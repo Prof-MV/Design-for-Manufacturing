@@ -1,0 +1,38 @@
+# .github/workflows/main.yaml
+
+on:
+  push:
+    branches:
+      - master # or main, depending on your default branch name
+
+name: Build Book
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.3'
+      - name: Install dependencies
+        run: |
+          R -e 'install.packages(c("remotes"))'
+          R -e 'remotes::install_github("rstudio/bookdown")'
+          R -e 'install.packages(c("knitr", "rmarkdown"))'
+          # Install any other packages your book requires here:
+          R -e 'install.packages(c("ggplot2", "dplyr", "kableExtra", "webshot2"))'
+          
+      - name: Build the book
+        run: Rscript -e 'bookdown::render_book("index.Rmd", "bookdown::gitbook")'
+        
+      - name: Disable Jekyll processing
+        run: touch docs/.nojekyll 
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs
+          publish_branch: gh-pages # The branch where the rendered book lives
+          keep_files: false # Ensure ALL existing files are deleted before new files are copied
