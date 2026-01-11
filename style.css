@@ -12,3 +12,24 @@ pre {
 pre code {
   white-space: inherit;
 }
+
+/*--- LOGO in Table of Contents ---*/
+.toc-logo {
+  /* Set a maximum width for the area the logo occupies */
+  width: 200px !important; 
+  margin: 0 auto; /* Center the logo container */
+  display: block;
+}
+
+.toc-logo img {
+  /* Ensure the image scales within the container */
+  max-width: 100%; 
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Optional: Adjust the space above the logo */
+.summary > li:first-child { 
+  height: auto !important;
+  padding-top: 10px;
+}
