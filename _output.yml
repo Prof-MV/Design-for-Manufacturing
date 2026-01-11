@@ -4,7 +4,7 @@ bookdown::gitbook:
     toc:
       before: |
         <li><a href="./">Design for Manufacturing</a></li>
-    edit: https://github.com/USERNAME/REPO/edit/BRANCH/%s
+    edit: https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/%s
     download: ["pdf", "epub"]
 bookdown::pdf_book:
   includes:
