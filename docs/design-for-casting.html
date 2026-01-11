@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 1 Design for Casting | Design Notes</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 1 Design for Casting | Design Notes" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 1 Design for Casting | Design Notes" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction-to-the-casting-process"><i class="fa fa-check"></i>💡 Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#essential-components-of-casting"><i class="fa fa-check"></i>🧱 Essential Components of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#the-basic-steps-of-casting"><i class="fa fa-check"></i>⚙️ The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#applications-and-scope"><i class="fa fa-check"></i>🌍 Applications and Scope</a></li>
+<li class="chapter" data-level="1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>1.1</b> Sand Mould Casting: The Versatile Workhorse</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction"><i class="fa fa-check"></i><b>1.1.1</b> 💡 Introduction</a></li>
+<li class="chapter" data-level="1.1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#components-and-steps-of-the-process"><i class="fa fa-check"></i><b>1.1.2</b> ⚙️ Components and Steps of the Process</a></li>
+<li class="chapter" data-level="1.1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#advantages-and-disadvantages"><i class="fa fa-check"></i><b>1.1.3</b> 📊 Advantages and Disadvantages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>1.2</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#investment-casting"><i class="fa fa-check"></i><b>1.3</b> Investment Casting</a></li>
+<li class="chapter" data-level="1.4" data-path="design-for-casting.html"><a href="design-for-casting.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>1.4</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design-for-casting.html"><a href="design-for-casting.html#engineering-metal-castings-for-quality-and-value"><i class="fa fa-check"></i><b>1.4.1</b> 🔩 Engineering Metal Castings for Quality and Value</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design-for-casting.html"><a href="design-for-casting.html#variables-in-metal-casting-design"><i class="fa fa-check"></i><b>1.4.2</b> 🔬 Variables in Metal Casting Design</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design-for-casting.html"><a href="design-for-casting.html#design-considerations-for-shape-and-mold"><i class="fa fa-check"></i><b>1.4.3</b> 📐 Design Considerations for Shape and Mold</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="design-for-casting.html"><a href="design-for-casting.html#defects-in-casting-process"><i class="fa fa-check"></i><b>1.5</b> Defects in Casting process</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Design Notes</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="design-for-casting" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Design for Casting<a href="design-for-casting.html#design-for-casting" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-the-casting-process" class="section level2 unnumbered hasAnchor">
+<h2>💡 Introduction to the Casting Process<a href="#introduction-to-the-casting-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Casting is one of the oldest and most fundamental processes in manufacturing, dating back thousands of years. It involves pouring a liquid material, typically a molten metal, into a mold cavity where it is allowed to solidify in the desired shape. The resulting solidified object is called a <strong>casting</strong>.</p>
+<p>The significance of casting lies in its ability to produce complex, intricate shapes—including those with internal cavities or non-symmetrical geometries—that would be difficult or impossible to create using methods like machining or forging. This makes casting essential for industries ranging from aerospace and automotive to jewelry and construction.</p>
+<hr />
+</div>
+<div id="essential-components-of-casting" class="section level2 unnumbered hasAnchor">
+<h2>🧱 Essential Components of Casting<a href="#essential-components-of-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Every casting operation requires two basic elements:</p>
+<ol style="list-style-type: decimal">
+<li><strong>The Casting Material:</strong> This is the material, usually metal (such as iron, steel, aluminum, or bronze), that is melted into a liquid state.</li>
+<li><strong>The Mold:</strong> This is the container that holds the liquid material and determines the final shape of the part. The mold contains a cavity that is the inverse of the part being made.</li>
+</ol>
+</div>
+<div id="the-basic-steps-of-casting" class="section level2 unnumbered hasAnchor">
+<h2>⚙️ The Basic Steps of Casting<a href="design-for-casting.html#the-basic-steps-of-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>While the specifics vary greatly depending on the material and method (e.g., sand casting vs. die casting), the fundamental steps remain consistent:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Melting:</strong> The casting material is heated to a liquid state in a furnace.</li>
+<li><strong>Pouring:</strong> The molten material is introduced into the mold cavity.</li>
+<li><strong>Solidification:</strong> The material is allowed to cool and solidify within the mold, taking the shape of the cavity.</li>
+<li><strong>Removal (Fettling):</strong> The solidified casting is removed from the mold.</li>
+<li><strong>Cleaning and Finishing:</strong> The casting is cleaned of any excess material (like gates or risers) and prepared for its intended use.</li>
+</ol>
+</div>
+<div id="applications-and-scope" class="section level2 unnumbered hasAnchor">
+<h2>🌍 Applications and Scope<a href="#applications-and-scope" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The versatility of casting allows it to produce parts ranging in size from a few grams (e.g., dental crowns) to hundreds of tons (e.g., steam turbine housings). The choice of a specific casting method—such as sand casting, investment casting, die casting, or continuous casting—depends on the required surface finish, dimensional accuracy, batch size, and the type of material being processed.</p>
+</div>
+<div id="sand-mould-casting-the-versatile-workhorse" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Sand Mould Casting: The Versatile Workhorse<a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="introduction" class="section level3 hasAnchor" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> 💡 Introduction<a href="#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Sand casting, also known as sand mould casting, is the oldest and most frequently used metal casting process, responsible for producing over 70% of all metal castings. It is highly valued for its <strong>versatility</strong> and <strong>cost-effectiveness</strong>, making it the foundational method for manufacturing a vast array of metal components, from massive engine blocks and turbine parts to small fittings and decorative items.</p>
+<p>The basic principle is simple: create a mould using sand, pour molten metal into the cavity, let it solidify, and then break the mould to retrieve the part.</p>
+<hr />
+</div>
+<div id="components-and-steps-of-the-process" class="section level3 hasAnchor" number="1.1.2">
+<h3><span class="header-section-number">1.1.2</span> ⚙️ Components and Steps of the Process<a href="design-for-casting.html#components-and-steps-of-the-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The sand casting process is typically performed in two halves and involves five main steps.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
+<img src="images/Sand-Casting-Infographic-2048x1366.png" alt="Sand Casting Process" width="50%" />
+<p class="caption">
+Figure 1.1: Sand Casting Process
+</p>
+</div>
+<div id="mold-preparation" class="section level4 hasAnchor" number="1.1.2.1">
+<h4><span class="header-section-number">1.1.2.1</span> Mold Preparation<a href="design-for-casting.html#mold-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The mold is created inside a metal frame called a <strong>flask</strong> (or molding box). The flask has two halves: the <strong>cope</strong> (top half) and the <strong>drag</strong> (bottom half).</p>
+<ul>
+<li><strong>Pattern:</strong> A pattern, which is a reusable, full-sized model of the part to be cast (often made of wood, plastic, or metal), is placed inside the flask.</li>
+<li><strong>Gating System:</strong> Additional shapes are included with the pattern to form the channels through which the molten metal will flow:
+<ul>
+<li><strong>Sprue:</strong> The vertical channel where the molten metal is poured.</li>
+<li><strong>Runners:</strong> Horizontal channels leading from the sprue to the mold cavity.</li>
+<li><strong>Risers:</strong> Reservoirs that feed extra molten metal back into the mold cavity as the metal shrinks during solidification.</li>
+</ul></li>
+<li><strong>Compacting:</strong> Molding sand—typically a mix of sand, clay (bentonite), and water or other bonding agents—is packed tightly around the pattern inside the flask.</li>
+<li><strong>Pattern Removal:</strong> The flask is separated, and the pattern is carefully removed, leaving the inverse cavity of the part.</li>
+</ul>
+</div>
+<div id="core-placement-optional" class="section level4 hasAnchor" number="1.1.2.2">
+<h4><span class="header-section-number">1.1.2.2</span> Core Placement (Optional)<a href="design-for-casting.html#core-placement-optional" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If the casting requires <strong>internal features</strong> (like a hollow pipe or engine cylinder), a pre-formed core (usually made of a different, rigid sand mix) is placed into the mold cavity. This core remains suspended inside the cavity and prevents the molten metal from filling that space.</p>
+</div>
+<div id="mold-closure-and-pouring" class="section level4 hasAnchor" number="1.1.2.3">
+<h4><span class="header-section-number">1.1.2.3</span> Mold Closure and Pouring<a href="design-for-casting.html#mold-closure-and-pouring" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>The cope and drag are sealed and clamped together.</li>
+<li>Molten metal is poured from a ladle down the <strong>sprue</strong> and through the gating system until the mold cavity and risers are completely filled.</li>
+</ul>
+</div>
+<div id="solidification-cooling-and-shakeout" class="section level4 hasAnchor" number="1.1.2.4">
+<h4><span class="header-section-number">1.1.2.4</span> Solidification, Cooling, and Shakeout<a href="design-for-casting.html#solidification-cooling-and-shakeout" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The metal cools and solidifies within the sand mold. Since sand molds are non-reusable (they are broken to remove the part), this step is often called <strong>shakeout</strong>.</p>
+</div>
+<div id="finishing" class="section level4 hasAnchor" number="1.1.2.5">
+<h4><span class="header-section-number">1.1.2.5</span> Finishing<a href="design-for-casting.html#finishing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The final casting is removed, and the metal from the sprue, runners, and risers (the non-part material) is cut away (a process called <strong>fettling</strong>) and typically recycled.</p>
+<hr />
+</div>
+</div>
+<div id="advantages-and-disadvantages" class="section level3 hasAnchor" number="1.1.3">
+<h3><span class="header-section-number">1.1.3</span> 📊 Advantages and Disadvantages<a href="#advantages-and-disadvantages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Feature</th>
+<th align="left">Advantage</th>
+<th align="left">Disadvantage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Cost</strong></td>
+<td align="left"><strong>Low tool and equipment cost</strong>, making it economical for small batches or prototypes.</td>
+<td align="left"><strong>Labor-intensive</strong> and requires significant energy for sand processing and handling.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Material/Size</strong></td>
+<td align="left"><strong>Highly versatile:</strong> can handle almost all metals and produce castings ranging from very small to very large (up to 200 tons).</td>
+<td align="left"><strong>Poor surface finish</strong> and <strong>low dimensional accuracy</strong> compared to die casting or investment casting.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Mold</strong></td>
+<td align="left">Molds are rapidly made and disposable, facilitating complex shapes.</td>
+<td align="left">Low production rate due to the non-reusable nature of the mold.</td>
+</tr>
+</tbody>
+</table>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/2CIcvB72dmk" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen>
+  </iframe>
+</div>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/pwaXCko_Tkw" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen>
+  </iframe>
+</div>
+<p>Further reading:</p>
+<p><a href="https://www.reliance-foundry.com/blog/sand-casting">Reliance Foundry</a></p>
+<p><a href="https://www.3dpcasting.com/blogs/sand-casting-8-key-steps-in-detail/">3DPCasting</a></p>
+<p><a href="https://www.generalkinematics.com/blog/sand-casting/">General Kinematics</a></p>
+</div>
+</div>
+<div id="full-mould-casting-casting" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Full Mould Casting Casting<a href="design-for-casting.html#full-mould-casting-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="investment-casting" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Investment Casting<a href="design-for-casting.html#investment-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<hr />
+</div>
+<div id="design-for-casting-reliance-casting-design" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Design for Casting <span class="citation">(<a href="#ref-reliance-casting-design">Reliance Foundry Co. Ltd. 2025</a>)</span><a href="design-for-casting.html#design-for-casting-reliance-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="engineering-metal-castings-for-quality-and-value" class="section level3 hasAnchor" number="1.4.1">
+<h3><span class="header-section-number">1.4.1</span> 🔩 Engineering Metal Castings for Quality and Value<a href="#engineering-metal-castings-for-quality-and-value" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Good metal casting design aims to create the simplest mold that will produce the desired shape. This process requires expert knowledge of metals and casting methods to strike the best balance between quality and value in the final product.</p>
+<p>Engineers and designers select metals and casting methods based on the mechanical requirements of the end-user. They must determine how the cast object will behave under load, when struck, and in different heat conditions—specifically, whether it will crack, warp, or deform over time. Metal designs may also require a specific grade of finishing for either mechanical or aesthetic reasons.</p>
+<p>Ultimately, the designer uses their experience of how material properties and casting methods influence each other in the foundry to create the final design. A key skill is knowing the behavior of metal in its liquid, cooling, and solid states to create a design that minimizes production problems.</p>
+</div>
+<div id="variables-in-metal-casting-design" class="section level3 hasAnchor" number="1.4.2">
+<h3><span class="header-section-number">1.4.2</span> 🔬 Variables in Metal Casting Design<a href="#variables-in-metal-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Several characteristics of the metal itself and the physics of heat transfer significantly affect the outcome of a casting design.</p>
+<div id="metal-castability" class="section level4 hasAnchor" number="1.4.2.1">
+<h4><span class="header-section-number">1.4.2.1</span> Metal Castability<a href="design-for-casting.html#metal-castability" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Four main metal characteristics influence the casting process:</p>
+<ul>
+<li><strong>Fluidity:</strong> This describes the ease with which a molten metal flows. Metals with high fluidity are better able to capture small details within a mold.</li>
+<li><strong>Shrinkage:</strong> This is the rate at which molten metal contracts as it cools. Shrinkage is categorized by three stages:
+<ul>
+<li><strong>Liquid Shrinkage:</strong> Contraction rate when the metal first begins to cool.</li>
+<li><strong>Solidification Shrinkage:</strong> Contraction rate when the metal is actively freezing from a liquid to a solid state.</li>
+<li><strong>Solid Shrinkage:</strong> Contraction rate once the metal has fully set.</li>
+<li>These rates help predict strains and defects, especially if parts of the design freeze much faster than others, which can challenge the casting’s integrity.</li>
+</ul></li>
+<li><strong>Slag or Dross Formation:</strong> This describes the presence of non-metallic inclusions in the casting. Slag/dross on the surface may be acceptable, but sub-surface inclusions are detrimental.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<img src="images/dross-slag-titanium.jpg" alt="Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging." width="50%" />
+<p class="caption">
+Figure 1.2: Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging.
+</p>
+</div>
+<ul>
+<li><strong>Pouring Temperature:</strong> This is the specific temperature at which an alloy can be poured. Generally, the hotter the metal, the more production challenges are introduced.</li>
+</ul>
+</div>
+<div id="heat-transfer-and-solidification-patterns" class="section level4 hasAnchor" number="1.4.2.2">
+<h4><span class="header-section-number">1.4.2.2</span> Heat Transfer and Solidification Patterns<a href="design-for-casting.html#heat-transfer-and-solidification-patterns" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Solidification is controlled by how heat is transferred and dispersed:</p>
+<ul>
+<li><strong>Heat Transfer Rates:</strong> Two rates affect solidification speed:
+<ol style="list-style-type: decimal">
+<li>The dispersion of heat through the metal itself.</li>
+<li>The rate of heat transfer from the casting surface to the mold.</li>
+</ol></li>
+<li>These rates determine the overall temperature differential across the casting, which can lead to differential cooling as sections change state at different times.</li>
+<li><strong>Solidification Pattern:</strong> A casting usually crystallizes from the edge inward, cooling quickly where it touches the mold.</li>
+<li>Engineers use the crystallization, heat transfer, and shrinkage rates to predict the solidification pattern and design the mold accordingly to minimize shrinkage problems.
+<ul>
+<li><strong>Chills:</strong> Molds may be designed with chills to create more rapid shrinkage in a specific section.</li>
+<li><strong>Risers:</strong> Reservoirs, called risers, are connected to the cooling casting to slowly feed liquid metal into it, preventing cavities from forming as the metal shrinks.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="design-considerations-for-shape-and-mold" class="section level3 hasAnchor" number="1.4.3">
+<h3><span class="header-section-number">1.4.3</span> 📐 Design Considerations for Shape and Mold<a href="#design-considerations-for-shape-and-mold" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Designers must structure the geometry of the casting and the mold components to manage heat and metal flow.</p>
+<div id="shape-and-section-size-changes" class="section level4 hasAnchor" number="1.4.3.1">
+<h4><span class="header-section-number">1.4.3.1</span> Shape and Section Size Changes<a href="design-for-casting.html#shape-and-section-size-changes" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Hot Spots:</strong> Increased thickness in material can create hot spots in cooling castings.</li>
+<li><strong>Uniform Thickness:</strong> Where possible, designing castings with uniform thickness is helpful.</li>
+<li><strong>Tapering:</strong> For large diameter changes, sections should be tapered slowly to prevent cooling strain.</li>
+<li><strong>Smoothing and Cores:</strong> Engineers prevent high-volume hotspots by smoothing sharp angles and adding cores.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<img src="images/metal-casting-wall-slope.png" alt="Metal castings with large diameter changes should be tapered slowly to prevent cooling strain." width="50%" />
+<p class="caption">
+Figure 1.3: Metal castings with large diameter changes should be tapered slowly to prevent cooling strain.
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
+<img src="images/metal-casting-volume-change.png" alt="By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming." width="50%" />
+<p class="caption">
+Figure 1.4: By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming.
+</p>
+</div>
+</div>
+<div id="junctions-between-sections" class="section level4 hasAnchor" number="1.4.3.2">
+<h4><span class="header-section-number">1.4.3.2</span> Junctions Between Sections<a href="design-for-casting.html#junctions-between-sections" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Volume Consistency:</strong> Sharp angles where two or more sections meet can create a larger volume of metal (a hotspot) at the junction.</li>
+<li><strong>Rounding Corners:</strong> Designers can smooth these corners, rounding them away from sharp angles, to make the metal volume at the junction more consistent with the surrounding metal volumes.</li>
+</ul>
+</div>
+<div id="mold-stability-and-surface-finish" class="section level4 hasAnchor" number="1.4.3.3">
+<h4><span class="header-section-number">1.4.3.3</span> Mold Stability and Surface Finish<a href="design-for-casting.html#mold-stability-and-surface-finish" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Mold Integrity:</strong> The mold material must be able to withstand the metal’s behavior (expansion, contraction, and off-gassing) while it cools, without fracturing or collapsing.</li>
+<li><strong>Surface Finish Capability:</strong> The molding method dictates the final surface finish.
+<ul>
+<li>Fine finishes often require more expensive molding processes.</li>
+<li>For parts requiring precision finishes only in certain areas, the casting can be machined afterward, but the metal must be easily machinable.</li>
+<li>While intensive molding processes yield smoother finishes and are often costly, for large objects, this can be less expensive than machining the entire surface.</li>
+</ul></li>
+</ul>
+</div>
+<div id="other-mold-design-considerations" class="section level4 hasAnchor" number="1.4.3.4">
+<h4><span class="header-section-number">1.4.3.4</span> Other Mold Design Considerations<a href="design-for-casting.html#other-mold-design-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>To achieve an excellent casting at a good price, the designer should try to minimize or eliminate deep drafts, expensive cores, and irregular parting.</p>
+<ul>
+<li><strong>Drafts:</strong> These are necessary tapers on the vertical walls of a casting. They ensure the pattern (the positive image of the object) can be removed from the mold without disturbing the walls.</li>
+<li><strong>Cores:</strong> Cores are used to create intentional voids or holes inside a casting. They can be costly to produce, but can sometimes be avoided by changing the orientation of the casting or the mold’s parting line.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
+<img src="images/sand-mold-with-core.jpg" alt="A sand mold with a core. Where the halves of the mold come together is the parting line." width="50%" />
+<p class="caption">
+Figure 1.5: A sand mold with a core. Where the halves of the mold come together is the parting line.
+</p>
+</div>
+<ul>
+<li><strong>Parting Lines:</strong> This is the line where the two halves of the mold meet. Risers and gates are often placed along the parting line.
+<ul>
+<li><strong>Flash:</strong> Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.</li>
+</ul></li>
+</ul>
+</div>
+<div id="excellence-in-casting-design" class="section level4 hasAnchor" number="1.4.3.5">
+<h4><span class="header-section-number">1.4.3.5</span> 🌟 Excellence in Casting Design<a href="#excellence-in-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Designing a superior product at the lowest price requires understanding the complex dependencies between materials and methods. The required mechanical properties of the final product determine the metal needed, and that metal’s liquid, cooling, and solid behavior dictates the necessary mold features.</p>
+<ul>
+<li><strong>Example:</strong> Brittle metals are less suited for designs with sharp edges prone to chipping. Metals with low fluidity require molds with less small detail.</li>
+<li><strong>Process Challenges:</strong> A high melting point (like that of steel) demands a higher level of monitoring and precision throughout the process.</li>
+</ul>
+<p>Experience and clear communication among designers, engineers, and metalworkers are crucial for creating a product of quality and value.</p>
+<hr />
+</div>
+</div>
+</div>
+<div id="defects-in-casting-process" class="section level2 hasAnchor" number="1.5">
+<h2><span class="header-section-number">1.5</span> Defects in Casting process<a href="design-for-casting.html#defects-in-casting-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-reliance-casting-design" class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-Casting.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>
