@@ -1,5 +1,5 @@
 --- 
-title: "Design Notes"
+title: "Design for Manufacturing"
 author: "Martin Volkening"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site

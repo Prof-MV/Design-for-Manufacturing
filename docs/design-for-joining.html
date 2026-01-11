@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Design for Joining | Design for Manufacturing</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Design for Joining | Design for Manufacturing" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Design for Joining | Design for Manufacturing" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="design-for-casting.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction-to-the-casting-process"><i class="fa fa-check"></i>💡 Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#essential-components-of-casting"><i class="fa fa-check"></i>🧱 Essential Components of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#the-basic-steps-of-casting"><i class="fa fa-check"></i>⚙️ The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#applications-and-scope"><i class="fa fa-check"></i>🌍 Applications and Scope</a></li>
+<li class="chapter" data-level="1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>1.1</b> Sand Mould Casting: The Versatile Workhorse</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction"><i class="fa fa-check"></i><b>1.1.1</b> 💡 Introduction</a></li>
+<li class="chapter" data-level="1.1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#components-and-steps-of-the-process"><i class="fa fa-check"></i><b>1.1.2</b> ⚙️ Components and Steps of the Process</a></li>
+<li class="chapter" data-level="1.1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#advantages-and-disadvantages"><i class="fa fa-check"></i><b>1.1.3</b> 📊 Advantages and Disadvantages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>1.2</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#investment-casting"><i class="fa fa-check"></i><b>1.3</b> Investment Casting</a></li>
+<li class="chapter" data-level="1.4" data-path="design-for-casting.html"><a href="design-for-casting.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>1.4</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design-for-casting.html"><a href="design-for-casting.html#engineering-metal-castings-for-quality-and-value"><i class="fa fa-check"></i><b>1.4.1</b> 🔩 Engineering Metal Castings for Quality and Value</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design-for-casting.html"><a href="design-for-casting.html#variables-in-metal-casting-design"><i class="fa fa-check"></i><b>1.4.2</b> 🔬 Variables in Metal Casting Design</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design-for-casting.html"><a href="design-for-casting.html#design-considerations-for-shape-and-mold"><i class="fa fa-check"></i><b>1.4.3</b> 📐 Design Considerations for Shape and Mold</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="design-for-casting.html"><a href="design-for-casting.html#defects-in-casting-process"><i class="fa fa-check"></i><b>1.5</b> Defects in Casting process</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-for-joining.html"><a href="design-for-joining.html"><i class="fa fa-check"></i><b>2</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#joining-processes-uniting-materials-for-function"><i class="fa fa-check"></i><b>2.1</b> 🔗 Joining Processes: Uniting Materials for Function</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-1"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-of-joining-methods"><i class="fa fa-check"></i><b>2.1.2</b> Classification of Joining Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#the-welding-process"><i class="fa fa-check"></i><b>2.2</b> ♨️ The Welding Process</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-to-welding"><i class="fa fa-check"></i><b>2.2.1</b> Introduction to Welding</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-and-types-of-welding-processes"><i class="fa fa-check"></i><b>2.2.2</b> Classification and Types of Welding Processes</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-for-joining.html"><a href="design-for-joining.html#when-to-choose-welding"><i class="fa fa-check"></i><b>2.2.3</b> When to Choose Welding</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Design for Manufacturing</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="design-for-joining" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Design for Joining<a href="design-for-joining.html#design-for-joining" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="joining-processes-uniting-materials-for-function" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> 🔗 Joining Processes: Uniting Materials for Function<a href="#joining-processes-uniting-materials-for-function" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="introduction-1" class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Introduction<a href="design-for-joining.html#introduction-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The ability to permanently or temporarily unite two or more separate material components is fundamental to nearly every branch of engineering and manufacturing. Whether creating the fuselage of an aircraft, the circuitry of a smartphone, or the frame of a bicycle, <strong>joining processes</strong> are essential for assembling parts into functional products.</p>
+<p>Joining processes can be broadly categorized based on the method used to create the bond: those that use <strong>heat and fusion</strong> (welding), those that use <strong>fillers</strong> (brazing and soldering), those that use <strong>chemical agents</strong> (adhesives), and those that rely on <strong>mechanical force</strong> (fasteners). The selection of the appropriate joining method is a critical design decision, dictated by the materials being joined, the required strength, the operating environment (e.g., temperature, corrosion), and cost considerations.</p>
+<hr />
+</div>
+<div id="classification-of-joining-methods" class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Classification of Joining Methods<a href="design-for-joining.html#classification-of-joining-methods" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Joining techniques are typically classified into three main groups based on how the bond is established:</p>
+<div id="fusion-and-cohesion" class="section level4 hasAnchor" number="2.1.2.1">
+<h4><span class="header-section-number">2.1.2.1</span> Fusion and Cohesion<a href="design-for-joining.html#fusion-and-cohesion" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These processes create a continuous, strong bond by achieving atomic or molecular cohesion between the joined parts, often involving melting the base materials.</p>
+<ul>
+<li><strong>Welding:</strong> This is a permanent joining process that involves heating the base metal parts to their melting point and allowing them to fuse together, often with the addition of a filler metal. Welding creates a joint that can be as strong, or even stronger, than the parent material itself. It is widely used in heavy industries like construction, shipbuilding, and pipe fabrication.</li>
+</ul>
+</div>
+<div id="chemicalmetallurgical-bonding-with-fillers" class="section level4 hasAnchor" number="2.1.2.2">
+<h4><span class="header-section-number">2.1.2.2</span> Chemical/Metallurgical Bonding with Fillers<a href="design-for-joining.html#chemicalmetallurgical-bonding-with-fillers" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These processes use a separate material (a filler) to create the bond between two materials without melting the base materials.</p>
+<ul>
+<li><strong>Brazing:</strong> A joining process where a non-ferrous filler metal is melted and drawn into the joint gap by capillary action. The filler metal has a melting point <strong>above <span class="math inline">\(450^\circ\text{C}\)</span> (<span class="math inline">\(840^\circ\text{F}\)</span>)</strong>, but below the melting point of the base metals. Brazing creates strong, leak-tight joints with minimal thermal distortion to the base parts.</li>
+<li><strong>Soldering:</strong> Similar to brazing, soldering uses a filler metal (solder) that melts at a temperature <strong>below <span class="math inline">\(450^\circ\text{C}\)</span> (<span class="math inline">\(840^\circ\text{F}\)</span>)</strong>. This process is primarily used in electronics and sheet metal work where strong mechanical bonds are less critical than electrical conductivity or a leak-proof seal.</li>
+</ul>
+</div>
+<div id="mechanical-and-chemical-adhesion" class="section level4 hasAnchor" number="2.1.2.3">
+<h4><span class="header-section-number">2.1.2.3</span> Mechanical and Chemical Adhesion<a href="design-for-joining.html#mechanical-and-chemical-adhesion" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These methods rely on either a sticky substance or physical interlocking to hold parts together.</p>
+<ul>
+<li><strong>Adhesive Joining:</strong> This method uses chemical compounds (adhesives, glues, epoxies) that cure to form a chemical bond between the surfaces. Adhesives can join dissimilar materials (like metal to plastic), distribute stress over a wide area, and provide excellent sealing.</li>
+<li><strong>Mechanical Fasteners:</strong> These are non-permanent methods that use hardware to hold materials together. This category includes common items like <strong>bolts, screws, rivets, nuts, pins, and clips</strong>. The primary advantage of mechanical fasteners is that they allow for easy disassembly and reassembly for maintenance or repair.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="the-welding-process" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> ♨️ The Welding Process<a href="design-for-joining.html#the-welding-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="introduction-to-welding" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Introduction to Welding<a href="design-for-joining.html#introduction-to-welding" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welding is a <strong>fusion joining process</strong> that creates a permanent, monolithic bond between two or more separate metal parts. Unlike brazing or soldering, welding typically involves heating the base metal parts to their melting temperature and allowing them to fuse together, often with the addition of a <strong>filler material</strong></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
+<img src="images/Gemini_Generated_Image_o2yyb9o2yyb9o2yy.png" alt="Welding" width="50%" />
+<p class="caption">
+Figure 2.1: Welding
+</p>
+</div>
+<p>The primary goal of welding is to create a joint that is as strong as, or even stronger than, the original parent materials. This makes it an indispensable process in heavy fabrication and structural engineering, including the construction of ships, bridges, pipelines, and pressure vessels.</p>
+<p>How is it possible that a weld is stronger than the original parent materials?</p>
+<hr />
+</div>
+<div id="classification-and-types-of-welding-processes" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Classification and Types of Welding Processes<a href="design-for-joining.html#classification-and-types-of-welding-processes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welding processes are broadly classified based on the source of energy used to achieve the necessary heat for fusion. The three major categories are:</p>
+<div id="arc-welding" class="section level4 hasAnchor" number="2.2.2.1">
+<h4><span class="header-section-number">2.2.2.1</span> 1. Arc Welding<a href="design-for-joining.html#arc-welding" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Arc welding is the most common category, utilizing an electrical arc to generate the heat required to melt the metals. A power source creates an arc between an electrode and the base metal, generating temperatures high enough to melt both.</p>
+<ul>
+<li><strong>Shielded Metal Arc Welding (SMAW or Stick Welding):</strong> Uses a consumable electrode coated with flux. The flux vaporizes during welding, creating a protective gas shield and slag, which prevents atmospheric contamination of the molten weld pool. It is highly versatile and used widely for structural steel.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
+<img src="images/Gemini_Generated_Image_7mwxtj7mwxtj7mwx.png" alt="Shielded Metal Arc Welding (SMAW)" width="50%" />
+<p class="caption">
+Figure 2.2: Shielded Metal Arc Welding (SMAW)
+</p>
+</div>
+<ul>
+<li><strong>Gas Metal Arc Welding (GMAW or MIG Welding):</strong> Uses a continuous, consumable wire electrode fed through a welding gun, while an externally supplied shielding gas (e.g., Argon, <span class="math inline">\(\text{CO}_2\)</span>) protects the arc and weld pool. It is known for its speed and suitability for automated systems.</li>
+<li><strong>Gas Tungsten Arc Welding (GTAW or TIG Welding):</strong> Uses a non-consumable tungsten electrode and an inert shielding gas (usually Argon). It typically requires a separate filler rod. TIG welding produces the highest quality welds, often used for critical applications and joining thin metals or reactive metals like aluminum and titanium.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
+<img src="images/Gemini_Generated_Image_ftcdd1ftcdd1ftcd.png" alt="Gas Tungsten Arc Welding (GATW)" width="50%" />
+<p class="caption">
+Figure 2.3: Gas Tungsten Arc Welding (GATW)
+</p>
+</div>
+</div>
+<div id="resistance-welding" class="section level4 hasAnchor" number="2.2.2.2">
+<h4><span class="header-section-number">2.2.2.2</span> 2. Resistance Welding<a href="design-for-joining.html#resistance-welding" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Resistance welding uses the heat generated by the electrical resistance of the materials themselves when a current is passed through them under pressure.</p>
+<ul>
+<li><strong>Spot Welding:</strong> The most common resistance method. It uses two electrodes to clamp sheets of metal together. A high current is passed through, locally heating and fusing the metal at a small “spot.” It is widely used in the automotive industry for joining body panels.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-10"></span>
+<img src="images/Picture299.jpg" alt="Spot Welding" width="50%" />
+<p class="caption">
+Figure 2.4: Spot Welding
+</p>
+</div>
+</div>
+<div id="high-energy-beam-welding" class="section level4 hasAnchor" number="2.2.2.3">
+<h4><span class="header-section-number">2.2.2.3</span> 3. High-Energy Beam Welding<a href="design-for-joining.html#high-energy-beam-welding" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These advanced processes use highly concentrated energy sources for deep, narrow, and precise welds.</p>
+<ul>
+<li><strong>Laser Beam Welding (LBW):</strong> Uses a focused beam of coherent light (laser) to heat and fuse the materials. It is excellent for high-speed, precise welding in mass production.</li>
+<li><strong>Electron Beam Welding (EBW):</strong> Uses a beam of high-velocity electrons to provide the heat source. This process requires a vacuum chamber, but produces extremely high-quality welds with very low heat input, ideal for aerospace and nuclear components.</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="when-to-choose-welding" class="section level3 hasAnchor" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> When to Choose Welding<a href="design-for-joining.html#when-to-choose-welding" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welding is not always the best solution, but it is the superior choice over other joining processes like mechanical fastening, brazing, or adhesives in several key scenarios:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Requirement for Monolithic Strength:</strong>
+<ul>
+<li><strong>Permanent Joint:</strong> Welding creates a permanent, continuous metallurgical bond, effectively making the joint an integral part of the structure.</li>
+<li><strong>High Load/Stress:</strong> For applications subjected to high dynamic or static loads (e.g., bridge structures, pressure vessels, vehicle chassis), the strength and rigidity offered by a fully fused weld joint are unmatched by mechanical fasteners or adhesives.</li>
+</ul></li>
+<li><strong>Structural Integrity and Sealing:</strong>
+<ul>
+<li><strong>Leak-Proof Seals:</strong> Welding is essential for creating completely leak-proof joints, which is critical for containers, tanks, and pipelines holding liquids or gases under pressure.</li>
+<li><strong>Weight Reduction:</strong> By eliminating overlapping flanges or bolted plates, welding can often result in lighter overall structures compared to mechanical fastening.</li>
+</ul></li>
+<li><strong>Specific Material and Geometry Requirements:</strong>
+<ul>
+<li><strong>Thick Sections:</strong> Welding is highly effective for joining very thick metal plates, where fasteners would be impractical or structurally insufficient.</li>
+<li><strong>Material Compatibility:</strong> While welding <em>can</em> join dissimilar metals, it is best suited for scenarios where the material properties of the filler metal can be carefully matched to the base metals to maintain structural and chemical properties.</li>
+</ul></li>
+</ol>
+<div id="comparison-to-other-processes" class="section level4 hasAnchor" number="2.2.3.1">
+<h4><span class="header-section-number">2.2.3.1</span> Comparison to Other Processes:<a href="design-for-joining.html#comparison-to-other-processes" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Process</th>
+<th align="left">Primary Advantage Over Welding</th>
+<th align="left">Why Welding is Chosen Instead</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Mechanical Fasteners</strong></td>
+<td align="left">Allows for <strong>disassembly</strong> and repair.</td>
+<td align="left">When a joint must be <strong>permanent</strong> and transmit <strong>structural forces</strong> without the risk of loosening under vibration.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Brazing / Soldering</strong></td>
+<td align="left">Lower heat input prevents distortion/damage to base metal.</td>
+<td align="left">When the joint needs the <strong>full strength</strong> of the parent metal, and the service temperature exceeds the filler metal’s melting point.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Adhesive Bonding</strong></td>
+<td align="left">Joins dissimilar materials; distributes stress over a wide area.</td>
+<td align="left">When high strength is required in <strong>high-temperature environments</strong> where most adhesives would degrade, or when a <strong>rapidly cured joint</strong> is necessary.</td>
+</tr>
+</tbody>
+</table>
+
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="design-for-casting.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Joining.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
