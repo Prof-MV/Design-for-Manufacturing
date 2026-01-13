@@ -87,6 +87,58 @@ The final casting is removed, and the metal from the sprue, runners, and risers 
 | **Material/Size** | **Highly versatile:** can handle almost all metals and produce castings ranging from very small to very large (up to 200 tons). | **Poor surface finish** and **low dimensional accuracy** compared to die casting or investment casting. |
 | **Mold** | Molds are rapidly made and disposable, facilitating complex shapes. | Low production rate due to the non-reusable nature of the mold. |
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Typical Casting Company."}
+knitr::include_graphics("images/SandCastingCompany.png")
+```
+<details>
+  <summary>This diagram illustrates the integrated flow of a metal casting facility, tracing the journey from raw scrap and sand to a finished product. </summary>
+  
+  The process is characterized by two main streams: **Metal Melting** and **Sand/Core Preparation**, which converge at the pouring stage.
+
+  
+#### Primary Metal Melting Methods {-}
+  
+  The image identifies three distinct industrial furnaces. Each uses a different physical principle to reach the melting point of the metal (often exceeding 1,370°C or 2,500°F for iron).
+  
+##### Electric Arc Furnace (EAF) {-}
+  * **Mechanism:** This furnace uses high-voltage electric arcs to melt the charge. Large graphite electrodes are lowered toward the metal scrap; electricity "arcs" from the electrodes to the metal, generating intense thermal energy.
+  * **Emissions:** As indicated by the "Gas and Particulate Emissions" label, this process is volatile. The arc can cause rapid vaporization of surface contaminants on the scrap metal.
+  
+##### Induction Furnace {-}
+  * **Mechanism:** This method utilizes a high-voltage electrical source passed through a copper coil. This creates a rapidly reversing magnetic field that induces "eddy currents" inside the metal. The metal’s own electrical resistance generates the heat internally.
+  * **Characteristics:** It is generally cleaner than the EAF and provides a natural "stirring" action due to electromagnetic forces, which ensures a consistent alloy mix.
+  
+##### Cupola Furnace {-}
+  * **Mechanism:** A Cupola is a vertical, cylindrical furnace. It is a "combustion" furnace where layers of **Coke** (fuel), **Flux**, and **Metallics** are layered. A blower forces air into the bottom to facilitate the burning of the coke, which melts the metal as it drops through the stack.
+  * **Characteristics:** This is a continuous melting process. The diagram shows a tall stack to manage the significant volume of flue gases produced by the burning fuel.
+  
+  
+#### Mold and Core Preparation {-}
+  
+  For a casting to have a specific shape, the molten metal must be poured into a "negative" space.
+  
+  * **Sand Preparation:** Raw sand is mixed with a **Binder** (like clay or chemical resin) to ensure it holds its shape.
+  * **Molding:** The sand is packed around a pattern to create the external shape of the part.
+  * **Core Making & Baking:** **Cores** are used to create hollow internal cavities (like the inside of an engine block). These are often "baked" in an oven to harden the binder so the core doesn't collapse when hit by molten metal.
+  
+  
+#### Post-Melting and Finishing {-}
+  
+  Once the metal is liquid and the molds are ready, the final steps of production occur:
+  
+  1.  **Ductile Iron Inoculation:** The metal is treated with alloys (like Magnesium) to improve its strength and ductility.
+  2.  **Pouring:** The "Hot Metal" is poured into the molds.
+  3.  **Casting Shakeout:** Once solidified, the sand mold is vibrated until it breaks apart, releasing the metal casting. 
+      * *Note: The "Return Sand" is sent back to the start of the process to be recycled.*
+  4.  **Cooling and Cleaning:** The casting is cooled and cleaned of any remaining sand or "flash" (excess metal).
+  5.  **Finishing:** Final grinding or machining is performed before **Shipping**.
+  
+  ---
+  
+**Environmental Note:** The diagram emphasizes that every stage of the foundry—from melting to shakeout—generates dust and gases, highlighting the need for robust industrial ventilation systems.
+</details>
+
+
 ```{=html}
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
   <iframe 
@@ -217,6 +269,12 @@ knitr::include_graphics("images/metal-casting-volume-change.png")
 To achieve an excellent casting at a good price, the designer should try to minimize or eliminate deep drafts, expensive cores, and irregular parting.
 
 * **Drafts:** These are necessary tapers on the vertical walls of a casting. They ensure the pattern (the positive image of the object) can be removed from the mold without disturbing the walls.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Design with Draft Angles"}
+knitr::include_graphics("images/Gemini_Generated_Image_b6qi6zb6qi6zb6qi.png")
+```
+
+
 * **Cores:** Cores are used to create intentional voids or holes inside a casting.  They can be costly to produce, but can sometimes be avoided by changing the orientation of the casting or the mold's parting line.
 
 ```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="A sand mold with a core. Where the halves of the mold come together is the parting line."}
@@ -224,6 +282,11 @@ knitr::include_graphics("images/sand-mold-with-core.jpg")
 ```
 
 * **Parting Lines:** This is the line where the two halves of the mold meet. Risers and gates are often placed along the parting line.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Parting Lines"}
+knitr::include_graphics("images/Gemini_Generated_Image_67wz4x67wz4x67wz.png")
+```
+
     * **Flash:** Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.
 
 #### 🌟 Excellence in Casting Design

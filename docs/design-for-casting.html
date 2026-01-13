@@ -23,7 +23,7 @@
 <meta name="author" content="Martin Volkening" />
 
 
-<meta name="date" content="2026-01-11" />
+<meta name="date" content="2026-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -271,6 +271,75 @@ Figure 1.1: Sand Casting Process
 </tr>
 </tbody>
 </table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<img src="images/SandCastingCompany.png" alt="Typical Casting Company." width="50%" />
+<p class="caption">
+Figure 1.2: Typical Casting Company.
+</p>
+</div>
+<details>
+<summary>
+This diagram illustrates the integrated flow of a metal casting facility, tracing the journey from raw scrap and sand to a finished product.
+</summary>
+<p>The process is characterized by two main streams: <strong>Metal Melting</strong> and <strong>Sand/Core Preparation</strong>, which converge at the pouring stage.</p>
+<div id="primary-metal-melting-methods" class="section level4 unnumbered hasAnchor">
+<h4>Primary Metal Melting Methods<a href="design-for-casting.html#primary-metal-melting-methods" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The image identifies three distinct industrial furnaces. Each uses a different physical principle to reach the melting point of the metal (often exceeding 1,370°C or 2,500°F for iron).</p>
+<div id="electric-arc-furnace-eaf" class="section level5 unnumbered hasAnchor">
+<h5>Electric Arc Furnace (EAF)<a href="design-for-casting.html#electric-arc-furnace-eaf" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>Mechanism:</strong> This furnace uses high-voltage electric arcs to melt the charge. Large graphite electrodes are lowered toward the metal scrap; electricity “arcs” from the electrodes to the metal, generating intense thermal energy.
+<ul>
+<li><strong>Emissions:</strong> As indicated by the “Gas and Particulate Emissions” label, this process is volatile. The arc can cause rapid vaporization of surface contaminants on the scrap metal.</li>
+</ul></li>
+</ul>
+</div>
+<div id="induction-furnace" class="section level5 unnumbered hasAnchor">
+<h5>Induction Furnace<a href="design-for-casting.html#induction-furnace" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>Mechanism:</strong> This method utilizes a high-voltage electrical source passed through a copper coil. This creates a rapidly reversing magnetic field that induces “eddy currents” inside the metal. The metal’s own electrical resistance generates the heat internally.
+<ul>
+<li><strong>Characteristics:</strong> It is generally cleaner than the EAF and provides a natural “stirring” action due to electromagnetic forces, which ensures a consistent alloy mix.</li>
+</ul></li>
+</ul>
+</div>
+<div id="cupola-furnace" class="section level5 unnumbered hasAnchor">
+<h5>Cupola Furnace<a href="design-for-casting.html#cupola-furnace" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>Mechanism:</strong> A Cupola is a vertical, cylindrical furnace. It is a “combustion” furnace where layers of <strong>Coke</strong> (fuel), <strong>Flux</strong>, and <strong>Metallics</strong> are layered. A blower forces air into the bottom to facilitate the burning of the coke, which melts the metal as it drops through the stack.
+<ul>
+<li><strong>Characteristics:</strong> This is a continuous melting process. The diagram shows a tall stack to manage the significant volume of flue gases produced by the burning fuel.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="mold-and-core-preparation" class="section level4 unnumbered hasAnchor">
+<h4>Mold and Core Preparation<a href="design-for-casting.html#mold-and-core-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a casting to have a specific shape, the molten metal must be poured into a “negative” space.</p>
+<ul>
+<li><strong>Sand Preparation:</strong> Raw sand is mixed with a <strong>Binder</strong> (like clay or chemical resin) to ensure it holds its shape.
+<ul>
+<li><strong>Molding:</strong> The sand is packed around a pattern to create the external shape of the part.</li>
+<li><strong>Core Making &amp; Baking:</strong> <strong>Cores</strong> are used to create hollow internal cavities (like the inside of an engine block). These are often “baked” in an oven to harden the binder so the core doesn’t collapse when hit by molten metal.</li>
+</ul></li>
+</ul>
+</div>
+<div id="post-melting-and-finishing" class="section level4 unnumbered hasAnchor">
+<h4>Post-Melting and Finishing<a href="design-for-casting.html#post-melting-and-finishing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Once the metal is liquid and the molds are ready, the final steps of production occur:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Ductile Iron Inoculation:</strong> The metal is treated with alloys (like Magnesium) to improve its strength and ductility.</li>
+<li><strong>Pouring:</strong> The “Hot Metal” is poured into the molds.</li>
+<li><strong>Casting Shakeout:</strong> Once solidified, the sand mold is vibrated until it breaks apart, releasing the metal casting.
+<ul>
+<li><em>Note: The “Return Sand” is sent back to the start of the process to be recycled.</em></li>
+</ul></li>
+<li><strong>Cooling and Cleaning:</strong> The casting is cooled and cleaned of any remaining sand or “flash” (excess metal).</li>
+<li><strong>Finishing:</strong> Final grinding or machining is performed before <strong>Shipping</strong>.</li>
+</ol>
+<hr />
+<strong>Environmental Note:</strong> The diagram emphasizes that every stage of the foundry—from melting to shakeout—generates dust and gases, highlighting the need for robust industrial ventilation systems.
+</details>
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
   <iframe 
     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
@@ -297,6 +366,7 @@ Figure 1.1: Sand Casting Process
 <p><a href="https://www.reliance-foundry.com/blog/sand-casting">Reliance Foundry</a></p>
 <p><a href="https://www.3dpcasting.com/blogs/sand-casting-8-key-steps-in-detail/">3DPCasting</a></p>
 <p><a href="https://www.generalkinematics.com/blog/sand-casting/">General Kinematics</a></p>
+</div>
 </div>
 </div>
 <div id="full-mould-casting-casting" class="section level2 hasAnchor" number="1.2">
@@ -331,10 +401,10 @@ Figure 1.1: Sand Casting Process
 </ul></li>
 <li><strong>Slag or Dross Formation:</strong> This describes the presence of non-metallic inclusions in the casting. Slag/dross on the surface may be acceptable, but sub-surface inclusions are detrimental.</li>
 </ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
 <img src="images/dross-slag-titanium.jpg" alt="Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging." width="50%" />
 <p class="caption">
-Figure 1.2: Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging.
+Figure 1.3: Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging.
 </p>
 </div>
 <ul>
@@ -371,16 +441,16 @@ Figure 1.2: Slag is the dark layer floating on this titanium as it flows from an
 <li><strong>Tapering:</strong> For large diameter changes, sections should be tapered slowly to prevent cooling strain.</li>
 <li><strong>Smoothing and Cores:</strong> Engineers prevent high-volume hotspots by smoothing sharp angles and adding cores.</li>
 </ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
 <img src="images/metal-casting-wall-slope.png" alt="Metal castings with large diameter changes should be tapered slowly to prevent cooling strain." width="50%" />
 <p class="caption">
-Figure 1.3: Metal castings with large diameter changes should be tapered slowly to prevent cooling strain.
+Figure 1.4: Metal castings with large diameter changes should be tapered slowly to prevent cooling strain.
 </p>
 </div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
 <img src="images/metal-casting-volume-change.png" alt="By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming." width="50%" />
 <p class="caption">
-Figure 1.4: By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming.
+Figure 1.5: By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming.
 </p>
 </div>
 </div>
@@ -408,20 +478,32 @@ Figure 1.4: By smoothing sharp angles and adding cores, engineers prevent high-v
 <p>To achieve an excellent casting at a good price, the designer should try to minimize or eliminate deep drafts, expensive cores, and irregular parting.</p>
 <ul>
 <li><strong>Drafts:</strong> These are necessary tapers on the vertical walls of a casting. They ensure the pattern (the positive image of the object) can be removed from the mold without disturbing the walls.</li>
-<li><strong>Cores:</strong> Cores are used to create intentional voids or holes inside a casting. They can be costly to produce, but can sometimes be avoided by changing the orientation of the casting or the mold’s parting line.</li>
 </ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
-<img src="images/sand-mold-with-core.jpg" alt="A sand mold with a core. Where the halves of the mold come together is the parting line." width="50%" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
+<img src="images/Gemini_Generated_Image_b6qi6zb6qi6zb6qi.png" alt="Design with Draft Angles" width="50%" />
 <p class="caption">
-Figure 1.5: A sand mold with a core. Where the halves of the mold come together is the parting line.
+Figure 1.6: Design with Draft Angles
 </p>
 </div>
 <ul>
-<li><strong>Parting Lines:</strong> This is the line where the two halves of the mold meet. Risers and gates are often placed along the parting line.
-<ul>
-<li><strong>Flash:</strong> Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.</li>
-</ul></li>
+<li><strong>Cores:</strong> Cores are used to create intentional voids or holes inside a casting. They can be costly to produce, but can sometimes be avoided by changing the orientation of the casting or the mold’s parting line.</li>
 </ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
+<img src="images/sand-mold-with-core.jpg" alt="A sand mold with a core. Where the halves of the mold come together is the parting line." width="50%" />
+<p class="caption">
+Figure 1.7: A sand mold with a core. Where the halves of the mold come together is the parting line.
+</p>
+</div>
+<ul>
+<li><strong>Parting Lines:</strong> This is the line where the two halves of the mold meet. Risers and gates are often placed along the parting line.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
+<img src="images/Gemini_Generated_Image_67wz4x67wz4x67wz.png" alt="Parting Lines" width="50%" />
+<p class="caption">
+Figure 1.8: Parting Lines
+</p>
+</div>
+<pre><code>* **Flash:** Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.</code></pre>
 </div>
 <div id="excellence-in-casting-design" class="section level4 hasAnchor" number="1.4.3.5">
 <h4><span class="header-section-number">1.4.3.5</span> 🌟 Excellence in Casting Design<a href="#excellence-in-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>

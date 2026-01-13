@@ -7,6 +7,9 @@ fig:unnamed-chunk-7
 fig:unnamed-chunk-8
 fig:unnamed-chunk-9
 fig:unnamed-chunk-10
+fig:unnamed-chunk-11
+fig:unnamed-chunk-12
+fig:unnamed-chunk-13
 design-for-casting
 sand-mould-casting-the-versatile-workhorse
 introduction
