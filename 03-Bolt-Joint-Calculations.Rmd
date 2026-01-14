@@ -81,6 +81,8 @@ knitr::include_graphics("images/TensileStressArea.png")
 It is the effective area of a threaded rod to be used for stress  calculations.  
 The diameter of this unthreaded rod is the average of the  pitch diameter and the minor diameter of the threaded rod.
 
+#### English Bolt Tensile Cross Stress Area {-}
+
 ```{r fastener-lookup, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(dplyr)
@@ -140,7 +142,7 @@ fastener_lookup %>%
   add_header_above(c(" " = 1, " " = 1, "Coarse Series (UNC)" = 3, "Fine Series (UNF)" = 3))
 ```
 
-Metric Bolt Tensile Cross Stress Area 
+#### Metric Bolt Tensile Cross Stress Area {-}
 
 ```{r metric-fastener-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
