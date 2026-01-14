@@ -1,0 +1,3260 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Strength of Bolt Joint Calculations | Bolt Joint Calculations</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Strength of Bolt Joint Calculations | Bolt Joint Calculations" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Strength of Bolt Joint Calculations | Bolt Joint Calculations" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="design-for-joining.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li>
+<li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction-to-the-casting-process"><i class="fa fa-check"></i>💡 Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#essential-components-of-casting"><i class="fa fa-check"></i>🧱 Essential Components of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#the-basic-steps-of-casting"><i class="fa fa-check"></i>⚙️ The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#applications-and-scope"><i class="fa fa-check"></i>🌍 Applications and Scope</a></li>
+<li class="chapter" data-level="1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>1.1</b> Sand Mould Casting: The Versatile Workhorse</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction"><i class="fa fa-check"></i><b>1.1.1</b> 💡 Introduction</a></li>
+<li class="chapter" data-level="1.1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#components-and-steps-of-the-process"><i class="fa fa-check"></i><b>1.1.2</b> ⚙️ Components and Steps of the Process</a></li>
+<li class="chapter" data-level="1.1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#advantages-and-disadvantages"><i class="fa fa-check"></i><b>1.1.3</b> 📊 Advantages and Disadvantages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>1.2</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#investment-casting"><i class="fa fa-check"></i><b>1.3</b> Investment Casting</a></li>
+<li class="chapter" data-level="1.4" data-path="design-for-casting.html"><a href="design-for-casting.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>1.4</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design-for-casting.html"><a href="design-for-casting.html#engineering-metal-castings-for-quality-and-value"><i class="fa fa-check"></i><b>1.4.1</b> 🔩 Engineering Metal Castings for Quality and Value</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design-for-casting.html"><a href="design-for-casting.html#variables-in-metal-casting-design"><i class="fa fa-check"></i><b>1.4.2</b> 🔬 Variables in Metal Casting Design</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design-for-casting.html"><a href="design-for-casting.html#design-considerations-for-shape-and-mold"><i class="fa fa-check"></i><b>1.4.3</b> 📐 Design Considerations for Shape and Mold</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="design-for-casting.html"><a href="design-for-casting.html#defects-in-casting-process"><i class="fa fa-check"></i><b>1.5</b> Defects in Casting process</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-for-joining.html"><a href="design-for-joining.html"><i class="fa fa-check"></i><b>2</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#joining-processes-uniting-materials-for-function"><i class="fa fa-check"></i><b>2.1</b> 🔗 Joining Processes: Uniting Materials for Function</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-1"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-of-joining-methods"><i class="fa fa-check"></i><b>2.1.2</b> Classification of Joining Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#the-welding-process"><i class="fa fa-check"></i><b>2.2</b> ♨️ The Welding Process</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-to-welding"><i class="fa fa-check"></i><b>2.2.1</b> Introduction to Welding</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-and-types-of-welding-processes"><i class="fa fa-check"></i><b>2.2.2</b> Classification and Types of Welding Processes</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-for-joining.html"><a href="design-for-joining.html#when-to-choose-welding"><i class="fa fa-check"></i><b>2.2.3</b> When to Choose Welding</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html"><i class="fa fa-check"></i><b>3</b> Strength of Bolt Joint Calculations</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-definitions"><i class="fa fa-check"></i><b>3.1</b> Bolt Definitions</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#nut-dimensions"><i class="fa fa-check"></i><b>3.1.1</b> Nut Dimensions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#washer-dimensions"><i class="fa fa-check"></i><b>3.1.2</b> Washer Dimensions</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example"><i class="fa fa-check"></i><b>3.2</b> Example</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bolt Joint Calculations</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="strength-of-bolt-joint-calculations" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Strength of Bolt Joint Calculations<a href="strength-of-bolt-joint-calculations.html#strength-of-bolt-joint-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Mechanics of Bolted Joint Integrity {#bolted-joints} Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt PreloadWhen a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload (<span class="math inline">\(F_p\)</span>). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself.
+The relationship between the applied torque (<span class="math inline">\(T\)</span>) and the resulting preload is typically approximated by the “short-form” torque equation:<span class="math display">\[T = K \cdot D \cdot F_p\]</span>
+Where: <span class="math inline">\(T\)</span> is the tightening torque.<span class="math inline">\(K\)</span> is the torque coefficient (often ~0.2 for unlubricated steel).<span class="math inline">\(D\)</span> is the nominal diameter of the bolt. <span class="math inline">\(F_p\)</span> is the desired preload. Note: Relying solely on torque to determine preload is notoriously imprecise due to friction variables. Advanced applications may use the “turn-of-nut” method or ultrasonic tension sensors <span class="citation">(<a href="#ref-shigley2020">Budynas and Nisbett 2020</a>)</span>. Load Distribution and Joint Stiffness. When an external tensile load (<span class="math inline">\(P\)</span>) is applied to a joint, only a fraction of that load is actually felt by the bolt. The rest is absorbed by the decompression of the clamped members. This is defined by the joint stiffness constant, <span class="math inline">\(C\)</span>:<span class="math display">\[C = \frac{k_b}{k_b + k_m}\]</span> In this equation, <span class="math inline">\(k_b\)</span> represents the stiffness of the bolt and <span class="math inline">\(k_m\)</span> represents the stiffness of the members. The total force acting on the bolt (<span class="math inline">\(F_b\)</span>) after the external load is applied is:<span class="math display">\[F_b = F_p + C \cdot P\]</span> Visualizing Factor of Safety to ensure the joint does not fail via yielding or separation, we must calculate the factor of safety. The following R code demonstrates how the bolt force increases relative to the external load until the point of joint separation.</p>
+<div class="figure"><span style="display:block;" id="fig:bolt-plot"></span>
+<img src="_main_files/figure-html/bolt-plot-1.png" alt="Relationship between Bolt Force and External Load." width="672" />
+<p class="caption">
+Figure 3.1: Relationship between Bolt Force and External Load.
+</p>
+</div>
+<p>As illustrated in Figure ~<a href="strength-of-bolt-joint-calculations.html#fig:bolt-plot">3.1</a>, the bolt force increases much more slowly while the joint is clamped (<span class="math inline">\(C &lt; 1\)</span>). Once the external load exceeds the separation point, the bolt must carry the entire load, significantly increasing the risk of fatigue or tensile failure.</p>
+<p><strong>Summary Checklist for Designers</strong></p>
+<ul>
+<li>Determine required clamping force to prevent sliding or separation.</li>
+<li>Select bolt grade based on proof strength requirements.</li>
+<li>Calculate stiffness-es (<span class="math inline">\(k_b, k_m\)</span>) to find the joint constant.</li>
+<li>Verify safety factors against yielding, joint separation, and fatigue.</li>
+</ul>
+<div id="bolt-definitions" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Bolt Definitions<a href="strength-of-bolt-joint-calculations.html#bolt-definitions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Key Terminology used to describe the geometry of a bolt.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-14"></span>
+<img src="images/ThreadStandards.png" alt="Thread Standards" width="70%" />
+<p class="caption">
+Figure 3.2: Thread Standards
+</p>
+</div>
+<ul>
+<li><strong>Pitch</strong> – distance between adjacent threads. Reciprocal of threads per inch.</li>
+<li><strong>Major diameter</strong> – largest diameter of thread</li>
+<li><strong>Minor diameter</strong> – smallest diameter of thread</li>
+<li><strong>Pitch diameter</strong> – theoretical diameter between major and minor diameters, where tooth and gap are same width</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-15"></span>
+<img src="images/BasicProfile.png" alt="Basic Thread Profile" width="70%" />
+<p class="caption">
+Figure 3.3: Basic Thread Profile
+</p>
+</div>
+<blockquote>
+<p><strong>Note:</strong> The dimensions and geometry in the figure above are only used for drawing the threads, they are not dimensions to manufacture to!</p>
+</blockquote>
+<p>The tensile stress area, <span class="math inline">\(A_t\)</span>, is the area of an unthreaded rod with the same tensile strength as a threaded rod.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-16"></span>
+<img src="images/TensileStressArea.png" alt="Tensile Stress Area" width="100%" />
+<p class="caption">
+Figure 3.4: Tensile Stress Area
+</p>
+</div>
+<p>It is the effective area of a threaded rod to be used for stress calculations.<br />
+The diameter of this unthreaded rod is the average of the pitch diameter and the minor diameter of the threaded rod.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:fastener-lookup">Table 3.1: </span>Fastener Dimensions: UNC and UNF Series
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Coarse Series (UNC)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Fine Series (UNF)
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:center;">
+Size
+</th>
+<th style="text-align:center;">
+Nominal D<br>in
+</th>
+<th style="text-align:center;">
+UNC<br>N
+</th>
+<th style="text-align:center;">
+UNC <span class="math inline">\(A_t\)</span><br><span class="math inline">\(in^2\)</span>
+</th>
+<th style="text-align:center;">
+UNC <span class="math inline">\(A_r\)</span><br><span class="math inline">\(in^2\)</span>
+</th>
+<th style="text-align:center;">
+UNF<br>N
+</th>
+<th style="text-align:center;">
+UNF <span class="math inline">\(A_t\)</span><br><span class="math inline">\(in^2\)</span>
+</th>
+<th style="text-align:center;">
+UNF <span class="math inline">\(A_r\)</span><br><span class="math inline">\(in^2\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0.0600
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+NA
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+NA
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+NA
+</td>
+<td style="text-align:center;">
+80
+</td>
+<td style="text-align:center;">
+0.00180
+</td>
+<td style="text-align:center;">
+0.00151
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.0730
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+64
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00263
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00218
+</td>
+<td style="text-align:center;">
+72
+</td>
+<td style="text-align:center;">
+0.00278
+</td>
+<td style="text-align:center;">
+0.00237
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.0860
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+56
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00370
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00310
+</td>
+<td style="text-align:center;">
+64
+</td>
+<td style="text-align:center;">
+0.00394
+</td>
+<td style="text-align:center;">
+0.00339
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.0990
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+48
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00487
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00406
+</td>
+<td style="text-align:center;">
+56
+</td>
+<td style="text-align:center;">
+0.00523
+</td>
+<td style="text-align:center;">
+0.00451
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+0.1120
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+40
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00604
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00496
+</td>
+<td style="text-align:center;">
+48
+</td>
+<td style="text-align:center;">
+0.00661
+</td>
+<td style="text-align:center;">
+0.00566
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;">
+0.1250
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+40
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00796
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00672
+</td>
+<td style="text-align:center;">
+44
+</td>
+<td style="text-align:center;">
+0.00880
+</td>
+<td style="text-align:center;">
+0.00716
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+6
+</td>
+<td style="text-align:center;">
+0.1380
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+32
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00909
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.00745
+</td>
+<td style="text-align:center;">
+40
+</td>
+<td style="text-align:center;">
+0.01015
+</td>
+<td style="text-align:center;">
+0.00874
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+0.1640
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+32
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.01400
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.01196
+</td>
+<td style="text-align:center;">
+36
+</td>
+<td style="text-align:center;">
+0.01474
+</td>
+<td style="text-align:center;">
+0.01285
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+0.1900
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+24
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.01750
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.01450
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+0.02000
+</td>
+<td style="text-align:center;">
+0.01750
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+12
+</td>
+<td style="text-align:center;">
+0.2160
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+24
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.02420
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.02060
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+0.02580
+</td>
+<td style="text-align:center;">
+0.02260
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1/4
+</td>
+<td style="text-align:center;">
+0.2500
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+20
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.03180
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.02690
+</td>
+<td style="text-align:center;">
+28
+</td>
+<td style="text-align:center;">
+0.03640
+</td>
+<td style="text-align:center;">
+0.03260
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5/16
+</td>
+<td style="text-align:center;">
+0.3125
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+18
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.05240
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.04540
+</td>
+<td style="text-align:center;">
+24
+</td>
+<td style="text-align:center;">
+0.05800
+</td>
+<td style="text-align:center;">
+0.05240
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3/8
+</td>
+<td style="text-align:center;">
+0.3750
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+16
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.07750
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.06780
+</td>
+<td style="text-align:center;">
+24
+</td>
+<td style="text-align:center;">
+0.08780
+</td>
+<td style="text-align:center;">
+0.08090
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7/16
+</td>
+<td style="text-align:center;">
+0.4375
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+14
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.10630
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.09330
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+0.11870
+</td>
+<td style="text-align:center;">
+0.10900
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1/2
+</td>
+<td style="text-align:center;">
+0.5000
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+13
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.14190
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.12570
+</td>
+<td style="text-align:center;">
+20
+</td>
+<td style="text-align:center;">
+0.15990
+</td>
+<td style="text-align:center;">
+0.14860
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9/16
+</td>
+<td style="text-align:center;">
+0.5625
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+12
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.18200
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.16200
+</td>
+<td style="text-align:center;">
+18
+</td>
+<td style="text-align:center;">
+0.20300
+</td>
+<td style="text-align:center;">
+0.18900
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5/8
+</td>
+<td style="text-align:center;">
+0.6250
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+11
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.22600
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.20200
+</td>
+<td style="text-align:center;">
+18
+</td>
+<td style="text-align:center;">
+0.25600
+</td>
+<td style="text-align:center;">
+0.24000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3/4
+</td>
+<td style="text-align:center;">
+0.7500
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+10
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.33400
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.30200
+</td>
+<td style="text-align:center;">
+16
+</td>
+<td style="text-align:center;">
+0.37300
+</td>
+<td style="text-align:center;">
+0.35100
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7/8
+</td>
+<td style="text-align:center;">
+0.8750
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+9
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.46200
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.41900
+</td>
+<td style="text-align:center;">
+14
+</td>
+<td style="text-align:center;">
+0.50900
+</td>
+<td style="text-align:center;">
+0.48000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1.0000
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+8
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.60600
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.55100
+</td>
+<td style="text-align:center;">
+12
+</td>
+<td style="text-align:center;">
+0.66300
+</td>
+<td style="text-align:center;">
+0.62500
+</td>
+</tr>
+</tbody>
+</table>
+<p>Metric Bolt Tensile Cross Stress Area</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:metric-fastener-table">Table 3.2: </span>Metric Fastener Dimensions: Coarse-Pitch and Fine-Pitch Series
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Coarse-Pitch Series
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Fine-Pitch Series
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:center;">
+Nominal<br>Diameter d<br>(mm)
+</th>
+<th style="text-align:center;">
+Pitch<br>p<br>(mm)
+</th>
+<th style="text-align:center;">
+Tensile<br>Stress Area <span class="math inline">\(A_t\)</span><br>(mm<span class="math inline">\(^2\)</span>)
+</th>
+<th style="text-align:center;">
+Minor<br>Diameter Area <span class="math inline">\(A_r\)</span><br>(mm<span class="math inline">\(^2\)</span>)
+</th>
+<th style="text-align:center;">
+Pitch<br>p<br>(mm)
+</th>
+<th style="text-align:center;">
+Tensile<br>Stress Area <span class="math inline">\(A_t\)</span><br>(mm<span class="math inline">\(^2\)</span>)
+</th>
+<th style="text-align:center;">
+Minor<br>Diameter Area <span class="math inline">\(A_r\)</span><br>(mm<span class="math inline">\(^2\)</span>)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1.6
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.35
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1.27
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1.07
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.40
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+2.07
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1.79
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.5
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.45
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+3.39
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+2.98
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.50
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+5.03
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+4.47
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3.5
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.60
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+6.78
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+6.00
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.70
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+8.78
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+7.75
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+0.80
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+14.20
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+12.70
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+6.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+20.10
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+17.90
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1.25
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+36.60
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+32.80
+</td>
+<td style="text-align:center;">
+1.00
+</td>
+<td style="text-align:center;">
+39.2
+</td>
+<td style="text-align:center;">
+36.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1.50
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+58.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+52.30
+</td>
+<td style="text-align:center;">
+1.25
+</td>
+<td style="text-align:center;">
+61.2
+</td>
+<td style="text-align:center;">
+56.3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+12.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1.75
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+84.30
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+76.30
+</td>
+<td style="text-align:center;">
+1.25
+</td>
+<td style="text-align:center;">
+92.1
+</td>
+<td style="text-align:center;">
+86.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+14.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+2.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+115.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+104.00
+</td>
+<td style="text-align:center;">
+1.50
+</td>
+<td style="text-align:center;">
+125.0
+</td>
+<td style="text-align:center;">
+116.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+16.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+2.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+157.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+144.00
+</td>
+<td style="text-align:center;">
+1.50
+</td>
+<td style="text-align:center;">
+167.0
+</td>
+<td style="text-align:center;">
+157.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+20.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+2.50
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+245.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+225.00
+</td>
+<td style="text-align:center;">
+1.50
+</td>
+<td style="text-align:center;">
+272.0
+</td>
+<td style="text-align:center;">
+259.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+24.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+3.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+353.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+324.00
+</td>
+<td style="text-align:center;">
+2.00
+</td>
+<td style="text-align:center;">
+384.0
+</td>
+<td style="text-align:center;">
+365.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+30.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+3.50
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+561.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+519.00
+</td>
+<td style="text-align:center;">
+2.00
+</td>
+<td style="text-align:center;">
+621.0
+</td>
+<td style="text-align:center;">
+596.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+36.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+4.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+817.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+759.00
+</td>
+<td style="text-align:center;">
+2.00
+</td>
+<td style="text-align:center;">
+915.0
+</td>
+<td style="text-align:center;">
+884.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+42.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+4.50
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1120.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1050.00
+</td>
+<td style="text-align:center;">
+2.00
+</td>
+<td style="text-align:center;">
+1260.0
+</td>
+<td style="text-align:center;">
+1230.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+48.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+5.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1470.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1380.00
+</td>
+<td style="text-align:center;">
+2.00
+</td>
+<td style="text-align:center;">
+1670.0
+</td>
+<td style="text-align:center;">
+1630.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+56.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+5.50
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+2030.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+1910.00
+</td>
+<td style="text-align:center;">
+2.00
+</td>
+<td style="text-align:center;">
+2300.0
+</td>
+<td style="text-align:center;">
+2250.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+64.0
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+6.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+2680.00
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+2520.00
+</td>
+<td style="text-align:center;">
+2.00
+</td>
+<td style="text-align:center;">
+3030.0
+</td>
+<td style="text-align:center;">
+2980.0
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Hexagon-head bolts</strong> are one of the most common for engineering applications.</li>
+<li><span class="math inline">\(W\)</span> is usually about <span class="math inline">\(1.5\)</span> times nominal diameter:
+<span class="math display">\[\text{round}(W \cdot 1.5)\]</span>
+<ul>
+<li><strong>Example:</strong> <span class="math inline">\(\text{Dia} = 7/16 \Rightarrow \text{round}(7 \cdot 1.5) \Rightarrow \text{round}(10.5) = 11\)</span>
+<span class="math inline">\(\therefore W = 11/16\)</span></li>
+</ul></li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-17"></span>
+<img src="images/BoltDimensions.png" alt="Bolt Dimensions" width="100%" />
+<p class="caption">
+Figure 3.5: Bolt Dimensions
+</p>
+</div>
+<ul>
+<li>Bolt length <span class="math inline">\(L\)</span> is measured from <strong>below the head</strong>.</li>
+<li>Thread length <span class="math inline">\(L_T\)</span>.</li>
+</ul>
+<p>Although many other thread lengths exist, to standardize the bolts used in this course, we only use a tread length determined by the equation below.</p>
+<p>English Units:
+<span class="math display">\[
+L_{T} = \begin{cases}
+2d + \frac{1}{4} \text{ in} &amp; L \le 6 \text{ in} \\
+2d + \frac{1}{2} \text{ in} &amp; L &gt; 6 \text{ in}
+\end{cases}
+\]</span>
+Metric Units:
+<span class="math display">\[
+L_T = \begin{cases}
+2d + 6 &amp; L \le 125, \quad d \le 48 \\
+2d + 12 &amp; 125 &lt; L \le 200 \\
+2d + 25 &amp; L &gt; 200
+\end{cases}
+\]</span></p>
+<div id="nut-dimensions" class="section level3 hasAnchor" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Nut Dimensions<a href="strength-of-bolt-joint-calculations.html#nut-dimensions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>First three threads of nut carry majority of load</li>
+<li>Localized plastic strain in the first thread is likely, so <strong>nuts should not be re-used in critical applications</strong>.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-18"></span>
+<img src="images/Nuts.png" alt="Nuts" width="100%" />
+<p class="caption">
+Figure 3.6: Nuts
+</p>
+</div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:english-nut-dimensions-table">Table 3.3: </span>Dimensions of Hexagonal Nuts
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Height H
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Nominal<br>Size, in
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Width<br>W
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Regular<br>Hexagonal
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Thick or<br>Slotted
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+JAM
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1/4
+</td>
+<td style="text-align:center;">
+7/16
+</td>
+<td style="text-align:center;">
+7/32
+</td>
+<td style="text-align:center;">
+9/32
+</td>
+<td style="text-align:center;">
+5/32
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5/16
+</td>
+<td style="text-align:center;">
+1/2
+</td>
+<td style="text-align:center;">
+17/64
+</td>
+<td style="text-align:center;">
+21/64
+</td>
+<td style="text-align:center;">
+3/16
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3/8
+</td>
+<td style="text-align:center;">
+9/16
+</td>
+<td style="text-align:center;">
+21/64
+</td>
+<td style="text-align:center;">
+13/32
+</td>
+<td style="text-align:center;">
+7/32
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7/16
+</td>
+<td style="text-align:center;">
+11/16
+</td>
+<td style="text-align:center;">
+3/8
+</td>
+<td style="text-align:center;">
+29/64
+</td>
+<td style="text-align:center;">
+1/4
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1/2
+</td>
+<td style="text-align:center;">
+3/4
+</td>
+<td style="text-align:center;">
+7/16
+</td>
+<td style="text-align:center;">
+9/16
+</td>
+<td style="text-align:center;">
+5/16
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9/16
+</td>
+<td style="text-align:center;">
+7/8
+</td>
+<td style="text-align:center;">
+31/64
+</td>
+<td style="text-align:center;">
+39/64
+</td>
+<td style="text-align:center;">
+5/16
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5/8
+</td>
+<td style="text-align:center;">
+15/16
+</td>
+<td style="text-align:center;">
+35/64
+</td>
+<td style="text-align:center;">
+23/32
+</td>
+<td style="text-align:center;">
+3/8
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3/4
+</td>
+<td style="text-align:center;">
+1 1/8
+</td>
+<td style="text-align:center;">
+41/64
+</td>
+<td style="text-align:center;">
+13/16
+</td>
+<td style="text-align:center;">
+27/64
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7/8
+</td>
+<td style="text-align:center;">
+1 5/16
+</td>
+<td style="text-align:center;">
+3/4
+</td>
+<td style="text-align:center;">
+29/32
+</td>
+<td style="text-align:center;">
+31/64
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1 1/2
+</td>
+<td style="text-align:center;">
+55/64
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+35/64
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1 1/8
+</td>
+<td style="text-align:center;">
+1 11/16
+</td>
+<td style="text-align:center;">
+31/32
+</td>
+<td style="text-align:center;">
+1 5/32
+</td>
+<td style="text-align:center;">
+39/64
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1 1/4
+</td>
+<td style="text-align:center;">
+1 7/8
+</td>
+<td style="text-align:center;">
+1 1/16
+</td>
+<td style="text-align:center;">
+1 1/4
+</td>
+<td style="text-align:center;">
+23/32
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1 3/8
+</td>
+<td style="text-align:center;">
+2 1/16
+</td>
+<td style="text-align:center;">
+1 11/64
+</td>
+<td style="text-align:center;">
+1 3/8
+</td>
+<td style="text-align:center;">
+25/32
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1 1/2
+</td>
+<td style="text-align:center;">
+2 1/4
+</td>
+<td style="text-align:center;">
+1 9/32
+</td>
+<td style="text-align:center;">
+1 1/2
+</td>
+<td style="text-align:center;">
+27/32
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:metric-nut-table">Table 3.4: </span>Dimensions of Metric Hexagonal Nuts
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Height H (mm)
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Nominal<br>Size, mm
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Width<br>W
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Regular<br>Hexagonal
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Thick or<br>Slotted
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+JAM
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+M5
+</td>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+4.7
+</td>
+<td style="text-align:center;">
+5.1
+</td>
+<td style="text-align:center;">
+2.7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M6
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+5.2
+</td>
+<td style="text-align:center;">
+5.7
+</td>
+<td style="text-align:center;">
+3.2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M8
+</td>
+<td style="text-align:center;">
+13
+</td>
+<td style="text-align:center;">
+6.8
+</td>
+<td style="text-align:center;">
+7.5
+</td>
+<td style="text-align:center;">
+4.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M10
+</td>
+<td style="text-align:center;">
+16
+</td>
+<td style="text-align:center;">
+8.4
+</td>
+<td style="text-align:center;">
+9.3
+</td>
+<td style="text-align:center;">
+5.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M12
+</td>
+<td style="text-align:center;">
+18
+</td>
+<td style="text-align:center;">
+10.8
+</td>
+<td style="text-align:center;">
+12.0
+</td>
+<td style="text-align:center;">
+6.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M14
+</td>
+<td style="text-align:center;">
+21
+</td>
+<td style="text-align:center;">
+12.8
+</td>
+<td style="text-align:center;">
+14.1
+</td>
+<td style="text-align:center;">
+7.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M16
+</td>
+<td style="text-align:center;">
+24
+</td>
+<td style="text-align:center;">
+14.8
+</td>
+<td style="text-align:center;">
+16.4
+</td>
+<td style="text-align:center;">
+8.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M20
+</td>
+<td style="text-align:center;">
+30
+</td>
+<td style="text-align:center;">
+18.0
+</td>
+<td style="text-align:center;">
+20.3
+</td>
+<td style="text-align:center;">
+10.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M24
+</td>
+<td style="text-align:center;">
+36
+</td>
+<td style="text-align:center;">
+21.5
+</td>
+<td style="text-align:center;">
+23.9
+</td>
+<td style="text-align:center;">
+12.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M30
+</td>
+<td style="text-align:center;">
+46
+</td>
+<td style="text-align:center;">
+25.6
+</td>
+<td style="text-align:center;">
+28.6
+</td>
+<td style="text-align:center;">
+15.0
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+M36
+</td>
+<td style="text-align:center;">
+55
+</td>
+<td style="text-align:center;">
+31.0
+</td>
+<td style="text-align:center;">
+34.7
+</td>
+<td style="text-align:center;">
+18.0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="washer-dimensions" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Washer Dimensions<a href="strength-of-bolt-joint-calculations.html#washer-dimensions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:washer-dimensions">Table 3.5: </span>Basic Dimensions of American Standard Plain Washers (Inches)
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="2">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Diameter
+</div>
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+</tr>
+<tr>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Fastener Size
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Washer Size
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+ID
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+OD
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Thickness
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+#6
+</td>
+<td style="text-align:center;">
+0.138
+</td>
+<td style="text-align:center;">
+0.156
+</td>
+<td style="text-align:center;">
+0.375
+</td>
+<td style="text-align:center;">
+0.049
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+#8
+</td>
+<td style="text-align:center;">
+0.164
+</td>
+<td style="text-align:center;">
+0.188
+</td>
+<td style="text-align:center;">
+0.438
+</td>
+<td style="text-align:center;">
+0.049
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+#10
+</td>
+<td style="text-align:center;">
+0.190
+</td>
+<td style="text-align:center;">
+0.219
+</td>
+<td style="text-align:center;">
+0.500
+</td>
+<td style="text-align:center;">
+0.049
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+#12
+</td>
+<td style="text-align:center;">
+0.216
+</td>
+<td style="text-align:center;">
+0.250
+</td>
+<td style="text-align:center;">
+0.562
+</td>
+<td style="text-align:center;">
+0.065
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1/4 N
+</td>
+<td style="text-align:center;">
+0.250
+</td>
+<td style="text-align:center;">
+0.281
+</td>
+<td style="text-align:center;">
+0.625
+</td>
+<td style="text-align:center;">
+0.065
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1/4 W
+</td>
+<td style="text-align:center;">
+0.250
+</td>
+<td style="text-align:center;">
+0.312
+</td>
+<td style="text-align:center;">
+0.734
+</td>
+<td style="text-align:center;">
+0.065
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5/16 N
+</td>
+<td style="text-align:center;">
+0.312
+</td>
+<td style="text-align:center;">
+0.344
+</td>
+<td style="text-align:center;">
+0.688
+</td>
+<td style="text-align:center;">
+0.065
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5/16 W
+</td>
+<td style="text-align:center;">
+0.312
+</td>
+<td style="text-align:center;">
+0.375
+</td>
+<td style="text-align:center;">
+0.875
+</td>
+<td style="text-align:center;">
+0.083
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3/8 N
+</td>
+<td style="text-align:center;">
+0.375
+</td>
+<td style="text-align:center;">
+0.406
+</td>
+<td style="text-align:center;">
+0.812
+</td>
+<td style="text-align:center;">
+0.065
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3/8 W
+</td>
+<td style="text-align:center;">
+0.375
+</td>
+<td style="text-align:center;">
+0.438
+</td>
+<td style="text-align:center;">
+1.000
+</td>
+<td style="text-align:center;">
+0.083
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7/16 N
+</td>
+<td style="text-align:center;">
+0.438
+</td>
+<td style="text-align:center;">
+0.469
+</td>
+<td style="text-align:center;">
+0.922
+</td>
+<td style="text-align:center;">
+0.065
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7/16 W
+</td>
+<td style="text-align:center;">
+0.438
+</td>
+<td style="text-align:center;">
+0.500
+</td>
+<td style="text-align:center;">
+1.250
+</td>
+<td style="text-align:center;">
+0.083
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1/2 N
+</td>
+<td style="text-align:center;">
+0.500
+</td>
+<td style="text-align:center;">
+0.531
+</td>
+<td style="text-align:center;">
+1.062
+</td>
+<td style="text-align:center;">
+0.095
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1/2 W
+</td>
+<td style="text-align:center;">
+0.500
+</td>
+<td style="text-align:center;">
+0.562
+</td>
+<td style="text-align:center;">
+1.375
+</td>
+<td style="text-align:center;">
+0.109
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9/16 N
+</td>
+<td style="text-align:center;">
+0.562
+</td>
+<td style="text-align:center;">
+0.594
+</td>
+<td style="text-align:center;">
+1.156
+</td>
+<td style="text-align:center;">
+0.095
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9/16 W
+</td>
+<td style="text-align:center;">
+0.562
+</td>
+<td style="text-align:center;">
+0.625
+</td>
+<td style="text-align:center;">
+1.469
+</td>
+<td style="text-align:center;">
+0.109
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5/8 N
+</td>
+<td style="text-align:center;">
+0.625
+</td>
+<td style="text-align:center;">
+0.656
+</td>
+<td style="text-align:center;">
+1.312
+</td>
+<td style="text-align:center;">
+0.095
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5/8 W
+</td>
+<td style="text-align:center;">
+0.625
+</td>
+<td style="text-align:center;">
+0.688
+</td>
+<td style="text-align:center;">
+1.750
+</td>
+<td style="text-align:center;">
+0.134
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3/4 N
+</td>
+<td style="text-align:center;">
+0.750
+</td>
+<td style="text-align:center;">
+0.812
+</td>
+<td style="text-align:center;">
+1.469
+</td>
+<td style="text-align:center;">
+0.134
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3/4 W
+</td>
+<td style="text-align:center;">
+0.750
+</td>
+<td style="text-align:center;">
+0.812
+</td>
+<td style="text-align:center;">
+2.000
+</td>
+<td style="text-align:center;">
+0.148
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7/8 N
+</td>
+<td style="text-align:center;">
+0.875
+</td>
+<td style="text-align:center;">
+0.938
+</td>
+<td style="text-align:center;">
+1.750
+</td>
+<td style="text-align:center;">
+0.134
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7/8 W
+</td>
+<td style="text-align:center;">
+0.875
+</td>
+<td style="text-align:center;">
+0.938
+</td>
+<td style="text-align:center;">
+2.250
+</td>
+<td style="text-align:center;">
+0.165
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1 N
+</td>
+<td style="text-align:center;">
+1.000
+</td>
+<td style="text-align:center;">
+1.062
+</td>
+<td style="text-align:center;">
+2.000
+</td>
+<td style="text-align:center;">
+0.134
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1 W
+</td>
+<td style="text-align:center;">
+1.000
+</td>
+<td style="text-align:center;">
+1.062
+</td>
+<td style="text-align:center;">
+2.500
+</td>
+<td style="text-align:center;">
+0.165
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;">Note: </span> <sup></sup> N = narrow; W = wide; use W when not specified.
+</td>
+</tr>
+</tfoot>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:metric-washers">Table 3.6: </span>Dimensions of Metric Plain Washers (Millimeters)
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Washer<br>Size*
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Minimum<br>ID
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Maximum<br>OD
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Maximum<br>Thickness
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1.6 N
+</td>
+<td style="text-align:center;">
+1.95
+</td>
+<td style="text-align:center;">
+4.0
+</td>
+<td style="text-align:center;">
+0.70
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1.6 R
+</td>
+<td style="text-align:center;">
+1.95
+</td>
+<td style="text-align:center;">
+5.0
+</td>
+<td style="text-align:center;">
+0.70
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1.6 W
+</td>
+<td style="text-align:center;">
+1.95
+</td>
+<td style="text-align:center;">
+6.0
+</td>
+<td style="text-align:center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2 N
+</td>
+<td style="text-align:center;">
+2.50
+</td>
+<td style="text-align:center;">
+5.0
+</td>
+<td style="text-align:center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2 R
+</td>
+<td style="text-align:center;">
+2.50
+</td>
+<td style="text-align:center;">
+6.0
+</td>
+<td style="text-align:center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2 W
+</td>
+<td style="text-align:center;">
+2.50
+</td>
+<td style="text-align:center;">
+8.0
+</td>
+<td style="text-align:center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.5 N
+</td>
+<td style="text-align:center;">
+3.00
+</td>
+<td style="text-align:center;">
+6.0
+</td>
+<td style="text-align:center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.5 R
+</td>
+<td style="text-align:center;">
+3.00
+</td>
+<td style="text-align:center;">
+8.0
+</td>
+<td style="text-align:center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.5 W
+</td>
+<td style="text-align:center;">
+3.00
+</td>
+<td style="text-align:center;">
+10.0
+</td>
+<td style="text-align:center;">
+1.20
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3 N
+</td>
+<td style="text-align:center;">
+3.50
+</td>
+<td style="text-align:center;">
+7.0
+</td>
+<td style="text-align:center;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3 R
+</td>
+<td style="text-align:center;">
+3.50
+</td>
+<td style="text-align:center;">
+10.0
+</td>
+<td style="text-align:center;">
+1.20
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3 W
+</td>
+<td style="text-align:center;">
+3.50
+</td>
+<td style="text-align:center;">
+12.0
+</td>
+<td style="text-align:center;">
+1.40
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4 N
+</td>
+<td style="text-align:center;">
+4.70
+</td>
+<td style="text-align:center;">
+10.0
+</td>
+<td style="text-align:center;">
+1.20
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4 R
+</td>
+<td style="text-align:center;">
+4.70
+</td>
+<td style="text-align:center;">
+12.0
+</td>
+<td style="text-align:center;">
+1.40
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4 W
+</td>
+<td style="text-align:center;">
+4.70
+</td>
+<td style="text-align:center;">
+16.0
+</td>
+<td style="text-align:center;">
+2.30
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5 N
+</td>
+<td style="text-align:center;">
+5.50
+</td>
+<td style="text-align:center;">
+11.0
+</td>
+<td style="text-align:center;">
+1.40
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5 R
+</td>
+<td style="text-align:center;">
+5.50
+</td>
+<td style="text-align:center;">
+15.0
+</td>
+<td style="text-align:center;">
+1.75
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5 W
+</td>
+<td style="text-align:center;">
+5.50
+</td>
+<td style="text-align:center;">
+20.0
+</td>
+<td style="text-align:center;">
+2.30
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+6 N
+</td>
+<td style="text-align:center;">
+6.65
+</td>
+<td style="text-align:center;">
+13.0
+</td>
+<td style="text-align:center;">
+1.75
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+6 R
+</td>
+<td style="text-align:center;">
+6.65
+</td>
+<td style="text-align:center;">
+18.8
+</td>
+<td style="text-align:center;">
+1.75
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+6 W
+</td>
+<td style="text-align:center;">
+6.65
+</td>
+<td style="text-align:center;">
+25.4
+</td>
+<td style="text-align:center;">
+2.30
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8 N
+</td>
+<td style="text-align:center;">
+8.90
+</td>
+<td style="text-align:center;">
+18.8
+</td>
+<td style="text-align:center;">
+2.30
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8 R
+</td>
+<td style="text-align:center;">
+8.90
+</td>
+<td style="text-align:center;">
+25.4
+</td>
+<td style="text-align:center;">
+2.30
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8 W
+</td>
+<td style="text-align:center;">
+8.90
+</td>
+<td style="text-align:center;">
+32.0
+</td>
+<td style="text-align:center;">
+2.80
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10 N
+</td>
+<td style="text-align:center;">
+10.85
+</td>
+<td style="text-align:center;">
+20.0
+</td>
+<td style="text-align:center;">
+2.30
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10 R
+</td>
+<td style="text-align:center;">
+10.85
+</td>
+<td style="text-align:center;">
+28.0
+</td>
+<td style="text-align:center;">
+2.80
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10 W
+</td>
+<td style="text-align:center;">
+10.85
+</td>
+<td style="text-align:center;">
+39.0
+</td>
+<td style="text-align:center;">
+3.50
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+12 N
+</td>
+<td style="text-align:center;">
+13.30
+</td>
+<td style="text-align:center;">
+25.4
+</td>
+<td style="text-align:center;">
+2.80
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+12 R
+</td>
+<td style="text-align:center;">
+13.30
+</td>
+<td style="text-align:center;">
+34.0
+</td>
+<td style="text-align:center;">
+3.50
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+12 W
+</td>
+<td style="text-align:center;">
+13.30
+</td>
+<td style="text-align:center;">
+44.0
+</td>
+<td style="text-align:center;">
+3.50
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+16 N
+</td>
+<td style="text-align:center;">
+17.25
+</td>
+<td style="text-align:center;">
+32.0
+</td>
+<td style="text-align:center;">
+3.50
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+16 R
+</td>
+<td style="text-align:center;">
+17.25
+</td>
+<td style="text-align:center;">
+44.0
+</td>
+<td style="text-align:center;">
+4.00
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+16 W
+</td>
+<td style="text-align:center;">
+17.25
+</td>
+<td style="text-align:center;">
+56.0
+</td>
+<td style="text-align:center;">
+4.60
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+20 N
+</td>
+<td style="text-align:center;">
+21.80
+</td>
+<td style="text-align:center;">
+39.0
+</td>
+<td style="text-align:center;">
+4.00
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+20 R
+</td>
+<td style="text-align:center;">
+21.80
+</td>
+<td style="text-align:center;">
+50.0
+</td>
+<td style="text-align:center;">
+4.60
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+20 W
+</td>
+<td style="text-align:center;">
+21.80
+</td>
+<td style="text-align:center;">
+66.0
+</td>
+<td style="text-align:center;">
+5.10
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+24 N
+</td>
+<td style="text-align:center;">
+25.60
+</td>
+<td style="text-align:center;">
+44.0
+</td>
+<td style="text-align:center;">
+4.60
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+24 R
+</td>
+<td style="text-align:center;">
+25.60
+</td>
+<td style="text-align:center;">
+56.0
+</td>
+<td style="text-align:center;">
+5.10
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+24 W
+</td>
+<td style="text-align:center;">
+25.60
+</td>
+<td style="text-align:center;">
+72.0
+</td>
+<td style="text-align:center;">
+5.60
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+30 N
+</td>
+<td style="text-align:center;">
+32.40
+</td>
+<td style="text-align:center;">
+56.0
+</td>
+<td style="text-align:center;">
+5.10
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+30 R
+</td>
+<td style="text-align:center;">
+32.40
+</td>
+<td style="text-align:center;">
+72.0
+</td>
+<td style="text-align:center;">
+5.60
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+30 W
+</td>
+<td style="text-align:center;">
+32.40
+</td>
+<td style="text-align:center;">
+90.0
+</td>
+<td style="text-align:center;">
+6.40
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+36 N
+</td>
+<td style="text-align:center;">
+38.30
+</td>
+<td style="text-align:center;">
+66.0
+</td>
+<td style="text-align:center;">
+5.60
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+36 R
+</td>
+<td style="text-align:center;">
+38.30
+</td>
+<td style="text-align:center;">
+90.0
+</td>
+<td style="text-align:center;">
+6.40
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+36 W
+</td>
+<td style="text-align:center;">
+38.30
+</td>
+<td style="text-align:center;">
+110.0
+</td>
+<td style="text-align:center;">
+8.50
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;">Note: </span> <sup></sup> N = narrow; R = regular; W = wide. *Same as screw or bolt size.
+</td>
+</tr>
+</tfoot>
+</table>
+<hr />
+</div>
+</div>
+<div id="example" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Example<a href="strength-of-bolt-joint-calculations.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this example we are verifying if the bolts can hold the applied load and how big the safety factors are.</p>
+<p><strong>Bolt material: SAE J429 Grade 5</strong> properties <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">Fastenal Technical Reference Guide</a></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Strength Property</th>
+<th align="left">Minimum Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Minimum Proof Strength</td>
+<td align="left">85,000 psi</td>
+</tr>
+<tr class="even">
+<td align="left">Minimum Tensile Strength</td>
+<td align="left">120,000 psi</td>
+</tr>
+<tr class="odd">
+<td align="left">Minimum Yield Strength</td>
+<td align="left">92,000 psi</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-19"></span>
+<img src="images/BoltJointExample.png" alt="2 Plate Example" width="100%" />
+<p class="caption">
+Figure 3.7: 2 Plate Example
+</p>
+</div>
+<div id="what-is-the-spring-constant-of-the-bolt-k_b" class="section level5 unnumbered hasAnchor question">
+<h5><strong>1)</strong> What is the spring constant of the bolt <span class="math inline">\(k_b\)</span>?<a href="strength-of-bolt-joint-calculations.html#what-is-the-spring-constant-of-the-bolt-k_b" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p>The bolt stiffness (<span class="math inline">\(k_b\)</span>) is calculated using the following formula:</p>
+<p><span class="math display">\[k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}\]</span></p>
+<p>Where the individual parameters are determined as follows:</p>
+<p><strong>Length of the unthreaded portion (<span class="math inline">\(l_d\)</span>):</strong></p>
+<p><span class="math display">\[l_d = L - L_T = 1.5 - (2 \cdot 0.5 + 0.25) = 0.25 \text{ in}\]</span></p>
+<p><strong>Length of the threaded portion (<span class="math inline">\(l_t\)</span>):</strong></p>
+<p><span class="math display">\[l_t = 0.5 + 0.75 + 0.095 - 0.25 = 1.095 \text{ in}\]</span></p>
+<p><strong>Tensile stress area (<span class="math inline">\(A_t\)</span>):</strong></p>
+<p><span class="math display">\[A_t = 0.1599 \text{ in}^2\]</span></p>
+<p><strong>Major diameter area (<span class="math inline">\(A_d\)</span>):</strong></p>
+<p><span class="math display">\[A_d = \frac{\pi}{4}(0.5)^2 = 0.1963 \text{ in}^2\]</span></p>
+<p><strong>Modulus of elasticity (<span class="math inline">\(E\)</span>):</strong></p>
+<p><span class="math display">\[E = 29 \cdot 10^6 \frac{\text{lbf}}{\text{in}^2}\]</span></p>
+<p>Substituting these values back into the main formula for <span class="math inline">\(k_b\)</span>:</p>
+<p><span class="math display">\[k_b = \frac{0.1963 \cdot 0.1599 \cdot 29 \cdot 10^6}{0.1963 \cdot 1.095 + 0.1599 \cdot 0.25} = 3.57 \cdot 10^6 \frac{\text{lbf}}{\text{in}}\]</span></p>
+</div>
+<div id="what-is-the-spring-constant-of-the-compressed-joint-k_m" class="section level5 unnumbered hasAnchor question">
+<h5><strong>2)</strong> What is the spring constant of the compressed joint <span class="math inline">\(k_m\)</span>?<a href="strength-of-bolt-joint-calculations.html#what-is-the-spring-constant-of-the-compressed-joint-k_m" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p><strong>Spring Rate of Compressed Joint Case : <span class="math inline">\(3D_{head} &lt; D_{joint}\)</span></strong></p>
+<p>The area <span class="math inline">\(A_s\)</span> is given by the formula:
+<span class="math display">\[ A_s = \frac{\pi}{4} \cdot \left[ (D_H + 0.1 l_j)^2 - D_h^2 \right] \]</span></p>
+<p>Given values:
+<span class="math display">\[ D_h = 0.510 \, \text{in} \]</span>
+<span class="math display">\[ D_H = W \text{ on Page 8} = 1.5 \cdot 0.5 = 0.75 \, \text{in} \]</span>
+<span class="math display">\[ l_j = 0.5 + 0.75 + 0.095 = 1.345 \, \text{in} \]</span>
+where <span class="math inline">\(l_{j}\)</span> is the entire joint length.</p>
+<p>Substituting the values into the area formula:
+<span class="math display">\[ A_s = \frac{\pi}{4} \left[ (0.75 + 0.1 \cdot 1.345)^2 - 0.510^2 \right] = 0.4102 \, \text{in}^2 \]</span></p>
+<p>The stiffness <span class="math inline">\(k_j\)</span> is calculated as:
+<span class="math display">\[ k_j = \frac{E A_s}{l_{material}} \]</span>
+where <span class="math inline">\(l_{material}\)</span> is the length of the substitute cylinder of each material.</p>
+<ul>
+<li><strong>Steel Spring Constant</strong>
+Length for steel, combine top plate and washer:
+<span class="math display">\[ l_{steel} = 0.5 + 0.095 \]</span></li>
+</ul>
+<p>Stiffness for steel:
+<span class="math display">\[ k_{steel} = \frac{29 \cdot 10^6 \cdot 0.4102}{(0.5 + 0.095)} = 20 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} \]</span></p>
+<ul>
+<li><strong>Cast Iron Spring Constant</strong>
+Given values for cast iron:
+<span class="math display">\[ E = 13 \cdot 10^6 \, \text{psi} \]</span>
+<span class="math display">\[ l_{cast iron} = 0.75 \]</span></li>
+</ul>
+<p>Stiffness for cast iron:
+<span class="math display">\[ k_{iron} = \frac{13 \cdot 10^6 \cdot 0.4102}{0.75} = 7.1 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} \]</span></p>
+<ul>
+<li><strong>Combine springs in series:</strong>
+The equivalent spring constant <span class="math inline">\(k_m\)</span> is found using:
+<span class="math display">\[ \frac{1}{k_m} = \frac{1}{k_1} + \frac{1}{k_2} + \dots + \frac{1}{k_n} \]</span></li>
+</ul>
+<p>Substituting the calculated stiffness values:
+<span class="math display">\[ \frac{1}{k_m} = \frac{1}{20 \cdot 10^6} + \frac{1}{7.1 \cdot 10^6} = \frac{1}{1.908 \cdot 10^7} \]</span></p>
+<p>Solving for <span class="math inline">\(k_m\)</span>:
+<span class="math display">\[ k_m = 5.24 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} \]</span></p>
+<p><strong>Spring rate of compressed joint:</strong>
+<span class="math display">\[ k_m = 5.24 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} \]</span></p>
+</div>
+<div id="what-is-the-initial-load-in-the-bolt-f_i" class="section level5 unnumbered hasAnchor question">
+<h5><strong>3)</strong> What is the initial load in the bolt <span class="math inline">\(F_i\)</span>?<a href="strength-of-bolt-joint-calculations.html#what-is-the-initial-load-in-the-bolt-f_i" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<div id="joint-stiffness-constant-c" class="section level5 unnumbered hasAnchor">
+<h5>Joint Stiffness Constant (C)<a href="strength-of-bolt-joint-calculations.html#joint-stiffness-constant-c" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The stiffness constant <strong>C</strong> defines how the external load is shared between the bolt and the clamped members:
+<span class="math display">\[ C = \frac{k_b}{k_b + k_m} = \frac{3.57 \cdot 10^6}{3.57 \cdot 10^6 + 5.24 \cdot 10^6} = 0.405 \]</span></p>
+</div>
+<div id="load-and-preload-parameters" class="section level5 unnumbered hasAnchor">
+<h5>Load and Preload Parameters<a href="strength-of-bolt-joint-calculations.html#load-and-preload-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>Portion of Load (P):</strong> The external load shared by the individual fastener:
+<span class="math display">\[ P = \frac{10000 \text{ lbf}}{4} = 2500 \text{ lbf} \]</span></li>
+<li><strong>Initial Preload (<span class="math inline">\(F_i\)</span>):</strong> Calculated based on the <em>Fastenal Technical Reference Guide</em><span class="citation">(<a href="#ref-fastenal_guide">Fastenal Company n.d.</a>)</span>:
+<span class="math display">\[ F_i = 0.75 \cdot 0.1599 \cdot 85000 = 10194 \text{ lbf} \]</span></li>
+</ul>
+</div>
+</div>
+<div id="what-is-the-tensile-force-in-the-bolt-f_b" class="section level5 unnumbered hasAnchor question">
+<h5><strong>4)</strong> What is the tensile force in the bolt <span class="math inline">\(F_b\)</span>?<a href="strength-of-bolt-joint-calculations.html#what-is-the-tensile-force-in-the-bolt-f_b" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div id="resulting-forces" class="section level5 unnumbered hasAnchor answer">
+<h5>Resulting Forces<a href="strength-of-bolt-joint-calculations.html#resulting-forces" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><strong>Force in the Bolt (<span class="math inline">\(F_b\)</span>):</strong>
+The total tension in the bolt after the external load is applied:
+<span class="math display">\[ F_b = C \cdot P + F_i \]</span>
+<span class="math display">\[ F_b = 0.405 \cdot 2500 + 10194 = 11207 \text{ lbf} \]</span></p>
+</div>
+<div id="what-is-the-compression-force-in-the-members-f_m" class="section level5 unnumbered hasAnchor question">
+<h5><strong>5)</strong> What is the compression force in the members <span class="math inline">\(F_m\)</span>?<a href="strength-of-bolt-joint-calculations.html#what-is-the-compression-force-in-the-members-f_m" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p><strong>Force in the Member (<span class="math inline">\(F_m\)</span>):</strong> The force remaining in the clamped members:
+<span class="math display">\[ F_m = (1 - C) \cdot P - F_i \]</span>
+<span class="math display">\[ F_m = (1 - 0.405) \cdot 2500 - 10194 = -8707 \text{ lbf} \]</span></p>
+<blockquote>
+<p><strong>Note:</strong> The negative result for <span class="math inline">\(F_m\)</span> indicates that the members are in <strong>compression</strong>.</p>
+</blockquote>
+</div>
+<div id="tensile-stress-in-bolt" class="section level5 unnumbered hasAnchor question">
+<h5><strong>6)</strong> Tensile Stress in Bolt<a href="strength-of-bolt-joint-calculations.html#tensile-stress-in-bolt" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p>The following calculations determine the tensile stress and various safety factors for the bolt assembly.</p>
+<p><strong>Tensile Stress (<span class="math inline">\(\sigma_b\)</span>):</strong>
+<span class="math display">\[\sigma_b = \frac{F_b}{A_t} = \frac{11207}{0.1599 \, in^2} = 70 \, ksi\]</span></p>
+</div>
+<div id="what-are-the-safety-factors-n_l-n_p-n_o" class="section level5 unnumbered hasAnchor question">
+<h5><strong>7)</strong> What are the safety factors <span class="math inline">\(n_L\)</span>, <span class="math inline">\(n_P\)</span>, <span class="math inline">\(n_O\)</span>?<a href="strength-of-bolt-joint-calculations.html#what-are-the-safety-factors-n_l-n_p-n_o" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p><strong>1. Proof Load Safety Factor (<span class="math inline">\(n_p\)</span>):</strong>
+<span class="math display">\[n_p = \frac{S_p A_t}{CP + F_i} = \frac{85000 \cdot 0.1599}{0.405 \cdot 2500 + 10194} = 1.21\]</span></p>
+<p><strong>2. Load Factor (<span class="math inline">\(n_L\)</span>):</strong>
+<span class="math display">\[n_L = \frac{S_p \cdot A_t - F_i}{CP} = \frac{85000 \cdot 0.1599 - 10194}{0.405 \cdot 2500} = 3.36\]</span></p>
+<p><strong>3. Separation Safety Factor (<span class="math inline">\(n_o\)</span>):</strong>
+<span class="math display">\[n_o = \frac{F_i}{P(1 - C)} = \frac{10194}{2500(1 - 0.405)} = 6.85\]</span></p>
+</div>
+<div id="torque-requirements-and-lubrication-effects" class="section level5 unnumbered hasAnchor question">
+<h5><strong>8)</strong> Torque Requirements and Lubrication Effects<a href="strength-of-bolt-joint-calculations.html#torque-requirements-and-lubrication-effects" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p>This question evaluates the torque required to achieve the initial tension (<span class="math inline">\(F_i\)</span>) and the impact of lubrication on bolt integrity.</p>
+<p><strong>Torque required to achieve <span class="math inline">\(F_i\)</span>:</strong>
+<span class="math display">\[T = K \cdot d \cdot F_i\]</span>
+<span class="math display">\[T = 0.2 \cdot 0.5 \cdot 10194 = 1019 \, in \cdot lbf = 85 \, ft \cdot lbs\]</span></p>
+<blockquote>
+<p><strong>Note:</strong> (<span class="math inline">\(in \cdot lbf\)</span>) are not common units. Therefore answer in (<span class="math inline">\(ft \cdot lbs\)</span>) instead.</p>
+</blockquote>
+<p><strong>Impact of Lubrication (<span class="math inline">\(K = 0.1\)</span>):</strong>
+What is <span class="math inline">\(F_i\)</span> if the operator lubricates the bolt?
+<span class="math display">\[F_i = \frac{T}{K \cdot d} = \frac{1019}{0.1 \cdot 0.5} = 20380 \, lbf\]</span></p>
+<p><strong>Resulting Stress (<span class="math inline">\(\sigma\)</span>):</strong>
+<span class="math display">\[\sigma = \frac{F_i}{A_t} = \frac{20380}{0.1599} = 127454 \, psi\]</span></p>
+<blockquote>
+<p><strong>Conclusion:</strong> The stress exceeds tensile strength!<br />
+<strong>Result:</strong> Bolt will break while tightening.</p>
+</blockquote>
+</div>
+
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-shigley2020" class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div id="ref-fastenal_guide" class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="design-for-joining.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/03-Bolt-Joint-Calculations.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
