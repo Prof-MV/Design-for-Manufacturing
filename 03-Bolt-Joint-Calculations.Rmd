@@ -74,7 +74,7 @@ knitr::include_graphics("images/BasicProfile.png")
 
 The tensile stress area, $A_t$, is the area of an unthreaded rod  with the same tensile strength as a threaded rod.
 
-```{r, echo=FALSE, out.width="100%", fig.align="center", fig.cap="Tensile Stress Area"}
+```{r, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Tensile Stress Area"}
 knitr::include_graphics("images/TensileStressArea.png")
 ```
 
@@ -138,9 +138,11 @@ fastener_lookup %>%
   kable_styling(latex_options = c("hold_position"), full_width = FALSE) %>%
   # Highlight columns 3, 4, and 5 (UNC columns)
   column_spec(3:5, background = "#F9E7F0") %>% 
+
   # Adding the grouping header row
   add_header_above(c(" " = 1, " " = 1, "Coarse Series (UNC)" = 3, "Fine Series (UNF)" = 3))
 ```
+
 
 #### Metric Bolt Tensile Cross Stress Area {-}
 
