@@ -21,6 +21,6 @@ This book collect the main manufacturing methods and provides guidelines for a g
 ```{r include=FALSE}
 # automatically create a bib database for R packages
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+  .packages(), 'bookdown', 'knitr', 'rmarkdown', 'ggplot2', 'rlang', 'vctrs', 'dplyr'
 ), 'packages.bib')
 ```

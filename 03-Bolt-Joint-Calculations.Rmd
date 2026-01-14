@@ -1,0 +1,335 @@
+---
+title: "Bolt Joint Calculations"
+output: 
+  html_document:
+    css: style.css
+---
+# Strength of Bolt Joint Calculations
+
+Mechanics of Bolted Joint Integrity {#bolted-joints} Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt PreloadWhen a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_p$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself. 
+The relationship between the applied torque ($T$) and the resulting preload is typically approximated by the "short-form" torque equation:$$T = K \cdot D \cdot F_p$$
+Where: $T$ is the tightening torque.$K$ is the torque coefficient (often ~0.2 for unlubricated steel).$D$ is the nominal diameter of the bolt. $F_p$ is the desired preload. Note: Relying solely on torque to determine preload is notoriously imprecise due to friction variables. Advanced applications may use the "turn-of-nut" method or ultrasonic tension sensors [@shigley2020]. Load Distribution and Joint Stiffness. When an external tensile load ($P$) is applied to a joint, only a fraction of that load is actually felt by the bolt. The rest is absorbed by the decompression of the clamped members. This is defined by the joint stiffness constant, $C$:$$C = \frac{k_b}{k_b + k_m}$$ In this equation, $k_b$ represents the stiffness of the bolt and $k_m$ represents the stiffness of the members. The total force acting on the bolt ($F_b$) after the external load is applied is:$$F_b = F_p + C \cdot P$$ Visualizing Factor of Safety to ensure the joint does not fail via yielding or separation, we must calculate the factor of safety. The following R code demonstrates how the bolt force increases relative to the external load until the point of joint separation.
+
+```{r bolt-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Relationship between Bolt Force and External Load."}
+library(ggplot2)
+library(rlang)
+library(vctrs)
+
+# Parameters
+preload <- 5000  # Newtons
+C <- 0.25        # Stiffness constant
+ext_load <- seq(0, 10000, by = 100)
+
+# Calculate Bolt Force
+# Before separation: Fb = Fp + C*P
+# After separation: Fb = P (once P > Fp/(1-C))
+sep_point <- preload / (1 - C)
+bolt_force <- ifelse(ext_load < sep_point, preload + C * ext_load, ext_load)
+
+df <- data.frame(ExternalLoad = ext_load, BoltForce = bolt_force)
+
+ggplot(df, aes(x = ExternalLoad, y = BoltForce)) +
+  geom_line(color = "#2c3e50", linewidth = 1) +
+  geom_vline(xintercept = sep_point, linetype = "dashed", color = "red") +
+  annotate("text", x = sep_point, y = max(bolt_force), label = "Joint Separation", 
+           hjust = 1.1, color = "red") +
+  labs(title = "Bolted Joint Load Response",
+       x = "External Applied Load (N)",
+       y = "Total Force on Bolt (N)") +
+  theme_minimal()
+```
+
+As illustrated in Figure ~\@ref(fig:bolt-plot), the bolt force increases much more slowly while the joint is clamped ($C < 1$). Once the external load exceeds the separation point, the bolt must carry the entire load, significantly increasing the risk of fatigue or tensile failure. 
+
+**Summary Checklist for Designers**
+
+* Determine required clamping force to prevent sliding or separation.
+* Select bolt grade based on proof strength requirements.
+* Calculate stiffness-es ($k_b, k_m$) to find the joint constant.
+* Verify safety factors against yielding, joint separation, and fatigue.
+
+## Definitions and Background
+
+Key Terminology  used to describe the geometry of a bolt.
+
+```{r, echo=FALSE, out.width="100%", fig.align="center", fig.cap="Thread Standards"}
+knitr::include_graphics("images/ThreadStandards.png")
+```
+
+* **Pitch** – distance between adjacent threads.	Reciprocal of  threads per inch.
+* **Major diameter** – largest diameter of  thread
+* **Minor diameter** – smallest diameter of  thread
+* **Pitch diameter** – theoretical diameter between major and minor diameters, where  tooth and gap are same width
+
+```{r, echo=FALSE, out.width="100%", fig.align="center", fig.cap="Basic Thread Profile"}
+knitr::include_graphics("images/BasicProfile.png")
+```
+
+> **Note:** The dimensions and geometry in the figure above are only used for drawing the threads, they are not dimensions to manufacture to!
+
+The tensile stress area, $A_t$, is the area of an unthreaded rod  with the same tensile strength as a threaded rod.
+
+```{r, echo=FALSE, out.width="100%", fig.align="center", fig.cap="Tensile Stress Area"}
+knitr::include_graphics("images/TensileStressArea.png")
+```
+
+It is the effective area of a threaded rod to be used for stress  calculations.  
+The diameter of this unthreaded rod is the average of the  pitch diameter and the minor diameter of the threaded rod.
+
+```{r fastener-lookup, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(dplyr)
+library(kableExtra)
+# Creating the fastener data frame
+fastener_lookup <- tibble::tribble(
+  ~Size,  ~Nominal_D, ~UNC_N, ~UNC_At, ~UNC_Ar, ~UNF_N, ~UNF_At, ~UNF_Ar,
+  "0",    0.0600,     NA,     NA,      NA,      80,     0.00180, 0.00151,
+  "1",    0.0730,     64,     0.00263, 0.00218, 72,     0.00278, 0.00237,
+  "2",    0.0860,     56,     0.00370, 0.00310, 64,     0.00394, 0.00339,
+  "3",    0.0990,     48,     0.00487, 0.00406, 56,     0.00523, 0.00451,
+  "4",    0.1120,     40,     0.00604, 0.00496, 48,     0.00661, 0.00566,
+  "5",    0.1250,     40,     0.00796, 0.00672, 44,     0.00880, 0.00716,
+  "6",    0.1380,     32,     0.00909, 0.00745, 40,     0.01015, 0.00874,
+  "8",    0.1640,     32,     0.0140,  0.01196, 36,     0.01474, 0.01285,
+  "10",   0.1900,     24,     0.0175,  0.01450, 32,     0.0200,  0.0175,
+  "12",   0.2160,     24,     0.0242,  0.0206,  28,     0.0258,  0.0226,
+  "1/4",  0.2500,     20,     0.0318,  0.0269,  28,     0.0364,  0.0326,
+  "5/16", 0.3125,     18,     0.0524,  0.0454,  24,     0.0580,  0.0524,
+  "3/8",  0.3750,     16,     0.0775,  0.0678,  24,     0.0878,  0.0809,
+  "7/16", 0.4375,     14,     0.1063,  0.0933,  20,     0.1187,  0.1090,
+  "1/2",  0.5000,     13,     0.1419,  0.1257,  20,     0.1599,  0.1486,
+  "9/16", 0.5625,     12,     0.182,   0.162,   18,     0.203,   0.189,
+  "5/8",  0.6250,     11,     0.226,   0.202,   18,     0.256,   0.240,
+  "3/4",  0.7500,     10,     0.334,   0.302,   16,     0.373,   0.351,
+  "7/8",  0.8750,     9,      0.462,   0.419,   14,     0.509,   0.480,
+  "1",    1.0000,     8,      0.606,   0.551,   12,     0.663,   0.625
+)
+
+# Render the table for the report
+kable(fastener_lookup, 
+      caption = "Fastener Dimensions: UNC and UNF Series",
+      booktabs = TRUE,
+      align = "c",
+      escape = FALSE, # This allows the LaTeX $in^2$ to render correctly
+      col.names = c("Size", 
+                    "Nominal D (in)", 
+                    "UNC (N)", 
+                    "UNC $A_t$ ($in^2$)", 
+                    "UNC $A_r$ ($in^2$)", 
+                    "UNF (N)", 
+                    "UNF $A_t$ ($in^2$)", 
+                    "UNF $A_r$ ($in^2$)"),
+      digits = 5
+) %>%
+  kable_styling(latex_options = c("hold_position"), full_width = FALSE) %>%
+  # Highlight columns 3, 4, and 5 (UNC columns)
+  column_spec(3:5, background = "#F2F2F2") %>% 
+  # Adding the grouping header row
+  add_header_above(c(" " = 1, " " = 1, "Coarse Series (UNC)" = 3, "Fine Series (UNF)" = 3))
+```
+
+
+-----------------------------------------------------------------------------------------------------------
+## Example
+
+In this example we are verifying if the bolts can hold the applied load and how big the safety factors are.
+
+**Bolt material: SAE J429 Grade 5** properties  [Fastenal Technical Reference Guide](http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf)
+
+| Strength Property | Minimum Value |
+| :--- | :--- |
+| Minimum Proof Strength | 85,000 psi |
+| Minimum Tensile Strength | 120,000 psi |
+| Minimum Yield Strength | 92,000 psi |
+
+```{r, echo=FALSE, out.width="100%", fig.align="center", fig.cap="2 Plate Example"}
+knitr::include_graphics("images/BoltJointExample.png")
+```
+
+:::{.question}
+##### **1)** What is the spring constant of the bolt $k_b$? {-}
+:::
+
+::: {.answer}
+The bolt stiffness ($k_b$) is calculated using the following formula:
+
+$$k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}$$
+
+Where the individual parameters are determined as follows:
+
+**Length of the unthreaded portion ($l_d$):**
+
+$$l_d = L - L_T = 1.5 - (2 \cdot 0.5 + 0.25) = 0.25 \text{ in}$$
+
+**Length of the threaded portion ($l_t$):**
+
+$$l_t = 0.5 + 0.75 + 0.095 - 0.25 = 1.095 \text{ in}$$
+
+**Tensile stress area ($A_t$):**
+
+$$A_t = 0.1599 \text{ in}^2$$
+
+**Major diameter area ($A_d$):**
+
+$$A_d = \frac{\pi}{4}(0.5)^2 = 0.1963 \text{ in}^2$$
+
+**Modulus of elasticity ($E$):**
+
+$$E = 29 \cdot 10^6 \frac{\text{lbf}}{\text{in}^2}$$
+
+Substituting these values back into the main formula for $k_b$:
+
+$$k_b = \frac{0.1963 \cdot 0.1599 \cdot 29 \cdot 10^6}{0.1963 \cdot 1.095 + 0.1599 \cdot 0.25} = 3.57 \cdot 10^6 \frac{\text{lbf}}{\text{in}}$$
+:::
+
+::: {.question}
+##### **2)** What is the spring constant of the compressed joint $k_m$? {-}
+:::
+
+::: {.answer}
+**Spring Rate of Compressed Joint Case : $3D_{head} < D_{joint}$**
+
+The area $A_s$ is given by the formula:
+$$ A_s = \frac{\pi}{4} \cdot \left[ (D_H + 0.1 l_j)^2 - D_h^2 \right] $$
+
+Given values:
+$$ D_h = 0.510 \, \text{in} $$
+$$ D_H = W \text{ on Page 8} = 1.5 \cdot 0.5 = 0.75 \, \text{in} $$
+$$ l_j = 0.5 + 0.75 + 0.095 = 1.345 \, \text{in} $$
+where $l_{j}$ is the entire joint length.
+
+Substituting the values into the area formula:
+$$ A_s = \frac{\pi}{4} \left[ (0.75 + 0.1 \cdot 1.345)^2 - 0.510^2 \right] = 0.4102 \, \text{in}^2 $$
+
+The stiffness $k_j$ is calculated as:
+$$ k_j = \frac{E A_s}{l_{material}} $$
+where $l_{material}$ is the length of the substitute cylinder of each material.
+
+* **Steel Spring Constant**
+Length for steel, combine top plate and washer:
+$$ l_{steel} = 0.5 + 0.095 $$
+
+Stiffness for steel:
+$$ k_{steel} = \frac{29 \cdot 10^6 \cdot 0.4102}{(0.5 + 0.095)} = 20 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} $$
+
+
+* **Cast Iron Spring Constant**
+Given values for cast iron:
+$$ E = 13 \cdot 10^6 \, \text{psi} $$
+$$ l_{cast iron} = 0.75 $$
+
+Stiffness for cast iron:
+$$ k_{iron} = \frac{13 \cdot 10^6 \cdot 0.4102}{0.75} = 7.1 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} $$
+
+* **Combine springs in series:**
+The equivalent spring constant $k_m$ is found using:
+$$ \frac{1}{k_m} = \frac{1}{k_1} + \frac{1}{k_2} + \dots + \frac{1}{k_n} $$
+
+Substituting the calculated stiffness values:
+$$ \frac{1}{k_m} = \frac{1}{20 \cdot 10^6} + \frac{1}{7.1 \cdot 10^6} = \frac{1}{1.908 \cdot 10^7} $$
+
+Solving for $k_m$:
+$$ k_m = 5.24 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} $$
+
+**Spring rate of compressed joint:**
+$$ k_m = 5.24 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} $$
+:::
+
+
+::: {.question}
+##### **3)** What is the initial load in the bolt $F_i$? {-}
+:::
+
+::: {.answer}
+
+##### Joint Stiffness Constant (C) {-}
+The stiffness constant **C** defines how the external load is shared between the bolt and the clamped members:
+$$ C = \frac{k_b}{k_b + k_m} = \frac{3.57 \cdot 10^6}{3.57 \cdot 10^6 + 5.24 \cdot 10^6} = 0.405 $$
+
+
+##### Load and Preload Parameters {-}
+* **Portion of Load (P):** The external load shared by the individual fastener:
+    $$ P = \frac{10000 \text{ lbf}}{4} = 2500 \text{ lbf} $$
+* **Initial Preload ($F_i$):** Calculated based on the *Fastenal Technical Reference Guide*[@fastenal_guide]:
+    $$ F_i = 0.75 \cdot 0.1599 \cdot 85000 = 10194 \text{ lbf} $$
+:::
+
+::: {.question}
+##### **4)** What is the tensile force in the bolt $F_b$? {-}
+:::
+
+::: {.answer}
+
+##### Resulting Forces {-}
+**Force in the Bolt ($F_b$):**
+The total tension in the bolt after the external load is applied:
+$$ F_b = C \cdot P + F_i $$
+$$ F_b = 0.405 \cdot 2500 + 10194 = 11207 \text{ lbf} $$
+:::
+
+
+::: {.question}
+##### **5)** What is the compression force in the members $F_m$? {-}
+:::
+::: {.answer}
+
+**Force in the Member ($F_m$):** The force remaining in the clamped members:
+$$ F_m = (1 - C) \cdot P - F_i $$
+$$ F_m = (1 - 0.405) \cdot 2500 - 10194 = -8707 \text{ lbf} $$
+
+> **Note:** The negative result for $F_m$ indicates that the members are in **compression**.
+
+:::
+
+:::{.question}
+##### **6)** Tensile Stress in Bolt  {-}
+:::
+::: {.answer}
+
+The following calculations determine the tensile stress and various safety factors for the bolt assembly.
+
+**Tensile Stress ($\sigma_b$):**
+$$\sigma_b = \frac{F_b}{A_t} = \frac{11207}{0.1599 \, in^2} = 70 \, ksi$$
+
+:::
+:::{.question}
+##### **7)** What are the safety factors $n_L$, $n_P$, $n_O$?   {-}
+:::
+::: {.answer}
+**1. Proof Load Safety Factor ($n_p$):**
+$$n_p = \frac{S_p A_t}{CP + F_i} = \frac{85000 \cdot 0.1599}{0.405 \cdot 2500 + 10194} = 1.21$$
+
+**2. Load Factor ($n_L$):**
+$$n_L = \frac{S_p \cdot A_t - F_i}{CP} = \frac{85000 \cdot 0.1599 - 10194}{0.405 \cdot 2500} = 3.36$$
+
+**3. Separation Safety Factor ($n_o$):**
+$$n_o = \frac{F_i}{P(1 - C)} = \frac{10194}{2500(1 - 0.405)} = 6.85$$
+
+:::
+
+:::{.question}
+##### **8)** Torque Requirements and Lubrication Effects  {-}
+:::
+::: {.answer}
+
+This question evaluates the torque required to achieve the initial tension ($F_i$) and the impact of lubrication on bolt integrity.
+
+**Torque required to achieve $F_i$:**
+$$T = K \cdot d \cdot F_i$$
+$$T = 0.2 \cdot 0.5 \cdot 10194 = 1019 \, in \cdot lbf = 85 \, ft \cdot lbs$$
+
+> **Note:** ($in \cdot lbf$) are not common units. Therefore answer in ($ft \cdot lbs$) instead.
+
+**Impact of Lubrication ($K = 0.1$):**
+What is $F_i$ if the operator lubricates the bolt?
+$$F_i = \frac{T}{K \cdot d} = \frac{1019}{0.1 \cdot 0.5} = 20380 \, lbf$$
+
+**Resulting Stress ($\sigma$):**
+$$\sigma = \frac{F_i}{A_t} = \frac{20380}{0.1599} = 127454 \, psi$$
+
+> **Conclusion:** The stress exceeds tensile strength! \
+> **Result:** Bolt will break while tightening.
+
+:::
+
+

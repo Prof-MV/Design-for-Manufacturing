@@ -175,6 +175,8 @@ Further reading:
 
 [General Kinematics](https://www.generalkinematics.com/blog/sand-casting/)
 
+[Design Rules](https://diecasting.zinc.org/properties/en/design/eng_prop_d_design-rules/)
+
 
 ## Full Mould Casting Casting
 

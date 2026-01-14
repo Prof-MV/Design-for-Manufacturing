@@ -33,3 +33,55 @@ pre code {
   height: auto !important;
   padding-top: 10px;
 }
+/* Style for the Question Box */
+.question {
+  padding: 1.5em;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  background-color: #f8f9fa; /* Light gray background */
+  border-left: 6px solid #2c3e50; /* Thick dark sidebar */
+  border-radius: 4px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Automatically adds a "Question" label at the top */
+.question::before {
+  content: "QUESTION";
+  display: block;
+  font-weight: bold;
+  font-size: 0.8em;
+  color: #2c3e50;
+  margin-bottom: 0.5em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Optional: Italicize math inside questions slightly */
+.question em {
+  color: #34495e;
+}
+
+/* Style for the Answer Box */
+.answer {
+  padding: 1.5em;
+  margin-top: 0.5em; /* Closer to the question */
+  margin-bottom: 2em;
+  background-color: #f1f8f1; /* Very light mint green */
+  border-left: 2px dashed #27ae60; /* Thinner green dashed line */
+  border-radius: 4px;
+}
+
+/* Automatically adds a "Solution" label */
+.answer::before {
+  content: "Solution:";
+  display: block;
+  font-weight: bold;
+  font-style: italic;
+  color: #27ae60;
+  margin-bottom: 0.5em;
+}
+
+/* Optional: Make the math results stand out in the answer */
+.answer .math.display {
+  color: #1a531b;
+}
