@@ -22,6 +22,8 @@ tab:english-nut-dimensions-table
 tab:metric-nut-table
 tab:washer-dimensions
 tab:metric-washers
+fig:force-triangle-plot
+fig:joint-working-load
 fig:unnamed-chunk-19
 design-for-casting
 sand-mould-casting-the-versatile-workhorse
@@ -66,4 +68,6 @@ strength-of-bolt-joint-calculations
 bolt-definitions
 nut-dimensions
 washer-dimensions
+bolt-joints
+how-to-interpret-the-result
 example

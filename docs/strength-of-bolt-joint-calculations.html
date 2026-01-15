@@ -23,7 +23,7 @@
 <meta name="author" content="Martin Volkening" />
 
 
-<meta name="date" content="2026-01-14" />
+<meta name="date" content="2026-01-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -56,6 +56,71 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -146,7 +211,11 @@ div.csl-indent {
 <li class="chapter" data-level="3.1.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#nut-dimensions"><i class="fa fa-check"></i><b>3.1.1</b> Nut Dimensions</a></li>
 <li class="chapter" data-level="3.1.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#washer-dimensions"><i class="fa fa-check"></i><b>3.1.2</b> Washer Dimensions</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example"><i class="fa fa-check"></i><b>3.2</b> Example</a></li>
+<li class="chapter" data-level="3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-joints"><i class="fa fa-check"></i><b>3.2</b> Understanding Bolt Joints and Force Triangles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#how-to-interpret-the-result"><i class="fa fa-check"></i><b>3.2.1</b> How to Interpret the Result</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example"><i class="fa fa-check"></i><b>3.3</b> Example</a></li>
 </ul></li>
 </ul>
 
@@ -210,7 +279,7 @@ Figure 3.3: Basic Thread Profile
 </blockquote>
 <p>The tensile stress area, <span class="math inline">\(A_t\)</span>, is the area of an unthreaded rod with the same tensile strength as a threaded rod.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-16"></span>
-<img src="images/TensileStressArea.png" alt="Tensile Stress Area" width="100%" />
+<img src="images/TensileStressArea.png" alt="Tensile Stress Area" width="70%" />
 <p class="caption">
 Figure 3.4: Tensile Stress Area
 </p>
@@ -2984,11 +3053,125 @@ Maximum<br>Thickness
 </tr>
 </tfoot>
 </table>
+</div>
+</div>
+<div id="bolt-joints" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Understanding Bolt Joints and Force Triangles<a href="strength-of-bolt-joint-calculations.html#bolt-joints" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In bolted joints, the force triangle is a conceptual tool used to visualize and analyze the distribution of forces between the bolt and the clamped members under preload and external working loads. This representation helps engineers understand how forces are balanced to maintain joint integrity and prevent failure modes such as separation or fatigue <span class="citation">(<a href="#ref-shigley2020">Budynas and Nisbett 2020</a>)</span>.
+When a bolt is tightened to apply a preload <span class="math inline">\(F_p\)</span>, it elongates the bolt shaft by a small amount <span class="math inline">\(\delta_b\)</span>, governed by the bolt’s stiffness <span class="math inline">\(k_b\)</span> according to Hooke’s law: <span class="math inline">\(\delta_b = F_p / k_b\)</span>. Simultaneously, this preload compresses the clamped members (e.g., plates or flanges) by an equivalent amount <span class="math inline">\(\delta_m = F_p / k_m\)</span>, where <span class="math inline">\(k_m\)</span> is the stiffness of the members. The preload creates an initial tensile force in the bolt and a compressive force in the members, establishing equilibrium in the joint before any external load is applied.
+The introduction of an external working force <span class="math inline">\(F_w\)</span> alters this balance. In a typical force triangle diagram, the preload forms the base, and the working force is distributed between the bolt and members based on their relative stiffnesses. The change in bolt force becomes <span class="math inline">\(\Delta F_b = (k_b / (k_b + k_m)) F_w\)</span>, while the change in member force is <span class="math inline">\(\Delta F_m = -(k_m / (k_b + k_m)) F_w\)</span>. Thus, the bolt experiences an increase in tension, and the members see a reduction in compression. If the working force exceeds a critical threshold, it may lead to joint separation when the member compression approaches zero.
+For a visual representation, consider the force triangle plot shown in Figure <a href="strength-of-bolt-joint-calculations.html#fig:force-triangle-plot">3.7</a>, which illustrates the vector addition of forces in a simplified bolted joint scenario.</p>
+<blockquote>
+<p>Note: The stiffness ratio <span class="math inline">\(k_b / k_m\)</span> significantly influences how the working force is shared; stiffer bolts absorb more of the load variation, enhancing joint reliability.</p>
+</blockquote>
+<p>Key Considerations in Design</p>
+<ul>
+<li>Preload Selection: Choose <span class="math inline">\(F_p\)</span> to be sufficiently high to prevent separation under maximum <span class="math inline">\(F_w\)</span>.</li>
+<li>Material Properties: Account for yield strength and fatigue limits in calculations.</li>
+<li>Safety Factors: Apply appropriate margins to avoid over-stressing components.</li>
+</ul>
+<p>The following animation demonstrates screw/bolt force calculations:</p>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe 
+    src="https://player.vimeo.com/video/93192874" 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+    frameborder="0" 
+    allow="autoplay; fullscreen; picture-in-picture" 
+    allowfullscreen>
+  </iframe>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:force-triangle-plot"></span>
+<img src="images/ForceTriangle2.png" alt="Force Triangle" width="70%" />
+<p class="caption">
+Figure 3.7: Force Triangle
+</p>
+</div>
+<p>This image illustrates the Joint Diagram (often called a “Force Triangle” or “Frustum”) for a bolted connection. It visualizes how forces and deformations are distributed between the bolt and the clamped members when a preload is applied.</p>
+<div id="the-physical-model-left" class="section level5 unnumbered hasAnchor">
+<h5>1. The Physical Model (Left)<a href="strength-of-bolt-joint-calculations.html#the-physical-model-left" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>On the left, the bolt is modeled as a tension spring (green coil) and the clamped members are modeled as a compression spring (yellow coils).Preload (<span class="math inline">\(F_v\)</span>): When the nut is tightened, the bolt is pulled into tension (elongation), and the members are squeezed into compression.Equilibrium: The red arrows represent the internal forces. The force pulling the bolt (<span class="math inline">\(F_v\)</span>) is exactly equal to the force pushing against the members.</p>
+</div>
+<div id="the-force-deformation-graph-right" class="section level5 unnumbered hasAnchor">
+<h5>2. The Force-Deformation Graph (Right)<a href="strength-of-bolt-joint-calculations.html#the-force-deformation-graph-right" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The graph translates these physical movements into a geometric diagram where the slopes represent stiffness (<span class="math inline">\(k = \frac{Force}{Deformation}\)</span>).
+* <strong>Elongation (Green Line):</strong> This is the bolt’s behavior. As the load increases, the bolt stretches. Because a bolt is typically long and thin, it is relatively “stretchy,” resulting in a shallower slope.
+* <strong>Compression (Yellow Line):</strong> This is the members’ behavior. It is plotted starting from the right and moving toward the center. Clamped members (like steel plates) are usually much stiffer than the bolt, so this line has a steeper slope.
+* <strong>The Intersection Point (<span class="math inline">\(F_v\)</span>):</strong> The peak of the triangle represents the state after tightening but before any external “working load” is applied. At this point, the bolt tension and member compression are balanced at the preload value <span class="math inline">\(F_v\)</span>.</p>
+</div>
+<div id="key-engineering-takeaway" class="section level5 unnumbered hasAnchor">
+<h5>Key Engineering Takeaway<a href="strength-of-bolt-joint-calculations.html#key-engineering-takeaway" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The “triangle” shows that for any given preload, the members will deform less (linear distance) than the bolt because they are stiffer. This is crucial for fatigue resistance: when an external load is applied to the joint, the “stiff” members absorb most of the force change, protecting the “stretchy” bolt from large fluctuations in tension that could lead to failure.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="strength-of-bolt-joint-calculations.html#cb2-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="strength-of-bolt-joint-calculations.html#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="strength-of-bolt-joint-calculations.html#cb2-3" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb2-4"><a href="strength-of-bolt-joint-calculations.html#cb2-4" tabindex="-1"></a>preload <span class="ot">&lt;-</span> <span class="dv">30000</span> </span>
+<span id="cb2-5"><a href="strength-of-bolt-joint-calculations.html#cb2-5" tabindex="-1"></a>kb <span class="ot">&lt;-</span> <span class="dv">431027</span>    <span class="co"># Bolt stiffness from previous calc</span></span>
+<span id="cb2-6"><a href="strength-of-bolt-joint-calculations.html#cb2-6" tabindex="-1"></a>km <span class="ot">&lt;-</span> kb <span class="sc">*</span> <span class="dv">4</span>    <span class="co"># Member stiffness</span></span>
+<span id="cb2-7"><a href="strength-of-bolt-joint-calculations.html#cb2-7" tabindex="-1"></a>external_p <span class="ot">&lt;-</span> <span class="dv">15000</span> <span class="co"># New external force (N)</span></span>
+<span id="cb2-8"><a href="strength-of-bolt-joint-calculations.html#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="strength-of-bolt-joint-calculations.html#cb2-9" tabindex="-1"></a><span class="co"># Calculate Load Sharing</span></span>
+<span id="cb2-10"><a href="strength-of-bolt-joint-calculations.html#cb2-10" tabindex="-1"></a>Phi <span class="ot">&lt;-</span> kb <span class="sc">/</span> (kb <span class="sc">+</span> km)</span>
+<span id="cb2-11"><a href="strength-of-bolt-joint-calculations.html#cb2-11" tabindex="-1"></a>bolt_increase <span class="ot">&lt;-</span> Phi <span class="sc">*</span> external_p</span>
+<span id="cb2-12"><a href="strength-of-bolt-joint-calculations.html#cb2-12" tabindex="-1"></a>member_decrease <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> Phi) <span class="sc">*</span> external_p</span>
+<span id="cb2-13"><a href="strength-of-bolt-joint-calculations.html#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="strength-of-bolt-joint-calculations.html#cb2-14" tabindex="-1"></a><span class="co"># Data for the &quot;Force Triangle&quot;</span></span>
+<span id="cb2-15"><a href="strength-of-bolt-joint-calculations.html#cb2-15" tabindex="-1"></a><span class="co"># Base triangle (Preload only)</span></span>
+<span id="cb2-16"><a href="strength-of-bolt-joint-calculations.html#cb2-16" tabindex="-1"></a>base_tri <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-17"><a href="strength-of-bolt-joint-calculations.html#cb2-17" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, preload<span class="sc">/</span>kb, (preload<span class="sc">/</span>kb <span class="sc">+</span> preload<span class="sc">/</span>km)),</span>
+<span id="cb2-18"><a href="strength-of-bolt-joint-calculations.html#cb2-18" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, preload, <span class="dv">0</span>),</span>
+<span id="cb2-19"><a href="strength-of-bolt-joint-calculations.html#cb2-19" tabindex="-1"></a>  <span class="at">group =</span> <span class="st">&quot;Preload Only&quot;</span></span>
+<span id="cb2-20"><a href="strength-of-bolt-joint-calculations.html#cb2-20" tabindex="-1"></a>)</span>
+<span id="cb2-21"><a href="strength-of-bolt-joint-calculations.html#cb2-21" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="strength-of-bolt-joint-calculations.html#cb2-22" tabindex="-1"></a><span class="co"># New state (with Working Load P)</span></span>
+<span id="cb2-23"><a href="strength-of-bolt-joint-calculations.html#cb2-23" tabindex="-1"></a><span class="co"># The bolt elongates by (Phi * P / kb)</span></span>
+<span id="cb2-24"><a href="strength-of-bolt-joint-calculations.html#cb2-24" tabindex="-1"></a><span class="co"># The member compression reduces</span></span>
+<span id="cb2-25"><a href="strength-of-bolt-joint-calculations.html#cb2-25" tabindex="-1"></a>new_delta_b <span class="ot">&lt;-</span> (preload <span class="sc">+</span> bolt_increase) <span class="sc">/</span> kb</span>
+<span id="cb2-26"><a href="strength-of-bolt-joint-calculations.html#cb2-26" tabindex="-1"></a>new_y <span class="ot">&lt;-</span> preload <span class="sc">+</span> bolt_increase</span>
+<span id="cb2-27"><a href="strength-of-bolt-joint-calculations.html#cb2-27" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="strength-of-bolt-joint-calculations.html#cb2-28" tabindex="-1"></a>working_load_tri <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-29"><a href="strength-of-bolt-joint-calculations.html#cb2-29" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, new_delta_b, (preload<span class="sc">/</span>kb <span class="sc">+</span> preload<span class="sc">/</span>km)),</span>
+<span id="cb2-30"><a href="strength-of-bolt-joint-calculations.html#cb2-30" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, new_y, preload <span class="sc">-</span> member_decrease),</span>
+<span id="cb2-31"><a href="strength-of-bolt-joint-calculations.html#cb2-31" tabindex="-1"></a>  <span class="at">group =</span> <span class="st">&quot;With Working Load&quot;</span></span>
+<span id="cb2-32"><a href="strength-of-bolt-joint-calculations.html#cb2-32" tabindex="-1"></a>)</span>
+<span id="cb2-33"><a href="strength-of-bolt-joint-calculations.html#cb2-33" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="strength-of-bolt-joint-calculations.html#cb2-34" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(base_tri, working_load_tri)</span>
+<span id="cb2-35"><a href="strength-of-bolt-joint-calculations.html#cb2-35" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="strength-of-bolt-joint-calculations.html#cb2-36" tabindex="-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> group, <span class="at">linetype =</span> group)) <span class="sc">+</span></span>
+<span id="cb2-37"><a href="strength-of-bolt-joint-calculations.html#cb2-37" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2-38"><a href="strength-of-bolt-joint-calculations.html#cb2-38" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> preload, <span class="at">linetype =</span> <span class="st">&quot;dotted&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb2-39"><a href="strength-of-bolt-joint-calculations.html#cb2-39" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;segment&quot;</span>, <span class="at">x =</span> new_delta_b, <span class="at">y =</span> preload, <span class="at">xend =</span> new_delta_b, <span class="at">yend =</span> new_y, </span>
+<span id="cb2-40"><a href="strength-of-bolt-joint-calculations.html#cb2-40" tabindex="-1"></a>           <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>)), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2-41"><a href="strength-of-bolt-joint-calculations.html#cb2-41" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Effect of Working Load on Joint Diagram&quot;</span>,</span>
+<span id="cb2-42"><a href="strength-of-bolt-joint-calculations.html#cb2-42" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Bolt Force Increase:&quot;</span>, <span class="fu">round</span>(bolt_increase), <span class="st">&quot;N&quot;</span>),</span>
+<span id="cb2-43"><a href="strength-of-bolt-joint-calculations.html#cb2-43" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Deformation (mm)&quot;</span>,</span>
+<span id="cb2-44"><a href="strength-of-bolt-joint-calculations.html#cb2-44" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Force (N)&quot;</span>,</span>
+<span id="cb2-45"><a href="strength-of-bolt-joint-calculations.html#cb2-45" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Scenario&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;Scenario&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2-46"><a href="strength-of-bolt-joint-calculations.html#cb2-46" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated
+## in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to
+## see where this warning was generated.</code></pre>
+<div class="figure"><span style="display:block;" id="fig:joint-working-load"></span>
+<img src="_main_files/figure-html/joint-working-load-1.png" alt="Joint Diagram with External Working Load" width="672" />
+<p class="caption">
+Figure 3.8: Joint Diagram with External Working Load
+</p>
+</div>
+</div>
+<div id="how-to-interpret-the-result" class="section level3 hasAnchor" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> How to Interpret the Result<a href="strength-of-bolt-joint-calculations.html#how-to-interpret-the-result" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>The “Triangle” stretches upward:</strong> The peak moves from <span class="math inline">\(F_i\)</span> (preload) to <span class="math inline">\(F_b\)</span> (total bolt load).</li>
+<li><strong>The Red Arrow:</strong> This represents the additional tension the bolt carries. Notice that it is much smaller than the total external force (<span class="math inline">\(P = 15,000\)</span>). This is because the members “gave up” some of their compression to support the load.</li>
+<li><strong>Member Safety:</strong> As long as the yellow line (member compression) does not reach <span class="math inline">\(y = 0\)</span>, the joint remains “clamped.” If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.</li>
+</ul>
 <hr />
 </div>
 </div>
-<div id="example" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Example<a href="strength-of-bolt-joint-calculations.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="example" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Example<a href="strength-of-bolt-joint-calculations.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In this example we are verifying if the bolts can hold the applied load and how big the safety factors are.</p>
 <p><strong>Bolt material: SAE J429 Grade 5</strong> properties <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">Fastenal Technical Reference Guide</a></p>
 <table>
@@ -3016,7 +3199,7 @@ Maximum<br>Thickness
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-19"></span>
 <img src="images/BoltJointExample.png" alt="2 Plate Example" width="100%" />
 <p class="caption">
-Figure 3.7: 2 Plate Example
+Figure 3.9: 2 Plate Example
 </p>
 </div>
 <div id="what-is-the-spring-constant-of-the-bolt-k_b" class="section level5 unnumbered hasAnchor question">

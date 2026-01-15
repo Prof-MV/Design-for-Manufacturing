@@ -471,6 +471,114 @@ metric_washer_data %>%
            footnote_as_chunk = TRUE)
 ```
 
+## Understanding Bolt Joints and Force Triangles {#bolt-joints}
+In bolted joints, the force triangle is a conceptual tool used to visualize and analyze the distribution of forces between the bolt and the clamped members under preload and external working loads. This representation helps engineers understand how forces are balanced to maintain joint integrity and prevent failure modes such as separation or fatigue [@shigley2020].
+When a bolt is tightened to apply a preload $F_p$, it elongates the bolt shaft by a small amount $\delta_b$, governed by the bolt's stiffness $k_b$ according to Hooke's law: $\delta_b = F_p / k_b$. Simultaneously, this preload compresses the clamped members (e.g., plates or flanges) by an equivalent amount $\delta_m = F_p / k_m$, where $k_m$ is the stiffness of the members. The preload creates an initial tensile force in the bolt and a compressive force in the members, establishing equilibrium in the joint before any external load is applied.
+The introduction of an external working force $F_w$ alters this balance. In a typical force triangle diagram, the preload forms the base, and the working force is distributed between the bolt and members based on their relative stiffnesses. The change in bolt force becomes $\Delta F_b = (k_b / (k_b + k_m)) F_w$, while the change in member force is $\Delta F_m = -(k_m / (k_b + k_m)) F_w$. Thus, the bolt experiences an increase in tension, and the members see a reduction in compression. If the working force exceeds a critical threshold, it may lead to joint separation when the member compression approaches zero.
+For a visual representation, consider the force triangle plot shown in Figure \@ref(fig:force-triangle-plot), which illustrates the vector addition of forces in a simplified bolted joint scenario.
+
+
+>Note: The stiffness ratio $k_b / k_m$ significantly influences how the working force is shared; stiffer bolts absorb more of the load variation, enhancing joint reliability.
+
+Key Considerations in Design
+
+* Preload Selection: Choose $F_p$ to be sufficiently high to prevent separation under maximum $F_w$.
+* Material Properties: Account for yield strength and fatigue limits in calculations.
+* Safety Factors: Apply appropriate margins to avoid over-stressing components.
+
+The following animation demonstrates screw/bolt force calculations:
+
+
+```{=html}
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe 
+    src="https://player.vimeo.com/video/93192874" 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+    frameborder="0" 
+    allow="autoplay; fullscreen; picture-in-picture" 
+    allowfullscreen>
+  </iframe>
+</div>
+```
+
+
+```{r force-triangle-plot, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Force Triangle"}
+knitr::include_graphics("images/ForceTriangle2.png")
+```
+
+This image illustrates the Joint Diagram (often called a "Force Triangle" or "Frustum") for a bolted connection. It visualizes how forces and deformations are distributed between the bolt and the clamped members when a preload is applied.
+
+##### 1. The Physical Model (Left) {-}
+
+On the left, the bolt is modeled as a tension spring (green coil) and the clamped members are modeled as a compression spring (yellow coils).Preload ($F_v$): When the nut is tightened, the bolt is pulled into tension (elongation), and the members are squeezed into compression.Equilibrium: The red arrows represent the internal forces. The force pulling the bolt ($F_v$) is exactly equal to the force pushing against the members.
+
+##### 2. The Force-Deformation Graph (Right) {-}
+
+The graph translates these physical movements into a geometric diagram where the slopes represent stiffness ($k = \frac{Force}{Deformation}$).
+* **Elongation (Green Line):** This is the bolt's behavior. As the load increases, the bolt stretches. Because a bolt is typically long and thin, it is relatively "stretchy," resulting in a shallower slope.
+* **Compression (Yellow Line):** This is the members' behavior. It is plotted starting from the right and moving toward the center. Clamped members (like steel plates) are usually much stiffer than the bolt, so this line has a steeper slope.
+* **The Intersection Point ($F_v$):** The peak of the triangle represents the state after tightening but before any external "working load" is applied. At this point, the bolt tension and member compression are balanced at the preload value $F_v$.
+
+##### Key Engineering Takeaway {-} 
+
+The "triangle" shows that for any given preload, the members will deform less (linear distance) than the bolt because they are stiffer. This is crucial for fatigue resistance: when an external load is applied to the joint, the "stiff" members absorb most of the force change, protecting the "stretchy" bolt from large fluctuations in tension that could lead to failure.
+
+```{r joint-working-load, echo=TRUE, fig.cap="Joint Diagram with External Working Load"}
+library(ggplot2)
+
+# Parameters
+preload <- 30000 
+kb <- 431027    # Bolt stiffness from previous calc
+km <- kb * 4    # Member stiffness
+external_p <- 15000 # New external force (N)
+
+# Calculate Load Sharing
+Phi <- kb / (kb + km)
+bolt_increase <- Phi * external_p
+member_decrease <- (1 - Phi) * external_p
+
+# Data for the "Force Triangle"
+# Base triangle (Preload only)
+base_tri <- data.frame(
+  x = c(0, preload/kb, (preload/kb + preload/km)),
+  y = c(0, preload, 0),
+  group = "Preload Only"
+)
+
+# New state (with Working Load P)
+# The bolt elongates by (Phi * P / kb)
+# The member compression reduces
+new_delta_b <- (preload + bolt_increase) / kb
+new_y <- preload + bolt_increase
+
+working_load_tri <- data.frame(
+  x = c(0, new_delta_b, (preload/kb + preload/km)),
+  y = c(0, new_y, preload - member_decrease),
+  group = "With Working Load"
+)
+
+plot_data <- rbind(base_tri, working_load_tri)
+
+ggplot(plot_data, aes(x = x, y = y, color = group, linetype = group)) +
+  geom_line(size = 1) +
+  geom_hline(yintercept = preload, linetype = "dotted", alpha = 0.5) +
+  annotate("segment", x = new_delta_b, y = preload, xend = new_delta_b, yend = new_y, 
+           arrow = arrow(length = unit(0.2, "cm")), color = "red") +
+  labs(title = "Effect of Working Load on Joint Diagram",
+       subtitle = paste("Bolt Force Increase:", round(bolt_increase), "N"),
+       x = "Deformation (mm)",
+       y = "Force (N)",
+       color = "Scenario", linetype = "Scenario") +
+  theme_minimal()
+```
+### How to Interpret the Result
+* **The "Triangle" stretches upward:** The peak moves from $F_i$ (preload) to $F_b$ (total bolt load).
+* **The Red Arrow:** This represents the additional tension the bolt carries. Notice that it is much smaller than the total external force ($P = 15,000$). This is because the members "gave up" some of their compression to support the load.
+* **Member Safety:** As long as the yellow line (member compression) does not reach $y = 0$, the joint remains "clamped." If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.
+
+
+
+
 
 -----------------------------------------------------------------------------------------------------------
 ## Example
