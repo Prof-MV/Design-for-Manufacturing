@@ -215,7 +215,14 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#how-to-interpret-the-result"><i class="fa fa-check"></i><b>3.2.1</b> How to Interpret the Result</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example"><i class="fa fa-check"></i><b>3.3</b> Example</a></li>
+<li class="chapter" data-level="3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-analysis"><i class="fa fa-check"></i><b>3.3</b> Advanced Analysis of Bolted Joints</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#fastener-stiffness-k_b"><i class="fa fa-check"></i><b>3.3.1</b> Fastener Stiffness (<span class="math inline">\(k_b\)</span>)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#member-stiffness-k_m-and-substitute-cylinders"><i class="fa fa-check"></i><b>3.3.2</b> Member Stiffness (<span class="math inline">\(k_m\)</span>) and Substitute Cylinders</a></li>
+<li class="chapter" data-level="3.3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#joint-forces-and-tightening-torque"><i class="fa fa-check"></i><b>3.3.3</b> Joint Forces and Tightening Torque</a></li>
+<li class="chapter" data-level="3.3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#stress-analysis-and-safety-factors"><i class="fa fa-check"></i><b>3.3.4</b> Stress Analysis and Safety Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example"><i class="fa fa-check"></i><b>3.4</b> Example</a></li>
 </ul></li>
 </ul>
 
@@ -3053,6 +3060,7 @@ Maximum<br>Thickness
 </tr>
 </tfoot>
 </table>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div id="bolt-joints" class="section level2 hasAnchor" number="3.2">
@@ -3167,11 +3175,160 @@ Figure 3.8: Joint Diagram with External Working Load
 <li><strong>The Red Arrow:</strong> This represents the additional tension the bolt carries. Notice that it is much smaller than the total external force (<span class="math inline">\(P = 15,000\)</span>). This is because the members “gave up” some of their compression to support the load.</li>
 <li><strong>Member Safety:</strong> As long as the yellow line (member compression) does not reach <span class="math inline">\(y = 0\)</span>, the joint remains “clamped.” If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.</li>
 </ul>
+</div>
+</div>
+<div id="bolted-analysis" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Advanced Analysis of Bolted Joints<a href="strength-of-bolt-joint-calculations.html#bolted-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The reliability of a bolted joint depends on understanding the stiffness relationship between the fastener and the clamped members. This chapter details the analytical steps required to ensure joint integrity based on the force triangle principles.</p>
+<div id="fastener-stiffness-k_b" class="section level3 hasAnchor" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Fastener Stiffness (<span class="math inline">\(k_b\)</span>)<a href="strength-of-bolt-joint-calculations.html#fastener-stiffness-k_b" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A bolt is not a perfectly rigid body; it acts as a series of springs with different cross-sections. To calculate the total fastener stiffness (<span class="math inline">\(k_b\)</span>), we must account for both the unthreaded shank and the threaded portion within the grip.</p>
+<p>The stiffness is calculated using the following formula:</p>
+<p><span class="math display">\[k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}\]</span></p>
+<p><strong>Where:</strong>
+* <span class="math inline">\(A_d\)</span>: Area of the unthreaded portion.
+* <span class="math inline">\(A_t\)</span>: Tensile stress area of the threaded portion.
+* <span class="math inline">\(l_d\)</span>: Length of the unthreaded portion (<span class="math inline">\(L - L_T\)</span>).
+* <span class="math inline">\(l_t\)</span>: Length of the threaded portion in the grip (<span class="math inline">\(L_{grip} - l_d\)</span>).
+* <span class="math inline">\(E\)</span>: Modulus of elasticity.</p>
+<hr />
+</div>
+<div id="member-stiffness-k_m-and-substitute-cylinders" class="section level3 hasAnchor" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Member Stiffness (<span class="math inline">\(k_m\)</span>) and Substitute Cylinders<a href="strength-of-bolt-joint-calculations.html#member-stiffness-k_m-and-substitute-cylinders" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Calculating the stiffness of the clamped members (<span class="math inline">\(k_m\)</span>) is complex because the compressive stress spreads out from the bolt head rather than remaining a uniform cylinder. We use the <strong>Area of a substitute cylinder</strong> (<span class="math inline">\(A_s\)</span>) to model this behavior.</p>
+<p>The general formula for member stiffness is:
+<span class="math display">\[k_m = \frac{EA_s}{l_j}\]</span></p>
+<p>The calculation of <span class="math inline">\(A_s\)</span> depends on the relationship between the joint diameter (<span class="math inline">\(D_J\)</span>) and the head diameter (<span class="math inline">\(D_H\)</span>):</p>
+<ol style="list-style-type: decimal">
+<li><strong>Small Joint (<span class="math inline">\(D_J &lt; D_H\)</span>):</strong>
+<span class="math display">\[A_s = \frac{\pi}{4}(D_c^2 - D_h^2)\]</span></li>
+<li><strong>Medium Joint (<span class="math inline">\(D_H &lt; D_J &lt; 3D_H\)</span>):</strong>
+<span class="math display">\[A_s = \frac{\pi}{4}(D_H^2 - D_h^2) + \frac{\pi}{8}\left(\frac{D_J}{D_H} - 1\right)\left(\frac{D_H l_j}{5} + \frac{l_j^2}{100}\right)\]</span></li>
+<li><strong>Large Joint (<span class="math inline">\(3D_H &lt; D_J\)</span>):</strong>
+<span class="math display">\[A_s = \frac{\pi}{4}\left[(D_H + 0.1l)^2 - D_h^2\right]\]</span></li>
+</ol>
+<hr />
+</div>
+<div id="joint-forces-and-tightening-torque" class="section level3 hasAnchor" number="3.3.3">
+<h3><span class="header-section-number">3.3.3</span> Joint Forces and Tightening Torque<a href="strength-of-bolt-joint-calculations.html#joint-forces-and-tightening-torque" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>Joint Stiffness Constant</strong> (<span class="math inline">\(C\)</span>) determines how much of an external load <span class="math inline">\(P\)</span> is shared by the bolt.</p>
+<p><span class="math display">\[C = \frac{k_b}{k_b + k_m}\]</span></p>
+<div id="force-distribution" class="section level4 hasAnchor" number="3.3.3.1">
+<h4><span class="header-section-number">3.3.3.1</span> Force Distribution<a href="strength-of-bolt-joint-calculations.html#force-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The total force in the bolt (<span class="math inline">\(F_b\)</span>) and the remaining clamping force in the member (<span class="math inline">\(F_m\)</span>) are calculated as follows:
+* <span class="math inline">\(F_b = C \cdot P + F_i\)</span>
+* <span class="math inline">\(F_m = (1 - C) \cdot P - F_i\)</span></p>
+</div>
+<div id="preload-and-torque" class="section level4 hasAnchor" number="3.3.3.2">
+<h4><span class="header-section-number">3.3.3.2</span> Preload and Torque<a href="strength-of-bolt-joint-calculations.html#preload-and-torque" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The initial preload (<span class="math inline">\(F_i\)</span>) is typically set to 75% of the proof load (<span class="math inline">\(F_p\)</span>):
+<span class="math display">\[F_i = 0.75 F_p = 0.75 \cdot A_t S_p\]</span></p>
+<p>To achieve this preload, the required tightening torque (<span class="math inline">\(T\)</span>) is calculated using the nominal diameter (<span class="math inline">\(d\)</span>) and a friction factor (<span class="math inline">\(K\)</span>):
+<span class="math display">\[T = K \cdot d \cdot F_i\]</span></p>
+<p>According to standard tables, the friction factor <span class="math inline">\(K\)</span> varies by bolt condition:
+* <strong>Non-plated, black finish:</strong> <span class="math inline">\(0.20 - 0.30\)</span>
+* <strong>Zinc-plated:</strong> <span class="math inline">\(0.17 - 0.22\)</span>
+* <strong>Lubricated:</strong> <span class="math inline">\(0.12 - 0.16\)</span></p>
 <hr />
 </div>
 </div>
-<div id="example" class="section level2 hasAnchor" number="3.3">
-<h2><span class="header-section-number">3.3</span> Example<a href="strength-of-bolt-joint-calculations.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="stress-analysis-and-safety-factors" class="section level3 hasAnchor" number="3.3.4">
+<h3><span class="header-section-number">3.3.4</span> Stress Analysis and Safety Factors<a href="strength-of-bolt-joint-calculations.html#stress-analysis-and-safety-factors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The tensile stress in the bolt (<span class="math inline">\(\sigma\)</span>) is the total bolt force divided by the tensile area:
+<span class="math display">\[\sigma = \frac{F_b}{A_t} = \frac{CP + F_i}{A_t}\]</span></p>
+<p>To ensure a safe design, we evaluate three safety factors:</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="left">Name</th>
+<th align="left">Purpose</th>
+<th align="left">Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(n_P\)</span></td>
+<td align="left"><strong>Yield Safety</strong></td>
+<td align="left">Guards against static stress exceeding proof strength</td>
+<td align="left"><span class="math inline">\(n_P = \frac{S_p A_t}{CP + F_i}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(n_L\)</span></td>
+<td align="left"><strong>Load Factor</strong></td>
+<td align="left">Guards against general overloading</td>
+<td align="left"><span class="math inline">\(n_L = \frac{S_p A_t - F_i}{CP}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(n_o\)</span></td>
+<td align="left"><strong>Separation Factor</strong></td>
+<td align="left">Guards against physical joint separation</td>
+<td align="left"><span class="math inline">\(n_o = \frac{F_i}{P(1 - C)}\)</span></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<table style="width:6%;">
+<colgroup>
+<col width="5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td></td>
+</tr>
+<tr class="even">
+<td>## Calculation Example in R</td>
+</tr>
+<tr class="odd">
+<td>``` r
+# Input Variables
+E &lt;- 210000 # Modulus (MPa)
+At &lt;- 84.3 # Tensile Area M12 (mm^2)
+Ad &lt;- 113.1 # Shank Area M12 (mm^2)
+lt &lt;- 10 # Threaded length in grip (mm)
+ld &lt;- 40 # Unthreaded length (mm)
+P &lt;- 15000 # External Load (N)
+Sp &lt;- 600 # Proof Strength (MPa)</td>
+</tr>
+<tr class="even">
+<td># 1. Calculate Bolt Stiffness
+kb &lt;- (Ad * At * E) / (Ad * lt + At * ld)</td>
+</tr>
+<tr class="odd">
+<td># 2. Assume Member Stiffness (Simplified for example)
+km &lt;- kb * 4</td>
+</tr>
+<tr class="even">
+<td># 3. Calculate Constants and Safety
+C &lt;- kb / (kb + km)
+Fi &lt;- 0.75 * At * Sp
+no &lt;- Fi / (P * (1 - C)) # Separation Factor</td>
+</tr>
+<tr class="odd">
+<td>print(paste(“Joint Constant C:”, round(C, 3)))
+```</td>
+</tr>
+<tr class="even">
+<td><code>## [1] "Joint Constant C: 0.2"</code></td>
+</tr>
+<tr class="odd">
+<td><code>r print(paste("Separation Safety Factor (no):", round(no, 2)))</code></td>
+</tr>
+<tr class="even">
+<td><code>## [1] "Separation Safety Factor (no): 3.16"</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="example" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Example<a href="strength-of-bolt-joint-calculations.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In this example we are verifying if the bolts can hold the applied load and how big the safety factors are.</p>
 <p><strong>Bolt material: SAE J429 Grade 5</strong> properties <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">Fastenal Technical Reference Guide</a></p>
 <table>

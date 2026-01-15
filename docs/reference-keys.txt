@@ -70,4 +70,11 @@ nut-dimensions
 washer-dimensions
 bolt-joints
 how-to-interpret-the-result
+bolted-analysis
+fastener-stiffness-k_b
+member-stiffness-k_m-and-substitute-cylinders
+joint-forces-and-tightening-torque
+force-distribution
+preload-and-torque
+stress-analysis-and-safety-factors
 example

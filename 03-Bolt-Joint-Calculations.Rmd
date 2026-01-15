@@ -471,6 +471,8 @@ metric_washer_data %>%
            footnote_as_chunk = TRUE)
 ```
 
+\newpage
+
 ## Understanding Bolt Joints and Force Triangles {#bolt-joints}
 In bolted joints, the force triangle is a conceptual tool used to visualize and analyze the distribution of forces between the bolt and the clamped members under preload and external working loads. This representation helps engineers understand how forces are balanced to maintain joint integrity and prevent failure modes such as separation or fatigue [@shigley2020].
 When a bolt is tightened to apply a preload $F_p$, it elongates the bolt shaft by a small amount $\delta_b$, governed by the bolt's stiffness $k_b$ according to Hooke's law: $\delta_b = F_p / k_b$. Simultaneously, this preload compresses the clamped members (e.g., plates or flanges) by an equivalent amount $\delta_m = F_p / k_m$, where $k_m$ is the stiffness of the members. The preload creates an initial tensile force in the bolt and a compressive force in the members, establishing equilibrium in the joint before any external load is applied.
@@ -577,8 +579,126 @@ ggplot(plot_data, aes(x = x, y = y, color = group, linetype = group)) +
 * **Member Safety:** As long as the yellow line (member compression) does not reach $y = 0$, the joint remains "clamped." If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.
 
 
+## Advanced Analysis of Bolted Joints {#bolted-analysis}
+
+The reliability of a bolted joint depends on understanding the stiffness relationship between the fastener and the clamped members. This chapter details the analytical steps required to ensure joint integrity based on the force triangle principles.
+
+### Fastener Stiffness ($k_b$)
+
+A bolt is not a perfectly rigid body; it acts as a series of springs with different cross-sections. To calculate the total fastener stiffness ($k_b$), we must account for both the unthreaded shank and the threaded portion within the grip.
+
+The stiffness is calculated using the following formula:
+
+$$k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}$$
+
+**Where:**
+* $A_d$: Area of the unthreaded portion.
+* $A_t$: Tensile stress area of the threaded portion.
+* $l_d$: Length of the unthreaded portion ($L - L_T$).
+* $l_t$: Length of the threaded portion in the grip ($L_{grip} - l_d$).
+* $E$: Modulus of elasticity.
+
+---
+
+### Member Stiffness ($k_m$) and Substitute Cylinders
+
+Calculating the stiffness of the clamped members ($k_m$) is complex because the compressive stress spreads out from the bolt head rather than remaining a uniform cylinder. We use the **Area of a substitute cylinder** ($A_s$) to model this behavior.
 
 
+
+The general formula for member stiffness is:
+$$k_m = \frac{EA_s}{l_j}$$
+
+The calculation of $A_s$ depends on the relationship between the joint diameter ($D_J$) and the head diameter ($D_H$):
+
+1. **Small Joint ($D_J < D_H$):**
+   $$A_s = \frac{\pi}{4}(D_c^2 - D_h^2)$$
+2. **Medium Joint ($D_H < D_J < 3D_H$):**
+   $$A_s = \frac{\pi}{4}(D_H^2 - D_h^2) + \frac{\pi}{8}\left(\frac{D_J}{D_H} - 1\right)\left(\frac{D_H l_j}{5} + \frac{l_j^2}{100}\right)$$
+3. **Large Joint ($3D_H < D_J$):**
+   $$A_s = \frac{\pi}{4}\left[(D_H + 0.1l)^2 - D_h^2\right]$$
+
+---
+
+### Joint Forces and Tightening Torque
+
+The **Joint Stiffness Constant** ($C$) determines how much of an external load $P$ is shared by the bolt.
+
+$$C = \frac{k_b}{k_b + k_m}$$
+
+#### Force Distribution
+The total force in the bolt ($F_b$) and the remaining clamping force in the member ($F_m$) are calculated as follows:
+* $F_b = C \cdot P + F_i$
+* $F_m = (1 - C) \cdot P - F_i$
+
+#### Preload and Torque
+The initial preload ($F_i$) is typically set to 75% of the proof load ($F_p$):
+$$F_i = 0.75 F_p = 0.75 \cdot A_t S_p$$
+
+To achieve this preload, the required tightening torque ($T$) is calculated using the nominal diameter ($d$) and a friction factor ($K$):
+$$T = K \cdot d \cdot F_i$$
+
+According to standard tables, the friction factor $K$ varies by bolt condition:
+* **Non-plated, black finish:** $0.20 - 0.30$
+* **Zinc-plated:** $0.17 - 0.22$
+* **Lubricated:** $0.12 - 0.16$
+
+---
+
+### Stress Analysis and Safety Factors
+
+The tensile stress in the bolt ($\sigma$) is the total bolt force divided by the tensile area:
+$$\sigma = \frac{F_b}{A_t} = \frac{CP + F_i}{A_t}$$
+
+To ensure a safe design, we evaluate three safety factors:
+
+| Factor | Name | Purpose | Formula |
+| :--- | :--- | :--- | :--- |
+| $n_P$ | **Yield Safety** | Guards against static stress exceeding proof strength | $n_P = \frac{S_p A_t}{CP + F_i}$ |
+| $n_L$ | **Load Factor** | Guards against general overloading | $n_L = \frac{S_p A_t - F_i}{CP}$ |
+| $n_o$ | **Separation Factor** | Guards against physical joint separation | $n_o = \frac{F_i}{P(1 - C)}$ |
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+---
+\newpage
+
+## Calculation Example in R
+
+```{r joint-analysis, echo=TRUE}
+# Input Variables
+E <- 210000        # Modulus (MPa)
+At <- 84.3         # Tensile Area M12 (mm^2)
+Ad <- 113.1        # Shank Area M12 (mm^2)
+lt <- 10           # Threaded length in grip (mm)
+ld <- 40           # Unthreaded length (mm)
+P <- 15000         # External Load (N)
+Sp <- 600          # Proof Strength (MPa)
+
+# 1. Calculate Bolt Stiffness
+kb <- (Ad * At * E) / (Ad * lt + At * ld)
+
+# 2. Assume Member Stiffness (Simplified for example)
+km <- kb * 4 
+
+# 3. Calculate Constants and Safety
+C <- kb / (kb + km)
+Fi <- 0.75 * At * Sp
+no <- Fi / (P * (1 - C)) # Separation Factor
+
+print(paste("Joint Constant C:", round(C, 3)))
+print(paste("Separation Safety Factor (no):", round(no, 2)))
+```
 
 -----------------------------------------------------------------------------------------------------------
 ## Example
