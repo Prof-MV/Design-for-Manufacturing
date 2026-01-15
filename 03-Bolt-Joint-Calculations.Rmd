@@ -1,5 +1,4 @@
 ---
-title: "Bolt Joint Calculations"
 output: 
   html_document:
     css: style.css
@@ -9,9 +8,12 @@ output:
     header-includes:
     - \usepackage{makecell}
 ---
-# Strength of Bolt Joint Calculations
 
-Mechanics of Bolted Joint Integrity {#bolted-joints} Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt PreloadWhen a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_p$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself. 
+# Strength of Bolt Joint Calculations 
+
+## Mechanics of Bolted Joint Integrity. {-#bolted-joints}
+
+Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt PreloadWhen a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_p$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself. 
 The relationship between the applied torque ($T$) and the resulting preload is typically approximated by the "short-form" torque equation:$$T = K \cdot D \cdot F_p$$
 Where: $T$ is the tightening torque.$K$ is the torque coefficient (often ~0.2 for unlubricated steel).$D$ is the nominal diameter of the bolt. $F_p$ is the desired preload. Note: Relying solely on torque to determine preload is notoriously imprecise due to friction variables. Advanced applications may use the "turn-of-nut" method or ultrasonic tension sensors [@shigley2020]. Load Distribution and Joint Stiffness. When an external tensile load ($P$) is applied to a joint, only a fraction of that load is actually felt by the bolt. The rest is absorbed by the decompression of the clamped members. This is defined by the joint stiffness constant, $C$:$$C = \frac{k_b}{k_b + k_m}$$ In this equation, $k_b$ represents the stiffness of the bolt and $k_m$ represents the stiffness of the members. The total force acting on the bolt ($F_b$) after the external load is applied is:$$F_b = F_p + C \cdot P$$ Visualizing Factor of Safety to ensure the joint does not fail via yielding or separation, we must calculate the factor of safety. The following R code demonstrates how the bolt force increases relative to the external load until the point of joint separation.
 
@@ -53,9 +55,9 @@ As illustrated in Figure ~\@ref(fig:bolt-plot), the bolt force increases much mo
 * Calculate stiffness-es ($k_b, k_m$) to find the joint constant.
 * Verify safety factors against yielding, joint separation, and fatigue.
 
-## Bolt Definitions
+## Bolt Definitions {#bolt-definitions}
 
-Key Terminology  used to describe the geometry of a bolt.
+Key terminology used to describe the geometry of a bolt.
 
 ```{r, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Thread Standards"}
 knitr::include_graphics("images/ThreadStandards.png")
@@ -66,11 +68,11 @@ knitr::include_graphics("images/ThreadStandards.png")
 * **Minor diameter** – smallest diameter of  thread
 * **Pitch diameter** – theoretical diameter between major and minor diameters, where  tooth and gap are same width
 
-```{r, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Basic Thread Profile"}
+```{r basic-profile, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Basic Thread Profile"}
 knitr::include_graphics("images/BasicProfile.png")
 ```
 
-> **Note:** The dimensions and geometry in the figure above are only used for drawing the threads, they are not dimensions to manufacture to!
+> **Note:** The dimensions and geometry in the Figure ~\@ref(fig:basic-profile) are only used for 3d modeling and drawing the threads, they are not dimensions to manufacture to!
 
 The tensile stress area, $A_t$, is the area of an unthreaded rod  with the same tensile strength as a threaded rod.
 
@@ -81,9 +83,9 @@ knitr::include_graphics("images/TensileStressArea.png")
 It is the effective area of a threaded rod to be used for stress  calculations.  
 The diameter of this unthreaded rod is the average of the  pitch diameter and the minor diameter of the threaded rod.
 
-#### English Bolt Tensile Cross Stress Area {-}
+#### English Bolt - Tensile Cross Sectional Area {-}
 
-```{r fastener-lookup, echo=FALSE, message=FALSE, warning=FALSE}
+```{r english-cross-section-area-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(dplyr)
 library(kableExtra)
@@ -144,14 +146,13 @@ fastener_lookup %>%
 ```
 
 
-#### Metric Bolt Tensile Cross Stress Area {-}
+#### Metric Bolt - Tensile Cross Sectional Area {-}
 
-```{r metric-fastener-table, echo=FALSE, message=FALSE, warning=FALSE}
+```{r metric-cross-section-area-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(dplyr)
 library(kableExtra)
 
-# Creating the metric fastener data frame from image_34d6a5.png
 metric_lookup <- tibble::tribble(
   ~Nominal_D, ~C_Pitch, ~C_At, ~C_Ar, ~F_Pitch, ~F_At, ~F_Ar,
   1.6,        0.35,     1.27,  1.07,  NA,       NA,    NA,
@@ -203,6 +204,8 @@ metric_lookup %>%
 
 ```
 
+For the purpose of this course we limit to Hexagon-Head bolts.
+
 * **Hexagon-head bolts** are one of the most common for engineering applications.
 * $W$ is usually about $1.5$ times nominal diameter:
   $$\text{round}(W \cdot 1.5)$$
@@ -210,22 +213,23 @@ metric_lookup %>%
     $\therefore W = 11/16$
 
 
-```{r, echo=FALSE, out.width="100%", fig.align="center", fig.cap="Bolt Dimensions"}
+```{r, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Bolt Dimensions"}
 knitr::include_graphics("images/BoltDimensions.png")
 ```
 * Bolt length $L$ is measured from **below the head**.
 * Thread length $L_T$.
 
-Although many other thread lengths exist, to standardize the bolts used in this course, we only use a tread length determined by the equation below.
+Although many other thread lengths exist, to standardize the bolts used in this course, we only use a tread length determined by the equations below.
 
-English Units:
+##### English Units: {-#thread-lengths-english}
 $$
 L_{T} = \begin{cases} 
 2d + \frac{1}{4} \text{ in} & L \le 6 \text{ in} \\ 
 2d + \frac{1}{2} \text{ in} & L > 6 \text{ in} 
 \end{cases}
 $$
-Metric Units:
+
+##### Metric Units: {-#thread-lengths-metric}
 $$
 L_T = \begin{cases} 
 2d + 6 & L \le 125, \quad d \le 48 \\ 
@@ -290,8 +294,9 @@ nut_dimensions %>%
   add_header_above(c(" " = 1, " " = 1, "Height H" = 3)) %>%
   row_spec(0, background = "#D81B60", color = "white") # Matching the pink header style
 ```
-
-```{r metric-nut-table, echo=FALSE, message=FALSE, warning=FALSE}
+  
+  
+```{r metric-nut-dimensions-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(dplyr)
 library(kableExtra)
@@ -337,7 +342,7 @@ metric_nuts %>%
 
 ### Washer Dimensions
 
-```{r washer-dimensions, echo=FALSE, message=FALSE, warning=FALSE}
+```{r english-washer-dimensions-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(dplyr)
 library(kableExtra)
@@ -386,8 +391,9 @@ washer_data %>%
            general_title = "Note: ", 
            footnote_as_chunk = TRUE)
 ```
-
-```{r metric-washers, echo=FALSE, message=FALSE, warning=FALSE}
+  
+  
+```{r metric-washer-dimensions, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(dplyr)
 library(kableExtra)
@@ -471,6 +477,7 @@ metric_washer_data %>%
            footnote_as_chunk = TRUE)
 ```
 
+
 \newpage
 
 ## Understanding Bolt Joints and Force Triangles {#bolt-joints}
@@ -482,13 +489,13 @@ For a visual representation, consider the force triangle plot shown in Figure \@
 
 >Note: The stiffness ratio $k_b / k_m$ significantly influences how the working force is shared; stiffer bolts absorb more of the load variation, enhancing joint reliability.
 
-Key Considerations in Design
+**Key Considerations in Design**
 
 * Preload Selection: Choose $F_p$ to be sufficiently high to prevent separation under maximum $F_w$.
 * Material Properties: Account for yield strength and fatigue limits in calculations.
 * Safety Factors: Apply appropriate margins to avoid over-stressing components.
 
-The following animation demonstrates screw/bolt force calculations:
+The following animation demonstrates bolt force development during tightening:
 
 
 ```{=html}
@@ -502,7 +509,8 @@ The following animation demonstrates screw/bolt force calculations:
   </iframe>
 </div>
 ```
-
+  
+  
 
 ```{r force-triangle-plot, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Force Triangle"}
 knitr::include_graphics("images/ForceTriangle2.png")
@@ -512,7 +520,7 @@ This image illustrates the Joint Diagram (often called a "Force Triangle" or "Fr
 
 ##### 1. The Physical Model (Left) {-}
 
-On the left, the bolt is modeled as a tension spring (green coil) and the clamped members are modeled as a compression spring (yellow coils).Preload ($F_v$): When the nut is tightened, the bolt is pulled into tension (elongation), and the members are squeezed into compression.Equilibrium: The red arrows represent the internal forces. The force pulling the bolt ($F_v$) is exactly equal to the force pushing against the members.
+On the left of Figure ~\@ref(fig:force-triangle-plot), the bolt is modeled as a tension spring (green coil) and the clamped members are modeled as a compression spring (yellow coils). Preload ($F_v$): When the nut is tightened, the bolt is pulled into tension (elongation), and the members are squeezed into compression. Equilibrium: The red arrows represent the internal forces. The force pulling the bolt ($F_v$) is exactly equal to the force pushing against the members.
 
 ##### 2. The Force-Deformation Graph (Right) {-}
 
@@ -525,7 +533,7 @@ The graph translates these physical movements into a geometric diagram where the
 
 The "triangle" shows that for any given preload, the members will deform less (linear distance) than the bolt because they are stiffer. This is crucial for fatigue resistance: when an external load is applied to the joint, the "stiff" members absorb most of the force change, protecting the "stretchy" bolt from large fluctuations in tension that could lead to failure.
 
-```{r joint-working-load, echo=TRUE, fig.cap="Joint Diagram with External Working Load"}
+```{r joint-working-load, echo=FALSE, warning=FALSE, fig.cap="Joint Diagram with External Working Load"}
 library(ggplot2)
 
 # Parameters
@@ -578,12 +586,13 @@ ggplot(plot_data, aes(x = x, y = y, color = group, linetype = group)) +
 * **The Red Arrow:** This represents the additional tension the bolt carries. Notice that it is much smaller than the total external force ($P = 15,000$). This is because the members "gave up" some of their compression to support the load.
 * **Member Safety:** As long as the yellow line (member compression) does not reach $y = 0$, the joint remains "clamped." If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.
 
+\newpage
 
-## Advanced Analysis of Bolted Joints {#bolted-analysis}
+## Advanced Analysis of Bolted Joints with applicable Formulas {#bolted-analysis-formulas}
 
 The reliability of a bolted joint depends on understanding the stiffness relationship between the fastener and the clamped members. This chapter details the analytical steps required to ensure joint integrity based on the force triangle principles.
 
-### Fastener Stiffness ($k_b$)
+### Fastener Stiffness ($k_b$) {#kb}
 
 A bolt is not a perfectly rigid body; it acts as a series of springs with different cross-sections. To calculate the total fastener stiffness ($k_b$), we must account for both the unthreaded shank and the threaded portion within the grip.
 
@@ -592,6 +601,7 @@ The stiffness is calculated using the following formula:
 $$k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}$$
 
 **Where:**
+
 * $A_d$: Area of the unthreaded portion.
 * $A_t$: Tensile stress area of the threaded portion.
 * $l_d$: Length of the unthreaded portion ($L - L_T$).
@@ -600,11 +610,9 @@ $$k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}$$
 
 ---
 
-### Member Stiffness ($k_m$) and Substitute Cylinders
+### Member Stiffness ($k_m$) and Substitute Cylinders {#km}
 
 Calculating the stiffness of the clamped members ($k_m$) is complex because the compressive stress spreads out from the bolt head rather than remaining a uniform cylinder. We use the **Area of a substitute cylinder** ($A_s$) to model this behavior.
-
-
 
 The general formula for member stiffness is:
 $$k_m = \frac{EA_s}{l_j}$$
@@ -620,30 +628,31 @@ The calculation of $A_s$ depends on the relationship between the joint diameter 
 
 ---
 
-### Joint Forces and Tightening Torque
+### Joint Forces and Tightening Torque 
 
 The **Joint Stiffness Constant** ($C$) determines how much of an external load $P$ is shared by the bolt.
 
 $$C = \frac{k_b}{k_b + k_m}$$
 
-#### Force Distribution
+#### Force Distribution {-}
 The total force in the bolt ($F_b$) and the remaining clamping force in the member ($F_m$) are calculated as follows:
 * $F_b = C \cdot P + F_i$
 * $F_m = (1 - C) \cdot P - F_i$
 
-#### Preload and Torque
+#### Preload {-}
 The initial preload ($F_i$) is typically set to 75% of the proof load ($F_p$):
 $$F_i = 0.75 F_p = 0.75 \cdot A_t S_p$$
 
+#### Torque {-}
 To achieve this preload, the required tightening torque ($T$) is calculated using the nominal diameter ($d$) and a friction factor ($K$):
 $$T = K \cdot d \cdot F_i$$
 
 According to standard tables, the friction factor $K$ varies by bolt condition:
+
 * **Non-plated, black finish:** $0.20 - 0.30$
 * **Zinc-plated:** $0.17 - 0.22$
 * **Lubricated:** $0.12 - 0.16$
 
----
 
 ### Stress Analysis and Safety Factors
 
@@ -660,48 +669,177 @@ To ensure a safe design, we evaluate three safety factors:
 
 \newpage
 
+---
 
+## Applied Example: Bolted Joint Safety Calculation {#bolt-example}
 
+To ensure the reliability of a bolted joint, we must move from theoretical equations to practical application. In this example, we will calculate the safety factors for a specific joint configuration by retrieving standard dimensions from the tables provided in Chapter \@ref(bolt-definitions) and applying the stiffness formulas derived in Chapter \@ref(bolted-analysis-formulas).
 
+#### Problem Statement {-}
 
+We are designing a bolted connection to clamp two plates together: one made of **Steel** and one made of **Cast Iron**. The joint is subjected to an external tensile load $P$.
 
+**Design Parameters:**
 
+* **Fastener:** 1/2 in - 13 x 3 UNC Carbon Steel Bolt (SAE Grade 5).
+* **Washer:** 1/2 in Narrow Flat Washer (placed under the bolt head).
+* **Plate 1 (Top):** Steel, thickness $t_1 = 1.25$ in.
+* **Plate 2 (Bottom):** Cast Iron, thickness $t_2 = 0.75$ in.
+* **Hole Clearance:** 0.0625 in.
+* **External Load ($P$):** 4,000 lbs.
+* **Modulus of Elasticity:**
+    * Steel ($E_s$): $30 \times 10^6$ psi.
+    * Cast Iron ($E_{ci}$): $14.5 \times 10^6$ psi.
+    * Bolt ($E_b$): $29 \times 10^6$ psi.
+* **Bolt Proof Strength ($S_p$):** 85,000 psi (SAE Grade 5).
 
+#### Step 1: Retrieving Table Data {-}
 
+First, we need to gather the geometric properties of the hardware. Instead of guessing, we look up the exact values from the reference tables.
+
+1.  **Tensile Stress Area ($A_t$):** From Table \@ref(tab:english-cross-section-area-table) for a "1/2" size UNC bolt.
+2.  **Washer Thickness ($t_w$):** From Table \@ref(tab:english-washer-dimensions-table) for a "1/2 N" washer.
+
+#### Step 2: Calculation {-}
+
+```{r design-data, echo=FALSE, message=FALSE}
+library(tibble)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+# 1. Define the Design Parameters
+design_params <- tribble(
+  ~Parameter,      ~Value,       ~Unit,   ~Description,
+  "Load_P",        4000,         "lbf",   "External Tensile Load",
+  "E_Bolt",        29e6,         "psi",   "Modulus Elasticity (Carbon Steel)",
+  "E_Steel",       30e6,         "psi",   "Modulus Elasticity (Plate 1)",
+  "E_CastIron",    14.5e6,       "psi",   "Modulus Elasticity (Plate 2)",
+  "Proof_Str",     85000,        "psi",   "Proof Strength (Grade 5)",
+  "Plate1_Thick",  1.25,          "in",    "Thickness of Steel Plate",
+  "Plate2_Thick",  0.75,          "in",    "Thickness of Cast Iron Plate"
+)
+
+# 2. Lookup Table Extraction
+# We manually extract these values from the text's reference tables
+# Table 3 (Fastener Lookup) & Table 5 (Washer Dimensions)
+table_lookups <- tribble(
+  ~Component, ~Size,     ~Property,     ~Value,  ~Source_Table,
+  "Bolt",     "1/2 UNC", "Area_At",     0.1419,  "Table 3: Fastener Dimensions",
+  "Washer",   "1/2 N",   "Thickness",   0.095,   "Table 5: Washer Dimensions"
+)
+
+# Display the data for verification
+kable(table_lookups, caption = "Design Values Retrieved from Standards Tables")
+
+# --- 1. Extract Variables for Readability ---
+P   <- design_params$Value[design_params$Parameter == "Load_P"]
+Eb  <- design_params$Value[design_params$Parameter == "E_Bolt"]
+Sp  <- design_params$Value[design_params$Parameter == "Proof_Str"]
+t1  <- design_params$Value[design_params$Parameter == "Plate1_Thick"]
+t2  <- design_params$Value[design_params$Parameter == "Plate2_Thick"]
+
+# From Lookups
+At  <- table_lookups$Value[table_lookups$Property == "Area_At"]
+tw  <- table_lookups$Value[table_lookups$Property == "Thickness"]
+
+# --- 2. Geometry Calculations ---
+d_nom <- 0.5           # Nominal diameter
+Grip  <- t1 + t2 + tw  # Total Grip Length (l)
+
+# Thread Length (Standard Formula for L <= 6in)
+# Lt = 2*d + 0.25
+L_total <- 3.0         # Selected Bolt Length
+Lt      <- 2 * d_nom + 0.25 
+
+# Length of unthreaded shank (l_d) and threaded portion in grip (l_t)
+l_d_total <- L_total - Lt      # Total unthreaded length of bolt
+l_d       <- min(l_d_total, Grip) # Unthreaded portion INSIDE the grip
+l_t       <- Grip - l_d        # Threaded portion INSIDE the grip
+
+# Bolt Area (Unthreaded)
+Ad <- (pi / 4) * d_nom^2
+
+# --- 3. Stiffness Calculations ---
+
+# Bolt Stiffness (kb)
+kb <- (Ad * At * Eb) / (Ad * l_t + At * l_d)
+
+# Member Stiffness (km)
+# We use the 'Medium Joint' substitute area approximation 
+# Assumption: Joint Diameter Dj is roughly equal to the Hex Width (W)
+# From Nut Table: W for 1/2 is 3/4 inch. 
+Hex_W <- 0.75 
+Dh    <- 0.5 + 0.0625 # Hole diameter clearance (standard rule of thumb)
+Dj    <- Hex_W       # Approximation for joint stress distribution
+
+# Substitute Area (As) formula for Large Joint
+# As = (pi/4)*(Dj^2 - Dh^2)
+As <- (pi / 4) * ((Hex_W + 0.1 * Grip)^2 - Dh^2)
+
+# Equivalent Modulus (Em) - Weighted Harmonic Mean for Series Springs
+# 1/km_total = 1/k_steel + 1/k_iron + 1/k_washer
+# To keep this example concise, we use a weighted average E based on thickness
+E_avg <- (design_params$Value[3]*t1 + design_params$Value[4]*t2) / (t1 + t2)
+
+km <- (E_avg * As) / Grip
+
+# Joint Constant (C)
+C_joint <- kb / (kb + km)
+
+# --- 4. Force Analysis ---
+
+# Preload (Fi) - Targeted at 75% of Proof Load
+Fi <- 0.75 * At * Sp
+
+# Total Bolt Load (Fb)
+Fb <- C_joint * P + Fi
+
+# --- 5. Factors of Safety ---
+
+# Yield Factor (nP)
+nP <- (Sp * At) / Fb
+
+# Load Factor (nL)
+nL <- (Sp * At - Fi) / (C_joint * P)
+
+# Separation Factor (n0)
+n0 <- Fi / (P * (1 - C_joint))
+
+# Organize Results into a readable Tribble
+results <- tribble(
+  ~Metric,                  ~Value,    ~Status,
+  "Grip (in)",              Grip,      "Calculated",
+  "Thread Length (in)",     Lt,        "Calculated",
+  "Shank Length (in)",      l_d_total, "Calculated",
+  "Shank Cross Section (Ad) [in^2]",              Ad,        "Calculated",
+  "Bolt Stiffness (kb) [psi]",kb,      "Calculated",
+  "Surrogate Area in Member (As) [in^2]", As,  "Calculated",
+  "Member Stiffness (km) [psi]",km,      "Calculated",
+  "Joint Constant (C)",       C_joint,   "Calculated",
+  "Preload (Fi) [lbf]",       Fi,        "Calculated",
+  "Boltload (Fb) [lbf]",      Fb,        "Calculated",
+  "Yield Safety (nP)",      nP,        ifelse(nP > 1, "SAFE", "FAIL"),
+  "Load Factor (nL)",       nL,        ifelse(nL > 1, "SAFE", "FAIL"),
+  "Separation Factor (n0)", n0,        ifelse(n0 > 1, "SAFE", "FAIL")
+)
+
+results %>%
+  mutate(Value = formatC(Value, format = "f", digits = 2)) %>%
+  kbl(caption = "Bolted Joint Safety Analysis Results", booktabs = TRUE) %>%
+  kable_styling(latex_options = "hold_position") %>%
+  row_spec(which(results$Status == "SAFE"), color = "green", bold = TRUE) %>%
+  row_spec(which(results$Status == "FAIL"), color = "red", bold = TRUE)
+```
+
+Results and Conclusion 
+The calculation results are summarized below. The Joint Constant ($C$) indicates the fraction of the external load carried by the bolt. A lower $C$ value is generally preferred, as it means the rigid members absorb more of the load, protecting the bolt from fatigue.
 
 
 ---
 \newpage
 
-## Calculation Example in R
-
-```{r joint-analysis, echo=TRUE}
-# Input Variables
-E <- 210000        # Modulus (MPa)
-At <- 84.3         # Tensile Area M12 (mm^2)
-Ad <- 113.1        # Shank Area M12 (mm^2)
-lt <- 10           # Threaded length in grip (mm)
-ld <- 40           # Unthreaded length (mm)
-P <- 15000         # External Load (N)
-Sp <- 600          # Proof Strength (MPa)
-
-# 1. Calculate Bolt Stiffness
-kb <- (Ad * At * E) / (Ad * lt + At * ld)
-
-# 2. Assume Member Stiffness (Simplified for example)
-km <- kb * 4 
-
-# 3. Calculate Constants and Safety
-C <- kb / (kb + km)
-Fi <- 0.75 * At * Sp
-no <- Fi / (P * (1 - C)) # Separation Factor
-
-print(paste("Joint Constant C:", round(C, 3)))
-print(paste("Separation Safety Factor (no):", round(no, 2)))
-```
-
------------------------------------------------------------------------------------------------------------
-## Example
+## Example 2
 
 In this example we are verifying if the bolts can hold the applied load and how big the safety factors are.
 

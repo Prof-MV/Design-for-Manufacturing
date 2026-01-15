@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Applied Example: Bolted Joint Safety Calculation | Bolt Joint Calculations</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Applied Example: Bolted Joint Safety Calculation | Bolt Joint Calculations" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Applied Example: Bolted Joint Safety Calculation | Bolt Joint Calculations" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes" />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="strength-of-bolt-joint-calculations.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li>
+<li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction-to-the-casting-process"><i class="fa fa-check"></i>💡 Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#essential-components-of-casting"><i class="fa fa-check"></i>🧱 Essential Components of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#the-basic-steps-of-casting"><i class="fa fa-check"></i>⚙️ The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#applications-and-scope"><i class="fa fa-check"></i>🌍 Applications and Scope</a></li>
+<li class="chapter" data-level="1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>1.1</b> Sand Mould Casting: The Versatile Workhorse</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction"><i class="fa fa-check"></i><b>1.1.1</b> 💡 Introduction</a></li>
+<li class="chapter" data-level="1.1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#components-and-steps-of-the-process"><i class="fa fa-check"></i><b>1.1.2</b> ⚙️ Components and Steps of the Process</a></li>
+<li class="chapter" data-level="1.1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#advantages-and-disadvantages"><i class="fa fa-check"></i><b>1.1.3</b> 📊 Advantages and Disadvantages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>1.2</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#investment-casting"><i class="fa fa-check"></i><b>1.3</b> Investment Casting</a></li>
+<li class="chapter" data-level="1.4" data-path="design-for-casting.html"><a href="design-for-casting.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>1.4</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design-for-casting.html"><a href="design-for-casting.html#engineering-metal-castings-for-quality-and-value"><i class="fa fa-check"></i><b>1.4.1</b> 🔩 Engineering Metal Castings for Quality and Value</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design-for-casting.html"><a href="design-for-casting.html#variables-in-metal-casting-design"><i class="fa fa-check"></i><b>1.4.2</b> 🔬 Variables in Metal Casting Design</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design-for-casting.html"><a href="design-for-casting.html#design-considerations-for-shape-and-mold"><i class="fa fa-check"></i><b>1.4.3</b> 📐 Design Considerations for Shape and Mold</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="design-for-casting.html"><a href="design-for-casting.html#defects-in-casting-process"><i class="fa fa-check"></i><b>1.5</b> Defects in Casting process</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-for-joining.html"><a href="design-for-joining.html"><i class="fa fa-check"></i><b>2</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#joining-processes-uniting-materials-for-function"><i class="fa fa-check"></i><b>2.1</b> 🔗 Joining Processes: Uniting Materials for Function</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-1"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-of-joining-methods"><i class="fa fa-check"></i><b>2.1.2</b> Classification of Joining Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#the-welding-process"><i class="fa fa-check"></i><b>2.2</b> ♨️ The Welding Process</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-to-welding"><i class="fa fa-check"></i><b>2.2.1</b> Introduction to Welding</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-and-types-of-welding-processes"><i class="fa fa-check"></i><b>2.2.2</b> Classification and Types of Welding Processes</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-for-joining.html"><a href="design-for-joining.html#when-to-choose-welding"><i class="fa fa-check"></i><b>2.2.3</b> When to Choose Welding</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html"><i class="fa fa-check"></i><b>3</b> Strength of Bolt Joint Calculations</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-definitions"><i class="fa fa-check"></i><b>3.1</b> Bolt Definitions</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#nut-dimensions"><i class="fa fa-check"></i><b>3.1.1</b> Nut Dimensions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#washer-dimensions"><i class="fa fa-check"></i><b>3.1.2</b> Washer Dimensions</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-joints"><i class="fa fa-check"></i><b>3.2</b> Understanding Bolt Joints and Force Triangles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#how-to-interpret-the-result"><i class="fa fa-check"></i><b>3.2.1</b> How to Interpret the Result</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-analysis"><i class="fa fa-check"></i><b>3.3</b> Advanced Analysis of Bolted Joints</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#fastener-stiffness-k_b"><i class="fa fa-check"></i><b>3.3.1</b> Fastener Stiffness (<span class="math inline">\(k_b\)</span>)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#member-stiffness-k_m-and-substitute-cylinders"><i class="fa fa-check"></i><b>3.3.2</b> Member Stiffness (<span class="math inline">\(k_m\)</span>) and Substitute Cylinders</a></li>
+<li class="chapter" data-level="3.3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#joint-forces-and-tightening-torque"><i class="fa fa-check"></i><b>3.3.3</b> Joint Forces and Tightening Torque</a></li>
+<li class="chapter" data-level="3.3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#stress-analysis-and-safety-factors"><i class="fa fa-check"></i><b>3.3.4</b> Stress Analysis and Safety Factors</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="bolt-example.html"><a href="bolt-example.html"><i class="fa fa-check"></i><b>4</b> Applied Example: Bolted Joint Safety Calculation</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="bolt-example.html"><a href="bolt-example.html#problem-statement"><i class="fa fa-check"></i><b>4.1</b> Problem Statement</a></li>
+<li class="chapter" data-level="4.2" data-path="bolt-example.html"><a href="bolt-example.html#step-1-retrieving-table-data-with-tribble"><i class="fa fa-check"></i><b>4.2</b> Step 1: Retrieving Table Data with <code>tribble</code></a></li>
+<li class="chapter" data-level="4.3" data-path="bolt-example.html"><a href="bolt-example.html#example"><i class="fa fa-check"></i><b>4.3</b> Example</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bolt Joint Calculations</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="bolt-example" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Applied Example: Bolted Joint Safety Calculation<a href="bolt-example.html#bolt-example" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>To ensure the reliability of a bolted joint, we must move from theoretical equations to practical application. In this example, we will calculate the safety factors for a specific joint configuration by retrieving standard dimensions from the tables provided in Chapter <a href="#bolted-joints"><strong>??</strong></a> and applying the stiffness formulas derived in Chapter <a href="strength-of-bolt-joint-calculations.html#bolted-analysis">3.3</a>.</p>
+<div id="problem-statement" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Problem Statement<a href="bolt-example.html#problem-statement" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We are designing a bolted connection to clamp two plates together: one made of <strong>Steel</strong> and one made of <strong>Cast Iron</strong>. The joint is subjected to an external tensile load <span class="math inline">\(P\)</span>.</p>
+<p><strong>Design Parameters:</strong></p>
+<ul>
+<li><strong>Fastener:</strong> 1/2 in - 13 UNC Carbon Steel Bolt (SAE Grade 5).</li>
+<li><strong>Washer:</strong> 1/2 in Narrow Flat Washer (placed under the bolt head).</li>
+<li><strong>Plate 1 (Top):</strong> Steel, thickness <span class="math inline">\(t_1 = 1.0\)</span> in.</li>
+<li><strong>Plate 2 (Bottom):</strong> Cast Iron, thickness <span class="math inline">\(t_2 = 1.0\)</span> in.</li>
+<li><strong>External Load (<span class="math inline">\(P\)</span>):</strong> 4,000 lbs.</li>
+<li><strong>Modulus of Elasticity:</strong>
+<ul>
+<li>Steel (<span class="math inline">\(E_s\)</span>): <span class="math inline">\(30 \times 10^6\)</span> psi.</li>
+<li>Cast Iron (<span class="math inline">\(E_{ci}\)</span>): <span class="math inline">\(14.5 \times 10^6\)</span> psi.</li>
+<li>Bolt (<span class="math inline">\(E_b\)</span>): <span class="math inline">\(29 \times 10^6\)</span> psi.</li>
+</ul></li>
+<li><strong>Bolt Proof Strength (<span class="math inline">\(S_p\)</span>):</strong> 85,000 psi (SAE Grade 5).</li>
+</ul>
+</div>
+<div id="step-1-retrieving-table-data-with-tribble" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Step 1: Retrieving Table Data with <code>tribble</code><a href="bolt-example.html#step-1-retrieving-table-data-with-tribble" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>First, we need to gather the geometric properties of the hardware. Instead of guessing, we look up the exact values from the reference tables.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Tensile Stress Area (<span class="math inline">\(A_t\)</span>):</strong> From Table <a href="strength-of-bolt-joint-calculations.html#tab:fastener-lookup">3.1</a> for a “1/2” size UNC bolt.</li>
+<li><strong>Washer Thickness (<span class="math inline">\(t_w\)</span>):</strong> From Table <a href="strength-of-bolt-joint-calculations.html#tab:washer-dimensions">3.5</a> for a “1/2 N” washer.</li>
+</ol>
+<p>We will use the <code>tribble</code> function from the <code>tibble</code> package to organize these inputs cleanly. This approach creates a readable, row-by-row data frame that documents our design sources.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="bolt-example.html#cb4-1" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb4-2"><a href="bolt-example.html#cb4-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb4-3"><a href="bolt-example.html#cb4-3" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb4-4"><a href="bolt-example.html#cb4-4" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb4-5"><a href="bolt-example.html#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="bolt-example.html#cb4-6" tabindex="-1"></a><span class="co"># 1. Define the Design Parameters</span></span>
+<span id="cb4-7"><a href="bolt-example.html#cb4-7" tabindex="-1"></a>design_params <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb4-8"><a href="bolt-example.html#cb4-8" tabindex="-1"></a>  <span class="sc">~</span>Parameter,      <span class="sc">~</span>Value,       <span class="sc">~</span>Unit,   <span class="sc">~</span>Description,</span>
+<span id="cb4-9"><a href="bolt-example.html#cb4-9" tabindex="-1"></a>  <span class="st">&quot;Load_P&quot;</span>,        <span class="dv">4000</span>,         <span class="st">&quot;lbf&quot;</span>,   <span class="st">&quot;External Tensile Load&quot;</span>,</span>
+<span id="cb4-10"><a href="bolt-example.html#cb4-10" tabindex="-1"></a>  <span class="st">&quot;E_Bolt&quot;</span>,        <span class="fl">29e6</span>,         <span class="st">&quot;psi&quot;</span>,   <span class="st">&quot;Modulus Elasticity (Carbon Steel)&quot;</span>,</span>
+<span id="cb4-11"><a href="bolt-example.html#cb4-11" tabindex="-1"></a>  <span class="st">&quot;E_Steel&quot;</span>,       <span class="fl">30e6</span>,         <span class="st">&quot;psi&quot;</span>,   <span class="st">&quot;Modulus Elasticity (Plate 1)&quot;</span>,</span>
+<span id="cb4-12"><a href="bolt-example.html#cb4-12" tabindex="-1"></a>  <span class="st">&quot;E_CastIron&quot;</span>,    <span class="fl">14.5e6</span>,       <span class="st">&quot;psi&quot;</span>,   <span class="st">&quot;Modulus Elasticity (Plate 2)&quot;</span>,</span>
+<span id="cb4-13"><a href="bolt-example.html#cb4-13" tabindex="-1"></a>  <span class="st">&quot;Proof_Str&quot;</span>,     <span class="dv">85000</span>,        <span class="st">&quot;psi&quot;</span>,   <span class="st">&quot;Proof Strength (Grade 5)&quot;</span>,</span>
+<span id="cb4-14"><a href="bolt-example.html#cb4-14" tabindex="-1"></a>  <span class="st">&quot;Plate1_Thick&quot;</span>,  <span class="fl">1.0</span>,          <span class="st">&quot;in&quot;</span>,    <span class="st">&quot;Thickness of Steel Plate&quot;</span>,</span>
+<span id="cb4-15"><a href="bolt-example.html#cb4-15" tabindex="-1"></a>  <span class="st">&quot;Plate2_Thick&quot;</span>,  <span class="fl">1.0</span>,          <span class="st">&quot;in&quot;</span>,    <span class="st">&quot;Thickness of Cast Iron Plate&quot;</span></span>
+<span id="cb4-16"><a href="bolt-example.html#cb4-16" tabindex="-1"></a>)</span>
+<span id="cb4-17"><a href="bolt-example.html#cb4-17" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="bolt-example.html#cb4-18" tabindex="-1"></a><span class="co"># 2. Lookup Table Extraction</span></span>
+<span id="cb4-19"><a href="bolt-example.html#cb4-19" tabindex="-1"></a><span class="co"># We manually extract these values from the text&#39;s reference tables</span></span>
+<span id="cb4-20"><a href="bolt-example.html#cb4-20" tabindex="-1"></a><span class="co"># Table 3 (Fastener Lookup) &amp; Table 5 (Washer Dimensions)</span></span>
+<span id="cb4-21"><a href="bolt-example.html#cb4-21" tabindex="-1"></a>table_lookups <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb4-22"><a href="bolt-example.html#cb4-22" tabindex="-1"></a>  <span class="sc">~</span>Component, <span class="sc">~</span>Size,     <span class="sc">~</span>Property,     <span class="sc">~</span>Value,  <span class="sc">~</span>Source_Table,</span>
+<span id="cb4-23"><a href="bolt-example.html#cb4-23" tabindex="-1"></a>  <span class="st">&quot;Bolt&quot;</span>,     <span class="st">&quot;1/2 UNC&quot;</span>, <span class="st">&quot;Area_At&quot;</span>,     <span class="fl">0.1419</span>,  <span class="st">&quot;Table 3: Fastener Dimensions&quot;</span>,</span>
+<span id="cb4-24"><a href="bolt-example.html#cb4-24" tabindex="-1"></a>  <span class="st">&quot;Washer&quot;</span>,   <span class="st">&quot;1/2 N&quot;</span>,   <span class="st">&quot;Thickness&quot;</span>,   <span class="fl">0.095</span>,   <span class="st">&quot;Table 5: Washer Dimensions&quot;</span></span>
+<span id="cb4-25"><a href="bolt-example.html#cb4-25" tabindex="-1"></a>)</span>
+<span id="cb4-26"><a href="bolt-example.html#cb4-26" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="bolt-example.html#cb4-27" tabindex="-1"></a><span class="co"># Display the data for verification</span></span>
+<span id="cb4-28"><a href="bolt-example.html#cb4-28" tabindex="-1"></a><span class="fu">kable</span>(table_lookups, <span class="at">caption =</span> <span class="st">&quot;Design Values Retrieved from Standards Tables&quot;</span>)</span></code></pre></div>
+<table>
+<caption>
+<span id="tab:design-data">Table 4.1: </span>Design Values Retrieved from Standards Tables
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Component
+</th>
+<th style="text-align:left;">
+Size
+</th>
+<th style="text-align:left;">
+Property
+</th>
+<th style="text-align:right;">
+Value
+</th>
+<th style="text-align:left;">
+Source_Table
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bolt
+</td>
+<td style="text-align:left;">
+1/2 UNC
+</td>
+<td style="text-align:left;">
+Area_At
+</td>
+<td style="text-align:right;">
+0.1419
+</td>
+<td style="text-align:left;">
+Table 3: Fastener Dimensions
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washer
+</td>
+<td style="text-align:left;">
+1/2 N
+</td>
+<td style="text-align:left;">
+Thickness
+</td>
+<td style="text-align:right;">
+0.0950
+</td>
+<td style="text-align:left;">
+Table 5: Washer Dimensions
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="bolt-example.html#cb5-1" tabindex="-1"></a><span class="co"># --- 1. Extract Variables for Readability ---</span></span>
+<span id="cb5-2"><a href="bolt-example.html#cb5-2" tabindex="-1"></a>P   <span class="ot">&lt;-</span> design_params<span class="sc">$</span>Value[design_params<span class="sc">$</span>Parameter <span class="sc">==</span> <span class="st">&quot;Load_P&quot;</span>]</span>
+<span id="cb5-3"><a href="bolt-example.html#cb5-3" tabindex="-1"></a>Eb  <span class="ot">&lt;-</span> design_params<span class="sc">$</span>Value[design_params<span class="sc">$</span>Parameter <span class="sc">==</span> <span class="st">&quot;E_Bolt&quot;</span>]</span>
+<span id="cb5-4"><a href="bolt-example.html#cb5-4" tabindex="-1"></a>Sp  <span class="ot">&lt;-</span> design_params<span class="sc">$</span>Value[design_params<span class="sc">$</span>Parameter <span class="sc">==</span> <span class="st">&quot;Proof_Str&quot;</span>]</span>
+<span id="cb5-5"><a href="bolt-example.html#cb5-5" tabindex="-1"></a>t1  <span class="ot">&lt;-</span> design_params<span class="sc">$</span>Value[design_params<span class="sc">$</span>Parameter <span class="sc">==</span> <span class="st">&quot;Plate1_Thick&quot;</span>]</span>
+<span id="cb5-6"><a href="bolt-example.html#cb5-6" tabindex="-1"></a>t2  <span class="ot">&lt;-</span> design_params<span class="sc">$</span>Value[design_params<span class="sc">$</span>Parameter <span class="sc">==</span> <span class="st">&quot;Plate2_Thick&quot;</span>]</span>
+<span id="cb5-7"><a href="bolt-example.html#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="bolt-example.html#cb5-8" tabindex="-1"></a><span class="co"># From Lookups</span></span>
+<span id="cb5-9"><a href="bolt-example.html#cb5-9" tabindex="-1"></a>At  <span class="ot">&lt;-</span> table_lookups<span class="sc">$</span>Value[table_lookups<span class="sc">$</span>Property <span class="sc">==</span> <span class="st">&quot;Area_At&quot;</span>]</span>
+<span id="cb5-10"><a href="bolt-example.html#cb5-10" tabindex="-1"></a>tw  <span class="ot">&lt;-</span> table_lookups<span class="sc">$</span>Value[table_lookups<span class="sc">$</span>Property <span class="sc">==</span> <span class="st">&quot;Thickness&quot;</span>]</span>
+<span id="cb5-11"><a href="bolt-example.html#cb5-11" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="bolt-example.html#cb5-12" tabindex="-1"></a><span class="co"># --- 2. Geometry Calculations ---</span></span>
+<span id="cb5-13"><a href="bolt-example.html#cb5-13" tabindex="-1"></a>d_nom <span class="ot">&lt;-</span> <span class="fl">0.5</span>           <span class="co"># Nominal diameter</span></span>
+<span id="cb5-14"><a href="bolt-example.html#cb5-14" tabindex="-1"></a>Grip  <span class="ot">&lt;-</span> t1 <span class="sc">+</span> t2 <span class="sc">+</span> tw  <span class="co"># Total Grip Length (l)</span></span>
+<span id="cb5-15"><a href="bolt-example.html#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="bolt-example.html#cb5-16" tabindex="-1"></a><span class="co"># Thread Length (Standard Formula for L &lt;= 6in)</span></span>
+<span id="cb5-17"><a href="bolt-example.html#cb5-17" tabindex="-1"></a><span class="co"># Lt = 2*d + 0.25</span></span>
+<span id="cb5-18"><a href="bolt-example.html#cb5-18" tabindex="-1"></a>L_total <span class="ot">&lt;-</span> <span class="fl">3.0</span>         <span class="co"># Selected Bolt Length</span></span>
+<span id="cb5-19"><a href="bolt-example.html#cb5-19" tabindex="-1"></a>Lt      <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> d_nom <span class="sc">+</span> <span class="fl">0.25</span> </span>
+<span id="cb5-20"><a href="bolt-example.html#cb5-20" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="bolt-example.html#cb5-21" tabindex="-1"></a><span class="co"># Length of unthreaded shank (l_d) and threaded portion in grip (l_t)</span></span>
+<span id="cb5-22"><a href="bolt-example.html#cb5-22" tabindex="-1"></a>l_d_total <span class="ot">&lt;-</span> L_total <span class="sc">-</span> Lt      <span class="co"># Total unthreaded length of bolt</span></span>
+<span id="cb5-23"><a href="bolt-example.html#cb5-23" tabindex="-1"></a>l_d       <span class="ot">&lt;-</span> <span class="fu">min</span>(l_d_total, Grip) <span class="co"># Unthreaded portion INSIDE the grip</span></span>
+<span id="cb5-24"><a href="bolt-example.html#cb5-24" tabindex="-1"></a>l_t       <span class="ot">&lt;-</span> Grip <span class="sc">-</span> l_d        <span class="co"># Threaded portion INSIDE the grip</span></span>
+<span id="cb5-25"><a href="bolt-example.html#cb5-25" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="bolt-example.html#cb5-26" tabindex="-1"></a><span class="co"># Bolt Area (Unthreaded)</span></span>
+<span id="cb5-27"><a href="bolt-example.html#cb5-27" tabindex="-1"></a>Ad <span class="ot">&lt;-</span> (pi <span class="sc">/</span> <span class="dv">4</span>) <span class="sc">*</span> d_nom<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb5-28"><a href="bolt-example.html#cb5-28" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="bolt-example.html#cb5-29" tabindex="-1"></a><span class="co"># --- 3. Stiffness Calculations ---</span></span>
+<span id="cb5-30"><a href="bolt-example.html#cb5-30" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="bolt-example.html#cb5-31" tabindex="-1"></a><span class="co"># Bolt Stiffness (kb)</span></span>
+<span id="cb5-32"><a href="bolt-example.html#cb5-32" tabindex="-1"></a>kb <span class="ot">&lt;-</span> (Ad <span class="sc">*</span> At <span class="sc">*</span> Eb) <span class="sc">/</span> (Ad <span class="sc">*</span> l_t <span class="sc">+</span> At <span class="sc">*</span> l_d)</span>
+<span id="cb5-33"><a href="bolt-example.html#cb5-33" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="bolt-example.html#cb5-34" tabindex="-1"></a><span class="co"># Member Stiffness (km)</span></span>
+<span id="cb5-35"><a href="bolt-example.html#cb5-35" tabindex="-1"></a><span class="co"># We use the &#39;Medium Joint&#39; substitute area approximation </span></span>
+<span id="cb5-36"><a href="bolt-example.html#cb5-36" tabindex="-1"></a><span class="co"># Assumption: Joint Diameter Dj is roughly equal to the Hex Width (W)</span></span>
+<span id="cb5-37"><a href="bolt-example.html#cb5-37" tabindex="-1"></a><span class="co"># From Nut Table: W for 1/2 is 3/4 inch. </span></span>
+<span id="cb5-38"><a href="bolt-example.html#cb5-38" tabindex="-1"></a>Hex_W <span class="ot">&lt;-</span> <span class="fl">0.75</span> </span>
+<span id="cb5-39"><a href="bolt-example.html#cb5-39" tabindex="-1"></a>Dh    <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> <span class="fl">0.0625</span> <span class="co"># Hole diameter clearance (standard rule of thumb)</span></span>
+<span id="cb5-40"><a href="bolt-example.html#cb5-40" tabindex="-1"></a>Dj    <span class="ot">&lt;-</span> Hex_W       <span class="co"># Approximation for joint stress distribution</span></span>
+<span id="cb5-41"><a href="bolt-example.html#cb5-41" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="bolt-example.html#cb5-42" tabindex="-1"></a><span class="co"># Substitute Area (As) formula for Medium Joint (simplified)</span></span>
+<span id="cb5-43"><a href="bolt-example.html#cb5-43" tabindex="-1"></a><span class="co"># As = (pi/4)*(Dj^2 - Dh^2)</span></span>
+<span id="cb5-44"><a href="bolt-example.html#cb5-44" tabindex="-1"></a>As <span class="ot">&lt;-</span> (pi <span class="sc">/</span> <span class="dv">4</span>) <span class="sc">*</span> (Dj<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> Dh<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb5-45"><a href="bolt-example.html#cb5-45" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="bolt-example.html#cb5-46" tabindex="-1"></a><span class="co"># Equivalent Modulus (Em) - Weighted Harmonic Mean for Series Springs</span></span>
+<span id="cb5-47"><a href="bolt-example.html#cb5-47" tabindex="-1"></a><span class="co"># 1/km_total = 1/k_steel + 1/k_iron + 1/k_washer</span></span>
+<span id="cb5-48"><a href="bolt-example.html#cb5-48" tabindex="-1"></a><span class="co"># To keep this example concise, we use a weighted average E based on thickness</span></span>
+<span id="cb5-49"><a href="bolt-example.html#cb5-49" tabindex="-1"></a>E_avg <span class="ot">&lt;-</span> (design_params<span class="sc">$</span>Value[<span class="dv">3</span>]<span class="sc">*</span>t1 <span class="sc">+</span> design_params<span class="sc">$</span>Value[<span class="dv">4</span>]<span class="sc">*</span>t2) <span class="sc">/</span> (t1 <span class="sc">+</span> t2)</span>
+<span id="cb5-50"><a href="bolt-example.html#cb5-50" tabindex="-1"></a></span>
+<span id="cb5-51"><a href="bolt-example.html#cb5-51" tabindex="-1"></a>km <span class="ot">&lt;-</span> (E_avg <span class="sc">*</span> As) <span class="sc">/</span> Grip</span>
+<span id="cb5-52"><a href="bolt-example.html#cb5-52" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="bolt-example.html#cb5-53" tabindex="-1"></a><span class="co"># Joint Constant (C)</span></span>
+<span id="cb5-54"><a href="bolt-example.html#cb5-54" tabindex="-1"></a>C_joint <span class="ot">&lt;-</span> kb <span class="sc">/</span> (kb <span class="sc">+</span> km)</span>
+<span id="cb5-55"><a href="bolt-example.html#cb5-55" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="bolt-example.html#cb5-56" tabindex="-1"></a><span class="co"># --- 4. Force Analysis ---</span></span>
+<span id="cb5-57"><a href="bolt-example.html#cb5-57" tabindex="-1"></a></span>
+<span id="cb5-58"><a href="bolt-example.html#cb5-58" tabindex="-1"></a><span class="co"># Preload (Fi) - Targeted at 75% of Proof Load</span></span>
+<span id="cb5-59"><a href="bolt-example.html#cb5-59" tabindex="-1"></a>Fi <span class="ot">&lt;-</span> <span class="fl">0.75</span> <span class="sc">*</span> At <span class="sc">*</span> Sp</span>
+<span id="cb5-60"><a href="bolt-example.html#cb5-60" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="bolt-example.html#cb5-61" tabindex="-1"></a><span class="co"># Total Bolt Load (Fb)</span></span>
+<span id="cb5-62"><a href="bolt-example.html#cb5-62" tabindex="-1"></a>Fb <span class="ot">&lt;-</span> C_joint <span class="sc">*</span> P <span class="sc">+</span> Fi</span>
+<span id="cb5-63"><a href="bolt-example.html#cb5-63" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="bolt-example.html#cb5-64" tabindex="-1"></a><span class="co"># --- 5. Factors of Safety ---</span></span>
+<span id="cb5-65"><a href="bolt-example.html#cb5-65" tabindex="-1"></a></span>
+<span id="cb5-66"><a href="bolt-example.html#cb5-66" tabindex="-1"></a><span class="co"># Yield Factor (nP)</span></span>
+<span id="cb5-67"><a href="bolt-example.html#cb5-67" tabindex="-1"></a>nP <span class="ot">&lt;-</span> (Sp <span class="sc">*</span> At) <span class="sc">/</span> Fb</span>
+<span id="cb5-68"><a href="bolt-example.html#cb5-68" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="bolt-example.html#cb5-69" tabindex="-1"></a><span class="co"># Load Factor (nL)</span></span>
+<span id="cb5-70"><a href="bolt-example.html#cb5-70" tabindex="-1"></a>nL <span class="ot">&lt;-</span> (Sp <span class="sc">*</span> At <span class="sc">-</span> Fi) <span class="sc">/</span> (C_joint <span class="sc">*</span> P)</span>
+<span id="cb5-71"><a href="bolt-example.html#cb5-71" tabindex="-1"></a></span>
+<span id="cb5-72"><a href="bolt-example.html#cb5-72" tabindex="-1"></a><span class="co"># Separation Factor (n0)</span></span>
+<span id="cb5-73"><a href="bolt-example.html#cb5-73" tabindex="-1"></a>n0 <span class="ot">&lt;-</span> Fi <span class="sc">/</span> (P <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> C_joint))</span>
+<span id="cb5-74"><a href="bolt-example.html#cb5-74" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="bolt-example.html#cb5-75" tabindex="-1"></a><span class="co"># Organize Results into a readable Tribble</span></span>
+<span id="cb5-76"><a href="bolt-example.html#cb5-76" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb5-77"><a href="bolt-example.html#cb5-77" tabindex="-1"></a>  <span class="sc">~</span>Metric,                  <span class="sc">~</span>Value,    <span class="sc">~</span>Status,</span>
+<span id="cb5-78"><a href="bolt-example.html#cb5-78" tabindex="-1"></a>  <span class="st">&quot;Bolt Stiffness (kb)&quot;</span>,    kb,        <span class="st">&quot;Calculated&quot;</span>,</span>
+<span id="cb5-79"><a href="bolt-example.html#cb5-79" tabindex="-1"></a>  <span class="st">&quot;Member Stiffness (km)&quot;</span>,  km,        <span class="st">&quot;Calculated&quot;</span>,</span>
+<span id="cb5-80"><a href="bolt-example.html#cb5-80" tabindex="-1"></a>  <span class="st">&quot;Joint Constant (C)&quot;</span>,     C_joint,   <span class="st">&quot;Dimensionless&quot;</span>,</span>
+<span id="cb5-81"><a href="bolt-example.html#cb5-81" tabindex="-1"></a>  <span class="st">&quot;Preload (Fi)&quot;</span>,           Fi,        <span class="st">&quot;lbf&quot;</span>,</span>
+<span id="cb5-82"><a href="bolt-example.html#cb5-82" tabindex="-1"></a>  <span class="st">&quot;Yield Safety (nP)&quot;</span>,      nP,        <span class="fu">ifelse</span>(nP <span class="sc">&gt;</span> <span class="dv">1</span>, <span class="st">&quot;SAFE&quot;</span>, <span class="st">&quot;FAIL&quot;</span>),</span>
+<span id="cb5-83"><a href="bolt-example.html#cb5-83" tabindex="-1"></a>  <span class="st">&quot;Load Factor (nL)&quot;</span>,       nL,        <span class="fu">ifelse</span>(nL <span class="sc">&gt;</span> <span class="dv">1</span>, <span class="st">&quot;SAFE&quot;</span>, <span class="st">&quot;FAIL&quot;</span>),</span>
+<span id="cb5-84"><a href="bolt-example.html#cb5-84" tabindex="-1"></a>  <span class="st">&quot;Separation Factor (n0)&quot;</span>, n0,        <span class="fu">ifelse</span>(n0 <span class="sc">&gt;</span> <span class="dv">1</span>, <span class="st">&quot;SAFE&quot;</span>, <span class="st">&quot;FAIL&quot;</span>)</span>
+<span id="cb5-85"><a href="bolt-example.html#cb5-85" tabindex="-1"></a>)</span>
+<span id="cb5-86"><a href="bolt-example.html#cb5-86" tabindex="-1"></a></span>
+<span id="cb5-87"><a href="bolt-example.html#cb5-87" tabindex="-1"></a>results <span class="sc">%&gt;%</span></span>
+<span id="cb5-88"><a href="bolt-example.html#cb5-88" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Value =</span> <span class="fu">formatC</span>(Value, <span class="at">format =</span> <span class="st">&quot;f&quot;</span>, <span class="at">digits =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-89"><a href="bolt-example.html#cb5-89" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Bolted Joint Safety Analysis Results&quot;</span>, <span class="at">booktabs =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-90"><a href="bolt-example.html#cb5-90" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">latex_options =</span> <span class="st">&quot;hold_position&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-91"><a href="bolt-example.html#cb5-91" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="fu">which</span>(results<span class="sc">$</span>Status <span class="sc">==</span> <span class="st">&quot;SAFE&quot;</span>), <span class="at">color =</span> <span class="st">&quot;green&quot;</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-92"><a href="bolt-example.html#cb5-92" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="fu">which</span>(results<span class="sc">$</span>Status <span class="sc">==</span> <span class="st">&quot;FAIL&quot;</span>), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:design-data">Table 4.1: </span>Bolted Joint Safety Analysis Results
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Metric
+</th>
+<th style="text-align:left;">
+Value
+</th>
+<th style="text-align:left;">
+Status
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bolt Stiffness (kb)
+</td>
+<td style="text-align:left;">
+2556425.05
+</td>
+<td style="text-align:left;">
+Calculated
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Member Stiffness (km)
+</td>
+<td style="text-align:left;">
+2052751.86
+</td>
+<td style="text-align:left;">
+Calculated
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Joint Constant (C)
+</td>
+<td style="text-align:left;">
+0.55
+</td>
+<td style="text-align:left;">
+Dimensionless
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Preload (Fi)
+</td>
+<td style="text-align:left;">
+9046.12
+</td>
+<td style="text-align:left;">
+lbf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+Yield Safety (nP)
+</td>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+1.07
+</td>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+SAFE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+Load Factor (nL)
+</td>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+1.36
+</td>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+SAFE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+Separation Factor (n0)
+</td>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+5.08
+</td>
+<td style="text-align:left;font-weight: bold;color: green !important;">
+SAFE
+</td>
+</tr>
+</tbody>
+</table>
+<p>Results and Conclusion
+The calculation results are summarized below. The Joint Constant (<span class="math inline">\(C\)</span>) indicates the fraction of the external load carried by the bolt. A lower <span class="math inline">\(C\)</span> value is generally preferred, as it means the rigid members absorb more of the load, protecting the bolt from fatigue.</p>
+<hr />
+</div>
+<div id="example" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Example<a href="bolt-example.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this example we are verifying if the bolts can hold the applied load and how big the safety factors are.</p>
+<p><strong>Bolt material: SAE J429 Grade 5</strong> properties <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">Fastenal Technical Reference Guide</a></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Strength Property</th>
+<th align="left">Minimum Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Minimum Proof Strength</td>
+<td align="left">85,000 psi</td>
+</tr>
+<tr class="even">
+<td align="left">Minimum Tensile Strength</td>
+<td align="left">120,000 psi</td>
+</tr>
+<tr class="odd">
+<td align="left">Minimum Yield Strength</td>
+<td align="left">92,000 psi</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-19"></span>
+<img src="images/BoltJointExample.png" alt="2 Plate Example" width="100%" />
+<p class="caption">
+Figure 4.1: 2 Plate Example
+</p>
+</div>
+<div id="what-is-the-spring-constant-of-the-bolt-k_b" class="section level5 unnumbered hasAnchor question">
+<h5><strong>1)</strong> What is the spring constant of the bolt <span class="math inline">\(k_b\)</span>?<a href="bolt-example.html#what-is-the-spring-constant-of-the-bolt-k_b" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p>The bolt stiffness (<span class="math inline">\(k_b\)</span>) is calculated using the following formula:</p>
+<p><span class="math display">\[k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}\]</span></p>
+<p>Where the individual parameters are determined as follows:</p>
+<p><strong>Length of the unthreaded portion (<span class="math inline">\(l_d\)</span>):</strong></p>
+<p><span class="math display">\[l_d = L - L_T = 1.5 - (2 \cdot 0.5 + 0.25) = 0.25 \text{ in}\]</span></p>
+<p><strong>Length of the threaded portion (<span class="math inline">\(l_t\)</span>):</strong></p>
+<p><span class="math display">\[l_t = 0.5 + 0.75 + 0.095 - 0.25 = 1.095 \text{ in}\]</span></p>
+<p><strong>Tensile stress area (<span class="math inline">\(A_t\)</span>):</strong></p>
+<p><span class="math display">\[A_t = 0.1599 \text{ in}^2\]</span></p>
+<p><strong>Major diameter area (<span class="math inline">\(A_d\)</span>):</strong></p>
+<p><span class="math display">\[A_d = \frac{\pi}{4}(0.5)^2 = 0.1963 \text{ in}^2\]</span></p>
+<p><strong>Modulus of elasticity (<span class="math inline">\(E\)</span>):</strong></p>
+<p><span class="math display">\[E = 29 \cdot 10^6 \frac{\text{lbf}}{\text{in}^2}\]</span></p>
+<p>Substituting these values back into the main formula for <span class="math inline">\(k_b\)</span>:</p>
+<p><span class="math display">\[k_b = \frac{0.1963 \cdot 0.1599 \cdot 29 \cdot 10^6}{0.1963 \cdot 1.095 + 0.1599 \cdot 0.25} = 3.57 \cdot 10^6 \frac{\text{lbf}}{\text{in}}\]</span></p>
+</div>
+<div id="what-is-the-spring-constant-of-the-compressed-joint-k_m" class="section level5 unnumbered hasAnchor question">
+<h5><strong>2)</strong> What is the spring constant of the compressed joint <span class="math inline">\(k_m\)</span>?<a href="bolt-example.html#what-is-the-spring-constant-of-the-compressed-joint-k_m" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p><strong>Spring Rate of Compressed Joint Case : <span class="math inline">\(3D_{head} &lt; D_{joint}\)</span></strong></p>
+<p>The area <span class="math inline">\(A_s\)</span> is given by the formula:
+<span class="math display">\[ A_s = \frac{\pi}{4} \cdot \left[ (D_H + 0.1 l_j)^2 - D_h^2 \right] \]</span></p>
+<p>Given values:
+<span class="math display">\[ D_h = 0.510 \, \text{in} \]</span>
+<span class="math display">\[ D_H = W \text{ on Page 8} = 1.5 \cdot 0.5 = 0.75 \, \text{in} \]</span>
+<span class="math display">\[ l_j = 0.5 + 0.75 + 0.095 = 1.345 \, \text{in} \]</span>
+where <span class="math inline">\(l_{j}\)</span> is the entire joint length.</p>
+<p>Substituting the values into the area formula:
+<span class="math display">\[ A_s = \frac{\pi}{4} \left[ (0.75 + 0.1 \cdot 1.345)^2 - 0.510^2 \right] = 0.4102 \, \text{in}^2 \]</span></p>
+<p>The stiffness <span class="math inline">\(k_j\)</span> is calculated as:
+<span class="math display">\[ k_j = \frac{E A_s}{l_{material}} \]</span>
+where <span class="math inline">\(l_{material}\)</span> is the length of the substitute cylinder of each material.</p>
+<ul>
+<li><strong>Steel Spring Constant</strong>
+Length for steel, combine top plate and washer:
+<span class="math display">\[ l_{steel} = 0.5 + 0.095 \]</span></li>
+</ul>
+<p>Stiffness for steel:
+<span class="math display">\[ k_{steel} = \frac{29 \cdot 10^6 \cdot 0.4102}{(0.5 + 0.095)} = 20 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} \]</span></p>
+<ul>
+<li><strong>Cast Iron Spring Constant</strong>
+Given values for cast iron:
+<span class="math display">\[ E = 13 \cdot 10^6 \, \text{psi} \]</span>
+<span class="math display">\[ l_{cast iron} = 0.75 \]</span></li>
+</ul>
+<p>Stiffness for cast iron:
+<span class="math display">\[ k_{iron} = \frac{13 \cdot 10^6 \cdot 0.4102}{0.75} = 7.1 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} \]</span></p>
+<ul>
+<li><strong>Combine springs in series:</strong>
+The equivalent spring constant <span class="math inline">\(k_m\)</span> is found using:
+<span class="math display">\[ \frac{1}{k_m} = \frac{1}{k_1} + \frac{1}{k_2} + \dots + \frac{1}{k_n} \]</span></li>
+</ul>
+<p>Substituting the calculated stiffness values:
+<span class="math display">\[ \frac{1}{k_m} = \frac{1}{20 \cdot 10^6} + \frac{1}{7.1 \cdot 10^6} = \frac{1}{1.908 \cdot 10^7} \]</span></p>
+<p>Solving for <span class="math inline">\(k_m\)</span>:
+<span class="math display">\[ k_m = 5.24 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} \]</span></p>
+<p><strong>Spring rate of compressed joint:</strong>
+<span class="math display">\[ k_m = 5.24 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} \]</span></p>
+</div>
+<div id="what-is-the-initial-load-in-the-bolt-f_i" class="section level5 unnumbered hasAnchor question">
+<h5><strong>3)</strong> What is the initial load in the bolt <span class="math inline">\(F_i\)</span>?<a href="bolt-example.html#what-is-the-initial-load-in-the-bolt-f_i" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<div id="joint-stiffness-constant-c" class="section level5 unnumbered hasAnchor">
+<h5>Joint Stiffness Constant (C)<a href="bolt-example.html#joint-stiffness-constant-c" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The stiffness constant <strong>C</strong> defines how the external load is shared between the bolt and the clamped members:
+<span class="math display">\[ C = \frac{k_b}{k_b + k_m} = \frac{3.57 \cdot 10^6}{3.57 \cdot 10^6 + 5.24 \cdot 10^6} = 0.405 \]</span></p>
+</div>
+<div id="load-and-preload-parameters" class="section level5 unnumbered hasAnchor">
+<h5>Load and Preload Parameters<a href="bolt-example.html#load-and-preload-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>Portion of Load (P):</strong> The external load shared by the individual fastener:
+<span class="math display">\[ P = \frac{10000 \text{ lbf}}{4} = 2500 \text{ lbf} \]</span></li>
+<li><strong>Initial Preload (<span class="math inline">\(F_i\)</span>):</strong> Calculated based on the <em>Fastenal Technical Reference Guide</em><span class="citation">(<a href="#ref-fastenal_guide">Fastenal Company n.d.</a>)</span>:
+<span class="math display">\[ F_i = 0.75 \cdot 0.1599 \cdot 85000 = 10194 \text{ lbf} \]</span></li>
+</ul>
+</div>
+</div>
+<div id="what-is-the-tensile-force-in-the-bolt-f_b" class="section level5 unnumbered hasAnchor question">
+<h5><strong>4)</strong> What is the tensile force in the bolt <span class="math inline">\(F_b\)</span>?<a href="bolt-example.html#what-is-the-tensile-force-in-the-bolt-f_b" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div id="resulting-forces" class="section level5 unnumbered hasAnchor answer">
+<h5>Resulting Forces<a href="bolt-example.html#resulting-forces" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><strong>Force in the Bolt (<span class="math inline">\(F_b\)</span>):</strong>
+The total tension in the bolt after the external load is applied:
+<span class="math display">\[ F_b = C \cdot P + F_i \]</span>
+<span class="math display">\[ F_b = 0.405 \cdot 2500 + 10194 = 11207 \text{ lbf} \]</span></p>
+</div>
+<div id="what-is-the-compression-force-in-the-members-f_m" class="section level5 unnumbered hasAnchor question">
+<h5><strong>5)</strong> What is the compression force in the members <span class="math inline">\(F_m\)</span>?<a href="bolt-example.html#what-is-the-compression-force-in-the-members-f_m" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p><strong>Force in the Member (<span class="math inline">\(F_m\)</span>):</strong> The force remaining in the clamped members:
+<span class="math display">\[ F_m = (1 - C) \cdot P - F_i \]</span>
+<span class="math display">\[ F_m = (1 - 0.405) \cdot 2500 - 10194 = -8707 \text{ lbf} \]</span></p>
+<blockquote>
+<p><strong>Note:</strong> The negative result for <span class="math inline">\(F_m\)</span> indicates that the members are in <strong>compression</strong>.</p>
+</blockquote>
+</div>
+<div id="tensile-stress-in-bolt" class="section level5 unnumbered hasAnchor question">
+<h5><strong>6)</strong> Tensile Stress in Bolt<a href="bolt-example.html#tensile-stress-in-bolt" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p>The following calculations determine the tensile stress and various safety factors for the bolt assembly.</p>
+<p><strong>Tensile Stress (<span class="math inline">\(\sigma_b\)</span>):</strong>
+<span class="math display">\[\sigma_b = \frac{F_b}{A_t} = \frac{11207}{0.1599 \, in^2} = 70 \, ksi\]</span></p>
+</div>
+<div id="what-are-the-safety-factors-n_l-n_p-n_o" class="section level5 unnumbered hasAnchor question">
+<h5><strong>7)</strong> What are the safety factors <span class="math inline">\(n_L\)</span>, <span class="math inline">\(n_P\)</span>, <span class="math inline">\(n_O\)</span>?<a href="bolt-example.html#what-are-the-safety-factors-n_l-n_p-n_o" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p><strong>1. Proof Load Safety Factor (<span class="math inline">\(n_p\)</span>):</strong>
+<span class="math display">\[n_p = \frac{S_p A_t}{CP + F_i} = \frac{85000 \cdot 0.1599}{0.405 \cdot 2500 + 10194} = 1.21\]</span></p>
+<p><strong>2. Load Factor (<span class="math inline">\(n_L\)</span>):</strong>
+<span class="math display">\[n_L = \frac{S_p \cdot A_t - F_i}{CP} = \frac{85000 \cdot 0.1599 - 10194}{0.405 \cdot 2500} = 3.36\]</span></p>
+<p><strong>3. Separation Safety Factor (<span class="math inline">\(n_o\)</span>):</strong>
+<span class="math display">\[n_o = \frac{F_i}{P(1 - C)} = \frac{10194}{2500(1 - 0.405)} = 6.85\]</span></p>
+</div>
+<div id="torque-requirements-and-lubrication-effects" class="section level5 unnumbered hasAnchor question">
+<h5><strong>8)</strong> Torque Requirements and Lubrication Effects<a href="bolt-example.html#torque-requirements-and-lubrication-effects" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<div class="answer">
+<p>This question evaluates the torque required to achieve the initial tension (<span class="math inline">\(F_i\)</span>) and the impact of lubrication on bolt integrity.</p>
+<p><strong>Torque required to achieve <span class="math inline">\(F_i\)</span>:</strong>
+<span class="math display">\[T = K \cdot d \cdot F_i\]</span>
+<span class="math display">\[T = 0.2 \cdot 0.5 \cdot 10194 = 1019 \, in \cdot lbf = 85 \, ft \cdot lbs\]</span></p>
+<blockquote>
+<p><strong>Note:</strong> (<span class="math inline">\(in \cdot lbf\)</span>) are not common units. Therefore answer in (<span class="math inline">\(ft \cdot lbs\)</span>) instead.</p>
+</blockquote>
+<p><strong>Impact of Lubrication (<span class="math inline">\(K = 0.1\)</span>):</strong>
+What is <span class="math inline">\(F_i\)</span> if the operator lubricates the bolt?
+<span class="math display">\[F_i = \frac{T}{K \cdot d} = \frac{1019}{0.1 \cdot 0.5} = 20380 \, lbf\]</span></p>
+<p><strong>Resulting Stress (<span class="math inline">\(\sigma\)</span>):</strong>
+<span class="math display">\[\sigma = \frac{F_i}{A_t} = \frac{20380}{0.1599} = 127454 \, psi\]</span></p>
+<blockquote>
+<p><strong>Conclusion:</strong> The stress exceeds tensile strength!<br />
+<strong>Result:</strong> Bolt will break while tightening.</p>
+</blockquote>
+</div>
+
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-fastenal_guide" class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="strength-of-bolt-joint-calculations.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/03-Bolt-Joint-Calculations.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
