@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Design for Welding | Design for Manufacturing</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Design for Welding | Design for Manufacturing" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Design for Welding | Design for Manufacturing" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="design-for-stamping.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li>
+<li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction-to-the-casting-process"><i class="fa fa-check"></i>💡 Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#essential-components-of-casting"><i class="fa fa-check"></i>🧱 Essential Components of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#the-basic-steps-of-casting"><i class="fa fa-check"></i>⚙️ The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#applications-and-scope"><i class="fa fa-check"></i>🌍 Applications and Scope</a></li>
+<li class="chapter" data-level="1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>1.1</b> Sand Mould Casting: The Versatile Workhorse</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction"><i class="fa fa-check"></i><b>1.1.1</b> 💡 Introduction</a></li>
+<li class="chapter" data-level="1.1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#components-and-steps-of-the-process"><i class="fa fa-check"></i><b>1.1.2</b> ⚙️ Components and Steps of the Process</a></li>
+<li class="chapter" data-level="1.1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#advantages-and-disadvantages"><i class="fa fa-check"></i><b>1.1.3</b> 📊 Advantages and Disadvantages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>1.2</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#investment-casting"><i class="fa fa-check"></i><b>1.3</b> Investment Casting</a></li>
+<li class="chapter" data-level="1.4" data-path="design-for-casting.html"><a href="design-for-casting.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>1.4</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design-for-casting.html"><a href="design-for-casting.html#engineering-metal-castings-for-quality-and-value"><i class="fa fa-check"></i><b>1.4.1</b> 🔩 Engineering Metal Castings for Quality and Value</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design-for-casting.html"><a href="design-for-casting.html#variables-in-metal-casting-design"><i class="fa fa-check"></i><b>1.4.2</b> 🔬 Variables in Metal Casting Design</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design-for-casting.html"><a href="design-for-casting.html#design-considerations-for-shape-and-mold"><i class="fa fa-check"></i><b>1.4.3</b> 📐 Design Considerations for Shape and Mold</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="design-for-casting.html"><a href="design-for-casting.html#defects-in-casting-process"><i class="fa fa-check"></i><b>1.5</b> Defects in Casting process</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-for-joining.html"><a href="design-for-joining.html"><i class="fa fa-check"></i><b>2</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#joining-processes-uniting-materials-for-function"><i class="fa fa-check"></i><b>2.1</b> 🔗 Joining Processes: Uniting Materials for Function</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-1"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-of-joining-methods"><i class="fa fa-check"></i><b>2.1.2</b> Classification of Joining Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#the-welding-process"><i class="fa fa-check"></i><b>2.2</b> ♨️ The Welding Process</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-to-welding"><i class="fa fa-check"></i><b>2.2.1</b> Introduction to Welding</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-and-types-of-welding-processes"><i class="fa fa-check"></i><b>2.2.2</b> Classification and Types of Welding Processes</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-for-joining.html"><a href="design-for-joining.html#when-to-choose-welding"><i class="fa fa-check"></i><b>2.2.3</b> When to Choose Welding</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html"><i class="fa fa-check"></i><b>3</b> Strength of Bolt Joint Calculations</a>
+<ul>
+<li class="chapter" data-level="" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-joints"><i class="fa fa-check"></i>Mechanics of Bolted Joint Integrity.</a></li>
+<li class="chapter" data-level="3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-definitions"><i class="fa fa-check"></i><b>3.1</b> Bolt Definitions</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#nut-dimensions"><i class="fa fa-check"></i><b>3.1.1</b> Nut Dimensions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#washer-dimensions"><i class="fa fa-check"></i><b>3.1.2</b> Washer Dimensions</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-joints"><i class="fa fa-check"></i><b>3.2</b> Understanding Bolt Joints and Force Triangles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#how-to-interpret-the-result"><i class="fa fa-check"></i><b>3.2.1</b> How to Interpret the Result</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-analysis-formulas"><i class="fa fa-check"></i><b>3.3</b> Advanced Analysis of Bolted Joints with applicable Formulas</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#kb"><i class="fa fa-check"></i><b>3.3.1</b> Fastener Stiffness (<span class="math inline">\(k_b\)</span>)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#km"><i class="fa fa-check"></i><b>3.3.2</b> Member Stiffness (<span class="math inline">\(k_m\)</span>) and Substitute Cylinders</a></li>
+<li class="chapter" data-level="3.3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#joint-forces-and-tightening-torque"><i class="fa fa-check"></i><b>3.3.3</b> Joint Forces and Tightening Torque</a></li>
+<li class="chapter" data-level="3.3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#stress-analysis-and-safety-factors"><i class="fa fa-check"></i><b>3.3.4</b> Stress Analysis and Safety Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-example"><i class="fa fa-check"></i><b>3.4</b> Applied Example: Bolted Joint Safety Calculation</a></li>
+<li class="chapter" data-level="3.5" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example-2"><i class="fa fa-check"></i><b>3.5</b> Example 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html"><i class="fa fa-check"></i><b>4</b> Gears, Gear Trains, and Transmissions</a>
+<ul>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#introduction-to-gears"><i class="fa fa-check"></i>💡 Introduction to Gears</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#fundamental-gear-concepts"><i class="fa fa-check"></i>⚙️ Fundamental Gear Concepts</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#the-basic-principle"><i class="fa fa-check"></i><b>4.0.1</b> The Basic Principle</a></li>
+<li class="chapter" data-level="4.0.2" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#the-fundamental-law-of-gearing"><i class="fa fa-check"></i><b>4.0.2</b> The Fundamental Law of Gearing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-terminology"><i class="fa fa-check"></i>📐 Gear Terminology</a>
+<ul>
+<li class="chapter" data-level="4.0.3" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#essential-gear-formulas"><i class="fa fa-check"></i><b>4.0.3</b> Essential Gear Formulas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#types-of-gears"><i class="fa fa-check"></i>🔧 Types of Gears</a>
+<ul>
+<li class="chapter" data-level="4.0.4" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#spur-gears"><i class="fa fa-check"></i><b>4.0.4</b> Spur Gears</a></li>
+<li class="chapter" data-level="4.0.5" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#helical-gears"><i class="fa fa-check"></i><b>4.0.5</b> Helical Gears</a></li>
+<li class="chapter" data-level="4.0.6" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#bevel-gears"><i class="fa fa-check"></i><b>4.0.6</b> Bevel Gears</a></li>
+<li class="chapter" data-level="4.0.7" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#worm-gears"><i class="fa fa-check"></i><b>4.0.7</b> Worm Gears</a></li>
+<li class="chapter" data-level="4.0.8" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#rack-and-pinion"><i class="fa fa-check"></i><b>4.0.8</b> Rack and Pinion</a></li>
+<li class="chapter" data-level="4.0.9" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-type-comparison"><i class="fa fa-check"></i><b>4.0.9</b> Gear Type Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-ratios-and-calculations"><i class="fa fa-check"></i>📊 Gear Ratios and Calculations</a>
+<ul>
+<li class="chapter" data-level="4.0.10" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#speed-and-torque-relationships"><i class="fa fa-check"></i><b>4.0.10</b> Speed and Torque Relationships</a></li>
+<li class="chapter" data-level="4.0.11" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#key-relationships"><i class="fa fa-check"></i><b>4.0.11</b> Key Relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-trains"><i class="fa fa-check"></i>🔄 Gear Trains</a>
+<ul>
+<li class="chapter" data-level="4.0.12" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#simple-gear-train"><i class="fa fa-check"></i><b>4.0.12</b> Simple Gear Train</a></li>
+<li class="chapter" data-level="4.0.13" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#compound-gear-train"><i class="fa fa-check"></i><b>4.0.13</b> Compound Gear Train</a></li>
+<li class="chapter" data-level="4.0.14" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#planetary-epicyclic-gear-train"><i class="fa fa-check"></i><b>4.0.14</b> Planetary (Epicyclic) Gear Train</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#industry-applications"><i class="fa fa-check"></i>🏭 Industry Applications</a>
+<ul>
+<li class="chapter" data-level="4.0.15" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#automotive-industry"><i class="fa fa-check"></i><b>4.0.15</b> Automotive Industry</a></li>
+<li class="chapter" data-level="4.0.16" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#food-processing-industry"><i class="fa fa-check"></i><b>4.0.16</b> Food Processing Industry</a></li>
+<li class="chapter" data-level="4.0.17" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#defense-industry"><i class="fa fa-check"></i><b>4.0.17</b> Defense Industry</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-design-considerations"><i class="fa fa-check"></i>🔧 Gear Design Considerations</a>
+<ul>
+<li class="chapter" data-level="4.0.18" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#material-selection"><i class="fa fa-check"></i><b>4.0.18</b> Material Selection</a></li>
+<li class="chapter" data-level="4.0.19" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#common-failure-modes"><i class="fa fa-check"></i><b>4.0.19</b> Common Failure Modes</a></li>
+<li class="chapter" data-level="4.0.20" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#design-guidelines"><i class="fa fa-check"></i><b>4.0.20</b> Design Guidelines</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#design-checklist-for-gears"><i class="fa fa-check"></i>📋 Design Checklist for Gears</a>
+<ul>
+<li class="chapter" data-level="4.0.21" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-specification"><i class="fa fa-check"></i><b>4.0.21</b> Gear Specification</a></li>
+<li class="chapter" data-level="4.0.22" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#strength-verification"><i class="fa fa-check"></i><b>4.0.22</b> Strength Verification</a></li>
+<li class="chapter" data-level="4.0.23" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-train-design"><i class="fa fa-check"></i><b>4.0.23</b> Gear Train Design</a></li>
+<li class="chapter" data-level="4.0.24" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#manufacturing-and-assembly"><i class="fa fa-check"></i><b>4.0.24</b> Manufacturing and Assembly</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#case-study-food-packaging-line-drive"><i class="fa fa-check"></i>🎯 Case Study: Food Packaging Line Drive</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#practice-problems"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#further-reading"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#supplemental-videos"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="4.0.25" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-gear-ratios-work"><i class="fa fa-check"></i><b>4.0.25</b> How Gear Ratios Work</a></li>
+<li class="chapter" data-level="4.0.26" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#planetary-gears-explained"><i class="fa fa-check"></i><b>4.0.26</b> Planetary Gears Explained</a></li>
+<li class="chapter" data-level="4.0.27" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-manual-transmissions-work"><i class="fa fa-check"></i><b>4.0.27</b> How Manual Transmissions Work</a></li>
+<li class="chapter" data-level="4.0.28" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-differentials-work"><i class="fa fa-check"></i><b>4.0.28</b> How Differentials Work</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#references"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="design-for-stamping.html"><a href="design-for-stamping.html"><i class="fa fa-check"></i><b>5</b> Design for Stamping</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#introduction-to-the-stamping-process"><i class="fa fa-check"></i>💡 Introduction to the Stamping Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#essential-components-of-stamping"><i class="fa fa-check"></i>🧱 Essential Components of Stamping</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#types-of-stamping-operations"><i class="fa fa-check"></i>⚙️ Types of Stamping Operations</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="design-for-stamping.html"><a href="design-for-stamping.html#blanking-and-punching"><i class="fa fa-check"></i><b>5.0.1</b> Blanking and Punching</a></li>
+<li class="chapter" data-level="5.0.2" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bending"><i class="fa fa-check"></i><b>5.0.2</b> Bending</a></li>
+<li class="chapter" data-level="5.0.3" data-path="design-for-stamping.html"><a href="design-for-stamping.html#drawing"><i class="fa fa-check"></i><b>5.0.3</b> Drawing</a></li>
+<li class="chapter" data-level="5.0.4" data-path="design-for-stamping.html"><a href="design-for-stamping.html#embossing-and-coining"><i class="fa fa-check"></i><b>5.0.4</b> Embossing and Coining</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#stamping-press-types-and-progressive-dies"><i class="fa fa-check"></i>🏭 Stamping Press Types and Progressive Dies</a>
+<ul>
+<li class="chapter" data-level="5.0.5" data-path="design-for-stamping.html"><a href="design-for-stamping.html#types-of-stamping-presses"><i class="fa fa-check"></i><b>5.0.5</b> Types of Stamping Presses</a></li>
+<li class="chapter" data-level="5.0.6" data-path="design-for-stamping.html"><a href="design-for-stamping.html#progressive-die-stamping"><i class="fa fa-check"></i><b>5.0.6</b> Progressive Die Stamping</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#advantages-and-limitations-of-stamping"><i class="fa fa-check"></i>📊 Advantages and Limitations of Stamping</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#material-considerations-for-stamping"><i class="fa fa-check"></i>🔬 Material Considerations for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.7" data-path="design-for-stamping.html"><a href="design-for-stamping.html#formability"><i class="fa fa-check"></i><b>5.0.7</b> Formability</a></li>
+<li class="chapter" data-level="5.0.8" data-path="design-for-stamping.html"><a href="design-for-stamping.html#common-stamping-materials"><i class="fa fa-check"></i><b>5.0.8</b> Common Stamping Materials</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#design-guidelines-for-stamping"><i class="fa fa-check"></i>📐 Design Guidelines for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.9" data-path="design-for-stamping.html"><a href="design-for-stamping.html#hole-design"><i class="fa fa-check"></i><b>5.0.9</b> Hole Design</a></li>
+<li class="chapter" data-level="5.0.10" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bend-design"><i class="fa fa-check"></i><b>5.0.10</b> Bend Design</a></li>
+<li class="chapter" data-level="5.0.11" data-path="design-for-stamping.html"><a href="design-for-stamping.html#drawing-design"><i class="fa fa-check"></i><b>5.0.11</b> Drawing Design</a></li>
+<li class="chapter" data-level="5.0.12" data-path="design-for-stamping.html"><a href="design-for-stamping.html#general-design-best-practices"><i class="fa fa-check"></i><b>5.0.12</b> General Design Best Practices</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#common-stamping-defects-and-prevention"><i class="fa fa-check"></i>🛠️ Common Stamping Defects and Prevention</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#design-checklist-for-stamping"><i class="fa fa-check"></i>📋 Design Checklist for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.13" data-path="design-for-stamping.html"><a href="design-for-stamping.html#holes-and-cutouts"><i class="fa fa-check"></i><b>5.0.13</b> Holes and Cutouts</a></li>
+<li class="chapter" data-level="5.0.14" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bends"><i class="fa fa-check"></i><b>5.0.14</b> Bends</a></li>
+<li class="chapter" data-level="5.0.15" data-path="design-for-stamping.html"><a href="design-for-stamping.html#draws"><i class="fa fa-check"></i><b>5.0.15</b> Draws</a></li>
+<li class="chapter" data-level="5.0.16" data-path="design-for-stamping.html"><a href="design-for-stamping.html#general"><i class="fa fa-check"></i><b>5.0.16</b> General</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#case-study-automotive-bracket-design"><i class="fa fa-check"></i>🎯 Case Study: Automotive Bracket Design</a>
+<ul>
+<li class="chapter" data-level="5.0.17" data-path="design-for-stamping.html"><a href="design-for-stamping.html#initial-design-evaluation"><i class="fa fa-check"></i><b>5.0.17</b> Initial Design Evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#summary-key-design-rules-for-stamping"><i class="fa fa-check"></i>📚 “Summary: Key Design Rules for Stamping”</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#practice-problems-1"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#further-reading-1"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#supplemental-videos-1"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="5.0.18" data-path="design-for-stamping.html"><a href="design-for-stamping.html#how-stamping-dies-work"><i class="fa fa-check"></i><b>5.0.18</b> How Stamping Dies Work</a></li>
+<li class="chapter" data-level="5.0.19" data-path="design-for-stamping.html"><a href="design-for-stamping.html#deep-drawing-process-explained"><i class="fa fa-check"></i><b>5.0.19</b> Deep Drawing Process Explained</a></li>
+<li class="chapter" data-level="5.0.20" data-path="design-for-stamping.html"><a href="design-for-stamping.html#stamping-by-smarter-every-day"><i class="fa fa-check"></i><b>5.0.20</b> Stamping by ‘Smarter Every Day’</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#references-1"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="design-for-welding.html"><a href="design-for-welding.html"><i class="fa fa-check"></i><b>6</b> Design for Welding</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#introduction-to-design-for-welding"><i class="fa fa-check"></i>💡 Introduction to Design for Welding</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#the-welding-process-fundamentals"><i class="fa fa-check"></i>🔥 The Welding Process Fundamentals</a>
+<ul>
+<li class="chapter" data-level="6.0.1" data-path="design-for-welding.html"><a href="design-for-welding.html#key-welding-terminology"><i class="fa fa-check"></i><b>6.0.1</b> Key Welding Terminology</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#types-of-weld-joints"><i class="fa fa-check"></i>🔗 Types of Weld Joints</a>
+<ul>
+<li class="chapter" data-level="6.0.2" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-selection-guide"><i class="fa fa-check"></i><b>6.0.2</b> Joint Selection Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#types-of-welds"><i class="fa fa-check"></i>🔧 Types of Welds</a>
+<ul>
+<li class="chapter" data-level="6.0.3" data-path="design-for-welding.html"><a href="design-for-welding.html#fillet-welds"><i class="fa fa-check"></i><b>6.0.3</b> Fillet Welds</a></li>
+<li class="chapter" data-level="6.0.4" data-path="design-for-welding.html"><a href="design-for-welding.html#groove-welds"><i class="fa fa-check"></i><b>6.0.4</b> Groove Welds</a></li>
+<li class="chapter" data-level="6.0.5" data-path="design-for-welding.html"><a href="design-for-welding.html#groove-weld-parameters"><i class="fa fa-check"></i><b>6.0.5</b> Groove Weld Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#welding-symbols"><i class="fa fa-check"></i>📐 Welding Symbols</a>
+<ul>
+<li class="chapter" data-level="6.0.6" data-path="design-for-welding.html"><a href="design-for-welding.html#common-weld-symbols"><i class="fa fa-check"></i><b>6.0.6</b> Common Weld Symbols</a></li>
+<li class="chapter" data-level="6.0.7" data-path="design-for-welding.html"><a href="design-for-welding.html#supplementary-symbols"><i class="fa fa-check"></i><b>6.0.7</b> Supplementary Symbols</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#design-guidelines-for-welded-joints"><i class="fa fa-check"></i>📏 Design Guidelines for Welded Joints</a>
+<ul>
+<li class="chapter" data-level="6.0.8" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-accessibility"><i class="fa fa-check"></i><b>6.0.8</b> Joint Accessibility</a></li>
+<li class="chapter" data-level="6.0.9" data-path="design-for-welding.html"><a href="design-for-welding.html#weld-sizing"><i class="fa fa-check"></i><b>6.0.9</b> Weld Sizing</a></li>
+<li class="chapter" data-level="6.0.10" data-path="design-for-welding.html"><a href="design-for-welding.html#minimizing-distortion"><i class="fa fa-check"></i><b>6.0.10</b> Minimizing Distortion</a></li>
+<li class="chapter" data-level="6.0.11" data-path="design-for-welding.html"><a href="design-for-welding.html#fatigue-considerations"><i class="fa fa-check"></i><b>6.0.11</b> Fatigue Considerations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#material-weldability"><i class="fa fa-check"></i>🔬 Material Weldability</a>
+<ul>
+<li class="chapter" data-level="6.0.12" data-path="design-for-welding.html"><a href="design-for-welding.html#carbon-steel-weldability"><i class="fa fa-check"></i><b>6.0.12</b> Carbon Steel Weldability</a></li>
+<li class="chapter" data-level="6.0.13" data-path="design-for-welding.html"><a href="design-for-welding.html#weldability-of-common-materials"><i class="fa fa-check"></i><b>6.0.13</b> Weldability of Common Materials</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#common-weld-defects-and-prevention"><i class="fa fa-check"></i>🛠️ Common Weld Defects and Prevention</a>
+<ul>
+<li class="chapter" data-level="6.0.14" data-path="design-for-welding.html"><a href="design-for-welding.html#defect-causes-and-prevention"><i class="fa fa-check"></i><b>6.0.14</b> Defect Causes and Prevention</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#design-checklist-for-welding"><i class="fa fa-check"></i>📋 Design Checklist for Welding</a>
+<ul>
+<li class="chapter" data-level="6.0.15" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-design"><i class="fa fa-check"></i><b>6.0.15</b> Joint Design</a></li>
+<li class="chapter" data-level="6.0.16" data-path="design-for-welding.html"><a href="design-for-welding.html#material-considerations"><i class="fa fa-check"></i><b>6.0.16</b> Material Considerations</a></li>
+<li class="chapter" data-level="6.0.17" data-path="design-for-welding.html"><a href="design-for-welding.html#distortion-control"><i class="fa fa-check"></i><b>6.0.17</b> Distortion Control</a></li>
+<li class="chapter" data-level="6.0.18" data-path="design-for-welding.html"><a href="design-for-welding.html#quality-requirements"><i class="fa fa-check"></i><b>6.0.18</b> Quality Requirements</a></li>
+<li class="chapter" data-level="6.0.19" data-path="design-for-welding.html"><a href="design-for-welding.html#fatigue-and-strength"><i class="fa fa-check"></i><b>6.0.19</b> Fatigue and Strength</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#case-study-welded-frame-design"><i class="fa fa-check"></i>🎯 Case Study: Welded Frame Design</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#practice-problems-2"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#further-reading-2"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#supplemental-videos-2"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="6.0.20" data-path="design-for-welding.html"><a href="design-for-welding.html#understanding-welding-symbols"><i class="fa fa-check"></i><b>6.0.20</b> Understanding Welding Symbols</a></li>
+<li class="chapter" data-level="6.0.21" data-path="design-for-welding.html"><a href="design-for-welding.html#weld-joint-types-explained"><i class="fa fa-check"></i><b>6.0.21</b> Weld Joint Types Explained</a></li>
+<li class="chapter" data-level="6.0.22" data-path="design-for-welding.html"><a href="design-for-welding.html#controlling-weld-distortion"><i class="fa fa-check"></i><b>6.0.22</b> Controlling Weld Distortion</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#references-2"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Design for Manufacturing</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="design-for-welding" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Design for Welding<a href="design-for-welding.html#design-for-welding" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-design-for-welding" class="section level2 unnumbered hasAnchor">
+<h2>💡 Introduction to Design for Welding<a href="#introduction-to-design-for-welding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Welding is the most widely used method for permanently joining metals in structural, mechanical, and industrial applications. Unlike mechanical fastening, welding creates a <strong>metallurgical bond</strong> between components, resulting in joints that can be as strong as—or stronger than—the base materials themselves.</p>
+<p>Designing for welding requires careful consideration of joint geometry, material selection, thermal effects, and accessibility. A well-designed weldment minimizes fabrication costs, ensures structural integrity, and reduces the likelihood of defects.</p>
+<hr />
+<blockquote>
+<p><strong>🤔 Think About It:</strong> Consider a bicycle frame, a ship’s hull, and a skyscraper’s steel structure. What do they all have in common? They all rely heavily on welded connections. Why do you think welding was chosen over bolting or riveting for these applications?</p>
+</blockquote>
+<hr />
+</div>
+<div id="the-welding-process-fundamentals" class="section level2 unnumbered hasAnchor">
+<h2>🔥 The Welding Process Fundamentals<a href="#the-welding-process-fundamentals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Welding joins materials by applying <strong>heat</strong>, <strong>pressure</strong>, or both, with or without filler material. The most common welding processes use heat to melt the base metals at the joint interface.</p>
+<div id="key-welding-terminology" class="section level3 hasAnchor" number="6.0.1">
+<h3><span class="header-section-number">6.0.1</span> Key Welding Terminology<a href="design-for-welding.html#key-welding-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:welding-terminology"></span>
+<img src="_main_files/figure-html/welding-terminology-1.png" alt="Cross-section of a typical fusion weld showing key zones and terminology." width="960" />
+<p class="caption">
+Figure 6.1: Cross-section of a typical fusion weld showing key zones and terminology.
+</p>
+</div>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Base Metal</strong></td>
+<td align="left">The original material being joined</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Filler Metal</strong></td>
+<td align="left">Additional metal added to the joint during welding</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Weld Metal</strong></td>
+<td align="left">The portion of the fusion zone that has been completely melted</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Heat Affected Zone (HAZ)</strong></td>
+<td align="left">Base metal that has not melted but whose properties have been altered by the heat of welding</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Fusion Line</strong></td>
+<td align="left">The boundary between the weld metal and the HAZ</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Weld Toe</strong></td>
+<td align="left">The junction between the weld face and the base metal</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Weld Root</strong></td>
+<td align="left">The points at which the back of the weld intersects the base metal</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Reinforcement</strong></td>
+<td align="left">Weld metal in excess of the quantity required to fill the joint</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>❓ Quick Question:</strong> Why might the Heat Affected Zone (HAZ) be a concern in welded structures, even though the metal there never actually melted?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal the answer
+</summary>
+<p>The HAZ experiences significant thermal cycling (rapid heating and cooling) which can cause:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Grain growth</strong> - reducing strength and toughness</li>
+<li><strong>Phase transformations</strong> - potentially forming brittle microstructures</li>
+<li><strong>Residual stresses</strong> - from non-uniform thermal expansion/contraction</li>
+<li><strong>Softening</strong> - in heat-treated materials (like aluminum alloys)</li>
+<li><strong>Sensitization</strong> - in stainless steels, leading to corrosion susceptibility</li>
+</ol>
+<p>The HAZ is often the weakest part of a welded joint, which is why proper heat input control and post-weld heat treatment may be necessary.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="types-of-weld-joints" class="section level2 unnumbered hasAnchor">
+<h2>🔗 Types of Weld Joints<a href="#types-of-weld-joints" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>weld joint</strong> is the configuration of the parts to be joined. The five basic joint types can accommodate various types of welds.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:joint-types"></span>
+<img src="_main_files/figure-html/joint-types-1.png" alt="The five basic types of weld joints." width="1152" />
+<p class="caption">
+Figure 6.2: The five basic types of weld joints.
+</p>
+</div>
+<div id="joint-selection-guide" class="section level3 hasAnchor" number="6.0.2">
+<h3><span class="header-section-number">6.0.2</span> Joint Selection Guide<a href="design-for-welding.html#joint-selection-guide" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="36%" />
+<col width="20%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Joint Type</th>
+<th align="left">Typical Applications</th>
+<th align="left">Advantages</th>
+<th align="left">Limitations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Butt</strong></td>
+<td align="left">Plates, pipes, structural members</td>
+<td align="left">Full penetration possible; good strength</td>
+<td align="left">Requires edge preparation for thick sections</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Lap</strong></td>
+<td align="left">Sheet metal, reinforcing plates</td>
+<td align="left">Easy fit-up; tolerant of gaps</td>
+<td align="left">Not full penetration; potential crevice corrosion</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>T-Joint</strong></td>
+<td align="left">Stiffeners, brackets, frames</td>
+<td align="left">Versatile; easy to assemble</td>
+<td align="left">Stress concentration at the joint</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Corner</strong></td>
+<td align="left">Box sections, frames, enclosures</td>
+<td align="left">Forms structural shapes</td>
+<td align="left">Access may be limited on inside corner</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Edge</strong></td>
+<td align="left">Sheet metal, flanges</td>
+<td align="left">Low distortion</td>
+<td align="left">Limited strength; for thin materials only</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>🤔 Design Decision:</strong> You need to join two 10 mm thick steel plates end-to-end to form a continuous beam that will carry significant bending loads. Which joint type would you choose and why?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis
+</summary>
+<p><strong>Best choice: Butt Joint with full penetration groove weld</strong></p>
+<p>Reasoning:
+- <strong>Full penetration</strong> ensures the weld is as strong as the base metal
+- <strong>Continuous load path</strong> - bending stresses transfer smoothly across the joint
+- <strong>No overlap</strong> - maintains the beam’s cross-sectional geometry
+- <strong>Smooth stress flow</strong> - minimizes stress concentration</p>
+<p>A lap joint would introduce eccentricity and stress concentration, making it unsuitable for bending applications.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="types-of-welds" class="section level2 unnumbered hasAnchor">
+<h2>🔧 Types of Welds<a href="#types-of-welds" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Within each joint type, different <strong>weld types</strong> can be applied. The two most common are fillet welds and groove welds.</p>
+<div id="fillet-welds" class="section level3 hasAnchor" number="6.0.3">
+<h3><span class="header-section-number">6.0.3</span> Fillet Welds<a href="design-for-welding.html#fillet-welds" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Fillet welds</strong> are triangular in cross-section and are used to join surfaces at approximately right angles (T-joints, lap joints, corner joints).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fillet-weld"></span>
+<img src="_main_files/figure-html/fillet-weld-1.png" alt="Fillet weld anatomy and sizing." width="960" />
+<p class="caption">
+Figure 6.3: Fillet weld anatomy and sizing.
+</p>
+</div>
+<p><strong>Key fillet weld parameters:</strong></p>
+<ul>
+<li><strong>Leg size (L):</strong> The length of the sides of the triangle</li>
+<li><strong>Throat (t):</strong> The shortest distance from the root to the face; determines weld strength</li>
+<li><strong>For equal-leg fillets:</strong> <span class="math inline">\(t = 0.707 \times L\)</span></li>
+</ul>
+<blockquote>
+<p><strong>❓ Calculation Challenge:</strong> A fillet weld has a leg size of 8 mm. What is the theoretical throat dimension?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal solution
+</summary>
+<p><span class="math display">\[t = 0.707 \times L = 0.707 \times 8 \text{ mm} = 5.66 \text{ mm}\]</span></p>
+<p>The theoretical throat is <strong>5.66 mm</strong>.</p>
+</details>
+<hr />
+</div>
+<div id="groove-welds" class="section level3 hasAnchor" number="6.0.4">
+<h3><span class="header-section-number">6.0.4</span> Groove Welds<a href="design-for-welding.html#groove-welds" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Groove welds</strong> are made in a groove between the edges of the parts to be joined. They are used primarily for butt joints and provide full or partial penetration.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:groove-welds"></span>
+<img src="_main_files/figure-html/groove-welds-1.png" alt="Common groove weld preparations." width="1152" />
+<p class="caption">
+Figure 6.4: Common groove weld preparations.
+</p>
+</div>
+</div>
+<div id="groove-weld-parameters" class="section level3 hasAnchor" number="6.0.5">
+<h3><span class="header-section-number">6.0.5</span> Groove Weld Parameters<a href="design-for-welding.html#groove-weld-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:groove-parameters"></span>
+<img src="_main_files/figure-html/groove-parameters-1.png" alt="Key dimensions in groove weld preparation." width="768" />
+<p class="caption">
+Figure 6.5: Key dimensions in groove weld preparation.
+</p>
+</div>
+<blockquote>
+<p><strong>🤔 Engineering Trade-off:</strong> A larger groove angle makes welding easier (better access) but requires more filler metal. A smaller angle uses less filler but may result in incomplete fusion. For a 25 mm thick plate, would you recommend a single-V or double-V groove? Why?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis
+</summary>
+<p><strong>Recommended: Double-V groove</strong></p>
+<p>For thick plates (typically &gt; 20 mm), double-V is preferred because:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Less filler metal</strong> - The volume of a double-V is about half that of a single-V for the same plate thickness</li>
+<li><strong>Reduced distortion</strong> - Welding from both sides balances residual stresses</li>
+<li><strong>Faster welding</strong> - Less total weld metal to deposit</li>
+<li><strong>Better quality</strong> - Easier to achieve full penetration</li>
+</ol>
+<p>The trade-off is that the plate must be flipped or welders must work from both sides.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="welding-symbols" class="section level2 unnumbered hasAnchor">
+<h2>📐 Welding Symbols<a href="#welding-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Welding symbols provide a standardized way to communicate welding requirements on engineering drawings. Understanding these symbols is essential for both designers and fabricators.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weld-symbol-basic"></span>
+<img src="_main_files/figure-html/weld-symbol-basic-1.png" alt="Basic elements of a welding symbol." width="960" />
+<p class="caption">
+Figure 6.6: Basic elements of a welding symbol.
+</p>
+</div>
+<div id="common-weld-symbols" class="section level3 hasAnchor" number="6.0.6">
+<h3><span class="header-section-number">6.0.6</span> Common Weld Symbols<a href="design-for-welding.html#common-weld-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weld-symbol-types"></span>
+<img src="_main_files/figure-html/weld-symbol-types-1.png" alt="Common weld type symbols." width="1152" />
+<p class="caption">
+Figure 6.7: Common weld type symbols.
+</p>
+</div>
+</div>
+<div id="supplementary-symbols" class="section level3 hasAnchor" number="6.0.7">
+<h3><span class="header-section-number">6.0.7</span> Supplementary Symbols<a href="design-for-welding.html#supplementary-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:supplementary-symbols"></span>
+<img src="_main_files/figure-html/supplementary-symbols-1.png" alt="Supplementary welding symbols." width="960" />
+<p class="caption">
+Figure 6.8: Supplementary welding symbols.
+</p>
+</div>
+<blockquote>
+<p><strong>❓ Symbol Reading Practice:</strong> A welding symbol shows a fillet weld symbol below the reference line with “6” on the left side and “50-100” on the right side. What does this specify?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal interpretation
+</summary>
+<p>This symbol specifies:</p>
+<ul>
+<li><strong>Fillet weld</strong> on the <strong>arrow side</strong> of the joint (symbol below reference line)</li>
+<li><strong>6 mm leg size</strong> (number to the left of the symbol)</li>
+<li><strong>50 mm weld length</strong> with <strong>100 mm pitch</strong> (center-to-center spacing)</li>
+</ul>
+<p>This is an <strong>intermittent fillet weld</strong> pattern: 50 mm long welds spaced 100 mm apart (center-to-center).</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="design-guidelines-for-welded-joints" class="section level2 unnumbered hasAnchor">
+<h2>📏 Design Guidelines for Welded Joints<a href="#design-guidelines-for-welded-joints" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="joint-accessibility" class="section level3 hasAnchor" number="6.0.8">
+<h3><span class="header-section-number">6.0.8</span> Joint Accessibility<a href="design-for-welding.html#joint-accessibility" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The welder must have adequate access to create a quality weld. Poor accessibility leads to defects.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:joint-accessibility"></span>
+<img src="_main_files/figure-html/joint-accessibility-1.png" alt="Good vs. poor joint accessibility for welding." width="960" />
+<p class="caption">
+Figure 6.9: Good vs. poor joint accessibility for welding.
+</p>
+</div>
+<p><strong>Design rules for accessibility:</strong></p>
+<ul>
+<li>Minimum <strong>15-20 mm clearance</strong> around the joint for electrode access</li>
+<li>Consider the <strong>welding position</strong> (flat is easiest; overhead is most difficult)</li>
+<li>Provide <strong>viewing angle</strong> for the welder to see the weld pool</li>
+<li>Allow for <strong>electrode angle</strong> (typically 15-45° from perpendicular)</li>
+</ul>
+<hr />
+</div>
+<div id="weld-sizing" class="section level3 hasAnchor" number="6.0.9">
+<h3><span class="header-section-number">6.0.9</span> Weld Sizing<a href="design-for-welding.html#weld-sizing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welds should be sized based on the loads they must carry—not too small (weak) and not too large (wasteful and causes distortion).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weld-sizing"></span>
+<img src="_main_files/figure-html/weld-sizing-1.png" alt="Fillet weld sizing guidelines." width="960" />
+<p class="caption">
+Figure 6.10: Fillet weld sizing guidelines.
+</p>
+</div>
+<p><strong>Fillet weld sizing rules:</strong></p>
+<table>
+<colgroup>
+<col width="35%" />
+<col width="64%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Rule</th>
+<th align="left">Guideline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Minimum leg size</strong></td>
+<td align="left">≥ thickness of thinner member (for structural welds)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Maximum leg size</strong></td>
+<td align="left">≤ thickness of thinner member</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>For lap joints</strong></td>
+<td align="left">Leg size ≤ 0.75 × thickness of thinner plate</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Intermittent welds</strong></td>
+<td align="left">Length ≥ 4 × leg size; pitch ≤ 16 × thinner plate thickness</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>❓ Sizing Problem:</strong> Two plates are being joined with a fillet weld. The plates are 10 mm and 6 mm thick. What should be the maximum fillet weld leg size?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal solution
+</summary>
+<p>The maximum leg size is limited by the <strong>thinner plate</strong>:</p>
+<p>Maximum leg size = 6 mm (thickness of thinner plate)</p>
+<p>In practice, you might use 5 mm to provide a slight edge clearance and avoid burning through the thinner plate.</p>
+</details>
+<hr />
+</div>
+<div id="minimizing-distortion" class="section level3 hasAnchor" number="6.0.10">
+<h3><span class="header-section-number">6.0.10</span> Minimizing Distortion<a href="design-for-welding.html#minimizing-distortion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welding introduces heat that causes expansion and contraction, leading to distortion and residual stresses.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:distortion-types"></span>
+<img src="_main_files/figure-html/distortion-types-1.png" alt="Common types of weld distortion." width="1152" />
+<p class="caption">
+Figure 6.11: Common types of weld distortion.
+</p>
+</div>
+<p><strong>Design strategies to minimize distortion:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Use the minimum weld size</strong> that provides adequate strength</li>
+<li><strong>Balance welds symmetrically</strong> - use double-V instead of single-V for thick sections</li>
+<li><strong>Use intermittent welds</strong> instead of continuous welds where possible</li>
+<li><strong>Sequence welds properly</strong> - alternate sides, weld toward free ends</li>
+<li><strong>Pre-set or pre-bend</strong> parts to compensate for expected distortion</li>
+<li><strong>Use fixtures and clamps</strong> to restrain parts during welding</li>
+</ol>
+<hr />
+</div>
+<div id="fatigue-considerations" class="section level3 hasAnchor" number="6.0.11">
+<h3><span class="header-section-number">6.0.11</span> Fatigue Considerations<a href="design-for-welding.html#fatigue-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welded joints are particularly susceptible to fatigue failure due to:</p>
+<ul>
+<li>Stress concentrations at weld toes</li>
+<li>Residual tensile stresses</li>
+<li>Potential defects (porosity, lack of fusion)</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fatigue-improvement"></span>
+<img src="_main_files/figure-html/fatigue-improvement-1.png" alt="Design improvements for fatigue resistance." width="960" />
+<p class="caption">
+Figure 6.12: Design improvements for fatigue resistance.
+</p>
+</div>
+<p><strong>Design rules for fatigue-critical welds:</strong></p>
+<ul>
+<li><strong>Grind weld toes</strong> smooth to reduce stress concentration</li>
+<li>Use <strong>full penetration welds</strong> in critical areas</li>
+<li><strong>Avoid undercut</strong> (notch at weld toe)</li>
+<li>Specify <strong>weld profile</strong> (flush or concave is better than convex)</li>
+<li>Consider <strong>post-weld treatments</strong>: shot peening, TIG dressing, or hammer peening</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="material-weldability" class="section level2 unnumbered hasAnchor">
+<h2>🔬 Material Weldability<a href="#material-weldability" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Not all materials weld equally well. <strong>Weldability</strong> is the ability of a material to be welded without defects and retain satisfactory mechanical properties.</p>
+<div id="carbon-steel-weldability" class="section level3 hasAnchor" number="6.0.12">
+<h3><span class="header-section-number">6.0.12</span> Carbon Steel Weldability<a href="design-for-welding.html#carbon-steel-weldability" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The weldability of steel depends largely on its <strong>carbon equivalent (CE)</strong>:</p>
+<p><span class="math display">\[CE = C + \frac{Mn}{6} + \frac{Cr + Mo + V}{5} + \frac{Ni + Cu}{15}\]</span></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:carbon-equivalent"></span>
+<img src="_main_files/figure-html/carbon-equivalent-1.png" alt="Weldability zones based on carbon equivalent." width="768" />
+<p class="caption">
+Figure 6.13: Weldability zones based on carbon equivalent.
+</p>
+</div>
+</div>
+<div id="weldability-of-common-materials" class="section level3 hasAnchor" number="6.0.13">
+<h3><span class="header-section-number">6.0.13</span> Weldability of Common Materials<a href="design-for-welding.html#weldability-of-common-materials" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="30%" />
+<col width="46%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Material</th>
+<th align="left">Weldability</th>
+<th align="left">Key Considerations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Low Carbon Steel</strong> (&lt; 0.25% C)</td>
+<td align="left">Excellent</td>
+<td align="left">Most weldable; no special precautions</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Medium Carbon Steel</strong> (0.25-0.45% C)</td>
+<td align="left">Good to Fair</td>
+<td align="left">May need preheat; risk of HAZ hardening</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>High Carbon Steel</strong> (&gt; 0.45% C)</td>
+<td align="left">Poor</td>
+<td align="left">Preheat and PWHT required; crack-sensitive</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Stainless Steel (304/316)</strong></td>
+<td align="left">Good</td>
+<td align="left">Control heat input to avoid sensitization</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Aluminum Alloys</strong></td>
+<td align="left">Good to Fair</td>
+<td align="left">Requires shielding gas; oxide removal critical</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Cast Iron</strong></td>
+<td align="left">Poor</td>
+<td align="left">Very crack-sensitive; specialized procedures needed</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Titanium</strong></td>
+<td align="left">Fair</td>
+<td align="left">Requires complete shielding from atmosphere</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>🤔 Material Challenge:</strong> You need to weld a bracket made from AISI 4140 steel (0.4% C, 1% Cr, 0.2% Mo, 0.9% Mn). Calculate the carbon equivalent and determine what precautions are needed.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal calculation
+</summary>
+<p><span class="math display">\[CE = 0.4 + \frac{0.9}{6} + \frac{1 + 0.2 + 0}{5} + \frac{0 + 0}{15}\]</span>
+<span class="math display">\[CE = 0.4 + 0.15 + 0.24 + 0 = 0.79\]</span></p>
+<p>With CE = 0.79 (in the “poor” weldability zone):</p>
+<p><strong>Required precautions:</strong>
+1. <strong>Preheat</strong> to 200-300°C before welding
+2. Use <strong>low-hydrogen electrodes</strong> (e.g., E7018)
+3. Control <strong>interpass temperature</strong>
+4. <strong>Post-weld heat treatment (PWHT)</strong> - stress relief at 600-650°C
+5. <strong>Slow cooling</strong> after welding</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="common-weld-defects-and-prevention" class="section level2 unnumbered hasAnchor">
+<h2>🛠️ Common Weld Defects and Prevention<a href="#common-weld-defects-and-prevention" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Understanding weld defects helps designers specify requirements that prevent them.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weld-defects"></span>
+<img src="_main_files/figure-html/weld-defects-1.png" alt="Common weld defects and their appearance." width="1152" />
+<p class="caption">
+Figure 6.14: Common weld defects and their appearance.
+</p>
+</div>
+<div id="defect-causes-and-prevention" class="section level3 hasAnchor" number="6.0.14">
+<h3><span class="header-section-number">6.0.14</span> Defect Causes and Prevention<a href="design-for-welding.html#defect-causes-and-prevention" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="28%" />
+<col width="28%" />
+<col width="42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Defect</th>
+<th align="left">Causes</th>
+<th align="left">Prevention</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Porosity</strong></td>
+<td align="left">Contamination, moisture, improper shielding</td>
+<td align="left">Clean surfaces; dry electrodes; proper gas flow</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Undercut</strong></td>
+<td align="left">Excessive current, wrong angle, fast travel</td>
+<td align="left">Reduce current; proper technique; slower speed</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Lack of Fusion</strong></td>
+<td align="left">Low heat input, wrong angle, oxide films</td>
+<td align="left">Increase current; proper angle; clean surfaces</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Incomplete Penetration</strong></td>
+<td align="left">Low current, fast travel, large root face</td>
+<td align="left">Increase current; proper joint prep; back gouge</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Cracks</strong></td>
+<td align="left">High restraint, hydrogen, fast cooling</td>
+<td align="left">Preheat; low-H electrodes; reduce restraint</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Spatter</strong></td>
+<td align="left">High current, long arc, contamination</td>
+<td align="left">Reduce current; shorter arc; clean surfaces</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="design-checklist-for-welding" class="section level2 unnumbered hasAnchor">
+<h2>📋 Design Checklist for Welding<a href="#design-checklist-for-welding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="joint-design" class="section level3 hasAnchor" number="6.0.15">
+<h3><span class="header-section-number">6.0.15</span> Joint Design<a href="design-for-welding.html#joint-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Selected appropriate joint type for loading conditions</label></li>
+<li><label><input type="checkbox" />Specified correct weld type (fillet, groove, etc.)</label></li>
+<li><label><input type="checkbox" />Weld size adequate for required strength</label></li>
+<li><label><input type="checkbox" />Weld access is adequate (15-20 mm minimum clearance)</label></li>
+<li><label><input type="checkbox" />Welding position considered (flat preferred)</label></li>
+</ul>
+</div>
+<div id="material-considerations" class="section level3 hasAnchor" number="6.0.16">
+<h3><span class="header-section-number">6.0.16</span> Material Considerations<a href="design-for-welding.html#material-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Base metal weldability verified</label></li>
+<li><label><input type="checkbox" />Filler metal compatibility confirmed</label></li>
+<li><label><input type="checkbox" />Preheat requirements determined (if needed)</label></li>
+<li><label><input type="checkbox" />Post-weld heat treatment specified (if needed)</label></li>
+</ul>
+</div>
+<div id="distortion-control" class="section level3 hasAnchor" number="6.0.17">
+<h3><span class="header-section-number">6.0.17</span> Distortion Control<a href="design-for-welding.html#distortion-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Welds balanced symmetrically where possible</label></li>
+<li><label><input type="checkbox" />Minimum weld size specified to reduce heat input</label></li>
+<li><label><input type="checkbox" />Welding sequence specified for critical assemblies</label></li>
+<li><label><input type="checkbox" />Allowance for shrinkage in dimensions</label></li>
+</ul>
+</div>
+<div id="quality-requirements" class="section level3 hasAnchor" number="6.0.18">
+<h3><span class="header-section-number">6.0.18</span> Quality Requirements<a href="design-for-welding.html#quality-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Weld symbols correctly applied on drawings</label></li>
+<li><label><input type="checkbox" />Inspection requirements specified (visual, NDT)</label></li>
+<li><label><input type="checkbox" />Acceptance criteria defined</label></li>
+<li><label><input type="checkbox" />Welder qualification requirements stated</label></li>
+</ul>
+</div>
+<div id="fatigue-and-strength" class="section level3 hasAnchor" number="6.0.19">
+<h3><span class="header-section-number">6.0.19</span> Fatigue and Strength<a href="design-for-welding.html#fatigue-and-strength" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Weld toe geometry specified for fatigue-critical joints</label></li>
+<li><label><input type="checkbox" />Full penetration specified where required</label></li>
+<li><label><input type="checkbox" />Stress concentrations minimized</label></li>
+<li><label><input type="checkbox" />Backup bars or backgouging specified if needed</label></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="case-study-welded-frame-design" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Case Study: Welded Frame Design<a href="#case-study-welded-frame-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Design Requirements:</strong></p>
+<p>A machine frame must be fabricated from structural steel tubes (50 mm × 50 mm × 3 mm wall thickness) with the following requirements:</p>
+<ul>
+<li>Must support 10 kN static load</li>
+<li>Fatigue loading expected (10⁶ cycles)</li>
+<li>Minimal distortion required for mounting surfaces</li>
+<li>Cost-effective fabrication</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:frame-case-study"></span>
+<img src="_main_files/figure-html/frame-case-study-1.png" alt="Welded frame design with potential improvements highlighted." width="960" />
+<p class="caption">
+Figure 6.15: Welded frame design with potential improvements highlighted.
+</p>
+</div>
+<blockquote>
+<p><strong>🤔 Your Turn:</strong> Based on the design guidelines covered, identify improvements for this frame design.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis and recommendations
+</summary>
+<p><strong>Issue 1: Single-sided fillet welds</strong>
+- Problem: May cause angular distortion; stress concentration
+- Solution: Use double-sided fillet welds or specify full penetration at critical corners</p>
+<p><strong>Issue 2: No stiffener at load application point</strong>
+- Problem: Concentrated load may cause local buckling or fatigue cracking
+- Solution: Add a gusset plate or stiffener at the load point</p>
+<p><strong>Issue 3: Sharp corners at brace connections</strong>
+- Problem: High stress concentration; poor fatigue performance
+- Solution: Add cope holes or radius transitions; grind weld toes smooth</p>
+<p><strong>Additional Recommendations:</strong>
+1. Specify welding sequence (start from center, work outward)
+2. Use intermittent welds on brace if continuous weld causes distortion
+3. Specify weld toe grinding for fatigue-critical joints
+4. Consider welding in the flat position by rotating the assembly</p>
+</details>
+<hr />
+</div>
+<div id="practice-problems-2" class="section level2 unnumbered hasAnchor">
+<h2>✍️ Practice Problems<a href="design-for-welding.html#practice-problems-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem 1:</strong> A T-joint connects a 12 mm thick plate to a 8 mm thick plate using fillet welds on both sides. What is the maximum recommended fillet weld leg size?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p>Maximum leg size is limited by the <strong>thinner plate</strong> (8 mm).</p>
+<p>Maximum fillet leg size = <strong>8 mm</strong></p>
+<p>However, for practical edge clearance, <strong>6-7 mm</strong> would be commonly specified.</p>
+</details>
+<hr />
+<p><strong>Problem 2:</strong> Calculate the theoretical throat of a fillet weld with 10 mm leg size. If the weld must carry a load of 50 kN and is 200 mm long, what is the shear stress in the throat?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p><strong>Throat calculation:</strong>
+<span class="math display">\[t = 0.707 \times L = 0.707 \times 10 \text{ mm} = 7.07 \text{ mm}\]</span></p>
+<p><strong>Throat area:</strong>
+<span class="math display">\[A = t \times \text{length} = 7.07 \text{ mm} \times 200 \text{ mm} = 1414 \text{ mm}^2\]</span></p>
+<p><strong>Shear stress:</strong>
+<span class="math display">\[\tau = \frac{F}{A} = \frac{50,000 \text{ N}}{1414 \text{ mm}^2} = 35.4 \text{ MPa}\]</span></p>
+<p>The shear stress in the weld throat is <strong>35.4 MPa</strong>.</p>
+</details>
+<hr />
+<p><strong>Problem 3:</strong> A steel has composition: 0.25% C, 1.2% Mn, 0.5% Cr, 0.3% Mo. Calculate the carbon equivalent. Is preheating likely required?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p><span class="math display">\[CE = C + \frac{Mn}{6} + \frac{Cr + Mo + V}{5} + \frac{Ni + Cu}{15}\]</span></p>
+<p><span class="math display">\[CE = 0.25 + \frac{1.2}{6} + \frac{0.5 + 0.3 + 0}{5} + \frac{0 + 0}{15}\]</span></p>
+<p><span class="math display">\[CE = 0.25 + 0.20 + 0.16 + 0 = 0.61\]</span></p>
+<p>With CE = <strong>0.61</strong>, this falls in the “Fair to Poor” weldability range.</p>
+<p><strong>Preheating IS required</strong> - typically 150-200°C minimum. Low-hydrogen electrodes should be used, and post-weld heat treatment may be advisable.</p>
+</details>
+<hr />
+</div>
+<div id="further-reading-2" class="section level2 unnumbered hasAnchor">
+<h2>🔗 Further Reading<a href="#further-reading-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://www.lincolnelectric.com/en/support/welding-resources">Lincoln Electric Welding Design Guide</a></p>
+<p><a href="https://www.aws.org/publications">AWS Welding Handbook</a></p>
+<p><a href="https://www.engineersedge.com/welding_symbols.htm">Weld Symbol Guide - Engineers Edge</a></p>
+<p><a href="https://www.lincolnelectric.com/en/support/welding-resources/design-of-welded-structures">Design of Welded Structures - Blodgett</a></p>
+<hr />
+</div>
+<div id="supplemental-videos-2" class="section level2 unnumbered hasAnchor">
+<h2>🎬 Supplemental Videos<a href="#supplemental-videos-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="understanding-welding-symbols" class="section level3 hasAnchor" number="6.0.20">
+<h3><span class="header-section-number">6.0.20</span> Understanding Welding Symbols<a href="design-for-welding.html#understanding-welding-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/Svoi1v_o5yI"
+    title="Understanding Welding Symbols"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="weld-joint-types-explained" class="section level3 hasAnchor" number="6.0.21">
+<h3><span class="header-section-number">6.0.21</span> Weld Joint Types Explained<a href="design-for-welding.html#weld-joint-types-explained" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/CpSWUSSDquk"
+    title="Weld Joint Types"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="controlling-weld-distortion" class="section level3 hasAnchor" number="6.0.22">
+<h3><span class="header-section-number">6.0.22</span> Controlling Weld Distortion<a href="design-for-welding.html#controlling-weld-distortion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/w_iqJDfbzMM"
+    title="Controlling Weld Distortion"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+<hr />
+</div>
+</div>
+<div id="references-2" class="section level2 unnumbered hasAnchor">
+<h2>📖 References<a href="#references-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Blodgett, O. W. (1966). <em>Design of Welded Structures</em>. James F. Lincoln Arc Welding Foundation.</p></li>
+<li><p>American Welding Society. (2020). <em>AWS D1.1 Structural Welding Code - Steel</em>. AWS.</p></li>
+<li><p>Messler, R. W. (2004). <em>Principles of Welding: Processes, Physics, Chemistry, and Metallurgy</em>. Wiley-VCH.</p></li>
+<li><p>Kou, S. (2003). <em>Welding Metallurgy</em> (2nd ed.). Wiley-Interscience.</p></li>
+<li><p>Hicks, J. (1999). <em>Welded Joint Design</em> (3rd ed.). Industrial Press.</p></li>
+</ol>
+
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="design-for-stamping.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/06-Welding.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

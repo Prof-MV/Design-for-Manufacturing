@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Design for Joining | Design for Manufacturing</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Design for Joining | Design for Manufacturing" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Design for Joining | Design for Manufacturing" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="design-for-stamping.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li>
+<li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction-to-the-casting-process"><i class="fa fa-check"></i>💡 Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#essential-components-of-casting"><i class="fa fa-check"></i>🧱 Essential Components of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#the-basic-steps-of-casting"><i class="fa fa-check"></i>⚙️ The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#applications-and-scope"><i class="fa fa-check"></i>🌍 Applications and Scope</a></li>
+<li class="chapter" data-level="1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>1.1</b> Sand Mould Casting: The Versatile Workhorse</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction"><i class="fa fa-check"></i><b>1.1.1</b> 💡 Introduction</a></li>
+<li class="chapter" data-level="1.1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#components-and-steps-of-the-process"><i class="fa fa-check"></i><b>1.1.2</b> ⚙️ Components and Steps of the Process</a></li>
+<li class="chapter" data-level="1.1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#advantages-and-disadvantages"><i class="fa fa-check"></i><b>1.1.3</b> 📊 Advantages and Disadvantages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>1.2</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#investment-casting"><i class="fa fa-check"></i><b>1.3</b> Investment Casting</a></li>
+<li class="chapter" data-level="1.4" data-path="design-for-casting.html"><a href="design-for-casting.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>1.4</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design-for-casting.html"><a href="design-for-casting.html#engineering-metal-castings-for-quality-and-value"><i class="fa fa-check"></i><b>1.4.1</b> 🔩 Engineering Metal Castings for Quality and Value</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design-for-casting.html"><a href="design-for-casting.html#variables-in-metal-casting-design"><i class="fa fa-check"></i><b>1.4.2</b> 🔬 Variables in Metal Casting Design</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design-for-casting.html"><a href="design-for-casting.html#design-considerations-for-shape-and-mold"><i class="fa fa-check"></i><b>1.4.3</b> 📐 Design Considerations for Shape and Mold</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="design-for-casting.html"><a href="design-for-casting.html#defects-in-casting-process"><i class="fa fa-check"></i><b>1.5</b> Defects in Casting process</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-for-joining.html"><a href="design-for-joining.html"><i class="fa fa-check"></i><b>2</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#joining-processes-uniting-materials-for-function"><i class="fa fa-check"></i><b>2.1</b> 🔗 Joining Processes: Uniting Materials for Function</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-1"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-of-joining-methods"><i class="fa fa-check"></i><b>2.1.2</b> Classification of Joining Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#the-welding-process"><i class="fa fa-check"></i><b>2.2</b> ♨️ The Welding Process</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-to-welding"><i class="fa fa-check"></i><b>2.2.1</b> Introduction to Welding</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-and-types-of-welding-processes"><i class="fa fa-check"></i><b>2.2.2</b> Classification and Types of Welding Processes</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-for-joining.html"><a href="design-for-joining.html#when-to-choose-welding"><i class="fa fa-check"></i><b>2.2.3</b> When to Choose Welding</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html"><i class="fa fa-check"></i><b>3</b> Strength of Bolt Joint Calculations</a>
+<ul>
+<li class="chapter" data-level="" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-joints"><i class="fa fa-check"></i>Mechanics of Bolted Joint Integrity.</a></li>
+<li class="chapter" data-level="3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-definitions"><i class="fa fa-check"></i><b>3.1</b> Bolt Definitions</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#nut-dimensions"><i class="fa fa-check"></i><b>3.1.1</b> Nut Dimensions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#washer-dimensions"><i class="fa fa-check"></i><b>3.1.2</b> Washer Dimensions</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-joints"><i class="fa fa-check"></i><b>3.2</b> Understanding Bolt Joints and Force Triangles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#how-to-interpret-the-result"><i class="fa fa-check"></i><b>3.2.1</b> How to Interpret the Result</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-analysis-formulas"><i class="fa fa-check"></i><b>3.3</b> Advanced Analysis of Bolted Joints with applicable Formulas</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#kb"><i class="fa fa-check"></i><b>3.3.1</b> Fastener Stiffness (<span class="math inline">\(k_b\)</span>)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#km"><i class="fa fa-check"></i><b>3.3.2</b> Member Stiffness (<span class="math inline">\(k_m\)</span>) and Substitute Cylinders</a></li>
+<li class="chapter" data-level="3.3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#joint-forces-and-tightening-torque"><i class="fa fa-check"></i><b>3.3.3</b> Joint Forces and Tightening Torque</a></li>
+<li class="chapter" data-level="3.3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#stress-analysis-and-safety-factors"><i class="fa fa-check"></i><b>3.3.4</b> Stress Analysis and Safety Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-example"><i class="fa fa-check"></i><b>3.4</b> Applied Example: Bolted Joint Safety Calculation</a></li>
+<li class="chapter" data-level="3.5" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example-2"><i class="fa fa-check"></i><b>3.5</b> Example 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html"><i class="fa fa-check"></i><b>4</b> Gears, Gear Trains, and Transmissions</a>
+<ul>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#introduction-to-gears"><i class="fa fa-check"></i>💡 Introduction to Gears</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#fundamental-gear-concepts"><i class="fa fa-check"></i>⚙️ Fundamental Gear Concepts</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#the-basic-principle"><i class="fa fa-check"></i><b>4.0.1</b> The Basic Principle</a></li>
+<li class="chapter" data-level="4.0.2" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#the-fundamental-law-of-gearing"><i class="fa fa-check"></i><b>4.0.2</b> The Fundamental Law of Gearing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-terminology"><i class="fa fa-check"></i>📐 Gear Terminology</a>
+<ul>
+<li class="chapter" data-level="4.0.3" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#essential-gear-formulas"><i class="fa fa-check"></i><b>4.0.3</b> Essential Gear Formulas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#types-of-gears"><i class="fa fa-check"></i>🔧 Types of Gears</a>
+<ul>
+<li class="chapter" data-level="4.0.4" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#spur-gears"><i class="fa fa-check"></i><b>4.0.4</b> Spur Gears</a></li>
+<li class="chapter" data-level="4.0.5" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#helical-gears"><i class="fa fa-check"></i><b>4.0.5</b> Helical Gears</a></li>
+<li class="chapter" data-level="4.0.6" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#bevel-gears"><i class="fa fa-check"></i><b>4.0.6</b> Bevel Gears</a></li>
+<li class="chapter" data-level="4.0.7" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#worm-gears"><i class="fa fa-check"></i><b>4.0.7</b> Worm Gears</a></li>
+<li class="chapter" data-level="4.0.8" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#rack-and-pinion"><i class="fa fa-check"></i><b>4.0.8</b> Rack and Pinion</a></li>
+<li class="chapter" data-level="4.0.9" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-type-comparison"><i class="fa fa-check"></i><b>4.0.9</b> Gear Type Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-ratios-and-calculations"><i class="fa fa-check"></i>📊 Gear Ratios and Calculations</a>
+<ul>
+<li class="chapter" data-level="4.0.10" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#speed-and-torque-relationships"><i class="fa fa-check"></i><b>4.0.10</b> Speed and Torque Relationships</a></li>
+<li class="chapter" data-level="4.0.11" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#key-relationships"><i class="fa fa-check"></i><b>4.0.11</b> Key Relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-trains"><i class="fa fa-check"></i>🔄 Gear Trains</a>
+<ul>
+<li class="chapter" data-level="4.0.12" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#simple-gear-train"><i class="fa fa-check"></i><b>4.0.12</b> Simple Gear Train</a></li>
+<li class="chapter" data-level="4.0.13" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#compound-gear-train"><i class="fa fa-check"></i><b>4.0.13</b> Compound Gear Train</a></li>
+<li class="chapter" data-level="4.0.14" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#planetary-epicyclic-gear-train"><i class="fa fa-check"></i><b>4.0.14</b> Planetary (Epicyclic) Gear Train</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#industry-applications"><i class="fa fa-check"></i>🏭 Industry Applications</a>
+<ul>
+<li class="chapter" data-level="4.0.15" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#automotive-industry"><i class="fa fa-check"></i><b>4.0.15</b> Automotive Industry</a></li>
+<li class="chapter" data-level="4.0.16" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#food-processing-industry"><i class="fa fa-check"></i><b>4.0.16</b> Food Processing Industry</a></li>
+<li class="chapter" data-level="4.0.17" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#defense-industry"><i class="fa fa-check"></i><b>4.0.17</b> Defense Industry</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-design-considerations"><i class="fa fa-check"></i>🔧 Gear Design Considerations</a>
+<ul>
+<li class="chapter" data-level="4.0.18" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#material-selection"><i class="fa fa-check"></i><b>4.0.18</b> Material Selection</a></li>
+<li class="chapter" data-level="4.0.19" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#common-failure-modes"><i class="fa fa-check"></i><b>4.0.19</b> Common Failure Modes</a></li>
+<li class="chapter" data-level="4.0.20" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#design-guidelines"><i class="fa fa-check"></i><b>4.0.20</b> Design Guidelines</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#design-checklist-for-gears"><i class="fa fa-check"></i>📋 Design Checklist for Gears</a>
+<ul>
+<li class="chapter" data-level="4.0.21" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-specification"><i class="fa fa-check"></i><b>4.0.21</b> Gear Specification</a></li>
+<li class="chapter" data-level="4.0.22" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#strength-verification"><i class="fa fa-check"></i><b>4.0.22</b> Strength Verification</a></li>
+<li class="chapter" data-level="4.0.23" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-train-design"><i class="fa fa-check"></i><b>4.0.23</b> Gear Train Design</a></li>
+<li class="chapter" data-level="4.0.24" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#manufacturing-and-assembly"><i class="fa fa-check"></i><b>4.0.24</b> Manufacturing and Assembly</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#case-study-food-packaging-line-drive"><i class="fa fa-check"></i>🎯 Case Study: Food Packaging Line Drive</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#practice-problems"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#further-reading"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#supplemental-videos"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="4.0.25" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-gear-ratios-work"><i class="fa fa-check"></i><b>4.0.25</b> How Gear Ratios Work</a></li>
+<li class="chapter" data-level="4.0.26" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#planetary-gears-explained"><i class="fa fa-check"></i><b>4.0.26</b> Planetary Gears Explained</a></li>
+<li class="chapter" data-level="4.0.27" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-manual-transmissions-work"><i class="fa fa-check"></i><b>4.0.27</b> How Manual Transmissions Work</a></li>
+<li class="chapter" data-level="4.0.28" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-differentials-work"><i class="fa fa-check"></i><b>4.0.28</b> How Differentials Work</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#references"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="design-for-stamping.html"><a href="design-for-stamping.html"><i class="fa fa-check"></i><b>5</b> Design for Stamping</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#introduction-to-the-stamping-process"><i class="fa fa-check"></i>💡 Introduction to the Stamping Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#essential-components-of-stamping"><i class="fa fa-check"></i>🧱 Essential Components of Stamping</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#types-of-stamping-operations"><i class="fa fa-check"></i>⚙️ Types of Stamping Operations</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="design-for-stamping.html"><a href="design-for-stamping.html#blanking-and-punching"><i class="fa fa-check"></i><b>5.0.1</b> Blanking and Punching</a></li>
+<li class="chapter" data-level="5.0.2" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bending"><i class="fa fa-check"></i><b>5.0.2</b> Bending</a></li>
+<li class="chapter" data-level="5.0.3" data-path="design-for-stamping.html"><a href="design-for-stamping.html#drawing"><i class="fa fa-check"></i><b>5.0.3</b> Drawing</a></li>
+<li class="chapter" data-level="5.0.4" data-path="design-for-stamping.html"><a href="design-for-stamping.html#embossing-and-coining"><i class="fa fa-check"></i><b>5.0.4</b> Embossing and Coining</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#stamping-press-types-and-progressive-dies"><i class="fa fa-check"></i>🏭 Stamping Press Types and Progressive Dies</a>
+<ul>
+<li class="chapter" data-level="5.0.5" data-path="design-for-stamping.html"><a href="design-for-stamping.html#types-of-stamping-presses"><i class="fa fa-check"></i><b>5.0.5</b> Types of Stamping Presses</a></li>
+<li class="chapter" data-level="5.0.6" data-path="design-for-stamping.html"><a href="design-for-stamping.html#progressive-die-stamping"><i class="fa fa-check"></i><b>5.0.6</b> Progressive Die Stamping</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#advantages-and-limitations-of-stamping"><i class="fa fa-check"></i>📊 Advantages and Limitations of Stamping</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#material-considerations-for-stamping"><i class="fa fa-check"></i>🔬 Material Considerations for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.7" data-path="design-for-stamping.html"><a href="design-for-stamping.html#formability"><i class="fa fa-check"></i><b>5.0.7</b> Formability</a></li>
+<li class="chapter" data-level="5.0.8" data-path="design-for-stamping.html"><a href="design-for-stamping.html#common-stamping-materials"><i class="fa fa-check"></i><b>5.0.8</b> Common Stamping Materials</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#design-guidelines-for-stamping"><i class="fa fa-check"></i>📐 Design Guidelines for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.9" data-path="design-for-stamping.html"><a href="design-for-stamping.html#hole-design"><i class="fa fa-check"></i><b>5.0.9</b> Hole Design</a></li>
+<li class="chapter" data-level="5.0.10" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bend-design"><i class="fa fa-check"></i><b>5.0.10</b> Bend Design</a></li>
+<li class="chapter" data-level="5.0.11" data-path="design-for-stamping.html"><a href="design-for-stamping.html#drawing-design"><i class="fa fa-check"></i><b>5.0.11</b> Drawing Design</a></li>
+<li class="chapter" data-level="5.0.12" data-path="design-for-stamping.html"><a href="design-for-stamping.html#general-design-best-practices"><i class="fa fa-check"></i><b>5.0.12</b> General Design Best Practices</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#common-stamping-defects-and-prevention"><i class="fa fa-check"></i>🛠️ Common Stamping Defects and Prevention</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#design-checklist-for-stamping"><i class="fa fa-check"></i>📋 Design Checklist for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.13" data-path="design-for-stamping.html"><a href="design-for-stamping.html#holes-and-cutouts"><i class="fa fa-check"></i><b>5.0.13</b> Holes and Cutouts</a></li>
+<li class="chapter" data-level="5.0.14" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bends"><i class="fa fa-check"></i><b>5.0.14</b> Bends</a></li>
+<li class="chapter" data-level="5.0.15" data-path="design-for-stamping.html"><a href="design-for-stamping.html#draws"><i class="fa fa-check"></i><b>5.0.15</b> Draws</a></li>
+<li class="chapter" data-level="5.0.16" data-path="design-for-stamping.html"><a href="design-for-stamping.html#general"><i class="fa fa-check"></i><b>5.0.16</b> General</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#case-study-automotive-bracket-design"><i class="fa fa-check"></i>🎯 Case Study: Automotive Bracket Design</a>
+<ul>
+<li class="chapter" data-level="5.0.17" data-path="design-for-stamping.html"><a href="design-for-stamping.html#initial-design-evaluation"><i class="fa fa-check"></i><b>5.0.17</b> Initial Design Evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#summary-key-design-rules-for-stamping"><i class="fa fa-check"></i>📚 “Summary: Key Design Rules for Stamping”</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#practice-problems-1"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#further-reading-1"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#supplemental-videos-1"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="5.0.18" data-path="design-for-stamping.html"><a href="design-for-stamping.html#how-stamping-dies-work"><i class="fa fa-check"></i><b>5.0.18</b> How Stamping Dies Work</a></li>
+<li class="chapter" data-level="5.0.19" data-path="design-for-stamping.html"><a href="design-for-stamping.html#deep-drawing-process-explained"><i class="fa fa-check"></i><b>5.0.19</b> Deep Drawing Process Explained</a></li>
+<li class="chapter" data-level="5.0.20" data-path="design-for-stamping.html"><a href="design-for-stamping.html#metal-stamping-in-automotive-manufacturing"><i class="fa fa-check"></i><b>5.0.20</b> Metal Stamping in Automotive Manufacturing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#references-1"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="design-for-joining-1.html"><a href="design-for-joining-1.html"><i class="fa fa-check"></i><b>6</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="design-for-joining-1.html"><a href="design-for-joining-1.html#joining-processes-uniting-materials-for-function-1"><i class="fa fa-check"></i><b>6.1</b> 🔗 Joining Processes: Uniting Materials for Function</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="design-for-joining-1.html"><a href="design-for-joining-1.html#introduction-2"><i class="fa fa-check"></i><b>6.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.1.2" data-path="design-for-joining-1.html"><a href="design-for-joining-1.html#classification-of-joining-methods-1"><i class="fa fa-check"></i><b>6.1.2</b> Classification of Joining Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="design-for-joining-1.html"><a href="design-for-joining-1.html#the-welding-process-1"><i class="fa fa-check"></i><b>6.2</b> ♨️ The Welding Process</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="design-for-joining-1.html"><a href="design-for-joining-1.html#introduction-to-welding-1"><i class="fa fa-check"></i><b>6.2.1</b> Introduction to Welding</a></li>
+<li class="chapter" data-level="6.2.2" data-path="design-for-joining-1.html"><a href="design-for-joining-1.html#classification-and-types-of-welding-processes-1"><i class="fa fa-check"></i><b>6.2.2</b> Classification and Types of Welding Processes</a></li>
+<li class="chapter" data-level="6.2.3" data-path="design-for-joining-1.html"><a href="design-for-joining-1.html#when-to-choose-welding-1"><i class="fa fa-check"></i><b>6.2.3</b> When to Choose Welding</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Design for Manufacturing</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="design-for-joining-1" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Design for Joining<a href="design-for-joining-1.html#design-for-joining-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="joining-processes-uniting-materials-for-function-1" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> 🔗 Joining Processes: Uniting Materials for Function<a href="#joining-processes-uniting-materials-for-function-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="introduction-2" class="section level3 hasAnchor" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> Introduction<a href="design-for-joining-1.html#introduction-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The ability to permanently or temporarily unite two or more separate material components is fundamental to nearly every branch of engineering and manufacturing. Whether creating the fuselage of an aircraft, the circuitry of a smartphone, or the frame of a bicycle, <strong>joining processes</strong> are essential for assembling parts into functional products.</p>
+<p>Joining processes can be broadly categorized based on the method used to create the bond: those that use <strong>heat and fusion</strong> (welding), those that use <strong>fillers</strong> (brazing and soldering), those that use <strong>chemical agents</strong> (adhesives), and those that rely on <strong>mechanical force</strong> (fasteners). The selection of the appropriate joining method is a critical design decision, dictated by the materials being joined, the required strength, the operating environment (e.g., temperature, corrosion), and cost considerations.</p>
+<hr />
+</div>
+<div id="classification-of-joining-methods-1" class="section level3 hasAnchor" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> Classification of Joining Methods<a href="design-for-joining-1.html#classification-of-joining-methods-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Joining techniques are typically classified into three main groups based on how the bond is established:</p>
+<div id="fusion-and-cohesion-1" class="section level4 hasAnchor" number="6.1.2.1">
+<h4><span class="header-section-number">6.1.2.1</span> Fusion and Cohesion<a href="design-for-joining-1.html#fusion-and-cohesion-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These processes create a continuous, strong bond by achieving atomic or molecular cohesion between the joined parts, often involving melting the base materials.</p>
+<ul>
+<li><strong>Welding:</strong> This is a permanent joining process that involves heating the base metal parts to their melting point and allowing them to fuse together, often with the addition of a filler metal. Welding creates a joint that can be as strong, or even stronger, than the parent material itself. It is widely used in heavy industries like construction, shipbuilding, and pipe fabrication.</li>
+</ul>
+</div>
+<div id="chemicalmetallurgical-bonding-with-fillers-1" class="section level4 hasAnchor" number="6.1.2.2">
+<h4><span class="header-section-number">6.1.2.2</span> Chemical/Metallurgical Bonding with Fillers<a href="design-for-joining-1.html#chemicalmetallurgical-bonding-with-fillers-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These processes use a separate material (a filler) to create the bond between two materials without melting the base materials.</p>
+<ul>
+<li><strong>Brazing:</strong> A joining process where a non-ferrous filler metal is melted and drawn into the joint gap by capillary action. The filler metal has a melting point <strong>above <span class="math inline">\(450^\circ\text{C}\)</span> (<span class="math inline">\(840^\circ\text{F}\)</span>)</strong>, but below the melting point of the base metals. Brazing creates strong, leak-tight joints with minimal thermal distortion to the base parts.</li>
+<li><strong>Soldering:</strong> Similar to brazing, soldering uses a filler metal (solder) that melts at a temperature <strong>below <span class="math inline">\(450^\circ\text{C}\)</span> (<span class="math inline">\(840^\circ\text{F}\)</span>)</strong>. This process is primarily used in electronics and sheet metal work where strong mechanical bonds are less critical than electrical conductivity or a leak-proof seal.</li>
+</ul>
+</div>
+<div id="mechanical-and-chemical-adhesion-1" class="section level4 hasAnchor" number="6.1.2.3">
+<h4><span class="header-section-number">6.1.2.3</span> Mechanical and Chemical Adhesion<a href="design-for-joining-1.html#mechanical-and-chemical-adhesion-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These methods rely on either a sticky substance or physical interlocking to hold parts together.</p>
+<ul>
+<li><strong>Adhesive Joining:</strong> This method uses chemical compounds (adhesives, glues, epoxies) that cure to form a chemical bond between the surfaces. Adhesives can join dissimilar materials (like metal to plastic), distribute stress over a wide area, and provide excellent sealing.</li>
+<li><strong>Mechanical Fasteners:</strong> These are non-permanent methods that use hardware to hold materials together. This category includes common items like <strong>bolts, screws, rivets, nuts, pins, and clips</strong>. The primary advantage of mechanical fasteners is that they allow for easy disassembly and reassembly for maintenance or repair.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="the-welding-process-1" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> ♨️ The Welding Process<a href="design-for-joining-1.html#the-welding-process-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="introduction-to-welding-1" class="section level3 hasAnchor" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> Introduction to Welding<a href="design-for-joining-1.html#introduction-to-welding-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welding is a <strong>fusion joining process</strong> that creates a permanent, monolithic bond between two or more separate metal parts. Unlike brazing or soldering, welding typically involves heating the base metal parts to their melting temperature and allowing them to fuse together, often with the addition of a <strong>filler material</strong></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-19"></span>
+<img src="images/Gemini_Generated_Image_o2yyb9o2yyb9o2yy.png" alt="Welding" width="50%" />
+<p class="caption">
+Figure 6.1: Welding
+</p>
+</div>
+<p>The primary goal of welding is to create a joint that is as strong as, or even stronger than, the original parent materials. This makes it an indispensable process in heavy fabrication and structural engineering, including the construction of ships, bridges, pipelines, and pressure vessels.</p>
+<p>How is it possible that a weld is stronger than the original parent materials?</p>
+<hr />
+</div>
+<div id="classification-and-types-of-welding-processes-1" class="section level3 hasAnchor" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> Classification and Types of Welding Processes<a href="design-for-joining-1.html#classification-and-types-of-welding-processes-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welding processes are broadly classified based on the source of energy used to achieve the necessary heat for fusion. The three major categories are:</p>
+<div id="arc-welding-1" class="section level4 hasAnchor" number="6.2.2.1">
+<h4><span class="header-section-number">6.2.2.1</span> 1. Arc Welding<a href="design-for-joining-1.html#arc-welding-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Arc welding is the most common category, utilizing an electrical arc to generate the heat required to melt the metals. A power source creates an arc between an electrode and the base metal, generating temperatures high enough to melt both.</p>
+<ul>
+<li><strong>Shielded Metal Arc Welding (SMAW or Stick Welding):</strong> Uses a consumable electrode coated with flux. The flux vaporizes during welding, creating a protective gas shield and slag, which prevents atmospheric contamination of the molten weld pool. It is highly versatile and used widely for structural steel.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-20"></span>
+<img src="images/Gemini_Generated_Image_7mwxtj7mwxtj7mwx.png" alt="Shielded Metal Arc Welding (SMAW)" width="50%" />
+<p class="caption">
+Figure 6.2: Shielded Metal Arc Welding (SMAW)
+</p>
+</div>
+<ul>
+<li><strong>Gas Metal Arc Welding (GMAW or MIG Welding):</strong> Uses a continuous, consumable wire electrode fed through a welding gun, while an externally supplied shielding gas (e.g., Argon, <span class="math inline">\(\text{CO}_2\)</span>) protects the arc and weld pool. It is known for its speed and suitability for automated systems.</li>
+<li><strong>Gas Tungsten Arc Welding (GTAW or TIG Welding):</strong> Uses a non-consumable tungsten electrode and an inert shielding gas (usually Argon). It typically requires a separate filler rod. TIG welding produces the highest quality welds, often used for critical applications and joining thin metals or reactive metals like aluminum and titanium.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-21"></span>
+<img src="images/Gemini_Generated_Image_ftcdd1ftcdd1ftcd.png" alt="Gas Tungsten Arc Welding (GATW)" width="50%" />
+<p class="caption">
+Figure 6.3: Gas Tungsten Arc Welding (GATW)
+</p>
+</div>
+</div>
+<div id="resistance-welding-1" class="section level4 hasAnchor" number="6.2.2.2">
+<h4><span class="header-section-number">6.2.2.2</span> 2. Resistance Welding<a href="design-for-joining-1.html#resistance-welding-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Resistance welding uses the heat generated by the electrical resistance of the materials themselves when a current is passed through them under pressure.</p>
+<ul>
+<li><strong>Spot Welding:</strong> The most common resistance method. It uses two electrodes to clamp sheets of metal together. A high current is passed through, locally heating and fusing the metal at a small “spot.” It is widely used in the automotive industry for joining body panels.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-22"></span>
+<img src="images/Picture299.jpg" alt="Spot Welding" width="50%" />
+<p class="caption">
+Figure 6.4: Spot Welding
+</p>
+</div>
+</div>
+<div id="high-energy-beam-welding-1" class="section level4 hasAnchor" number="6.2.2.3">
+<h4><span class="header-section-number">6.2.2.3</span> 3. High-Energy Beam Welding<a href="design-for-joining-1.html#high-energy-beam-welding-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These advanced processes use highly concentrated energy sources for deep, narrow, and precise welds.</p>
+<ul>
+<li><strong>Laser Beam Welding (LBW):</strong> Uses a focused beam of coherent light (laser) to heat and fuse the materials. It is excellent for high-speed, precise welding in mass production.</li>
+<li><strong>Electron Beam Welding (EBW):</strong> Uses a beam of high-velocity electrons to provide the heat source. This process requires a vacuum chamber, but produces extremely high-quality welds with very low heat input, ideal for aerospace and nuclear components.</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="when-to-choose-welding-1" class="section level3 hasAnchor" number="6.2.3">
+<h3><span class="header-section-number">6.2.3</span> When to Choose Welding<a href="design-for-joining-1.html#when-to-choose-welding-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welding is not always the best solution, but it is the superior choice over other joining processes like mechanical fastening, brazing, or adhesives in several key scenarios:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Requirement for Monolithic Strength:</strong>
+<ul>
+<li><strong>Permanent Joint:</strong> Welding creates a permanent, continuous metallurgical bond, effectively making the joint an integral part of the structure.</li>
+<li><strong>High Load/Stress:</strong> For applications subjected to high dynamic or static loads (e.g., bridge structures, pressure vessels, vehicle chassis), the strength and rigidity offered by a fully fused weld joint are unmatched by mechanical fasteners or adhesives.</li>
+</ul></li>
+<li><strong>Structural Integrity and Sealing:</strong>
+<ul>
+<li><strong>Leak-Proof Seals:</strong> Welding is essential for creating completely leak-proof joints, which is critical for containers, tanks, and pipelines holding liquids or gases under pressure.</li>
+<li><strong>Weight Reduction:</strong> By eliminating overlapping flanges or bolted plates, welding can often result in lighter overall structures compared to mechanical fastening.</li>
+</ul></li>
+<li><strong>Specific Material and Geometry Requirements:</strong>
+<ul>
+<li><strong>Thick Sections:</strong> Welding is highly effective for joining very thick metal plates, where fasteners would be impractical or structurally insufficient.</li>
+<li><strong>Material Compatibility:</strong> While welding <em>can</em> join dissimilar metals, it is best suited for scenarios where the material properties of the filler metal can be carefully matched to the base metals to maintain structural and chemical properties.</li>
+</ul></li>
+</ol>
+<div id="comparison-to-other-processes-1" class="section level4 hasAnchor" number="6.2.3.1">
+<h4><span class="header-section-number">6.2.3.1</span> Comparison to Other Processes:<a href="design-for-joining-1.html#comparison-to-other-processes-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Process</th>
+<th align="left">Primary Advantage Over Welding</th>
+<th align="left">Why Welding is Chosen Instead</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Mechanical Fasteners</strong></td>
+<td align="left">Allows for <strong>disassembly</strong> and repair.</td>
+<td align="left">When a joint must be <strong>permanent</strong> and transmit <strong>structural forces</strong> without the risk of loosening under vibration.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Brazing / Soldering</strong></td>
+<td align="left">Lower heat input prevents distortion/damage to base metal.</td>
+<td align="left">When the joint needs the <strong>full strength</strong> of the parent metal, and the service temperature exceeds the filler metal’s melting point.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Adhesive Bonding</strong></td>
+<td align="left">Joins dissimilar materials; distributes stress over a wide area.</td>
+<td align="left">When high strength is required in <strong>high-temperature environments</strong> where most adhesives would degrade, or when a <strong>rapidly cured joint</strong> is necessary.</td>
+</tr>
+</tbody>
+</table>
+
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="design-for-stamping.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/06-Joining.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
