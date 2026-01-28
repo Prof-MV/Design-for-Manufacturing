@@ -73,6 +73,7 @@ fig:fatigue-improvement
 fig:carbon-equivalent
 fig:weld-defects
 fig:frame-case-study
+<<<<<<< HEAD
 fig:plot-auto
 fig:plot-food
 fig:bearing-classification
@@ -88,6 +89,8 @@ fig:pv-limit-plot
 tab:individual-limits-table
 tab:bushing-example-calc
 tab:selection-guide
+=======
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
 design-for-casting
 sand-mould-casting-the-versatile-workhorse
 introduction
@@ -224,6 +227,7 @@ fatigue-and-strength
 understanding-welding-symbols
 weld-joint-types-explained
 controlling-weld-distortion
+<<<<<<< HEAD
 design-for-machining
 challenge-questions
 theory-math
@@ -241,3 +245,5 @@ bearing-example
 bushings
 pv-limits
 bushing-example
+=======
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
