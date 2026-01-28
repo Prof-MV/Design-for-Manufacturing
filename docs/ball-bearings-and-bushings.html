@@ -1,0 +1,2182 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Ball Bearings and Bushings | Design for Manufacturing</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Ball Bearings and Bushings | Design for Manufacturing" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Ball Bearings and Bushings | Design for Manufacturing" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-28" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="design-for-machining.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li><li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction-to-the-casting-process"><i class="fa fa-check"></i>💡 Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#essential-components-of-casting"><i class="fa fa-check"></i>🧱 Essential Components of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#the-basic-steps-of-casting"><i class="fa fa-check"></i>⚙️ The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#applications-and-scope"><i class="fa fa-check"></i>🌍 Applications and Scope</a></li>
+<li class="chapter" data-level="1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>1.1</b> Sand Mould Casting: The Versatile Workhorse</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction"><i class="fa fa-check"></i><b>1.1.1</b> 💡 Introduction</a></li>
+<li class="chapter" data-level="1.1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#components-and-steps-of-the-process"><i class="fa fa-check"></i><b>1.1.2</b> ⚙️ Components and Steps of the Process</a></li>
+<li class="chapter" data-level="1.1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#advantages-and-disadvantages"><i class="fa fa-check"></i><b>1.1.3</b> 📊 Advantages and Disadvantages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>1.2</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#investment-casting"><i class="fa fa-check"></i><b>1.3</b> Investment Casting</a></li>
+<li class="chapter" data-level="1.4" data-path="design-for-casting.html"><a href="design-for-casting.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>1.4</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design-for-casting.html"><a href="design-for-casting.html#engineering-metal-castings-for-quality-and-value"><i class="fa fa-check"></i><b>1.4.1</b> 🔩 Engineering Metal Castings for Quality and Value</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design-for-casting.html"><a href="design-for-casting.html#variables-in-metal-casting-design"><i class="fa fa-check"></i><b>1.4.2</b> 🔬 Variables in Metal Casting Design</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design-for-casting.html"><a href="design-for-casting.html#design-considerations-for-shape-and-mold"><i class="fa fa-check"></i><b>1.4.3</b> 📐 Design Considerations for Shape and Mold</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="design-for-casting.html"><a href="design-for-casting.html#defects-in-casting-process"><i class="fa fa-check"></i><b>1.5</b> Defects in Casting process</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-for-joining.html"><a href="design-for-joining.html"><i class="fa fa-check"></i><b>2</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#joining-processes-uniting-materials-for-function"><i class="fa fa-check"></i><b>2.1</b> 🔗 Joining Processes: Uniting Materials for Function</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-1"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-of-joining-methods"><i class="fa fa-check"></i><b>2.1.2</b> Classification of Joining Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#the-welding-process"><i class="fa fa-check"></i><b>2.2</b> ♨️ The Welding Process</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-to-welding"><i class="fa fa-check"></i><b>2.2.1</b> Introduction to Welding</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-and-types-of-welding-processes"><i class="fa fa-check"></i><b>2.2.2</b> Classification and Types of Welding Processes</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-for-joining.html"><a href="design-for-joining.html#when-to-choose-welding"><i class="fa fa-check"></i><b>2.2.3</b> When to Choose Welding</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html"><i class="fa fa-check"></i><b>3</b> Strength of Bolt Joint Calculations</a>
+<ul>
+<li class="chapter" data-level="" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-joints"><i class="fa fa-check"></i>Mechanics of Bolted Joint Integrity.</a></li>
+<li class="chapter" data-level="3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-definitions"><i class="fa fa-check"></i><b>3.1</b> Bolt Definitions</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#nut-dimensions"><i class="fa fa-check"></i><b>3.1.1</b> Nut Dimensions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#washer-dimensions"><i class="fa fa-check"></i><b>3.1.2</b> Washer Dimensions</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-joints"><i class="fa fa-check"></i><b>3.2</b> Understanding Bolt Joints and Force Triangles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#how-to-interpret-the-result"><i class="fa fa-check"></i><b>3.2.1</b> How to Interpret the Result</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-analysis-formulas"><i class="fa fa-check"></i><b>3.3</b> Advanced Analysis of Bolted Joints with applicable Formulas</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#kb"><i class="fa fa-check"></i><b>3.3.1</b> Fastener Stiffness (<span class="math inline">\(k_b\)</span>)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#km"><i class="fa fa-check"></i><b>3.3.2</b> Member Stiffness (<span class="math inline">\(k_m\)</span>) and Substitute Cylinders</a></li>
+<li class="chapter" data-level="3.3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#joint-forces-and-tightening-torque"><i class="fa fa-check"></i><b>3.3.3</b> Joint Forces and Tightening Torque</a></li>
+<li class="chapter" data-level="3.3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#stress-analysis-and-safety-factors"><i class="fa fa-check"></i><b>3.3.4</b> Stress Analysis and Safety Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-example"><i class="fa fa-check"></i><b>3.4</b> Applied Example: Bolted Joint Safety Calculation</a></li>
+<li class="chapter" data-level="3.5" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example-2"><i class="fa fa-check"></i><b>3.5</b> Example 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html"><i class="fa fa-check"></i><b>4</b> Gears, Gear Trains, and Transmissions</a>
+<ul>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#introduction-to-gears"><i class="fa fa-check"></i>💡 Introduction to Gears</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#fundamental-gear-concepts"><i class="fa fa-check"></i>⚙️ Fundamental Gear Concepts</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#the-basic-principle"><i class="fa fa-check"></i><b>4.0.1</b> The Basic Principle</a></li>
+<li class="chapter" data-level="4.0.2" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#the-fundamental-law-of-gearing"><i class="fa fa-check"></i><b>4.0.2</b> The Fundamental Law of Gearing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-terminology"><i class="fa fa-check"></i>📐 Gear Terminology</a>
+<ul>
+<li class="chapter" data-level="4.0.3" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#essential-gear-formulas"><i class="fa fa-check"></i><b>4.0.3</b> Essential Gear Formulas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#types-of-gears"><i class="fa fa-check"></i>🔧 Types of Gears</a>
+<ul>
+<li class="chapter" data-level="4.0.4" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#spur-gears"><i class="fa fa-check"></i><b>4.0.4</b> Spur Gears</a></li>
+<li class="chapter" data-level="4.0.5" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#helical-gears"><i class="fa fa-check"></i><b>4.0.5</b> Helical Gears</a></li>
+<li class="chapter" data-level="4.0.6" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#bevel-gears"><i class="fa fa-check"></i><b>4.0.6</b> Bevel Gears</a></li>
+<li class="chapter" data-level="4.0.7" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#worm-gears"><i class="fa fa-check"></i><b>4.0.7</b> Worm Gears</a></li>
+<li class="chapter" data-level="4.0.8" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#rack-and-pinion"><i class="fa fa-check"></i><b>4.0.8</b> Rack and Pinion</a></li>
+<li class="chapter" data-level="4.0.9" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-type-comparison"><i class="fa fa-check"></i><b>4.0.9</b> Gear Type Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-ratios-and-calculations"><i class="fa fa-check"></i>📊 Gear Ratios and Calculations</a>
+<ul>
+<li class="chapter" data-level="4.0.10" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#speed-and-torque-relationships"><i class="fa fa-check"></i><b>4.0.10</b> Speed and Torque Relationships</a></li>
+<li class="chapter" data-level="4.0.11" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#key-relationships"><i class="fa fa-check"></i><b>4.0.11</b> Key Relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-trains"><i class="fa fa-check"></i>🔄 Gear Trains</a>
+<ul>
+<li class="chapter" data-level="4.0.12" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#simple-gear-train"><i class="fa fa-check"></i><b>4.0.12</b> Simple Gear Train</a></li>
+<li class="chapter" data-level="4.0.13" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#compound-gear-train"><i class="fa fa-check"></i><b>4.0.13</b> Compound Gear Train</a></li>
+<li class="chapter" data-level="4.0.14" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#planetary-epicyclic-gear-train"><i class="fa fa-check"></i><b>4.0.14</b> Planetary (Epicyclic) Gear Train</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#industry-applications"><i class="fa fa-check"></i>🏭 Industry Applications</a>
+<ul>
+<li class="chapter" data-level="4.0.15" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#automotive-industry"><i class="fa fa-check"></i><b>4.0.15</b> Automotive Industry</a></li>
+<li class="chapter" data-level="4.0.16" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#food-processing-industry"><i class="fa fa-check"></i><b>4.0.16</b> Food Processing Industry</a></li>
+<li class="chapter" data-level="4.0.17" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#defense-industry"><i class="fa fa-check"></i><b>4.0.17</b> Defense Industry</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-design-considerations"><i class="fa fa-check"></i>🔧 Gear Design Considerations</a>
+<ul>
+<li class="chapter" data-level="4.0.18" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#material-selection"><i class="fa fa-check"></i><b>4.0.18</b> Material Selection</a></li>
+<li class="chapter" data-level="4.0.19" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#common-failure-modes"><i class="fa fa-check"></i><b>4.0.19</b> Common Failure Modes</a></li>
+<li class="chapter" data-level="4.0.20" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#design-guidelines"><i class="fa fa-check"></i><b>4.0.20</b> Design Guidelines</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#design-checklist-for-gears"><i class="fa fa-check"></i>📋 Design Checklist for Gears</a>
+<ul>
+<li class="chapter" data-level="4.0.21" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-specification"><i class="fa fa-check"></i><b>4.0.21</b> Gear Specification</a></li>
+<li class="chapter" data-level="4.0.22" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#strength-verification"><i class="fa fa-check"></i><b>4.0.22</b> Strength Verification</a></li>
+<li class="chapter" data-level="4.0.23" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-train-design"><i class="fa fa-check"></i><b>4.0.23</b> Gear Train Design</a></li>
+<li class="chapter" data-level="4.0.24" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#manufacturing-and-assembly"><i class="fa fa-check"></i><b>4.0.24</b> Manufacturing and Assembly</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#case-study-food-packaging-line-drive"><i class="fa fa-check"></i>🎯 Case Study: Food Packaging Line Drive</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#practice-problems"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#further-reading"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#supplemental-videos"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="4.0.25" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-gear-ratios-work"><i class="fa fa-check"></i><b>4.0.25</b> How Gear Ratios Work</a></li>
+<li class="chapter" data-level="4.0.26" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#planetary-gears-explained"><i class="fa fa-check"></i><b>4.0.26</b> Planetary Gears Explained</a></li>
+<li class="chapter" data-level="4.0.27" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-manual-transmissions-work"><i class="fa fa-check"></i><b>4.0.27</b> How Manual Transmissions Work</a></li>
+<li class="chapter" data-level="4.0.28" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-differentials-work"><i class="fa fa-check"></i><b>4.0.28</b> How Differentials Work</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#references"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="design-for-stamping.html"><a href="design-for-stamping.html"><i class="fa fa-check"></i><b>5</b> Design for Stamping</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#introduction-to-the-stamping-process"><i class="fa fa-check"></i>💡 Introduction to the Stamping Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#essential-components-of-stamping"><i class="fa fa-check"></i>🧱 Essential Components of Stamping</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#types-of-stamping-operations"><i class="fa fa-check"></i>⚙️ Types of Stamping Operations</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="design-for-stamping.html"><a href="design-for-stamping.html#blanking-and-punching"><i class="fa fa-check"></i><b>5.0.1</b> Blanking and Punching</a></li>
+<li class="chapter" data-level="5.0.2" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bending"><i class="fa fa-check"></i><b>5.0.2</b> Bending</a></li>
+<li class="chapter" data-level="5.0.3" data-path="design-for-stamping.html"><a href="design-for-stamping.html#drawing"><i class="fa fa-check"></i><b>5.0.3</b> Drawing</a></li>
+<li class="chapter" data-level="5.0.4" data-path="design-for-stamping.html"><a href="design-for-stamping.html#embossing-and-coining"><i class="fa fa-check"></i><b>5.0.4</b> Embossing and Coining</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#stamping-press-types-and-progressive-dies"><i class="fa fa-check"></i>🏭 Stamping Press Types and Progressive Dies</a>
+<ul>
+<li class="chapter" data-level="5.0.5" data-path="design-for-stamping.html"><a href="design-for-stamping.html#types-of-stamping-presses"><i class="fa fa-check"></i><b>5.0.5</b> Types of Stamping Presses</a></li>
+<li class="chapter" data-level="5.0.6" data-path="design-for-stamping.html"><a href="design-for-stamping.html#progressive-die-stamping"><i class="fa fa-check"></i><b>5.0.6</b> Progressive Die Stamping</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#advantages-and-limitations-of-stamping"><i class="fa fa-check"></i>📊 Advantages and Limitations of Stamping</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#material-considerations-for-stamping"><i class="fa fa-check"></i>🔬 Material Considerations for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.7" data-path="design-for-stamping.html"><a href="design-for-stamping.html#formability"><i class="fa fa-check"></i><b>5.0.7</b> Formability</a></li>
+<li class="chapter" data-level="5.0.8" data-path="design-for-stamping.html"><a href="design-for-stamping.html#common-stamping-materials"><i class="fa fa-check"></i><b>5.0.8</b> Common Stamping Materials</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#design-guidelines-for-stamping"><i class="fa fa-check"></i>📐 Design Guidelines for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.9" data-path="design-for-stamping.html"><a href="design-for-stamping.html#hole-design"><i class="fa fa-check"></i><b>5.0.9</b> Hole Design</a></li>
+<li class="chapter" data-level="5.0.10" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bend-design"><i class="fa fa-check"></i><b>5.0.10</b> Bend Design</a></li>
+<li class="chapter" data-level="5.0.11" data-path="design-for-stamping.html"><a href="design-for-stamping.html#drawing-design"><i class="fa fa-check"></i><b>5.0.11</b> Drawing Design</a></li>
+<li class="chapter" data-level="5.0.12" data-path="design-for-stamping.html"><a href="design-for-stamping.html#general-design-best-practices"><i class="fa fa-check"></i><b>5.0.12</b> General Design Best Practices</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#common-stamping-defects-and-prevention"><i class="fa fa-check"></i>🛠️ Common Stamping Defects and Prevention</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#design-checklist-for-stamping"><i class="fa fa-check"></i>📋 Design Checklist for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.13" data-path="design-for-stamping.html"><a href="design-for-stamping.html#holes-and-cutouts"><i class="fa fa-check"></i><b>5.0.13</b> Holes and Cutouts</a></li>
+<li class="chapter" data-level="5.0.14" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bends"><i class="fa fa-check"></i><b>5.0.14</b> Bends</a></li>
+<li class="chapter" data-level="5.0.15" data-path="design-for-stamping.html"><a href="design-for-stamping.html#draws"><i class="fa fa-check"></i><b>5.0.15</b> Draws</a></li>
+<li class="chapter" data-level="5.0.16" data-path="design-for-stamping.html"><a href="design-for-stamping.html#general"><i class="fa fa-check"></i><b>5.0.16</b> General</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#case-study-automotive-bracket-design"><i class="fa fa-check"></i>🎯 Case Study: Automotive Bracket Design</a>
+<ul>
+<li class="chapter" data-level="5.0.17" data-path="design-for-stamping.html"><a href="design-for-stamping.html#initial-design-evaluation"><i class="fa fa-check"></i><b>5.0.17</b> Initial Design Evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#summary-key-design-rules-for-stamping"><i class="fa fa-check"></i>📚 “Summary: Key Design Rules for Stamping”</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#practice-problems-1"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#further-reading-1"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#supplemental-videos-1"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="5.0.18" data-path="design-for-stamping.html"><a href="design-for-stamping.html#how-stamping-dies-work"><i class="fa fa-check"></i><b>5.0.18</b> How Stamping Dies Work</a></li>
+<li class="chapter" data-level="5.0.19" data-path="design-for-stamping.html"><a href="design-for-stamping.html#deep-drawing-process-explained"><i class="fa fa-check"></i><b>5.0.19</b> Deep Drawing Process Explained</a></li>
+<li class="chapter" data-level="5.0.20" data-path="design-for-stamping.html"><a href="design-for-stamping.html#stamping-by-smarter-every-day"><i class="fa fa-check"></i><b>5.0.20</b> Stamping by ‘Smarter Every Day’</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#references-1"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="design-for-welding.html"><a href="design-for-welding.html"><i class="fa fa-check"></i><b>6</b> Design for Welding</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#introduction-to-design-for-welding"><i class="fa fa-check"></i>💡 Introduction to Design for Welding</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#the-welding-process-fundamentals"><i class="fa fa-check"></i>🔥 The Welding Process Fundamentals</a>
+<ul>
+<li class="chapter" data-level="6.0.1" data-path="design-for-welding.html"><a href="design-for-welding.html#key-welding-terminology"><i class="fa fa-check"></i><b>6.0.1</b> Key Welding Terminology</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#types-of-weld-joints"><i class="fa fa-check"></i>🔗 Types of Weld Joints</a>
+<ul>
+<li class="chapter" data-level="6.0.2" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-selection-guide"><i class="fa fa-check"></i><b>6.0.2</b> Joint Selection Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#types-of-welds"><i class="fa fa-check"></i>🔧 Types of Welds</a>
+<ul>
+<li class="chapter" data-level="6.0.3" data-path="design-for-welding.html"><a href="design-for-welding.html#fillet-welds"><i class="fa fa-check"></i><b>6.0.3</b> Fillet Welds</a></li>
+<li class="chapter" data-level="6.0.4" data-path="design-for-welding.html"><a href="design-for-welding.html#groove-welds"><i class="fa fa-check"></i><b>6.0.4</b> Groove Welds</a></li>
+<li class="chapter" data-level="6.0.5" data-path="design-for-welding.html"><a href="design-for-welding.html#groove-weld-parameters"><i class="fa fa-check"></i><b>6.0.5</b> Groove Weld Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#welding-symbols"><i class="fa fa-check"></i>📐 Welding Symbols</a>
+<ul>
+<li class="chapter" data-level="6.0.6" data-path="design-for-welding.html"><a href="design-for-welding.html#common-weld-symbols"><i class="fa fa-check"></i><b>6.0.6</b> Common Weld Symbols</a></li>
+<li class="chapter" data-level="6.0.7" data-path="design-for-welding.html"><a href="design-for-welding.html#supplementary-symbols"><i class="fa fa-check"></i><b>6.0.7</b> Supplementary Symbols</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#design-guidelines-for-welded-joints"><i class="fa fa-check"></i>📏 Design Guidelines for Welded Joints</a>
+<ul>
+<li class="chapter" data-level="6.0.8" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-accessibility"><i class="fa fa-check"></i><b>6.0.8</b> Joint Accessibility</a></li>
+<li class="chapter" data-level="6.0.9" data-path="design-for-welding.html"><a href="design-for-welding.html#weld-sizing"><i class="fa fa-check"></i><b>6.0.9</b> Weld Sizing</a></li>
+<li class="chapter" data-level="6.0.10" data-path="design-for-welding.html"><a href="design-for-welding.html#minimizing-distortion"><i class="fa fa-check"></i><b>6.0.10</b> Minimizing Distortion</a></li>
+<li class="chapter" data-level="6.0.11" data-path="design-for-welding.html"><a href="design-for-welding.html#fatigue-considerations"><i class="fa fa-check"></i><b>6.0.11</b> Fatigue Considerations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#material-weldability"><i class="fa fa-check"></i>🔬 Material Weldability</a>
+<ul>
+<li class="chapter" data-level="6.0.12" data-path="design-for-welding.html"><a href="design-for-welding.html#carbon-steel-weldability"><i class="fa fa-check"></i><b>6.0.12</b> Carbon Steel Weldability</a></li>
+<li class="chapter" data-level="6.0.13" data-path="design-for-welding.html"><a href="design-for-welding.html#weldability-of-common-materials"><i class="fa fa-check"></i><b>6.0.13</b> Weldability of Common Materials</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#common-weld-defects-and-prevention"><i class="fa fa-check"></i>🛠️ Common Weld Defects and Prevention</a>
+<ul>
+<li class="chapter" data-level="6.0.14" data-path="design-for-welding.html"><a href="design-for-welding.html#defect-causes-and-prevention"><i class="fa fa-check"></i><b>6.0.14</b> Defect Causes and Prevention</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#design-checklist-for-welding"><i class="fa fa-check"></i>📋 Design Checklist for Welding</a>
+<ul>
+<li class="chapter" data-level="6.0.15" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-design"><i class="fa fa-check"></i><b>6.0.15</b> Joint Design</a></li>
+<li class="chapter" data-level="6.0.16" data-path="design-for-welding.html"><a href="design-for-welding.html#material-considerations"><i class="fa fa-check"></i><b>6.0.16</b> Material Considerations</a></li>
+<li class="chapter" data-level="6.0.17" data-path="design-for-welding.html"><a href="design-for-welding.html#distortion-control"><i class="fa fa-check"></i><b>6.0.17</b> Distortion Control</a></li>
+<li class="chapter" data-level="6.0.18" data-path="design-for-welding.html"><a href="design-for-welding.html#quality-requirements"><i class="fa fa-check"></i><b>6.0.18</b> Quality Requirements</a></li>
+<li class="chapter" data-level="6.0.19" data-path="design-for-welding.html"><a href="design-for-welding.html#fatigue-and-strength"><i class="fa fa-check"></i><b>6.0.19</b> Fatigue and Strength</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#case-study-welded-frame-design"><i class="fa fa-check"></i>🎯 Case Study: Welded Frame Design</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#practice-problems-2"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#further-reading-2"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#supplemental-videos-2"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="6.0.20" data-path="design-for-welding.html"><a href="design-for-welding.html#understanding-welding-symbols"><i class="fa fa-check"></i><b>6.0.20</b> Understanding Welding Symbols</a></li>
+<li class="chapter" data-level="6.0.21" data-path="design-for-welding.html"><a href="design-for-welding.html#weld-joint-types-explained"><i class="fa fa-check"></i><b>6.0.21</b> Weld Joint Types Explained</a></li>
+<li class="chapter" data-level="6.0.22" data-path="design-for-welding.html"><a href="design-for-welding.html#controlling-weld-distortion"><i class="fa fa-check"></i><b>6.0.22</b> Controlling Weld Distortion</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#references-2"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="design-for-machining.html"><a href="design-for-machining.html"><i class="fa fa-check"></i><b>7</b> Design for Machining</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions"><i class="fa fa-check"></i><b>7.1</b> Challenge Questions</a></li>
+<li class="chapter" data-level="7.2" data-path="design-for-machining.html"><a href="design-for-machining.html#theory-math"><i class="fa fa-check"></i><b>7.2</b> Theory &amp; Math</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions-1"><i class="fa fa-check"></i><b>7.2.1</b> Challenge Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="design-for-machining.html"><a href="design-for-machining.html#hands-on-examples"><i class="fa fa-check"></i><b>7.3</b> Hands-on Examples</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="design-for-machining.html"><a href="design-for-machining.html#automotive-industry-1"><i class="fa fa-check"></i><b>7.3.1</b> Automotive Industry</a></li>
+<li class="chapter" data-level="7.3.2" data-path="design-for-machining.html"><a href="design-for-machining.html#food-industry"><i class="fa fa-check"></i><b>7.3.2</b> Food Industry</a></li>
+<li class="chapter" data-level="7.3.3" data-path="design-for-machining.html"><a href="design-for-machining.html#defense-industry-1"><i class="fa fa-check"></i><b>7.3.3</b> Defense Industry</a></li>
+<li class="chapter" data-level="7.3.4" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions-2"><i class="fa fa-check"></i><b>7.3.4</b> Challenge Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="design-for-machining.html"><a href="design-for-machining.html#interactive-exercises"><i class="fa fa-check"></i><b>7.4</b> Interactive Exercises</a></li>
+<li class="chapter" data-level="7.5" data-path="design-for-machining.html"><a href="design-for-machining.html#check-your-understanding"><i class="fa fa-check"></i><b>7.5</b> Check Your Understanding</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html"><i class="fa fa-check"></i><b>8</b> Ball Bearings and Bushings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#introduction-to-bearings"><i class="fa fa-check"></i>Introduction to Bearings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#classification-of-bearings"><i class="fa fa-check"></i>Classification of Bearings</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#ball-bearings"><i class="fa fa-check"></i>Ball Bearings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#anatomy-of-a-ball-bearing"><i class="fa fa-check"></i>Anatomy of a Ball Bearing</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#types-of-ball-bearings"><i class="fa fa-check"></i>Types of Ball Bearings</a></li>
+</ul></li>
+<li class="chapter" data-level="8.1" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-life"><i class="fa fa-check"></i><b>8.1</b> Ball Bearing Life Calculations</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#the-l10-life-concept"><i class="fa fa-check"></i>The L10 Life Concept</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#basic-life-equation"><i class="fa fa-check"></i>Basic Life Equation</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#converting-to-hours"><i class="fa fa-check"></i>Converting to Hours</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#equivalent-dynamic-load"><i class="fa fa-check"></i>Equivalent Dynamic Load</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#basic-dynamic-load-rating-c"><i class="fa fa-check"></i>Basic Dynamic Load Rating (C)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#adjusted-rating-life"><i class="fa fa-check"></i>Adjusted Rating Life</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#life-calculation-plot"><i class="fa fa-check"></i>Life Calculation Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-example"><i class="fa fa-check"></i><b>8.2</b> Applied Example: Ball Bearing Life Calculation</a></li>
+<li class="chapter" data-level="8.3" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushings"><i class="fa fa-check"></i><b>8.3</b> Plain Bearings (Bushings)</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#advantages-of-bushings"><i class="fa fa-check"></i>Advantages of Bushings</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#types-of-bushings"><i class="fa fa-check"></i>Types of Bushings</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#pv-limits"><i class="fa fa-check"></i><b>8.4</b> PV Limits for Bushings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#the-pv-concept"><i class="fa fa-check"></i>The PV Concept</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#calculating-bearing-pressure-p"><i class="fa fa-check"></i>Calculating Bearing Pressure (P)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#calculating-sliding-velocity-v"><i class="fa fa-check"></i>Calculating Sliding Velocity (V)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#pv-limit-visualization"><i class="fa fa-check"></i>PV Limit Visualization</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#design-rules-for-pv"><i class="fa fa-check"></i>Design Rules for PV</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushing-example"><i class="fa fa-check"></i><b>8.5</b> Applied Example: Bushing PV Calculation</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-vs.-bushing-selection-guide"><i class="fa fa-check"></i>Bearing vs. Bushing Selection Guide</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#summary-equations"><i class="fa fa-check"></i>Summary Equations</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#ball-bearing-life"><i class="fa fa-check"></i>Ball Bearing Life</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushing-pv-limits"><i class="fa fa-check"></i>Bushing PV Limits</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#design-checklist"><i class="fa fa-check"></i>Design Checklist</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Design for Manufacturing</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ball-bearings-and-bushings" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Ball Bearings and Bushings<a href="ball-bearings-and-bushings.html#ball-bearings-and-bushings" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-bearings" class="section level2 unnumbered hasAnchor">
+<h2>Introduction to Bearings<a href="ball-bearings-and-bushings.html#introduction-to-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Bearings are machine elements that <strong>constrain relative motion</strong> and <strong>reduce friction</strong> between moving parts. They are fundamental to virtually every rotating machine—from tiny precision instruments to massive industrial equipment.</p>
+<p>Bearings serve three primary functions:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Support loads</strong> (radial and/or thrust)</li>
+<li><strong>Reduce friction</strong> between moving surfaces</li>
+<li><strong>Guide motion</strong> with precision and repeatability</li>
+</ol>
+<hr />
+<div id="classification-of-bearings" class="section level3 unnumbered hasAnchor">
+<h3>Classification of Bearings<a href="ball-bearings-and-bushings.html#classification-of-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Bearings are broadly classified into two main categories:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bearing-classification"></span>
+<img src="_main_files/figure-html/bearing-classification-1.png" alt="Classification of bearing types." width="960" />
+<p class="caption">
+Figure 8.1: Classification of bearing types.
+</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="ball-bearings" class="section level2 unnumbered hasAnchor">
+<h2>Ball Bearings<a href="ball-bearings-and-bushings.html#ball-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ball bearings are the most common type of rolling element bearing. They use spherical balls as the rolling elements, held between an inner race and an outer race.</p>
+<div id="anatomy-of-a-ball-bearing" class="section level3 unnumbered hasAnchor">
+<h3>Anatomy of a Ball Bearing<a href="ball-bearings-and-bushings.html#anatomy-of-a-ball-bearing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ball-bearing-anatomy"></span>
+<img src="_main_files/figure-html/ball-bearing-anatomy-1.png" alt="Cross-section of a deep groove ball bearing showing main components." width="960" />
+<p class="caption">
+Figure 8.2: Cross-section of a deep groove ball bearing showing main components.
+</p>
+</div>
+<p><strong>Key Components:</strong></p>
+<table>
+<colgroup>
+<col width="52%" />
+<col width="47%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Component</th>
+<th align="left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Inner Race</strong></td>
+<td align="left">Mounted on the shaft; rotates with the shaft</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Outer Race</strong></td>
+<td align="left">Mounted in the housing; typically stationary</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Rolling Elements</strong></td>
+<td align="left">Balls that roll between races, carrying the load</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Cage (Retainer)</strong></td>
+<td align="left">Separates and guides the balls to prevent contact</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Seals/Shields</strong></td>
+<td align="left">Keep lubricant in and contaminants out</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="types-of-ball-bearings" class="section level3 unnumbered hasAnchor">
+<h3>Types of Ball Bearings<a href="ball-bearings-and-bushings.html#types-of-ball-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ball-bearing-types-table">Table 8.1: </span>Common Ball Bearing Types and Applications
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Type
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Load Capacity
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Typical Applications
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Key Feature
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Deep Groove
+</td>
+<td style="text-align:left;">
+Radial + light axial
+</td>
+<td style="text-align:left;">
+Electric motors, pumps, gearboxes
+</td>
+<td style="text-align:left;">
+Most versatile; handles combined loads
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angular Contact
+</td>
+<td style="text-align:left;">
+Combined radial + high axial
+</td>
+<td style="text-align:left;">
+Machine tool spindles, pumps
+</td>
+<td style="text-align:left;">
+Contact angle 15-40 deg; paired for bidirectional thrust
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Self-Aligning
+</td>
+<td style="text-align:left;">
+Radial + light axial
+</td>
+<td style="text-align:left;">
+Conveyors, fans, textile machinery
+</td>
+<td style="text-align:left;">
+Tolerates shaft deflection and misalignment
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Thrust Ball
+</td>
+<td style="text-align:left;">
+Axial only
+</td>
+<td style="text-align:left;">
+Automotive steering, crane hooks
+</td>
+<td style="text-align:left;">
+90 deg contact angle; cannot handle radial loads
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="bearing-life" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Ball Bearing Life Calculations<a href="ball-bearings-and-bushings.html#bearing-life" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The life of a rolling element bearing is inherently statistical—even identical bearings under identical conditions will fail at different times due to material fatigue. The <strong>L10 life</strong> (or <strong>basic rating life</strong>) is the standard measure used in bearing selection.</p>
+<div id="the-l10-life-concept" class="section level3 unnumbered hasAnchor">
+<h3>The L10 Life Concept<a href="ball-bearings-and-bushings.html#the-l10-life-concept" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<blockquote>
+<p><strong>Definition:</strong> The L10 life is the number of revolutions (or hours at a given speed) that <strong>90% of a group of identical bearings</strong> will complete or exceed before the first evidence of fatigue failure (flaking/spalling).</p>
+</blockquote>
+<p>In other words, 10% of bearings will fail before reaching L10 life, while 90% will survive.</p>
+</div>
+<div id="basic-life-equation" class="section level3 unnumbered hasAnchor">
+<h3>Basic Life Equation<a href="ball-bearings-and-bushings.html#basic-life-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The fundamental bearing life equation is:</p>
+<p><span class="math display">\[L_{10} = \left(\frac{C}{P}\right)^p \times 10^6 \text{ revolutions}\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(L_{10}\)</span></td>
+<td align="left">Basic rating life</td>
+<td align="left">revolutions</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(C\)</span></td>
+<td align="left">Basic dynamic load rating</td>
+<td align="left">N or lbf</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Equivalent dynamic bearing load</td>
+<td align="left">N or lbf</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(p\)</span></td>
+<td align="left">Life exponent</td>
+<td align="left">—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Life Exponent Values:</strong></p>
+<ul>
+<li><strong>Ball bearings:</strong> <span class="math inline">\(p = 3\)</span></li>
+<li><strong>Roller bearings:</strong> <span class="math inline">\(p = 10/3 \approx 3.33\)</span></li>
+</ul>
+</div>
+<div id="converting-to-hours" class="section level3 unnumbered hasAnchor">
+<h3>Converting to Hours<a href="ball-bearings-and-bushings.html#converting-to-hours" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For bearings operating at constant speed, it is more practical to express life in hours:</p>
+<p><span class="math display">\[L_{10h} = \frac{L_{10}}{60 \cdot n} = \frac{1}{60 \cdot n}\left(\frac{C}{P}\right)^p \times 10^6 \text{ hours}\]</span></p>
+<p>Where <span class="math inline">\(n\)</span> is the rotational speed in RPM.</p>
+<p>This simplifies to:</p>
+<p><span class="math display">\[L_{10h} = \frac{10^6}{60 \cdot n}\left(\frac{C}{P}\right)^p\]</span></p>
+<hr />
+</div>
+<div id="equivalent-dynamic-load" class="section level3 unnumbered hasAnchor">
+<h3>Equivalent Dynamic Load<a href="ball-bearings-and-bushings.html#equivalent-dynamic-load" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When a bearing experiences both radial (<span class="math inline">\(F_r\)</span>) and axial (<span class="math inline">\(F_a\)</span>) loads simultaneously, an <strong>equivalent dynamic load</strong> (<span class="math inline">\(P\)</span>) must be calculated:</p>
+<p><span class="math display">\[P = X \cdot F_r + Y \cdot F_a\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(X\)</span></td>
+<td align="left">Radial load factor (from bearing tables)</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(Y\)</span></td>
+<td align="left">Axial load factor (from bearing tables)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(F_r\)</span></td>
+<td align="left">Applied radial load</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(F_a\)</span></td>
+<td align="left">Applied axial (thrust) load</td>
+</tr>
+</tbody>
+</table>
+<p>For <strong>pure radial loading</strong> (most common case): <span class="math inline">\(P = F_r\)</span></p>
+<table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:load-factor-table">Table 8.2: </span>Load Factors for Ball Bearings (ISO 281)
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Fa/Fr ≤ e
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Fa/Fr &gt; e
+</div>
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+</tr>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Bearing Type
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+X
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Y
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+X
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Y
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+e
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Deep Groove (single row)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.56
+</td>
+<td style="text-align:left;">
+1.0-2.3*
+</td>
+<td style="text-align:left;">
+0.19-0.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angular Contact (a=15 deg)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:left;">
+1.18
+</td>
+<td style="text-align:left;">
+0.38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angular Contact (a=25 deg)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:left;">
+0.87
+</td>
+<td style="text-align:left;">
+0.68
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angular Contact (a=40 deg)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:left;">
+0.55
+</td>
+<td style="text-align:left;">
+1.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Self-Aligning
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.65
+</td>
+<td style="text-align:left;">
+3.7*cot(a)
+</td>
+<td style="text-align:left;">
+0.22*cot(a)
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;">Note: </span>
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> *Values depend on bearing geometry; consult manufacturer catalog
+</td>
+</tr>
+</tfoot>
+</table>
+<hr />
+</div>
+<div id="basic-dynamic-load-rating-c" class="section level3 unnumbered hasAnchor">
+<h3>Basic Dynamic Load Rating (C)<a href="ball-bearings-and-bushings.html#basic-dynamic-load-rating-c" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>basic dynamic load rating</strong> (<span class="math inline">\(C\)</span>) is a catalog value provided by the manufacturer. It represents:</p>
+<blockquote>
+<p>The constant radial load that a bearing can theoretically endure for a basic rating life of <strong>one million revolutions</strong>.</p>
+</blockquote>
+<p>Typical catalog format:</p>
+<table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:catalog-table">Table 8.3: </span>Example Bearing Catalog Data (Deep Groove Series 62xx)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Designation
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+d (mm)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+D (mm)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+B (mm)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+C (kN)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+C₀ (kN)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Limiting Speed (rpm)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+6205
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+14.8
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+13000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6206
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+20.3
+</td>
+<td style="text-align:right;">
+11.2
+</td>
+<td style="text-align:right;">
+11000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6207
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+26.0
+</td>
+<td style="text-align:right;">
+15.0
+</td>
+<td style="text-align:right;">
+9500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6208
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+30.7
+</td>
+<td style="text-align:right;">
+18.2
+</td>
+<td style="text-align:right;">
+8500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6209
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+33.2
+</td>
+<td style="text-align:right;">
+20.0
+</td>
+<td style="text-align:right;">
+7500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6210
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+35.1
+</td>
+<td style="text-align:right;">
+21.6
+</td>
+<td style="text-align:right;">
+7000
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;">Legend: </span>
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> C = Dynamic load rating; C₀ = Static load rating
+</td>
+</tr>
+</tfoot>
+</table>
+<hr />
+</div>
+<div id="adjusted-rating-life" class="section level3 unnumbered hasAnchor">
+<h3>Adjusted Rating Life<a href="ball-bearings-and-bushings.html#adjusted-rating-life" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The basic L10 equation assumes ideal operating conditions. In practice, factors such as <strong>reliability requirements</strong>, <strong>lubrication quality</strong>, and <strong>contamination</strong> affect bearing life. The <strong>adjusted rating life</strong> accounts for these factors:</p>
+<p><span class="math display">\[L_{na} = a_1 \cdot a_2 \cdot a_3 \cdot L_{10}\]</span></p>
+<p>Or using the modern ISO 281 formulation:</p>
+<p><span class="math display">\[L_{nm} = a_1 \cdot a_{ISO} \cdot L_{10}\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="left">Description</th>
+<th align="left">Typical Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(a_1\)</span></td>
+<td align="left">Life adjustment factor for reliability</td>
+<td align="left">See table below</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(a_2\)</span></td>
+<td align="left">Material factor</td>
+<td align="left">0.5 to 2.0 (modern steels ≈ 1.0)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(a_3\)</span></td>
+<td align="left">Operating conditions factor</td>
+<td align="left">0.1 to 1.0</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(a_{ISO}\)</span></td>
+<td align="left">Combined lubrication-contamination factor</td>
+<td align="left">0.1 to 50</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reliability Factor (<span class="math inline">\(a_1\)</span>):</strong></p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:reliability-table">Table 8.4: </span>Reliability Factor a₁
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Reliability
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Life Symbol
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+a₁
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;background-color: rgba(232, 245, 233, 255) !important;">
+90%
+</td>
+<td style="text-align:center;background-color: rgba(232, 245, 233, 255) !important;">
+L10
+</td>
+<td style="text-align:center;background-color: rgba(232, 245, 233, 255) !important;">
+1.00
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+95%
+</td>
+<td style="text-align:center;">
+L5
+</td>
+<td style="text-align:center;">
+0.64
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+96%
+</td>
+<td style="text-align:center;">
+L4
+</td>
+<td style="text-align:center;">
+0.55
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+97%
+</td>
+<td style="text-align:center;">
+L3
+</td>
+<td style="text-align:center;">
+0.47
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+98%
+</td>
+<td style="text-align:center;">
+L2
+</td>
+<td style="text-align:center;">
+0.37
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+99%
+</td>
+<td style="text-align:center;">
+L1
+</td>
+<td style="text-align:center;">
+0.25
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="life-calculation-plot" class="section level3 unnumbered hasAnchor">
+<h3>Life Calculation Plot<a href="ball-bearings-and-bushings.html#life-calculation-plot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The following plot illustrates how bearing life varies with the C/P ratio:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bearing-life-plot"></span>
+<img src="_main_files/figure-html/bearing-life-plot-1.png" alt="Bearing life as a function of load ratio (C/P)." width="960" />
+<p class="caption">
+Figure 8.3: Bearing life as a function of load ratio (C/P).
+</p>
+</div>
+<blockquote>
+<p><strong>Design Insight:</strong> A small increase in bearing size (higher C) or reduction in load (lower P) dramatically increases bearing life due to the cubic relationship.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="bearing-example" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Applied Example: Ball Bearing Life Calculation<a href="ball-bearings-and-bushings.html#bearing-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="problem-statement-1" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="ball-bearings-and-bushings.html#problem-statement-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<p>A deep groove ball bearing (6207) supports a shaft rotating at <strong>1,750 RPM</strong>. The bearing experiences a <strong>radial load of 3,500 N</strong> and an <strong>axial load of 800 N</strong>. Determine:</p>
+<ol style="list-style-type: decimal">
+<li>The equivalent dynamic load (<span class="math inline">\(P\)</span>)</li>
+<li>The basic L10 life in hours</li>
+<li>The L5 life (95% reliability) in hours</li>
+</ol>
+<p><strong>Given data from catalog:</strong>
+- Bearing: 6207
+- Dynamic load rating: <span class="math inline">\(C = 26.0\)</span> kN = 26,000 N
+- For Fa/Fr ratio, use: <span class="math inline">\(e = 0.24\)</span>, <span class="math inline">\(X = 0.56\)</span>, <span class="math inline">\(Y = 1.6\)</span></p>
+<div id="solution" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="ball-bearings-and-bushings.html#solution" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:bearing-example-calc">Table 8.5: </span>Ball Bearing Life Calculation Steps
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Step
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Calculation
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Result
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>Check load ratio
+</td>
+<td style="text-align:left;">
+Fa/Fr = 800 / 3500 = 0.229
+</td>
+<td style="text-align:left;">
+≤ e: Use X=1, Y=0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Equivalent load (P)
+</td>
+<td style="text-align:left;">
+P = X·Fr + Y·Fa = 0.56×3500 + 1.6×800
+</td>
+<td style="text-align:left;">
+3500 N
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>L10 (revolutions)
+</td>
+<td style="text-align:left;">
+L10 = (C/P)³ × 10⁶ = (26/3.5)³ × 10⁶
+</td>
+<td style="text-align:left;">
+409.9 million rev
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+<ol start="4" style="list-style-type: decimal">
+<li>L10 (hours)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+L10h = L10 / (60 × n) = 409.9×10⁶ / (60 × 1750)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+3,904 hours
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="5" style="list-style-type: decimal">
+<li>L5 (95% reliability)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+L5 = a₁ × L10 = 0.64 × 3904
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+2,499 hours
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<div id="interpretation" class="section level5 unnumbered hasAnchor">
+<h5>Interpretation<a href="ball-bearings-and-bushings.html#interpretation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li>The <strong>L10 life</strong> of 3,904 hours means that 90% of these bearings will operate at least this long before fatigue failure.</li>
+<li>For applications requiring <strong>95% reliability</strong>, use the L5 life of 2,499 hours.</li>
+<li>At 24/7 operation, L10 represents approximately 0.4 years of service.</li>
+</ul>
+<hr />
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="bushings" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Plain Bearings (Bushings)<a href="ball-bearings-and-bushings.html#bushings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Plain bearings, also called <strong>bushings</strong> or <strong>sleeve bearings</strong>, are the simplest form of bearing. They consist of a bearing surface with no rolling elements—the shaft slides directly against the bearing material.</p>
+<div id="advantages-of-bushings" class="section level3 unnumbered hasAnchor">
+<h3>Advantages of Bushings<a href="ball-bearings-and-bushings.html#advantages-of-bushings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="45%" />
+<col width="54%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Advantage</th>
+<th align="left">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Compact design</strong></td>
+<td align="left">No need for rolling elements; minimal radial space</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Low cost</strong></td>
+<td align="left">Simple manufacturing; no precision balls or races</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Quiet operation</strong></td>
+<td align="left">No rolling elements to generate noise</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>High load capacity</strong></td>
+<td align="left">Large contact area; excellent for shock loads</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Self-lubricating options</strong></td>
+<td align="left">Polymer and sintered metal bushings need no external lubrication</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="types-of-bushings" class="section level3 unnumbered hasAnchor">
+<h3>Types of Bushings<a href="ball-bearings-and-bushings.html#types-of-bushings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:bushing-types-table">Table 8.6: </span>Common Bushing Materials and PV Limits
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Type
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Material
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+PV_Limit
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Applications
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Lubrication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bronze Bushings
+</td>
+<td style="text-align:left;">
+Cast bronze, SAE 660
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+50,000 - 75,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Heavy machinery, pumps
+</td>
+<td style="text-align:left;">
+Oil/grease required
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oil-Impregnated Bronze
+</td>
+<td style="text-align:left;">
+Sintered bronze (porous)
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+25,000 - 50,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Fractional HP motors, fans
+</td>
+<td style="text-align:left;">
+Self-lubricating
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PTFE-Lined
+</td>
+<td style="text-align:left;">
+Steel + PTFE coating
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+10,000 - 25,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Food processing, medical
+</td>
+<td style="text-align:left;">
+Dry running
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polymer (Nylon, Acetal)
+</td>
+<td style="text-align:left;">
+Engineering plastics
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+3,000 - 10,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Light duty, instrumentation
+</td>
+<td style="text-align:left;">
+Often dry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PEEK Composite
+</td>
+<td style="text-align:left;">
+High-performance polymer
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+15,000 - 40,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Aerospace, high temperature
+</td>
+<td style="text-align:left;">
+Dry or minimal
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="pv-limits" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> PV Limits for Bushings<a href="ball-bearings-and-bushings.html#pv-limits" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>PV limit</strong> is the most important design criterion for plain bearings. It represents the maximum combination of <strong>bearing pressure</strong> (P) and <strong>sliding velocity</strong> (V) that the bearing material can sustain without excessive wear or failure.</p>
+<div id="the-pv-concept" class="section level3 unnumbered hasAnchor">
+<h3>The PV Concept<a href="ball-bearings-and-bushings.html#the-pv-concept" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[PV = P \times V\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Typical Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Bearing pressure</td>
+<td align="left">psi (or MPa)</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(V\)</span></td>
+<td align="left">Sliding velocity</td>
+<td align="left">ft/min (or m/s)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(PV\)</span></td>
+<td align="left">PV factor</td>
+<td align="left">psi·ft/min (or MPa·m/s)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="calculating-bearing-pressure-p" class="section level3 unnumbered hasAnchor">
+<h3>Calculating Bearing Pressure (P)<a href="ball-bearings-and-bushings.html#calculating-bearing-pressure-p" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a journal bearing (shaft in a bushing):</p>
+<p><span class="math display">\[P = \frac{F}{d \times L}\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(F\)</span></td>
+<td align="left">Radial load on the bearing (lbf or N)</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(d\)</span></td>
+<td align="left">Shaft (journal) diameter (in or mm)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(L\)</span></td>
+<td align="left">Bearing length (in or mm)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note:</strong> This is the <strong>projected area</strong> method, using <span class="math inline">\(A = d \times L\)</span>, not the cylindrical surface area.</p>
+</blockquote>
+</div>
+<div id="calculating-sliding-velocity-v" class="section level3 unnumbered hasAnchor">
+<h3>Calculating Sliding Velocity (V)<a href="ball-bearings-and-bushings.html#calculating-sliding-velocity-v" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[V = \pi \times d \times n\]</span></p>
+<p>For consistent units:</p>
+<p><strong>English:</strong>
+<span class="math display">\[V = \frac{\pi \times d \times n}{12} \quad \text{(ft/min, where } d \text{ in inches, } n \text{ in RPM)}\]</span></p>
+<p><strong>Metric:</strong>
+<span class="math display">\[V = \frac{\pi \times d \times n}{60,000} \quad \text{(m/s, where } d \text{ in mm, } n \text{ in RPM)}\]</span></p>
+<hr />
+</div>
+<div id="pv-limit-visualization" class="section level3 unnumbered hasAnchor">
+<h3>PV Limit Visualization<a href="ball-bearings-and-bushings.html#pv-limit-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre><code>## Warning in geom_point(aes(x = 1000, y = 30), color = &quot;darkgreen&quot;, size = 4): All aesthetics have length 1, but the data has 396 rows.
+## ℹ Please consider using `annotate()` or provide this layer with data containing a single row.</code></pre>
+<pre><code>## Warning in geom_point(aes(x = 2500, y = 100), color = &quot;red&quot;, size = 4, shape = 4, : All aesthetics have length 1, but the data has 396 rows.
+## ℹ Please consider using `annotate()` or provide this layer with data containing a single row.</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pv-limit-plot"></span>
+<img src="_main_files/figure-html/pv-limit-plot-1.png" alt="PV limit diagram showing safe operating region for different bushing materials." width="960" />
+<p class="caption">
+Figure 8.4: PV limit diagram showing safe operating region for different bushing materials.
+</p>
+</div>
+<hr />
+</div>
+<div id="design-rules-for-pv" class="section level3 unnumbered hasAnchor">
+<h3>Design Rules for PV<a href="ball-bearings-and-bushings.html#design-rules-for-pv" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Calculate the actual PV</strong> for your application</li>
+<li><strong>Select a bushing material</strong> with a PV limit <strong>at least 2× higher</strong> than calculated</li>
+<li><strong>Check individual P and V limits</strong> separately (materials have maximums for each)</li>
+<li><strong>Consider temperature effects</strong>—PV limits decrease at elevated temperatures</li>
+</ol>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:individual-limits-table">Table 8.7: </span>Individual P, V, and PV Limits for Common Bushing Materials
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Material
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Max P (psi)
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Max V (ft/min)
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Max PV (psi-ft/min)
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Max Temp (F)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+SAE 660 Bronze
+</td>
+<td style="text-align:center;">
+4000
+</td>
+<td style="text-align:center;">
+750
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+75000
+</td>
+<td style="text-align:center;">
+450
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sintered Bronze (oil-impreg.)
+</td>
+<td style="text-align:center;">
+2000
+</td>
+<td style="text-align:center;">
+400
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+50000
+</td>
+<td style="text-align:center;">
+300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PTFE/Bronze Composite
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+500
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+25000
+</td>
+<td style="text-align:center;">
+500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acetal (Delrin)
+</td>
+<td style="text-align:center;">
+1500
+</td>
+<td style="text-align:center;">
+600
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+10000
+</td>
+<td style="text-align:center;">
+180
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nylon 6/6
+</td>
+<td style="text-align:center;">
+1000
+</td>
+<td style="text-align:center;">
+400
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+5000
+</td>
+<td style="text-align:center;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PEEK
+</td>
+<td style="text-align:center;">
+3000
+</td>
+<td style="text-align:center;">
+650
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+40000
+</td>
+<td style="text-align:center;">
+480
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="bushing-example" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Applied Example: Bushing PV Calculation<a href="ball-bearings-and-bushings.html#bushing-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="problem-statement-2" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="ball-bearings-and-bushings.html#problem-statement-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<p>A shaft rotating at <strong>500 RPM</strong> is supported by a bronze bushing. The shaft diameter is <strong>1.5 inches</strong> and the bushing length is <strong>2.0 inches</strong>. The radial load on the bushing is <strong>800 lbf</strong>.</p>
+<p>Determine:
+1. The bearing pressure (<span class="math inline">\(P\)</span>)
+2. The sliding velocity (<span class="math inline">\(V\)</span>)
+3. The PV value
+4. Whether a SAE 660 bronze bushing is suitable</p>
+<div id="solution-1" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="ball-bearings-and-bushings.html#solution-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:bushing-example-calc">Table 8.8: </span>Bushing PV Calculation Steps
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Step
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Formula
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Calculation
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Result
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>Bearing Pressure
+</td>
+<td style="text-align:left;">
+P = F / (d × L)
+</td>
+<td style="text-align:left;">
+P = 800 / (1.5 × 2)
+</td>
+<td style="text-align:left;">
+266.7 psi
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Sliding Velocity
+</td>
+<td style="text-align:left;">
+V = π·d·n / 12
+</td>
+<td style="text-align:left;">
+V = π × 1.5 × 500 / 12
+</td>
+<td style="text-align:left;">
+196.3 ft/min
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+<ol start="3" style="list-style-type: decimal">
+<li>PV Factor
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+PV = P × V
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+PV = 266.7 × 196.3
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+52,360 psi·ft/min
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="4" style="list-style-type: decimal">
+<li>Check P Limit
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+P &lt; P_max (4,000 psi)
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+266.7 &lt; 4,000?
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+OK ✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="5" style="list-style-type: decimal">
+<li>Check V Limit
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+V &lt; V_max (750 ft/min)
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+196.3 &lt; 750?
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+OK ✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="6" style="list-style-type: decimal">
+<li>Check PV Limit
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+PV &lt; PV_max (75,000)
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+52360 &lt; 75,000?
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+OK ✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="7" style="list-style-type: decimal">
+<li>Safety Factor
+</td>
+<td style="text-align:left;">
+SF = PV_limit / PV_actual
+</td>
+<td style="text-align:left;">
+SF = 75,000 / 52360
+</td>
+<td style="text-align:left;">
+1.43
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<div id="conclusion" class="section level5 unnumbered hasAnchor">
+<h5>Conclusion<a href="ball-bearings-and-bushings.html#conclusion" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The SAE 660 bronze bushing is <strong>suitable</strong> for this application:</p>
+<ul>
+<li>All individual limits (P, V) are satisfied</li>
+<li>The actual PV (52,360 psi·ft/min) is well below the material limit (75,000 psi·ft/min)</li>
+<li>Safety factor of 1.43 provides adequate margin</li>
+</ul>
+<hr />
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="bearing-vs.-bushing-selection-guide" class="section level2 unnumbered hasAnchor">
+<h2>Bearing vs. Bushing Selection Guide<a href="ball-bearings-and-bushings.html#bearing-vs.-bushing-selection-guide" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When should you use a ball bearing versus a bushing? The following table provides guidance:</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:selection-guide">Table 8.9: </span>Ball Bearing vs. Bushing Selection Criteria
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Factor
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Ball Bearing
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Bushing (Plain Bearing)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Speed
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+High speeds (&gt;3,000 RPM)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Low to moderate speeds
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Load Type
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Radial and/or axial
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Primarily radial
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shock Loads
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Poor—balls can indent races
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Excellent—large contact area
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Space (radial)
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Requires more radial space
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Very compact
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lubrication
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Sealed or periodic greasing
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Self-lubricating options available
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Noise
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Some noise from rolling elements
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Quieter operation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cost
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Higher initial cost
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Lower cost
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maintenance
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Replace entire bearing
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Can often be replaced in-situ
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Life Prediction
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Well-established (L10)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Less precise; wear-based
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="summary-equations" class="section level2 unnumbered hasAnchor">
+<h2>Summary Equations<a href="ball-bearings-and-bushings.html#summary-equations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ball-bearing-life" class="section level3 unnumbered hasAnchor">
+<h3>Ball Bearing Life<a href="ball-bearings-and-bushings.html#ball-bearing-life" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="43%" />
+<col width="56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(L_{10} = \left(\frac{C}{P}\right)^3 \times 10^6\)</span></td>
+<td align="left">Basic L10 life (revolutions) for ball bearings</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(L_{10h} = \frac{10^6}{60n}\left(\frac{C}{P}\right)^3\)</span></td>
+<td align="left">L10 life in hours</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P = X \cdot F_r + Y \cdot F_a\)</span></td>
+<td align="left">Equivalent dynamic load</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(L_{na} = a_1 \cdot a_{ISO} \cdot L_{10}\)</span></td>
+<td align="left">Adjusted rating life</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="bushing-pv-limits" class="section level3 unnumbered hasAnchor">
+<h3>Bushing PV Limits<a href="ball-bearings-and-bushings.html#bushing-pv-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P = \frac{F}{d \times L}\)</span></td>
+<td align="left">Bearing pressure (projected area)</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(V = \frac{\pi d n}{12}\)</span></td>
+<td align="left">Sliding velocity (ft/min)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(PV = P \times V\)</span></td>
+<td align="left">PV factor—must be less than material PV limit</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="design-checklist" class="section level2 unnumbered hasAnchor">
+<h2>Design Checklist<a href="ball-bearings-and-bushings.html#design-checklist" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>For Ball Bearings:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Determine radial and axial loads</label></li>
+<li><label><input type="checkbox" />Calculate equivalent dynamic load (<span class="math inline">\(P\)</span>)</label></li>
+<li><label><input type="checkbox" />Select bearing with <span class="math inline">\(C/P\)</span> ratio giving adequate life</label></li>
+<li><label><input type="checkbox" />Verify speed is below limiting speed</label></li>
+<li><label><input type="checkbox" />Apply reliability and operating condition factors if needed</label></li>
+<li><label><input type="checkbox" />Specify lubrication and sealing requirements</label></li>
+</ul>
+<p><strong>For Bushings:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Calculate bearing pressure (<span class="math inline">\(P\)</span>)</label></li>
+<li><label><input type="checkbox" />Calculate sliding velocity (<span class="math inline">\(V\)</span>)</label></li>
+<li><label><input type="checkbox" />Verify <span class="math inline">\(P &lt; P_{max}\)</span> for selected material</label></li>
+<li><label><input type="checkbox" />Verify <span class="math inline">\(V &lt; V_{max}\)</span> for selected material</label></li>
+<li><label><input type="checkbox" />Verify <span class="math inline">\(PV &lt; PV_{limit}\)</span> with safety factor ≥ 2</label></li>
+<li><label><input type="checkbox" />Consider temperature effects on PV limits</label></li>
+<li><label><input type="checkbox" />Specify lubrication (if required) or confirm dry-running capability</label></li>
+</ul>
+
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="design-for-machining.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/08-Bearings.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

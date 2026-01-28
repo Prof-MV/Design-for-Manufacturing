@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-28" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="strength-of-bolt-joint-calculations.html"/>
+<link rel="next" href="design-for-stamping.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li><li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction-to-the-casting-process"><i class="fa fa-check"></i>💡 Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#essential-components-of-casting"><i class="fa fa-check"></i>🧱 Essential Components of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#the-basic-steps-of-casting"><i class="fa fa-check"></i>⚙️ The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="" data-path="design-for-casting.html"><a href="design-for-casting.html#applications-and-scope"><i class="fa fa-check"></i>🌍 Applications and Scope</a></li>
+<li class="chapter" data-level="1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>1.1</b> Sand Mould Casting: The Versatile Workhorse</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="design-for-casting.html"><a href="design-for-casting.html#introduction"><i class="fa fa-check"></i><b>1.1.1</b> 💡 Introduction</a></li>
+<li class="chapter" data-level="1.1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#components-and-steps-of-the-process"><i class="fa fa-check"></i><b>1.1.2</b> ⚙️ Components and Steps of the Process</a></li>
+<li class="chapter" data-level="1.1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#advantages-and-disadvantages"><i class="fa fa-check"></i><b>1.1.3</b> 📊 Advantages and Disadvantages</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="design-for-casting.html"><a href="design-for-casting.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>1.2</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="1.3" data-path="design-for-casting.html"><a href="design-for-casting.html#investment-casting"><i class="fa fa-check"></i><b>1.3</b> Investment Casting</a></li>
+<li class="chapter" data-level="1.4" data-path="design-for-casting.html"><a href="design-for-casting.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>1.4</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design-for-casting.html"><a href="design-for-casting.html#engineering-metal-castings-for-quality-and-value"><i class="fa fa-check"></i><b>1.4.1</b> 🔩 Engineering Metal Castings for Quality and Value</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design-for-casting.html"><a href="design-for-casting.html#variables-in-metal-casting-design"><i class="fa fa-check"></i><b>1.4.2</b> 🔬 Variables in Metal Casting Design</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design-for-casting.html"><a href="design-for-casting.html#design-considerations-for-shape-and-mold"><i class="fa fa-check"></i><b>1.4.3</b> 📐 Design Considerations for Shape and Mold</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="design-for-casting.html"><a href="design-for-casting.html#defects-in-casting-process"><i class="fa fa-check"></i><b>1.5</b> Defects in Casting process</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="design-for-joining.html"><a href="design-for-joining.html"><i class="fa fa-check"></i><b>2</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#joining-processes-uniting-materials-for-function"><i class="fa fa-check"></i><b>2.1</b> 🔗 Joining Processes: Uniting Materials for Function</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-1"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-of-joining-methods"><i class="fa fa-check"></i><b>2.1.2</b> Classification of Joining Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#the-welding-process"><i class="fa fa-check"></i><b>2.2</b> ♨️ The Welding Process</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="design-for-joining.html"><a href="design-for-joining.html#introduction-to-welding"><i class="fa fa-check"></i><b>2.2.1</b> Introduction to Welding</a></li>
+<li class="chapter" data-level="2.2.2" data-path="design-for-joining.html"><a href="design-for-joining.html#classification-and-types-of-welding-processes"><i class="fa fa-check"></i><b>2.2.2</b> Classification and Types of Welding Processes</a></li>
+<li class="chapter" data-level="2.2.3" data-path="design-for-joining.html"><a href="design-for-joining.html#when-to-choose-welding"><i class="fa fa-check"></i><b>2.2.3</b> When to Choose Welding</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html"><i class="fa fa-check"></i><b>3</b> Strength of Bolt Joint Calculations</a>
+<ul>
+<li class="chapter" data-level="" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-joints"><i class="fa fa-check"></i>Mechanics of Bolted Joint Integrity.</a></li>
+<li class="chapter" data-level="3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-definitions"><i class="fa fa-check"></i><b>3.1</b> Bolt Definitions</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#nut-dimensions"><i class="fa fa-check"></i><b>3.1.1</b> Nut Dimensions</a></li>
+<li class="chapter" data-level="3.1.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#washer-dimensions"><i class="fa fa-check"></i><b>3.1.2</b> Washer Dimensions</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-joints"><i class="fa fa-check"></i><b>3.2</b> Understanding Bolt Joints and Force Triangles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#how-to-interpret-the-result"><i class="fa fa-check"></i><b>3.2.1</b> How to Interpret the Result</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolted-analysis-formulas"><i class="fa fa-check"></i><b>3.3</b> Advanced Analysis of Bolted Joints with applicable Formulas</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#kb"><i class="fa fa-check"></i><b>3.3.1</b> Fastener Stiffness (<span class="math inline">\(k_b\)</span>)</a></li>
+<li class="chapter" data-level="3.3.2" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#km"><i class="fa fa-check"></i><b>3.3.2</b> Member Stiffness (<span class="math inline">\(k_m\)</span>) and Substitute Cylinders</a></li>
+<li class="chapter" data-level="3.3.3" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#joint-forces-and-tightening-torque"><i class="fa fa-check"></i><b>3.3.3</b> Joint Forces and Tightening Torque</a></li>
+<li class="chapter" data-level="3.3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#stress-analysis-and-safety-factors"><i class="fa fa-check"></i><b>3.3.4</b> Stress Analysis and Safety Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#bolt-example"><i class="fa fa-check"></i><b>3.4</b> Applied Example: Bolted Joint Safety Calculation</a></li>
+<li class="chapter" data-level="3.5" data-path="strength-of-bolt-joint-calculations.html"><a href="strength-of-bolt-joint-calculations.html#example-2"><i class="fa fa-check"></i><b>3.5</b> Example 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html"><i class="fa fa-check"></i><b>4</b> Gears, Gear Trains, and Transmissions</a>
+<ul>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#introduction-to-gears"><i class="fa fa-check"></i>💡 Introduction to Gears</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#fundamental-gear-concepts"><i class="fa fa-check"></i>⚙️ Fundamental Gear Concepts</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#the-basic-principle"><i class="fa fa-check"></i><b>4.0.1</b> The Basic Principle</a></li>
+<li class="chapter" data-level="4.0.2" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#the-fundamental-law-of-gearing"><i class="fa fa-check"></i><b>4.0.2</b> The Fundamental Law of Gearing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-terminology"><i class="fa fa-check"></i>📐 Gear Terminology</a>
+<ul>
+<li class="chapter" data-level="4.0.3" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#essential-gear-formulas"><i class="fa fa-check"></i><b>4.0.3</b> Essential Gear Formulas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#types-of-gears"><i class="fa fa-check"></i>🔧 Types of Gears</a>
+<ul>
+<li class="chapter" data-level="4.0.4" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#spur-gears"><i class="fa fa-check"></i><b>4.0.4</b> Spur Gears</a></li>
+<li class="chapter" data-level="4.0.5" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#helical-gears"><i class="fa fa-check"></i><b>4.0.5</b> Helical Gears</a></li>
+<li class="chapter" data-level="4.0.6" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#bevel-gears"><i class="fa fa-check"></i><b>4.0.6</b> Bevel Gears</a></li>
+<li class="chapter" data-level="4.0.7" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#worm-gears"><i class="fa fa-check"></i><b>4.0.7</b> Worm Gears</a></li>
+<li class="chapter" data-level="4.0.8" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#rack-and-pinion"><i class="fa fa-check"></i><b>4.0.8</b> Rack and Pinion</a></li>
+<li class="chapter" data-level="4.0.9" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-type-comparison"><i class="fa fa-check"></i><b>4.0.9</b> Gear Type Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-ratios-and-calculations"><i class="fa fa-check"></i>📊 Gear Ratios and Calculations</a>
+<ul>
+<li class="chapter" data-level="4.0.10" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#speed-and-torque-relationships"><i class="fa fa-check"></i><b>4.0.10</b> Speed and Torque Relationships</a></li>
+<li class="chapter" data-level="4.0.11" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#key-relationships"><i class="fa fa-check"></i><b>4.0.11</b> Key Relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-trains"><i class="fa fa-check"></i>🔄 Gear Trains</a>
+<ul>
+<li class="chapter" data-level="4.0.12" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#simple-gear-train"><i class="fa fa-check"></i><b>4.0.12</b> Simple Gear Train</a></li>
+<li class="chapter" data-level="4.0.13" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#compound-gear-train"><i class="fa fa-check"></i><b>4.0.13</b> Compound Gear Train</a></li>
+<li class="chapter" data-level="4.0.14" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#planetary-epicyclic-gear-train"><i class="fa fa-check"></i><b>4.0.14</b> Planetary (Epicyclic) Gear Train</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#industry-applications"><i class="fa fa-check"></i>🏭 Industry Applications</a>
+<ul>
+<li class="chapter" data-level="4.0.15" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#automotive-industry"><i class="fa fa-check"></i><b>4.0.15</b> Automotive Industry</a></li>
+<li class="chapter" data-level="4.0.16" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#food-processing-industry"><i class="fa fa-check"></i><b>4.0.16</b> Food Processing Industry</a></li>
+<li class="chapter" data-level="4.0.17" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#defense-industry"><i class="fa fa-check"></i><b>4.0.17</b> Defense Industry</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-design-considerations"><i class="fa fa-check"></i>🔧 Gear Design Considerations</a>
+<ul>
+<li class="chapter" data-level="4.0.18" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#material-selection"><i class="fa fa-check"></i><b>4.0.18</b> Material Selection</a></li>
+<li class="chapter" data-level="4.0.19" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#common-failure-modes"><i class="fa fa-check"></i><b>4.0.19</b> Common Failure Modes</a></li>
+<li class="chapter" data-level="4.0.20" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#design-guidelines"><i class="fa fa-check"></i><b>4.0.20</b> Design Guidelines</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#design-checklist-for-gears"><i class="fa fa-check"></i>📋 Design Checklist for Gears</a>
+<ul>
+<li class="chapter" data-level="4.0.21" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-specification"><i class="fa fa-check"></i><b>4.0.21</b> Gear Specification</a></li>
+<li class="chapter" data-level="4.0.22" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#strength-verification"><i class="fa fa-check"></i><b>4.0.22</b> Strength Verification</a></li>
+<li class="chapter" data-level="4.0.23" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#gear-train-design"><i class="fa fa-check"></i><b>4.0.23</b> Gear Train Design</a></li>
+<li class="chapter" data-level="4.0.24" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#manufacturing-and-assembly"><i class="fa fa-check"></i><b>4.0.24</b> Manufacturing and Assembly</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#case-study-food-packaging-line-drive"><i class="fa fa-check"></i>🎯 Case Study: Food Packaging Line Drive</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#practice-problems"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#further-reading"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#supplemental-videos"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="4.0.25" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-gear-ratios-work"><i class="fa fa-check"></i><b>4.0.25</b> How Gear Ratios Work</a></li>
+<li class="chapter" data-level="4.0.26" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#planetary-gears-explained"><i class="fa fa-check"></i><b>4.0.26</b> Planetary Gears Explained</a></li>
+<li class="chapter" data-level="4.0.27" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-manual-transmissions-work"><i class="fa fa-check"></i><b>4.0.27</b> How Manual Transmissions Work</a></li>
+<li class="chapter" data-level="4.0.28" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#how-differentials-work"><i class="fa fa-check"></i><b>4.0.28</b> How Differentials Work</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="gears-gear-trains-and-transmissions.html"><a href="gears-gear-trains-and-transmissions.html#references"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="design-for-stamping.html"><a href="design-for-stamping.html"><i class="fa fa-check"></i><b>5</b> Design for Stamping</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#introduction-to-the-stamping-process"><i class="fa fa-check"></i>💡 Introduction to the Stamping Process</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#essential-components-of-stamping"><i class="fa fa-check"></i>🧱 Essential Components of Stamping</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#types-of-stamping-operations"><i class="fa fa-check"></i>⚙️ Types of Stamping Operations</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="design-for-stamping.html"><a href="design-for-stamping.html#blanking-and-punching"><i class="fa fa-check"></i><b>5.0.1</b> Blanking and Punching</a></li>
+<li class="chapter" data-level="5.0.2" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bending"><i class="fa fa-check"></i><b>5.0.2</b> Bending</a></li>
+<li class="chapter" data-level="5.0.3" data-path="design-for-stamping.html"><a href="design-for-stamping.html#drawing"><i class="fa fa-check"></i><b>5.0.3</b> Drawing</a></li>
+<li class="chapter" data-level="5.0.4" data-path="design-for-stamping.html"><a href="design-for-stamping.html#embossing-and-coining"><i class="fa fa-check"></i><b>5.0.4</b> Embossing and Coining</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#stamping-press-types-and-progressive-dies"><i class="fa fa-check"></i>🏭 Stamping Press Types and Progressive Dies</a>
+<ul>
+<li class="chapter" data-level="5.0.5" data-path="design-for-stamping.html"><a href="design-for-stamping.html#types-of-stamping-presses"><i class="fa fa-check"></i><b>5.0.5</b> Types of Stamping Presses</a></li>
+<li class="chapter" data-level="5.0.6" data-path="design-for-stamping.html"><a href="design-for-stamping.html#progressive-die-stamping"><i class="fa fa-check"></i><b>5.0.6</b> Progressive Die Stamping</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#advantages-and-limitations-of-stamping"><i class="fa fa-check"></i>📊 Advantages and Limitations of Stamping</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#material-considerations-for-stamping"><i class="fa fa-check"></i>🔬 Material Considerations for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.7" data-path="design-for-stamping.html"><a href="design-for-stamping.html#formability"><i class="fa fa-check"></i><b>5.0.7</b> Formability</a></li>
+<li class="chapter" data-level="5.0.8" data-path="design-for-stamping.html"><a href="design-for-stamping.html#common-stamping-materials"><i class="fa fa-check"></i><b>5.0.8</b> Common Stamping Materials</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#design-guidelines-for-stamping"><i class="fa fa-check"></i>📐 Design Guidelines for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.9" data-path="design-for-stamping.html"><a href="design-for-stamping.html#hole-design"><i class="fa fa-check"></i><b>5.0.9</b> Hole Design</a></li>
+<li class="chapter" data-level="5.0.10" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bend-design"><i class="fa fa-check"></i><b>5.0.10</b> Bend Design</a></li>
+<li class="chapter" data-level="5.0.11" data-path="design-for-stamping.html"><a href="design-for-stamping.html#drawing-design"><i class="fa fa-check"></i><b>5.0.11</b> Drawing Design</a></li>
+<li class="chapter" data-level="5.0.12" data-path="design-for-stamping.html"><a href="design-for-stamping.html#general-design-best-practices"><i class="fa fa-check"></i><b>5.0.12</b> General Design Best Practices</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#common-stamping-defects-and-prevention"><i class="fa fa-check"></i>🛠️ Common Stamping Defects and Prevention</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#design-checklist-for-stamping"><i class="fa fa-check"></i>📋 Design Checklist for Stamping</a>
+<ul>
+<li class="chapter" data-level="5.0.13" data-path="design-for-stamping.html"><a href="design-for-stamping.html#holes-and-cutouts"><i class="fa fa-check"></i><b>5.0.13</b> Holes and Cutouts</a></li>
+<li class="chapter" data-level="5.0.14" data-path="design-for-stamping.html"><a href="design-for-stamping.html#bends"><i class="fa fa-check"></i><b>5.0.14</b> Bends</a></li>
+<li class="chapter" data-level="5.0.15" data-path="design-for-stamping.html"><a href="design-for-stamping.html#draws"><i class="fa fa-check"></i><b>5.0.15</b> Draws</a></li>
+<li class="chapter" data-level="5.0.16" data-path="design-for-stamping.html"><a href="design-for-stamping.html#general"><i class="fa fa-check"></i><b>5.0.16</b> General</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#case-study-automotive-bracket-design"><i class="fa fa-check"></i>🎯 Case Study: Automotive Bracket Design</a>
+<ul>
+<li class="chapter" data-level="5.0.17" data-path="design-for-stamping.html"><a href="design-for-stamping.html#initial-design-evaluation"><i class="fa fa-check"></i><b>5.0.17</b> Initial Design Evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#summary-key-design-rules-for-stamping"><i class="fa fa-check"></i>📚 “Summary: Key Design Rules for Stamping”</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#practice-problems-1"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#further-reading-1"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#supplemental-videos-1"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="5.0.18" data-path="design-for-stamping.html"><a href="design-for-stamping.html#how-stamping-dies-work"><i class="fa fa-check"></i><b>5.0.18</b> How Stamping Dies Work</a></li>
+<li class="chapter" data-level="5.0.19" data-path="design-for-stamping.html"><a href="design-for-stamping.html#deep-drawing-process-explained"><i class="fa fa-check"></i><b>5.0.19</b> Deep Drawing Process Explained</a></li>
+<li class="chapter" data-level="5.0.20" data-path="design-for-stamping.html"><a href="design-for-stamping.html#stamping-by-smarter-every-day"><i class="fa fa-check"></i><b>5.0.20</b> Stamping by ‘Smarter Every Day’</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-stamping.html"><a href="design-for-stamping.html#references-1"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="design-for-welding.html"><a href="design-for-welding.html"><i class="fa fa-check"></i><b>6</b> Design for Welding</a>
+<ul>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#introduction-to-design-for-welding"><i class="fa fa-check"></i>💡 Introduction to Design for Welding</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#the-welding-process-fundamentals"><i class="fa fa-check"></i>🔥 The Welding Process Fundamentals</a>
+<ul>
+<li class="chapter" data-level="6.0.1" data-path="design-for-welding.html"><a href="design-for-welding.html#key-welding-terminology"><i class="fa fa-check"></i><b>6.0.1</b> Key Welding Terminology</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#types-of-weld-joints"><i class="fa fa-check"></i>🔗 Types of Weld Joints</a>
+<ul>
+<li class="chapter" data-level="6.0.2" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-selection-guide"><i class="fa fa-check"></i><b>6.0.2</b> Joint Selection Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#types-of-welds"><i class="fa fa-check"></i>🔧 Types of Welds</a>
+<ul>
+<li class="chapter" data-level="6.0.3" data-path="design-for-welding.html"><a href="design-for-welding.html#fillet-welds"><i class="fa fa-check"></i><b>6.0.3</b> Fillet Welds</a></li>
+<li class="chapter" data-level="6.0.4" data-path="design-for-welding.html"><a href="design-for-welding.html#groove-welds"><i class="fa fa-check"></i><b>6.0.4</b> Groove Welds</a></li>
+<li class="chapter" data-level="6.0.5" data-path="design-for-welding.html"><a href="design-for-welding.html#groove-weld-parameters"><i class="fa fa-check"></i><b>6.0.5</b> Groove Weld Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#welding-symbols"><i class="fa fa-check"></i>📐 Welding Symbols</a>
+<ul>
+<li class="chapter" data-level="6.0.6" data-path="design-for-welding.html"><a href="design-for-welding.html#common-weld-symbols"><i class="fa fa-check"></i><b>6.0.6</b> Common Weld Symbols</a></li>
+<li class="chapter" data-level="6.0.7" data-path="design-for-welding.html"><a href="design-for-welding.html#supplementary-symbols"><i class="fa fa-check"></i><b>6.0.7</b> Supplementary Symbols</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#design-guidelines-for-welded-joints"><i class="fa fa-check"></i>📏 Design Guidelines for Welded Joints</a>
+<ul>
+<li class="chapter" data-level="6.0.8" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-accessibility"><i class="fa fa-check"></i><b>6.0.8</b> Joint Accessibility</a></li>
+<li class="chapter" data-level="6.0.9" data-path="design-for-welding.html"><a href="design-for-welding.html#weld-sizing"><i class="fa fa-check"></i><b>6.0.9</b> Weld Sizing</a></li>
+<li class="chapter" data-level="6.0.10" data-path="design-for-welding.html"><a href="design-for-welding.html#minimizing-distortion"><i class="fa fa-check"></i><b>6.0.10</b> Minimizing Distortion</a></li>
+<li class="chapter" data-level="6.0.11" data-path="design-for-welding.html"><a href="design-for-welding.html#fatigue-considerations"><i class="fa fa-check"></i><b>6.0.11</b> Fatigue Considerations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#material-weldability"><i class="fa fa-check"></i>🔬 Material Weldability</a>
+<ul>
+<li class="chapter" data-level="6.0.12" data-path="design-for-welding.html"><a href="design-for-welding.html#carbon-steel-weldability"><i class="fa fa-check"></i><b>6.0.12</b> Carbon Steel Weldability</a></li>
+<li class="chapter" data-level="6.0.13" data-path="design-for-welding.html"><a href="design-for-welding.html#weldability-of-common-materials"><i class="fa fa-check"></i><b>6.0.13</b> Weldability of Common Materials</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#common-weld-defects-and-prevention"><i class="fa fa-check"></i>🛠️ Common Weld Defects and Prevention</a>
+<ul>
+<li class="chapter" data-level="6.0.14" data-path="design-for-welding.html"><a href="design-for-welding.html#defect-causes-and-prevention"><i class="fa fa-check"></i><b>6.0.14</b> Defect Causes and Prevention</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#design-checklist-for-welding"><i class="fa fa-check"></i>📋 Design Checklist for Welding</a>
+<ul>
+<li class="chapter" data-level="6.0.15" data-path="design-for-welding.html"><a href="design-for-welding.html#joint-design"><i class="fa fa-check"></i><b>6.0.15</b> Joint Design</a></li>
+<li class="chapter" data-level="6.0.16" data-path="design-for-welding.html"><a href="design-for-welding.html#material-considerations"><i class="fa fa-check"></i><b>6.0.16</b> Material Considerations</a></li>
+<li class="chapter" data-level="6.0.17" data-path="design-for-welding.html"><a href="design-for-welding.html#distortion-control"><i class="fa fa-check"></i><b>6.0.17</b> Distortion Control</a></li>
+<li class="chapter" data-level="6.0.18" data-path="design-for-welding.html"><a href="design-for-welding.html#quality-requirements"><i class="fa fa-check"></i><b>6.0.18</b> Quality Requirements</a></li>
+<li class="chapter" data-level="6.0.19" data-path="design-for-welding.html"><a href="design-for-welding.html#fatigue-and-strength"><i class="fa fa-check"></i><b>6.0.19</b> Fatigue and Strength</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#case-study-welded-frame-design"><i class="fa fa-check"></i>🎯 Case Study: Welded Frame Design</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#practice-problems-2"><i class="fa fa-check"></i>✍️ Practice Problems</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#further-reading-2"><i class="fa fa-check"></i>🔗 Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#supplemental-videos-2"><i class="fa fa-check"></i>🎬 Supplemental Videos</a>
+<ul>
+<li class="chapter" data-level="6.0.20" data-path="design-for-welding.html"><a href="design-for-welding.html#understanding-welding-symbols"><i class="fa fa-check"></i><b>6.0.20</b> Understanding Welding Symbols</a></li>
+<li class="chapter" data-level="6.0.21" data-path="design-for-welding.html"><a href="design-for-welding.html#weld-joint-types-explained"><i class="fa fa-check"></i><b>6.0.21</b> Weld Joint Types Explained</a></li>
+<li class="chapter" data-level="6.0.22" data-path="design-for-welding.html"><a href="design-for-welding.html#controlling-weld-distortion"><i class="fa fa-check"></i><b>6.0.22</b> Controlling Weld Distortion</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#references-2"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="design-for-machining.html"><a href="design-for-machining.html"><i class="fa fa-check"></i><b>7</b> Design for Machining</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions"><i class="fa fa-check"></i><b>7.1</b> Challenge Questions</a></li>
+<li class="chapter" data-level="7.2" data-path="design-for-machining.html"><a href="design-for-machining.html#theory-math"><i class="fa fa-check"></i><b>7.2</b> Theory &amp; Math</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions-1"><i class="fa fa-check"></i><b>7.2.1</b> Challenge Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="design-for-machining.html"><a href="design-for-machining.html#hands-on-examples"><i class="fa fa-check"></i><b>7.3</b> Hands-on Examples</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="design-for-machining.html"><a href="design-for-machining.html#automotive-industry-1"><i class="fa fa-check"></i><b>7.3.1</b> Automotive Industry</a></li>
+<li class="chapter" data-level="7.3.2" data-path="design-for-machining.html"><a href="design-for-machining.html#food-industry"><i class="fa fa-check"></i><b>7.3.2</b> Food Industry</a></li>
+<li class="chapter" data-level="7.3.3" data-path="design-for-machining.html"><a href="design-for-machining.html#defense-industry-1"><i class="fa fa-check"></i><b>7.3.3</b> Defense Industry</a></li>
+<li class="chapter" data-level="7.3.4" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions-2"><i class="fa fa-check"></i><b>7.3.4</b> Challenge Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="design-for-machining.html"><a href="design-for-machining.html#interactive-exercises"><i class="fa fa-check"></i><b>7.4</b> Interactive Exercises</a></li>
+<li class="chapter" data-level="7.5" data-path="design-for-machining.html"><a href="design-for-machining.html#check-your-understanding"><i class="fa fa-check"></i><b>7.5</b> Check Your Understanding</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html"><i class="fa fa-check"></i><b>8</b> Ball Bearings and Bushings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#introduction-to-bearings"><i class="fa fa-check"></i>Introduction to Bearings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#classification-of-bearings"><i class="fa fa-check"></i>Classification of Bearings</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#ball-bearings"><i class="fa fa-check"></i>Ball Bearings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#anatomy-of-a-ball-bearing"><i class="fa fa-check"></i>Anatomy of a Ball Bearing</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#types-of-ball-bearings"><i class="fa fa-check"></i>Types of Ball Bearings</a></li>
+</ul></li>
+<li class="chapter" data-level="8.1" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-life"><i class="fa fa-check"></i><b>8.1</b> Ball Bearing Life Calculations</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#the-l10-life-concept"><i class="fa fa-check"></i>The L10 Life Concept</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#basic-life-equation"><i class="fa fa-check"></i>Basic Life Equation</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#converting-to-hours"><i class="fa fa-check"></i>Converting to Hours</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#equivalent-dynamic-load"><i class="fa fa-check"></i>Equivalent Dynamic Load</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#basic-dynamic-load-rating-c"><i class="fa fa-check"></i>Basic Dynamic Load Rating (C)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#adjusted-rating-life"><i class="fa fa-check"></i>Adjusted Rating Life</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#life-calculation-plot"><i class="fa fa-check"></i>Life Calculation Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-example"><i class="fa fa-check"></i><b>8.2</b> Applied Example: Ball Bearing Life Calculation</a></li>
+<li class="chapter" data-level="8.3" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushings"><i class="fa fa-check"></i><b>8.3</b> Plain Bearings (Bushings)</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#advantages-of-bushings"><i class="fa fa-check"></i>Advantages of Bushings</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#types-of-bushings"><i class="fa fa-check"></i>Types of Bushings</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#pv-limits"><i class="fa fa-check"></i><b>8.4</b> PV Limits for Bushings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#the-pv-concept"><i class="fa fa-check"></i>The PV Concept</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#calculating-bearing-pressure-p"><i class="fa fa-check"></i>Calculating Bearing Pressure (P)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#calculating-sliding-velocity-v"><i class="fa fa-check"></i>Calculating Sliding Velocity (V)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#pv-limit-visualization"><i class="fa fa-check"></i>PV Limit Visualization</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#design-rules-for-pv"><i class="fa fa-check"></i>Design Rules for PV</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushing-example"><i class="fa fa-check"></i><b>8.5</b> Applied Example: Bushing PV Calculation</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-vs.-bushing-selection-guide"><i class="fa fa-check"></i>Bearing vs. Bushing Selection Guide</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#summary-equations"><i class="fa fa-check"></i>Summary Equations</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#ball-bearing-life"><i class="fa fa-check"></i>Ball Bearing Life</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushing-pv-limits"><i class="fa fa-check"></i>Bushing PV Limits</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#design-checklist"><i class="fa fa-check"></i>Design Checklist</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Design for Manufacturing</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="gears-gear-trains-and-transmissions" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Gears, Gear Trains, and Transmissions<a href="gears-gear-trains-and-transmissions.html#gears-gear-trains-and-transmissions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-gears" class="section level2 unnumbered hasAnchor">
+<h2>💡 Introduction to Gears<a href="#introduction-to-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Gears are toothed mechanical components that transmit <strong>power and motion</strong> between rotating shafts. They are among the oldest and most important machine elements, found in virtually every mechanical system—from wristwatches to wind turbines, from automotive transmissions to industrial robots.</p>
+<p>Gears serve three fundamental purposes:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Transmit power</strong> from one shaft to another</li>
+<li><strong>Change rotational speed</strong> (increase or decrease RPM)</li>
+<li><strong>Change torque</strong> (increase or decrease turning force)</li>
+<li><strong>Change direction</strong> of rotation or axis of rotation</li>
+</ol>
+<hr />
+<blockquote>
+<p><strong>🤔 Think About It:</strong> Your car’s engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this? And why does a truck need more gear ratios than a sports car?</p>
+</blockquote>
+<hr />
+</div>
+<div id="fundamental-gear-concepts" class="section level2 unnumbered hasAnchor">
+<h2>⚙️ Fundamental Gear Concepts<a href="gears-gear-trains-and-transmissions.html#fundamental-gear-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="the-basic-principle" class="section level3 hasAnchor" number="4.0.1">
+<h3><span class="header-section-number">4.0.1</span> The Basic Principle<a href="gears-gear-trains-and-transmissions.html#the-basic-principle" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When two gears mesh, their teeth interlock. As one gear (the <strong>driver</strong> or <strong>pinion</strong>) rotates, it pushes against the teeth of the other gear (the <strong>driven gear</strong>), causing it to rotate.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-mesh-basic"></span>
+<img src="_main_files/figure-html/gear-mesh-basic-1.png" alt="Basic gear mesh showing driver (pinion) and driven gear." width="960" />
+<p class="caption">
+Figure 4.1: Basic gear mesh showing driver (pinion) and driven gear.
+</p>
+</div>
+</div>
+<div id="the-fundamental-law-of-gearing" class="section level3 hasAnchor" number="4.0.2">
+<h3><span class="header-section-number">4.0.2</span> The Fundamental Law of Gearing<a href="gears-gear-trains-and-transmissions.html#the-fundamental-law-of-gearing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For smooth, constant-velocity power transmission, the <strong>common normal</strong> at the point of contact between gear teeth must always pass through a fixed point called the <strong>pitch point</strong>. This is achieved through the <strong>involute tooth profile</strong>, which is the standard for most modern gears.</p>
+<hr />
+</div>
+</div>
+<div id="gear-terminology" class="section level2 unnumbered hasAnchor">
+<h2>📐 Gear Terminology<a href="#gear-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Understanding gear terminology is essential for specifying, designing, and manufacturing gears.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-terminology"></span>
+<img src="_main_files/figure-html/gear-terminology-1.png" alt="Essential gear terminology and dimensions." width="960" />
+<p class="caption">
+Figure 4.2: Essential gear terminology and dimensions.
+</p>
+</div>
+<div id="essential-gear-formulas" class="section level3 hasAnchor" number="4.0.3">
+<h3><span class="header-section-number">4.0.3</span> Essential Gear Formulas<a href="gears-gear-trains-and-transmissions.html#essential-gear-formulas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Parameter</th>
+<th align="left">Metric (Module)</th>
+<th align="left">Imperial (Diametral Pitch)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Pitch Diameter</strong></td>
+<td align="left"><span class="math inline">\(d = m \times N\)</span></td>
+<td align="left"><span class="math inline">\(d = N / P\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Circular Pitch</strong></td>
+<td align="left"><span class="math inline">\(p = \pi \times m\)</span></td>
+<td align="left"><span class="math inline">\(p = \pi / P\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Addendum</strong></td>
+<td align="left"><span class="math inline">\(a = m\)</span></td>
+<td align="left"><span class="math inline">\(a = 1 / P\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Dedendum</strong></td>
+<td align="left"><span class="math inline">\(b = 1.25 \times m\)</span></td>
+<td align="left"><span class="math inline">\(b = 1.25 / P\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Outside Diameter</strong></td>
+<td align="left"><span class="math inline">\(d_o = m(N + 2)\)</span></td>
+<td align="left"><span class="math inline">\(d_o = (N + 2) / P\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Center Distance</strong></td>
+<td align="left"><span class="math inline">\(C = m(N_1 + N_2)/2\)</span></td>
+<td align="left"><span class="math inline">\(C = (N_1 + N_2) / 2P\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Where: <span class="math inline">\(m\)</span> = module, <span class="math inline">\(P\)</span> = diametral pitch, <span class="math inline">\(N\)</span> = number of teeth, <span class="math inline">\(d\)</span> = pitch diameter</p>
+<blockquote>
+<p><strong>⚠️ Important:</strong> Module (mm) and Diametral Pitch (teeth/inch) are inversely related: <span class="math inline">\(m = 25.4 / P\)</span>. <strong>Never mix metric and imperial gears!</strong></p>
+</blockquote>
+<hr />
+<blockquote>
+<p><strong>❓ Quick Calculation:</strong> A gear has 40 teeth and a module of 3 mm. Calculate: (a) pitch diameter, (b) outside diameter, (c) circular pitch.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal solution
+</summary>
+<p><strong>(a) Pitch Diameter:</strong>
+<span class="math display">\[d = m \times N = 3 \times 40 = 120 \text{ mm}\]</span></p>
+<p><strong>(b) Outside Diameter:</strong>
+<span class="math display">\[d_o = m(N + 2) = 3(40 + 2) = 126 \text{ mm}\]</span></p>
+<p><strong>(c) Circular Pitch:</strong>
+<span class="math display">\[p = \pi \times m = \pi \times 3 = 9.42 \text{ mm}\]</span></p>
+</details>
+<hr />
+</div>
+</div>
+<div id="types-of-gears" class="section level2 unnumbered hasAnchor">
+<h2>🔧 Types of Gears<a href="#types-of-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Different gear types are designed for different applications based on shaft orientation, load capacity, speed, and noise requirements.</p>
+<div id="spur-gears" class="section level3 hasAnchor" number="4.0.4">
+<h3><span class="header-section-number">4.0.4</span> Spur Gears<a href="gears-gear-trains-and-transmissions.html#spur-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Spur gears</strong> have straight teeth parallel to the axis of rotation. They are the simplest, most common, and most economical type.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spur-gear"></span>
+<img src="_main_files/figure-html/spur-gear-1.png" alt="Spur gears: parallel shafts, straight teeth." width="768" />
+<p class="caption">
+Figure 4.3: Spur gears: parallel shafts, straight teeth.
+</p>
+</div>
+<p><strong>Applications:</strong> Gearboxes, conveyors, food processing equipment, clocks, printers</p>
+<hr />
+</div>
+<div id="helical-gears" class="section level3 hasAnchor" number="4.0.5">
+<h3><span class="header-section-number">4.0.5</span> Helical Gears<a href="gears-gear-trains-and-transmissions.html#helical-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Helical gears</strong> have teeth cut at an angle (helix angle) to the shaft axis. This allows gradual tooth engagement, resulting in smoother, quieter operation.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:helical-gear"></span>
+<img src="_main_files/figure-html/helical-gear-1.png" alt="Helical gears: angled teeth for smoother operation." width="960" />
+<p class="caption">
+Figure 4.4: Helical gears: angled teeth for smoother operation.
+</p>
+</div>
+<p><strong>Applications:</strong> Automotive transmissions, industrial gearboxes, machine tools, elevators</p>
+<hr />
+</div>
+<div id="bevel-gears" class="section level3 hasAnchor" number="4.0.6">
+<h3><span class="header-section-number">4.0.6</span> Bevel Gears<a href="gears-gear-trains-and-transmissions.html#bevel-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Bevel gears</strong> transmit power between shafts that intersect, typically at 90°. The teeth are cut on a conical surface.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bevel-gear"></span>
+<img src="_main_files/figure-html/bevel-gear-1.png" alt="Bevel gears: intersecting shafts, typically at 90°." width="960" />
+<p class="caption">
+Figure 4.5: Bevel gears: intersecting shafts, typically at 90°.
+</p>
+</div>
+<p><strong>Applications:</strong> Automotive differentials, hand tools, food mixers, rotorcraft transmissions</p>
+<hr />
+</div>
+<div id="worm-gears" class="section level3 hasAnchor" number="4.0.7">
+<h3><span class="header-section-number">4.0.7</span> Worm Gears<a href="gears-gear-trains-and-transmissions.html#worm-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Worm gears</strong> consist of a worm (screw-like) driving a worm wheel. They provide very high reduction ratios in a compact space and can be self-locking.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:worm-gear"></span>
+<img src="_main_files/figure-html/worm-gear-1.png" alt="Worm gear set: high reduction ratio, right-angle drive." width="960" />
+<p class="caption">
+Figure 4.6: Worm gear set: high reduction ratio, right-angle drive.
+</p>
+</div>
+<p><strong>Applications:</strong> Conveyor drives, elevator lifts, tuning mechanisms, steering systems</p>
+<hr />
+</div>
+<div id="rack-and-pinion" class="section level3 hasAnchor" number="4.0.8">
+<h3><span class="header-section-number">4.0.8</span> Rack and Pinion<a href="gears-gear-trains-and-transmissions.html#rack-and-pinion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Rack and pinion</strong> converts rotational motion to linear motion (or vice versa). The rack is essentially a gear with infinite radius.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rack-pinion"></span>
+<img src="_main_files/figure-html/rack-pinion-1.png" alt="Rack and pinion: rotary to linear motion conversion." width="960" />
+<p class="caption">
+Figure 4.7: Rack and pinion: rotary to linear motion conversion.
+</p>
+</div>
+<p><strong>Applications:</strong> Automotive steering, CNC machines, actuators, stairlifts</p>
+<hr />
+</div>
+<div id="gear-type-comparison" class="section level3 hasAnchor" number="4.0.9">
+<h3><span class="header-section-number">4.0.9</span> Gear Type Comparison<a href="gears-gear-trains-and-transmissions.html#gear-type-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="25%" />
+<col width="17%" />
+<col width="16%" />
+<col width="17%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Gear Type</th>
+<th align="left">Shaft Arrangement</th>
+<th align="left">Ratio Range</th>
+<th align="left">Efficiency</th>
+<th align="left">Noise Level</th>
+<th align="left">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Spur</strong></td>
+<td align="left">Parallel</td>
+<td align="left">1:1 to 6:1</td>
+<td align="left">98-99%</td>
+<td align="left">High</td>
+<td align="left">Low</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Helical</strong></td>
+<td align="left">Parallel</td>
+<td align="left">1:1 to 10:1</td>
+<td align="left">97-99%</td>
+<td align="left">Low</td>
+<td align="left">Medium</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Bevel</strong></td>
+<td align="left">Intersecting (90°)</td>
+<td align="left">1:1 to 5:1</td>
+<td align="left">97-99%</td>
+<td align="left">Medium</td>
+<td align="left">High</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Worm</strong></td>
+<td align="left">Right angle (non-intersecting)</td>
+<td align="left">5:1 to 100:1</td>
+<td align="left">40-90%</td>
+<td align="left">Low</td>
+<td align="left">Medium</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Rack &amp; Pinion</strong></td>
+<td align="left">Rotary to linear</td>
+<td align="left">N/A</td>
+<td align="left">97-99%</td>
+<td align="left">Medium</td>
+<td align="left">Medium</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>🤔 Design Decision:</strong> A food packaging machine requires a 25:1 speed reduction in a compact space. The drive must be self-locking to prevent the load from back-driving the motor when power is off. Which gear type would you recommend?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis
+</summary>
+<p><strong>Recommended: Worm Gear</strong></p>
+<p>Reasons:
+1. <strong>High ratio</strong> - 25:1 is within the typical worm gear range (5:1 to 100:1)
+2. <strong>Compact</strong> - Achieves high ratio in single stage
+3. <strong>Self-locking</strong> - When lead angle &lt; friction angle (typically &lt; 5°), the worm gear cannot be back-driven
+4. <strong>Quiet operation</strong> - Important in food processing environments</p>
+<p><strong>Trade-offs to consider:</strong>
+- Lower efficiency (70-85% at this ratio) means more heat and energy loss
+- May require cooling or lubrication considerations
+- Higher sliding friction causes wear - use appropriate materials (bronze wheel, hardened steel worm)</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="gear-ratios-and-calculations" class="section level2 unnumbered hasAnchor">
+<h2>📊 Gear Ratios and Calculations<a href="#gear-ratios-and-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="speed-and-torque-relationships" class="section level3 hasAnchor" number="4.0.10">
+<h3><span class="header-section-number">4.0.10</span> Speed and Torque Relationships<a href="gears-gear-trains-and-transmissions.html#speed-and-torque-relationships" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>gear ratio</strong> is the fundamental relationship between meshing gears:</p>
+<p><span class="math display">\[\text{Gear Ratio} = \frac{N_{driven}}{N_{driver}} = \frac{\omega_{driver}}{\omega_{driven}} = \frac{T_{driven}}{T_{driver}}\]</span></p>
+<p>Where: <span class="math inline">\(N\)</span> = number of teeth, <span class="math inline">\(\omega\)</span> = angular velocity, <span class="math inline">\(T\)</span> = torque</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-ratio-visual"></span>
+<img src="_main_files/figure-html/gear-ratio-visual-1.png" alt="Gear ratio demonstration: speed reduction and torque multiplication." width="960" />
+<p class="caption">
+Figure 4.8: Gear ratio demonstration: speed reduction and torque multiplication.
+</p>
+</div>
+</div>
+<div id="key-relationships" class="section level3 hasAnchor" number="4.0.11">
+<h3><span class="header-section-number">4.0.11</span> Key Relationships<a href="gears-gear-trains-and-transmissions.html#key-relationships" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>For a simple gear pair:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">If the driven gear is…</th>
+<th align="left">Then speed is…</th>
+<th align="left">And torque is…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Larger</strong> (more teeth)</td>
+<td align="left"><strong>Reduced</strong></td>
+<td align="left"><strong>Increased</strong></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Smaller</strong> (fewer teeth)</td>
+<td align="left"><strong>Increased</strong></td>
+<td align="left"><strong>Reduced</strong></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Same size</strong></td>
+<td align="left"><strong>Same</strong></td>
+<td align="left"><strong>Same</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Power relationship (accounting for efficiency):</strong></p>
+<p><span class="math display">\[P_{out} = P_{in} \times \eta\]</span></p>
+<p><span class="math display">\[T_{out} \times \omega_{out} = T_{in} \times \omega_{in} \times \eta\]</span></p>
+<p>Where <span class="math inline">\(\eta\)</span> = efficiency (typically 0.97-0.99 per gear mesh)</p>
+<hr />
+<blockquote>
+<p><strong>❓ Calculation Challenge:</strong> A motor runs at 1750 RPM and delivers 5 kW. It drives a gear with 20 teeth meshed with a gear having 80 teeth. Calculate: (a) output speed, (b) gear ratio, (c) output torque (assume 98% efficiency).</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal solution
+</summary>
+<p><strong>(a) Gear Ratio:</strong>
+<span class="math display">\[GR = \frac{N_{driven}}{N_{driver}} = \frac{80}{20} = 4:1\]</span></p>
+<p><strong>(b) Output Speed:</strong>
+<span class="math display">\[n_{out} = \frac{n_{in}}{GR} = \frac{1750}{4} = 437.5 \text{ RPM}\]</span></p>
+<p><strong>(c) Input Torque:</strong>
+<span class="math display">\[T_{in} = \frac{P}{\omega_{in}} = \frac{5000}{1750 \times \frac{2\pi}{60}} = \frac{5000}{183.3} = 27.3 \text{ N·m}\]</span></p>
+<p><strong>(d) Output Torque:</strong>
+<span class="math display">\[T_{out} = T_{in} \times GR \times \eta = 27.3 \times 4 \times 0.98 = 107 \text{ N·m}\]</span></p>
+<p>Or verify using power:
+<span class="math display">\[T_{out} = \frac{P_{out}}{\omega_{out}} = \frac{5000 \times 0.98}{437.5 \times \frac{2\pi}{60}} = \frac{4900}{45.8} = 107 \text{ N·m}\]</span> ✓</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="gear-trains" class="section level2 unnumbered hasAnchor">
+<h2>🔄 Gear Trains<a href="#gear-trains" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>gear train</strong> is a combination of two or more gears used to transmit power from one shaft to another. Gear trains allow for larger speed ratios and more complex motion transmission than a single gear pair.</p>
+<div id="simple-gear-train" class="section level3 hasAnchor" number="4.0.12">
+<h3><span class="header-section-number">4.0.12</span> Simple Gear Train<a href="gears-gear-trains-and-transmissions.html#simple-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In a <strong>simple gear train</strong>, each shaft carries only one gear. The intermediate gears are called <strong>idlers</strong> and do not affect the overall gear ratio—they only change the direction of rotation.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:simple-gear-train"></span>
+<img src="_main_files/figure-html/simple-gear-train-1.png" alt="Simple gear train with idler gear." width="1152" />
+<p class="caption">
+Figure 4.9: Simple gear train with idler gear.
+</p>
+</div>
+<p><strong>Simple gear train ratio:</strong>
+<span class="math display">\[GR = \frac{N_{driven}}{N_{driver}} = \frac{N_{last}}{N_{first}}\]</span></p>
+<p>The idler gears only affect <strong>direction of rotation</strong>, not the gear ratio.</p>
+<hr />
+</div>
+<div id="compound-gear-train" class="section level3 hasAnchor" number="4.0.13">
+<h3><span class="header-section-number">4.0.13</span> Compound Gear Train<a href="gears-gear-trains-and-transmissions.html#compound-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In a <strong>compound gear train</strong>, two or more gears are mounted on the same shaft, rotating together. This allows for much higher gear ratios in a compact space.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:compound-gear-train"></span>
+<img src="_main_files/figure-html/compound-gear-train-1.png" alt="Compound gear train: higher ratios in less space." width="1152" />
+<p class="caption">
+Figure 4.10: Compound gear train: higher ratios in less space.
+</p>
+</div>
+<p><strong>Compound gear train ratio:</strong>
+<span class="math display">\[GR = \frac{N_{B}}{N_{A}} \times \frac{N_{D}}{N_{C}} = \frac{\text{Product of driven teeth}}{\text{Product of driver teeth}}\]</span></p>
+<hr />
+</div>
+<div id="planetary-epicyclic-gear-train" class="section level3 hasAnchor" number="4.0.14">
+<h3><span class="header-section-number">4.0.14</span> Planetary (Epicyclic) Gear Train<a href="gears-gear-trains-and-transmissions.html#planetary-epicyclic-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Planetary gear systems</strong> are compact, high-ratio gear trains widely used in automatic transmissions, power tools, and aerospace applications.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:planetary-gear"></span>
+<img src="_main_files/figure-html/planetary-gear-1.png" alt="Planetary gear system components and arrangement." width="960" />
+<p class="caption">
+Figure 4.11: Planetary gear system components and arrangement.
+</p>
+</div>
+<p><strong>Planetary gear ratio</strong> (sun input, carrier output, ring fixed):
+<span class="math display">\[GR = 1 + \frac{N_{ring}}{N_{sun}}\]</span></p>
+<p><strong>Applications:</strong>
+- <strong>Automotive:</strong> Automatic transmissions, hybrid drives, transfer cases
+- <strong>Aerospace:</strong> Helicopter transmissions, jet engine gearboxes
+- <strong>Industrial:</strong> Wind turbines, conveyors, hoists</p>
+<blockquote>
+<p><strong>🤔 Automotive Connection:</strong> Why do automatic transmissions use planetary gear sets instead of conventional gear trains?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal explanation
+</summary>
+<p><strong>Planetary gears in automatic transmissions offer several advantages:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Multiple ratios from one gear set</strong> - By holding different elements (sun, ring, or carrier) stationary using clutches and bands, different gear ratios are achieved without physically moving gears</p></li>
+<li><p><strong>Constant mesh</strong> - All gears remain engaged; ratio changes are smooth and fast</p></li>
+<li><p><strong>Compact design</strong> - High power density; fits in limited space</p></li>
+<li><p><strong>Load sharing</strong> - Multiple planet gears share the load (typically 3-5 planets)</p></li>
+<li><p><strong>Coaxial input/output</strong> - Input and output shafts can be on the same axis</p></li>
+</ol>
+<p>A typical 6-speed automatic uses 2-3 planetary gear sets with multiple clutches to achieve all forward gears plus reverse.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="industry-applications" class="section level2 unnumbered hasAnchor">
+<h2>🏭 Industry Applications<a href="#industry-applications" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="automotive-industry" class="section level3 hasAnchor" number="4.0.15">
+<h3><span class="header-section-number">4.0.15</span> Automotive Industry<a href="gears-gear-trains-and-transmissions.html#automotive-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:automotive-gears"></span>
+<img src="_main_files/figure-html/automotive-gears-1.png" alt="Gear applications in automotive systems." width="1152" />
+<p class="caption">
+Figure 4.12: Gear applications in automotive systems.
+</p>
+</div>
+<p><strong>Key automotive gear applications:</strong></p>
+<table>
+<colgroup>
+<col width="27%" />
+<col width="41%" />
+<col width="31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">System</th>
+<th align="left">Gear Types</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Manual Transmission</td>
+<td align="left">Helical, synchronizer</td>
+<td align="left">Multiple speed ratios</td>
+</tr>
+<tr class="even">
+<td align="left">Automatic Transmission</td>
+<td align="left">Planetary, helical</td>
+<td align="left">Smooth ratio changes</td>
+</tr>
+<tr class="odd">
+<td align="left">Differential</td>
+<td align="left">Spiral bevel, hypoid</td>
+<td align="left">Final drive, allows wheel speed difference</td>
+</tr>
+<tr class="even">
+<td align="left">Transfer Case</td>
+<td align="left">Spur, chain/gear</td>
+<td align="left">4WD/AWD power distribution</td>
+</tr>
+<tr class="odd">
+<td align="left">Steering</td>
+<td align="left">Rack and pinion, recirculating ball</td>
+<td align="left">Convert rotation to linear</td>
+</tr>
+<tr class="even">
+<td align="left">Starter Motor</td>
+<td align="left">Spur, planetary</td>
+<td align="left">High reduction for cranking torque</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="food-processing-industry" class="section level3 hasAnchor" number="4.0.16">
+<h3><span class="header-section-number">4.0.16</span> Food Processing Industry<a href="gears-gear-trains-and-transmissions.html#food-processing-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:food-industry-gears"></span>
+<img src="_main_files/figure-html/food-industry-gears-1.png" alt="Gear applications in food processing equipment." width="1152" />
+<p class="caption">
+Figure 4.13: Gear applications in food processing equipment.
+</p>
+</div>
+<p><strong>Food industry gear requirements:</strong></p>
+<ul>
+<li><strong>Stainless steel</strong> or <strong>food-grade materials</strong> for hygiene</li>
+<li><strong>Sealed gearboxes</strong> to prevent lubricant contamination</li>
+<li><strong>Washdown capability</strong> for sanitation</li>
+<li><strong>Smooth operation</strong> to prevent product damage</li>
+<li><strong>Variable speed</strong> capability for different products</li>
+</ul>
+<hr />
+</div>
+<div id="defense-industry" class="section level3 hasAnchor" number="4.0.17">
+<h3><span class="header-section-number">4.0.17</span> Defense Industry<a href="gears-gear-trains-and-transmissions.html#defense-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:defense-gears"></span>
+<img src="_main_files/figure-html/defense-gears-1.png" alt="Gear applications in defense systems." width="1152" />
+<p class="caption">
+Figure 4.14: Gear applications in defense systems.
+</p>
+</div>
+<p><strong>Defense gear requirements:</strong></p>
+<ul>
+<li><strong>Extreme reliability</strong> - Mission critical, no field repair</li>
+<li><strong>High strength-to-weight ratio</strong> - Often use aerospace-grade materials</li>
+<li><strong>Environmental resistance</strong> - Temperature extremes, dust, water</li>
+<li><strong>Zero or minimal backlash</strong> - Precision positioning systems</li>
+<li><strong>Noise reduction</strong> - Stealth requirements</li>
+<li><strong>Shock loading capability</strong> - Combat conditions</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="gear-design-considerations" class="section level2 unnumbered hasAnchor">
+<h2>🔧 Gear Design Considerations<a href="#gear-design-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="material-selection" class="section level3 hasAnchor" number="4.0.18">
+<h3><span class="header-section-number">4.0.18</span> Material Selection<a href="gears-gear-trains-and-transmissions.html#material-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="28%" />
+<col width="24%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Material</th>
+<th align="left">Applications</th>
+<th align="left">Advantages</th>
+<th align="left">Limitations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Carbon Steel</strong> (1045, 4140)</td>
+<td align="left">General purpose, automotive</td>
+<td align="left">Good strength, economical</td>
+<td align="left">Requires heat treatment</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Alloy Steel</strong> (4340, 8620)</td>
+<td align="left">High-load applications</td>
+<td align="left">High strength, hardenable</td>
+<td align="left">More expensive</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Cast Iron</strong></td>
+<td align="left">Low-speed, low-load</td>
+<td align="left">Good damping, economical</td>
+<td align="left">Brittle, low strength</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Bronze</strong></td>
+<td align="left">Worm wheels, low-speed</td>
+<td align="left">Good wear with steel</td>
+<td align="left">Lower strength</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Nylon/Acetal</strong></td>
+<td align="left">Light loads, quiet operation</td>
+<td align="left">Self-lubricating, quiet</td>
+<td align="left">Limited load, temperature</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Stainless Steel</strong></td>
+<td align="left">Food, medical, marine</td>
+<td align="left">Corrosion resistant</td>
+<td align="left">Lower hardness possible</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="common-failure-modes" class="section level3 hasAnchor" number="4.0.19">
+<h3><span class="header-section-number">4.0.19</span> Common Failure Modes<a href="gears-gear-trains-and-transmissions.html#common-failure-modes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-failures"></span>
+<img src="_main_files/figure-html/gear-failures-1.png" alt="Common gear failure modes." width="1152" />
+<p class="caption">
+Figure 4.15: Common gear failure modes.
+</p>
+</div>
+</div>
+<div id="design-guidelines" class="section level3 hasAnchor" number="4.0.20">
+<h3><span class="header-section-number">4.0.20</span> Design Guidelines<a href="gears-gear-trains-and-transmissions.html#design-guidelines" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><p><strong>Minimum teeth:</strong> To avoid undercut (20° pressure angle):</p>
+<ul>
+<li>Minimum pinion teeth ≈ 17 for standard gears</li>
+<li>Use profile shift for fewer teeth</li>
+</ul></li>
+<li><p><strong>Contact ratio:</strong> Should be &gt; 1.2 for smooth operation
+<span class="math display">\[\text{Contact Ratio} = \frac{\text{Arc of Action}}{\text{Circular Pitch}}\]</span></p></li>
+<li><p><strong>Face width:</strong> Typically 9-13 × module for spur gears</p></li>
+<li><p><strong>Backlash:</strong> Small clearance between teeth (typically 0.04-0.10 × module)</p></li>
+<li><p><strong>Lubrication:</strong> Critical for all enclosed gear systems</p></li>
+</ol>
+<hr />
+</div>
+</div>
+<div id="design-checklist-for-gears" class="section level2 unnumbered hasAnchor">
+<h2>📋 Design Checklist for Gears<a href="#design-checklist-for-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="gear-specification" class="section level3 hasAnchor" number="4.0.21">
+<h3><span class="header-section-number">4.0.21</span> Gear Specification<a href="gears-gear-trains-and-transmissions.html#gear-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Gear type selected based on shaft arrangement</label></li>
+<li><label><input type="checkbox" />Module/diametral pitch specified</label></li>
+<li><label><input type="checkbox" />Number of teeth determined for required ratio</label></li>
+<li><label><input type="checkbox" />Pressure angle specified (typically 20°)</label></li>
+<li><label><input type="checkbox" />Face width determined</label></li>
+<li><label><input type="checkbox" />Material selected based on load and environment</label></li>
+</ul>
+</div>
+<div id="strength-verification" class="section level3 hasAnchor" number="4.0.22">
+<h3><span class="header-section-number">4.0.22</span> Strength Verification<a href="gears-gear-trains-and-transmissions.html#strength-verification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Bending stress calculated and within limits</label></li>
+<li><label><input type="checkbox" />Contact (Hertzian) stress calculated and within limits</label></li>
+<li><label><input type="checkbox" />Service factors applied for shock loading</label></li>
+<li><label><input type="checkbox" />Safety factor adequate (typically 1.5-2.5)</label></li>
+</ul>
+</div>
+<div id="gear-train-design" class="section level3 hasAnchor" number="4.0.23">
+<h3><span class="header-section-number">4.0.23</span> Gear Train Design<a href="gears-gear-trains-and-transmissions.html#gear-train-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Overall ratio achieved</label></li>
+<li><label><input type="checkbox" />Intermediate shafts and bearings specified</label></li>
+<li><label><input type="checkbox" />Center distances calculated</label></li>
+<li><label><input type="checkbox" />Shaft alignment considered</label></li>
+<li><label><input type="checkbox" />Housing/mounting provisions adequate</label></li>
+</ul>
+</div>
+<div id="manufacturing-and-assembly" class="section level3 hasAnchor" number="4.0.24">
+<h3><span class="header-section-number">4.0.24</span> Manufacturing and Assembly<a href="gears-gear-trains-and-transmissions.html#manufacturing-and-assembly" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Gear quality grade specified (AGMA or ISO)</label></li>
+<li><label><input type="checkbox" />Surface finish requirements defined</label></li>
+<li><label><input type="checkbox" />Heat treatment specified if required</label></li>
+<li><label><input type="checkbox" />Assembly procedure considered</label></li>
+<li><label><input type="checkbox" />Lubrication system designed</label></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="case-study-food-packaging-line-drive" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Case Study: Food Packaging Line Drive<a href="#case-study-food-packaging-line-drive" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Design Requirements:</strong></p>
+<p>A food packaging machine requires a gear drive with the following specifications:</p>
+<ul>
+<li>Motor speed: 1800 RPM</li>
+<li>Output speed: 45 RPM (±2%)</li>
+<li>Output torque: 200 N·m</li>
+<li>Must fit in 300 mm × 200 mm envelope</li>
+<li>Food-safe requirements (no contamination risk)</li>
+<li>16 hours/day operation, 6 days/week</li>
+</ul>
+<blockquote>
+<p><strong>🤔 Your Turn:</strong> Design a gear train to meet these requirements. Consider gear types, stages, materials, and food safety.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal design solution
+</summary>
+<p><strong>1. Calculate Required Ratio:</strong>
+<span class="math display">\[GR = \frac{1800}{45} = 40:1\]</span></p>
+<p><strong>2. Select Gear Train Configuration:</strong></p>
+<p><strong>Option A: Two-stage helical</strong> (preferred for food industry)
+- Stage 1: 6.3:1 (16T pinion, 101T gear - round to 100T) → actual 6.25:1
+- Stage 2: 6.4:1 (15T pinion, 96T gear) → actual 6.4:1
+- Total: 6.25 × 6.4 = <strong>40:1</strong> ✓</p>
+<p><strong>Option B: Worm + Helical</strong>
+- Worm stage: 20:1
+- Helical stage: 2:1
+- Total: 40:1
+- Self-locking feature may be beneficial</p>
+<p><strong>3. Material Selection:</strong>
+- Gears: <strong>Stainless steel 17-4 PH</strong> (food-safe, hardenable)
+- Alternative: Carbon steel with <strong>food-grade coating</strong>
+- Housing: Cast aluminum with epoxy coating</p>
+<p><strong>4. Food Safety Features:</strong>
+- <strong>Sealed gearbox</strong> with NSF-approved seals
+- <strong>Food-grade synthetic lubricant</strong> (NSF H1)
+- <strong>Smooth exterior</strong> for easy cleaning
+- <strong>Stainless fasteners</strong></p>
+<p><strong>5. Verify Size:</strong>
+- Module 3 for both stages
+- Stage 1 center distance: 3 × (16 + 100) / 2 = 174 mm
+- Stage 2 center distance: 3 × (15 + 96) / 2 = 166.5 mm
+- Fits within 300 × 200 mm envelope ✓</p>
+<p><strong>6. Efficiency Check:</strong>
+- Two-stage helical: ~97% × 97% = 94%
+- Input power: (200 × 45 × 2π/60) / 0.94 = 1003 W
+- Motor rating: 1.1 kW minimum ✓</p>
+</details>
+<hr />
+</div>
+<div id="practice-problems" class="section level2 unnumbered hasAnchor">
+<h2>✍️ Practice Problems<a href="gears-gear-trains-and-transmissions.html#practice-problems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem 1:</strong> A spur gear has 24 teeth and a module of 4 mm. Calculate: (a) pitch diameter, (b) circular pitch, (c) addendum, (d) outside diameter.</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p><strong>(a) Pitch Diameter:</strong>
+<span class="math display">\[d = m \times N = 4 \times 24 = 96 \text{ mm}\]</span></p>
+<p><strong>(b) Circular Pitch:</strong>
+<span class="math display">\[p = \pi \times m = \pi \times 4 = 12.57 \text{ mm}\]</span></p>
+<p><strong>(c) Addendum:</strong>
+<span class="math display">\[a = m = 4 \text{ mm}\]</span></p>
+<p><strong>(d) Outside Diameter:</strong>
+<span class="math display">\[d_o = m(N + 2) = 4(24 + 2) = 104 \text{ mm}\]</span></p>
+</details>
+<hr />
+<p><strong>Problem 2:</strong> A compound gear train has: Gear A (20 teeth) driving Gear B (50 teeth), which is on the same shaft as Gear C (18 teeth), which drives Gear D (72 teeth). Calculate the overall gear ratio and output speed if the input is 1200 RPM.</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p><strong>Gear Ratio:</strong>
+<span class="math display">\[GR = \frac{N_B}{N_A} \times \frac{N_D}{N_C} = \frac{50}{20} \times \frac{72}{18} = 2.5 \times 4 = 10:1\]</span></p>
+<p><strong>Output Speed:</strong>
+<span class="math display">\[n_{out} = \frac{n_{in}}{GR} = \frac{1200}{10} = 120 \text{ RPM}\]</span></p>
+</details>
+<hr />
+<p><strong>Problem 3:</strong> A planetary gear set has a sun gear with 20 teeth and a ring gear with 80 teeth. If the ring is held stationary and the sun is the input at 500 RPM, what is the carrier (output) speed?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p>For sun input, carrier output, ring fixed:</p>
+<p><span class="math display">\[GR = 1 + \frac{N_{ring}}{N_{sun}} = 1 + \frac{80}{20} = 1 + 4 = 5:1\]</span></p>
+<p><strong>Carrier Speed:</strong>
+<span class="math display">\[n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}\]</span></p>
+</details>
+<hr />
+</div>
+<div id="further-reading" class="section level2 unnumbered hasAnchor">
+<h2>🔗 Further Reading<a href="#further-reading" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://www.agma.org/">AGMA Gear Standards</a></p>
+<p><a href="https://www.geartechnology.com/">Gear Technology Magazine</a></p>
+<p><a href="https://khkgears.net/new/gear_knowledge/">KHK Gear Technical Reference</a></p>
+<p><a href="https://www.industrialpress.com/">Machinery’s Handbook - Gearing Section</a></p>
+<hr />
+</div>
+<div id="supplemental-videos" class="section level2 unnumbered hasAnchor">
+<h2>🎬 Supplemental Videos<a href="#supplemental-videos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="how-gear-ratios-work" class="section level3 hasAnchor" number="4.0.25">
+<h3><span class="header-section-number">4.0.25</span> How Gear Ratios Work<a href="gears-gear-trains-and-transmissions.html#how-gear-ratios-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/JOLtS4VUcvQ"
+    title="How Gear Ratios Work"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="planetary-gears-explained" class="section level3 hasAnchor" number="4.0.26">
+<h3><span class="header-section-number">4.0.26</span> Planetary Gears Explained<a href="gears-gear-trains-and-transmissions.html#planetary-gears-explained" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/ARd-Om2VyiE"
+    title="Planetary Gears Explained"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="how-manual-transmissions-work" class="section level3 hasAnchor" number="4.0.27">
+<h3><span class="header-section-number">4.0.27</span> How Manual Transmissions Work<a href="gears-gear-trains-and-transmissions.html#how-manual-transmissions-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/wCu9W9xNwtI"
+    title="Manual Transmission Explained"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="how-differentials-work" class="section level3 hasAnchor" number="4.0.28">
+<h3><span class="header-section-number">4.0.28</span> How Differentials Work<a href="gears-gear-trains-and-transmissions.html#how-differentials-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/yYAw79386WI"
+    title="How Differentials Work"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+<hr />
+</div>
+</div>
+<div id="references" class="section level2 unnumbered hasAnchor">
+<h2>📖 References<a href="#references" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Shigley, J. E., &amp; Mischke, C. R. (2011). <em>Mechanical Engineering Design</em> (10th ed.). McGraw-Hill.</p></li>
+<li><p>Dudley, D. W. (1994). <em>Handbook of Practical Gear Design</em>. CRC Press.</p></li>
+<li><p>AGMA. (2019). <em>AGMA 2001-D04: Fundamental Rating Factors and Calculation Methods for Involute Spur and Helical Gear Teeth</em>. American Gear Manufacturers Association.</p></li>
+<li><p>Radzevich, S. P. (2012). <em>Dudley’s Handbook of Practical Gear Design and Manufacture</em> (2nd ed.). CRC Press.</p></li>
+<li><p>Jelaska, D. (2012). <em>Gears and Gear Drives</em>. Wiley.</p></li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="strength-of-bolt-joint-calculations.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="design-for-stamping.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/04-Gears.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

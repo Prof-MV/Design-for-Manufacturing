@@ -1,5 +1,13 @@
 # Design for Joining
 
+
+```{r setup-02, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+```
+
 ## 🔗 Joining Processes: Uniting Materials for Function
 
 ### Introduction
