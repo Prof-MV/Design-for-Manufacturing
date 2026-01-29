@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing</title>
+  <title>Chapter 11 Power Transmission: Chain Drives | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 11 Power Transmission: Chain Drives | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 11 Power Transmission: Chain Drives | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="strength-of-bolt-joint-calculations.html"/>
-<link rel="next" href="design-for-stamping.html"/>
+<link rel="prev" href="power-transmission-belt-pulley-systems.html"/>
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -615,794 +615,1088 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="gears-gear-trains-and-transmissions" class="section level1 hasAnchor" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Gears, Gear Trains, and Transmissions<a href="gears-gear-trains-and-transmissions.html#gears-gear-trains-and-transmissions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="introduction-to-gears" class="section level2 unnumbered hasAnchor">
-<h2>💡 Introduction to Gears<a href="#introduction-to-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Gears are toothed mechanical components that transmit <strong>power and motion</strong> between rotating shafts. They are among the oldest and most important machine elements, found in virtually every mechanical system—from wristwatches to wind turbines, from automotive transmissions to industrial robots.</p>
-<p>Gears serve three fundamental purposes:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Transmit power</strong> from one shaft to another</li>
-<li><strong>Change rotational speed</strong> (increase or decrease RPM)</li>
-<li><strong>Change torque</strong> (increase or decrease turning force)</li>
-<li><strong>Change direction</strong> of rotation or axis of rotation</li>
-</ol>
-<hr />
+<div id="power-transmission-chain-drives" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Power Transmission: Chain Drives<a href="power-transmission-chain-drives.html#power-transmission-chain-drives" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-chain-drives" class="section level2 unnumbered hasAnchor">
+<h2>💡 Introduction to Chain Drives<a href="#introduction-to-chain-drives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Chain drives are mechanical power transmission systems that use a series of interconnected links to transfer motion and force between rotating shafts. Unlike belt drives that rely on friction, chain drives use positive engagement between chain links and sprocket teeth, ensuring no slip and maintaining exact speed ratios.</p>
 <blockquote>
-<p><strong>🤔 Think About It:</strong> Your car’s engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this? And why does a truck need more gear ratios than a sports car?</p>
+<p><strong>Think About It:</strong> Consider a bicycle—the chain connecting your pedals to the rear wheel is a perfect example of a chain drive. Why do bicycles use chains instead of belts? The answer lies in the need for positive engagement, high efficiency, and the ability to transmit significant force through a compact mechanism.</p>
+</blockquote>
+<p>Chain drives are found everywhere in mechanical systems:</p>
+<ul>
+<li><strong>Transportation</strong> – Bicycles, motorcycles, automotive timing chains</li>
+<li><strong>Industrial machinery</strong> – Conveyors, agricultural equipment, manufacturing lines</li>
+<li><strong>Construction equipment</strong> – Excavators, forklifts, cranes</li>
+<li><strong>Power tools</strong> – Chainsaws, drill presses</li>
+</ul>
+<div id="why-choose-chain-drives" class="section level3 hasAnchor" number="11.0.1">
+<h3><span class="header-section-number">11.0.1</span> Why Choose Chain Drives?<a href="power-transmission-chain-drives.html#why-choose-chain-drives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Advantage</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>No slip</strong></td>
+<td align="left">Positive engagement ensures exact speed ratios</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>High efficiency</strong></td>
+<td align="left">Up to 98% mechanical efficiency</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>High power capacity</strong></td>
+<td align="left">Can transmit very high loads</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Long center distances</strong></td>
+<td align="left">Effective over distances where gears aren’t practical</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Durability</strong></td>
+<td align="left">Long service life with proper lubrication</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Compact</strong></td>
+<td align="left">Higher power density than belt drives</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="roller-chain-fundamentals" class="section level2 unnumbered hasAnchor">
+<h2>⚙️ Roller Chain Fundamentals<a href="power-transmission-chain-drives.html#roller-chain-fundamentals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The most common type of industrial chain is the <strong>roller chain</strong>, standardized under ANSI (American) and ISO (International) specifications. Understanding its construction is essential for proper selection and maintenance.</p>
+<div id="roller-chain-anatomy" class="section level3 hasAnchor" number="11.0.2">
+<h3><span class="header-section-number">11.0.2</span> Roller Chain Anatomy<a href="power-transmission-chain-drives.html#roller-chain-anatomy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-anatomy"></span>
+<img src="_main_files/figure-html/chain-anatomy-1.png" alt="Roller chain link construction showing key components" width="1056" />
+<p class="caption">
+Figure 11.1: Roller chain link construction showing key components
+</p>
+</div>
+</div>
+<div id="chain-component-functions" class="section level3 hasAnchor" number="11.0.3">
+<h3><span class="header-section-number">11.0.3</span> Chain Component Functions<a href="power-transmission-chain-drives.html#chain-component-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Component</th>
+<th align="left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Roller</strong></td>
+<td align="left">Engages with sprocket teeth; rolls to reduce friction</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Bushing</strong></td>
+<td align="left">Provides bearing surface between pin and roller</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Pin</strong></td>
+<td align="left">Connects outer plates; transfers load between links</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Inner Plates</strong></td>
+<td align="left">Hold bushings; transfer tension through chain</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Outer Plates</strong></td>
+<td align="left">Connect pins; alternate with inner links</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="standard-chain-sizes" class="section level3 hasAnchor" number="11.0.4">
+<h3><span class="header-section-number">11.0.4</span> Standard Chain Sizes<a href="power-transmission-chain-drives.html#standard-chain-sizes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Roller chains are designated by standardized numbers that encode their pitch and construction:</p>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:chain-sizes-table">Table 11.1: </span>Common ANSI Roller Chain Specifications
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+ANSI No. 
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Pitch (in)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Pitch (mm)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Roller Ø (in)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Avg. Tensile (lbs)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+1/4
+</td>
+<td style="text-align:center;">
+6.35
+</td>
+<td style="text-align:center;">
+0.130
+</td>
+<td style="text-align:center;">
+780
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+35
+</td>
+<td style="text-align:center;">
+3/8
+</td>
+<td style="text-align:center;">
+9.525
+</td>
+<td style="text-align:center;">
+0.200
+</td>
+<td style="text-align:center;">
+1,760
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+40
+</td>
+<td style="text-align:center;">
+1/2
+</td>
+<td style="text-align:center;">
+12.70
+</td>
+<td style="text-align:center;">
+0.312
+</td>
+<td style="text-align:center;">
+3,125
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+41
+</td>
+<td style="text-align:center;">
+1/2
+</td>
+<td style="text-align:center;">
+12.70
+</td>
+<td style="text-align:center;">
+0.306
+</td>
+<td style="text-align:center;">
+2,000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+50
+</td>
+<td style="text-align:center;">
+5/8
+</td>
+<td style="text-align:center;">
+15.875
+</td>
+<td style="text-align:center;">
+0.400
+</td>
+<td style="text-align:center;">
+4,880
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+60
+</td>
+<td style="text-align:center;">
+3/4
+</td>
+<td style="text-align:center;">
+19.05
+</td>
+<td style="text-align:center;">
+0.469
+</td>
+<td style="text-align:center;">
+7,030
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+80
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+25.40
+</td>
+<td style="text-align:center;">
+0.625
+</td>
+<td style="text-align:center;">
+12,500
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+100
+</td>
+<td style="text-align:center;">
+1-1/4
+</td>
+<td style="text-align:center;">
+31.75
+</td>
+<td style="text-align:center;">
+0.750
+</td>
+<td style="text-align:center;">
+19,531
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+120
+</td>
+<td style="text-align:center;">
+1-1/2
+</td>
+<td style="text-align:center;">
+38.10
+</td>
+<td style="text-align:center;">
+0.875
+</td>
+<td style="text-align:center;">
+28,125
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+140
+</td>
+<td style="text-align:center;">
+1-3/4
+</td>
+<td style="text-align:center;">
+44.45
+</td>
+<td style="text-align:center;">
+1.000
+</td>
+<td style="text-align:center;">
+38,280
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;">Note: </span>
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> Chain numbers: First digit(s) = pitch in 1/8”, last digit: 0 = standard, 1 = lightweight, 5 = rollerless
+</td>
+</tr>
+</tfoot>
+</table>
+<blockquote>
+<p><strong>Understanding Chain Numbers:</strong> The ANSI chain number system is logical. For example, chain #40 has a pitch of 4/8” = 1/2”. Chain #60 has a pitch of 6/8” = 3/4”. The final digit indicates the series: 0 for standard roller, 1 for lightweight, and 5 for rollerless (bushing) chains.</p>
 </blockquote>
 <hr />
 </div>
-<div id="fundamental-gear-concepts" class="section level2 unnumbered hasAnchor">
-<h2>⚙️ Fundamental Gear Concepts<a href="gears-gear-trains-and-transmissions.html#fundamental-gear-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="the-basic-principle" class="section level3 hasAnchor" number="4.0.1">
-<h3><span class="header-section-number">4.0.1</span> The Basic Principle<a href="gears-gear-trains-and-transmissions.html#the-basic-principle" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>When two gears mesh, their teeth interlock. As one gear (the <strong>driver</strong> or <strong>pinion</strong>) rotates, it pushes against the teeth of the other gear (the <strong>driven gear</strong>), causing it to rotate.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-mesh-basic"></span>
-<img src="_main_files/figure-html/gear-mesh-basic-1.png" alt="Basic gear mesh showing driver (pinion) and driven gear." width="960" />
+</div>
+<div id="sprocket-design-and-selection" class="section level2 unnumbered hasAnchor">
+<h2>🔗 Sprocket Design and Selection<a href="#sprocket-design-and-selection" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sprockets are toothed wheels designed to engage with chain links. Proper sprocket selection is critical for chain drive performance and longevity.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sprocket-diagram"></span>
+<img src="_main_files/figure-html/sprocket-diagram-1.png" alt="Sprocket tooth geometry and engagement with roller chain" width="960" />
 <p class="caption">
-Figure 4.1: Basic gear mesh showing driver (pinion) and driven gear.
+Figure 11.2: Sprocket tooth geometry and engagement with roller chain
 </p>
 </div>
+<div id="sprocket-terminology" class="section level3 hasAnchor" number="11.0.5">
+<h3><span class="header-section-number">11.0.5</span> Sprocket Terminology<a href="power-transmission-chain-drives.html#sprocket-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Definition</th>
+<th align="left">Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Number of Teeth (N)</strong></td>
+<td align="left">Count of teeth on sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Pitch (P)</strong></td>
+<td align="left">Distance between roller centers</td>
+<td align="left">—</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Pitch Diameter (D)</strong></td>
+<td align="left">Diameter of circle through roller centers</td>
+<td align="left"><span class="math inline">\(D = \frac{P}{\sin(180°/N)}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Outside Diameter</strong></td>
+<td align="left">Diameter to tooth tips</td>
+<td align="left"><span class="math inline">\(D_o \approx P \times \left(\cot\frac{180°}{N} + 1\right)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Root Diameter</strong></td>
+<td align="left">Diameter at tooth base</td>
+<td align="left"><span class="math inline">\(D_r = D - \text{Roller Ø}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Chordal Action</strong></td>
+<td align="left">Velocity variation due to polygon effect</td>
+<td align="left">Minimized with more teeth</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="the-fundamental-law-of-gearing" class="section level3 hasAnchor" number="4.0.2">
-<h3><span class="header-section-number">4.0.2</span> The Fundamental Law of Gearing<a href="gears-gear-trains-and-transmissions.html#the-fundamental-law-of-gearing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>For smooth, constant-velocity power transmission, the <strong>common normal</strong> at the point of contact between gear teeth must always pass through a fixed point called the <strong>pitch point</strong>. This is achieved through the <strong>involute tooth profile</strong>, which is the standard for most modern gears.</p>
+<div id="minimum-sprocket-teeth" class="section level3 hasAnchor" number="11.0.6">
+<h3><span class="header-section-number">11.0.6</span> Minimum Sprocket Teeth<a href="power-transmission-chain-drives.html#minimum-sprocket-teeth" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The number of teeth affects smooth operation. Fewer teeth cause more “chordal action” (speed variation as chain engages).</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Application</th>
+<th align="center">Minimum Driver Teeth</th>
+<th align="center">Minimum Driven Teeth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">High-speed, smooth operation</td>
+<td align="center">21-25</td>
+<td align="center">17-21</td>
+</tr>
+<tr class="even">
+<td align="left">Moderate speed</td>
+<td align="center">17-19</td>
+<td align="center">15-17</td>
+</tr>
+<tr class="odd">
+<td align="left">Low speed, high torque</td>
+<td align="center">12-15</td>
+<td align="center">12-15</td>
+</tr>
+<tr class="even">
+<td align="left">Absolute minimum</td>
+<td align="center">9</td>
+<td align="center">9</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Design Rule:</strong> For smooth operation at moderate to high speeds, use at least 17 teeth on the smaller sprocket. Below 12 teeth, noise and wear increase significantly.</p>
+</blockquote>
 <hr />
 </div>
 </div>
-<div id="gear-terminology" class="section level2 unnumbered hasAnchor">
-<h2>📐 Gear Terminology<a href="#gear-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Understanding gear terminology is essential for specifying, designing, and manufacturing gears.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-terminology"></span>
-<img src="_main_files/figure-html/gear-terminology-1.png" alt="Essential gear terminology and dimensions." width="960" />
+<div id="chain-drive-calculations" class="section level2 unnumbered hasAnchor">
+<h2>📐 Chain Drive Calculations<a href="#chain-drive-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="speed-ratio" class="section level3 hasAnchor" number="11.0.7">
+<h3><span class="header-section-number">11.0.7</span> Speed Ratio<a href="power-transmission-chain-drives.html#speed-ratio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Like belt and gear drives, chain drives follow a simple speed ratio relationship:</p>
+<p><span class="math display">\[\frac{n_2}{n_1} = \frac{N_1}{N_2} = \frac{1}{i}\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(n_1\)</span></td>
+<td align="left">Driver sprocket speed</td>
+<td align="left">rpm</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(n_2\)</span></td>
+<td align="left">Driven sprocket speed</td>
+<td align="left">rpm</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(N_1\)</span></td>
+<td align="left">Number of teeth on driver sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(N_2\)</span></td>
+<td align="left">Number of teeth on driven sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(i\)</span></td>
+<td align="left">Speed ratio</td>
+<td align="left">—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Key Point:</strong> Since chain engagement is positive (no slip), the speed ratio is exact and constant—unlike belt drives where slip can occur.</p>
+</blockquote>
+</div>
+<div id="chain-length-calculation" class="section level3 hasAnchor" number="11.0.8">
+<h3><span class="header-section-number">11.0.8</span> Chain Length Calculation<a href="power-transmission-chain-drives.html#chain-length-calculation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The chain length is calculated in terms of <strong>pitches</strong> (number of links):</p>
+<p><span class="math display">\[L_p = 2C_p + \frac{N_1 + N_2}{2} + \frac{(N_2 - N_1)^2}{4\pi^2 C_p}\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(L_p\)</span></td>
+<td align="left">Chain length in pitches</td>
+<td align="left">pitches</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(C_p\)</span></td>
+<td align="left">Center distance in pitches (<span class="math inline">\(C/P\)</span>)</td>
+<td align="left">pitches</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(N_1\)</span></td>
+<td align="left">Teeth on smaller sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(N_2\)</span></td>
+<td align="left">Teeth on larger sprocket</td>
+<td align="left">—</td>
+</tr>
+</tbody>
+</table>
+<p>The actual chain length is:
+<span class="math display">\[L = L_p \times P\]</span></p>
+<blockquote>
+<p><strong>Important:</strong> Chain length must be a whole number of pitches. An <strong>even number</strong> of pitches is preferred to avoid offset links, which are weaker than standard links.</p>
+</blockquote>
+</div>
+<div id="center-distance-calculation" class="section level3 hasAnchor" number="11.0.9">
+<h3><span class="header-section-number">11.0.9</span> Center Distance Calculation<a href="power-transmission-chain-drives.html#center-distance-calculation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Given a chain length, the center distance can be calculated:</p>
+<p><span class="math display">\[C_p = \frac{1}{4}\left[L_p - \frac{N_1 + N_2}{2} + \sqrt{\left(L_p - \frac{N_1 + N_2}{2}\right)^2 - \frac{8(N_2 - N_1)^2}{4\pi^2}}\right]\]</span></p>
+<p>Or approximately:</p>
+<p><span class="math display">\[C \approx \frac{P}{4}\left[2L_p - N_1 - N_2 + \sqrt{(2L_p - N_1 - N_2)^2 - 0.81(N_2 - N_1)^2}\right]\]</span></p>
+</div>
+<div id="chain-speed" class="section level3 hasAnchor" number="11.0.10">
+<h3><span class="header-section-number">11.0.10</span> Chain Speed<a href="power-transmission-chain-drives.html#chain-speed" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The linear chain speed is:</p>
+<p><span class="math display">\[v = \frac{P \times N \times n}{60,000}\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(v\)</span></td>
+<td align="left">Chain speed</td>
+<td align="left">m/s</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Chain pitch</td>
+<td align="left">mm</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(N\)</span></td>
+<td align="left">Number of teeth on sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(n\)</span></td>
+<td align="left">Sprocket rotational speed</td>
+<td align="left">rpm</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="chain-drive-system-layout" class="section level2 unnumbered hasAnchor">
+<h2>📊 Chain Drive System Layout<a href="#chain-drive-system-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-drive-layout"></span>
+<img src="_main_files/figure-html/chain-drive-layout-1.png" alt="Chain drive system showing driver and driven sprockets with chain path" width="1056" />
 <p class="caption">
-Figure 4.2: Essential gear terminology and dimensions.
+Figure 11.3: Chain drive system showing driver and driven sprockets with chain path
 </p>
 </div>
-<div id="essential-gear-formulas" class="section level3 hasAnchor" number="4.0.3">
-<h3><span class="header-section-number">4.0.3</span> Essential Gear Formulas<a href="gears-gear-trains-and-transmissions.html#essential-gear-formulas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<hr />
+</div>
+<div id="worked-example-chain-drive-design" class="section level2 unnumbered hasAnchor">
+<h2>🧮 Worked Example: Chain Drive Design<a href="#worked-example-chain-drive-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem:</strong> Design a chain drive to transmit power from a 1200 rpm motor to a conveyor shaft that must rotate at 400 rpm. The center distance should be approximately 500 mm. Select an appropriate chain size for moderate industrial service.</p>
+<details>
+<summary>
+<strong>Click to reveal solution</strong>
+</summary>
+<p><strong>Step 1: Calculate the required speed ratio</strong></p>
+<p><span class="math display">\[i = \frac{n_1}{n_2} = \frac{1200}{400} = 3.0\]</span></p>
+<p><strong>Step 2: Select sprocket teeth</strong></p>
+<p>Choose driver sprocket: <span class="math inline">\(N_1 = 17\)</span> teeth (good minimum for smooth operation)</p>
+<p>Calculate driven sprocket: <span class="math inline">\(N_2 = N_1 \times i = 17 \times 3 = 51\)</span> teeth</p>
+<p><strong>Step 3: Select chain size</strong></p>
+<p>For moderate industrial service at 1200 rpm, let’s select <strong>ANSI #40</strong> chain (1/2” = 12.7 mm pitch).</p>
+<p><strong>Step 4: Calculate pitch diameters</strong></p>
+<p>Driver pitch diameter:
+<span class="math display">\[D_1 = \frac{P}{\sin(180°/N_1)} = \frac{12.7}{\sin(180°/17)} = \frac{12.7}{0.1837} = 69.1 \text{ mm}\]</span></p>
+<p>Driven pitch diameter:
+<span class="math display">\[D_2 = \frac{P}{\sin(180°/N_2)} = \frac{12.7}{\sin(180°/51)} = \frac{12.7}{0.0616} = 206.2 \text{ mm}\]</span></p>
+<p><strong>Step 5: Calculate chain length</strong></p>
+<p>Convert center distance to pitches:
+<span class="math display">\[C_p = \frac{C}{P} = \frac{500}{12.7} = 39.37 \text{ pitches}\]</span></p>
+<p>Chain length in pitches:
+<span class="math display">\[L_p = 2(39.37) + \frac{17 + 51}{2} + \frac{(51 - 17)^2}{4\pi^2(39.37)}\]</span></p>
+<p><span class="math display">\[L_p = 78.74 + 34 + \frac{1156}{1554.5} = 78.74 + 34 + 0.74 = 113.48 \text{ pitches}\]</span></p>
+<p>Round to nearest <strong>even number</strong>: <span class="math inline">\(L_p = 114\)</span> pitches</p>
+<p>Actual chain length: <span class="math inline">\(L = 114 \times 12.7 = 1447.8\)</span> mm</p>
+<p><strong>Step 6: Recalculate actual center distance</strong></p>
+<p>Using the rounded chain length:
+<span class="math display">\[C_p = \frac{1}{4}\left[114 - 34 + \sqrt{(114-34)^2 - 0.81(34)^2}\right]\]</span></p>
+<p><span class="math display">\[C_p = \frac{1}{4}\left[80 + \sqrt{6400 - 936.4}\right] = \frac{1}{4}[80 + 73.9] = 38.5 \text{ pitches}\]</span></p>
+<p><span class="math display">\[C = 38.5 \times 12.7 = 489 \text{ mm}\]</span></p>
+<p><strong>Step 7: Check chain speed</strong></p>
+<p><span class="math display">\[v = \frac{12.7 \times 17 \times 1200}{60,000} = 4.32 \text{ m/s}\]</span></p>
+<p>This is acceptable for #40 chain (max recommended ~7-10 m/s for this size).</p>
+<p><strong>Summary:</strong>
+- Chain: ANSI #40 (1/2” pitch)
+- Driver sprocket: 17 teeth, 69.1 mm pitch diameter
+- Driven sprocket: 51 teeth, 206.2 mm pitch diameter
+- Chain length: 114 pitches (1448 mm)
+- Center distance: 489 mm
+- Output speed: 400 rpm (exact)</p>
+</details>
+<hr />
+</div>
+<div id="chain-tensioning-and-adjustment" class="section level2 unnumbered hasAnchor">
+<h2>⚡ Chain Tensioning and Adjustment<a href="power-transmission-chain-drives.html#chain-tensioning-and-adjustment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Unlike belts, chains do not stretch significantly, but they do <strong>wear</strong>. As chain links wear, the effective pitch increases (chain “elongation”), requiring adjustment.</p>
+<div id="chain-slack" class="section level3 hasAnchor" number="11.0.11">
+<h3><span class="header-section-number">11.0.11</span> Chain Slack<a href="power-transmission-chain-drives.html#chain-slack" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Proper chain slack on the <strong>slack side</strong> (typically the lower span) is essential:</p>
 <table>
+<thead>
+<tr class="header">
+<th align="left">Chain Span Length</th>
+<th align="left">Recommended Slack</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Up to 300 mm</td>
+<td align="left">2-3% of span</td>
+</tr>
+<tr class="even">
+<td align="left">300-600 mm</td>
+<td align="left">3-4% of span</td>
+</tr>
+<tr class="odd">
+<td align="left">Over 600 mm</td>
+<td align="left">4-5% of span</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-slack-diagram"></span>
+<img src="_main_files/figure-html/chain-slack-diagram-1.png" alt="Chain slack measurement on the slack side span" width="960" />
+<p class="caption">
+Figure 11.4: Chain slack measurement on the slack side span
+</p>
+</div>
+</div>
+<div id="tensioning-methods-1" class="section level3 hasAnchor" number="11.0.12">
+<h3><span class="header-section-number">11.0.12</span> Tensioning Methods<a href="power-transmission-chain-drives.html#tensioning-methods-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Adjustable shaft position</strong> – Move one sprocket to take up slack</li>
+<li><strong>Idler sprocket</strong> – Engages with chain to increase wrap and tension</li>
+<li><strong>Shoe tensioner</strong> – Spring-loaded shoe presses against chain back</li>
+<li><strong>Automatic tensioner</strong> – Self-adjusting mechanism for varying loads</li>
+</ol>
+</div>
+<div id="chain-wear-and-replacement" class="section level3 hasAnchor" number="11.0.13">
+<h3><span class="header-section-number">11.0.13</span> Chain Wear and Replacement<a href="power-transmission-chain-drives.html#chain-wear-and-replacement" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Chain wear is measured as <strong>elongation</strong> (increase in pitch length):</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Elongation</th>
+<th align="left">Action Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">&lt; 1%</td>
+<td align="left">Normal wear; continue monitoring</td>
+</tr>
+<tr class="even">
+<td align="left">1-1.5%</td>
+<td align="left">Plan replacement; increase lubrication</td>
+</tr>
+<tr class="odd">
+<td align="left">1.5-2%</td>
+<td align="left">Replace immediately for precision drives</td>
+</tr>
+<tr class="even">
+<td align="left">&gt; 3%</td>
+<td align="left">Replace immediately; inspect sprockets</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Measurement Tip:</strong> To measure chain wear, measure a span of 10-20 pitches and compare to the theoretical length. A 1% elongation over 20 pitches of 1” chain means the measured length is 20.2” instead of 20”.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="lubrication-requirements" class="section level2 unnumbered hasAnchor">
+<h2>🛢️ Lubrication Requirements<a href="#lubrication-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Proper lubrication is critical for chain drive life. The lubrication method depends on chain speed.</p>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:lubrication-table">Table 11.2: </span>Chain Lubrication Methods by Speed
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Chain Speed
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Method
+</th>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Description
+</th>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Typical Application
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+&lt; 4 m/s
+</td>
+<td style="text-align:center;">
+Manual/Drip
+</td>
+<td style="text-align:left;">
+Periodic manual application or drip oiler
+</td>
+<td style="text-align:left;">
+Low-speed conveyors, hand-operated equipment
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4-7 m/s
+</td>
+<td style="text-align:center;">
+Bath/Disc
+</td>
+<td style="text-align:left;">
+Chain runs through oil bath or disc splashes oil
+</td>
+<td style="text-align:left;">
+General industrial machinery
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7-12 m/s
+</td>
+<td style="text-align:center;">
+Oil Stream
+</td>
+<td style="text-align:left;">
+Continuous oil stream directed at chain
+</td>
+<td style="text-align:left;">
+High-speed industrial drives
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+&gt; 12 m/s
+</td>
+<td style="text-align:center;">
+Oil Mist/Spray
+</td>
+<td style="text-align:left;">
+Pressurized oil mist or spray system
+</td>
+<td style="text-align:left;">
+Very high-speed, precision equipment
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="chain-vs.-belt-comparison" class="section level2 unnumbered hasAnchor">
+<h2>🔄 Chain vs. Belt Comparison<a href="#chain-vs.-belt-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When should you choose a chain drive over a belt drive?</p>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:comparison-table">Table 11.3: </span>Chain Drive vs. Belt Drive Comparison
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Characteristic
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Chain Drive
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Belt Drive
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Slip
+</td>
+<td style="text-align:center;">
+None (positive)
+</td>
+<td style="text-align:center;">
+1-3%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Efficiency
+</td>
+<td style="text-align:center;">
+97-98%
+</td>
+<td style="text-align:center;">
+95-98%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Speed Ratio Accuracy
+</td>
+<td style="text-align:center;">
+Exact
+</td>
+<td style="text-align:center;">
+Good (V-belt) to Exact (timing)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Load Capacity
+</td>
+<td style="text-align:center;">
+High
+</td>
+<td style="text-align:center;">
+Moderate to High
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shock Absorption
+</td>
+<td style="text-align:center;">
+Poor
+</td>
+<td style="text-align:center;">
+Excellent
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Noise
+</td>
+<td style="text-align:center;">
+Higher
+</td>
+<td style="text-align:center;">
+Low
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maintenance
+</td>
+<td style="text-align:center;">
+Regular lubrication
+</td>
+<td style="text-align:center;">
+Minimal
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cost
+</td>
+<td style="text-align:center;">
+Higher initial
+</td>
+<td style="text-align:center;">
+Lower
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Speed Capability
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+<td style="text-align:center;">
+High to Very High
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Environment Tolerance
+</td>
+<td style="text-align:center;">
+Good (with proper lube)
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Choose Chain Drives When:</strong></p>
+<ul>
+<li>Exact speed ratio is required</li>
+<li>High loads must be transmitted</li>
+<li>Compact design is needed</li>
+<li>Operating environment is harsh (heat, oil, dust)</li>
+<li>Long service life is important</li>
+</ul>
+<p><strong>Choose Belt Drives When:</strong></p>
+<ul>
+<li>Shock absorption is important</li>
+<li>Quiet operation is required</li>
+<li>High speeds are needed</li>
+<li>Low maintenance is preferred</li>
+<li>Cost is a primary concern</li>
+</ul>
+<hr />
+</div>
+<div id="design-guidelines-and-best-practices-1" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Design Guidelines and Best Practices<a href="#design-guidelines-and-best-practices-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="sprocket-selection" class="section level3 hasAnchor" number="11.0.14">
+<h3><span class="header-section-number">11.0.14</span> Sprocket Selection<a href="power-transmission-chain-drives.html#sprocket-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Parameter</th>
-<th align="left">Metric (Module)</th>
-<th align="left">Imperial (Diametral Pitch)</th>
+<th align="left">Recommendation</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Pitch Diameter</strong></td>
-<td align="left"><span class="math inline">\(d = m \times N\)</span></td>
-<td align="left"><span class="math inline">\(d = N / P\)</span></td>
+<td align="left">Minimum driver teeth</td>
+<td align="left">17-21 for smooth operation</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Circular Pitch</strong></td>
-<td align="left"><span class="math inline">\(p = \pi \times m\)</span></td>
-<td align="left"><span class="math inline">\(p = \pi / P\)</span></td>
+<td align="left">Maximum speed ratio</td>
+<td align="left">7:1 (single stage), 10:1 with tensioner</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Addendum</strong></td>
-<td align="left"><span class="math inline">\(a = m\)</span></td>
-<td align="left"><span class="math inline">\(a = 1 / P\)</span></td>
+<td align="left">Teeth difference</td>
+<td align="left">At least 4-5 teeth between sprockets</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Dedendum</strong></td>
-<td align="left"><span class="math inline">\(b = 1.25 \times m\)</span></td>
-<td align="left"><span class="math inline">\(b = 1.25 / P\)</span></td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Outside Diameter</strong></td>
-<td align="left"><span class="math inline">\(d_o = m(N + 2)\)</span></td>
-<td align="left"><span class="math inline">\(d_o = (N + 2) / P\)</span></td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Center Distance</strong></td>
-<td align="left"><span class="math inline">\(C = m(N_1 + N_2)/2\)</span></td>
-<td align="left"><span class="math inline">\(C = (N_1 + N_2) / 2P\)</span></td>
+<td align="left">Material</td>
+<td align="left">Hardened steel for drivers; cast iron acceptable for slow driven</td>
 </tr>
 </tbody>
 </table>
-<p>Where: <span class="math inline">\(m\)</span> = module, <span class="math inline">\(P\)</span> = diametral pitch, <span class="math inline">\(N\)</span> = number of teeth, <span class="math inline">\(d\)</span> = pitch diameter</p>
-<blockquote>
-<p><strong>⚠️ Important:</strong> Module (mm) and Diametral Pitch (teeth/inch) are inversely related: <span class="math inline">\(m = 25.4 / P\)</span>. <strong>Never mix metric and imperial gears!</strong></p>
-</blockquote>
-<hr />
-<blockquote>
-<p><strong>❓ Quick Calculation:</strong> A gear has 40 teeth and a module of 3 mm. Calculate: (a) pitch diameter, (b) outside diameter, (c) circular pitch.</p>
-</blockquote>
-<details>
-<summary>
-Click to reveal solution
-</summary>
-<p><strong>(a) Pitch Diameter:</strong>
-<span class="math display">\[d = m \times N = 3 \times 40 = 120 \text{ mm}\]</span></p>
-<p><strong>(b) Outside Diameter:</strong>
-<span class="math display">\[d_o = m(N + 2) = 3(40 + 2) = 126 \text{ mm}\]</span></p>
-<p><strong>(c) Circular Pitch:</strong>
-<span class="math display">\[p = \pi \times m = \pi \times 3 = 9.42 \text{ mm}\]</span></p>
-</details>
-<hr />
 </div>
+<div id="installation-best-practices-1" class="section level3 hasAnchor" number="11.0.15">
+<h3><span class="header-section-number">11.0.15</span> Installation Best Practices<a href="power-transmission-chain-drives.html#installation-best-practices-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Alignment</strong> – Sprockets must be parallel and in the same plane</li>
+<li><strong>Initial tension</strong> – Set slack per recommendations; slightly tight is better</li>
+<li><strong>Run-in</strong> – Check adjustment after first 24-48 hours</li>
+<li><strong>Lubrication</strong> – Establish lubrication schedule before startup</li>
+<li><strong>Guards</strong> – Always install safety guards around chain drives</li>
+</ol>
 </div>
-<div id="types-of-gears" class="section level2 unnumbered hasAnchor">
-<h2>🔧 Types of Gears<a href="#types-of-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Different gear types are designed for different applications based on shaft orientation, load capacity, speed, and noise requirements.</p>
-<div id="spur-gears" class="section level3 hasAnchor" number="4.0.4">
-<h3><span class="header-section-number">4.0.4</span> Spur Gears<a href="gears-gear-trains-and-transmissions.html#spur-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Spur gears</strong> have straight teeth parallel to the axis of rotation. They are the simplest, most common, and most economical type.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spur-gear"></span>
-<img src="_main_files/figure-html/spur-gear-1.png" alt="Spur gears: parallel shafts, straight teeth." width="768" />
-<p class="caption">
-Figure 4.3: Spur gears: parallel shafts, straight teeth.
-</p>
-</div>
-<p><strong>Applications:</strong> Gearboxes, conveyors, food processing equipment, clocks, printers</p>
-<hr />
-</div>
-<div id="helical-gears" class="section level3 hasAnchor" number="4.0.5">
-<h3><span class="header-section-number">4.0.5</span> Helical Gears<a href="gears-gear-trains-and-transmissions.html#helical-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Helical gears</strong> have teeth cut at an angle (helix angle) to the shaft axis. This allows gradual tooth engagement, resulting in smoother, quieter operation.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:helical-gear"></span>
-<img src="_main_files/figure-html/helical-gear-1.png" alt="Helical gears: angled teeth for smoother operation." width="960" />
-<p class="caption">
-Figure 4.4: Helical gears: angled teeth for smoother operation.
-</p>
-</div>
-<p><strong>Applications:</strong> Automotive transmissions, industrial gearboxes, machine tools, elevators</p>
-<hr />
-</div>
-<div id="bevel-gears" class="section level3 hasAnchor" number="4.0.6">
-<h3><span class="header-section-number">4.0.6</span> Bevel Gears<a href="gears-gear-trains-and-transmissions.html#bevel-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Bevel gears</strong> transmit power between shafts that intersect, typically at 90°. The teeth are cut on a conical surface.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bevel-gear"></span>
-<img src="_main_files/figure-html/bevel-gear-1.png" alt="Bevel gears: intersecting shafts, typically at 90°." width="960" />
-<p class="caption">
-Figure 4.5: Bevel gears: intersecting shafts, typically at 90°.
-</p>
-</div>
-<p><strong>Applications:</strong> Automotive differentials, hand tools, food mixers, rotorcraft transmissions</p>
-<hr />
-</div>
-<div id="worm-gears" class="section level3 hasAnchor" number="4.0.7">
-<h3><span class="header-section-number">4.0.7</span> Worm Gears<a href="gears-gear-trains-and-transmissions.html#worm-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Worm gears</strong> consist of a worm (screw-like) driving a worm wheel. They provide very high reduction ratios in a compact space and can be self-locking.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:worm-gear"></span>
-<img src="_main_files/figure-html/worm-gear-1.png" alt="Worm gear set: high reduction ratio, right-angle drive." width="960" />
-<p class="caption">
-Figure 4.6: Worm gear set: high reduction ratio, right-angle drive.
-</p>
-</div>
-<p><strong>Applications:</strong> Conveyor drives, elevator lifts, tuning mechanisms, steering systems</p>
-<hr />
-</div>
-<div id="rack-and-pinion" class="section level3 hasAnchor" number="4.0.8">
-<h3><span class="header-section-number">4.0.8</span> Rack and Pinion<a href="gears-gear-trains-and-transmissions.html#rack-and-pinion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Rack and pinion</strong> converts rotational motion to linear motion (or vice versa). The rack is essentially a gear with infinite radius.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rack-pinion"></span>
-<img src="_main_files/figure-html/rack-pinion-1.png" alt="Rack and pinion: rotary to linear motion conversion." width="960" />
-<p class="caption">
-Figure 4.7: Rack and pinion: rotary to linear motion conversion.
-</p>
-</div>
-<p><strong>Applications:</strong> Automotive steering, CNC machines, actuators, stairlifts</p>
-<hr />
-</div>
-<div id="gear-type-comparison" class="section level3 hasAnchor" number="4.0.9">
-<h3><span class="header-section-number">4.0.9</span> Gear Type Comparison<a href="gears-gear-trains-and-transmissions.html#gear-type-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="common-problems-and-solutions-1" class="section level3 hasAnchor" number="11.0.16">
+<h3><span class="header-section-number">11.0.16</span> Common Problems and Solutions<a href="power-transmission-chain-drives.html#common-problems-and-solutions-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table>
 <colgroup>
-<col width="14%" />
-<col width="25%" />
-<col width="17%" />
-<col width="16%" />
-<col width="17%" />
-<col width="8%" />
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">Gear Type</th>
-<th align="left">Shaft Arrangement</th>
-<th align="left">Ratio Range</th>
-<th align="left">Efficiency</th>
-<th align="left">Noise Level</th>
-<th align="left">Cost</th>
+<th align="left">Problem</th>
+<th align="left">Likely Cause</th>
+<th align="left">Solution</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Spur</strong></td>
-<td align="left">Parallel</td>
-<td align="left">1:1 to 6:1</td>
-<td align="left">98-99%</td>
-<td align="left">High</td>
-<td align="left">Low</td>
+<td align="left">Rapid wear</td>
+<td align="left">Poor lubrication or misalignment</td>
+<td align="left">Improve lubrication; realign sprockets</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Helical</strong></td>
-<td align="left">Parallel</td>
-<td align="left">1:1 to 10:1</td>
-<td align="left">97-99%</td>
-<td align="left">Low</td>
-<td align="left">Medium</td>
+<td align="left">Chain climbing sprocket</td>
+<td align="left">Worn chain or sprocket teeth</td>
+<td align="left">Replace both chain and sprockets</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Bevel</strong></td>
-<td align="left">Intersecting (90°)</td>
-<td align="left">1:1 to 5:1</td>
-<td align="left">97-99%</td>
-<td align="left">Medium</td>
-<td align="left">High</td>
+<td align="left">Excessive noise</td>
+<td align="left">Misalignment, worn components, improper tension</td>
+<td align="left">Align, replace worn parts, adjust slack</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Worm</strong></td>
-<td align="left">Right angle (non-intersecting)</td>
-<td align="left">5:1 to 100:1</td>
-<td align="left">40-90%</td>
-<td align="left">Low</td>
-<td align="left">Medium</td>
+<td align="left">Chain breaking</td>
+<td align="left">Overload, shock loading, or fatigue</td>
+<td align="left">Verify load; upgrade chain size</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Rack &amp; Pinion</strong></td>
-<td align="left">Rotary to linear</td>
-<td align="left">N/A</td>
-<td align="left">97-99%</td>
-<td align="left">Medium</td>
-<td align="left">Medium</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>🤔 Design Decision:</strong> A food packaging machine requires a 25:1 speed reduction in a compact space. The drive must be self-locking to prevent the load from back-driving the motor when power is off. Which gear type would you recommend?</p>
-</blockquote>
-<details>
-<summary>
-Click to reveal analysis
-</summary>
-<p><strong>Recommended: Worm Gear</strong></p>
-<p>Reasons:
-1. <strong>High ratio</strong> - 25:1 is within the typical worm gear range (5:1 to 100:1)
-2. <strong>Compact</strong> - Achieves high ratio in single stage
-3. <strong>Self-locking</strong> - When lead angle &lt; friction angle (typically &lt; 5°), the worm gear cannot be back-driven
-4. <strong>Quiet operation</strong> - Important in food processing environments</p>
-<p><strong>Trade-offs to consider:</strong>
-- Lower efficiency (70-85% at this ratio) means more heat and energy loss
-- May require cooling or lubrication considerations
-- Higher sliding friction causes wear - use appropriate materials (bronze wheel, hardened steel worm)</p>
-</details>
-<hr />
-</div>
-</div>
-<div id="gear-ratios-and-calculations" class="section level2 unnumbered hasAnchor">
-<h2>📊 Gear Ratios and Calculations<a href="#gear-ratios-and-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="speed-and-torque-relationships" class="section level3 hasAnchor" number="4.0.10">
-<h3><span class="header-section-number">4.0.10</span> Speed and Torque Relationships<a href="gears-gear-trains-and-transmissions.html#speed-and-torque-relationships" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The <strong>gear ratio</strong> is the fundamental relationship between meshing gears:</p>
-<p><span class="math display">\[\text{Gear Ratio} = \frac{N_{driven}}{N_{driver}} = \frac{\omega_{driver}}{\omega_{driven}} = \frac{T_{driven}}{T_{driver}}\]</span></p>
-<p>Where: <span class="math inline">\(N\)</span> = number of teeth, <span class="math inline">\(\omega\)</span> = angular velocity, <span class="math inline">\(T\)</span> = torque</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-ratio-visual"></span>
-<img src="_main_files/figure-html/gear-ratio-visual-1.png" alt="Gear ratio demonstration: speed reduction and torque multiplication." width="960" />
-<p class="caption">
-Figure 4.8: Gear ratio demonstration: speed reduction and torque multiplication.
-</p>
-</div>
-</div>
-<div id="key-relationships" class="section level3 hasAnchor" number="4.0.11">
-<h3><span class="header-section-number">4.0.11</span> Key Relationships<a href="gears-gear-trains-and-transmissions.html#key-relationships" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>For a simple gear pair:</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">If the driven gear is…</th>
-<th align="left">Then speed is…</th>
-<th align="left">And torque is…</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><strong>Larger</strong> (more teeth)</td>
-<td align="left"><strong>Reduced</strong></td>
-<td align="left"><strong>Increased</strong></td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Smaller</strong> (fewer teeth)</td>
-<td align="left"><strong>Increased</strong></td>
-<td align="left"><strong>Reduced</strong></td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Same size</strong></td>
-<td align="left"><strong>Same</strong></td>
-<td align="left"><strong>Same</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Power relationship (accounting for efficiency):</strong></p>
-<p><span class="math display">\[P_{out} = P_{in} \times \eta\]</span></p>
-<p><span class="math display">\[T_{out} \times \omega_{out} = T_{in} \times \omega_{in} \times \eta\]</span></p>
-<p>Where <span class="math inline">\(\eta\)</span> = efficiency (typically 0.97-0.99 per gear mesh)</p>
-<hr />
-<blockquote>
-<p><strong>❓ Calculation Challenge:</strong> A motor runs at 1750 RPM and delivers 5 kW. It drives a gear with 20 teeth meshed with a gear having 80 teeth. Calculate: (a) output speed, (b) gear ratio, (c) output torque (assume 98% efficiency).</p>
-</blockquote>
-<details>
-<summary>
-Click to reveal solution
-</summary>
-<p><strong>(a) Gear Ratio:</strong>
-<span class="math display">\[GR = \frac{N_{driven}}{N_{driver}} = \frac{80}{20} = 4:1\]</span></p>
-<p><strong>(b) Output Speed:</strong>
-<span class="math display">\[n_{out} = \frac{n_{in}}{GR} = \frac{1750}{4} = 437.5 \text{ RPM}\]</span></p>
-<p><strong>(c) Input Torque:</strong>
-<span class="math display">\[T_{in} = \frac{P}{\omega_{in}} = \frac{5000}{1750 \times \frac{2\pi}{60}} = \frac{5000}{183.3} = 27.3 \text{ N·m}\]</span></p>
-<p><strong>(d) Output Torque:</strong>
-<span class="math display">\[T_{out} = T_{in} \times GR \times \eta = 27.3 \times 4 \times 0.98 = 107 \text{ N·m}\]</span></p>
-<p>Or verify using power:
-<span class="math display">\[T_{out} = \frac{P_{out}}{\omega_{out}} = \frac{5000 \times 0.98}{437.5 \times \frac{2\pi}{60}} = \frac{4900}{45.8} = 107 \text{ N·m}\]</span> ✓</p>
-</details>
-<hr />
-</div>
-</div>
-<div id="gear-trains" class="section level2 unnumbered hasAnchor">
-<h2>🔄 Gear Trains<a href="#gear-trains" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A <strong>gear train</strong> is a combination of two or more gears used to transmit power from one shaft to another. Gear trains allow for larger speed ratios and more complex motion transmission than a single gear pair.</p>
-<div id="simple-gear-train" class="section level3 hasAnchor" number="4.0.12">
-<h3><span class="header-section-number">4.0.12</span> Simple Gear Train<a href="gears-gear-trains-and-transmissions.html#simple-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In a <strong>simple gear train</strong>, each shaft carries only one gear. The intermediate gears are called <strong>idlers</strong> and do not affect the overall gear ratio—they only change the direction of rotation.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:simple-gear-train"></span>
-<img src="_main_files/figure-html/simple-gear-train-1.png" alt="Simple gear train with idler gear." width="1152" />
-<p class="caption">
-Figure 4.9: Simple gear train with idler gear.
-</p>
-</div>
-<p><strong>Simple gear train ratio:</strong>
-<span class="math display">\[GR = \frac{N_{driven}}{N_{driver}} = \frac{N_{last}}{N_{first}}\]</span></p>
-<p>The idler gears only affect <strong>direction of rotation</strong>, not the gear ratio.</p>
-<hr />
-</div>
-<div id="compound-gear-train" class="section level3 hasAnchor" number="4.0.13">
-<h3><span class="header-section-number">4.0.13</span> Compound Gear Train<a href="gears-gear-trains-and-transmissions.html#compound-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In a <strong>compound gear train</strong>, two or more gears are mounted on the same shaft, rotating together. This allows for much higher gear ratios in a compact space.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:compound-gear-train"></span>
-<img src="_main_files/figure-html/compound-gear-train-1.png" alt="Compound gear train: higher ratios in less space." width="1152" />
-<p class="caption">
-Figure 4.10: Compound gear train: higher ratios in less space.
-</p>
-</div>
-<p><strong>Compound gear train ratio:</strong>
-<span class="math display">\[GR = \frac{N_{B}}{N_{A}} \times \frac{N_{D}}{N_{C}} = \frac{\text{Product of driven teeth}}{\text{Product of driver teeth}}\]</span></p>
-<hr />
-</div>
-<div id="planetary-epicyclic-gear-train" class="section level3 hasAnchor" number="4.0.14">
-<h3><span class="header-section-number">4.0.14</span> Planetary (Epicyclic) Gear Train<a href="gears-gear-trains-and-transmissions.html#planetary-epicyclic-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Planetary gear systems</strong> are compact, high-ratio gear trains widely used in automatic transmissions, power tools, and aerospace applications.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:planetary-gear"></span>
-<img src="_main_files/figure-html/planetary-gear-1.png" alt="Planetary gear system components and arrangement." width="960" />
-<p class="caption">
-Figure 4.11: Planetary gear system components and arrangement.
-</p>
-</div>
-<p><strong>Planetary gear ratio</strong> (sun input, carrier output, ring fixed):
-<span class="math display">\[GR = 1 + \frac{N_{ring}}{N_{sun}}\]</span></p>
-<p><strong>Applications:</strong>
-- <strong>Automotive:</strong> Automatic transmissions, hybrid drives, transfer cases
-- <strong>Aerospace:</strong> Helicopter transmissions, jet engine gearboxes
-- <strong>Industrial:</strong> Wind turbines, conveyors, hoists</p>
-<blockquote>
-<p><strong>🤔 Automotive Connection:</strong> Why do automatic transmissions use planetary gear sets instead of conventional gear trains?</p>
-</blockquote>
-<details>
-<summary>
-Click to reveal explanation
-</summary>
-<p><strong>Planetary gears in automatic transmissions offer several advantages:</strong></p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Multiple ratios from one gear set</strong> - By holding different elements (sun, ring, or carrier) stationary using clutches and bands, different gear ratios are achieved without physically moving gears</p></li>
-<li><p><strong>Constant mesh</strong> - All gears remain engaged; ratio changes are smooth and fast</p></li>
-<li><p><strong>Compact design</strong> - High power density; fits in limited space</p></li>
-<li><p><strong>Load sharing</strong> - Multiple planet gears share the load (typically 3-5 planets)</p></li>
-<li><p><strong>Coaxial input/output</strong> - Input and output shafts can be on the same axis</p></li>
-</ol>
-<p>A typical 6-speed automatic uses 2-3 planetary gear sets with multiple clutches to achieve all forward gears plus reverse.</p>
-</details>
-<hr />
-</div>
-</div>
-<div id="industry-applications" class="section level2 unnumbered hasAnchor">
-<h2>🏭 Industry Applications<a href="#industry-applications" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="automotive-industry" class="section level3 hasAnchor" number="4.0.15">
-<h3><span class="header-section-number">4.0.15</span> Automotive Industry<a href="gears-gear-trains-and-transmissions.html#automotive-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:automotive-gears"></span>
-<img src="_main_files/figure-html/automotive-gears-1.png" alt="Gear applications in automotive systems." width="1152" />
-<p class="caption">
-Figure 4.12: Gear applications in automotive systems.
-</p>
-</div>
-<p><strong>Key automotive gear applications:</strong></p>
-<table>
-<colgroup>
-<col width="27%" />
-<col width="41%" />
-<col width="31%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">System</th>
-<th align="left">Gear Types</th>
-<th align="left">Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Manual Transmission</td>
-<td align="left">Helical, synchronizer</td>
-<td align="left">Multiple speed ratios</td>
-</tr>
-<tr class="even">
-<td align="left">Automatic Transmission</td>
-<td align="left">Planetary, helical</td>
-<td align="left">Smooth ratio changes</td>
-</tr>
-<tr class="odd">
-<td align="left">Differential</td>
-<td align="left">Spiral bevel, hypoid</td>
-<td align="left">Final drive, allows wheel speed difference</td>
-</tr>
-<tr class="even">
-<td align="left">Transfer Case</td>
-<td align="left">Spur, chain/gear</td>
-<td align="left">4WD/AWD power distribution</td>
-</tr>
-<tr class="odd">
-<td align="left">Steering</td>
-<td align="left">Rack and pinion, recirculating ball</td>
-<td align="left">Convert rotation to linear</td>
-</tr>
-<tr class="even">
-<td align="left">Starter Motor</td>
-<td align="left">Spur, planetary</td>
-<td align="left">High reduction for cranking torque</td>
+<td align="left">Sprocket wear</td>
+<td align="left">Chain elongation</td>
+<td align="left">Replace chain before elongation exceeds 2%</td>
 </tr>
 </tbody>
 </table>
 <hr />
 </div>
-<div id="food-processing-industry" class="section level3 hasAnchor" number="4.0.16">
-<h3><span class="header-section-number">4.0.16</span> Food Processing Industry<a href="gears-gear-trains-and-transmissions.html#food-processing-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:food-industry-gears"></span>
-<img src="_main_files/figure-html/food-industry-gears-1.png" alt="Gear applications in food processing equipment." width="1152" />
-<p class="caption">
-Figure 4.13: Gear applications in food processing equipment.
-</p>
 </div>
-<p><strong>Food industry gear requirements:</strong></p>
+<div id="related-topics-1" class="section level2 unnumbered hasAnchor">
+<h2>🔗 Related Topics<a href="#related-topics-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Chain drives are part of the power transmission family. For related content, see:</p>
 <ul>
-<li><strong>Stainless steel</strong> or <strong>food-grade materials</strong> for hygiene</li>
-<li><strong>Sealed gearboxes</strong> to prevent lubricant contamination</li>
-<li><strong>Washdown capability</strong> for sanitation</li>
-<li><strong>Smooth operation</strong> to prevent product damage</li>
-<li><strong>Variable speed</strong> capability for different products</li>
+<li><strong>Chapter 4: Gears</strong> – When more compact, quieter transmission is needed</li>
+<li><strong>Chapter 10: Belt &amp; Pulley Systems</strong> – For shock absorption and quiet operation</li>
+<li><strong>Chapter 8: Bearings</strong> – Essential for supporting sprocket shafts</li>
 </ul>
 <hr />
 </div>
-<div id="defense-industry" class="section level3 hasAnchor" number="4.0.17">
-<h3><span class="header-section-number">4.0.17</span> Defense Industry<a href="gears-gear-trains-and-transmissions.html#defense-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:defense-gears"></span>
-<img src="_main_files/figure-html/defense-gears-1.png" alt="Gear applications in defense systems." width="1152" />
-<p class="caption">
-Figure 4.14: Gear applications in defense systems.
-</p>
-</div>
-<p><strong>Defense gear requirements:</strong></p>
-<ul>
-<li><strong>Extreme reliability</strong> - Mission critical, no field repair</li>
-<li><strong>High strength-to-weight ratio</strong> - Often use aerospace-grade materials</li>
-<li><strong>Environmental resistance</strong> - Temperature extremes, dust, water</li>
-<li><strong>Zero or minimal backlash</strong> - Precision positioning systems</li>
-<li><strong>Noise reduction</strong> - Stealth requirements</li>
-<li><strong>Shock loading capability</strong> - Combat conditions</li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="gear-design-considerations" class="section level2 unnumbered hasAnchor">
-<h2>🔧 Gear Design Considerations<a href="#gear-design-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="material-selection" class="section level3 hasAnchor" number="4.0.18">
-<h3><span class="header-section-number">4.0.18</span> Material Selection<a href="gears-gear-trains-and-transmissions.html#material-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<table>
-<colgroup>
-<col width="20%" />
-<col width="28%" />
-<col width="24%" />
-<col width="26%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Material</th>
-<th align="left">Applications</th>
-<th align="left">Advantages</th>
-<th align="left">Limitations</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><strong>Carbon Steel</strong> (1045, 4140)</td>
-<td align="left">General purpose, automotive</td>
-<td align="left">Good strength, economical</td>
-<td align="left">Requires heat treatment</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Alloy Steel</strong> (4340, 8620)</td>
-<td align="left">High-load applications</td>
-<td align="left">High strength, hardenable</td>
-<td align="left">More expensive</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Cast Iron</strong></td>
-<td align="left">Low-speed, low-load</td>
-<td align="left">Good damping, economical</td>
-<td align="left">Brittle, low strength</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Bronze</strong></td>
-<td align="left">Worm wheels, low-speed</td>
-<td align="left">Good wear with steel</td>
-<td align="left">Lower strength</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Nylon/Acetal</strong></td>
-<td align="left">Light loads, quiet operation</td>
-<td align="left">Self-lubricating, quiet</td>
-<td align="left">Limited load, temperature</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Stainless Steel</strong></td>
-<td align="left">Food, medical, marine</td>
-<td align="left">Corrosion resistant</td>
-<td align="left">Lower hardness possible</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="common-failure-modes" class="section level3 hasAnchor" number="4.0.19">
-<h3><span class="header-section-number">4.0.19</span> Common Failure Modes<a href="gears-gear-trains-and-transmissions.html#common-failure-modes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-failures"></span>
-<img src="_main_files/figure-html/gear-failures-1.png" alt="Common gear failure modes." width="1152" />
-<p class="caption">
-Figure 4.15: Common gear failure modes.
-</p>
-</div>
-</div>
-<div id="design-guidelines" class="section level3 hasAnchor" number="4.0.20">
-<h3><span class="header-section-number">4.0.20</span> Design Guidelines<a href="gears-gear-trains-and-transmissions.html#design-guidelines" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="chapter-summary-1" class="section level2 unnumbered hasAnchor">
+<h2>📚 Chapter Summary<a href="#chapter-summary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Chain drives provide reliable, positive power transmission for many applications:</p>
 <ol style="list-style-type: decimal">
-<li><p><strong>Minimum teeth:</strong> To avoid undercut (20° pressure angle):</p>
-<ul>
-<li>Minimum pinion teeth ≈ 17 for standard gears</li>
-<li>Use profile shift for fewer teeth</li>
-</ul></li>
-<li><p><strong>Contact ratio:</strong> Should be &gt; 1.2 for smooth operation
-<span class="math display">\[\text{Contact Ratio} = \frac{\text{Arc of Action}}{\text{Circular Pitch}}\]</span></p></li>
-<li><p><strong>Face width:</strong> Typically 9-13 × module for spur gears</p></li>
-<li><p><strong>Backlash:</strong> Small clearance between teeth (typically 0.04-0.10 × module)</p></li>
-<li><p><strong>Lubrication:</strong> Critical for all enclosed gear systems</p></li>
+<li><p><strong>Roller chains</strong> use rollers, bushings, pins, and plates for efficient power transfer</p></li>
+<li><p><strong>Speed ratio</strong> is exactly determined by sprocket tooth counts: <span class="math inline">\(i = N_2/N_1\)</span></p></li>
+<li><p><strong>Chain length</strong> must be calculated in pitches and rounded to an even number</p></li>
+<li><p><strong>Sprocket selection</strong> should use at least 17 teeth on the driver for smooth operation</p></li>
+<li><p><strong>Proper lubrication</strong> is critical and depends on chain speed</p></li>
+<li><p><strong>Chain wear</strong> should be monitored; replace when elongation exceeds 2%</p></li>
 </ol>
 <hr />
 </div>
-</div>
-<div id="design-checklist-for-gears" class="section level2 unnumbered hasAnchor">
-<h2>📋 Design Checklist for Gears<a href="#design-checklist-for-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="gear-specification" class="section level3 hasAnchor" number="4.0.21">
-<h3><span class="header-section-number">4.0.21</span> Gear Specification<a href="gears-gear-trains-and-transmissions.html#gear-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Gear type selected based on shaft arrangement</label></li>
-<li><label><input type="checkbox" />Module/diametral pitch specified</label></li>
-<li><label><input type="checkbox" />Number of teeth determined for required ratio</label></li>
-<li><label><input type="checkbox" />Pressure angle specified (typically 20°)</label></li>
-<li><label><input type="checkbox" />Face width determined</label></li>
-<li><label><input type="checkbox" />Material selected based on load and environment</label></li>
-</ul>
-</div>
-<div id="strength-verification" class="section level3 hasAnchor" number="4.0.22">
-<h3><span class="header-section-number">4.0.22</span> Strength Verification<a href="gears-gear-trains-and-transmissions.html#strength-verification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Bending stress calculated and within limits</label></li>
-<li><label><input type="checkbox" />Contact (Hertzian) stress calculated and within limits</label></li>
-<li><label><input type="checkbox" />Service factors applied for shock loading</label></li>
-<li><label><input type="checkbox" />Safety factor adequate (typically 1.5-2.5)</label></li>
-</ul>
-</div>
-<div id="gear-train-design" class="section level3 hasAnchor" number="4.0.23">
-<h3><span class="header-section-number">4.0.23</span> Gear Train Design<a href="gears-gear-trains-and-transmissions.html#gear-train-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Overall ratio achieved</label></li>
-<li><label><input type="checkbox" />Intermediate shafts and bearings specified</label></li>
-<li><label><input type="checkbox" />Center distances calculated</label></li>
-<li><label><input type="checkbox" />Shaft alignment considered</label></li>
-<li><label><input type="checkbox" />Housing/mounting provisions adequate</label></li>
-</ul>
-</div>
-<div id="manufacturing-and-assembly" class="section level3 hasAnchor" number="4.0.24">
-<h3><span class="header-section-number">4.0.24</span> Manufacturing and Assembly<a href="gears-gear-trains-and-transmissions.html#manufacturing-and-assembly" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Gear quality grade specified (AGMA or ISO)</label></li>
-<li><label><input type="checkbox" />Surface finish requirements defined</label></li>
-<li><label><input type="checkbox" />Heat treatment specified if required</label></li>
-<li><label><input type="checkbox" />Assembly procedure considered</label></li>
-<li><label><input type="checkbox" />Lubrication system designed</label></li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="case-study-food-packaging-line-drive" class="section level2 unnumbered hasAnchor">
-<h2>🎯 Case Study: Food Packaging Line Drive<a href="#case-study-food-packaging-line-drive" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Design Requirements:</strong></p>
-<p>A food packaging machine requires a gear drive with the following specifications:</p>
-<ul>
-<li>Motor speed: 1800 RPM</li>
-<li>Output speed: 45 RPM (±2%)</li>
-<li>Output torque: 200 N·m</li>
-<li>Must fit in 300 mm × 200 mm envelope</li>
-<li>Food-safe requirements (no contamination risk)</li>
-<li>16 hours/day operation, 6 days/week</li>
-</ul>
-<blockquote>
-<p><strong>🤔 Your Turn:</strong> Design a gear train to meet these requirements. Consider gear types, stages, materials, and food safety.</p>
-</blockquote>
+<div id="practice-problems-4" class="section level2 unnumbered hasAnchor">
+<h2>✏️ Practice Problems<a href="power-transmission-chain-drives.html#practice-problems-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem 1:</strong> A chain drive uses a 21-tooth driver sprocket at 900 rpm. What size driven sprocket is needed for an output speed of 300 rpm?</p>
 <details>
 <summary>
-Click to reveal design solution
+<strong>Click for answer</strong>
 </summary>
-<p><strong>1. Calculate Required Ratio:</strong>
-<span class="math display">\[GR = \frac{1800}{45} = 40:1\]</span></p>
-<p><strong>2. Select Gear Train Configuration:</strong></p>
-<p><strong>Option A: Two-stage helical</strong> (preferred for food industry)
-- Stage 1: 6.3:1 (16T pinion, 101T gear - round to 100T) → actual 6.25:1
-- Stage 2: 6.4:1 (15T pinion, 96T gear) → actual 6.4:1
-- Total: 6.25 × 6.4 = <strong>40:1</strong> ✓</p>
-<p><strong>Option B: Worm + Helical</strong>
-- Worm stage: 20:1
-- Helical stage: 2:1
-- Total: 40:1
-- Self-locking feature may be beneficial</p>
-<p><strong>3. Material Selection:</strong>
-- Gears: <strong>Stainless steel 17-4 PH</strong> (food-safe, hardenable)
-- Alternative: Carbon steel with <strong>food-grade coating</strong>
-- Housing: Cast aluminum with epoxy coating</p>
-<p><strong>4. Food Safety Features:</strong>
-- <strong>Sealed gearbox</strong> with NSF-approved seals
-- <strong>Food-grade synthetic lubricant</strong> (NSF H1)
-- <strong>Smooth exterior</strong> for easy cleaning
-- <strong>Stainless fasteners</strong></p>
-<p><strong>5. Verify Size:</strong>
-- Module 3 for both stages
-- Stage 1 center distance: 3 × (16 + 100) / 2 = 174 mm
-- Stage 2 center distance: 3 × (15 + 96) / 2 = 166.5 mm
-- Fits within 300 × 200 mm envelope ✓</p>
-<p><strong>6. Efficiency Check:</strong>
-- Two-stage helical: ~97% × 97% = 94%
-- Input power: (200 × 45 × 2π/60) / 0.94 = 1003 W
-- Motor rating: 1.1 kW minimum ✓</p>
+<p>Speed ratio: <span class="math inline">\(i = 900/300 = 3.0\)</span></p>
+<p>Driven sprocket teeth: <span class="math inline">\(N_2 = N_1 \times i = 21 \times 3 = 63\)</span> teeth</p>
 </details>
-<hr />
-</div>
-<div id="practice-problems" class="section level2 unnumbered hasAnchor">
-<h2>✍️ Practice Problems<a href="gears-gear-trains-and-transmissions.html#practice-problems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Problem 1:</strong> A spur gear has 24 teeth and a module of 4 mm. Calculate: (a) pitch diameter, (b) circular pitch, (c) addendum, (d) outside diameter.</p>
+<p><strong>Problem 2:</strong> Calculate the pitch diameter of a 19-tooth sprocket using #50 chain (5/8” = 15.875 mm pitch).</p>
 <details>
 <summary>
-Click for solution
+<strong>Click for answer</strong>
 </summary>
-<p><strong>(a) Pitch Diameter:</strong>
-<span class="math display">\[d = m \times N = 4 \times 24 = 96 \text{ mm}\]</span></p>
-<p><strong>(b) Circular Pitch:</strong>
-<span class="math display">\[p = \pi \times m = \pi \times 4 = 12.57 \text{ mm}\]</span></p>
-<p><strong>(c) Addendum:</strong>
-<span class="math display">\[a = m = 4 \text{ mm}\]</span></p>
-<p><strong>(d) Outside Diameter:</strong>
-<span class="math display">\[d_o = m(N + 2) = 4(24 + 2) = 104 \text{ mm}\]</span></p>
+<p><span class="math display">\[D = \frac{P}{\sin(180°/N)} = \frac{15.875}{\sin(180°/19)} = \frac{15.875}{\sin(9.47°)} = \frac{15.875}{0.1645} = 96.5 \text{ mm}\]</span></p>
 </details>
-<hr />
-<p><strong>Problem 2:</strong> A compound gear train has: Gear A (20 teeth) driving Gear B (50 teeth), which is on the same shaft as Gear C (18 teeth), which drives Gear D (72 teeth). Calculate the overall gear ratio and output speed if the input is 1200 RPM.</p>
+<p><strong>Problem 3:</strong> A chain drive has a 15-tooth driver and 45-tooth driven sprocket using #40 chain (12.7 mm pitch). If the center distance is 400 mm, calculate the chain length in pitches.</p>
 <details>
 <summary>
-Click for solution
+<strong>Click for answer</strong>
 </summary>
-<p><strong>Gear Ratio:</strong>
-<span class="math display">\[GR = \frac{N_B}{N_A} \times \frac{N_D}{N_C} = \frac{50}{20} \times \frac{72}{18} = 2.5 \times 4 = 10:1\]</span></p>
-<p><strong>Output Speed:</strong>
-<span class="math display">\[n_{out} = \frac{n_{in}}{GR} = \frac{1200}{10} = 120 \text{ RPM}\]</span></p>
+<p>Center distance in pitches: <span class="math inline">\(C_p = 400/12.7 = 31.5\)</span> pitches</p>
+<p><span class="math display">\[L_p = 2(31.5) + \frac{15 + 45}{2} + \frac{(45 - 15)^2}{4\pi^2(31.5)}\]</span></p>
+<p><span class="math display">\[L_p = 63 + 30 + \frac{900}{1244.1} = 63 + 30 + 0.72 = 93.72 \text{ pitches}\]</span></p>
+<p>Round to nearest even number: <strong>94 pitches</strong></p>
 </details>
-<hr />
-<p><strong>Problem 3:</strong> A planetary gear set has a sun gear with 20 teeth and a ring gear with 80 teeth. If the ring is held stationary and the sun is the input at 500 RPM, what is the carrier (output) speed?</p>
+<p><strong>Problem 4:</strong> What is the chain speed for a #60 chain (19.05 mm pitch) on a 23-tooth sprocket rotating at 600 rpm?</p>
 <details>
 <summary>
-Click for solution
+<strong>Click for answer</strong>
 </summary>
-<p>For sun input, carrier output, ring fixed:</p>
-<p><span class="math display">\[GR = 1 + \frac{N_{ring}}{N_{sun}} = 1 + \frac{80}{20} = 1 + 4 = 5:1\]</span></p>
-<p><strong>Carrier Speed:</strong>
-<span class="math display">\[n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}\]</span></p>
+<p><span class="math display">\[v = \frac{P \times N \times n}{60,000} = \frac{19.05 \times 23 \times 600}{60,000} = 4.38 \text{ m/s}\]</span></p>
 </details>
-<hr />
-</div>
-<div id="further-reading" class="section level2 unnumbered hasAnchor">
-<h2>🔗 Further Reading<a href="#further-reading" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://www.agma.org/">AGMA Gear Standards</a></p>
-<p><a href="https://www.geartechnology.com/">Gear Technology Magazine</a></p>
-<p><a href="https://khkgears.net/new/gear_knowledge/">KHK Gear Technical Reference</a></p>
-<p><a href="https://www.industrialpress.com/">Machinery’s Handbook - Gearing Section</a></p>
-<hr />
-</div>
-<div id="supplemental-videos" class="section level2 unnumbered hasAnchor">
-<h2>🎬 Supplemental Videos<a href="#supplemental-videos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="how-gear-ratios-work" class="section level3 hasAnchor" number="4.0.25">
-<h3><span class="header-section-number">4.0.25</span> How Gear Ratios Work<a href="gears-gear-trains-and-transmissions.html#how-gear-ratios-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/JOLtS4VUcvQ"
-    title="How Gear Ratios Work"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
-</div>
-<div id="planetary-gears-explained" class="section level3 hasAnchor" number="4.0.26">
-<h3><span class="header-section-number">4.0.26</span> Planetary Gears Explained<a href="gears-gear-trains-and-transmissions.html#planetary-gears-explained" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/ARd-Om2VyiE"
-    title="Planetary Gears Explained"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
-</div>
-<div id="how-manual-transmissions-work" class="section level3 hasAnchor" number="4.0.27">
-<h3><span class="header-section-number">4.0.27</span> How Manual Transmissions Work<a href="gears-gear-trains-and-transmissions.html#how-manual-transmissions-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/wCu9W9xNwtI"
-    title="Manual Transmission Explained"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
-</div>
-<div id="how-differentials-work" class="section level3 hasAnchor" number="4.0.28">
-<h3><span class="header-section-number">4.0.28</span> How Differentials Work<a href="gears-gear-trains-and-transmissions.html#how-differentials-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/yYAw79386WI"
-    title="How Differentials Work"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
-<hr />
-</div>
-</div>
-<div id="references" class="section level2 unnumbered hasAnchor">
-<h2>📖 References<a href="#references" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li><p>Shigley, J. E., &amp; Mischke, C. R. (2011). <em>Mechanical Engineering Design</em> (10th ed.). McGraw-Hill.</p></li>
-<li><p>Dudley, D. W. (1994). <em>Handbook of Practical Gear Design</em>. CRC Press.</p></li>
-<li><p>AGMA. (2019). <em>AGMA 2001-D04: Fundamental Rating Factors and Calculation Methods for Involute Spur and Helical Gear Teeth</em>. American Gear Manufacturers Association.</p></li>
-<li><p>Radzevich, S. P. (2012). <em>Dudley’s Handbook of Practical Gear Design and Manufacture</em> (2nd ed.). CRC Press.</p></li>
-<li><p>Jelaska, D. (2012). <em>Gears and Gear Drives</em>. Wiley.</p></li>
-</ol>
 
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
 </div>
 </div>
             </section>
@@ -1410,8 +1704,8 @@ Click for solution
           </div>
         </div>
       </div>
-<a href="strength-of-bolt-joint-calculations.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="design-for-stamping.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="power-transmission-belt-pulley-systems.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1442,7 +1736,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/04-Gears.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/11-Chain-Drives.Rmd",
     "text": "Edit"
   },
   "history": {

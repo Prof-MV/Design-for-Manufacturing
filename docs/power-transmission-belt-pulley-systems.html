@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing</title>
+  <title>Chapter 10 Power Transmission: Belt &amp; Pulley Systems | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 10 Power Transmission: Belt &amp; Pulley Systems | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Gears, Gear Trains, and Transmissions | Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 10 Power Transmission: Belt &amp; Pulley Systems | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="strength-of-bolt-joint-calculations.html"/>
-<link rel="next" href="design-for-stamping.html"/>
+<link rel="prev" href="four-bar-linkages.html"/>
+<link rel="next" href="power-transmission-chain-drives.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -615,793 +615,804 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="gears-gear-trains-and-transmissions" class="section level1 hasAnchor" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Gears, Gear Trains, and Transmissions<a href="gears-gear-trains-and-transmissions.html#gears-gear-trains-and-transmissions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="introduction-to-gears" class="section level2 unnumbered hasAnchor">
-<h2>💡 Introduction to Gears<a href="#introduction-to-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Gears are toothed mechanical components that transmit <strong>power and motion</strong> between rotating shafts. They are among the oldest and most important machine elements, found in virtually every mechanical system—from wristwatches to wind turbines, from automotive transmissions to industrial robots.</p>
-<p>Gears serve three fundamental purposes:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Transmit power</strong> from one shaft to another</li>
-<li><strong>Change rotational speed</strong> (increase or decrease RPM)</li>
-<li><strong>Change torque</strong> (increase or decrease turning force)</li>
-<li><strong>Change direction</strong> of rotation or axis of rotation</li>
-</ol>
-<hr />
+<div id="power-transmission-belt-pulley-systems" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">Chapter 10</span> Power Transmission: Belt &amp; Pulley Systems<a href="power-transmission-belt-pulley-systems.html#power-transmission-belt-pulley-systems" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-belt-pulley-systems" class="section level2 unnumbered hasAnchor">
+<h2>💡 Introduction to Belt &amp; Pulley Systems<a href="#introduction-to-belt-pulley-systems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Belt and pulley systems represent one of the oldest and most versatile methods of mechanical power transmission. From the spinning wheels of ancient civilizations to modern automotive engines and industrial machinery, belts have been transmitting power across distances for thousands of years.</p>
 <blockquote>
-<p><strong>🤔 Think About It:</strong> Your car’s engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this? And why does a truck need more gear ratios than a sports car?</p>
+<p><strong>Think About It:</strong> Look around your everyday environment. Your car uses multiple belt drives—the serpentine belt powers the alternator, water pump, and air conditioning compressor. A drill press uses belts to change speeds. Even household appliances like washing machines and vacuum cleaners rely on belt drives. Why do engineers choose belts over direct gear connections in so many applications?</p>
 </blockquote>
+<p>The answer lies in the unique advantages belt drives offer:</p>
+<ul>
+<li><strong>Shock absorption</strong> – Belts naturally dampen vibrations and load spikes</li>
+<li><strong>Distance</strong> – Power can be transmitted over relatively long center distances</li>
+<li><strong>Speed flexibility</strong> – Easy to change speed ratios by swapping pulleys</li>
+<li><strong>Quiet operation</strong> – Much quieter than gear or chain drives</li>
+<li><strong>Overload protection</strong> – Belts slip before catastrophic failure occurs</li>
+<li><strong>Low cost</strong> – Generally less expensive than gear systems</li>
+</ul>
 <hr />
 </div>
-<div id="fundamental-gear-concepts" class="section level2 unnumbered hasAnchor">
-<h2>⚙️ Fundamental Gear Concepts<a href="gears-gear-trains-and-transmissions.html#fundamental-gear-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="the-basic-principle" class="section level3 hasAnchor" number="4.0.1">
-<h3><span class="header-section-number">4.0.1</span> The Basic Principle<a href="gears-gear-trains-and-transmissions.html#the-basic-principle" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>When two gears mesh, their teeth interlock. As one gear (the <strong>driver</strong> or <strong>pinion</strong>) rotates, it pushes against the teeth of the other gear (the <strong>driven gear</strong>), causing it to rotate.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-mesh-basic"></span>
-<img src="_main_files/figure-html/gear-mesh-basic-1.png" alt="Basic gear mesh showing driver (pinion) and driven gear." width="960" />
+<div id="fundamental-belt-drive-concepts" class="section level2 unnumbered hasAnchor">
+<h2>⚙️ Fundamental Belt Drive Concepts<a href="power-transmission-belt-pulley-systems.html#fundamental-belt-drive-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="how-belt-drives-work" class="section level3 hasAnchor" number="10.0.1">
+<h3><span class="header-section-number">10.0.1</span> How Belt Drives Work<a href="power-transmission-belt-pulley-systems.html#how-belt-drives-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A belt drive consists of at least two pulleys connected by a flexible belt. When the driving pulley (connected to the motor or power source) rotates, friction between the belt and pulley surface transmits the motion to the driven pulley.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:belt-drive-diagram"></span>
+<img src="_main_files/figure-html/belt-drive-diagram-1.png" alt="Basic two-pulley belt drive system showing driver and driven pulleys" width="960" />
 <p class="caption">
-Figure 4.1: Basic gear mesh showing driver (pinion) and driven gear.
+Figure 10.1: Basic two-pulley belt drive system showing driver and driven pulleys
 </p>
 </div>
 </div>
-<div id="the-fundamental-law-of-gearing" class="section level3 hasAnchor" number="4.0.2">
-<h3><span class="header-section-number">4.0.2</span> The Fundamental Law of Gearing<a href="gears-gear-trains-and-transmissions.html#the-fundamental-law-of-gearing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>For smooth, constant-velocity power transmission, the <strong>common normal</strong> at the point of contact between gear teeth must always pass through a fixed point called the <strong>pitch point</strong>. This is achieved through the <strong>involute tooth profile</strong>, which is the standard for most modern gears.</p>
-<hr />
-</div>
-</div>
-<div id="gear-terminology" class="section level2 unnumbered hasAnchor">
-<h2>📐 Gear Terminology<a href="#gear-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Understanding gear terminology is essential for specifying, designing, and manufacturing gears.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-terminology"></span>
-<img src="_main_files/figure-html/gear-terminology-1.png" alt="Essential gear terminology and dimensions." width="960" />
-<p class="caption">
-Figure 4.2: Essential gear terminology and dimensions.
-</p>
-</div>
-<div id="essential-gear-formulas" class="section level3 hasAnchor" number="4.0.3">
-<h3><span class="header-section-number">4.0.3</span> Essential Gear Formulas<a href="gears-gear-trains-and-transmissions.html#essential-gear-formulas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="the-speed-ratio" class="section level3 hasAnchor" number="10.0.2">
+<h3><span class="header-section-number">10.0.2</span> The Speed Ratio<a href="power-transmission-belt-pulley-systems.html#the-speed-ratio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The fundamental relationship in any belt drive is the <strong>speed ratio</strong> (also called the velocity ratio). Since the belt travels at a constant linear velocity around both pulleys:</p>
+<p><span class="math display">\[v_{belt} = \omega_1 \times r_1 = \omega_2 \times r_2\]</span></p>
+<p>This leads to the fundamental speed ratio equation:</p>
+<p><span class="math display">\[\frac{n_2}{n_1} = \frac{D_1}{D_2} = \frac{1}{i}\]</span></p>
+<p>Where:</p>
 <table>
 <thead>
 <tr class="header">
-<th align="left">Parameter</th>
-<th align="left">Metric (Module)</th>
-<th align="left">Imperial (Diametral Pitch)</th>
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Pitch Diameter</strong></td>
-<td align="left"><span class="math inline">\(d = m \times N\)</span></td>
-<td align="left"><span class="math inline">\(d = N / P\)</span></td>
+<td align="left"><span class="math inline">\(n_1\)</span></td>
+<td align="left">Rotational speed of driver pulley</td>
+<td align="left">rpm</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Circular Pitch</strong></td>
-<td align="left"><span class="math inline">\(p = \pi \times m\)</span></td>
-<td align="left"><span class="math inline">\(p = \pi / P\)</span></td>
+<td align="left"><span class="math inline">\(n_2\)</span></td>
+<td align="left">Rotational speed of driven pulley</td>
+<td align="left">rpm</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Addendum</strong></td>
-<td align="left"><span class="math inline">\(a = m\)</span></td>
-<td align="left"><span class="math inline">\(a = 1 / P\)</span></td>
+<td align="left"><span class="math inline">\(D_1\)</span></td>
+<td align="left">Pitch diameter of driver pulley</td>
+<td align="left">mm or in</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Dedendum</strong></td>
-<td align="left"><span class="math inline">\(b = 1.25 \times m\)</span></td>
-<td align="left"><span class="math inline">\(b = 1.25 / P\)</span></td>
+<td align="left"><span class="math inline">\(D_2\)</span></td>
+<td align="left">Pitch diameter of driven pulley</td>
+<td align="left">mm or in</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(i\)</span></td>
+<td align="left">Speed ratio (transmission ratio)</td>
+<td align="left">dimensionless</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Key Insight:</strong> When the driver pulley is smaller than the driven pulley, the output speed decreases but the output torque increases proportionally. This is the principle of <strong>mechanical advantage</strong> applied to rotational systems.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="essential-belt-drive-terminology" class="section level2 unnumbered hasAnchor">
+<h2>📐 Essential Belt Drive Terminology<a href="#essential-belt-drive-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Understanding belt drive terminology is essential for proper selection and design.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pulley-terminology"></span>
+<img src="_main_files/figure-html/pulley-terminology-1.png" alt="V-belt pulley (sheave) cross-section with key dimensional terms" width="768" />
+<p class="caption">
+Figure 10.2: V-belt pulley (sheave) cross-section with key dimensional terms
+</p>
+</div>
+<div id="key-terminology-table" class="section level3 hasAnchor" number="10.0.3">
+<h3><span class="header-section-number">10.0.3</span> Key Terminology Table<a href="power-transmission-belt-pulley-systems.html#key-terminology-table" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Pulley (Sheave)</strong></td>
+<td align="left">The rotating wheel with a grooved rim that guides and grips the belt</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Pitch Diameter</strong></td>
+<td align="left">The effective diameter where the belt’s neutral axis contacts the pulley</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Outside Diameter</strong></td>
-<td align="left"><span class="math inline">\(d_o = m(N + 2)\)</span></td>
-<td align="left"><span class="math inline">\(d_o = (N + 2) / P\)</span></td>
+<td align="left">The largest diameter of the pulley (top of flanges)</td>
 </tr>
 <tr class="even">
+<td align="left"><strong>Groove Angle</strong></td>
+<td align="left">The angle of the V-groove, typically 34° to 40°</td>
+</tr>
+<tr class="odd">
 <td align="left"><strong>Center Distance</strong></td>
-<td align="left"><span class="math inline">\(C = m(N_1 + N_2)/2\)</span></td>
-<td align="left"><span class="math inline">\(C = (N_1 + N_2) / 2P\)</span></td>
+<td align="left">The distance between the shaft centers of driver and driven pulleys</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Belt Span</strong></td>
+<td align="left">The unsupported length of belt between pulleys</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Tight Side</strong></td>
+<td align="left">The belt span under higher tension (pulling side)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Slack Side</strong></td>
+<td align="left">The belt span under lower tension (returning side)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Arc of Contact</strong></td>
+<td align="left">The angle through which the belt wraps around a pulley</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Belt Pitch Length</strong></td>
+<td align="left">The total length measured at the belt’s neutral axis</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Creep</strong></td>
+<td align="left">Slight slippage between belt and pulley due to elastic stretch</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Slip</strong></td>
+<td align="left">Relative motion between belt and pulley surfaces (undesirable)</td>
 </tr>
 </tbody>
 </table>
-<p>Where: <span class="math inline">\(m\)</span> = module, <span class="math inline">\(P\)</span> = diametral pitch, <span class="math inline">\(N\)</span> = number of teeth, <span class="math inline">\(d\)</span> = pitch diameter</p>
-<blockquote>
-<p><strong>⚠️ Important:</strong> Module (mm) and Diametral Pitch (teeth/inch) are inversely related: <span class="math inline">\(m = 25.4 / P\)</span>. <strong>Never mix metric and imperial gears!</strong></p>
-</blockquote>
-<hr />
-<blockquote>
-<p><strong>❓ Quick Calculation:</strong> A gear has 40 teeth and a module of 3 mm. Calculate: (a) pitch diameter, (b) outside diameter, (c) circular pitch.</p>
-</blockquote>
-<details>
-<summary>
-Click to reveal solution
-</summary>
-<p><strong>(a) Pitch Diameter:</strong>
-<span class="math display">\[d = m \times N = 3 \times 40 = 120 \text{ mm}\]</span></p>
-<p><strong>(b) Outside Diameter:</strong>
-<span class="math display">\[d_o = m(N + 2) = 3(40 + 2) = 126 \text{ mm}\]</span></p>
-<p><strong>(c) Circular Pitch:</strong>
-<span class="math display">\[p = \pi \times m = \pi \times 3 = 9.42 \text{ mm}\]</span></p>
-</details>
 <hr />
 </div>
 </div>
-<div id="types-of-gears" class="section level2 unnumbered hasAnchor">
-<h2>🔧 Types of Gears<a href="#types-of-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Different gear types are designed for different applications based on shaft orientation, load capacity, speed, and noise requirements.</p>
-<div id="spur-gears" class="section level3 hasAnchor" number="4.0.4">
-<h3><span class="header-section-number">4.0.4</span> Spur Gears<a href="gears-gear-trains-and-transmissions.html#spur-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Spur gears</strong> have straight teeth parallel to the axis of rotation. They are the simplest, most common, and most economical type.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spur-gear"></span>
-<img src="_main_files/figure-html/spur-gear-1.png" alt="Spur gears: parallel shafts, straight teeth." width="768" />
+<div id="types-of-belts" class="section level2 unnumbered hasAnchor">
+<h2>🔧 Types of Belts<a href="#types-of-belts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Different applications require different belt types. Each has distinct characteristics that make it suitable for specific uses.</p>
+<div id="v-belts" class="section level3 hasAnchor" number="10.0.4">
+<h3><span class="header-section-number">10.0.4</span> V-Belts<a href="power-transmission-belt-pulley-systems.html#v-belts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>V-belts are the most common type of power transmission belt. Their trapezoidal cross-section wedges into the pulley groove, creating a friction grip that increases with load.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:v-belt-profile"></span>
+<img src="_main_files/figure-html/v-belt-profile-1.png" alt="V-belt cross-section profiles for different standard sizes" width="960" />
 <p class="caption">
-Figure 4.3: Spur gears: parallel shafts, straight teeth.
+Figure 10.3: V-belt cross-section profiles for different standard sizes
 </p>
 </div>
-<p><strong>Applications:</strong> Gearboxes, conveyors, food processing equipment, clocks, printers</p>
-<hr />
+<p><strong>V-Belt Advantages:</strong></p>
+<ul>
+<li>High friction grip due to wedging action</li>
+<li>Quiet operation</li>
+<li>Absorbs shock loads</li>
+<li>Slips before failure (overload protection)</li>
+<li>Inexpensive and widely available</li>
+</ul>
+<p><strong>V-Belt Limitations:</strong></p>
+<ul>
+<li>Some slip and creep (typically 1-2%)</li>
+<li>Not suitable for precise timing applications</li>
+<li>Limited speed ratio (typically up to 6:1)</li>
+<li>Temperature sensitive</li>
+</ul>
 </div>
-<div id="helical-gears" class="section level3 hasAnchor" number="4.0.5">
-<h3><span class="header-section-number">4.0.5</span> Helical Gears<a href="gears-gear-trains-and-transmissions.html#helical-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Helical gears</strong> have teeth cut at an angle (helix angle) to the shaft axis. This allows gradual tooth engagement, resulting in smoother, quieter operation.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:helical-gear"></span>
-<img src="_main_files/figure-html/helical-gear-1.png" alt="Helical gears: angled teeth for smoother operation." width="960" />
+<div id="timing-belts-synchronous-belts" class="section level3 hasAnchor" number="10.0.5">
+<h3><span class="header-section-number">10.0.5</span> Timing Belts (Synchronous Belts)<a href="power-transmission-belt-pulley-systems.html#timing-belts-synchronous-belts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Timing belts have teeth that mesh with grooves in the pulley, providing positive engagement without slip. They are essential when precise speed ratios and synchronized motion are required.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timing-belt-diagram"></span>
+<img src="_main_files/figure-html/timing-belt-diagram-1.png" alt="Timing belt tooth profile engaging with pulley grooves" width="960" />
 <p class="caption">
-Figure 4.4: Helical gears: angled teeth for smoother operation.
+Figure 10.4: Timing belt tooth profile engaging with pulley grooves
 </p>
 </div>
-<p><strong>Applications:</strong> Automotive transmissions, industrial gearboxes, machine tools, elevators</p>
-<hr />
+<p><strong>Timing Belt Advantages:</strong></p>
+<ul>
+<li>No slip – exact speed ratio maintained</li>
+<li>Can transmit high torque</li>
+<li>Suitable for precision positioning</li>
+<li>Long service life with proper maintenance</li>
+<li>Can operate in contaminated environments</li>
+</ul>
+<p><strong>Timing Belt Applications:</strong></p>
+<ul>
+<li>Automotive camshaft drives (hence “timing belt”)</li>
+<li>CNC machines and 3D printers</li>
+<li>Robotics and automation</li>
+<li>Conveyor systems requiring precise indexing</li>
+</ul>
 </div>
-<div id="bevel-gears" class="section level3 hasAnchor" number="4.0.6">
-<h3><span class="header-section-number">4.0.6</span> Bevel Gears<a href="gears-gear-trains-and-transmissions.html#bevel-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Bevel gears</strong> transmit power between shafts that intersect, typically at 90°. The teeth are cut on a conical surface.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bevel-gear"></span>
-<img src="_main_files/figure-html/bevel-gear-1.png" alt="Bevel gears: intersecting shafts, typically at 90°." width="960" />
-<p class="caption">
-Figure 4.5: Bevel gears: intersecting shafts, typically at 90°.
-</p>
-</div>
-<p><strong>Applications:</strong> Automotive differentials, hand tools, food mixers, rotorcraft transmissions</p>
-<hr />
-</div>
-<div id="worm-gears" class="section level3 hasAnchor" number="4.0.7">
-<h3><span class="header-section-number">4.0.7</span> Worm Gears<a href="gears-gear-trains-and-transmissions.html#worm-gears" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Worm gears</strong> consist of a worm (screw-like) driving a worm wheel. They provide very high reduction ratios in a compact space and can be self-locking.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:worm-gear"></span>
-<img src="_main_files/figure-html/worm-gear-1.png" alt="Worm gear set: high reduction ratio, right-angle drive." width="960" />
-<p class="caption">
-Figure 4.6: Worm gear set: high reduction ratio, right-angle drive.
-</p>
-</div>
-<p><strong>Applications:</strong> Conveyor drives, elevator lifts, tuning mechanisms, steering systems</p>
-<hr />
-</div>
-<div id="rack-and-pinion" class="section level3 hasAnchor" number="4.0.8">
-<h3><span class="header-section-number">4.0.8</span> Rack and Pinion<a href="gears-gear-trains-and-transmissions.html#rack-and-pinion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Rack and pinion</strong> converts rotational motion to linear motion (or vice versa). The rack is essentially a gear with infinite radius.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rack-pinion"></span>
-<img src="_main_files/figure-html/rack-pinion-1.png" alt="Rack and pinion: rotary to linear motion conversion." width="960" />
-<p class="caption">
-Figure 4.7: Rack and pinion: rotary to linear motion conversion.
-</p>
-</div>
-<p><strong>Applications:</strong> Automotive steering, CNC machines, actuators, stairlifts</p>
-<hr />
-</div>
-<div id="gear-type-comparison" class="section level3 hasAnchor" number="4.0.9">
-<h3><span class="header-section-number">4.0.9</span> Gear Type Comparison<a href="gears-gear-trains-and-transmissions.html#gear-type-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="flat-belts" class="section level3 hasAnchor" number="10.0.6">
+<h3><span class="header-section-number">10.0.6</span> Flat Belts<a href="power-transmission-belt-pulley-systems.html#flat-belts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Flat belts are the simplest type, consisting of a rectangular cross-section. Modern flat belts often have a high-friction coating and can handle very high speeds.</p>
+<p><strong>Flat Belt Characteristics:</strong></p>
 <table>
-<colgroup>
-<col width="14%" />
-<col width="25%" />
-<col width="17%" />
-<col width="16%" />
-<col width="17%" />
-<col width="8%" />
-</colgroup>
 <thead>
 <tr class="header">
-<th align="left">Gear Type</th>
-<th align="left">Shaft Arrangement</th>
-<th align="left">Ratio Range</th>
-<th align="left">Efficiency</th>
-<th align="left">Noise Level</th>
-<th align="left">Cost</th>
+<th align="left">Property</th>
+<th align="left">Rating</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Spur</strong></td>
-<td align="left">Parallel</td>
-<td align="left">1:1 to 6:1</td>
-<td align="left">98-99%</td>
-<td align="left">High</td>
+<td align="left">Speed capability</td>
+<td align="left">Excellent (up to 50 m/s)</td>
+</tr>
+<tr class="even">
+<td align="left">Power capacity</td>
+<td align="left">Moderate</td>
+</tr>
+<tr class="odd">
+<td align="left">Efficiency</td>
+<td align="left">Very high (98%+)</td>
+</tr>
+<tr class="even">
+<td align="left">Noise</td>
+<td align="left">Very quiet</td>
+</tr>
+<tr class="odd">
+<td align="left">Cost</td>
 <td align="left">Low</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Helical</strong></td>
-<td align="left">Parallel</td>
-<td align="left">1:1 to 10:1</td>
-<td align="left">97-99%</td>
-<td align="left">Low</td>
-<td align="left">Medium</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Bevel</strong></td>
-<td align="left">Intersecting (90°)</td>
-<td align="left">1:1 to 5:1</td>
-<td align="left">97-99%</td>
-<td align="left">Medium</td>
-<td align="left">High</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Worm</strong></td>
-<td align="left">Right angle (non-intersecting)</td>
-<td align="left">5:1 to 100:1</td>
-<td align="left">40-90%</td>
-<td align="left">Low</td>
-<td align="left">Medium</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Rack &amp; Pinion</strong></td>
-<td align="left">Rotary to linear</td>
-<td align="left">N/A</td>
-<td align="left">97-99%</td>
-<td align="left">Medium</td>
-<td align="left">Medium</td>
+<td align="left">Typical use</td>
+<td align="left">Light-duty, high-speed applications</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>🤔 Design Decision:</strong> A food packaging machine requires a 25:1 speed reduction in a compact space. The drive must be self-locking to prevent the load from back-driving the motor when power is off. Which gear type would you recommend?</p>
-</blockquote>
-<details>
-<summary>
-Click to reveal analysis
-</summary>
-<p><strong>Recommended: Worm Gear</strong></p>
-<p>Reasons:
-1. <strong>High ratio</strong> - 25:1 is within the typical worm gear range (5:1 to 100:1)
-2. <strong>Compact</strong> - Achieves high ratio in single stage
-3. <strong>Self-locking</strong> - When lead angle &lt; friction angle (typically &lt; 5°), the worm gear cannot be back-driven
-4. <strong>Quiet operation</strong> - Important in food processing environments</p>
-<p><strong>Trade-offs to consider:</strong>
-- Lower efficiency (70-85% at this ratio) means more heat and energy loss
-- May require cooling or lubrication considerations
-- Higher sliding friction causes wear - use appropriate materials (bronze wheel, hardened steel worm)</p>
-</details>
+</div>
+<div id="ribbed-poly-v-belts" class="section level3 hasAnchor" number="10.0.7">
+<h3><span class="header-section-number">10.0.7</span> Ribbed (Poly-V) Belts<a href="power-transmission-belt-pulley-systems.html#ribbed-poly-v-belts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Ribbed belts combine the high-speed capability of flat belts with the grip of V-belts. Multiple small V-ribs run along the belt’s inner surface.</p>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:belt-comparison-table">Table 10.1: </span>Comparison of Belt Types
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Feature
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+V-Belt
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Timing Belt
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Flat Belt
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Ribbed Belt
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Slip/Creep
+</td>
+<td style="text-align:center;">
+1-2%
+</td>
+<td style="text-align:center;">
+None
+</td>
+<td style="text-align:center;">
+2-4%
+</td>
+<td style="text-align:center;">
+&lt;1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Speed Ratio Accuracy
+</td>
+<td style="text-align:center;">
+Good
+</td>
+<td style="text-align:center;">
+Exact
+</td>
+<td style="text-align:center;">
+Fair
+</td>
+<td style="text-align:center;">
+Very Good
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maximum Speed
+</td>
+<td style="text-align:center;">
+25-30 m/s
+</td>
+<td style="text-align:center;">
+40-60 m/s
+</td>
+<td style="text-align:center;">
+50+ m/s
+</td>
+<td style="text-align:center;">
+40 m/s
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shock Absorption
+</td>
+<td style="text-align:center;">
+Excellent
+</td>
+<td style="text-align:center;">
+Poor
+</td>
+<td style="text-align:center;">
+Good
+</td>
+<td style="text-align:center;">
+Good
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Noise Level
+</td>
+<td style="text-align:center;">
+Low
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+<td style="text-align:center;">
+Very Low
+</td>
+<td style="text-align:center;">
+Low
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cost
+</td>
+<td style="text-align:center;">
+Low
+</td>
+<td style="text-align:center;">
+High
+</td>
+<td style="text-align:center;">
+Low
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maintenance
+</td>
+<td style="text-align:center;">
+Low
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+<td style="text-align:center;">
+Low
+</td>
+<td style="text-align:center;">
+Low
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Typical Applications
+</td>
+<td style="text-align:center;">
+HVAC, pumps, compressors
+</td>
+<td style="text-align:center;">
+Automotive engines, CNC, robotics
+</td>
+<td style="text-align:center;">
+High-speed machinery, textiles
+</td>
+<td style="text-align:center;">
+Automotive accessories, appliances
+</td>
+</tr>
+</tbody>
+</table>
 <hr />
 </div>
 </div>
-<div id="gear-ratios-and-calculations" class="section level2 unnumbered hasAnchor">
-<h2>📊 Gear Ratios and Calculations<a href="#gear-ratios-and-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="speed-and-torque-relationships" class="section level3 hasAnchor" number="4.0.10">
-<h3><span class="header-section-number">4.0.10</span> Speed and Torque Relationships<a href="gears-gear-trains-and-transmissions.html#speed-and-torque-relationships" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The <strong>gear ratio</strong> is the fundamental relationship between meshing gears:</p>
-<p><span class="math display">\[\text{Gear Ratio} = \frac{N_{driven}}{N_{driver}} = \frac{\omega_{driver}}{\omega_{driven}} = \frac{T_{driven}}{T_{driver}}\]</span></p>
-<p>Where: <span class="math inline">\(N\)</span> = number of teeth, <span class="math inline">\(\omega\)</span> = angular velocity, <span class="math inline">\(T\)</span> = torque</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-ratio-visual"></span>
-<img src="_main_files/figure-html/gear-ratio-visual-1.png" alt="Gear ratio demonstration: speed reduction and torque multiplication." width="960" />
-<p class="caption">
-Figure 4.8: Gear ratio demonstration: speed reduction and torque multiplication.
-</p>
+<div id="belt-drive-calculations" class="section level2 unnumbered hasAnchor">
+<h2>📊 Belt Drive Calculations<a href="#belt-drive-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="speed-ratio-and-output-speed" class="section level3 hasAnchor" number="10.0.8">
+<h3><span class="header-section-number">10.0.8</span> Speed Ratio and Output Speed<a href="power-transmission-belt-pulley-systems.html#speed-ratio-and-output-speed" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The speed ratio is the fundamental calculation for any belt drive system:</p>
+<p><span class="math display">\[i = \frac{n_1}{n_2} = \frac{D_2}{D_1}\]</span></p>
+<p>Rearranging to find the output speed:</p>
+<p><span class="math display">\[n_2 = n_1 \times \frac{D_1}{D_2}\]</span></p>
+<blockquote>
+<p><strong>Example:</strong> A motor running at 1750 rpm drives a 100 mm pulley. The driven pulley is 250 mm. What is the output speed?</p>
+<p><span class="math display">\[n_2 = 1750 \times \frac{100}{250} = 700 \text{ rpm}\]</span></p>
+</blockquote>
 </div>
-</div>
-<div id="key-relationships" class="section level3 hasAnchor" number="4.0.11">
-<h3><span class="header-section-number">4.0.11</span> Key Relationships<a href="gears-gear-trains-and-transmissions.html#key-relationships" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>For a simple gear pair:</strong></p>
+<div id="belt-length-calculation" class="section level3 hasAnchor" number="10.0.9">
+<h3><span class="header-section-number">10.0.9</span> Belt Length Calculation<a href="power-transmission-belt-pulley-systems.html#belt-length-calculation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For an open belt drive (the most common configuration), the required belt pitch length is:</p>
+<p><span class="math display">\[L = 2C + \frac{\pi}{2}(D_1 + D_2) + \frac{(D_2 - D_1)^2}{4C}\]</span></p>
+<p>Where:</p>
 <table>
 <thead>
 <tr class="header">
-<th align="left">If the driven gear is…</th>
-<th align="left">Then speed is…</th>
-<th align="left">And torque is…</th>
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Larger</strong> (more teeth)</td>
-<td align="left"><strong>Reduced</strong></td>
-<td align="left"><strong>Increased</strong></td>
+<td align="left"><span class="math inline">\(L\)</span></td>
+<td align="left">Belt pitch length</td>
+<td align="left">mm</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Smaller</strong> (fewer teeth)</td>
-<td align="left"><strong>Increased</strong></td>
-<td align="left"><strong>Reduced</strong></td>
+<td align="left"><span class="math inline">\(C\)</span></td>
+<td align="left">Center distance between pulleys</td>
+<td align="left">mm</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Same size</strong></td>
-<td align="left"><strong>Same</strong></td>
-<td align="left"><strong>Same</strong></td>
+<td align="left"><span class="math inline">\(D_1\)</span></td>
+<td align="left">Pitch diameter of smaller pulley</td>
+<td align="left">mm</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(D_2\)</span></td>
+<td align="left">Pitch diameter of larger pulley</td>
+<td align="left">mm</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Power relationship (accounting for efficiency):</strong></p>
-<p><span class="math display">\[P_{out} = P_{in} \times \eta\]</span></p>
-<p><span class="math display">\[T_{out} \times \omega_{out} = T_{in} \times \omega_{in} \times \eta\]</span></p>
-<p>Where <span class="math inline">\(\eta\)</span> = efficiency (typically 0.97-0.99 per gear mesh)</p>
-<hr />
+</div>
+<div id="center-distance-from-belt-length" class="section level3 hasAnchor" number="10.0.10">
+<h3><span class="header-section-number">10.0.10</span> Center Distance from Belt Length<a href="power-transmission-belt-pulley-systems.html#center-distance-from-belt-length" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If you have a standard belt length and need to calculate the center distance:</p>
+<p><span class="math display">\[C = \frac{B + \sqrt{B^2 - 8(D_2 - D_1)^2}}{8}\]</span></p>
+<p>Where:</p>
+<p><span class="math display">\[B = 2L - \pi(D_1 + D_2)\]</span></p>
+</div>
+<div id="arc-of-contact" class="section level3 hasAnchor" number="10.0.11">
+<h3><span class="header-section-number">10.0.11</span> Arc of Contact<a href="power-transmission-belt-pulley-systems.html#arc-of-contact" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The arc of contact (wrap angle) on the smaller pulley is critical for power transmission:</p>
+<p><span class="math display">\[\theta_1 = 180° - 2\sin^{-1}\left(\frac{D_2 - D_1}{2C}\right)\]</span></p>
 <blockquote>
-<p><strong>❓ Calculation Challenge:</strong> A motor runs at 1750 RPM and delivers 5 kW. It drives a gear with 20 teeth meshed with a gear having 80 teeth. Calculate: (a) output speed, (b) gear ratio, (c) output torque (assume 98% efficiency).</p>
+<p><strong>Design Rule:</strong> The arc of contact on the smaller pulley should be at least 120° for adequate grip. Values below this require adjustment of center distance or use of an idler pulley.</p>
 </blockquote>
+</div>
+<div id="belt-speed" class="section level3 hasAnchor" number="10.0.12">
+<h3><span class="header-section-number">10.0.12</span> Belt Speed<a href="power-transmission-belt-pulley-systems.html#belt-speed" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The linear belt speed affects both power capacity and belt life:</p>
+<p><span class="math display">\[v = \frac{\pi \times D \times n}{60,000}\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(v\)</span></td>
+<td align="left">Belt linear velocity</td>
+<td align="left">m/s</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(D\)</span></td>
+<td align="left">Pulley pitch diameter</td>
+<td align="left">mm</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(n\)</span></td>
+<td align="left">Rotational speed</td>
+<td align="left">rpm</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Design Rule:</strong> For V-belts, optimal belt speed is typically 15-25 m/s. Speeds above 30 m/s cause excessive centrifugal force and reduce belt grip.</p>
+</blockquote>
+</div>
+<div id="power-transmission" class="section level3 hasAnchor" number="10.0.13">
+<h3><span class="header-section-number">10.0.13</span> Power Transmission<a href="power-transmission-belt-pulley-systems.html#power-transmission" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The power transmitted by a belt drive depends on the tension difference between tight and slack sides:</p>
+<p><span class="math display">\[P = (T_1 - T_2) \times v\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Power transmitted</td>
+<td align="left">W</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(T_1\)</span></td>
+<td align="left">Tight side tension</td>
+<td align="left">N</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(T_2\)</span></td>
+<td align="left">Slack side tension</td>
+<td align="left">N</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(v\)</span></td>
+<td align="left">Belt velocity</td>
+<td align="left">m/s</td>
+</tr>
+</tbody>
+</table>
+<p>The tension ratio is governed by the friction equation:</p>
+<p><span class="math display">\[\frac{T_1}{T_2} = e^{\mu\theta}\]</span></p>
+<p>Where <span class="math inline">\(\mu\)</span> is the coefficient of friction between belt and pulley, and <span class="math inline">\(\theta\)</span> is the arc of contact in radians.</p>
+<hr />
+</div>
+</div>
+<div id="worked-example-belt-drive-design" class="section level2 unnumbered hasAnchor">
+<h2>🧮 Worked Example: Belt Drive Design<a href="#worked-example-belt-drive-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem:</strong> Design a V-belt drive system to transmit 5 kW from a 1450 rpm electric motor to a machine shaft that must rotate at approximately 500 rpm. The center distance should be approximately 500 mm.</p>
 <details>
 <summary>
-Click to reveal solution
+<strong>Click to reveal solution</strong>
 </summary>
-<p><strong>(a) Gear Ratio:</strong>
-<span class="math display">\[GR = \frac{N_{driven}}{N_{driver}} = \frac{80}{20} = 4:1\]</span></p>
-<p><strong>(b) Output Speed:</strong>
-<span class="math display">\[n_{out} = \frac{n_{in}}{GR} = \frac{1750}{4} = 437.5 \text{ RPM}\]</span></p>
-<p><strong>(c) Input Torque:</strong>
-<span class="math display">\[T_{in} = \frac{P}{\omega_{in}} = \frac{5000}{1750 \times \frac{2\pi}{60}} = \frac{5000}{183.3} = 27.3 \text{ N·m}\]</span></p>
-<p><strong>(d) Output Torque:</strong>
-<span class="math display">\[T_{out} = T_{in} \times GR \times \eta = 27.3 \times 4 \times 0.98 = 107 \text{ N·m}\]</span></p>
-<p>Or verify using power:
-<span class="math display">\[T_{out} = \frac{P_{out}}{\omega_{out}} = \frac{5000 \times 0.98}{437.5 \times \frac{2\pi}{60}} = \frac{4900}{45.8} = 107 \text{ N·m}\]</span> ✓</p>
+<p><strong>Step 1: Calculate the required speed ratio</strong></p>
+<p><span class="math display">\[i = \frac{n_1}{n_2} = \frac{1450}{500} = 2.9\]</span></p>
+<p><strong>Step 2: Select pulley diameters</strong></p>
+<p>Choose a driver pulley diameter (standard sizes: 75, 90, 100, 112, 125, 140, 160 mm…)</p>
+<p>Let’s select <span class="math inline">\(D_1 = 100\)</span> mm</p>
+<p>Then: <span class="math inline">\(D_2 = D_1 \times i = 100 \times 2.9 = 290\)</span> mm</p>
+<p>Select nearest standard size: <span class="math inline">\(D_2 = 280\)</span> mm (or 315 mm)</p>
+<p>With <span class="math inline">\(D_2 = 280\)</span> mm, actual speed ratio: <span class="math inline">\(i = 280/100 = 2.8\)</span></p>
+<p>Actual output speed: <span class="math inline">\(n_2 = 1450/2.8 = 518\)</span> rpm ✓ (close to target)</p>
+<p><strong>Step 3: Calculate belt length</strong></p>
+<p><span class="math display">\[L = 2(500) + \frac{\pi}{2}(100 + 280) + \frac{(280 - 100)^2}{4(500)}\]</span></p>
+<p><span class="math display">\[L = 1000 + 596.9 + 16.2 = 1613.1 \text{ mm}\]</span></p>
+<p>Select nearest standard belt length: <strong>A63</strong> (1600 mm) or <strong>A64</strong> (1626 mm)</p>
+<p><strong>Step 4: Verify arc of contact</strong></p>
+<p><span class="math display">\[\theta_1 = 180° - 2\sin^{-1}\left(\frac{280 - 100}{2 \times 500}\right)\]</span></p>
+<p><span class="math display">\[\theta_1 = 180° - 2\sin^{-1}(0.18) = 180° - 20.7° = 159.3°\]</span></p>
+<p>This exceeds 120°, so grip is adequate. ✓</p>
+<p><strong>Step 5: Check belt speed</strong></p>
+<p><span class="math display">\[v = \frac{\pi \times 100 \times 1450}{60,000} = 7.6 \text{ m/s}\]</span></p>
+<p>This is within acceptable range (15-25 m/s optimal, up to 30 m/s maximum). ✓</p>
+<p><strong>Step 6: Select belt cross-section</strong></p>
+<p>For 5 kW at 1450 rpm with a 100 mm pulley, referencing V-belt power rating tables, a <strong>B-section</strong> V-belt is appropriate. One belt should be sufficient, but two belts would provide a safety factor.</p>
+<p><strong>Summary:</strong>
+- Driver pulley: 100 mm pitch diameter, B-section groove
+- Driven pulley: 280 mm pitch diameter, B-section groove
+- Belt: B64 (1626 mm pitch length), B-section
+- Center distance: ~500 mm (adjust with tensioner)
+- Output speed: 518 rpm</p>
 </details>
 <hr />
 </div>
-</div>
-<div id="gear-trains" class="section level2 unnumbered hasAnchor">
-<h2>🔄 Gear Trains<a href="#gear-trains" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A <strong>gear train</strong> is a combination of two or more gears used to transmit power from one shaft to another. Gear trains allow for larger speed ratios and more complex motion transmission than a single gear pair.</p>
-<div id="simple-gear-train" class="section level3 hasAnchor" number="4.0.12">
-<h3><span class="header-section-number">4.0.12</span> Simple Gear Train<a href="gears-gear-trains-and-transmissions.html#simple-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In a <strong>simple gear train</strong>, each shaft carries only one gear. The intermediate gears are called <strong>idlers</strong> and do not affect the overall gear ratio—they only change the direction of rotation.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:simple-gear-train"></span>
-<img src="_main_files/figure-html/simple-gear-train-1.png" alt="Simple gear train with idler gear." width="1152" />
-<p class="caption">
-Figure 4.9: Simple gear train with idler gear.
-</p>
-</div>
-<p><strong>Simple gear train ratio:</strong>
-<span class="math display">\[GR = \frac{N_{driven}}{N_{driver}} = \frac{N_{last}}{N_{first}}\]</span></p>
-<p>The idler gears only affect <strong>direction of rotation</strong>, not the gear ratio.</p>
-<hr />
-</div>
-<div id="compound-gear-train" class="section level3 hasAnchor" number="4.0.13">
-<h3><span class="header-section-number">4.0.13</span> Compound Gear Train<a href="gears-gear-trains-and-transmissions.html#compound-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In a <strong>compound gear train</strong>, two or more gears are mounted on the same shaft, rotating together. This allows for much higher gear ratios in a compact space.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:compound-gear-train"></span>
-<img src="_main_files/figure-html/compound-gear-train-1.png" alt="Compound gear train: higher ratios in less space." width="1152" />
-<p class="caption">
-Figure 4.10: Compound gear train: higher ratios in less space.
-</p>
-</div>
-<p><strong>Compound gear train ratio:</strong>
-<span class="math display">\[GR = \frac{N_{B}}{N_{A}} \times \frac{N_{D}}{N_{C}} = \frac{\text{Product of driven teeth}}{\text{Product of driver teeth}}\]</span></p>
-<hr />
-</div>
-<div id="planetary-epicyclic-gear-train" class="section level3 hasAnchor" number="4.0.14">
-<h3><span class="header-section-number">4.0.14</span> Planetary (Epicyclic) Gear Train<a href="gears-gear-trains-and-transmissions.html#planetary-epicyclic-gear-train" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Planetary gear systems</strong> are compact, high-ratio gear trains widely used in automatic transmissions, power tools, and aerospace applications.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:planetary-gear"></span>
-<img src="_main_files/figure-html/planetary-gear-1.png" alt="Planetary gear system components and arrangement." width="960" />
-<p class="caption">
-Figure 4.11: Planetary gear system components and arrangement.
-</p>
-</div>
-<p><strong>Planetary gear ratio</strong> (sun input, carrier output, ring fixed):
-<span class="math display">\[GR = 1 + \frac{N_{ring}}{N_{sun}}\]</span></p>
-<p><strong>Applications:</strong>
-- <strong>Automotive:</strong> Automatic transmissions, hybrid drives, transfer cases
-- <strong>Aerospace:</strong> Helicopter transmissions, jet engine gearboxes
-- <strong>Industrial:</strong> Wind turbines, conveyors, hoists</p>
-<blockquote>
-<p><strong>🤔 Automotive Connection:</strong> Why do automatic transmissions use planetary gear sets instead of conventional gear trains?</p>
-</blockquote>
-<details>
-<summary>
-Click to reveal explanation
-</summary>
-<p><strong>Planetary gears in automatic transmissions offer several advantages:</strong></p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Multiple ratios from one gear set</strong> - By holding different elements (sun, ring, or carrier) stationary using clutches and bands, different gear ratios are achieved without physically moving gears</p></li>
-<li><p><strong>Constant mesh</strong> - All gears remain engaged; ratio changes are smooth and fast</p></li>
-<li><p><strong>Compact design</strong> - High power density; fits in limited space</p></li>
-<li><p><strong>Load sharing</strong> - Multiple planet gears share the load (typically 3-5 planets)</p></li>
-<li><p><strong>Coaxial input/output</strong> - Input and output shafts can be on the same axis</p></li>
-</ol>
-<p>A typical 6-speed automatic uses 2-3 planetary gear sets with multiple clutches to achieve all forward gears plus reverse.</p>
-</details>
-<hr />
-</div>
-</div>
-<div id="industry-applications" class="section level2 unnumbered hasAnchor">
-<h2>🏭 Industry Applications<a href="#industry-applications" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="automotive-industry" class="section level3 hasAnchor" number="4.0.15">
-<h3><span class="header-section-number">4.0.15</span> Automotive Industry<a href="gears-gear-trains-and-transmissions.html#automotive-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:automotive-gears"></span>
-<img src="_main_files/figure-html/automotive-gears-1.png" alt="Gear applications in automotive systems." width="1152" />
-<p class="caption">
-Figure 4.12: Gear applications in automotive systems.
-</p>
-</div>
-<p><strong>Key automotive gear applications:</strong></p>
+<div id="belt-tensioning" class="section level2 unnumbered hasAnchor">
+<h2>⚡ Belt Tensioning<a href="power-transmission-belt-pulley-systems.html#belt-tensioning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Proper belt tension is critical for reliable operation. Too little tension causes slip and rapid wear; too much tension damages bearings and shortens belt life.</p>
+<div id="tension-guidelines" class="section level3 hasAnchor" number="10.0.14">
+<h3><span class="header-section-number">10.0.14</span> Tension Guidelines<a href="power-transmission-belt-pulley-systems.html#tension-guidelines" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table>
 <colgroup>
-<col width="27%" />
-<col width="41%" />
-<col width="31%" />
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">System</th>
-<th align="left">Gear Types</th>
-<th align="left">Purpose</th>
+<th align="left">Belt Type</th>
+<th align="left">Tension Check Method</th>
+<th align="left">Acceptable Deflection</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Manual Transmission</td>
-<td align="left">Helical, synchronizer</td>
-<td align="left">Multiple speed ratios</td>
+<td align="left">V-Belt</td>
+<td align="left">Force per unit deflection</td>
+<td align="left">1.5-2% of span length per N force</td>
 </tr>
 <tr class="even">
-<td align="left">Automatic Transmission</td>
-<td align="left">Planetary, helical</td>
-<td align="left">Smooth ratio changes</td>
+<td align="left">Timing Belt</td>
+<td align="left">Frequency measurement</td>
+<td align="left">Specified Hz range</td>
 </tr>
 <tr class="odd">
-<td align="left">Differential</td>
-<td align="left">Spiral bevel, hypoid</td>
-<td align="left">Final drive, allows wheel speed difference</td>
-</tr>
-<tr class="even">
-<td align="left">Transfer Case</td>
-<td align="left">Spur, chain/gear</td>
-<td align="left">4WD/AWD power distribution</td>
-</tr>
-<tr class="odd">
-<td align="left">Steering</td>
-<td align="left">Rack and pinion, recirculating ball</td>
-<td align="left">Convert rotation to linear</td>
-</tr>
-<tr class="even">
-<td align="left">Starter Motor</td>
-<td align="left">Spur, planetary</td>
-<td align="left">High reduction for cranking torque</td>
+<td align="left">Flat Belt</td>
+<td align="left">Visual/manual check</td>
+<td align="left">Minimal visible sag</td>
 </tr>
 </tbody>
 </table>
-<hr />
 </div>
-<div id="food-processing-industry" class="section level3 hasAnchor" number="4.0.16">
-<h3><span class="header-section-number">4.0.16</span> Food Processing Industry<a href="gears-gear-trains-and-transmissions.html#food-processing-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:food-industry-gears"></span>
-<img src="_main_files/figure-html/food-industry-gears-1.png" alt="Gear applications in food processing equipment." width="1152" />
+<div id="tensioning-methods" class="section level3 hasAnchor" number="10.0.15">
+<h3><span class="header-section-number">10.0.15</span> Tensioning Methods<a href="power-transmission-belt-pulley-systems.html#tensioning-methods" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Adjustable motor base</strong> – Motor slides to adjust center distance</li>
+<li><strong>Idler pulley</strong> – Additional pulley presses against slack side</li>
+<li><strong>Automatic tensioner</strong> – Spring-loaded pulley maintains constant tension</li>
+<li><strong>Screw adjustment</strong> – Threaded adjustment for precise tension setting</li>
+</ol>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:idler-pulley-diagram"></span>
+<img src="_main_files/figure-html/idler-pulley-diagram-1.png" alt="Belt drive with backside idler tensioner" width="960" />
 <p class="caption">
-Figure 4.13: Gear applications in food processing equipment.
+Figure 10.5: Belt drive with backside idler tensioner
 </p>
 </div>
-<p><strong>Food industry gear requirements:</strong></p>
-<ul>
-<li><strong>Stainless steel</strong> or <strong>food-grade materials</strong> for hygiene</li>
-<li><strong>Sealed gearboxes</strong> to prevent lubricant contamination</li>
-<li><strong>Washdown capability</strong> for sanitation</li>
-<li><strong>Smooth operation</strong> to prevent product damage</li>
-<li><strong>Variable speed</strong> capability for different products</li>
-</ul>
-<hr />
-</div>
-<div id="defense-industry" class="section level3 hasAnchor" number="4.0.17">
-<h3><span class="header-section-number">4.0.17</span> Defense Industry<a href="gears-gear-trains-and-transmissions.html#defense-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:defense-gears"></span>
-<img src="_main_files/figure-html/defense-gears-1.png" alt="Gear applications in defense systems." width="1152" />
-<p class="caption">
-Figure 4.14: Gear applications in defense systems.
-</p>
-</div>
-<p><strong>Defense gear requirements:</strong></p>
-<ul>
-<li><strong>Extreme reliability</strong> - Mission critical, no field repair</li>
-<li><strong>High strength-to-weight ratio</strong> - Often use aerospace-grade materials</li>
-<li><strong>Environmental resistance</strong> - Temperature extremes, dust, water</li>
-<li><strong>Zero or minimal backlash</strong> - Precision positioning systems</li>
-<li><strong>Noise reduction</strong> - Stealth requirements</li>
-<li><strong>Shock loading capability</strong> - Combat conditions</li>
-</ul>
 <hr />
 </div>
 </div>
-<div id="gear-design-considerations" class="section level2 unnumbered hasAnchor">
-<h2>🔧 Gear Design Considerations<a href="#gear-design-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="material-selection" class="section level3 hasAnchor" number="4.0.18">
-<h3><span class="header-section-number">4.0.18</span> Material Selection<a href="gears-gear-trains-and-transmissions.html#material-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="design-guidelines-and-best-practices" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Design Guidelines and Best Practices<a href="#design-guidelines-and-best-practices" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="pulley-selection-guidelines" class="section level3 hasAnchor" number="10.0.16">
+<h3><span class="header-section-number">10.0.16</span> Pulley Selection Guidelines<a href="power-transmission-belt-pulley-systems.html#pulley-selection-guidelines" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table>
 <colgroup>
-<col width="20%" />
-<col width="28%" />
-<col width="24%" />
-<col width="26%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">Material</th>
-<th align="left">Applications</th>
-<th align="left">Advantages</th>
-<th align="left">Limitations</th>
+<th align="left">Parameter</th>
+<th align="left">Recommendation</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Carbon Steel</strong> (1045, 4140)</td>
-<td align="left">General purpose, automotive</td>
-<td align="left">Good strength, economical</td>
-<td align="left">Requires heat treatment</td>
+<td align="left">Minimum pulley diameter</td>
+<td align="left">Follow belt manufacturer specifications</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Alloy Steel</strong> (4340, 8620)</td>
-<td align="left">High-load applications</td>
-<td align="left">High strength, hardenable</td>
-<td align="left">More expensive</td>
+<td align="left">Speed ratio</td>
+<td align="left">Keep below 6:1 for single-stage drives</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Cast Iron</strong></td>
-<td align="left">Low-speed, low-load</td>
-<td align="left">Good damping, economical</td>
-<td align="left">Brittle, low strength</td>
+<td align="left">Number of belts</td>
+<td align="left">Use multiple belts for high power or redundancy</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Bronze</strong></td>
-<td align="left">Worm wheels, low-speed</td>
-<td align="left">Good wear with steel</td>
-<td align="left">Lower strength</td>
+<td align="left">Material</td>
+<td align="left">Cast iron or steel for most applications; aluminum for light duty</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Nylon/Acetal</strong></td>
-<td align="left">Light loads, quiet operation</td>
-<td align="left">Self-lubricating, quiet</td>
-<td align="left">Limited load, temperature</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Stainless Steel</strong></td>
-<td align="left">Food, medical, marine</td>
-<td align="left">Corrosion resistant</td>
-<td align="left">Lower hardness possible</td>
+<td align="left">Groove angle</td>
+<td align="left">34° for light/medium loads; 38° for heavy loads</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="common-failure-modes" class="section level3 hasAnchor" number="4.0.19">
-<h3><span class="header-section-number">4.0.19</span> Common Failure Modes<a href="gears-gear-trains-and-transmissions.html#common-failure-modes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-failures"></span>
-<img src="_main_files/figure-html/gear-failures-1.png" alt="Common gear failure modes." width="1152" />
-<p class="caption">
-Figure 4.15: Common gear failure modes.
-</p>
-</div>
-</div>
-<div id="design-guidelines" class="section level3 hasAnchor" number="4.0.20">
-<h3><span class="header-section-number">4.0.20</span> Design Guidelines<a href="gears-gear-trains-and-transmissions.html#design-guidelines" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="installation-best-practices" class="section level3 hasAnchor" number="10.0.17">
+<h3><span class="header-section-number">10.0.17</span> Installation Best Practices<a href="power-transmission-belt-pulley-systems.html#installation-best-practices" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><p><strong>Minimum teeth:</strong> To avoid undercut (20° pressure angle):</p>
+<li><strong>Alignment</strong> – Pulleys must be parallel and in the same plane</li>
+<li><strong>Tension</strong> – Set initial tension per manufacturer specifications</li>
+<li><strong>Run-in period</strong> – Re-tension after 24-48 hours of operation</li>
+<li><strong>Inspection</strong> – Check belt condition and tension regularly</li>
+<li><strong>Replacement</strong> – Replace all belts in a multi-belt drive together</li>
+</ol>
+</div>
+<div id="common-problems-and-solutions" class="section level3 hasAnchor" number="10.0.18">
+<h3><span class="header-section-number">10.0.18</span> Common Problems and Solutions<a href="power-transmission-belt-pulley-systems.html#common-problems-and-solutions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Problem</th>
+<th align="left">Likely Cause</th>
+<th align="left">Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Belt squeal</td>
+<td align="left">Insufficient tension or contamination</td>
+<td align="left">Increase tension; clean pulleys</td>
+</tr>
+<tr class="even">
+<td align="left">Rapid wear</td>
+<td align="left">Misalignment or wrong belt size</td>
+<td align="left">Realign pulleys; verify belt selection</td>
+</tr>
+<tr class="odd">
+<td align="left">Belt slipping</td>
+<td align="left">Worn belt or low tension</td>
+<td align="left">Replace belt; adjust tension</td>
+</tr>
+<tr class="even">
+<td align="left">Overheating</td>
+<td align="left">Excessive slip or overload</td>
+<td align="left">Reduce load; check alignment</td>
+</tr>
+<tr class="odd">
+<td align="left">Belt cracking</td>
+<td align="left">Age, heat, or chemical exposure</td>
+<td align="left">Replace belt; protect from environment</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="related-topics" class="section level2 unnumbered hasAnchor">
+<h2>🔗 Related Topics<a href="#related-topics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Belt and pulley systems are one component of the broader field of power transmission. For related content, see:</p>
 <ul>
-<li>Minimum pinion teeth ≈ 17 for standard gears</li>
-<li>Use profile shift for fewer teeth</li>
-</ul></li>
-<li><p><strong>Contact ratio:</strong> Should be &gt; 1.2 for smooth operation
-<span class="math display">\[\text{Contact Ratio} = \frac{\text{Arc of Action}}{\text{Circular Pitch}}\]</span></p></li>
-<li><p><strong>Face width:</strong> Typically 9-13 × module for spur gears</p></li>
-<li><p><strong>Backlash:</strong> Small clearance between teeth (typically 0.04-0.10 × module)</p></li>
-<li><p><strong>Lubrication:</strong> Critical for all enclosed gear systems</p></li>
+<li><strong>Chapter 4: Gears</strong> – For applications requiring exact speed ratios or high torque</li>
+<li><strong>Chapter 8: Bearings</strong> – Essential for supporting pulley shafts</li>
+<li><strong>Chain Drives</strong> – When positive engagement is needed with higher load capacity than timing belts</li>
+</ul>
+<hr />
+</div>
+<div id="chapter-summary" class="section level2 unnumbered hasAnchor">
+<h2>📚 Chapter Summary<a href="#chapter-summary" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Belt and pulley systems provide a versatile, economical method for transmitting rotational power. Key takeaways:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Speed ratio</strong> is determined by the ratio of pulley diameters: <span class="math inline">\(i = D_2/D_1\)</span></p></li>
+<li><p><strong>V-belts</strong> are most common for general power transmission; <strong>timing belts</strong> for precise synchronization</p></li>
+<li><p><strong>Belt length</strong> calculation considers center distance and both pulley diameters</p></li>
+<li><p><strong>Arc of contact</strong> must exceed 120° on the smaller pulley for reliable grip</p></li>
+<li><p><strong>Proper tensioning</strong> is critical – not too tight, not too loose</p></li>
+<li><p><strong>Belt speed</strong> affects both power capacity and service life</p></li>
 </ol>
 <hr />
 </div>
-</div>
-<div id="design-checklist-for-gears" class="section level2 unnumbered hasAnchor">
-<h2>📋 Design Checklist for Gears<a href="#design-checklist-for-gears" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="gear-specification" class="section level3 hasAnchor" number="4.0.21">
-<h3><span class="header-section-number">4.0.21</span> Gear Specification<a href="gears-gear-trains-and-transmissions.html#gear-specification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Gear type selected based on shaft arrangement</label></li>
-<li><label><input type="checkbox" />Module/diametral pitch specified</label></li>
-<li><label><input type="checkbox" />Number of teeth determined for required ratio</label></li>
-<li><label><input type="checkbox" />Pressure angle specified (typically 20°)</label></li>
-<li><label><input type="checkbox" />Face width determined</label></li>
-<li><label><input type="checkbox" />Material selected based on load and environment</label></li>
-</ul>
-</div>
-<div id="strength-verification" class="section level3 hasAnchor" number="4.0.22">
-<h3><span class="header-section-number">4.0.22</span> Strength Verification<a href="gears-gear-trains-and-transmissions.html#strength-verification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Bending stress calculated and within limits</label></li>
-<li><label><input type="checkbox" />Contact (Hertzian) stress calculated and within limits</label></li>
-<li><label><input type="checkbox" />Service factors applied for shock loading</label></li>
-<li><label><input type="checkbox" />Safety factor adequate (typically 1.5-2.5)</label></li>
-</ul>
-</div>
-<div id="gear-train-design" class="section level3 hasAnchor" number="4.0.23">
-<h3><span class="header-section-number">4.0.23</span> Gear Train Design<a href="gears-gear-trains-and-transmissions.html#gear-train-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Overall ratio achieved</label></li>
-<li><label><input type="checkbox" />Intermediate shafts and bearings specified</label></li>
-<li><label><input type="checkbox" />Center distances calculated</label></li>
-<li><label><input type="checkbox" />Shaft alignment considered</label></li>
-<li><label><input type="checkbox" />Housing/mounting provisions adequate</label></li>
-</ul>
-</div>
-<div id="manufacturing-and-assembly" class="section level3 hasAnchor" number="4.0.24">
-<h3><span class="header-section-number">4.0.24</span> Manufacturing and Assembly<a href="gears-gear-trains-and-transmissions.html#manufacturing-and-assembly" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Gear quality grade specified (AGMA or ISO)</label></li>
-<li><label><input type="checkbox" />Surface finish requirements defined</label></li>
-<li><label><input type="checkbox" />Heat treatment specified if required</label></li>
-<li><label><input type="checkbox" />Assembly procedure considered</label></li>
-<li><label><input type="checkbox" />Lubrication system designed</label></li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="case-study-food-packaging-line-drive" class="section level2 unnumbered hasAnchor">
-<h2>🎯 Case Study: Food Packaging Line Drive<a href="#case-study-food-packaging-line-drive" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Design Requirements:</strong></p>
-<p>A food packaging machine requires a gear drive with the following specifications:</p>
-<ul>
-<li>Motor speed: 1800 RPM</li>
-<li>Output speed: 45 RPM (±2%)</li>
-<li>Output torque: 200 N·m</li>
-<li>Must fit in 300 mm × 200 mm envelope</li>
-<li>Food-safe requirements (no contamination risk)</li>
-<li>16 hours/day operation, 6 days/week</li>
-</ul>
-<blockquote>
-<p><strong>🤔 Your Turn:</strong> Design a gear train to meet these requirements. Consider gear types, stages, materials, and food safety.</p>
-</blockquote>
+<div id="practice-problems-3" class="section level2 unnumbered hasAnchor">
+<h2>✏️ Practice Problems<a href="power-transmission-belt-pulley-systems.html#practice-problems-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem 1:</strong> A 2 HP motor runs at 1725 rpm and drives a fan through a V-belt drive. The fan must rotate at approximately 860 rpm. If the driver pulley is 4 inches in diameter, what size driven pulley is needed?</p>
 <details>
 <summary>
-Click to reveal design solution
+<strong>Click for answer</strong>
 </summary>
-<p><strong>1. Calculate Required Ratio:</strong>
-<span class="math display">\[GR = \frac{1800}{45} = 40:1\]</span></p>
-<p><strong>2. Select Gear Train Configuration:</strong></p>
-<p><strong>Option A: Two-stage helical</strong> (preferred for food industry)
-- Stage 1: 6.3:1 (16T pinion, 101T gear - round to 100T) → actual 6.25:1
-- Stage 2: 6.4:1 (15T pinion, 96T gear) → actual 6.4:1
-- Total: 6.25 × 6.4 = <strong>40:1</strong> ✓</p>
-<p><strong>Option B: Worm + Helical</strong>
-- Worm stage: 20:1
-- Helical stage: 2:1
-- Total: 40:1
-- Self-locking feature may be beneficial</p>
-<p><strong>3. Material Selection:</strong>
-- Gears: <strong>Stainless steel 17-4 PH</strong> (food-safe, hardenable)
-- Alternative: Carbon steel with <strong>food-grade coating</strong>
-- Housing: Cast aluminum with epoxy coating</p>
-<p><strong>4. Food Safety Features:</strong>
-- <strong>Sealed gearbox</strong> with NSF-approved seals
-- <strong>Food-grade synthetic lubricant</strong> (NSF H1)
-- <strong>Smooth exterior</strong> for easy cleaning
-- <strong>Stainless fasteners</strong></p>
-<p><strong>5. Verify Size:</strong>
-- Module 3 for both stages
-- Stage 1 center distance: 3 × (16 + 100) / 2 = 174 mm
-- Stage 2 center distance: 3 × (15 + 96) / 2 = 166.5 mm
-- Fits within 300 × 200 mm envelope ✓</p>
-<p><strong>6. Efficiency Check:</strong>
-- Two-stage helical: ~97% × 97% = 94%
-- Input power: (200 × 45 × 2π/60) / 0.94 = 1003 W
-- Motor rating: 1.1 kW minimum ✓</p>
+<p>Required speed ratio: <span class="math inline">\(i = 1725/860 = 2.0\)</span></p>
+<p>Driven pulley diameter: <span class="math inline">\(D_2 = D_1 \times i = 4 \times 2.0 = 8\)</span> inches</p>
+<p>Select nearest standard size: <strong>8 inch pulley</strong></p>
+<p>Actual output speed: <span class="math inline">\(1725/2 = 862.5\)</span> rpm ✓</p>
 </details>
-<hr />
-</div>
-<div id="practice-problems" class="section level2 unnumbered hasAnchor">
-<h2>✍️ Practice Problems<a href="gears-gear-trains-and-transmissions.html#practice-problems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Problem 1:</strong> A spur gear has 24 teeth and a module of 4 mm. Calculate: (a) pitch diameter, (b) circular pitch, (c) addendum, (d) outside diameter.</p>
+<p><strong>Problem 2:</strong> Calculate the belt pitch length for a drive with 80 mm and 200 mm pulleys at a center distance of 400 mm.</p>
 <details>
 <summary>
-Click for solution
+<strong>Click for answer</strong>
 </summary>
-<p><strong>(a) Pitch Diameter:</strong>
-<span class="math display">\[d = m \times N = 4 \times 24 = 96 \text{ mm}\]</span></p>
-<p><strong>(b) Circular Pitch:</strong>
-<span class="math display">\[p = \pi \times m = \pi \times 4 = 12.57 \text{ mm}\]</span></p>
-<p><strong>(c) Addendum:</strong>
-<span class="math display">\[a = m = 4 \text{ mm}\]</span></p>
-<p><strong>(d) Outside Diameter:</strong>
-<span class="math display">\[d_o = m(N + 2) = 4(24 + 2) = 104 \text{ mm}\]</span></p>
+<p><span class="math display">\[L = 2C + \frac{\pi}{2}(D_1 + D_2) + \frac{(D_2 - D_1)^2}{4C}\]</span></p>
+<p><span class="math display">\[L = 2(400) + \frac{\pi}{2}(80 + 200) + \frac{(200 - 80)^2}{4(400)}\]</span></p>
+<p><span class="math display">\[L = 800 + 439.8 + 9.0 = 1248.8 \text{ mm}\]</span></p>
+<p>Select belt length: <strong>approximately 1250 mm</strong></p>
 </details>
-<hr />
-<p><strong>Problem 2:</strong> A compound gear train has: Gear A (20 teeth) driving Gear B (50 teeth), which is on the same shaft as Gear C (18 teeth), which drives Gear D (72 teeth). Calculate the overall gear ratio and output speed if the input is 1200 RPM.</p>
+<p><strong>Problem 3:</strong> A timing belt drive has a 20-tooth driver pulley and a 60-tooth driven pulley. If the motor speed is 1800 rpm, what is the output speed?</p>
 <details>
 <summary>
-Click for solution
+<strong>Click for answer</strong>
 </summary>
-<p><strong>Gear Ratio:</strong>
-<span class="math display">\[GR = \frac{N_B}{N_A} \times \frac{N_D}{N_C} = \frac{50}{20} \times \frac{72}{18} = 2.5 \times 4 = 10:1\]</span></p>
-<p><strong>Output Speed:</strong>
-<span class="math display">\[n_{out} = \frac{n_{in}}{GR} = \frac{1200}{10} = 120 \text{ RPM}\]</span></p>
+<p>For timing belts, the speed ratio equals the tooth count ratio:</p>
+<p><span class="math display">\[n_2 = n_1 \times \frac{Z_1}{Z_2} = 1800 \times \frac{20}{60} = 600 \text{ rpm}\]</span></p>
 </details>
-<hr />
-<p><strong>Problem 3:</strong> A planetary gear set has a sun gear with 20 teeth and a ring gear with 80 teeth. If the ring is held stationary and the sun is the input at 500 RPM, what is the carrier (output) speed?</p>
-<details>
-<summary>
-Click for solution
-</summary>
-<p>For sun input, carrier output, ring fixed:</p>
-<p><span class="math display">\[GR = 1 + \frac{N_{ring}}{N_{sun}} = 1 + \frac{80}{20} = 1 + 4 = 5:1\]</span></p>
-<p><strong>Carrier Speed:</strong>
-<span class="math display">\[n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}\]</span></p>
-</details>
-<hr />
-</div>
-<div id="further-reading" class="section level2 unnumbered hasAnchor">
-<h2>🔗 Further Reading<a href="#further-reading" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://www.agma.org/">AGMA Gear Standards</a></p>
-<p><a href="https://www.geartechnology.com/">Gear Technology Magazine</a></p>
-<p><a href="https://khkgears.net/new/gear_knowledge/">KHK Gear Technical Reference</a></p>
-<p><a href="https://www.industrialpress.com/">Machinery’s Handbook - Gearing Section</a></p>
-<hr />
-</div>
-<div id="supplemental-videos" class="section level2 unnumbered hasAnchor">
-<h2>🎬 Supplemental Videos<a href="#supplemental-videos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="how-gear-ratios-work" class="section level3 hasAnchor" number="4.0.25">
-<h3><span class="header-section-number">4.0.25</span> How Gear Ratios Work<a href="gears-gear-trains-and-transmissions.html#how-gear-ratios-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/JOLtS4VUcvQ"
-    title="How Gear Ratios Work"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
-</div>
-<div id="planetary-gears-explained" class="section level3 hasAnchor" number="4.0.26">
-<h3><span class="header-section-number">4.0.26</span> Planetary Gears Explained<a href="gears-gear-trains-and-transmissions.html#planetary-gears-explained" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/ARd-Om2VyiE"
-    title="Planetary Gears Explained"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
-</div>
-<div id="how-manual-transmissions-work" class="section level3 hasAnchor" number="4.0.27">
-<h3><span class="header-section-number">4.0.27</span> How Manual Transmissions Work<a href="gears-gear-trains-and-transmissions.html#how-manual-transmissions-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/wCu9W9xNwtI"
-    title="Manual Transmission Explained"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
-</div>
-<div id="how-differentials-work" class="section level3 hasAnchor" number="4.0.28">
-<h3><span class="header-section-number">4.0.28</span> How Differentials Work<a href="gears-gear-trains-and-transmissions.html#how-differentials-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/yYAw79386WI"
-    title="How Differentials Work"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
-<hr />
-</div>
-</div>
-<div id="references" class="section level2 unnumbered hasAnchor">
-<h2>📖 References<a href="#references" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li><p>Shigley, J. E., &amp; Mischke, C. R. (2011). <em>Mechanical Engineering Design</em> (10th ed.). McGraw-Hill.</p></li>
-<li><p>Dudley, D. W. (1994). <em>Handbook of Practical Gear Design</em>. CRC Press.</p></li>
-<li><p>AGMA. (2019). <em>AGMA 2001-D04: Fundamental Rating Factors and Calculation Methods for Involute Spur and Helical Gear Teeth</em>. American Gear Manufacturers Association.</p></li>
-<li><p>Radzevich, S. P. (2012). <em>Dudley’s Handbook of Practical Gear Design and Manufacture</em> (2nd ed.). CRC Press.</p></li>
-<li><p>Jelaska, D. (2012). <em>Gears and Gear Drives</em>. Wiley.</p></li>
-</ol>
 
 </div>
 </div>
@@ -1410,8 +1421,8 @@ Click for solution
           </div>
         </div>
       </div>
-<a href="strength-of-bolt-joint-calculations.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="design-for-stamping.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="four-bar-linkages.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="power-transmission-chain-drives.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1442,7 +1453,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/04-Gears.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/10-Belt-Pulley.Rmd",
     "text": "Edit"
   },
   "history": {

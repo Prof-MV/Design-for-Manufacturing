@@ -1,0 +1,868 @@
+# Power Transmission: Chain Drives
+
+```{r setup-11, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+
+# Custom theme for chain drive visualizations
+theme_chain <- theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  )
+```
+
+## 💡 Introduction to Chain Drives {-}
+
+Chain drives are mechanical power transmission systems that use a series of interconnected links to transfer motion and force between rotating shafts. Unlike belt drives that rely on friction, chain drives use positive engagement between chain links and sprocket teeth, ensuring no slip and maintaining exact speed ratios.
+
+> **Think About It:** Consider a bicycle—the chain connecting your pedals to the rear wheel is a perfect example of a chain drive. Why do bicycles use chains instead of belts? The answer lies in the need for positive engagement, high efficiency, and the ability to transmit significant force through a compact mechanism.
+
+Chain drives are found everywhere in mechanical systems:
+
+- **Transportation** – Bicycles, motorcycles, automotive timing chains
+- **Industrial machinery** – Conveyors, agricultural equipment, manufacturing lines
+- **Construction equipment** – Excavators, forklifts, cranes
+- **Power tools** – Chainsaws, drill presses
+
+### Why Choose Chain Drives?
+
+| Advantage | Description |
+| :--- | :--- |
+| **No slip** | Positive engagement ensures exact speed ratios |
+| **High efficiency** | Up to 98% mechanical efficiency |
+| **High power capacity** | Can transmit very high loads |
+| **Long center distances** | Effective over distances where gears aren't practical |
+| **Durability** | Long service life with proper lubrication |
+| **Compact** | Higher power density than belt drives |
+
+---
+
+## ⚙️ Roller Chain Fundamentals {-}
+
+The most common type of industrial chain is the **roller chain**, standardized under ANSI (American) and ISO (International) specifications. Understanding its construction is essential for proper selection and maintenance.
+
+### Roller Chain Anatomy
+
+```{r chain-anatomy, echo=FALSE, fig.align='center', fig.cap="Roller chain link construction showing key components", fig.width=11, fig.height=6}
+library(ggplot2)
+library(ggforce)
+
+# Chain link parameters
+pitch <- 2.5
+roller_r <- 0.4
+pin_r <- 0.15
+plate_height <- 1.2
+plate_width <- 0.3
+link_spacing <- pitch
+
+# Create outer plates (darker)
+outer_plate_1 <- data.frame(
+ xmin = -plate_width/2,
+ xmax = plate_width/2,
+ ymin = -plate_height/2,
+ ymax = plate_height/2
+)
+
+outer_plate_2 <- data.frame(
+ xmin = pitch - plate_width/2,
+ xmax = pitch + plate_width/2,
+ ymin = -plate_height/2,
+ ymax = plate_height/2
+)
+
+# Create inner plates (lighter, offset)
+inner_plate_1 <- data.frame(
+ xmin = pitch - plate_width/2 + 0.35,
+ xmax = pitch + plate_width/2 + 0.35,
+ ymin = -plate_height/2 + 0.1,
+ ymax = plate_height/2 - 0.1
+)
+
+inner_plate_2 <- data.frame(
+ xmin = 2*pitch - plate_width/2 + 0.35,
+ xmax = 2*pitch + plate_width/2 + 0.35,
+ ymin = -plate_height/2 + 0.1,
+ ymax = plate_height/2 - 0.1
+)
+
+ggplot() +
+ # Outer link plates (left pair)
+ geom_rect(data = outer_plate_1,
+           aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+           fill = "gray50", color = "black", linewidth = 1) +
+ geom_rect(data = outer_plate_2,
+           aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+           fill = "gray50", color = "black", linewidth = 1) +
+ # Connecting bar for outer plates
+ geom_rect(aes(xmin = 0, xmax = pitch, ymin = -0.15, ymax = 0.15),
+           fill = "gray50", color = "black", linewidth = 0.5) +
+ # Inner link plates
+ geom_rect(data = inner_plate_1,
+           aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+           fill = "gray70", color = "black", linewidth = 1) +
+ geom_rect(data = inner_plate_2,
+           aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+           fill = "gray70", color = "black", linewidth = 1) +
+ # Connecting bar for inner plates
+ geom_rect(aes(xmin = pitch + 0.35, xmax = 2*pitch + 0.35,
+               ymin = -0.12, ymax = 0.12),
+           fill = "gray70", color = "black", linewidth = 0.5) +
+ # Rollers
+ geom_circle(aes(x0 = 0, y0 = 0, r = roller_r),
+             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
+ geom_circle(aes(x0 = pitch, y0 = 0, r = roller_r),
+             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
+ geom_circle(aes(x0 = 2*pitch, y0 = 0, r = roller_r),
+             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
+ # Pins (center of rollers)
+ geom_circle(aes(x0 = 0, y0 = 0, r = pin_r),
+             fill = "gray30", color = "black", linewidth = 0.8) +
+ geom_circle(aes(x0 = pitch, y0 = 0, r = pin_r),
+             fill = "gray30", color = "black", linewidth = 0.8) +
+ geom_circle(aes(x0 = 2*pitch, y0 = 0, r = pin_r),
+             fill = "gray30", color = "black", linewidth = 0.8) +
+ # Bushings (between pin and roller)
+ geom_circle(aes(x0 = 0, y0 = 0, r = roller_r - 0.1),
+             fill = NA, color = "orange", linewidth = 1, linetype = "dashed") +
+ # Pitch dimension
+ annotate("segment", x = 0, y = -1.2, xend = pitch, yend = -1.2,
+          arrow = arrow(ends = "both", length = unit(0.15, "cm")),
+          color = "darkgreen", linewidth = 1) +
+ annotate("text", x = pitch/2, y = -1.5,
+          label = "Pitch (P)", size = 4, color = "darkgreen", fontface = "bold") +
+ # Component labels
+ annotate("segment", x = 0, y = roller_r + 0.1, xend = 0, yend = 1.5,
+          color = "steelblue", linewidth = 0.8) +
+ annotate("text", x = 0, y = 1.75,
+          label = "Roller", size = 3.5, color = "steelblue", fontface = "bold") +
+ annotate("segment", x = -0.5, y = 0.4, xend = -1.2, yend = 0.8,
+          color = "gray40", linewidth = 0.8) +
+ annotate("text", x = -1.8, y = 0.8,
+          label = "Outer\nPlate", size = 3.5, color = "gray40") +
+ annotate("segment", x = pitch + 0.6, y = 0.35, xend = pitch + 1.5, yend = 0.9,
+          color = "gray60", linewidth = 0.8) +
+ annotate("text", x = pitch + 2.2, y = 0.9,
+          label = "Inner\nPlate", size = 3.5, color = "gray60") +
+ annotate("segment", x = 0, y = -0.2, xend = -0.8, yend = -0.7,
+          color = "gray30", linewidth = 0.8) +
+ annotate("text", x = -1.3, y = -0.7,
+          label = "Pin", size = 3.5, color = "gray30") +
+ annotate("text", x = 0.6, y = 0.5,
+          label = "Bushing", size = 3, color = "orange", fontface = "italic") +
+ # Roller diameter dimension
+ annotate("segment", x = 2*pitch - roller_r, y = 0.8,
+          xend = 2*pitch + roller_r, yend = 0.8,
+          arrow = arrow(ends = "both", length = unit(0.1, "cm")),
+          color = "purple", linewidth = 0.8) +
+ annotate("text", x = 2*pitch, y = 1.1,
+          label = "Roller Ø", size = 3.5, color = "purple") +
+ coord_fixed() +
+ xlim(-2.5, 7) +
+ ylim(-2, 2.2) +
+ theme_chain +
+ labs(title = "Roller Chain Construction",
+      subtitle = "Standard ANSI/ISO roller chain showing alternating inner and outer link plates")
+```
+
+### Chain Component Functions
+
+| Component | Function |
+| :--- | :--- |
+| **Roller** | Engages with sprocket teeth; rolls to reduce friction |
+| **Bushing** | Provides bearing surface between pin and roller |
+| **Pin** | Connects outer plates; transfers load between links |
+| **Inner Plates** | Hold bushings; transfer tension through chain |
+| **Outer Plates** | Connect pins; alternate with inner links |
+
+### Standard Chain Sizes
+
+Roller chains are designated by standardized numbers that encode their pitch and construction:
+
+```{r chain-sizes-table, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+chain_sizes <- data.frame(
+ `ANSI No.` = c("25", "35", "40", "41", "50", "60", "80", "100", "120", "140"),
+ `Pitch (in)` = c("1/4", "3/8", "1/2", "1/2", "5/8", "3/4", "1", "1-1/4", "1-1/2", "1-3/4"),
+ `Pitch (mm)` = c("6.35", "9.525", "12.70", "12.70", "15.875", "19.05", "25.40", "31.75", "38.10", "44.45"),
+ `Roller Ø (in)` = c("0.130", "0.200", "0.312", "0.306", "0.400", "0.469", "0.625", "0.750", "0.875", "1.000"),
+ `Avg. Tensile (lbs)` = c("780", "1,760", "3,125", "2,000", "4,880", "7,030", "12,500", "19,531", "28,125", "38,280"),
+ check.names = FALSE
+)
+
+kable(chain_sizes,
+     caption = "Common ANSI Roller Chain Specifications",
+     align = c('c', 'c', 'c', 'c', 'c')) %>%
+ kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+               full_width = TRUE) %>%
+ row_spec(0, bold = TRUE, background = "#4a86c7", color = "white") %>%
+ footnote(general = "Chain numbers: First digit(s) = pitch in 1/8\", last digit: 0 = standard, 1 = lightweight, 5 = rollerless")
+```
+
+> **Understanding Chain Numbers:** The ANSI chain number system is logical. For example, chain #40 has a pitch of 4/8" = 1/2". Chain #60 has a pitch of 6/8" = 3/4". The final digit indicates the series: 0 for standard roller, 1 for lightweight, and 5 for rollerless (bushing) chains.
+
+---
+
+## 🔗 Sprocket Design and Selection {-}
+
+Sprockets are toothed wheels designed to engage with chain links. Proper sprocket selection is critical for chain drive performance and longevity.
+
+```{r sprocket-diagram, echo=FALSE, fig.align='center', fig.cap="Sprocket tooth geometry and engagement with roller chain", fig.width=10, fig.height=8}
+library(ggplot2)
+library(ggforce)
+
+# Sprocket parameters
+num_teeth <- 17
+pitch <- 1.0
+pitch_diameter <- pitch / sin(pi / num_teeth)
+roller_r <- 0.15
+
+# Calculate tooth positions
+tooth_angles <- seq(0, 2*pi, length.out = num_teeth + 1)[1:num_teeth]
+tooth_x <- (pitch_diameter/2) * cos(tooth_angles - pi/2)
+tooth_y <- (pitch_diameter/2) * sin(tooth_angles - pi/2)
+
+# Create sprocket outline (simplified as circle with teeth indicated)
+theta <- seq(0, 2*pi, length.out = 200)
+sprocket_outer_r <- pitch_diameter/2 + 0.2
+sprocket_inner_r <- pitch_diameter/2 - 0.3
+
+# Create tooth profile points
+teeth_df <- data.frame()
+for (i in 1:num_teeth) {
+ angle <- tooth_angles[i] - pi/2
+ # Tooth tip
+ tip_r <- pitch_diameter/2 + 0.15
+ # Tooth root
+ root_r <- pitch_diameter/2 - 0.25
+ # Tooth width angle
+ half_tooth <- pi / num_teeth * 0.4
+
+ tooth <- data.frame(
+   x = c(root_r * cos(angle - half_tooth * 1.2),
+         tip_r * cos(angle - half_tooth * 0.5),
+         tip_r * cos(angle + half_tooth * 0.5),
+         root_r * cos(angle + half_tooth * 1.2)),
+   y = c(root_r * sin(angle - half_tooth * 1.2),
+         tip_r * sin(angle - half_tooth * 0.5),
+         tip_r * sin(angle + half_tooth * 0.5),
+         root_r * sin(angle + half_tooth * 1.2)),
+   tooth_id = i
+ )
+ teeth_df <- rbind(teeth_df, tooth)
+}
+
+# Chain rollers engaging with sprocket
+chain_roller_angles <- c(-pi/2, -pi/2 + 2*pi/num_teeth, -pi/2 + 4*pi/num_teeth)
+chain_roller_x <- (pitch_diameter/2) * cos(chain_roller_angles)
+chain_roller_y <- (pitch_diameter/2) * sin(chain_roller_angles)
+
+ggplot() +
+ # Sprocket body
+ geom_circle(aes(x0 = 0, y0 = 0, r = pitch_diameter/2 - 0.35),
+             fill = "gray70", color = "gray50", linewidth = 1) +
+ # Sprocket hub
+ geom_circle(aes(x0 = 0, y0 = 0, r = 0.8),
+             fill = "gray60", color = "gray40", linewidth = 1.2) +
+ # Bore
+ geom_circle(aes(x0 = 0, y0 = 0, r = 0.4),
+             fill = "white", color = "black", linewidth = 1) +
+ # Teeth
+ geom_polygon(data = teeth_df, aes(x = x, y = y, group = tooth_id),
+              fill = "gray70", color = "gray40", linewidth = 0.5) +
+ # Pitch circle (dashed)
+ geom_circle(aes(x0 = 0, y0 = 0, r = pitch_diameter/2),
+             fill = NA, color = "darkgreen", linewidth = 1, linetype = "dashed") +
+ # Chain rollers
+ geom_circle(aes(x0 = chain_roller_x[1], y0 = chain_roller_y[1], r = roller_r),
+             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
+ geom_circle(aes(x0 = chain_roller_x[2], y0 = chain_roller_y[2], r = roller_r),
+             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
+ geom_circle(aes(x0 = chain_roller_x[3], y0 = chain_roller_y[3], r = roller_r),
+             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
+ # Chain links connecting rollers
+ geom_segment(aes(x = chain_roller_x[1], y = chain_roller_y[1] - roller_r - 0.05,
+                  xend = chain_roller_x[1] - 0.8, yend = chain_roller_y[1] - 0.6),
+              color = "gray30", linewidth = 3) +
+ geom_segment(aes(x = chain_roller_x[3], y = chain_roller_y[3],
+                  xend = chain_roller_x[3] + 0.8, yend = chain_roller_y[3] - 0.4),
+              color = "gray30", linewidth = 3) +
+ # Dimension annotations
+ # Pitch diameter
+ annotate("segment", x = 0, y = 0, xend = pitch_diameter/2 * cos(pi/4),
+          yend = pitch_diameter/2 * sin(pi/4),
+          color = "darkgreen", linewidth = 0.8,
+          arrow = arrow(length = unit(0.15, "cm"), type = "closed")) +
+ annotate("text", x = pitch_diameter/2 * cos(pi/4) + 0.4,
+          y = pitch_diameter/2 * sin(pi/4) + 0.3,
+          label = "Pitch\nRadius", size = 3.5, color = "darkgreen") +
+ # Tooth labels
+ annotate("segment", x = (pitch_diameter/2 + 0.15) * cos(-pi/6),
+          y = (pitch_diameter/2 + 0.15) * sin(-pi/6),
+          xend = pitch_diameter/2 + 1.2, yend = -0.5,
+          color = "gray40", linewidth = 0.6) +
+ annotate("text", x = pitch_diameter/2 + 1.6, y = -0.5,
+          label = "Tooth", size = 3.5, color = "gray40") +
+ # Chain roller label
+ annotate("text", x = chain_roller_x[1] - 0.8, y = chain_roller_y[1] + 0.4,
+          label = "Chain\nRoller", size = 3.5, color = "steelblue", fontface = "bold") +
+ # Number of teeth annotation
+ annotate("text", x = 0, y = 0,
+          label = paste0("N = ", num_teeth), size = 4, fontface = "bold") +
+ coord_fixed() +
+ xlim(-pitch_diameter/2 - 2, pitch_diameter/2 + 2.5) +
+ ylim(-pitch_diameter/2 - 1.5, pitch_diameter/2 + 1) +
+ theme_chain +
+ labs(title = "Sprocket Tooth Engagement",
+      subtitle = "17-tooth sprocket showing chain rollers seated in tooth gaps")
+```
+
+### Sprocket Terminology
+
+| Term | Definition | Formula |
+| :--- | :--- | :--- |
+| **Number of Teeth (N)** | Count of teeth on sprocket | — |
+| **Pitch (P)** | Distance between roller centers | — |
+| **Pitch Diameter (D)** | Diameter of circle through roller centers | $D = \frac{P}{\sin(180°/N)}$ |
+| **Outside Diameter** | Diameter to tooth tips | $D_o \approx P \times \left(\cot\frac{180°}{N} + 1\right)$ |
+| **Root Diameter** | Diameter at tooth base | $D_r = D - \text{Roller Ø}$ |
+| **Chordal Action** | Velocity variation due to polygon effect | Minimized with more teeth |
+
+### Minimum Sprocket Teeth
+
+The number of teeth affects smooth operation. Fewer teeth cause more "chordal action" (speed variation as chain engages).
+
+| Application | Minimum Driver Teeth | Minimum Driven Teeth |
+| :--- | :---: | :---: |
+| High-speed, smooth operation | 21-25 | 17-21 |
+| Moderate speed | 17-19 | 15-17 |
+| Low speed, high torque | 12-15 | 12-15 |
+| Absolute minimum | 9 | 9 |
+
+> **Design Rule:** For smooth operation at moderate to high speeds, use at least 17 teeth on the smaller sprocket. Below 12 teeth, noise and wear increase significantly.
+
+---
+
+## 📐 Chain Drive Calculations {-}
+
+### Speed Ratio
+
+Like belt and gear drives, chain drives follow a simple speed ratio relationship:
+
+$$\frac{n_2}{n_1} = \frac{N_1}{N_2} = \frac{1}{i}$$
+
+Where:
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $n_1$ | Driver sprocket speed | rpm |
+| $n_2$ | Driven sprocket speed | rpm |
+| $N_1$ | Number of teeth on driver sprocket | — |
+| $N_2$ | Number of teeth on driven sprocket | — |
+| $i$ | Speed ratio | — |
+
+> **Key Point:** Since chain engagement is positive (no slip), the speed ratio is exact and constant—unlike belt drives where slip can occur.
+
+### Chain Length Calculation
+
+The chain length is calculated in terms of **pitches** (number of links):
+
+$$L_p = 2C_p + \frac{N_1 + N_2}{2} + \frac{(N_2 - N_1)^2}{4\pi^2 C_p}$$
+
+Where:
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $L_p$ | Chain length in pitches | pitches |
+| $C_p$ | Center distance in pitches ($C/P$) | pitches |
+| $N_1$ | Teeth on smaller sprocket | — |
+| $N_2$ | Teeth on larger sprocket | — |
+
+The actual chain length is:
+$$L = L_p \times P$$
+
+> **Important:** Chain length must be a whole number of pitches. An **even number** of pitches is preferred to avoid offset links, which are weaker than standard links.
+
+### Center Distance Calculation
+
+Given a chain length, the center distance can be calculated:
+
+$$C_p = \frac{1}{4}\left[L_p - \frac{N_1 + N_2}{2} + \sqrt{\left(L_p - \frac{N_1 + N_2}{2}\right)^2 - \frac{8(N_2 - N_1)^2}{4\pi^2}}\right]$$
+
+Or approximately:
+
+$$C \approx \frac{P}{4}\left[2L_p - N_1 - N_2 + \sqrt{(2L_p - N_1 - N_2)^2 - 0.81(N_2 - N_1)^2}\right]$$
+
+### Chain Speed
+
+The linear chain speed is:
+
+$$v = \frac{P \times N \times n}{60,000}$$
+
+Where:
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $v$ | Chain speed | m/s |
+| $P$ | Chain pitch | mm |
+| $N$ | Number of teeth on sprocket | — |
+| $n$ | Sprocket rotational speed | rpm |
+
+---
+
+## 📊 Chain Drive System Layout {-}
+
+```{r chain-drive-layout, echo=FALSE, fig.align='center', fig.cap="Chain drive system showing driver and driven sprockets with chain path", fig.width=11, fig.height=7}
+library(ggplot2)
+library(ggforce)
+
+# System parameters
+driver_teeth <- 17
+driven_teeth <- 34
+pitch <- 0.5
+driver_pd <- pitch / sin(pi / driver_teeth)
+driven_pd <- pitch / sin(pi / driven_teeth)
+
+driver_x <- 0
+driver_y <- 0
+driven_x <- 6
+driven_y <- 0
+
+# Calculate tangent points for chain
+# Upper tangent
+delta_r <- (driven_pd - driver_pd) / 2
+center_dist <- driven_x - driver_x
+tangent_angle <- asin(delta_r / center_dist)
+
+upper_tang_driver_x <- driver_x + (driver_pd/2) * cos(pi/2 - tangent_angle)
+upper_tang_driver_y <- driver_y + (driver_pd/2) * sin(pi/2 - tangent_angle)
+upper_tang_driven_x <- driven_x + (driven_pd/2) * cos(pi/2 - tangent_angle)
+upper_tang_driven_y <- driven_y + (driven_pd/2) * sin(pi/2 - tangent_angle)
+
+lower_tang_driver_x <- driver_x + (driver_pd/2) * cos(-pi/2 + tangent_angle)
+lower_tang_driver_y <- driver_y + (driver_pd/2) * sin(-pi/2 + tangent_angle)
+lower_tang_driven_x <- driven_x + (driven_pd/2) * cos(-pi/2 + tangent_angle)
+lower_tang_driven_y <- driven_y + (driven_pd/2) * sin(-pi/2 + tangent_angle)
+
+ggplot() +
+ # Driver sprocket
+ geom_circle(aes(x0 = driver_x, y0 = driver_y, r = driver_pd/2),
+             fill = "steelblue", color = "darkblue", linewidth = 1.5) +
+ geom_circle(aes(x0 = driver_x, y0 = driver_y, r = driver_pd/2 - 0.3),
+             fill = "gray70", color = "gray50", linewidth = 1) +
+ geom_circle(aes(x0 = driver_x, y0 = driver_y, r = 0.25),
+             fill = "white", color = "black", linewidth = 1) +
+ # Driven sprocket
+ geom_circle(aes(x0 = driven_x, y0 = driven_y, r = driven_pd/2),
+             fill = "coral", color = "darkred", linewidth = 1.5) +
+ geom_circle(aes(x0 = driven_x, y0 = driven_y, r = driven_pd/2 - 0.5),
+             fill = "gray70", color = "gray50", linewidth = 1) +
+ geom_circle(aes(x0 = driven_x, y0 = driven_y, r = 0.35),
+             fill = "white", color = "black", linewidth = 1) +
+ # Chain - tight side (top)
+ geom_segment(aes(x = upper_tang_driver_x, y = upper_tang_driver_y,
+                  xend = upper_tang_driven_x, yend = upper_tang_driven_y),
+              color = "gray20", linewidth = 4) +
+ # Chain - slack side (bottom)
+ geom_segment(aes(x = lower_tang_driver_x, y = lower_tang_driver_y,
+                  xend = lower_tang_driven_x, yend = lower_tang_driven_y),
+              color = "gray40", linewidth = 4) +
+ # Rotation arrows
+ geom_curve(aes(x = driver_x - 0.3, y = driver_y + driver_pd/2 + 0.5,
+                xend = driver_x + 0.5, yend = driver_y + driver_pd/2 + 0.3),
+            arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
+            curvature = -0.3, color = "darkblue", linewidth = 1.2) +
+ geom_curve(aes(x = driven_x - 0.4, y = driven_y + driven_pd/2 + 0.5,
+                xend = driven_x + 0.7, yend = driven_y + driven_pd/2 + 0.3),
+            arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
+            curvature = -0.3, color = "darkred", linewidth = 1.2) +
+ # Labels
+ annotate("text", x = driver_x, y = driver_y - driver_pd/2 - 0.7,
+          label = paste0("Driver: ", driver_teeth, " teeth"),
+          size = 4, fontface = "bold", color = "darkblue") +
+ annotate("text", x = driven_x, y = driven_y - driven_pd/2 - 0.7,
+          label = paste0("Driven: ", driven_teeth, " teeth"),
+          size = 4, fontface = "bold", color = "darkred") +
+ # Speed ratio annotation
+ annotate("label", x = 3, y = 2.5,
+          label = paste0("Speed Ratio = ", driven_teeth, "/", driver_teeth,
+                        " = ", round(driven_teeth/driver_teeth, 2), ":1"),
+          size = 4, fill = "lightyellow", color = "black", fontface = "bold") +
+ # Chain spans
+ annotate("text", x = 3, y = upper_tang_driver_y + 0.5,
+          label = "Tight Side", size = 3.5, color = "gray20", fontface = "italic") +
+ annotate("text", x = 3, y = lower_tang_driver_y - 0.5,
+          label = "Slack Side", size = 3.5, color = "gray40", fontface = "italic") +
+ # Center distance
+ annotate("segment", x = driver_x, y = -3.5, xend = driven_x, yend = -3.5,
+          arrow = arrow(ends = "both", length = unit(0.2, "cm")),
+          color = "darkgreen", linewidth = 1) +
+ annotate("text", x = 3, y = -4,
+          label = "Center Distance (C)", size = 4, color = "darkgreen") +
+ coord_fixed() +
+ xlim(-2.5, 10) +
+ ylim(-5, 4) +
+ theme_chain +
+ labs(title = "Chain Drive System Layout",
+      subtitle = "2:1 speed reduction with 17-tooth driver and 34-tooth driven sprocket")
+```
+
+---
+
+## 🧮 Worked Example: Chain Drive Design {-}
+
+**Problem:** Design a chain drive to transmit power from a 1200 rpm motor to a conveyor shaft that must rotate at 400 rpm. The center distance should be approximately 500 mm. Select an appropriate chain size for moderate industrial service.
+
+<details>
+<summary>**Click to reveal solution**</summary>
+
+**Step 1: Calculate the required speed ratio**
+
+$$i = \frac{n_1}{n_2} = \frac{1200}{400} = 3.0$$
+
+**Step 2: Select sprocket teeth**
+
+Choose driver sprocket: $N_1 = 17$ teeth (good minimum for smooth operation)
+
+Calculate driven sprocket: $N_2 = N_1 \times i = 17 \times 3 = 51$ teeth
+
+**Step 3: Select chain size**
+
+For moderate industrial service at 1200 rpm, let's select **ANSI #40** chain (1/2" = 12.7 mm pitch).
+
+**Step 4: Calculate pitch diameters**
+
+Driver pitch diameter:
+$$D_1 = \frac{P}{\sin(180°/N_1)} = \frac{12.7}{\sin(180°/17)} = \frac{12.7}{0.1837} = 69.1 \text{ mm}$$
+
+Driven pitch diameter:
+$$D_2 = \frac{P}{\sin(180°/N_2)} = \frac{12.7}{\sin(180°/51)} = \frac{12.7}{0.0616} = 206.2 \text{ mm}$$
+
+**Step 5: Calculate chain length**
+
+Convert center distance to pitches:
+$$C_p = \frac{C}{P} = \frac{500}{12.7} = 39.37 \text{ pitches}$$
+
+Chain length in pitches:
+$$L_p = 2(39.37) + \frac{17 + 51}{2} + \frac{(51 - 17)^2}{4\pi^2(39.37)}$$
+
+$$L_p = 78.74 + 34 + \frac{1156}{1554.5} = 78.74 + 34 + 0.74 = 113.48 \text{ pitches}$$
+
+Round to nearest **even number**: $L_p = 114$ pitches
+
+Actual chain length: $L = 114 \times 12.7 = 1447.8$ mm
+
+**Step 6: Recalculate actual center distance**
+
+Using the rounded chain length:
+$$C_p = \frac{1}{4}\left[114 - 34 + \sqrt{(114-34)^2 - 0.81(34)^2}\right]$$
+
+$$C_p = \frac{1}{4}\left[80 + \sqrt{6400 - 936.4}\right] = \frac{1}{4}[80 + 73.9] = 38.5 \text{ pitches}$$
+
+$$C = 38.5 \times 12.7 = 489 \text{ mm}$$
+
+**Step 7: Check chain speed**
+
+$$v = \frac{12.7 \times 17 \times 1200}{60,000} = 4.32 \text{ m/s}$$
+
+This is acceptable for #40 chain (max recommended ~7-10 m/s for this size).
+
+**Summary:**
+- Chain: ANSI #40 (1/2" pitch)
+- Driver sprocket: 17 teeth, 69.1 mm pitch diameter
+- Driven sprocket: 51 teeth, 206.2 mm pitch diameter
+- Chain length: 114 pitches (1448 mm)
+- Center distance: 489 mm
+- Output speed: 400 rpm (exact)
+
+</details>
+
+---
+
+## ⚡ Chain Tensioning and Adjustment {-}
+
+Unlike belts, chains do not stretch significantly, but they do **wear**. As chain links wear, the effective pitch increases (chain "elongation"), requiring adjustment.
+
+### Chain Slack
+
+Proper chain slack on the **slack side** (typically the lower span) is essential:
+
+| Chain Span Length | Recommended Slack |
+| :--- | :--- |
+| Up to 300 mm | 2-3% of span |
+| 300-600 mm | 3-4% of span |
+| Over 600 mm | 4-5% of span |
+
+```{r chain-slack-diagram, echo=FALSE, fig.align='center', fig.cap="Chain slack measurement on the slack side span", fig.width=10, fig.height=5}
+library(ggplot2)
+
+# Simplified chain slack diagram
+span_length <- 6
+sag <- 0.2
+
+# Create catenary-like curve for slack chain
+x_chain <- seq(0, span_length, length.out = 50)
+y_chain <- -sag * 4 * (x_chain/span_length) * (1 - x_chain/span_length)
+
+chain_df <- data.frame(x = x_chain, y = y_chain)
+
+ggplot() +
+ # Sprocket representations
+ geom_point(aes(x = 0, y = 0), size = 15, color = "gray50") +
+ geom_point(aes(x = span_length, y = 0), size = 25, color = "gray50") +
+ geom_point(aes(x = 0, y = 0), size = 8, color = "white") +
+ geom_point(aes(x = span_length, y = 0), size = 12, color = "white") +
+ # Tight side (straight)
+ geom_segment(aes(x = 0, y = 0.6, xend = span_length, yend = 0.9),
+              color = "gray30", linewidth = 4) +
+ # Slack side (with sag)
+ geom_line(data = chain_df, aes(x = x, y = y - 0.6),
+           color = "gray40", linewidth = 4) +
+ # Slack measurement
+ annotate("segment", x = span_length/2, y = -0.6,
+          xend = span_length/2, yend = -0.6 - sag,
+          arrow = arrow(ends = "both", length = unit(0.15, "cm")),
+          color = "red", linewidth = 1) +
+ annotate("text", x = span_length/2 + 0.6, y = -0.6 - sag/2,
+          label = "Slack\n(Sag)", size = 4, color = "red", fontface = "bold") +
+ # Span length
+ annotate("segment", x = 0, y = -1.3, xend = span_length, yend = -1.3,
+          arrow = arrow(ends = "both", length = unit(0.15, "cm")),
+          color = "darkgreen", linewidth = 0.8) +
+ annotate("text", x = span_length/2, y = -1.6,
+          label = "Span Length", size = 4, color = "darkgreen") +
+ # Labels
+ annotate("text", x = span_length/2, y = 1.1,
+          label = "Tight Side", size = 4, fontface = "italic", color = "gray30") +
+ annotate("text", x = span_length/2, y = -1.0,
+          label = "Slack Side", size = 4, fontface = "italic", color = "gray40") +
+ coord_fixed() +
+ xlim(-1, 7.5) +
+ ylim(-2, 1.5) +
+ theme_chain +
+ labs(title = "Chain Slack Measurement",
+      subtitle = "Proper slack prevents excessive tension while maintaining engagement")
+```
+
+### Tensioning Methods
+
+1. **Adjustable shaft position** – Move one sprocket to take up slack
+2. **Idler sprocket** – Engages with chain to increase wrap and tension
+3. **Shoe tensioner** – Spring-loaded shoe presses against chain back
+4. **Automatic tensioner** – Self-adjusting mechanism for varying loads
+
+### Chain Wear and Replacement
+
+Chain wear is measured as **elongation** (increase in pitch length):
+
+| Elongation | Action Required |
+| :--- | :--- |
+| < 1% | Normal wear; continue monitoring |
+| 1-1.5% | Plan replacement; increase lubrication |
+| 1.5-2% | Replace immediately for precision drives |
+| > 3% | Replace immediately; inspect sprockets |
+
+> **Measurement Tip:** To measure chain wear, measure a span of 10-20 pitches and compare to the theoretical length. A 1% elongation over 20 pitches of 1" chain means the measured length is 20.2" instead of 20".
+
+---
+
+## 🛢️ Lubrication Requirements {-}
+
+Proper lubrication is critical for chain drive life. The lubrication method depends on chain speed.
+
+```{r lubrication-table, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+lube_df <- data.frame(
+ `Chain Speed` = c("< 4 m/s", "4-7 m/s", "7-12 m/s", "> 12 m/s"),
+ `Method` = c("Manual/Drip", "Bath/Disc", "Oil Stream", "Oil Mist/Spray"),
+ `Description` = c(
+   "Periodic manual application or drip oiler",
+   "Chain runs through oil bath or disc splashes oil",
+   "Continuous oil stream directed at chain",
+   "Pressurized oil mist or spray system"
+ ),
+ `Typical Application` = c(
+   "Low-speed conveyors, hand-operated equipment",
+   "General industrial machinery",
+   "High-speed industrial drives",
+   "Very high-speed, precision equipment"
+ ),
+ check.names = FALSE
+)
+
+kable(lube_df,
+     caption = "Chain Lubrication Methods by Speed",
+     align = c('c', 'c', 'l', 'l')) %>%
+ kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+               full_width = TRUE) %>%
+ row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+---
+
+## 🔄 Chain vs. Belt Comparison {-}
+
+When should you choose a chain drive over a belt drive?
+
+```{r comparison-table, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+compare_df <- data.frame(
+ `Characteristic` = c("Slip", "Efficiency", "Speed Ratio Accuracy",
+                      "Load Capacity", "Shock Absorption", "Noise",
+                      "Maintenance", "Cost", "Speed Capability",
+                      "Environment Tolerance"),
+ `Chain Drive` = c("None (positive)", "97-98%", "Exact",
+                   "High", "Poor", "Higher",
+                   "Regular lubrication", "Higher initial", "Moderate",
+                   "Good (with proper lube)"),
+ `Belt Drive` = c("1-3%", "95-98%", "Good (V-belt) to Exact (timing)",
+                  "Moderate to High", "Excellent", "Low",
+                  "Minimal", "Lower", "High to Very High",
+                  "Moderate"),
+ check.names = FALSE
+)
+
+kable(compare_df,
+     caption = "Chain Drive vs. Belt Drive Comparison",
+     align = c('l', 'c', 'c')) %>%
+ kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+               full_width = TRUE) %>%
+ row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+**Choose Chain Drives When:**
+
+- Exact speed ratio is required
+- High loads must be transmitted
+- Compact design is needed
+- Operating environment is harsh (heat, oil, dust)
+- Long service life is important
+
+**Choose Belt Drives When:**
+
+- Shock absorption is important
+- Quiet operation is required
+- High speeds are needed
+- Low maintenance is preferred
+- Cost is a primary concern
+
+---
+
+## 🎯 Design Guidelines and Best Practices {-}
+
+### Sprocket Selection
+
+| Parameter | Recommendation |
+| :--- | :--- |
+| Minimum driver teeth | 17-21 for smooth operation |
+| Maximum speed ratio | 7:1 (single stage), 10:1 with tensioner |
+| Teeth difference | At least 4-5 teeth between sprockets |
+| Material | Hardened steel for drivers; cast iron acceptable for slow driven |
+
+### Installation Best Practices
+
+1. **Alignment** – Sprockets must be parallel and in the same plane
+2. **Initial tension** – Set slack per recommendations; slightly tight is better
+3. **Run-in** – Check adjustment after first 24-48 hours
+4. **Lubrication** – Establish lubrication schedule before startup
+5. **Guards** – Always install safety guards around chain drives
+
+### Common Problems and Solutions
+
+| Problem | Likely Cause | Solution |
+| :--- | :--- | :--- |
+| Rapid wear | Poor lubrication or misalignment | Improve lubrication; realign sprockets |
+| Chain climbing sprocket | Worn chain or sprocket teeth | Replace both chain and sprockets |
+| Excessive noise | Misalignment, worn components, improper tension | Align, replace worn parts, adjust slack |
+| Chain breaking | Overload, shock loading, or fatigue | Verify load; upgrade chain size |
+| Sprocket wear | Chain elongation | Replace chain before elongation exceeds 2% |
+
+---
+
+## 🔗 Related Topics {-}
+
+Chain drives are part of the power transmission family. For related content, see:
+
+- **Chapter 4: Gears** – When more compact, quieter transmission is needed
+- **Chapter 10: Belt & Pulley Systems** – For shock absorption and quiet operation
+- **Chapter 8: Bearings** – Essential for supporting sprocket shafts
+
+---
+
+## 📚 Chapter Summary {-}
+
+Chain drives provide reliable, positive power transmission for many applications:
+
+1. **Roller chains** use rollers, bushings, pins, and plates for efficient power transfer
+
+2. **Speed ratio** is exactly determined by sprocket tooth counts: $i = N_2/N_1$
+
+3. **Chain length** must be calculated in pitches and rounded to an even number
+
+4. **Sprocket selection** should use at least 17 teeth on the driver for smooth operation
+
+5. **Proper lubrication** is critical and depends on chain speed
+
+6. **Chain wear** should be monitored; replace when elongation exceeds 2%
+
+---
+
+## ✏️ Practice Problems {-}
+
+**Problem 1:** A chain drive uses a 21-tooth driver sprocket at 900 rpm. What size driven sprocket is needed for an output speed of 300 rpm?
+
+<details>
+<summary>**Click for answer**</summary>
+
+Speed ratio: $i = 900/300 = 3.0$
+
+Driven sprocket teeth: $N_2 = N_1 \times i = 21 \times 3 = 63$ teeth
+
+</details>
+
+**Problem 2:** Calculate the pitch diameter of a 19-tooth sprocket using #50 chain (5/8" = 15.875 mm pitch).
+
+<details>
+<summary>**Click for answer**</summary>
+
+$$D = \frac{P}{\sin(180°/N)} = \frac{15.875}{\sin(180°/19)} = \frac{15.875}{\sin(9.47°)} = \frac{15.875}{0.1645} = 96.5 \text{ mm}$$
+
+</details>
+
+**Problem 3:** A chain drive has a 15-tooth driver and 45-tooth driven sprocket using #40 chain (12.7 mm pitch). If the center distance is 400 mm, calculate the chain length in pitches.
+
+<details>
+<summary>**Click for answer**</summary>
+
+Center distance in pitches: $C_p = 400/12.7 = 31.5$ pitches
+
+$$L_p = 2(31.5) + \frac{15 + 45}{2} + \frac{(45 - 15)^2}{4\pi^2(31.5)}$$
+
+$$L_p = 63 + 30 + \frac{900}{1244.1} = 63 + 30 + 0.72 = 93.72 \text{ pitches}$$
+
+Round to nearest even number: **94 pitches**
+
+</details>
+
+**Problem 4:** What is the chain speed for a #60 chain (19.05 mm pitch) on a 23-tooth sprocket rotating at 600 rpm?
+
+<details>
+<summary>**Click for answer**</summary>
+
+$$v = \frac{P \times N \times n}{60,000} = \frac{19.05 \times 23 \times 600}{60,000} = 4.38 \text{ m/s}$$
+
+</details>
