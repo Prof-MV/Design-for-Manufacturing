@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''y:\\\\Martin\\\\Documents\\\\!_Fanshawe\\\\26W\\\\ENGR-1025\\\\DesignForManufacturing\\\\_bookdown_files'' -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force ''y:\\\\Martin\\\\Documents\\\\!_Fanshawe\\\\26W\\\\ENGR-1025\\\\DesignForManufacturing\\\\libs'' -ErrorAction SilentlyContinue\")"
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''y:\\\\Martin\\\\Documents\\\\!_Fanshawe\\\\26W\\\\ENGR-1025\\\\DesignForManufacturing\\\\_bookdown_files'' -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force ''y:\\\\Martin\\\\Documents\\\\!_Fanshawe\\\\26W\\\\ENGR-1025\\\\DesignForManufacturing\\\\libs'' -ErrorAction SilentlyContinue\")",
+      "Bash(powershell -Command \"Expand-Archive -Path ''bookdown-chapter.skill'' -DestinationPath ''./extracted'' -Force\")",
+      "Bash(copy:*)",
+      "Bash(powershell -Command \"Expand-Archive -Path ''bookdown-chapter.zip'' -DestinationPath ''./extracted'' -Force\")"
     ]
   }
 }

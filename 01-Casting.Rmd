@@ -1,4 +1,4 @@
-# Design for Casting
+# Design for Casting {#chap-01-casting}
 
 ```{r setup-01, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,9 +7,21 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
+## Learning Objectives {#sec:objectives-01}
 
+By the end of this chapter, you will be able to:
 
-## 💡 Introduction to the Casting Process {-}
+1. **Explain** the fundamental principles and steps of the casting process
+2. **Identify** the essential components required for casting operations
+3. **Compare** different casting methods and their appropriate applications
+4. **Apply** design considerations for castings including draft angles, parting lines, and wall thickness
+5. **Recognize** common casting defects and their causes
+
+::: {.callout-think}
+**Before You Read:** Have you ever noticed the small raised lines or marks on metal objects like engine blocks or cast iron cookware? What do you think causes these marks during manufacturing?
+:::
+
+## Introduction to the Casting Process {#sec:casting-intro}
 
 Casting is one of the oldest and most fundamental processes in manufacturing, dating back thousands of years. It involves pouring a liquid material, typically a molten metal, into a mold cavity where it is allowed to solidify in the desired shape. The resulting solidified object is called a **casting**. 
 
@@ -17,14 +29,14 @@ The significance of casting lies in its ability to produce complex, intricate sh
 
 ---
 
-## 🧱 Essential Components of Casting {-}
+## Essential Components of Casting {#sec:casting-components}
 
 Every casting operation requires two basic elements:
 
 1.  **The Casting Material:** This is the material, usually metal (such as iron, steel, aluminum, or bronze), that is melted into a liquid state.
 2.  **The Mold:** This is the container that holds the liquid material and determines the final shape of the part. The mold contains a cavity that is the inverse of the part being made.
 
-## ⚙️ The Basic Steps of Casting {-}
+## The Basic Steps of Casting {#sec:casting-steps}
 
 While the specifics vary greatly depending on the material and method (e.g., sand casting vs. die casting), the fundamental steps remain consistent:
 
@@ -34,14 +46,14 @@ While the specifics vary greatly depending on the material and method (e.g., san
 4.  **Removal (Fettling):** The solidified casting is removed from the mold.
 5.  **Cleaning and Finishing:** The casting is cleaned of any excess material (like gates or risers) and prepared for its intended use.
 
-## 🌍 Applications and Scope {-}
+## Applications and Scope {#sec:casting-applications}
 
 The versatility of casting allows it to produce parts ranging in size from a few grams (e.g., dental crowns) to hundreds of tons (e.g., steam turbine housings). The choice of a specific casting method—such as sand casting, investment casting, die casting, or continuous casting—depends on the required surface finish, dimensional accuracy, batch size, and the type of material being processed.
 
 
 ## Sand Mould Casting: The Versatile Workhorse
 
-### 💡 Introduction
+### Introduction {#sec:sand-casting-intro}
 
 Sand casting, also known as sand mould casting, is the oldest and most frequently used metal casting process, responsible for producing over 70% of all metal castings. It is highly valued for its **versatility** and **cost-effectiveness**, making it the foundational method for manufacturing a vast array of metal components, from massive engine blocks and turbine parts to small fittings and decorative items.
 
@@ -49,7 +61,7 @@ The basic principle is simple: create a mould using sand, pour molten metal into
 
 ---
 
-### ⚙️ Components and Steps of the Process
+### Components and Steps of the Process {#sec:sand-casting-steps}
 
 The sand casting process is typically performed in two halves and involves five main steps.
 
@@ -88,7 +100,7 @@ The final casting is removed, and the metal from the sprue, runners, and risers 
 
 ---
 
-### 📊 Advantages and Disadvantages
+### Advantages and Disadvantages {#sec:sand-casting-pros-cons}
 
 | Feature | Advantage | Disadvantage |
 | :--- | :--- | :--- |
@@ -197,7 +209,7 @@ Further reading:
 
 ## Design for Casting [@reliance-casting-design]
 
-### 🔩 Engineering Metal Castings for Quality and Value
+### Engineering Metal Castings for Quality and Value {#sec:engineering-castings}
 
 Good metal casting design aims to create the simplest mold that will produce the desired shape. This process requires expert knowledge of metals and casting methods to strike the best balance between quality and value in the final product.
 
@@ -205,7 +217,7 @@ Engineers and designers select metals and casting methods based on the mechanica
 
 Ultimately, the designer uses their experience of how material properties and casting methods influence each other in the foundry to create the final design. A key skill is knowing the behavior of metal in its liquid, cooling, and solid states to create a design that minimizes production problems.
 
-### 🔬 Variables in Metal Casting Design
+### Variables in Metal Casting Design {#sec:casting-variables}
 
 Several characteristics of the metal itself and the physics of heat transfer significantly affect the outcome of a casting design.
 
@@ -242,7 +254,7 @@ Solidification is controlled by how heat is transferred and dispersed:
     * **Risers:** Reservoirs, called risers, are connected to the cooling casting to slowly feed liquid metal into it, preventing cavities from forming as the metal shrinks.
 
 
-### 📐 Design Considerations for Shape and Mold
+### Design Considerations for Shape and Mold {#sec:design-considerations}
 
 Designers must structure the geometry of the casting and the mold components to manage heat and metal flow.
 
@@ -300,7 +312,7 @@ knitr::include_graphics("images/Gemini_Generated_Image_67wz4x67wz4x67wz.png")
 
     * **Flash:** Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.
 
-#### 🌟 Excellence in Casting Design
+#### Excellence in Casting Design {#sec:casting-excellence}
 
 Designing a superior product at the lowest price requires understanding the complex dependencies between materials and methods. The required mechanical properties of the final product determine the metal needed, and that metal's liquid, cooling, and solid behavior dictates the necessary mold features.
 

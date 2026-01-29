@@ -1,4 +1,4 @@
-# Four-Bar Linkages
+# Four-Bar Linkages {#chap-09-linkages}
 
 ```{r setup-09, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -20,7 +20,21 @@ theme_linkage <- theme_minimal() +
   )
 ```
 
-## Introduction to Four-Bar Linkages {-}
+## Learning Objectives {#sec:objectives-09}
+
+By the end of this chapter, you will be able to:
+
+1. **Identify** the components and terminology of four-bar linkage mechanisms
+2. **Apply** Grashof's Law to classify four-bar linkages
+3. **Distinguish** between crank-rocker, double-crank, rocker-crank, and triple-rocker mechanisms
+4. **Analyze** linkage motion using position analysis techniques
+5. **Select** appropriate linkage configurations for specific motion requirements
+
+::: {.callout-think}
+**Before You Read:** When you open a car hood, the hinges guide it through a specific path—rising up and forward—rather than just swinging in a simple arc. What mechanism might be hidden in the hinge to produce this carefully designed motion?
+:::
+
+## Introduction to Four-Bar Linkages {#sec:linkages-intro}
 
 The **four-bar linkage** is one of the most fundamental and versatile mechanisms in mechanical engineering. Despite its apparent simplicity—just four rigid links connected by four revolute (pin) joints—it can produce an extraordinary variety of motions. Four-bar linkages are found in countless applications, from automobile suspensions to robotic arms, from aircraft landing gear to simple hand tools.
 

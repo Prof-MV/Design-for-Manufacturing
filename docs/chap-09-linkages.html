@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Design for Manufacturing</title>
+  <title>Chapter 9 Four-Bar Linkages | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 9 Four-Bar Linkages | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 9 Four-Bar Linkages | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="chap-01-casting.html"/>
+<link rel="prev" href="chap-08-bearings.html"/>
+<link rel="next" href="chap-10-belts.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -685,23 +685,964 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Design for Manufacturing</h1>
-<p class="author"><em>Martin Volkening</em></p>
-<p class="date"><em>2026-01-29</em></p>
+<div id="chap-09-linkages" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Four-Bar Linkages<a href="chap-09-linkages.html#chap-09-linkages" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="sec:objectives-09" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Learning Objectives<a href="chap-09-linkages.html#sec:objectives-09" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>By the end of this chapter, you will be able to:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Identify</strong> the components and terminology of four-bar linkage mechanisms</li>
+<li><strong>Apply</strong> Grashof’s Law to classify four-bar linkages</li>
+<li><strong>Distinguish</strong> between crank-rocker, double-crank, rocker-crank, and triple-rocker mechanisms</li>
+<li><strong>Analyze</strong> linkage motion using position analysis techniques</li>
+<li><strong>Select</strong> appropriate linkage configurations for specific motion requirements</li>
+</ol>
+<div class="callout-think">
+<p><strong>Before You Read:</strong> When you open a car hood, the hinges guide it through a specific path—rising up and forward—rather than just swinging in a simple arc. What mechanism might be hidden in the hinge to produce this carefully designed motion?</p>
 </div>
-<div id="about" class="section level1 unnumbered hasAnchor">
-<h1>About<a href="index.html#about" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This book collects the main manufacturing methods and provides guidelines for a good part design to minimize defects and increase manufacturing efficiency.</p>
+</div>
+<div id="sec:linkages-intro" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Introduction to Four-Bar Linkages<a href="chap-09-linkages.html#sec:linkages-intro" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>four-bar linkage</strong> is one of the most fundamental and versatile mechanisms in mechanical engineering. Despite its apparent simplicity—just four rigid links connected by four revolute (pin) joints—it can produce an extraordinary variety of motions. Four-bar linkages are found in countless applications, from automobile suspensions to robotic arms, from aircraft landing gear to simple hand tools.</p>
+<p>A four-bar linkage converts <strong>rotary motion</strong> into complex <strong>output motion</strong> that can be:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Another rotation</strong> (with variable angular velocity)</li>
+<li><strong>Oscillating motion</strong> (back-and-forth rotation)</li>
+<li><strong>Complex path motion</strong> (coupler curves)</li>
+</ol>
+<hr />
+<blockquote>
+<p><strong>Think About It:</strong> When you open a car hood, the hinges guide it through a specific path—rising up and forward—rather than just swinging in a simple arc. This carefully designed motion comes from a four-bar linkage hidden in the hinge mechanism!</p>
+</blockquote>
+<hr />
+</div>
+<div id="anatomy-of-a-four-bar-linkage" class="section level2 unnumbered hasAnchor">
+<h2>Anatomy of a Four-Bar Linkage<a href="chap-09-linkages.html#anatomy-of-a-four-bar-linkage" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A four-bar linkage consists of four rigid members (links) connected in a closed loop by four revolute joints (pins).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:four-bar-anatomy"></span>
+<img src="_main_files/figure-html/four-bar-anatomy-1.png" alt="Components of a four-bar linkage mechanism." width="960" />
+<p class="caption">
+Figure 9.1: Components of a four-bar linkage mechanism.
+</p>
+</div>
+<p><strong>Key Components:</strong></p>
+<table>
+<colgroup>
+<col width="34%" />
+<col width="25%" />
+<col width="40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Component</th>
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Ground (Link 1)</strong></td>
+<td align="left"><span class="math inline">\(g\)</span></td>
+<td align="left">Fixed link connecting the two ground pivots</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Input Link (Link 2)</strong></td>
+<td align="left"><span class="math inline">\(a\)</span></td>
+<td align="left">Driven by motor or actuator; connected to ground at O2</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Coupler (Link 3)</strong></td>
+<td align="left"><span class="math inline">\(b\)</span></td>
+<td align="left">“Floating” link connecting the two moving pivots</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Output Link (Link 4)</strong></td>
+<td align="left"><span class="math inline">\(c\)</span></td>
+<td align="left">Delivers output motion; connected to ground at O4</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Ground Pivots</strong></td>
+<td align="left">O2, O4</td>
+<td align="left">Fixed pivot points attached to the frame</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Moving Pivots</strong></td>
+<td align="left">A, B</td>
+<td align="left">Pivot points that move during operation</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="grashofs-law" class="section level2 unnumbered hasAnchor">
+<h2>Grashof’s Law<a href="chap-09-linkages.html#grashofs-law" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Grashof’s Law</strong> determines whether a four-bar linkage can achieve continuous rotation or is limited to oscillating (rocking) motion. This is the most fundamental criterion for classifying four-bar linkages.</p>
+<div id="the-grashof-criterion" class="section level3 unnumbered hasAnchor">
+<h3>The Grashof Criterion<a href="chap-09-linkages.html#the-grashof-criterion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a four-bar linkage with link lengths <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(g\)</span>:</p>
+<p><span class="math display">\[S + L \leq P + Q\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(S\)</span></td>
+<td align="left">Length of the <strong>shortest</strong> link</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(L\)</span></td>
+<td align="left">Length of the <strong>longest</strong> link</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Length of one remaining link</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(Q\)</span></td>
+<td align="left">Length of the other remaining link</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="classification-by-grashof-condition" class="section level3 unnumbered hasAnchor">
+<h3>Classification by Grashof Condition<a href="chap-09-linkages.html#classification-by-grashof-condition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:grashof-classification"></span>
+<img src="_main_files/figure-html/grashof-classification-1.png" alt="Classification of four-bar linkages based on Grashof's Law." width="960" />
+<p class="caption">
+Figure 9.2: Classification of four-bar linkages based on Grashof’s Law.
+</p>
+</div>
+<hr />
+</div>
+<div id="grashof-classification-summary" class="section level3 unnumbered hasAnchor">
+<h3>Grashof Classification Summary<a href="chap-09-linkages.html#grashof-classification-summary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:grashof-table">Table 9.1: </span>Four-Bar Linkage Classification by Grashof Condition
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Type
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Condition
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Shortest Link
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Input
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Output
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Example Applications
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Crank-Rocker
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+S + L &lt; P + Q
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Input link (a)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Continuous rotation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Oscillation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Windshield wipers, pumps
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Double-Crank
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+S + L &lt; P + Q
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Ground (g)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Continuous rotation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Continuous rotation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Locomotive wheels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Rocker-Crank
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+S + L &lt; P + Q
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Output link (c)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Oscillation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Continuous rotation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Treadle pumps
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Triple-Rocker
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+S + L &gt; P + Q
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Any
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Oscillation only
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Oscillation only
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Rocking mechanisms
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="types-of-four-bar-linkages" class="section level2 unnumbered hasAnchor">
+<h2>Types of Four-Bar Linkages<a href="chap-09-linkages.html#types-of-four-bar-linkages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="crank-rocker-mechanism" class="section level3 unnumbered hasAnchor">
+<h3>Crank-Rocker Mechanism<a href="chap-09-linkages.html#crank-rocker-mechanism" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>crank-rocker</strong> is the most common four-bar linkage configuration. The input link (crank) rotates continuously while the output link (rocker) oscillates back and forth.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:crank-rocker"></span>
+<img src="_main_files/figure-html/crank-rocker-1.png" alt="Crank-rocker mechanism: input rotates, output oscillates." width="960" />
+<p class="caption">
+Figure 9.3: Crank-rocker mechanism: input rotates, output oscillates.
+</p>
+</div>
+<hr />
+</div>
+<div id="double-crank-drag-link-mechanism" class="section level3 unnumbered hasAnchor">
+<h3>Double-Crank (Drag-Link) Mechanism<a href="chap-09-linkages.html#double-crank-drag-link-mechanism" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In a <strong>double-crank</strong> or <strong>drag-link</strong> mechanism, both the input and output links can rotate continuously. This occurs when the <strong>ground link is the shortest</strong>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:double-crank"></span>
+<img src="_main_files/figure-html/double-crank-1.png" alt="Double-crank mechanism: both input and output rotate continuously." width="960" />
+<p class="caption">
+Figure 9.4: Double-crank mechanism: both input and output rotate continuously.
+</p>
+</div>
+<hr />
+</div>
+<div id="triple-rocker-non-grashof" class="section level3 unnumbered hasAnchor">
+<h3>Triple-Rocker (Non-Grashof)<a href="chap-09-linkages.html#triple-rocker-non-grashof" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When the Grashof condition is <strong>not satisfied</strong> (<span class="math inline">\(S + L &gt; P + Q\)</span>), no link can complete a full revolution. All links are restricted to oscillating (rocking) motion.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:triple-rocker"></span>
+<img src="_main_files/figure-html/triple-rocker-1.png" alt="Triple-rocker mechanism: all links oscillate, none can fully rotate." width="960" />
+<p class="caption">
+Figure 9.5: Triple-rocker mechanism: all links oscillate, none can fully rotate.
+</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="position-analysis" class="section level2 unnumbered hasAnchor">
+<h2>Position Analysis<a href="chap-09-linkages.html#position-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Position analysis determines the configuration of a linkage for a given input angle. This is fundamental for understanding linkage motion and for design.</p>
+<div id="loop-closure-equation" class="section level3 unnumbered hasAnchor">
+<h3>Loop Closure Equation<a href="chap-09-linkages.html#loop-closure-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The four-bar linkage forms a closed vector loop:</p>
+<p><span class="math display">\[\vec{a} + \vec{b} = \vec{g} + \vec{c}\]</span></p>
+<p>In component form (x and y):</p>
+<p><span class="math display">\[a \cos\theta_2 + b \cos\theta_3 = g + c \cos\theta_4\]</span>
+<span class="math display">\[a \sin\theta_2 + b \sin\theta_3 = c \sin\theta_4\]</span></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:vector-loop"></span>
+<img src="_main_files/figure-html/vector-loop-1.png" alt="Vector loop closure for position analysis." width="960" />
+<p class="caption">
+Figure 9.6: Vector loop closure for position analysis.
+</p>
+</div>
+</div>
+<div id="freudensteins-equation" class="section level3 unnumbered hasAnchor">
+<h3>Freudenstein’s Equation<a href="chap-09-linkages.html#freudensteins-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Freudenstein’s Equation</strong> provides a relationship between input angle <span class="math inline">\(\theta_2\)</span> and output angle <span class="math inline">\(\theta_4\)</span>:</p>
+<p><span class="math display">\[K_1 \cos\theta_4 - K_2 \cos\theta_2 + K_3 = \cos(\theta_2 - \theta_4)\]</span></p>
+<p><strong>Where:</strong></p>
+<p><span class="math display">\[K_1 = \frac{g}{c}, \quad K_2 = \frac{g}{a}, \quad K_3 = \frac{a^2 - b^2 + c^2 + g^2}{2ac}\]</span></p>
+<p>This equation is particularly useful for <strong>function generation</strong> problems, where a specific input-output relationship is desired.</p>
+<hr />
+</div>
+</div>
+<div id="transmission-angle" class="section level2 unnumbered hasAnchor">
+<h2>Transmission Angle<a href="chap-09-linkages.html#transmission-angle" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>transmission angle</strong> (<span class="math inline">\(\mu\)</span>) is the angle between the coupler and the output link. It is a critical measure of linkage quality—how effectively force is transmitted through the mechanism.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:transmission-angle"></span>
+<img src="_main_files/figure-html/transmission-angle-1.png" alt="Transmission angle and its significance for linkage performance." width="960" />
+<p class="caption">
+Figure 9.7: Transmission angle and its significance for linkage performance.
+</p>
+</div>
+<div id="transmission-angle-formula" class="section level3 unnumbered hasAnchor">
+<h3>Transmission Angle Formula<a href="chap-09-linkages.html#transmission-angle-formula" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The transmission angle can be calculated using the <strong>law of cosines</strong>:</p>
+<p><span class="math display">\[\cos\mu = \frac{b^2 + c^2 - (a^2 + g^2 - 2ag\cos\theta_2)}{2bc}\]</span></p>
+<p><strong>Design Rules:</strong></p>
+<table>
+<colgroup>
+<col width="44%" />
+<col width="20%" />
+<col width="35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Transmission Angle</th>
+<th align="left">Quality</th>
+<th align="left">Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mu = 90°\)</span></td>
+<td align="left">Optimal</td>
+<td align="left">Maximum force transmission</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(40° &lt; \mu &lt; 140°\)</span></td>
+<td align="left">Good</td>
+<td align="left">Acceptable for most applications</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(30° &lt; \mu &lt; 150°\)</span></td>
+<td align="left">Marginal</td>
+<td align="left">May need stronger components</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mu &lt; 30°\)</span> or <span class="math inline">\(\mu &gt; 150°\)</span></td>
+<td align="left">Poor</td>
+<td align="left">Avoid—high forces, poor motion quality</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="coupler-curves" class="section level2 unnumbered hasAnchor">
+<h2>Coupler Curves<a href="chap-09-linkages.html#coupler-curves" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the most powerful features of four-bar linkages is the ability to generate complex curves using a point attached to the coupler link. These <strong>coupler curves</strong> can approximate straight lines, circles, or other complex shapes.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:coupler-curve-concept"></span>
+<img src="_main_files/figure-html/coupler-curve-concept-1.png" alt="Coupler point P traces a coupler curve as the linkage moves." width="960" />
+<p class="caption">
+Figure 9.8: Coupler point P traces a coupler curve as the linkage moves.
+</p>
+</div>
+<div id="famous-coupler-curves" class="section level3 unnumbered hasAnchor">
+<h3>Famous Coupler Curves<a href="chap-09-linkages.html#famous-coupler-curves" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:coupler-types-table">Table 9.2: </span>Famous Four-Bar Coupler Curve Mechanisms
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Name
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Shape
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Application
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Watt’s Curve
+</td>
+<td style="text-align:left;">
+Figure-8 with straight segment
+</td>
+<td style="text-align:left;">
+Steam engine guides
+</td>
+<td style="text-align:left;">
+Approximate straight line over portion of path
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Roberts’ Curve
+</td>
+<td style="text-align:left;">
+Symmetrical with straight portion
+</td>
+<td style="text-align:left;">
+Mechanism design
+</td>
+<td style="text-align:left;">
+Three-point straight line approximation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chebyshev Linkage
+</td>
+<td style="text-align:left;">
+Nearly straight line
+</td>
+<td style="text-align:left;">
+Drafting machines, presses
+</td>
+<td style="text-align:left;">
+Very accurate straight line approximation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hoeken’s Linkage
+</td>
+<td style="text-align:left;">
+Extended straight portion
+</td>
+<td style="text-align:left;">
+Film projectors
+</td>
+<td style="text-align:left;">
+Long straight portion with low deviation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lambda Mechanism
+</td>
+<td style="text-align:left;">
+Complex curve with dwell
+</td>
+<td style="text-align:left;">
+Indexing mechanisms
+</td>
+<td style="text-align:left;">
+Output dwells while input continues
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="linkage-example-1" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Applied Example: Grashof Classification<a href="chap-09-linkages.html#linkage-example-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="problem-statement-3" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="chap-09-linkages.html#problem-statement-3" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<p>A four-bar linkage has the following link lengths:
+- Link 1 (ground): <span class="math inline">\(g = 100\)</span> mm
+- Link 2 (input): <span class="math inline">\(a = 40\)</span> mm
+- Link 3 (coupler): <span class="math inline">\(b = 80\)</span> mm
+- Link 4 (output): <span class="math inline">\(c = 60\)</span> mm</p>
+<p>Determine:
+1. Whether this is a Grashof or non-Grashof linkage
+2. The type of mechanism (crank-rocker, double-crank, etc.)
+3. Which link should be the input for continuous rotation</p>
+<div id="solution-2" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="chap-09-linkages.html#solution-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:grashof-example-calc">Table 9.3: </span>Grashof Classification Example
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Step
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Calculation
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Result
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>Identify shortest (S)
+</td>
+<td style="text-align:left;">
+S = min(40, 80, 60, 100)
+</td>
+<td style="text-align:left;">
+40 mm (a (input))
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Identify longest (L)
+</td>
+<td style="text-align:left;">
+L = max(40, 80, 60, 100)
+</td>
+<td style="text-align:left;">
+100 mm (g (ground))
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>Calculate S + L
+</td>
+<td style="text-align:left;">
+S + L = 40 + 100
+</td>
+<td style="text-align:left;">
+140 mm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="4" style="list-style-type: decimal">
+<li>Calculate P + Q
+</td>
+<td style="text-align:left;">
+P + Q = 60 + 80
+</td>
+<td style="text-align:left;">
+140 mm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+<ol start="5" style="list-style-type: decimal">
+<li>Compare (Grashof test)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+S + L (140) vs P + Q (140)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+S + L = P + Q: CHANGE POINT
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="6" style="list-style-type: decimal">
+<li>Mechanism type
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+Based on shortest link position
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+Crank-Rocker
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<div id="interpretation-1" class="section level5 unnumbered hasAnchor">
+<h5>Interpretation<a href="chap-09-linkages.html#interpretation-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li>Since <span class="math inline">\(S + L\)</span> (140 mm) is less than <span class="math inline">\(P + Q\)</span> (140 mm), this is a <strong>Grashof linkage</strong>.</li>
+<li>The shortest link is the <strong>input link (a = 40 mm)</strong>.</li>
+<li>When the shortest link is the input (crank), the mechanism is a <strong>Crank-Rocker</strong>.</li>
+<li>The input (link 2) will rotate continuously while the output (link 4) oscillates.</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="linkage-example-2" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Applied Example: Transmission Angle Analysis<a href="chap-09-linkages.html#linkage-example-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="problem-statement-4" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="chap-09-linkages.html#problem-statement-4" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<p>For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), calculate the transmission angle when the input is at:
+1. <span class="math inline">\(\theta_2 = 60°\)</span>
+2. Determine the minimum transmission angle through the full rotation</p>
+<div id="solution-3" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="chap-09-linkages.html#solution-3" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:trans-angle-example">Table 9.4: </span>Transmission Angle Analysis
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Parameter
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Formula/Description
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+At theta2 = 60 deg
+</td>
+<td style="text-align:left;">
+cos(mu) = (b^2 + c^2 - f^2) / 2bc
+</td>
+<td style="text-align:left;">
+75.5 deg
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+Minimum transmission angle
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+Through full crank rotation
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+48.2 deg
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maximum transmission angle
+</td>
+<td style="text-align:left;">
+Through full crank rotation
+</td>
+<td style="text-align:left;">
+180 deg
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Input angle at min mu
+</td>
+<td style="text-align:left;">
+theta2 where mu is minimum
+</td>
+<td style="text-align:left;">
+0 deg
+</td>
+</tr>
+</tbody>
+</table>
+<div id="quality-assessment" class="section level5 unnumbered hasAnchor">
+<h5>Quality Assessment<a href="chap-09-linkages.html#quality-assessment" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><strong>Design Quality:</strong> GOOD</p>
+<p><strong>Recommendation:</strong> Minimum transmission angle exceeds 40 deg - acceptable design</p>
+<hr />
+</div>
+</div>
+<div id="design-guidelines-1" class="section level2 unnumbered hasAnchor">
+<h2>Design Guidelines<a href="chap-09-linkages.html#design-guidelines-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="link-length-selection" class="section level3 unnumbered hasAnchor">
+<h3>Link Length Selection<a href="chap-09-linkages.html#link-length-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="54%" />
+<col width="45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Design Goal</th>
+<th align="left">Guideline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Continuous crank rotation</strong></td>
+<td align="left">Ensure Grashof condition: <span class="math inline">\(S + L \leq P + Q\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Crank-rocker mechanism</strong></td>
+<td align="left">Make the input link the shortest</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Good transmission angle</strong></td>
+<td align="left">Keep <span class="math inline">\(\mu_{min} &gt; 40°\)</span> throughout motion</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Avoid toggle positions</strong></td>
+<td align="left">Transmission angle should not approach 0° or 180°</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Symmetrical output</strong></td>
+<td align="left">Consider time ratio requirements</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="time-ratio" class="section level3 unnumbered hasAnchor">
+<h3>Time Ratio<a href="chap-09-linkages.html#time-ratio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>time ratio</strong> (TR) describes how the output motion is divided between forward and return strokes:</p>
+<p><span class="math display">\[TR = \frac{\text{Time for forward stroke}}{\text{Time for return stroke}} = \frac{\alpha}{\beta}\]</span></p>
+<p>Where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are the crank angles for forward and return strokes.</p>
+<p>For a <strong>quick-return mechanism</strong>, TR &gt; 1, meaning the return stroke is faster than the forward stroke.</p>
+<hr />
+</div>
+</div>
+<div id="summary-equations-1" class="section level2 unnumbered hasAnchor">
+<h2>Summary Equations<a href="chap-09-linkages.html#summary-equations-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="grashof-classification" class="section level3 unnumbered hasAnchor">
+<h3>Grashof Classification<a href="chap-09-linkages.html#grashof-classification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(S + L \leq P + Q\)</span></td>
+<td align="left">Grashof condition for continuous rotation</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(S\)</span> = shortest, <span class="math inline">\(L\)</span> = longest</td>
+<td align="left">Identify extreme link lengths</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="position-analysis-1" class="section level3 unnumbered hasAnchor">
+<h3>Position Analysis<a href="chap-09-linkages.html#position-analysis-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="43%" />
+<col width="56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(a\cos\theta_2 + b\cos\theta_3 = g + c\cos\theta_4\)</span></td>
+<td align="left">X-component loop closure</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(a\sin\theta_2 + b\sin\theta_3 = c\sin\theta_4\)</span></td>
+<td align="left">Y-component loop closure</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(K_1\cos\theta_4 - K_2\cos\theta_2 + K_3 = \cos(\theta_2 - \theta_4)\)</span></td>
+<td align="left">Freudenstein’s equation</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="transmission-angle-1" class="section level3 unnumbered hasAnchor">
+<h3>Transmission Angle<a href="chap-09-linkages.html#transmission-angle-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="43%" />
+<col width="56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\cos\mu = \frac{b^2 + c^2 - f^2}{2bc}\)</span></td>
+<td align="left">Transmission angle from diagonal</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(f^2 = a^2 + g^2 - 2ag\cos\theta_2\)</span></td>
+<td align="left">Diagonal length squared</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="design-checklist-1" class="section level2 unnumbered hasAnchor">
+<h2>Design Checklist<a href="chap-09-linkages.html#design-checklist-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>For Four-Bar Linkage Design:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Define the motion requirement (continuous rotation, oscillation, path)</label></li>
+<li><label><input type="checkbox" />Apply Grashof’s Law to classify mechanism type</label></li>
+<li><label><input type="checkbox" />Verify <span class="math inline">\(S + L &lt; P + Q\)</span> for crank-rocker applications</label></li>
+<li><label><input type="checkbox" />Calculate transmission angle range through full motion</label></li>
+<li><label><input type="checkbox" />Ensure <span class="math inline">\(\mu_{min} &gt; 40°\)</span> for good force transmission</label></li>
+<li><label><input type="checkbox" />Check for toggle positions (dead points)</label></li>
+<li><label><input type="checkbox" />Verify link proportions avoid interference</label></li>
+<li><label><input type="checkbox" />Consider time ratio for quick-return applications</label></li>
+<li><label><input type="checkbox" />Analyze coupler curve if path generation is required</label></li>
+<li><label><input type="checkbox" />Check that mechanism fits within available space</label></li>
+</ul>
+<hr />
+</div>
+<div id="common-applications" class="section level2 unnumbered hasAnchor">
+<h2>Common Applications<a href="chap-09-linkages.html#common-applications" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:applications-table">Table 9.5: </span>Common Four-Bar Linkage Applications
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Application
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Mechanism_Type
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Function
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Key_Feature
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Windshield wipers
+</td>
+<td style="text-align:left;">
+Crank-rocker
+</td>
+<td style="text-align:left;">
+Convert motor rotation to blade oscillation
+</td>
+<td style="text-align:left;">
+Consistent sweep angle
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Automobile suspension
+</td>
+<td style="text-align:left;">
+Four-bar variant
+</td>
+<td style="text-align:left;">
+Control wheel motion during travel
+</td>
+<td style="text-align:left;">
+Maintains wheel orientation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aircraft landing gear
+</td>
+<td style="text-align:left;">
+Four-bar linkage
+</td>
+<td style="text-align:left;">
+Retract/extend gear in specific path
+</td>
+<td style="text-align:left;">
+Compact stowage
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Reciprocating pumps
+</td>
+<td style="text-align:left;">
+Crank-rocker
+</td>
+<td style="text-align:left;">
+Convert rotation to linear pumping
+</td>
+<td style="text-align:left;">
+Smooth motion transfer
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sewing machines
+</td>
+<td style="text-align:left;">
+Crank-rocker
+</td>
+<td style="text-align:left;">
+Drive needle up/down motion
+</td>
+<td style="text-align:left;">
+Precise positioning
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Excavator bucket
+</td>
+<td style="text-align:left;">
+Four-bar linkage
+</td>
+<td style="text-align:left;">
+Control bucket angle during digging
+</td>
+<td style="text-align:left;">
+Force amplification
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Door closers
+</td>
+<td style="text-align:left;">
+Four-bar linkage
+</td>
+<td style="text-align:left;">
+Control closing speed and force
+</td>
+<td style="text-align:left;">
+Damped motion
+</td>
+</tr>
+</tbody>
+</table>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="chap-01-casting.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="chap-08-bearings.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chap-10-belts.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -732,7 +1673,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/index.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/09-Four-Bar-Linkage.Rmd",
     "text": "Edit"
   },
   "history": {

@@ -1,4 +1,4 @@
-# Power Transmission: Couplings & Clutches
+# Power Transmission: Couplings and Clutches {#chap-12-couplings}
 
 ```{r setup-12, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -20,7 +20,21 @@ theme_coupling <- theme_minimal() +
   )
 ```
 
-## 💡 Introduction to Couplings and Clutches {-}
+## Learning Objectives {#sec:objectives-12}
+
+By the end of this chapter, you will be able to:
+
+1. **Distinguish** between couplings and clutches based on their functions
+2. **Identify** the three types of shaft misalignment that couplings accommodate
+3. **Select** appropriate coupling types (rigid vs. flexible) for different applications
+4. **Explain** the operating principles of friction clutches
+5. **Calculate** clutch torque capacity and design parameters
+
+::: {.callout-think}
+**Before You Read:** Consider your car. The engine crankshaft must connect to the transmission input shaft—but you also need to disconnect them when shifting gears or stopping. What mechanisms allow both permanent connection and controlled engagement/disengagement?
+:::
+
+## Introduction to Couplings and Clutches {#sec:couplings-intro}
 
 In mechanical power transmission systems, we often need to connect rotating shafts together or control when power is transmitted. **Couplings** provide permanent or semi-permanent connections between shafts, while **clutches** allow controlled engagement and disengagement of power transmission.
 
@@ -42,7 +56,7 @@ Both components must handle:
 
 ---
 
-## ⚙️ Shaft Couplings {-}
+## Shaft Couplings {#sec:shaft-couplings}
 
 Shaft couplings are mechanical devices that connect two rotating shafts to transmit power. They are classified into two main categories: **rigid** and **flexible**.
 
@@ -138,7 +152,7 @@ grid.arrange(p1, p2, p3, ncol = 3)
 
 ---
 
-## 🔧 Rigid Couplings {-}
+## Rigid Couplings {#sec:rigid-couplings}
 
 Rigid couplings provide a solid connection between two shafts with **no allowance for misalignment**. They are used only when shafts are precisely aligned and remain so during operation.
 
@@ -438,7 +452,7 @@ grid.arrange(p1, p2, p3, ncol = 3)
 
 ---
 
-## 📐 Coupling Selection Criteria {-}
+## Coupling Selection Criteria {#sec:coupling-selection}
 
 Selecting the right coupling requires consideration of multiple factors:
 
@@ -971,7 +985,7 @@ $$T = 0.35 \times 4500 \times 0.1041 \times 2 = 328.0 \text{ N·m}$$
 
 ---
 
-## 🔗 Related Topics {-}
+## Related Topics {#sec:coupling-resources}
 
 Couplings and clutches work with other power transmission components:
 
@@ -1002,7 +1016,7 @@ Couplings and clutches are essential power transmission components:
 
 ---
 
-## ✏️ Practice Problems {-}
+## Practice Problems {#sec:coupling-problems}
 
 **Problem 1:** A jaw coupling connects a 15 kW motor running at 1450 rpm to a pump. If the service factor is 1.5, what minimum torque rating should the coupling have?
 

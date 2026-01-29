@@ -1,0 +1,58 @@
+/* Example CSS styles for bookdown chapters */
+/* Include this in your bookdown project's styles.css file */
+
+/* Question formatting */
+.question {
+  background-color: #e8f4f8;
+  border-left: 4px solid #2c7fb8;
+  padding: 15px 20px;
+  margin: 20px 0 10px 0;
+  font-weight: 600;
+  font-size: 1.05em;
+  border-radius: 4px;
+}
+
+.question::before {
+  content: "Q: ";
+  color: #2c7fb8;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-right: 5px;
+}
+
+/* Answer formatting */
+.answer {
+  background-color: #f0f7f0;
+  border-left: 4px solid #41ab5d;
+  padding: 15px 20px;
+  margin: 0 0 20px 0;
+  border-radius: 4px;
+}
+
+.answer::before {
+  content: "A: ";
+  color: #41ab5d;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-right: 5px;
+}
+
+/* Ensure readability */
+.question p:first-child,
+.answer p:first-child {
+  margin-top: 0;
+}
+
+.question p:last-child,
+.answer p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .question,
+  .answer {
+    padding: 12px 15px;
+    font-size: 0.95em;
+  }
+}

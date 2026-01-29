@@ -1,4 +1,4 @@
-# Ball Bearings and Bushings
+# Ball Bearings and Bushings {#chap-08-bearings}
 
 ```{r setup-08, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -16,7 +16,21 @@ theme_bearing <- theme_minimal() +
   )
 ```
 
-## Introduction to Bearings {-}
+## Learning Objectives {#sec:objectives-08}
+
+By the end of this chapter, you will be able to:
+
+1. **Classify** bearing types by their operating principles and load capabilities
+2. **Select** appropriate ball bearing types for different applications
+3. **Calculate** bearing life (L10) using the basic rating life equation
+4. **Apply** load factors to determine equivalent dynamic bearing loads
+5. **Determine** required dynamic load ratings for specified life requirements
+
+::: {.callout-think}
+**Before You Read:** Every rotating machine—from tiny precision instruments to massive industrial equipment—relies on bearings. What functions do you think bearings serve, and why can't rotating shafts simply rest directly in their housings?
+:::
+
+## Introduction to Bearings {#sec:bearings-intro}
 
 Bearings are machine elements that **constrain relative motion** and **reduce friction** between moving parts. They are fundamental to virtually every rotating machine—from tiny precision instruments to massive industrial equipment.
 

@@ -1,4 +1,4 @@
-# Power Transmission: Belt & Pulley Systems
+# Power Transmission: Belt and Pulley Systems {#chap-10-belts}
 
 ```{r setup-10, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -20,7 +20,21 @@ theme_pulley <- theme_minimal() +
   )
 ```
 
-## 💡 Introduction to Belt & Pulley Systems {-}
+## Learning Objectives {#sec:objectives-10}
+
+By the end of this chapter, you will be able to:
+
+1. **Explain** the operating principles and advantages of belt drive systems
+2. **Calculate** speed ratios and power transmission in belt drives
+3. **Differentiate** between V-belt, flat belt, and synchronous belt types
+4. **Apply** belt tension and wrap angle concepts to drive design
+5. **Select** appropriate belt and pulley combinations for given applications
+
+::: {.callout-think}
+**Before You Read:** Your car uses multiple belt drives—the serpentine belt powers the alternator, water pump, and air conditioning compressor. Why do engineers choose belts over direct gear connections in so many applications?
+:::
+
+## Introduction to Belt and Pulley Systems {#sec:belts-intro}
 
 Belt and pulley systems represent one of the oldest and most versatile methods of mechanical power transmission. From the spinning wheels of ancient civilizations to modern automotive engines and industrial machinery, belts have been transmitting power across distances for thousands of years.
 
@@ -37,7 +51,7 @@ The answer lies in the unique advantages belt drives offer:
 
 ---
 
-## ⚙️ Fundamental Belt Drive Concepts {-}
+## Fundamental Belt Drive Concepts {#sec:belt-fundamentals}
 
 ### How Belt Drives Work
 
@@ -153,7 +167,7 @@ Where:
 
 ---
 
-## 📐 Essential Belt Drive Terminology {-}
+## Essential Belt Drive Terminology {#sec:belt-terminology}
 
 Understanding belt drive terminology is essential for proper selection and design.
 
@@ -267,7 +281,7 @@ ggplot() +
 
 ---
 
-## 🔧 Types of Belts {-}
+## Types of Belts {#sec:belt-types}
 
 Different applications require different belt types. Each has distinct characteristics that make it suitable for specific uses.
 
@@ -507,7 +521,7 @@ kable(comparison_df,
 
 ---
 
-## 📊 Belt Drive Calculations {-}
+## Belt Drive Calculations {#sec:belt-calculations}
 
 ### Speed Ratio and Output Speed
 
@@ -779,7 +793,7 @@ ggplot() +
 
 ---
 
-## 🔗 Related Topics {-}
+## Related Topics {#sec:belt-resources}
 
 Belt and pulley systems are one component of the broader field of power transmission. For related content, see:
 
@@ -807,7 +821,7 @@ Belt and pulley systems provide a versatile, economical method for transmitting 
 
 ---
 
-## ✏️ Practice Problems {-}
+## Practice Problems {#sec:belt-problems}
 
 **Problem 1:** A 2 HP motor runs at 1725 rpm and drives a fan through a V-belt drive. The fan must rotate at approximately 860 rpm. If the driver pulley is 4 inches in diameter, what size driven pulley is needed?
 

@@ -1,4 +1,4 @@
-# Gears, Gear Trains, and Transmissions
+# Gears, Gear Trains, and Transmissions {#chap-04-gears}
 
 ```{r setup-04, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -35,7 +35,21 @@ gear_profile <- function(cx, cy, r_pitch, n_teeth, rotation = 0) {
 }
 ```
 
-## 💡 Introduction to Gears {-}
+## Learning Objectives {#sec:objectives-04}
+
+By the end of this chapter, you will be able to:
+
+1. **Explain** the fundamental principles of gear operation and power transmission
+2. **Calculate** gear ratios, speed changes, and torque changes in gear systems
+3. **Identify** different gear types and their appropriate applications
+4. **Apply** gear terminology including module, diametral pitch, and pressure angle
+5. **Analyze** simple and compound gear trains to determine overall speed ratios
+
+::: {.callout-think}
+**Before You Read:** Your car's engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this speed reduction, and why is it necessary?
+:::
+
+## Introduction to Gears {#sec:gears-intro}
 
 Gears are toothed mechanical components that transmit **power and motion** between rotating shafts. They are among the oldest and most important machine elements, found in virtually every mechanical system—from wristwatches to wind turbines, from automotive transmissions to industrial robots.
 
@@ -52,7 +66,7 @@ Gears serve three fundamental purposes:
 
 ---
 
-## ⚙️ Fundamental Gear Concepts {-}
+## Fundamental Gear Concepts {#sec:gear-fundamentals}
 
 ### The Basic Principle
 
@@ -107,7 +121,7 @@ For smooth, constant-velocity power transmission, the **common normal** at the p
 
 ---
 
-## 📐 Gear Terminology {-}
+## Gear Terminology {#sec:gear-terminology}
 
 Understanding gear terminology is essential for specifying, designing, and manufacturing gears.
 
@@ -229,7 +243,7 @@ $$p = \pi \times m = \pi \times 3 = 9.42 \text{ mm}$$
 
 ---
 
-## 🔧 Types of Gears {-}
+## Types of Gears {#sec:gear-types}
 
 Different gear types are designed for different applications based on shaft orientation, load capacity, speed, and noise requirements.
 
@@ -529,7 +543,7 @@ Reasons:
 
 ---
 
-## 📊 Gear Ratios and Calculations {-}
+## Gear Ratios and Calculations {#sec:gear-ratios}
 
 ### Speed and Torque Relationships
 
@@ -1025,7 +1039,7 @@ ggplot() +
 
 ---
 
-## 🔧 Gear Design Considerations {-}
+## Gear Design Considerations {#sec:gear-design}
 
 ### Material Selection
 
@@ -1188,7 +1202,7 @@ $$GR = \frac{1800}{45} = 40:1$$
 
 ---
 
-## ✍️ Practice Problems {-}
+## Practice Problems {#sec:gear-problems}
 
 **Problem 1:** A spur gear has 24 teeth and a module of 4 mm. Calculate: (a) pitch diameter, (b) circular pitch, (c) addendum, (d) outside diameter.
 
@@ -1242,7 +1256,7 @@ $$n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}$$
 
 ---
 
-## 🔗 Further Reading {-}
+## Further Reading {#sec:gear-resources}
 
 [AGMA Gear Standards](https://www.agma.org/)
 

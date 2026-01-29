@@ -1,5 +1,4 @@
-# Design for Stamping
-
+# Design for Stamping {#chap-05-stamping}
 
 ```{r setup-05, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -21,7 +20,21 @@ theme(
 )
 ```
 
-## 💡 Introduction to the Stamping Process {-}
+## Learning Objectives {#sec:objectives-05}
+
+By the end of this chapter, you will be able to:
+
+1. **Explain** the fundamental principles and components of metal stamping
+2. **Differentiate** between blanking, punching, bending, and drawing operations
+3. **Calculate** clearances, bend allowances, and blank sizes for stamped parts
+4. **Apply** design guidelines for manufacturability in stamped components
+5. **Identify** common stamping defects and their causes
+
+::: {.callout-think}
+**Before You Read:** Look around you right now. How many stamped metal parts can you identify? Consider items like your phone's SIM tray, car body panels, kitchen utensils, or even the clips holding papers together.
+:::
+
+## Introduction to the Stamping Process {#sec:stamping-intro}
 
 Metal stamping is one of the most versatile and widely used manufacturing processes in modern industry. It involves placing flat sheet metal—either in coil or blank form—into a stamping press where a tool and die surface forms the metal into the desired shape. Stamping encompasses a variety of operations including **blanking, punching, bending, drawing, embossing, and coining**.
 
@@ -33,7 +46,7 @@ The significance of stamping lies in its ability to produce high volumes of iden
 
 ---
 
-## 🧱 Essential Components of Stamping {-}
+## Essential Components of Stamping {#sec:stamping-components}
 
 Every stamping operation requires several basic elements working in harmony:
 1. **The Sheet Metal (Workpiece):** This is the raw material, typically supplied as coils or flat sheets. Common materials include steel, aluminum, brass, copper, and stainless steel.
@@ -90,7 +103,7 @@ ggplot() +
 
 ---
 
-## ⚙️ Types of Stamping Operations {-}
+## Types of Stamping Operations {#sec:stamping-operations}
 
 Stamping is not a single process but a family of related operations. Understanding each operation is crucial for designing parts that can be efficiently manufactured.
 
@@ -505,7 +518,7 @@ ggplot() +
 
 ---
 
-## 📊 Advantages and Limitations of Stamping {-}
+## Advantages and Limitations of Stamping {#sec:stamping-pros-cons}
 
 | Aspect | Advantages | Limitations |
 |:-------|:-----------|:------------|
@@ -518,7 +531,7 @@ ggplot() +
 
 ---
 
-## 🔬 Material Considerations for Stamping {-}
+## Material Considerations for Stamping {#sec:stamping-materials}
 
 Not all materials are equally suitable for stamping. The key material properties that influence stampability include:
 
@@ -625,7 +638,7 @@ The final choice depends on budget constraints and specific environmental condit
 
 ---
 
-## 📐 Design Guidelines for Stamping {-}
+## Design Guidelines for Stamping {#sec:stamping-guidelines}
 
 Designing parts for efficient stamping requires understanding the capabilities and limitations of the process. Following these guidelines will result in lower costs, better quality, and faster production.
 
@@ -1229,7 +1242,7 @@ Design symmetrical parts whenever possible:
 
 ---
 
-## 🛠️ Common Stamping Defects and Prevention {-}
+## Common Stamping Defects and Prevention {#sec:stamping-defects}
 
 Understanding potential defects helps designers avoid them through proper design.
 
@@ -1481,7 +1494,7 @@ ggplot() +
 
 ---
 
-## ✍️ Practice Problems {-}
+## Practice Problems {#sec:stamping-problems}
 
 Test your understanding with these problems:
 
@@ -1532,7 +1545,7 @@ The die should over-bend the part to 96° so that after springback, the final an
 
 ---
 
-## 🔗 Further Reading {-}
+## Further Reading {#sec:stamping-resources}
 
 [Stamping Design Guidelines - Xometry](https://www.xometry.com/resources/sheet/metal-stamping-design-guidelines/)
 

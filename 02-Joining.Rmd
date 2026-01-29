@@ -1,5 +1,4 @@
-# Design for Joining
-
+# Design for Joining {#chap-02-joining}
 
 ```{r setup-02, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -8,9 +7,23 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-## 🔗 Joining Processes: Uniting Materials for Function
+## Learning Objectives {#sec:objectives-02}
 
-### Introduction
+By the end of this chapter, you will be able to:
+
+1. **Classify** joining methods by their bonding mechanism (fusion, filler, mechanical)
+2. **Explain** the principles and applications of welding, brazing, and soldering
+3. **Identify** appropriate joining methods for different material combinations and applications
+4. **Compare** the advantages and limitations of permanent vs. non-permanent joining methods
+5. **Evaluate** when to choose welding over mechanical fastening or adhesive bonding
+
+::: {.callout-think}
+**Before You Read:** Consider the products around you—your phone, car, furniture, and buildings. Each is made of multiple parts joined together. What different methods might have been used to join these parts, and why might engineers have chosen those particular methods?
+:::
+
+## Joining Processes: Uniting Materials for Function {#sec:joining-intro}
+
+### Introduction {#sec:joining-overview}
 
 The ability to permanently or temporarily unite two or more separate material components is fundamental to nearly every branch of engineering and manufacturing. Whether creating the fuselage of an aircraft, the circuitry of a smartphone, or the frame of a bicycle, **joining processes** are essential for assembling parts into functional products. 
 
@@ -42,7 +55,7 @@ These methods rely on either a sticky substance or physical interlocking to hold
 * **Adhesive Joining:** This method uses chemical compounds (adhesives, glues, epoxies) that cure to form a chemical bond between the surfaces. Adhesives can join dissimilar materials (like metal to plastic), distribute stress over a wide area, and provide excellent sealing.
 * **Mechanical Fasteners:** These are non-permanent methods that use hardware to hold materials together. This category includes common items like **bolts, screws, rivets, nuts, pins, and clips**. The primary advantage of mechanical fasteners is that they allow for easy disassembly and reassembly for maintenance or repair.
 
-## ♨️ The Welding Process
+## The Welding Process {#sec:welding-process}
 
 ### Introduction to Welding
 

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Design for Manufacturing</title>
+  <title>Chapter 12 Power Transmission: Couplings and Clutches | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 12 Power Transmission: Couplings and Clutches | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 12 Power Transmission: Couplings and Clutches | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="chap-11-chains.html"/>
 
-<link rel="next" href="chap-01-casting.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -685,23 +685,992 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Design for Manufacturing</h1>
-<p class="author"><em>Martin Volkening</em></p>
-<p class="date"><em>2026-01-29</em></p>
+<div id="chap-12-couplings" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">Chapter 12</span> Power Transmission: Couplings and Clutches<a href="chap-12-couplings.html#chap-12-couplings" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="sec:objectives-12" class="section level2 hasAnchor" number="12.1">
+<h2><span class="header-section-number">12.1</span> Learning Objectives<a href="chap-12-couplings.html#sec:objectives-12" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>By the end of this chapter, you will be able to:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Distinguish</strong> between couplings and clutches based on their functions</li>
+<li><strong>Identify</strong> the three types of shaft misalignment that couplings accommodate</li>
+<li><strong>Select</strong> appropriate coupling types (rigid vs. flexible) for different applications</li>
+<li><strong>Explain</strong> the operating principles of friction clutches</li>
+<li><strong>Calculate</strong> clutch torque capacity and design parameters</li>
+</ol>
+<div class="callout-think">
+<p><strong>Before You Read:</strong> Consider your car. The engine crankshaft must connect to the transmission input shaft—but you also need to disconnect them when shifting gears or stopping. What mechanisms allow both permanent connection and controlled engagement/disengagement?</p>
 </div>
-<div id="about" class="section level1 unnumbered hasAnchor">
-<h1>About<a href="index.html#about" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This book collects the main manufacturing methods and provides guidelines for a good part design to minimize defects and increase manufacturing efficiency.</p>
+</div>
+<div id="sec:couplings-intro" class="section level2 hasAnchor" number="12.2">
+<h2><span class="header-section-number">12.2</span> Introduction to Couplings and Clutches<a href="chap-12-couplings.html#sec:couplings-intro" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In mechanical power transmission systems, we often need to connect rotating shafts together or control when power is transmitted. <strong>Couplings</strong> provide permanent or semi-permanent connections between shafts, while <strong>clutches</strong> allow controlled engagement and disengagement of power transmission.</p>
+<blockquote>
+<p><strong>Think About It:</strong> Consider your car. The engine crankshaft must connect to the transmission input shaft—but you also need to disconnect them when shifting gears or stopping. The clutch pedal controls a friction clutch that engages and disengages this connection. Meanwhile, the driveshaft uses flexible couplings (universal joints) to transmit power while accommodating the suspension’s movement.</p>
+</blockquote>
+<div id="why-are-couplings-and-clutches-important" class="section level3 hasAnchor" number="12.2.1">
+<h3><span class="header-section-number">12.2.1</span> Why Are Couplings and Clutches Important?<a href="chap-12-couplings.html#why-are-couplings-and-clutches-important" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Component</th>
+<th align="left">Primary Function</th>
+<th align="left">Key Applications</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Couplings</strong></td>
+<td align="left">Connect two shafts permanently</td>
+<td align="left">Motor-to-pump, gearbox connections</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Clutches</strong></td>
+<td align="left">Engage/disengage power on demand</td>
+<td align="left">Vehicles, machinery start/stop</td>
+</tr>
+</tbody>
+</table>
+<p>Both components must handle:</p>
+<ul>
+<li><strong>Torque transmission</strong> – Transfer rotational force between shafts</li>
+<li><strong>Misalignment compensation</strong> – Accommodate imperfect shaft alignment</li>
+<li><strong>Vibration damping</strong> – Reduce transmitted shock and vibration</li>
+<li><strong>Overload protection</strong> – Prevent damage from excessive torque</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="sec:shaft-couplings" class="section level2 hasAnchor" number="12.3">
+<h2><span class="header-section-number">12.3</span> Shaft Couplings<a href="chap-12-couplings.html#sec:shaft-couplings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Shaft couplings are mechanical devices that connect two rotating shafts to transmit power. They are classified into two main categories: <strong>rigid</strong> and <strong>flexible</strong>.</p>
+<div id="types-of-misalignment" class="section level3 hasAnchor" number="12.3.1">
+<h3><span class="header-section-number">12.3.1</span> Types of Misalignment<a href="chap-12-couplings.html#types-of-misalignment" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before selecting a coupling, it’s essential to understand the types of shaft misalignment that may be present:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:misalignment-types"></span>
+<img src="_main_files/figure-html/misalignment-types-1.png" alt="Three types of shaft misalignment that couplings must accommodate" width="1152" />
+<p class="caption">
+Figure 12.1: Three types of shaft misalignment that couplings must accommodate
+</p>
+</div>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Misalignment Type</th>
+<th align="left">Description</th>
+<th align="left">Typical Causes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Angular</strong></td>
+<td align="left">Shaft centerlines intersect at an angle</td>
+<td align="left">Mounting surface not perpendicular</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Parallel (Radial)</strong></td>
+<td align="left">Shaft centerlines are parallel but offset</td>
+<td align="left">Mounting holes not aligned</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Axial</strong></td>
+<td align="left">Shafts move apart or together along axis</td>
+<td align="left">Thermal expansion, bearing wear</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Real-World Note:</strong> In practice, misalignment is usually a combination of all three types. Good coupling selection must account for the worst-case combined misalignment.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="sec:rigid-couplings" class="section level2 hasAnchor" number="12.4">
+<h2><span class="header-section-number">12.4</span> Rigid Couplings<a href="chap-12-couplings.html#sec:rigid-couplings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Rigid couplings provide a solid connection between two shafts with <strong>no allowance for misalignment</strong>. They are used only when shafts are precisely aligned and remain so during operation.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rigid-coupling-types"></span>
+<img src="_main_files/figure-html/rigid-coupling-types-1.png" alt="Common rigid coupling designs" width="1056" />
+<p class="caption">
+Figure 12.2: Common rigid coupling designs
+</p>
+</div>
+<div id="rigid-coupling-characteristics" class="section level3 hasAnchor" number="12.4.1">
+<h3><span class="header-section-number">12.4.1</span> Rigid Coupling Characteristics<a href="chap-12-couplings.html#rigid-coupling-characteristics" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="22%" />
+<col width="18%" />
+<col width="22%" />
+<col width="18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Type</th>
+<th align="center">Torque Capacity</th>
+<th align="left">Installation</th>
+<th align="center">Cost</th>
+<th align="left">Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Sleeve</strong></td>
+<td align="center">Moderate</td>
+<td align="left">Requires shaft end access</td>
+<td align="center">Low</td>
+<td align="left">Light-duty, aligned shafts</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Flanged</strong></td>
+<td align="center">High</td>
+<td align="left">Requires axial space</td>
+<td align="center">Moderate</td>
+<td align="left">Heavy machinery, pumps</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Clamp</strong></td>
+<td align="center">Moderate</td>
+<td align="left">No end access needed</td>
+<td align="center">Low</td>
+<td align="left">Quick replacement</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Critical Warning:</strong> Rigid couplings transmit <strong>all</strong> misalignment forces directly to bearings and shafts. Even 0.1 mm of parallel misalignment can cause severe bearing wear and premature failure. Use rigid couplings only when alignment can be guaranteed.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="flexible-couplings" class="section level2 unnumbered hasAnchor">
+<h2>🔄 Flexible Couplings<a href="#flexible-couplings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Flexible couplings accommodate misalignment while transmitting torque. They use various mechanisms to provide flexibility.</p>
+<div id="elastomeric-couplings" class="section level3 hasAnchor" number="12.4.2">
+<h3><span class="header-section-number">12.4.2</span> Elastomeric Couplings<a href="chap-12-couplings.html#elastomeric-couplings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>These couplings use rubber or polymer elements to provide flexibility and damping.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:jaw-coupling"></span>
+<img src="_main_files/figure-html/jaw-coupling-1.png" alt="Jaw coupling with elastomeric spider element" width="960" />
+<p class="caption">
+Figure 12.3: Jaw coupling with elastomeric spider element
+</p>
+</div>
+<p><strong>Common Elastomeric Coupling Types:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Type</th>
+<th align="center">Flexibility</th>
+<th align="center">Damping</th>
+<th align="center">Misalignment Capacity</th>
+<th align="left">Applications</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Jaw/Spider</strong></td>
+<td align="center">Moderate</td>
+<td align="center">Good</td>
+<td align="center">Low-Moderate</td>
+<td align="left">Pumps, compressors</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Tire/Torus</strong></td>
+<td align="center">High</td>
+<td align="center">Excellent</td>
+<td align="center">High</td>
+<td align="left">Heavy equipment</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Sleeve</strong></td>
+<td align="center">Low</td>
+<td align="center">Moderate</td>
+<td align="center">Low</td>
+<td align="left">Light-duty drives</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Disc</strong></td>
+<td align="center">Low</td>
+<td align="center">Low</td>
+<td align="center">Moderate</td>
+<td align="left">Precision machinery</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="metallic-flexible-couplings" class="section level3 hasAnchor" number="12.4.3">
+<h3><span class="header-section-number">12.4.3</span> Metallic Flexible Couplings<a href="chap-12-couplings.html#metallic-flexible-couplings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>These use metal elements to provide flexibility through mechanical deflection rather than material deformation.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:metallic-couplings"></span>
+<img src="_main_files/figure-html/metallic-couplings-1.png" alt="Common metallic flexible coupling designs" width="1152" />
+<p class="caption">
+Figure 12.4: Common metallic flexible coupling designs
+</p>
+</div>
+</div>
+<div id="metallic-coupling-comparison" class="section level3 hasAnchor" number="12.4.4">
+<h3><span class="header-section-number">12.4.4</span> Metallic Coupling Comparison<a href="chap-12-couplings.html#metallic-coupling-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table style="width:100%;">
+<colgroup>
+<col width="12%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Type</th>
+<th align="center">Angular</th>
+<th align="center">Parallel</th>
+<th align="center">Axial</th>
+<th align="center">Torque</th>
+<th align="center">Speed</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Oldham</strong></td>
+<td align="center">None</td>
+<td align="center">High</td>
+<td align="center">Low</td>
+<td align="center">Moderate</td>
+<td align="center">Low</td>
+<td align="left">Zero backlash</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Gear</strong></td>
+<td align="center">Low-Mod</td>
+<td align="center">None</td>
+<td align="center">Yes</td>
+<td align="center">Very High</td>
+<td align="center">High</td>
+<td align="left">Requires lubrication</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Universal Joint</strong></td>
+<td align="center">High</td>
+<td align="center">None</td>
+<td align="center">None</td>
+<td align="center">High</td>
+<td align="center">Moderate</td>
+<td align="left">Non-constant velocity</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Disc Pack</strong></td>
+<td align="center">Moderate</td>
+<td align="center">Low</td>
+<td align="center">Yes</td>
+<td align="center">High</td>
+<td align="center">Very High</td>
+<td align="left">No lubrication needed</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Beam/Helical</strong></td>
+<td align="center">Low</td>
+<td align="center">Low</td>
+<td align="center">Yes</td>
+<td align="center">Low</td>
+<td align="center">High</td>
+<td align="left">Single-piece design</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="sec:coupling-selection" class="section level2 hasAnchor" number="12.5">
+<h2><span class="header-section-number">12.5</span> Coupling Selection Criteria<a href="chap-12-couplings.html#sec:coupling-selection" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Selecting the right coupling requires consideration of multiple factors:</p>
+<div id="torque-requirements" class="section level3 hasAnchor" number="12.5.1">
+<h3><span class="header-section-number">12.5.1</span> 1. Torque Requirements<a href="chap-12-couplings.html#torque-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The coupling must transmit the required torque with an appropriate safety factor:</p>
+<p><span class="math display">\[T_{coupling} \geq T_{nominal} \times SF\]</span></p>
+<p>Where the <strong>Service Factor (SF)</strong> accounts for load characteristics:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Load Type</th>
+<th align="center">Service Factor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Uniform (electric motor to centrifugal pump)</td>
+<td align="center">1.0 - 1.5</td>
+</tr>
+<tr class="even">
+<td align="left">Light shock (reciprocating compressor)</td>
+<td align="center">1.5 - 2.0</td>
+</tr>
+<tr class="odd">
+<td align="left">Moderate shock (machine tools)</td>
+<td align="center">2.0 - 2.5</td>
+</tr>
+<tr class="even">
+<td align="left">Heavy shock (crushers, mills)</td>
+<td align="center">2.5 - 3.0+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="speed-limitations" class="section level3 hasAnchor" number="12.5.2">
+<h3><span class="header-section-number">12.5.2</span> 2. Speed Limitations<a href="chap-12-couplings.html#speed-limitations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Coupling maximum speed depends on:</p>
+<ul>
+<li>Balance quality</li>
+<li>Material strength (centrifugal forces)</li>
+<li>Lubrication requirements (for gear couplings)</li>
+</ul>
+</div>
+<div id="misalignment-capacity" class="section level3 hasAnchor" number="12.5.3">
+<h3><span class="header-section-number">12.5.3</span> 3. Misalignment Capacity<a href="chap-12-couplings.html#misalignment-capacity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Select based on expected misalignment:</p>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:misalignment-capacity">Table 12.1: </span>Typical Misalignment Capacities by Coupling Type
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Coupling Type
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Angular (°)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Parallel (mm)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Axial (mm)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Rigid
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jaw/Spider
+</td>
+<td style="text-align:center;">
+0.5 - 1.0
+</td>
+<td style="text-align:center;">
+0.2 - 0.5
+</td>
+<td style="text-align:center;">
+0.5 - 2.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Disc Pack
+</td>
+<td style="text-align:center;">
+1.0 - 2.0
+</td>
+<td style="text-align:center;">
+0.1 - 0.3
+</td>
+<td style="text-align:center;">
+1 - 3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gear
+</td>
+<td style="text-align:center;">
+0.5 - 1.5
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+2 - 10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oldham
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+1 - 5
+</td>
+<td style="text-align:center;">
+0.5 - 1.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Universal Joint
+</td>
+<td style="text-align:center;">
+15 - 45
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="environmental-factors" class="section level3 hasAnchor" number="12.5.4">
+<h3><span class="header-section-number">12.5.4</span> 4. Environmental Factors<a href="chap-12-couplings.html#environmental-factors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider operating conditions:</p>
+<ul>
+<li><strong>Temperature range</strong> – Affects elastomer properties</li>
+<li><strong>Corrosive environment</strong> – Material selection</li>
+<li><strong>Electrical isolation</strong> – Some applications require non-conductive elements</li>
+<li><strong>Cleanliness</strong> – Some couplings require lubrication</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="clutches" class="section level2 unnumbered hasAnchor">
+<h2>⚡ Clutches<a href="chap-12-couplings.html#clutches" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Clutches are devices that connect and disconnect rotating shafts on demand. They allow controlled engagement of power transmission.</p>
+<div id="types-of-clutches" class="section level3 hasAnchor" number="12.5.5">
+<h3><span class="header-section-number">12.5.5</span> Types of Clutches<a href="chap-12-couplings.html#types-of-clutches" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:clutch-classification"></span>
+<img src="_main_files/figure-html/clutch-classification-1.png" alt="Classification of common clutch types" width="960" />
+<p class="caption">
+Figure 12.5: Classification of common clutch types
+</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="friction-clutches" class="section level2 unnumbered hasAnchor">
+<h2>🔴 Friction Clutches<a href="#friction-clutches" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Friction clutches transmit torque through friction between mating surfaces. They are the most common type, allowing smooth engagement and slip during startup.</p>
+<div id="single-plate-disc-clutch" class="section level3 hasAnchor" number="12.5.6">
+<h3><span class="header-section-number">12.5.6</span> Single-Plate Disc Clutch<a href="chap-12-couplings.html#single-plate-disc-clutch" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The most common design in automotive applications:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:disc-clutch"></span>
+<img src="_main_files/figure-html/disc-clutch-1.png" alt="Single-plate friction clutch components" width="960" />
+<p class="caption">
+Figure 12.6: Single-plate friction clutch components
+</p>
+</div>
+</div>
+<div id="friction-clutch-torque-capacity" class="section level3 hasAnchor" number="12.5.7">
+<h3><span class="header-section-number">12.5.7</span> Friction Clutch Torque Capacity<a href="chap-12-couplings.html#friction-clutch-torque-capacity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The torque transmitted by a friction clutch depends on the clamping force and friction coefficient:</p>
+<p><strong>Single-surface clutch:</strong>
+<span class="math display">\[T = \mu \times F \times r_m \times n\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(T\)</span></td>
+<td align="left">Transmitted torque</td>
+<td align="left">N·m</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mu\)</span></td>
+<td align="left">Coefficient of friction</td>
+<td align="left">—</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(F\)</span></td>
+<td align="left">Axial clamping force</td>
+<td align="left">N</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(r_m\)</span></td>
+<td align="left">Mean friction radius</td>
+<td align="left">m</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(n\)</span></td>
+<td align="left">Number of friction surfaces</td>
+<td align="left">—</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>mean friction radius</strong> can be calculated using:</p>
+<p><strong>Uniform pressure assumption:</strong>
+<span class="math display">\[r_m = \frac{2(r_o^3 - r_i^3)}{3(r_o^2 - r_i^2)}\]</span></p>
+<p><strong>Uniform wear assumption:</strong>
+<span class="math display">\[r_m = \frac{r_o + r_i}{2}\]</span></p>
+<p>Where <span class="math inline">\(r_o\)</span> is the outer radius and <span class="math inline">\(r_i\)</span> is the inner radius of the friction surface.</p>
+</div>
+<div id="friction-material-properties" class="section level3 hasAnchor" number="12.5.8">
+<h3><span class="header-section-number">12.5.8</span> Friction Material Properties<a href="chap-12-couplings.html#friction-material-properties" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:friction-materials">Table 12.2: </span>Common Friction Material Properties
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Material
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+μ (dry)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Max Temp (°C)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Wear Rate
+</th>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Applications
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Organic (woven)
+</td>
+<td style="text-align:center;">
+0.25-0.45
+</td>
+<td style="text-align:center;">
+250
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+<td style="text-align:left;">
+Automotive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Organic (molded)
+</td>
+<td style="text-align:center;">
+0.30-0.50
+</td>
+<td style="text-align:center;">
+300
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+<td style="text-align:left;">
+Trucks, industrial
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sintered metallic
+</td>
+<td style="text-align:center;">
+0.25-0.35
+</td>
+<td style="text-align:center;">
+450
+</td>
+<td style="text-align:center;">
+Low
+</td>
+<td style="text-align:left;">
+Heavy machinery
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cerametallic
+</td>
+<td style="text-align:center;">
+0.30-0.40
+</td>
+<td style="text-align:center;">
+500
+</td>
+<td style="text-align:center;">
+Low
+</td>
+<td style="text-align:left;">
+Racing, high-performance
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Carbon-carbon
+</td>
+<td style="text-align:center;">
+0.20-0.35
+</td>
+<td style="text-align:center;">
+800+
+</td>
+<td style="text-align:center;">
+Very Low
+</td>
+<td style="text-align:left;">
+Aircraft, F1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="multi-plate-clutches" class="section level3 hasAnchor" number="12.5.9">
+<h3><span class="header-section-number">12.5.9</span> Multi-Plate Clutches<a href="chap-12-couplings.html#multi-plate-clutches" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When higher torque capacity is needed in a compact space, multiple friction discs are used:</p>
+<p><span class="math display">\[T = \mu \times F \times r_m \times n\]</span></p>
+<p>Where <span class="math inline">\(n\)</span> = number of friction interfaces = (number of discs × 2) for alternating steel and friction plates.</p>
+<blockquote>
+<p><strong>Example:</strong> A 5-disc clutch pack with alternating friction and steel plates has <span class="math inline">\(n = 8\)</span> friction interfaces (4 friction discs × 2 sides each).</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="positive-engagement-clutches" class="section level2 unnumbered hasAnchor">
+<h2>🔵 Positive Engagement Clutches<a href="#positive-engagement-clutches" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Positive engagement clutches use mechanical interlocking rather than friction. They cannot slip and require the shafts to be at rest or synchronized speed for engagement.</p>
+<div id="jaw-clutch" class="section level3 hasAnchor" number="12.5.10">
+<h3><span class="header-section-number">12.5.10</span> Jaw Clutch<a href="chap-12-couplings.html#jaw-clutch" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:jaw-clutch"></span>
+<img src="_main_files/figure-html/jaw-clutch-1.png" alt="Jaw clutch showing interlocking teeth" width="960" />
+<p class="caption">
+Figure 12.7: Jaw clutch showing interlocking teeth
+</p>
+</div>
+<p><strong>Characteristics:</strong></p>
+<ul>
+<li><strong>No slip</strong> – 100% efficient power transmission</li>
+<li><strong>Cannot engage at speed</strong> – Requires synchronization</li>
+<li><strong>High torque capacity</strong> – Limited only by tooth strength</li>
+<li><strong>Applications</strong> – Gearbox engagement, tool spindles, marine transmissions</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="overrunning-clutches" class="section level2 unnumbered hasAnchor">
+<h2>🟢 Overrunning Clutches<a href="#overrunning-clutches" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Overrunning (one-way) clutches automatically engage in one direction and freewheel in the other. They require no external control.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:overrunning-clutch"></span>
+<img src="_main_files/figure-html/overrunning-clutch-1.png" alt="Sprag-type overrunning clutch operation" width="1056" />
+<p class="caption">
+Figure 12.8: Sprag-type overrunning clutch operation
+</p>
+</div>
+<div id="overrunning-clutch-applications" class="section level3 hasAnchor" number="12.5.11">
+<h3><span class="header-section-number">12.5.11</span> Overrunning Clutch Applications<a href="chap-12-couplings.html#overrunning-clutch-applications" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Application</th>
+<th align="left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Bicycle freewheel</strong></td>
+<td align="left">Coast without pedaling</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Starter motor</strong></td>
+<td align="left">Disengage when engine starts</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Conveyor backstop</strong></td>
+<td align="left">Prevent reverse motion</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Indexing mechanisms</strong></td>
+<td align="left">Allow incremental rotation</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Dual-input drives</strong></td>
+<td align="left">Higher-speed input overruns slower</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="worked-example-clutch-torque-calculation" class="section level2 unnumbered hasAnchor">
+<h2>🧮 Worked Example: Clutch Torque Calculation<a href="#worked-example-clutch-torque-calculation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem:</strong> A single-plate automotive clutch has the following specifications:
+- Outer friction radius: 125 mm
+- Inner friction radius: 80 mm
+- Coefficient of friction: 0.35
+- Axial spring force: 4500 N
+- Number of friction surfaces: 2 (both sides of disc contact)</p>
+<p>Calculate the maximum torque the clutch can transmit.</p>
+<details>
+<summary>
+<strong>Click to reveal solution</strong>
+</summary>
+<p><strong>Step 1: Calculate mean friction radius (uniform wear assumption)</strong></p>
+<p><span class="math display">\[r_m = \frac{r_o + r_i}{2} = \frac{0.125 + 0.080}{2} = 0.1025 \text{ m}\]</span></p>
+<p><strong>Step 2: Apply the torque formula</strong></p>
+<p><span class="math display">\[T = \mu \times F \times r_m \times n\]</span></p>
+<p><span class="math display">\[T = 0.35 \times 4500 \times 0.1025 \times 2\]</span></p>
+<p><span class="math display">\[T = 322.9 \text{ N·m}\]</span></p>
+<p><strong>Step 3: Verify with uniform pressure assumption (for comparison)</strong></p>
+<p><span class="math display">\[r_m = \frac{2(r_o^3 - r_i^3)}{3(r_o^2 - r_i^2)} = \frac{2(0.125^3 - 0.080^3)}{3(0.125^2 - 0.080^2)}\]</span></p>
+<p><span class="math display">\[r_m = \frac{2(0.001953 - 0.000512)}{3(0.01563 - 0.0064)} = \frac{0.002882}{0.02769} = 0.1041 \text{ m}\]</span></p>
+<p><span class="math display">\[T = 0.35 \times 4500 \times 0.1041 \times 2 = 328.0 \text{ N·m}\]</span></p>
+<p><strong>Answer:</strong> The clutch can transmit approximately <strong>323-328 N·m</strong> depending on the pressure distribution assumption. For design purposes, use the lower (uniform wear) value with an appropriate safety factor.</p>
+</details>
+<hr />
+</div>
+<div id="design-guidelines-and-best-practices-2" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Design Guidelines and Best Practices<a href="#design-guidelines-and-best-practices-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="coupling-selection-guidelines" class="section level3 hasAnchor" number="12.5.12">
+<h3><span class="header-section-number">12.5.12</span> Coupling Selection Guidelines<a href="chap-12-couplings.html#coupling-selection-guidelines" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="left">Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Torque</strong></td>
+<td align="left">Apply service factor 1.5-3.0 based on load type</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Misalignment</strong></td>
+<td align="left">Measure actual misalignment; select coupling with margin</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Speed</strong></td>
+<td align="left">Check manufacturer’s maximum rpm rating</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Environment</strong></td>
+<td align="left">Consider temperature, contamination, and corrosion</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Maintenance</strong></td>
+<td align="left">Elastomeric elements require periodic replacement</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Cost</strong></td>
+<td align="left">Balance initial cost against lifecycle and downtime costs</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="clutch-selection-guidelines" class="section level3 hasAnchor" number="12.5.13">
+<h3><span class="header-section-number">12.5.13</span> Clutch Selection Guidelines<a href="chap-12-couplings.html#clutch-selection-guidelines" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="left">Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Engagement type</strong></td>
+<td align="left">Friction for gradual; positive for instant</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Engagement frequency</strong></td>
+<td align="left">High cycles require better heat dissipation</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Slip time</strong></td>
+<td align="left">Minimize to reduce heat and wear</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Actuation</strong></td>
+<td align="left">Consider mechanical, hydraulic, pneumatic, or electromagnetic</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Heat dissipation</strong></td>
+<td align="left">Size for thermal capacity during engagement</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="common-problems-and-solutions-2" class="section level3 hasAnchor" number="12.5.14">
+<h3><span class="header-section-number">12.5.14</span> Common Problems and Solutions<a href="chap-12-couplings.html#common-problems-and-solutions-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Problem</th>
+<th align="left">Likely Cause</th>
+<th align="left">Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Coupling premature failure</td>
+<td align="left">Excessive misalignment</td>
+<td align="left">Realign shafts; select more flexible coupling</td>
+</tr>
+<tr class="even">
+<td align="left">Clutch slipping</td>
+<td align="left">Worn friction material or weak springs</td>
+<td align="left">Replace friction disc; check spring force</td>
+</tr>
+<tr class="odd">
+<td align="left">Vibration</td>
+<td align="left">Coupling imbalance or worn elements</td>
+<td align="left">Balance or replace coupling</td>
+</tr>
+<tr class="even">
+<td align="left">Noise</td>
+<td align="left">Backlash or worn teeth (gear coupling)</td>
+<td align="left">Replace worn components; check lubrication</td>
+</tr>
+<tr class="odd">
+<td align="left">Overheating</td>
+<td align="left">Excessive slip or engagement frequency</td>
+<td align="left">Reduce slip time; upgrade thermal capacity</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="sec:coupling-resources" class="section level2 hasAnchor" number="12.6">
+<h2><span class="header-section-number">12.6</span> Related Topics<a href="chap-12-couplings.html#sec:coupling-resources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Couplings and clutches work with other power transmission components:</p>
+<ul>
+<li><strong>Chapter 4: Gears</strong> – Often connected via couplings</li>
+<li><strong>Chapter 8: Bearings</strong> – Support coupled shafts</li>
+<li><strong>Chapter 10: Belt &amp; Pulley Systems</strong> – Alternative to direct shaft coupling</li>
+<li><strong>Chapter 11: Chain Drives</strong> – Another power transmission option</li>
+</ul>
+<hr />
+</div>
+<div id="chapter-summary-2" class="section level2 unnumbered hasAnchor">
+<h2>📚 Chapter Summary<a href="#chapter-summary-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Couplings and clutches are essential power transmission components:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Rigid couplings</strong> provide solid connections but require precise alignment</p></li>
+<li><p><strong>Flexible couplings</strong> accommodate misalignment through elastomeric or metallic elements</p></li>
+<li><p><strong>Misalignment types</strong> include angular, parallel (radial), and axial</p></li>
+<li><p><strong>Friction clutches</strong> allow smooth engagement and torque control: <span class="math inline">\(T = \mu F r_m n\)</span></p></li>
+<li><p><strong>Positive clutches</strong> provide no-slip engagement but require synchronization</p></li>
+<li><p><strong>Overrunning clutches</strong> automatically engage/disengage based on direction</p></li>
+<li><p><strong>Selection criteria</strong> include torque, speed, misalignment, environment, and cost</p></li>
+</ol>
+<hr />
+</div>
+<div id="sec:coupling-problems" class="section level2 hasAnchor" number="12.7">
+<h2><span class="header-section-number">12.7</span> Practice Problems<a href="chap-12-couplings.html#sec:coupling-problems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem 1:</strong> A jaw coupling connects a 15 kW motor running at 1450 rpm to a pump. If the service factor is 1.5, what minimum torque rating should the coupling have?</p>
+<details>
+<summary>
+<strong>Click for answer</strong>
+</summary>
+<p>Motor torque:
+<span class="math display">\[T = \frac{P \times 60}{2\pi n} = \frac{15000 \times 60}{2\pi \times 1450} = 98.8 \text{ N·m}\]</span></p>
+<p>Required coupling torque:
+<span class="math display">\[T_{coupling} = T \times SF = 98.8 \times 1.5 = 148.2 \text{ N·m}\]</span></p>
+<p>Select a coupling rated for at least <strong>150 N·m</strong>.</p>
+</details>
+<p><strong>Problem 2:</strong> A multi-plate clutch has 4 friction discs and 5 steel plates (alternating). If each friction surface can transmit 45 N·m, what is the total clutch torque capacity?</p>
+<details>
+<summary>
+<strong>Click for answer</strong>
+</summary>
+<p>Number of friction interfaces: 4 discs × 2 surfaces each = <strong>8 interfaces</strong></p>
+<p>Total torque capacity:
+<span class="math display">\[T_{total} = 8 \times 45 = 360 \text{ N·m}\]</span></p>
+</details>
+<p><strong>Problem 3:</strong> A cone clutch has a mean friction radius of 75 mm, cone angle of 12°, coefficient of friction 0.30, and axial force of 800 N. Calculate the torque capacity.</p>
+<details>
+<summary>
+<strong>Click for answer</strong>
+</summary>
+<p>For a cone clutch, the normal force is amplified by the cone angle:</p>
+<p><span class="math display">\[F_n = \frac{F_a}{\sin\alpha} = \frac{800}{\sin(12°)} = \frac{800}{0.208} = 3846 \text{ N}\]</span></p>
+<p>Torque:
+<span class="math display">\[T = \mu \times F_n \times r_m = 0.30 \times 3846 \times 0.075 = 86.5 \text{ N·m}\]</span></p>
+</details>
+<p><strong>Problem 4:</strong> What type of coupling would you recommend for connecting a motor to a gearbox with 0.5 mm parallel misalignment and 0.3° angular misalignment? Justify your selection.</p>
+<details>
+<summary>
+<strong>Click for answer</strong>
+</summary>
+<p><strong>Recommended: Jaw/Spider coupling with elastomeric element</strong></p>
+<p>Justification:
+- Parallel misalignment (0.5 mm) is within typical jaw coupling capacity (0.2-0.5 mm)
+- Angular misalignment (0.3°) is within typical capacity (0.5-1.0°)
+- Provides good vibration damping
+- Low maintenance (no lubrication)
+- Moderate cost</p>
+<p>Alternatives:
+- Disc coupling would work but offers less damping
+- Gear coupling is oversized for this application</p>
+</details>
 
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+<div class="csl-entry">
+Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
+<a href="chap-11-chains.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="chap-01-casting.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -732,7 +1701,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/index.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/12-Couplings-Clutches.Rmd",
     "text": "Edit"
   },
   "history": {

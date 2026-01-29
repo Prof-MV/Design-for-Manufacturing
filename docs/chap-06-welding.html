@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Design for Manufacturing</title>
+  <title>Chapter 6 Design for Welding | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 6 Design for Welding | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 6 Design for Welding | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="chap-01-casting.html"/>
+<link rel="prev" href="chap-05-stamping.html"/>
+<link rel="next" href="chap-07-machining.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -685,23 +685,765 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Design for Manufacturing</h1>
-<p class="author"><em>Martin Volkening</em></p>
-<p class="date"><em>2026-01-29</em></p>
+<div id="chap-06-welding" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Design for Welding<a href="chap-06-welding.html#chap-06-welding" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="sec:objectives-06" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Learning Objectives<a href="chap-06-welding.html#sec:objectives-06" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>By the end of this chapter, you will be able to:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Identify</strong> the key components and zones of a fusion weld</li>
+<li><strong>Select</strong> appropriate weld joint types and weld types for different applications</li>
+<li><strong>Apply</strong> weld sizing principles for fillet and groove welds</li>
+<li><strong>Calculate</strong> fillet weld strength and required weld sizes</li>
+<li><strong>Implement</strong> design guidelines to minimize distortion and improve weld quality</li>
+</ol>
+<div class="callout-think">
+<p><strong>Before You Read:</strong> Consider a bicycle frame, a ship’s hull, and a skyscraper’s steel structure. What do they all have in common? They all rely heavily on welded connections. Why do you think welding was chosen over bolting or riveting for these applications?</p>
 </div>
-<div id="about" class="section level1 unnumbered hasAnchor">
-<h1>About<a href="index.html#about" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This book collects the main manufacturing methods and provides guidelines for a good part design to minimize defects and increase manufacturing efficiency.</p>
+</div>
+<div id="sec:welding-intro" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Introduction to Design for Welding<a href="chap-06-welding.html#sec:welding-intro" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Welding is the most widely used method for permanently joining metals in structural, mechanical, and industrial applications. Unlike mechanical fastening, welding creates a <strong>metallurgical bond</strong> between components, resulting in joints that can be as strong as—or stronger than—the base materials themselves.</p>
+<p>Designing for welding requires careful consideration of joint geometry, material selection, thermal effects, and accessibility. A well-designed weldment minimizes fabrication costs, ensures structural integrity, and reduces the likelihood of defects.</p>
+<hr />
+<blockquote>
+<p><strong>🤔 Think About It:</strong> Consider a bicycle frame, a ship’s hull, and a skyscraper’s steel structure. What do they all have in common? They all rely heavily on welded connections. Why do you think welding was chosen over bolting or riveting for these applications?</p>
+</blockquote>
+<hr />
+</div>
+<div id="sec:welding-fundamentals" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> The Welding Process Fundamentals<a href="chap-06-welding.html#sec:welding-fundamentals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Welding joins materials by applying <strong>heat</strong>, <strong>pressure</strong>, or both, with or without filler material. The most common welding processes use heat to melt the base metals at the joint interface.</p>
+<div id="key-welding-terminology" class="section level3 hasAnchor" number="6.3.1">
+<h3><span class="header-section-number">6.3.1</span> Key Welding Terminology<a href="chap-06-welding.html#key-welding-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:welding-terminology"></span>
+<img src="_main_files/figure-html/welding-terminology-1.png" alt="Cross-section of a typical fusion weld showing key zones and terminology." width="960" />
+<p class="caption">
+Figure 6.1: Cross-section of a typical fusion weld showing key zones and terminology.
+</p>
+</div>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Base Metal</strong></td>
+<td align="left">The original material being joined</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Filler Metal</strong></td>
+<td align="left">Additional metal added to the joint during welding</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Weld Metal</strong></td>
+<td align="left">The portion of the fusion zone that has been completely melted</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Heat Affected Zone (HAZ)</strong></td>
+<td align="left">Base metal that has not melted but whose properties have been altered by the heat of welding</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Fusion Line</strong></td>
+<td align="left">The boundary between the weld metal and the HAZ</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Weld Toe</strong></td>
+<td align="left">The junction between the weld face and the base metal</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Weld Root</strong></td>
+<td align="left">The points at which the back of the weld intersects the base metal</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Reinforcement</strong></td>
+<td align="left">Weld metal in excess of the quantity required to fill the joint</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>❓ Quick Question:</strong> Why might the Heat Affected Zone (HAZ) be a concern in welded structures, even though the metal there never actually melted?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal the answer
+</summary>
+<p>The HAZ experiences significant thermal cycling (rapid heating and cooling) which can cause:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Grain growth</strong> - reducing strength and toughness</li>
+<li><strong>Phase transformations</strong> - potentially forming brittle microstructures</li>
+<li><strong>Residual stresses</strong> - from non-uniform thermal expansion/contraction</li>
+<li><strong>Softening</strong> - in heat-treated materials (like aluminum alloys)</li>
+<li><strong>Sensitization</strong> - in stainless steels, leading to corrosion susceptibility</li>
+</ol>
+<p>The HAZ is often the weakest part of a welded joint, which is why proper heat input control and post-weld heat treatment may be necessary.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="sec:weld-joints" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Types of Weld Joints<a href="chap-06-welding.html#sec:weld-joints" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A <strong>weld joint</strong> is the configuration of the parts to be joined. The five basic joint types can accommodate various types of welds.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:joint-types"></span>
+<img src="_main_files/figure-html/joint-types-1.png" alt="The five basic types of weld joints." width="1152" />
+<p class="caption">
+Figure 6.2: The five basic types of weld joints.
+</p>
+</div>
+<div id="joint-selection-guide" class="section level3 hasAnchor" number="6.4.1">
+<h3><span class="header-section-number">6.4.1</span> Joint Selection Guide<a href="chap-06-welding.html#joint-selection-guide" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="36%" />
+<col width="20%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Joint Type</th>
+<th align="left">Typical Applications</th>
+<th align="left">Advantages</th>
+<th align="left">Limitations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Butt</strong></td>
+<td align="left">Plates, pipes, structural members</td>
+<td align="left">Full penetration possible; good strength</td>
+<td align="left">Requires edge preparation for thick sections</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Lap</strong></td>
+<td align="left">Sheet metal, reinforcing plates</td>
+<td align="left">Easy fit-up; tolerant of gaps</td>
+<td align="left">Not full penetration; potential crevice corrosion</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>T-Joint</strong></td>
+<td align="left">Stiffeners, brackets, frames</td>
+<td align="left">Versatile; easy to assemble</td>
+<td align="left">Stress concentration at the joint</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Corner</strong></td>
+<td align="left">Box sections, frames, enclosures</td>
+<td align="left">Forms structural shapes</td>
+<td align="left">Access may be limited on inside corner</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Edge</strong></td>
+<td align="left">Sheet metal, flanges</td>
+<td align="left">Low distortion</td>
+<td align="left">Limited strength; for thin materials only</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>🤔 Design Decision:</strong> You need to join two 10 mm thick steel plates end-to-end to form a continuous beam that will carry significant bending loads. Which joint type would you choose and why?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis
+</summary>
+<p><strong>Best choice: Butt Joint with full penetration groove weld</strong></p>
+<p>Reasoning:
+- <strong>Full penetration</strong> ensures the weld is as strong as the base metal
+- <strong>Continuous load path</strong> - bending stresses transfer smoothly across the joint
+- <strong>No overlap</strong> - maintains the beam’s cross-sectional geometry
+- <strong>Smooth stress flow</strong> - minimizes stress concentration</p>
+<p>A lap joint would introduce eccentricity and stress concentration, making it unsuitable for bending applications.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="sec:weld-types" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Types of Welds<a href="chap-06-welding.html#sec:weld-types" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Within each joint type, different <strong>weld types</strong> can be applied. The two most common are fillet welds and groove welds.</p>
+<div id="fillet-welds" class="section level3 hasAnchor" number="6.5.1">
+<h3><span class="header-section-number">6.5.1</span> Fillet Welds<a href="chap-06-welding.html#fillet-welds" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Fillet welds</strong> are triangular in cross-section and are used to join surfaces at approximately right angles (T-joints, lap joints, corner joints).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fillet-weld"></span>
+<img src="_main_files/figure-html/fillet-weld-1.png" alt="Fillet weld anatomy and sizing." width="960" />
+<p class="caption">
+Figure 6.3: Fillet weld anatomy and sizing.
+</p>
+</div>
+<p><strong>Key fillet weld parameters:</strong></p>
+<ul>
+<li><strong>Leg size (L):</strong> The length of the sides of the triangle</li>
+<li><strong>Throat (t):</strong> The shortest distance from the root to the face; determines weld strength</li>
+<li><strong>For equal-leg fillets:</strong> <span class="math inline">\(t = 0.707 \times L\)</span></li>
+</ul>
+<blockquote>
+<p><strong>❓ Calculation Challenge:</strong> A fillet weld has a leg size of 8 mm. What is the theoretical throat dimension?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal solution
+</summary>
+<p><span class="math display">\[t = 0.707 \times L = 0.707 \times 8 \text{ mm} = 5.66 \text{ mm}\]</span></p>
+<p>The theoretical throat is <strong>5.66 mm</strong>.</p>
+</details>
+<hr />
+</div>
+<div id="groove-welds" class="section level3 hasAnchor" number="6.5.2">
+<h3><span class="header-section-number">6.5.2</span> Groove Welds<a href="chap-06-welding.html#groove-welds" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Groove welds</strong> are made in a groove between the edges of the parts to be joined. They are used primarily for butt joints and provide full or partial penetration.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:groove-welds"></span>
+<img src="_main_files/figure-html/groove-welds-1.png" alt="Common groove weld preparations." width="1152" />
+<p class="caption">
+Figure 6.4: Common groove weld preparations.
+</p>
+</div>
+</div>
+<div id="groove-weld-parameters" class="section level3 hasAnchor" number="6.5.3">
+<h3><span class="header-section-number">6.5.3</span> Groove Weld Parameters<a href="chap-06-welding.html#groove-weld-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:groove-parameters"></span>
+<img src="_main_files/figure-html/groove-parameters-1.png" alt="Key dimensions in groove weld preparation." width="768" />
+<p class="caption">
+Figure 6.5: Key dimensions in groove weld preparation.
+</p>
+</div>
+<blockquote>
+<p><strong>🤔 Engineering Trade-off:</strong> A larger groove angle makes welding easier (better access) but requires more filler metal. A smaller angle uses less filler but may result in incomplete fusion. For a 25 mm thick plate, would you recommend a single-V or double-V groove? Why?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis
+</summary>
+<p><strong>Recommended: Double-V groove</strong></p>
+<p>For thick plates (typically &gt; 20 mm), double-V is preferred because:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Less filler metal</strong> - The volume of a double-V is about half that of a single-V for the same plate thickness</li>
+<li><strong>Reduced distortion</strong> - Welding from both sides balances residual stresses</li>
+<li><strong>Faster welding</strong> - Less total weld metal to deposit</li>
+<li><strong>Better quality</strong> - Easier to achieve full penetration</li>
+</ol>
+<p>The trade-off is that the plate must be flipped or welders must work from both sides.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="sec:weld-symbols" class="section level2 hasAnchor" number="6.6">
+<h2><span class="header-section-number">6.6</span> Welding Symbols<a href="chap-06-welding.html#sec:weld-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Welding symbols provide a standardized way to communicate welding requirements on engineering drawings. Understanding these symbols is essential for both designers and fabricators.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weld-symbol-basic"></span>
+<img src="_main_files/figure-html/weld-symbol-basic-1.png" alt="Basic elements of a welding symbol." width="960" />
+<p class="caption">
+Figure 6.6: Basic elements of a welding symbol.
+</p>
+</div>
+<div id="common-weld-symbols" class="section level3 hasAnchor" number="6.6.1">
+<h3><span class="header-section-number">6.6.1</span> Common Weld Symbols<a href="chap-06-welding.html#common-weld-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weld-symbol-types"></span>
+<img src="_main_files/figure-html/weld-symbol-types-1.png" alt="Common weld type symbols." width="1152" />
+<p class="caption">
+Figure 6.7: Common weld type symbols.
+</p>
+</div>
+</div>
+<div id="supplementary-symbols" class="section level3 hasAnchor" number="6.6.2">
+<h3><span class="header-section-number">6.6.2</span> Supplementary Symbols<a href="chap-06-welding.html#supplementary-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:supplementary-symbols"></span>
+<img src="_main_files/figure-html/supplementary-symbols-1.png" alt="Supplementary welding symbols." width="960" />
+<p class="caption">
+Figure 6.8: Supplementary welding symbols.
+</p>
+</div>
+<blockquote>
+<p><strong>❓ Symbol Reading Practice:</strong> A welding symbol shows a fillet weld symbol below the reference line with “6” on the left side and “50-100” on the right side. What does this specify?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal interpretation
+</summary>
+<p>This symbol specifies:</p>
+<ul>
+<li><strong>Fillet weld</strong> on the <strong>arrow side</strong> of the joint (symbol below reference line)</li>
+<li><strong>6 mm leg size</strong> (number to the left of the symbol)</li>
+<li><strong>50 mm weld length</strong> with <strong>100 mm pitch</strong> (center-to-center spacing)</li>
+</ul>
+<p>This is an <strong>intermittent fillet weld</strong> pattern: 50 mm long welds spaced 100 mm apart (center-to-center).</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="design-guidelines-for-welded-joints" class="section level2 unnumbered hasAnchor">
+<h2>📏 Design Guidelines for Welded Joints<a href="#design-guidelines-for-welded-joints" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="joint-accessibility" class="section level3 hasAnchor" number="6.6.3">
+<h3><span class="header-section-number">6.6.3</span> Joint Accessibility<a href="chap-06-welding.html#joint-accessibility" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The welder must have adequate access to create a quality weld. Poor accessibility leads to defects.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:joint-accessibility"></span>
+<img src="_main_files/figure-html/joint-accessibility-1.png" alt="Good vs. poor joint accessibility for welding." width="960" />
+<p class="caption">
+Figure 6.9: Good vs. poor joint accessibility for welding.
+</p>
+</div>
+<p><strong>Design rules for accessibility:</strong></p>
+<ul>
+<li>Minimum <strong>15-20 mm clearance</strong> around the joint for electrode access</li>
+<li>Consider the <strong>welding position</strong> (flat is easiest; overhead is most difficult)</li>
+<li>Provide <strong>viewing angle</strong> for the welder to see the weld pool</li>
+<li>Allow for <strong>electrode angle</strong> (typically 15-45° from perpendicular)</li>
+</ul>
+<hr />
+</div>
+<div id="weld-sizing" class="section level3 hasAnchor" number="6.6.4">
+<h3><span class="header-section-number">6.6.4</span> Weld Sizing<a href="chap-06-welding.html#weld-sizing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welds should be sized based on the loads they must carry—not too small (weak) and not too large (wasteful and causes distortion).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weld-sizing"></span>
+<img src="_main_files/figure-html/weld-sizing-1.png" alt="Fillet weld sizing guidelines." width="960" />
+<p class="caption">
+Figure 6.10: Fillet weld sizing guidelines.
+</p>
+</div>
+<p><strong>Fillet weld sizing rules:</strong></p>
+<table>
+<colgroup>
+<col width="35%" />
+<col width="64%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Rule</th>
+<th align="left">Guideline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Minimum leg size</strong></td>
+<td align="left">≥ thickness of thinner member (for structural welds)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Maximum leg size</strong></td>
+<td align="left">≤ thickness of thinner member</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>For lap joints</strong></td>
+<td align="left">Leg size ≤ 0.75 × thickness of thinner plate</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Intermittent welds</strong></td>
+<td align="left">Length ≥ 4 × leg size; pitch ≤ 16 × thinner plate thickness</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>❓ Sizing Problem:</strong> Two plates are being joined with a fillet weld. The plates are 10 mm and 6 mm thick. What should be the maximum fillet weld leg size?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal solution
+</summary>
+<p>The maximum leg size is limited by the <strong>thinner plate</strong>:</p>
+<p>Maximum leg size = 6 mm (thickness of thinner plate)</p>
+<p>In practice, you might use 5 mm to provide a slight edge clearance and avoid burning through the thinner plate.</p>
+</details>
+<hr />
+</div>
+<div id="minimizing-distortion" class="section level3 hasAnchor" number="6.6.5">
+<h3><span class="header-section-number">6.6.5</span> Minimizing Distortion<a href="chap-06-welding.html#minimizing-distortion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welding introduces heat that causes expansion and contraction, leading to distortion and residual stresses.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:distortion-types"></span>
+<img src="_main_files/figure-html/distortion-types-1.png" alt="Common types of weld distortion." width="1152" />
+<p class="caption">
+Figure 6.11: Common types of weld distortion.
+</p>
+</div>
+<p><strong>Design strategies to minimize distortion:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Use the minimum weld size</strong> that provides adequate strength</li>
+<li><strong>Balance welds symmetrically</strong> - use double-V instead of single-V for thick sections</li>
+<li><strong>Use intermittent welds</strong> instead of continuous welds where possible</li>
+<li><strong>Sequence welds properly</strong> - alternate sides, weld toward free ends</li>
+<li><strong>Pre-set or pre-bend</strong> parts to compensate for expected distortion</li>
+<li><strong>Use fixtures and clamps</strong> to restrain parts during welding</li>
+</ol>
+<hr />
+</div>
+<div id="fatigue-considerations" class="section level3 hasAnchor" number="6.6.6">
+<h3><span class="header-section-number">6.6.6</span> Fatigue Considerations<a href="chap-06-welding.html#fatigue-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Welded joints are particularly susceptible to fatigue failure due to:</p>
+<ul>
+<li>Stress concentrations at weld toes</li>
+<li>Residual tensile stresses</li>
+<li>Potential defects (porosity, lack of fusion)</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fatigue-improvement"></span>
+<img src="_main_files/figure-html/fatigue-improvement-1.png" alt="Design improvements for fatigue resistance." width="960" />
+<p class="caption">
+Figure 6.12: Design improvements for fatigue resistance.
+</p>
+</div>
+<p><strong>Design rules for fatigue-critical welds:</strong></p>
+<ul>
+<li><strong>Grind weld toes</strong> smooth to reduce stress concentration</li>
+<li>Use <strong>full penetration welds</strong> in critical areas</li>
+<li><strong>Avoid undercut</strong> (notch at weld toe)</li>
+<li>Specify <strong>weld profile</strong> (flush or concave is better than convex)</li>
+<li>Consider <strong>post-weld treatments</strong>: shot peening, TIG dressing, or hammer peening</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="sec:weld-materials" class="section level2 hasAnchor" number="6.7">
+<h2><span class="header-section-number">6.7</span> Material Weldability<a href="chap-06-welding.html#sec:weld-materials" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Not all materials weld equally well. <strong>Weldability</strong> is the ability of a material to be welded without defects and retain satisfactory mechanical properties.</p>
+<div id="carbon-steel-weldability" class="section level3 hasAnchor" number="6.7.1">
+<h3><span class="header-section-number">6.7.1</span> Carbon Steel Weldability<a href="chap-06-welding.html#carbon-steel-weldability" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The weldability of steel depends largely on its <strong>carbon equivalent (CE)</strong>:</p>
+<p><span class="math display">\[CE = C + \frac{Mn}{6} + \frac{Cr + Mo + V}{5} + \frac{Ni + Cu}{15}\]</span></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:carbon-equivalent"></span>
+<img src="_main_files/figure-html/carbon-equivalent-1.png" alt="Weldability zones based on carbon equivalent." width="768" />
+<p class="caption">
+Figure 6.13: Weldability zones based on carbon equivalent.
+</p>
+</div>
+</div>
+<div id="weldability-of-common-materials" class="section level3 hasAnchor" number="6.7.2">
+<h3><span class="header-section-number">6.7.2</span> Weldability of Common Materials<a href="chap-06-welding.html#weldability-of-common-materials" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="30%" />
+<col width="46%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Material</th>
+<th align="left">Weldability</th>
+<th align="left">Key Considerations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Low Carbon Steel</strong> (&lt; 0.25% C)</td>
+<td align="left">Excellent</td>
+<td align="left">Most weldable; no special precautions</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Medium Carbon Steel</strong> (0.25-0.45% C)</td>
+<td align="left">Good to Fair</td>
+<td align="left">May need preheat; risk of HAZ hardening</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>High Carbon Steel</strong> (&gt; 0.45% C)</td>
+<td align="left">Poor</td>
+<td align="left">Preheat and PWHT required; crack-sensitive</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Stainless Steel (304/316)</strong></td>
+<td align="left">Good</td>
+<td align="left">Control heat input to avoid sensitization</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Aluminum Alloys</strong></td>
+<td align="left">Good to Fair</td>
+<td align="left">Requires shielding gas; oxide removal critical</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Cast Iron</strong></td>
+<td align="left">Poor</td>
+<td align="left">Very crack-sensitive; specialized procedures needed</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Titanium</strong></td>
+<td align="left">Fair</td>
+<td align="left">Requires complete shielding from atmosphere</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>🤔 Material Challenge:</strong> You need to weld a bracket made from AISI 4140 steel (0.4% C, 1% Cr, 0.2% Mo, 0.9% Mn). Calculate the carbon equivalent and determine what precautions are needed.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal calculation
+</summary>
+<p><span class="math display">\[CE = 0.4 + \frac{0.9}{6} + \frac{1 + 0.2 + 0}{5} + \frac{0 + 0}{15}\]</span>
+<span class="math display">\[CE = 0.4 + 0.15 + 0.24 + 0 = 0.79\]</span></p>
+<p>With CE = 0.79 (in the “poor” weldability zone):</p>
+<p><strong>Required precautions:</strong>
+1. <strong>Preheat</strong> to 200-300°C before welding
+2. Use <strong>low-hydrogen electrodes</strong> (e.g., E7018)
+3. Control <strong>interpass temperature</strong>
+4. <strong>Post-weld heat treatment (PWHT)</strong> - stress relief at 600-650°C
+5. <strong>Slow cooling</strong> after welding</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="sec:weld-defects" class="section level2 hasAnchor" number="6.8">
+<h2><span class="header-section-number">6.8</span> Common Weld Defects and Prevention<a href="chap-06-welding.html#sec:weld-defects" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Understanding weld defects helps designers specify requirements that prevent them.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weld-defects"></span>
+<img src="_main_files/figure-html/weld-defects-1.png" alt="Common weld defects and their appearance." width="1152" />
+<p class="caption">
+Figure 6.14: Common weld defects and their appearance.
+</p>
+</div>
+<div id="defect-causes-and-prevention" class="section level3 hasAnchor" number="6.8.1">
+<h3><span class="header-section-number">6.8.1</span> Defect Causes and Prevention<a href="chap-06-welding.html#defect-causes-and-prevention" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="28%" />
+<col width="28%" />
+<col width="42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Defect</th>
+<th align="left">Causes</th>
+<th align="left">Prevention</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Porosity</strong></td>
+<td align="left">Contamination, moisture, improper shielding</td>
+<td align="left">Clean surfaces; dry electrodes; proper gas flow</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Undercut</strong></td>
+<td align="left">Excessive current, wrong angle, fast travel</td>
+<td align="left">Reduce current; proper technique; slower speed</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Lack of Fusion</strong></td>
+<td align="left">Low heat input, wrong angle, oxide films</td>
+<td align="left">Increase current; proper angle; clean surfaces</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Incomplete Penetration</strong></td>
+<td align="left">Low current, fast travel, large root face</td>
+<td align="left">Increase current; proper joint prep; back gouge</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Cracks</strong></td>
+<td align="left">High restraint, hydrogen, fast cooling</td>
+<td align="left">Preheat; low-H electrodes; reduce restraint</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Spatter</strong></td>
+<td align="left">High current, long arc, contamination</td>
+<td align="left">Reduce current; shorter arc; clean surfaces</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="design-checklist-for-welding" class="section level2 unnumbered hasAnchor">
+<h2>📋 Design Checklist for Welding<a href="#design-checklist-for-welding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="joint-design" class="section level3 hasAnchor" number="6.8.2">
+<h3><span class="header-section-number">6.8.2</span> Joint Design<a href="chap-06-welding.html#joint-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Selected appropriate joint type for loading conditions</label></li>
+<li><label><input type="checkbox" />Specified correct weld type (fillet, groove, etc.)</label></li>
+<li><label><input type="checkbox" />Weld size adequate for required strength</label></li>
+<li><label><input type="checkbox" />Weld access is adequate (15-20 mm minimum clearance)</label></li>
+<li><label><input type="checkbox" />Welding position considered (flat preferred)</label></li>
+</ul>
+</div>
+<div id="material-considerations" class="section level3 hasAnchor" number="6.8.3">
+<h3><span class="header-section-number">6.8.3</span> Material Considerations<a href="chap-06-welding.html#material-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Base metal weldability verified</label></li>
+<li><label><input type="checkbox" />Filler metal compatibility confirmed</label></li>
+<li><label><input type="checkbox" />Preheat requirements determined (if needed)</label></li>
+<li><label><input type="checkbox" />Post-weld heat treatment specified (if needed)</label></li>
+</ul>
+</div>
+<div id="distortion-control" class="section level3 hasAnchor" number="6.8.4">
+<h3><span class="header-section-number">6.8.4</span> Distortion Control<a href="chap-06-welding.html#distortion-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Welds balanced symmetrically where possible</label></li>
+<li><label><input type="checkbox" />Minimum weld size specified to reduce heat input</label></li>
+<li><label><input type="checkbox" />Welding sequence specified for critical assemblies</label></li>
+<li><label><input type="checkbox" />Allowance for shrinkage in dimensions</label></li>
+</ul>
+</div>
+<div id="quality-requirements" class="section level3 hasAnchor" number="6.8.5">
+<h3><span class="header-section-number">6.8.5</span> Quality Requirements<a href="chap-06-welding.html#quality-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Weld symbols correctly applied on drawings</label></li>
+<li><label><input type="checkbox" />Inspection requirements specified (visual, NDT)</label></li>
+<li><label><input type="checkbox" />Acceptance criteria defined</label></li>
+<li><label><input type="checkbox" />Welder qualification requirements stated</label></li>
+</ul>
+</div>
+<div id="fatigue-and-strength" class="section level3 hasAnchor" number="6.8.6">
+<h3><span class="header-section-number">6.8.6</span> Fatigue and Strength<a href="chap-06-welding.html#fatigue-and-strength" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Weld toe geometry specified for fatigue-critical joints</label></li>
+<li><label><input type="checkbox" />Full penetration specified where required</label></li>
+<li><label><input type="checkbox" />Stress concentrations minimized</label></li>
+<li><label><input type="checkbox" />Backup bars or backgouging specified if needed</label></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="case-study-welded-frame-design" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Case Study: Welded Frame Design<a href="#case-study-welded-frame-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Design Requirements:</strong></p>
+<p>A machine frame must be fabricated from structural steel tubes (50 mm × 50 mm × 3 mm wall thickness) with the following requirements:</p>
+<ul>
+<li>Must support 10 kN static load</li>
+<li>Fatigue loading expected (10⁶ cycles)</li>
+<li>Minimal distortion required for mounting surfaces</li>
+<li>Cost-effective fabrication</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:frame-case-study"></span>
+<img src="_main_files/figure-html/frame-case-study-1.png" alt="Welded frame design with potential improvements highlighted." width="960" />
+<p class="caption">
+Figure 6.15: Welded frame design with potential improvements highlighted.
+</p>
+</div>
+<blockquote>
+<p><strong>🤔 Your Turn:</strong> Based on the design guidelines covered, identify improvements for this frame design.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis and recommendations
+</summary>
+<p><strong>Issue 1: Single-sided fillet welds</strong>
+- Problem: May cause angular distortion; stress concentration
+- Solution: Use double-sided fillet welds or specify full penetration at critical corners</p>
+<p><strong>Issue 2: No stiffener at load application point</strong>
+- Problem: Concentrated load may cause local buckling or fatigue cracking
+- Solution: Add a gusset plate or stiffener at the load point</p>
+<p><strong>Issue 3: Sharp corners at brace connections</strong>
+- Problem: High stress concentration; poor fatigue performance
+- Solution: Add cope holes or radius transitions; grind weld toes smooth</p>
+<p><strong>Additional Recommendations:</strong>
+1. Specify welding sequence (start from center, work outward)
+2. Use intermittent welds on brace if continuous weld causes distortion
+3. Specify weld toe grinding for fatigue-critical joints
+4. Consider welding in the flat position by rotating the assembly</p>
+</details>
+<hr />
+</div>
+<div id="sec:weld-problems" class="section level2 hasAnchor" number="6.9">
+<h2><span class="header-section-number">6.9</span> Practice Problems<a href="chap-06-welding.html#sec:weld-problems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem 1:</strong> A T-joint connects a 12 mm thick plate to a 8 mm thick plate using fillet welds on both sides. What is the maximum recommended fillet weld leg size?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p>Maximum leg size is limited by the <strong>thinner plate</strong> (8 mm).</p>
+<p>Maximum fillet leg size = <strong>8 mm</strong></p>
+<p>However, for practical edge clearance, <strong>6-7 mm</strong> would be commonly specified.</p>
+</details>
+<hr />
+<p><strong>Problem 2:</strong> Calculate the theoretical throat of a fillet weld with 10 mm leg size. If the weld must carry a load of 50 kN and is 200 mm long, what is the shear stress in the throat?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p><strong>Throat calculation:</strong>
+<span class="math display">\[t = 0.707 \times L = 0.707 \times 10 \text{ mm} = 7.07 \text{ mm}\]</span></p>
+<p><strong>Throat area:</strong>
+<span class="math display">\[A = t \times \text{length} = 7.07 \text{ mm} \times 200 \text{ mm} = 1414 \text{ mm}^2\]</span></p>
+<p><strong>Shear stress:</strong>
+<span class="math display">\[\tau = \frac{F}{A} = \frac{50,000 \text{ N}}{1414 \text{ mm}^2} = 35.4 \text{ MPa}\]</span></p>
+<p>The shear stress in the weld throat is <strong>35.4 MPa</strong>.</p>
+</details>
+<hr />
+<p><strong>Problem 3:</strong> A steel has composition: 0.25% C, 1.2% Mn, 0.5% Cr, 0.3% Mo. Calculate the carbon equivalent. Is preheating likely required?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p><span class="math display">\[CE = C + \frac{Mn}{6} + \frac{Cr + Mo + V}{5} + \frac{Ni + Cu}{15}\]</span></p>
+<p><span class="math display">\[CE = 0.25 + \frac{1.2}{6} + \frac{0.5 + 0.3 + 0}{5} + \frac{0 + 0}{15}\]</span></p>
+<p><span class="math display">\[CE = 0.25 + 0.20 + 0.16 + 0 = 0.61\]</span></p>
+<p>With CE = <strong>0.61</strong>, this falls in the “Fair to Poor” weldability range.</p>
+<p><strong>Preheating IS required</strong> - typically 150-200°C minimum. Low-hydrogen electrodes should be used, and post-weld heat treatment may be advisable.</p>
+</details>
+<hr />
+</div>
+<div id="sec:weld-resources" class="section level2 hasAnchor" number="6.10">
+<h2><span class="header-section-number">6.10</span> Further Reading<a href="chap-06-welding.html#sec:weld-resources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://www.lincolnelectric.com/en/support/welding-resources">Lincoln Electric Welding Design Guide</a></p>
+<p><a href="https://www.aws.org/publications">AWS Welding Handbook</a></p>
+<p><a href="https://www.engineersedge.com/welding_symbols.htm">Weld Symbol Guide - Engineers Edge</a></p>
+<p><a href="https://www.lincolnelectric.com/en/support/welding-resources/design-of-welded-structures">Design of Welded Structures - Blodgett</a></p>
+<hr />
+</div>
+<div id="supplemental-videos-2" class="section level2 unnumbered hasAnchor">
+<h2>🎬 Supplemental Videos<a href="#supplemental-videos-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="understanding-welding-symbols" class="section level3 hasAnchor" number="6.10.1">
+<h3><span class="header-section-number">6.10.1</span> Understanding Welding Symbols<a href="chap-06-welding.html#understanding-welding-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/Svoi1v_o5yI"
+    title="Understanding Welding Symbols"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="weld-joint-types-explained" class="section level3 hasAnchor" number="6.10.2">
+<h3><span class="header-section-number">6.10.2</span> Weld Joint Types Explained<a href="chap-06-welding.html#weld-joint-types-explained" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/CpSWUSSDquk"
+    title="Weld Joint Types"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="controlling-weld-distortion" class="section level3 hasAnchor" number="6.10.3">
+<h3><span class="header-section-number">6.10.3</span> Controlling Weld Distortion<a href="chap-06-welding.html#controlling-weld-distortion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/w_iqJDfbzMM"
+    title="Controlling Weld Distortion"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+<hr />
+</div>
+</div>
+<div id="references-2" class="section level2 unnumbered hasAnchor">
+<h2>📖 References<a href="#references-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Blodgett, O. W. (1966). <em>Design of Welded Structures</em>. James F. Lincoln Arc Welding Foundation.</p></li>
+<li><p>American Welding Society. (2020). <em>AWS D1.1 Structural Welding Code - Steel</em>. AWS.</p></li>
+<li><p>Messler, R. W. (2004). <em>Principles of Welding: Processes, Physics, Chemistry, and Metallurgy</em>. Wiley-VCH.</p></li>
+<li><p>Kou, S. (2003). <em>Welding Metallurgy</em> (2nd ed.). Wiley-Interscience.</p></li>
+<li><p>Hicks, J. (1999). <em>Welded Joint Design</em> (3rd ed.). Industrial Press.</p></li>
+</ol>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="chap-01-casting.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="chap-05-stamping.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chap-07-machining.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -732,7 +1474,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/index.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/06-Welding.Rmd",
     "text": "Edit"
   },
   "history": {

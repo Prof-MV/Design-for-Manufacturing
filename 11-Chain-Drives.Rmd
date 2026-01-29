@@ -1,4 +1,4 @@
-# Power Transmission: Chain Drives
+# Power Transmission: Chain Drives {#chap-11-chains}
 
 ```{r setup-11, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -20,7 +20,21 @@ theme_chain <- theme_minimal() +
   )
 ```
 
-## 💡 Introduction to Chain Drives {-}
+## Learning Objectives {#sec:objectives-11}
+
+By the end of this chapter, you will be able to:
+
+1. **Explain** the operating principles and advantages of roller chain drives
+2. **Identify** chain components and interpret chain size designations
+3. **Calculate** chain length, sprocket sizes, and speed ratios
+4. **Apply** service factors for chain drive selection
+5. **Implement** proper lubrication and maintenance practices
+
+::: {.callout-think}
+**Before You Read:** Consider a bicycle—the chain connecting your pedals to the rear wheel is a perfect example of a chain drive. Why do bicycles use chains instead of belts? What advantages does positive engagement provide?
+:::
+
+## Introduction to Chain Drives {#sec:chains-intro}
 
 Chain drives are mechanical power transmission systems that use a series of interconnected links to transfer motion and force between rotating shafts. Unlike belt drives that rely on friction, chain drives use positive engagement between chain links and sprocket teeth, ensuring no slip and maintaining exact speed ratios.
 
@@ -46,7 +60,7 @@ Chain drives are found everywhere in mechanical systems:
 
 ---
 
-## ⚙️ Roller Chain Fundamentals {-}
+## Roller Chain Fundamentals {#sec:chain-fundamentals}
 
 The most common type of industrial chain is the **roller chain**, standardized under ANSI (American) and ISO (International) specifications. Understanding its construction is essential for proper selection and maintenance.
 
@@ -213,7 +227,7 @@ kable(chain_sizes,
 
 ---
 
-## 🔗 Sprocket Design and Selection {-}
+## Sprocket Design and Selection {#sec:chain-sprockets}
 
 Sprockets are toothed wheels designed to engage with chain links. Proper sprocket selection is critical for chain drive performance and longevity.
 
@@ -353,7 +367,7 @@ The number of teeth affects smooth operation. Fewer teeth cause more "chordal ac
 
 ---
 
-## 📐 Chain Drive Calculations {-}
+## Chain Drive Calculations {#sec:chain-calculations}
 
 ### Speed Ratio
 
@@ -420,7 +434,7 @@ Where:
 
 ---
 
-## 📊 Chain Drive System Layout {-}
+## Chain Drive System Layout {#sec:chain-layout}
 
 ```{r chain-drive-layout, echo=FALSE, fig.align='center', fig.cap="Chain drive system showing driver and driven sprockets with chain path", fig.width=11, fig.height=7}
 library(ggplot2)
@@ -676,7 +690,7 @@ Chain wear is measured as **elongation** (increase in pitch length):
 
 ---
 
-## 🛢️ Lubrication Requirements {-}
+## Lubrication Requirements {#sec:chain-lubrication}
 
 Proper lubrication is critical for chain drive life. The lubrication method depends on chain speed.
 
@@ -793,7 +807,7 @@ kable(compare_df,
 
 ---
 
-## 🔗 Related Topics {-}
+## Related Topics {#sec:chain-resources}
 
 Chain drives are part of the power transmission family. For related content, see:
 
@@ -821,7 +835,7 @@ Chain drives provide reliable, positive power transmission for many applications
 
 ---
 
-## ✏️ Practice Problems {-}
+## Practice Problems {#sec:chain-problems}
 
 **Problem 1:** A chain drive uses a 21-tooth driver sprocket at 900 rpm. What size driven sprocket is needed for an output speed of 300 rpm?
 

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Design for Manufacturing</title>
+  <title>Chapter 5 Design for Stamping | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 5 Design for Stamping | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 5 Design for Stamping | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="chap-01-casting.html"/>
+<link rel="prev" href="chap-04-gears.html"/>
+<link rel="next" href="chap-06-welding.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -685,23 +685,952 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Design for Manufacturing</h1>
-<p class="author"><em>Martin Volkening</em></p>
-<p class="date"><em>2026-01-29</em></p>
+<div id="chap-05-stamping" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Design for Stamping<a href="chap-05-stamping.html#chap-05-stamping" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="sec:objectives-05" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Learning Objectives<a href="chap-05-stamping.html#sec:objectives-05" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>By the end of this chapter, you will be able to:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Explain</strong> the fundamental principles and components of metal stamping</li>
+<li><strong>Differentiate</strong> between blanking, punching, bending, and drawing operations</li>
+<li><strong>Calculate</strong> clearances, bend allowances, and blank sizes for stamped parts</li>
+<li><strong>Apply</strong> design guidelines for manufacturability in stamped components</li>
+<li><strong>Identify</strong> common stamping defects and their causes</li>
+</ol>
+<div class="callout-think">
+<p><strong>Before You Read:</strong> Look around you right now. How many stamped metal parts can you identify? Consider items like your phone’s SIM tray, car body panels, kitchen utensils, or even the clips holding papers together.</p>
 </div>
-<div id="about" class="section level1 unnumbered hasAnchor">
-<h1>About<a href="index.html#about" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This book collects the main manufacturing methods and provides guidelines for a good part design to minimize defects and increase manufacturing efficiency.</p>
+</div>
+<div id="sec:stamping-intro" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Introduction to the Stamping Process<a href="chap-05-stamping.html#sec:stamping-intro" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Metal stamping is one of the most versatile and widely used manufacturing processes in modern industry. It involves placing flat sheet metal—either in coil or blank form—into a stamping press where a tool and die surface forms the metal into the desired shape. Stamping encompasses a variety of operations including <strong>blanking, punching, bending, drawing, embossing, and coining</strong>.</p>
+<p>The significance of stamping lies in its ability to produce high volumes of identical parts with excellent dimensional accuracy, tight tolerances, and superior surface finish—all at relatively low cost per part. This makes stamping essential for industries ranging from automotive and aerospace to electronics and consumer appliances.</p>
+<hr />
+<blockquote>
+<p><strong>🤔 Think About It:</strong> Look around you right now. How many stamped metal parts can you identify? Consider items like your phone’s SIM tray, car body panels, kitchen utensils, or even the clips holding papers together.</p>
+</blockquote>
+<hr />
+</div>
+<div id="sec:stamping-components" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Essential Components of Stamping<a href="chap-05-stamping.html#sec:stamping-components" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Every stamping operation requires several basic elements working in harmony:
+1. <strong>The Sheet Metal (Workpiece):</strong> This is the raw material, typically supplied as coils or flat sheets. Common materials include steel, aluminum, brass, copper, and stainless steel.</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p><strong>The Die:</strong> A specialized tool that contains the negative (female) form of the part. The die is mounted on the press bed.</p></li>
+<li><p><strong>The Punch:</strong> The male counterpart that presses the sheet metal into or through the die cavity.</p></li>
+<li><p><strong>The Press:</strong> The machine that provides the force to drive the punch into the die. Presses can be mechanical, hydraulic, or servo-driven.</p></li>
+<li><p><strong>The Blank Holder (in drawing operations):</strong> A component that controls material flow and prevents wrinkling during deep drawing operations.</p></li>
+</ol>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:basic-stamping-setup"></span>
+<img src="_main_files/figure-html/basic-stamping-setup-1.png" alt="Basic stamping setup showing punch, die, and workpiece arrangement." width="768" />
+<p class="caption">
+Figure 5.1: Basic stamping setup showing punch, die, and workpiece arrangement.
+</p>
+</div>
+<hr />
+</div>
+<div id="sec:stamping-operations" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Types of Stamping Operations<a href="chap-05-stamping.html#sec:stamping-operations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Stamping is not a single process but a family of related operations. Understanding each operation is crucial for designing parts that can be efficiently manufactured.</p>
+<div id="blanking-and-punching" class="section level3 hasAnchor" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> Blanking and Punching<a href="chap-05-stamping.html#blanking-and-punching" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Blanking</strong> and <strong>punching</strong> are shearing operations that cut sheet metal using a punch and die.</p>
+<ul>
+<li><strong>Blanking:</strong> The cut-out piece (the blank) is the desired part, and the remaining sheet is scrap.</li>
+<li><strong>Punching (Piercing):</strong> The cut-out piece is scrap (the slug), and the remaining sheet with the hole is the desired part.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:blanking-vs-punching"></span>
+<img src="_main_files/figure-html/blanking-vs-punching-1.png" alt="Blanking vs. Punching: In blanking, the cut piece is the product. In punching, the sheet with the hole is the product." width="960" />
+<p class="caption">
+Figure 5.2: Blanking vs. Punching: In blanking, the cut piece is the product. In punching, the sheet with the hole is the product.
+</p>
+</div>
+<blockquote>
+<p><strong>❓ Question for Reflection:</strong> A manufacturer needs to create both circular washers and sheets with circular holes for ventilation. Which operation would they use for each product?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal the answer
+</summary>
+<ul>
+<li><strong>Washers:</strong> Blanking—the circular cut-out is the desired product.</li>
+<li><strong>Ventilation sheets:</strong> Punching—the sheet with holes is the desired product, and the circular slugs are scrap.</li>
+</ul>
+</details>
+<hr />
+</div>
+<div id="bending" class="section level3 hasAnchor" number="5.4.2">
+<h3><span class="header-section-number">5.4.2</span> Bending<a href="chap-05-stamping.html#bending" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Bending</strong> is a forming operation where the sheet metal is deformed along a straight axis to create an angled shape. The metal on the outside of the bend is stretched (in tension), while the metal on the inside is compressed.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bending-operation"></span>
+<img src="_main_files/figure-html/bending-operation-1.png" alt="V-bending operation showing the punch, die, and bent workpiece." width="768" />
+<p class="caption">
+Figure 5.3: V-bending operation showing the punch, die, and bent workpiece.
+</p>
+</div>
+<p>Key bending terminology:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Bend Radius</strong></td>
+<td align="left">The inside radius of the bend</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Bend Angle</strong></td>
+<td align="left">The angle of the bend measured from the original flat position</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Springback</strong></td>
+<td align="left">The elastic recovery of the material after the bending force is removed</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Bend Allowance</strong></td>
+<td align="left">The arc length of the neutral axis in the bend region</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>K-Factor</strong></td>
+<td align="left">The ratio of the neutral axis location to the material thickness</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>🤔 Critical Thinking:</strong> Why do you think the neutral axis (where there is neither tension nor compression) is NOT exactly at the center of the sheet thickness during bending?</p>
+</blockquote>
+<hr />
+</div>
+<div id="drawing" class="section level3 hasAnchor" number="5.4.3">
+<h3><span class="header-section-number">5.4.3</span> Drawing<a href="chap-05-stamping.html#drawing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Drawing</strong> is a process that transforms a flat sheet metal blank into a hollow, three-dimensional shape (like a cup or box) by pulling the material into a die cavity with a punch.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:deep-drawing-process"></span>
+<img src="_main_files/figure-html/deep-drawing-process-1.png" alt="Deep drawing process showing blank transformation into a cup shape." width="960" />
+<p class="caption">
+Figure 5.4: Deep drawing process showing blank transformation into a cup shape.
+</p>
+</div>
+<p>The distinction between <strong>shallow drawing</strong> and <strong>deep drawing</strong> is based on the ratio of drawing depth to diameter:</p>
+<p><span class="math display">\[\text{Drawing Ratio} = \frac{D_b}{D_p}\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(D_b\)</span> = Diameter of the original blank</li>
+<li><span class="math inline">\(D_p\)</span> = Diameter of the punch (final part)</li>
+</ul>
+<p>When the drawing ratio exceeds approximately <strong>2.0</strong>, the operation typically requires multiple drawing stages (redrawing) to avoid failure.</p>
+<blockquote>
+<p><strong>❓ Calculation Challenge:</strong> A beverage can manufacturer wants to draw a can body with a 66 mm diameter from a circular blank. If the maximum single-draw ratio is 2.0, what is the minimum blank diameter that can be used in a single drawing operation?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal the solution
+</summary>
+<p>Using the drawing ratio formula:</p>
+<p><span class="math display">\[D_b = D_p \times \text{Drawing Ratio} = 66 \text{ mm} \times 2.0 = 132 \text{ mm}\]</span></p>
+<p>The maximum blank diameter for a single draw operation is <strong>132 mm</strong>. Any larger blank would require multiple drawing stages.</p>
+</details>
+<hr />
+</div>
+<div id="embossing-and-coining" class="section level3 hasAnchor" number="5.4.4">
+<h3><span class="header-section-number">5.4.4</span> Embossing and Coining<a href="chap-05-stamping.html#embossing-and-coining" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p><strong>Embossing:</strong> Creates raised or recessed designs in sheet metal without changing the material thickness significantly. One side has a raised pattern while the other has a corresponding depression.</p></li>
+<li><p><strong>Coining:</strong> A severe squeezing operation that creates fine detail by forcing metal to flow into die cavities under very high pressure. Unlike embossing, coining can significantly change local thickness.</p></li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:embossing-coining"></span>
+<img src="_main_files/figure-html/embossing-coining-1.png" alt="Comparison of embossing (left) and coining (right) operations." width="960" />
+<p class="caption">
+Figure 5.5: Comparison of embossing (left) and coining (right) operations.
+</p>
+</div>
+<blockquote>
+<p><strong>🤔 Think About It:</strong> Why are coins made using the coining process rather than embossing? Consider factors like detail, durability, and counterfeit prevention.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="stamping-press-types-and-progressive-dies" class="section level2 unnumbered hasAnchor">
+<h2>🏭 Stamping Press Types and Progressive Dies<a href="#stamping-press-types-and-progressive-dies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="types-of-stamping-presses" class="section level3 hasAnchor" number="5.4.5">
+<h3><span class="header-section-number">5.4.5</span> Types of Stamping Presses<a href="chap-05-stamping.html#types-of-stamping-presses" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="26%" />
+<col width="26%" />
+<col width="29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Press Type</th>
+<th align="left">Force Mechanism</th>
+<th align="left">Characteristics</th>
+<th align="left">Best Applications</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Mechanical</strong></td>
+<td align="left">Flywheel and crankshaft</td>
+<td align="left">High speed, consistent stroke</td>
+<td align="left">High-volume blanking and forming</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Hydraulic</strong></td>
+<td align="left">Fluid pressure</td>
+<td align="left">Variable speed, full force throughout stroke</td>
+<td align="left">Deep drawing, complex forming</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Servo</strong></td>
+<td align="left">Electric servo motors</td>
+<td align="left">Programmable motion profiles, energy efficient</td>
+<td align="left">Precision parts, variable operations</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="progressive-die-stamping" class="section level3 hasAnchor" number="5.4.6">
+<h3><span class="header-section-number">5.4.6</span> Progressive Die Stamping<a href="chap-05-stamping.html#progressive-die-stamping" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Progressive die stamping is a highly efficient method where a coil of sheet metal is fed through a series of stations, each performing a different operation. The part remains attached to a carrier strip until the final station, where it is cut free.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:progressive-die"></span>
+<img src="_main_files/figure-html/progressive-die-1.png" alt="Progressive die stamping: multiple operations performed sequentially as the strip advances through the die." width="1152" />
+<p class="caption">
+Figure 5.6: Progressive die stamping: multiple operations performed sequentially as the strip advances through the die.
+</p>
+</div>
+<p><strong>Advantages of Progressive Dies:</strong></p>
+<ul>
+<li>Extremely high production rates (hundreds of parts per minute)</li>
+<li>Multiple operations in a single press stroke</li>
+<li>Reduced handling and labor costs</li>
+<li>Consistent part quality</li>
+</ul>
+<blockquote>
+<p><strong>❓ Design Question:</strong> If you were designing a simple bracket that requires three holes and two 90° bends, sketch how you might arrange the stations in a progressive die. What would be the sequence of operations?</p>
+</blockquote>
+<hr />
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/RPzv3WJ3mqM"
+    title="Advantages of Progressive Die Stamping"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/NuFpzJLMnFs"
+    title="Progressive Die Stamping"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+<hr />
+</div>
+</div>
+<div id="sec:stamping-pros-cons" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Advantages and Limitations of Stamping<a href="chap-05-stamping.html#sec:stamping-pros-cons" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="36%" />
+<col width="39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Aspect</th>
+<th align="left">Advantages</th>
+<th align="left">Limitations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Production Volume</strong></td>
+<td align="left">Extremely economical for high volumes; can produce thousands of parts per hour</td>
+<td align="left">High tooling costs make it uneconomical for low volumes (typically need &gt;10,000 parts)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Precision</strong></td>
+<td align="left">Excellent repeatability and tight tolerances (±0.1 mm achievable)</td>
+<td align="left">Complex 3D shapes may require multiple operations or secondary processes</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Material Utilization</strong></td>
+<td align="left">Can optimize blank layouts to minimize scrap</td>
+<td align="left">Some operations inherently produce scrap (e.g., punching slugs)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Surface Finish</strong></td>
+<td align="left">Good surface finish directly from the process</td>
+<td align="left">Die wear can affect surface quality over time</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Part Strength</strong></td>
+<td align="left">Work hardening can increase strength in formed areas</td>
+<td align="left">Excessive forming can lead to cracking or tearing</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Lead Time</strong></td>
+<td align="left">Fast production once tooling is ready</td>
+<td align="left">Long lead time for die design and fabrication (weeks to months)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="sec:stamping-materials" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Material Considerations for Stamping<a href="chap-05-stamping.html#sec:stamping-materials" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Not all materials are equally suitable for stamping. The key material properties that influence stampability include:</p>
+<div id="formability" class="section level3 hasAnchor" number="5.6.1">
+<h3><span class="header-section-number">5.6.1</span> Formability<a href="chap-05-stamping.html#formability" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Formability</strong> describes how much a material can be deformed before it cracks or tears. It is influenced by:</p>
+<ul>
+<li><strong>Ductility:</strong> The ability to undergo plastic deformation without fracture</li>
+<li><strong>Work Hardening Rate (n-value):</strong> How quickly the material strengthens as it deforms</li>
+<li><strong>Anisotropy (r-value):</strong> Directional differences in properties due to rolling direction</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:forming-limit-diagram"></span>
+<img src="_main_files/figure-html/forming-limit-diagram-1.png" alt="Forming Limit Diagram (FLD) showing safe and failure zones for different strain combinations." width="768" />
+<p class="caption">
+Figure 5.7: Forming Limit Diagram (FLD) showing safe and failure zones for different strain combinations.
+</p>
+</div>
+<p>The <strong>Forming Limit Diagram (FLD)</strong> is a critical tool that shows the combination of major and minor strains a material can withstand before failure.</p>
+</div>
+<div id="common-stamping-materials" class="section level3 hasAnchor" number="5.6.2">
+<h3><span class="header-section-number">5.6.2</span> Common Stamping Materials<a href="chap-05-stamping.html#common-stamping-materials" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="18%" />
+<col width="31%" />
+<col width="34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Material</th>
+<th align="left">Formability</th>
+<th align="left">Typical Applications</th>
+<th align="left">Special Considerations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Low Carbon Steel</strong></td>
+<td align="left">Excellent</td>
+<td align="left">Automotive body panels, appliances</td>
+<td align="left">Most economical; good for deep drawing</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Stainless Steel</strong></td>
+<td align="left">Good to Moderate</td>
+<td align="left">Kitchen equipment, medical devices</td>
+<td align="left">Work hardens rapidly; requires more force</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Aluminum Alloys</strong></td>
+<td align="left">Good</td>
+<td align="left">Aerospace, beverage cans</td>
+<td align="left">Springback issues; galling tendency</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Brass</strong></td>
+<td align="left">Excellent</td>
+<td align="left">Electrical connectors, decorative items</td>
+<td align="left">Expensive but forms easily</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Copper</strong></td>
+<td align="left">Excellent</td>
+<td align="left">Electrical components</td>
+<td align="left">Very ductile but soft</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>🤔 Material Selection Challenge:</strong> You are designing a stamped enclosure for outdoor electrical equipment. The part requires moderate drawing depth and must resist corrosion. Rank these materials from most to least suitable: Low carbon steel, 304 stainless steel, Aluminum 5052, Brass. Explain your reasoning.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis
+</summary>
+<p><strong>Recommended ranking:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>304 Stainless Steel</strong> - Excellent corrosion resistance, good formability, strong and durable</li>
+<li><strong>Aluminum 5052</strong> - Good corrosion resistance, lighter weight, but may require thicker gauge for strength</li>
+<li><strong>Brass</strong> - Good corrosion resistance but expensive and may be overkill</li>
+<li><strong>Low Carbon Steel</strong> - Poor corrosion resistance unless coated/painted; would require additional finishing</li>
+</ol>
+<p>The final choice depends on budget constraints and specific environmental conditions.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="sec:stamping-guidelines" class="section level2 hasAnchor" number="5.7">
+<h2><span class="header-section-number">5.7</span> Design Guidelines for Stamping<a href="chap-05-stamping.html#sec:stamping-guidelines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Designing parts for efficient stamping requires understanding the capabilities and limitations of the process. Following these guidelines will result in lower costs, better quality, and faster production.</p>
+<div id="hole-design" class="section level3 hasAnchor" number="5.7.1">
+<h3><span class="header-section-number">5.7.1</span> Hole Design<a href="chap-05-stamping.html#hole-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="minimum-hole-size" class="section level4 hasAnchor" number="5.7.1.1">
+<h4><span class="header-section-number">5.7.1.1</span> Minimum Hole Size<a href="chap-05-stamping.html#minimum-hole-size" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The minimum hole diameter should be at least equal to the material thickness to prevent punch breakage.</p>
+<p><span class="math display">\[d_{min} \geq t\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(d_{min}\)</span> = Minimum hole diameter</li>
+<li><span class="math inline">\(t\)</span> = Material thickness</li>
+</ul>
+<p>For non-circular holes, the minimum dimension should follow the same rule.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:minimum-hole-size"></span>
+<img src="_main_files/figure-html/minimum-hole-size-1.png" alt="Minimum hole size relative to material thickness." width="768" />
+<p class="caption">
+Figure 5.8: Minimum hole size relative to material thickness.
+</p>
+</div>
+</div>
+<div id="hole-spacing" class="section level4 hasAnchor" number="5.7.1.2">
+<h4><span class="header-section-number">5.7.1.2</span> Hole Spacing<a href="chap-05-stamping.html#hole-spacing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Holes should be spaced adequately apart to prevent distortion and ensure die strength:</p>
+<ul>
+<li><strong>Hole to hole:</strong> Minimum spacing = 2× material thickness</li>
+<li><strong>Hole to edge:</strong> Minimum distance = 1× material thickness (preferably 1.5×)</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:hole-spacing"></span>
+<img src="_main_files/figure-html/hole-spacing-1.png" alt="Recommended hole spacing guidelines." width="864" />
+<p class="caption">
+Figure 5.9: Recommended hole spacing guidelines.
+</p>
+</div>
+<blockquote>
+<p><strong>❓ Quick Check:</strong> A designer specifies 3 mm diameter holes in 2 mm thick steel sheet, with 3 mm spacing between holes. Is this design acceptable? Why or why not?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal answer
+</summary>
+<p><strong>Partially acceptable:</strong></p>
+<ul>
+<li>Hole diameter (3 mm) ≥ thickness (2 mm) ✓</li>
+<li>Hole spacing (3 mm) should be ≥ 2 × 2 mm = 4 mm ✗</li>
+</ul>
+<p>The hole spacing is too close. The designer should increase the spacing to at least 4 mm to prevent distortion and die damage.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="bend-design" class="section level3 hasAnchor" number="5.7.2">
+<h3><span class="header-section-number">5.7.2</span> Bend Design<a href="chap-05-stamping.html#bend-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="minimum-bend-radius" class="section level4 hasAnchor" number="5.7.2.1">
+<h4><span class="header-section-number">5.7.2.1</span> Minimum Bend Radius<a href="chap-05-stamping.html#minimum-bend-radius" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The minimum inside bend radius depends on material type, thickness, and grain direction. Bending perpendicular to the grain direction allows tighter radii.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Material</th>
+<th align="left">Minimum Bend Radius (× thickness)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Soft aluminum</td>
+<td align="left">0 - 0.5t</td>
+</tr>
+<tr class="even">
+<td align="left">Low carbon steel</td>
+<td align="left">0.5 - 1.0t</td>
+</tr>
+<tr class="odd">
+<td align="left">Stainless steel</td>
+<td align="left">0.5 - 1.0t</td>
+</tr>
+<tr class="even">
+<td align="left">Brass (soft)</td>
+<td align="left">0 - 0.5t</td>
+</tr>
+<tr class="odd">
+<td align="left">Spring steel</td>
+<td align="left">2.0 - 4.0t</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bend-radius-cracking"></span>
+<img src="_main_files/figure-html/bend-radius-cracking-1.png" alt="Bend radius and its relationship to material cracking." width="960" />
+<p class="caption">
+Figure 5.10: Bend radius and its relationship to material cracking.
+</p>
+</div>
+<blockquote>
+<p><strong>⚠️ Warning:</strong> Specifying a bend radius that is too small will result in cracking on the outer surface of the bend. Always check material specifications!</p>
+</blockquote>
+</div>
+<div id="springback-compensation" class="section level4 hasAnchor" number="5.7.2.2">
+<h4><span class="header-section-number">5.7.2.2</span> Springback Compensation<a href="chap-05-stamping.html#springback-compensation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>All materials exhibit <strong>springback</strong>—the tendency to partially return to their original shape after bending. Designers must account for this:</p>
+<ul>
+<li>Typical springback angles: 2° to 10° depending on material</li>
+<li>Solutions: Over-bend the part, use bottoming dies, or specify springback allowance</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:springback"></span>
+<img src="_main_files/figure-html/springback-1.png" alt="Springback phenomenon: the part opens up slightly after the bending force is removed." width="960" />
+<p class="caption">
+Figure 5.11: Springback phenomenon: the part opens up slightly after the bending force is removed.
+</p>
+</div>
+<blockquote>
+<p><strong>🤔 Engineering Challenge:</strong> A bracket requires a precise 90° bend. If the material has 5° of springback, what angle should the die produce to achieve the final 90° angle?</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal solution
+</summary>
+<p>The die should over-bend the material by the springback amount:</p>
+<p><span class="math display">\[\text{Die angle} = 90° + 5° = 95°\]</span></p>
+<p>The die should bend the part to <strong>95°</strong> so that after springback, the final angle is 90°.</p>
+</details>
+</div>
+<div id="bend-relief" class="section level4 hasAnchor" number="5.7.2.3">
+<h4><span class="header-section-number">5.7.2.3</span> Bend Relief<a href="chap-05-stamping.html#bend-relief" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>When a bend line intersects or comes close to an edge, <strong>bend relief</strong> cuts or notches are required to prevent tearing.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bend-relief"></span>
+<img src="_main_files/figure-html/bend-relief-1.png" alt="Bend relief prevents tearing at the intersection of bends and edges." width="960" />
+<p class="caption">
+Figure 5.12: Bend relief prevents tearing at the intersection of bends and edges.
+</p>
+</div>
+<p><strong>Bend relief guidelines:</strong></p>
+<ul>
+<li>Width of relief ≥ material thickness</li>
+<li>Length of relief ≥ material thickness + bend radius</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="drawing-design" class="section level3 hasAnchor" number="5.7.3">
+<h3><span class="header-section-number">5.7.3</span> Drawing Design<a href="chap-05-stamping.html#drawing-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="draw-depth-limits" class="section level4 hasAnchor" number="5.7.3.1">
+<h4><span class="header-section-number">5.7.3.1</span> Draw Depth Limits<a href="chap-05-stamping.html#draw-depth-limits" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The maximum depth of a single draw operation is limited by the drawing ratio. Exceeding this limit causes wrinkling, tearing, or both.</p>
+<p><strong>Rule of thumb:</strong> Single draw depth should not exceed 40-50% of the blank diameter for cylindrical parts.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:draw-depth-limit"></span>
+<img src="_main_files/figure-html/draw-depth-limit-1.png" alt="Draw ratio limits for single-stage drawing operations." width="960" />
+<p class="caption">
+Figure 5.13: Draw ratio limits for single-stage drawing operations.
+</p>
+</div>
+</div>
+<div id="corner-radii-in-drawn-parts" class="section level4 hasAnchor" number="5.7.3.2">
+<h4><span class="header-section-number">5.7.3.2</span> Corner Radii in Drawn Parts<a href="chap-05-stamping.html#corner-radii-in-drawn-parts" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Sharp corners in drawn parts concentrate stress and cause tearing. Minimum corner radii:</p>
+<ul>
+<li><strong>Bottom corner radius:</strong> ≥ 4× material thickness</li>
+<li><strong>Top (die entry) radius:</strong> ≥ 4× material thickness</li>
+<li><strong>Wall corner radius (rectangular parts):</strong> ≥ 3× material thickness</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:draw-corner-radii"></span>
+<img src="_main_files/figure-html/draw-corner-radii-1.png" alt="Critical corner radii in drawn parts." width="768" />
+<p class="caption">
+Figure 5.14: Critical corner radii in drawn parts.
+</p>
+</div>
+<blockquote>
+<p><strong>❓ Design Review:</strong> Examine the part specifications below. A rectangular box is being drawn from 1.5 mm thick aluminum with the following specifications: depth = 50 mm, bottom corner radius = 3 mm, wall corner radius = 6 mm. Identify any design violations.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis
+</summary>
+<p><strong>Analysis:</strong></p>
+<ul>
+<li>Bottom corner radius: 3 mm should be ≥ 4 × 1.5 mm = 6 mm ✗ <strong>TOO SMALL</strong></li>
+<li>Wall corner radius: 6 mm should be ≥ 3 × 1.5 mm = 4.5 mm ✓ OK</li>
+</ul>
+<p><strong>Recommendation:</strong> Increase the bottom corner radius to at least 6 mm to prevent tearing.</p>
+</details>
+<hr />
+</div>
+</div>
+<div id="general-design-best-practices" class="section level3 hasAnchor" number="5.7.4">
+<h3><span class="header-section-number">5.7.4</span> General Design Best Practices<a href="chap-05-stamping.html#general-design-best-practices" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="uniform-wall-thickness" class="section level4 hasAnchor" number="5.7.4.1">
+<h4><span class="header-section-number">5.7.4.1</span> Uniform Wall Thickness<a href="chap-05-stamping.html#uniform-wall-thickness" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Maintain uniform wall thickness throughout the part when possible. Significant thickness variations cause uneven material flow and stress concentrations.</p>
+</div>
+<div id="avoid-sharp-corners" class="section level4 hasAnchor" number="5.7.4.2">
+<h4><span class="header-section-number">5.7.4.2</span> Avoid Sharp Corners<a href="chap-05-stamping.html#avoid-sharp-corners" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Replace all sharp corners with radii or chamfers:</p>
+<ul>
+<li>Reduces stress concentration</li>
+<li>Extends die life</li>
+<li>Improves material flow</li>
+</ul>
+</div>
+<div id="design-for-nesting" class="section level4 hasAnchor" number="5.7.4.3">
+<h4><span class="header-section-number">5.7.4.3</span> Design for Nesting<a href="chap-05-stamping.html#design-for-nesting" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Consider how blanks will be nested on the sheet to minimize material waste.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:blank-nesting"></span>
+<img src="_main_files/figure-html/blank-nesting-1.png" alt="Good nesting design minimizes scrap and material cost." width="960" />
+<p class="caption">
+Figure 5.15: Good nesting design minimizes scrap and material cost.
+</p>
+</div>
+<blockquote>
+<p><strong>💰 Cost Impact:</strong> Material costs can represent 40-60% of total stamped part cost. A well-nested design that improves material utilization from 70% to 85% can significantly reduce part cost!</p>
+</blockquote>
+</div>
+<div id="symmetry" class="section level4 hasAnchor" number="5.7.4.4">
+<h4><span class="header-section-number">5.7.4.4</span> Symmetry<a href="chap-05-stamping.html#symmetry" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Design symmetrical parts whenever possible:</p>
+<ul>
+<li>Simplifies die design</li>
+<li>Improves material flow during forming</li>
+<li>Reduces the chance of assembly errors</li>
+</ul>
+<hr />
+</div>
+</div>
+</div>
+<div id="sec:stamping-defects" class="section level2 hasAnchor" number="5.8">
+<h2><span class="header-section-number">5.8</span> Common Stamping Defects and Prevention<a href="chap-05-stamping.html#sec:stamping-defects" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Understanding potential defects helps designers avoid them through proper design.</p>
+<table>
+<colgroup>
+<col width="19%" />
+<col width="31%" />
+<col width="19%" />
+<col width="29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Defect</th>
+<th align="left">Description</th>
+<th align="left">Causes</th>
+<th align="left">Prevention</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Wrinkling</strong></td>
+<td align="left">Wavy, folded material, typically in flange areas</td>
+<td align="left">Excessive compressive stress; insufficient blank holder force</td>
+<td align="left">Increase blank holder pressure; optimize blank size; add draw beads</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Tearing</strong></td>
+<td align="left">Cracks or splits in the material</td>
+<td align="left">Excessive tensile stress; sharp corners; insufficient material</td>
+<td align="left">Increase radii; use more ductile material; add draw stages</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Springback</strong></td>
+<td align="left">Part doesn’t hold intended shape</td>
+<td align="left">Elastic recovery of material</td>
+<td align="left">Over-bend; use bottoming dies; adjust tooling</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Burrs</strong></td>
+<td align="left">Sharp, rough edges on cut surfaces</td>
+<td align="left">Excessive die clearance; worn tooling</td>
+<td align="left">Maintain proper clearance (5-10% of thickness); replace worn tools</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Galling</strong></td>
+<td align="left">Material pickup on die surfaces</td>
+<td align="left">Metal-to-metal adhesion</td>
+<td align="left">Use lubrication; apply die coatings; select appropriate die material</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Orange Peel</strong></td>
+<td align="left">Rough, textured surface</td>
+<td align="left">Excessive grain growth; over-forming</td>
+<td align="left">Use fine-grain material; reduce strain</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:stamping-defects"></span>
+<img src="_main_files/figure-html/stamping-defects-1.png" alt="Common stamping defects: wrinkling in flanges, tearing at corners, and burrs on cut edges." width="1152" />
+<p class="caption">
+Figure 5.16: Common stamping defects: wrinkling in flanges, tearing at corners, and burrs on cut edges.
+</p>
+</div>
+<blockquote>
+<p><strong>🔍 Defect Diagnosis:</strong> A production run of drawn cups is showing wrinkling in the flange area. List three possible corrective actions the manufacturing team could take.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal solutions
+</summary>
+<p><strong>Possible corrective actions for flange wrinkling:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Increase blank holder force</strong> - More pressure prevents the material from buckling</li>
+<li><strong>Reduce blank diameter</strong> - Less excess material to wrinkle</li>
+<li><strong>Add draw beads</strong> - Control material flow and increase restraining force</li>
+<li><strong>Use better lubrication</strong> - Reduce friction and improve material flow</li>
+<li><strong>Anneal the material</strong> - Softer material flows more easily</li>
+</ol>
+</details>
+<hr />
+</div>
+<div id="design-checklist-for-stamping" class="section level2 unnumbered hasAnchor">
+<h2>📋 Design Checklist for Stamping<a href="#design-checklist-for-stamping" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before finalizing a stamped part design, verify the following:</p>
+<div id="holes-and-cutouts" class="section level3 hasAnchor" number="5.8.1">
+<h3><span class="header-section-number">5.8.1</span> Holes and Cutouts<a href="chap-05-stamping.html#holes-and-cutouts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Hole diameter ≥ material thickness</label></li>
+<li><label><input type="checkbox" />Hole-to-hole spacing ≥ 2× material thickness</label></li>
+<li><label><input type="checkbox" />Hole-to-edge distance ≥ 1× material thickness</label></li>
+<li><label><input type="checkbox" />No holes in bend zones (or proper relief provided)</label></li>
+</ul>
+</div>
+<div id="bends" class="section level3 hasAnchor" number="5.8.2">
+<h3><span class="header-section-number">5.8.2</span> Bends<a href="chap-05-stamping.html#bends" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Bend radius ≥ minimum for material (check data sheet)</label></li>
+<li><label><input type="checkbox" />Bend relief provided where bend meets edge</label></li>
+<li><label><input type="checkbox" />Springback compensation accounted for</label></li>
+<li><label><input type="checkbox" />Grain direction considered for tight bends</label></li>
+</ul>
+</div>
+<div id="draws" class="section level3 hasAnchor" number="5.8.3">
+<h3><span class="header-section-number">5.8.3</span> Draws<a href="chap-05-stamping.html#draws" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Draw ratio within single-stage limits</label></li>
+<li><label><input type="checkbox" />Bottom radius ≥ 4× material thickness</label></li>
+<li><label><input type="checkbox" />Wall radii ≥ 3× material thickness</label></li>
+<li><label><input type="checkbox" />No sharp transitions between surfaces</label></li>
+</ul>
+</div>
+<div id="general" class="section level3 hasAnchor" number="5.8.4">
+<h3><span class="header-section-number">5.8.4</span> General<a href="chap-05-stamping.html#general" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />All corners filleted or chamfered</label></li>
+<li><label><input type="checkbox" />Uniform wall thickness (or gradual transitions)</label></li>
+<li><label><input type="checkbox" />Part can be nested efficiently on sheet</label></li>
+<li><label><input type="checkbox" />Tolerances achievable by stamping process</label></li>
+<li><label><input type="checkbox" />Part can be ejected from die without interference</label></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="case-study-automotive-bracket-design" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Case Study: Automotive Bracket Design<a href="#case-study-automotive-bracket-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s apply our knowledge to a real-world example.</p>
+<p><strong>Design Requirements:</strong></p>
+<ul>
+<li>Material: Low carbon steel, 2.0 mm thick</li>
+<li>Overall dimensions: 80 mm × 50 mm × 25 mm height</li>
+<li>Two mounting holes: 8 mm diameter</li>
+<li>Two flanges bent at 90°</li>
+<li>Must be produced at 50,000 units/year</li>
+</ul>
+<div id="initial-design-evaluation" class="section level3 hasAnchor" number="5.8.5">
+<h3><span class="header-section-number">5.8.5</span> Initial Design Evaluation<a href="chap-05-stamping.html#initial-design-evaluation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bracket-case-study"></span>
+<img src="_main_files/figure-html/bracket-case-study-1.png" alt="Initial bracket design with potential issues highlighted." width="960" />
+<p class="caption">
+Figure 5.17: Initial bracket design with potential issues highlighted.
+</p>
+</div>
+<blockquote>
+<p><strong>🤔 Your Turn:</strong> Based on the guidelines covered, identify at least three potential issues with this initial design and suggest improvements.</p>
+</blockquote>
+<details>
+<summary>
+Click to reveal analysis
+</summary>
+<p><strong>Potential Issues and Solutions:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Hole too close to bend line</strong>
+<ul>
+<li>Issue: Hole may distort during bending</li>
+<li>Solution: Move hole at least 2× thickness (4 mm) + bend radius away from bend line</li>
+</ul></li>
+<li><strong>Sharp inside corners on bent flanges</strong>
+<ul>
+<li>Issue: Stress concentration and potential cracking</li>
+<li>Solution: Add fillet radius of at least 1× thickness (2 mm)</li>
+</ul></li>
+<li><strong>No bend relief at flange edges</strong>
+<ul>
+<li>Issue: Tearing at the bend-to-edge intersection</li>
+<li>Solution: Add bend relief notches</li>
+</ul></li>
+<li><strong>Hole spacing check needed</strong>
+<ul>
+<li>Verify holes are at least 4 mm apart (2× thickness)</li>
+</ul></li>
+</ol>
+</details>
+<hr />
+</div>
+</div>
+<div id="summary-key-design-rules-for-stamping" class="section level2 unnumbered hasAnchor">
+<h2>📚 “Summary: Key Design Rules for Stamping”<a href="#summary-key-design-rules-for-stamping" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Design Feature</th>
+<th align="left">Minimum Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Hole diameter</td>
+<td align="left">≥ Material thickness</td>
+</tr>
+<tr class="even">
+<td align="left">Hole-to-hole spacing</td>
+<td align="left">≥ 2× Material thickness</td>
+</tr>
+<tr class="odd">
+<td align="left">Hole-to-edge distance</td>
+<td align="left">≥ 1× Material thickness</td>
+</tr>
+<tr class="even">
+<td align="left">Inside bend radius</td>
+<td align="left">0.5-4× Material thickness (varies by material)</td>
+</tr>
+<tr class="odd">
+<td align="left">Draw bottom radius</td>
+<td align="left">≥ 4× Material thickness</td>
+</tr>
+<tr class="even">
+<td align="left">Draw wall radius</td>
+<td align="left">≥ 3× Material thickness</td>
+</tr>
+<tr class="odd">
+<td align="left">Maximum single draw ratio</td>
+<td align="left">~2.0</td>
+</tr>
+<tr class="even">
+<td align="left">Bend relief width</td>
+<td align="left">≥ Material thickness</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="sec:stamping-problems" class="section level2 hasAnchor" number="5.9">
+<h2><span class="header-section-number">5.9</span> Practice Problems<a href="chap-05-stamping.html#sec:stamping-problems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Test your understanding with these problems:</p>
+<p><strong>Problem 1:</strong> A part requires a blanked shape with 50 holes, 4 mm in diameter, arranged in a grid pattern. The material is 1.5 mm thick mild steel. What is the minimum allowable spacing between hole centers?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p>Minimum hole-to-hole spacing = 2 × thickness = 2 × 1.5 mm = <strong>3.0 mm</strong></p>
+<p>Minimum center-to-center distance = hole spacing + hole diameter = 3.0 mm + 4.0 mm = <strong>7.0 mm</strong></p>
+</details>
+<hr />
+<p><strong>Problem 2:</strong> An engineer wants to draw a cylindrical cup with a 40 mm inner diameter and 60 mm depth from a single blank. Is this feasible in a single drawing operation? If not, how would you approach this?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p>For a single draw, depth typically should not exceed 40-50% of blank diameter.</p>
+<p>Assuming 50% maximum: Maximum depth = 0.5 × blank diameter</p>
+<p>The blank diameter for a 40 mm cup (using drawing ratio of 2.0) = 40 × 2 = 80 mm</p>
+<p>Maximum single-draw depth ≈ 0.5 × 80 = <strong>40 mm</strong></p>
+<p>Since the required depth (60 mm) &gt; maximum single-draw depth (40 mm), <strong>this cannot be done in a single operation.</strong></p>
+<p><strong>Solution:</strong> Use a redrawing operation (two or more drawing stages) to achieve the full 60 mm depth.</p>
+</details>
+<hr />
+<p><strong>Problem 3:</strong> A bracket made from 2.5 mm aluminum sheet requires a 90° bend. The material specifications indicate 6° of springback. What should the die angle be set to?</p>
+<details>
+<summary>
+Click for solution
+</summary>
+<p>Die angle = Desired angle + Springback = 90° + 6° = <strong>96°</strong></p>
+<p>The die should over-bend the part to 96° so that after springback, the final angle is 90°.</p>
+</details>
+<hr />
+</div>
+<div id="sec:stamping-resources" class="section level2 hasAnchor" number="5.10">
+<h2><span class="header-section-number">5.10</span> Further Reading<a href="chap-05-stamping.html#sec:stamping-resources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://www.xometry.com/resources/sheet/metal-stamping-design-guidelines/">Stamping Design Guidelines - Xometry</a></p>
+<p><a href="https://www.thomasnet.com/articles/custom-manufacturing-fabricating/metal-stamping/">Metal Stamping Basics - Thomasnet</a></p>
+<p><a href="https://www.manortool.com/progressive-die-stamping/">Progressive Die Stamping - Manor Tool</a></p>
+<p><a href="https://www.custompartnet.com/wu/sheet-metal-forming">Sheet Metal Forming - CustomPart.Net</a></p>
+<hr />
+</div>
+<div id="supplemental-videos-1" class="section level2 unnumbered hasAnchor">
+<h2>🎬 Supplemental Videos<a href="#supplemental-videos-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="how-stamping-dies-work" class="section level3 hasAnchor" number="5.10.1">
+<h3><span class="header-section-number">5.10.1</span> How Stamping Dies Work<a href="chap-05-stamping.html#how-stamping-dies-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/ipMnAe0xNwM"
+    title="How Stamping Dies Work"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="deep-drawing-process-explained" class="section level3 hasAnchor" number="5.10.2">
+<h3><span class="header-section-number">5.10.2</span> Deep Drawing Process Explained<a href="chap-05-stamping.html#deep-drawing-process-explained" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/2KZRQSI8GkQ"
+    title="Deep Drawing Process"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+</div>
+<div id="stamping-by-smarter-every-day" class="section level3 hasAnchor" number="5.10.3">
+<h3><span class="header-section-number">5.10.3</span> Stamping by ‘Smarter Every Day’<a href="chap-05-stamping.html#stamping-by-smarter-every-day" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/GDzBE6vz5r0"
+    title="Stamping by Smarter Every Day"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+<hr />
+</div>
+</div>
+<div id="references-1" class="section level2 unnumbered hasAnchor">
+<h2>📖 References<a href="#references-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Groover, M. P. (2020). <em>Fundamentals of Modern Manufacturing: Materials, Processes, and Systems</em> (7th ed.). Wiley.</p></li>
+<li><p>Boljanovic, V. (2004). <em>Sheet Metal Forming Processes and Die Design</em>. Industrial Press.</p></li>
+<li><p>Hosford, W. F., &amp; Caddell, R. M. (2011). <em>Metal Forming: Mechanics and Metallurgy</em> (4th ed.). Cambridge University Press.</p></li>
+<li><p>Suchy, I. (2006). <em>Handbook of Die Design</em> (2nd ed.). McGraw-Hill.</p></li>
+</ol>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="chap-01-casting.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="chap-04-gears.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chap-06-welding.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -732,7 +1661,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/index.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/05-Stamping.Rmd",
     "text": "Edit"
   },
   "history": {

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Design for Manufacturing</title>
+  <title>Chapter 11 Power Transmission: Chain Drives | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 11 Power Transmission: Chain Drives | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 11 Power Transmission: Chain Drives | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="chap-01-casting.html"/>
+<link rel="prev" href="chap-10-belts.html"/>
+<link rel="next" href="chap-12-couplings.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -685,23 +685,1100 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Design for Manufacturing</h1>
-<p class="author"><em>Martin Volkening</em></p>
-<p class="date"><em>2026-01-29</em></p>
+<div id="chap-11-chains" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Power Transmission: Chain Drives<a href="chap-11-chains.html#chap-11-chains" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="sec:objectives-11" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> Learning Objectives<a href="chap-11-chains.html#sec:objectives-11" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>By the end of this chapter, you will be able to:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Explain</strong> the operating principles and advantages of roller chain drives</li>
+<li><strong>Identify</strong> chain components and interpret chain size designations</li>
+<li><strong>Calculate</strong> chain length, sprocket sizes, and speed ratios</li>
+<li><strong>Apply</strong> service factors for chain drive selection</li>
+<li><strong>Implement</strong> proper lubrication and maintenance practices</li>
+</ol>
+<div class="callout-think">
+<p><strong>Before You Read:</strong> Consider a bicycle—the chain connecting your pedals to the rear wheel is a perfect example of a chain drive. Why do bicycles use chains instead of belts? What advantages does positive engagement provide?</p>
 </div>
-<div id="about" class="section level1 unnumbered hasAnchor">
-<h1>About<a href="index.html#about" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This book collects the main manufacturing methods and provides guidelines for a good part design to minimize defects and increase manufacturing efficiency.</p>
+</div>
+<div id="sec:chains-intro" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> Introduction to Chain Drives<a href="chap-11-chains.html#sec:chains-intro" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Chain drives are mechanical power transmission systems that use a series of interconnected links to transfer motion and force between rotating shafts. Unlike belt drives that rely on friction, chain drives use positive engagement between chain links and sprocket teeth, ensuring no slip and maintaining exact speed ratios.</p>
+<blockquote>
+<p><strong>Think About It:</strong> Consider a bicycle—the chain connecting your pedals to the rear wheel is a perfect example of a chain drive. Why do bicycles use chains instead of belts? The answer lies in the need for positive engagement, high efficiency, and the ability to transmit significant force through a compact mechanism.</p>
+</blockquote>
+<p>Chain drives are found everywhere in mechanical systems:</p>
+<ul>
+<li><strong>Transportation</strong> – Bicycles, motorcycles, automotive timing chains</li>
+<li><strong>Industrial machinery</strong> – Conveyors, agricultural equipment, manufacturing lines</li>
+<li><strong>Construction equipment</strong> – Excavators, forklifts, cranes</li>
+<li><strong>Power tools</strong> – Chainsaws, drill presses</li>
+</ul>
+<div id="why-choose-chain-drives" class="section level3 hasAnchor" number="11.2.1">
+<h3><span class="header-section-number">11.2.1</span> Why Choose Chain Drives?<a href="chap-11-chains.html#why-choose-chain-drives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Advantage</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>No slip</strong></td>
+<td align="left">Positive engagement ensures exact speed ratios</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>High efficiency</strong></td>
+<td align="left">Up to 98% mechanical efficiency</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>High power capacity</strong></td>
+<td align="left">Can transmit very high loads</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Long center distances</strong></td>
+<td align="left">Effective over distances where gears aren’t practical</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Durability</strong></td>
+<td align="left">Long service life with proper lubrication</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Compact</strong></td>
+<td align="left">Higher power density than belt drives</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="sec:chain-fundamentals" class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> Roller Chain Fundamentals<a href="chap-11-chains.html#sec:chain-fundamentals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The most common type of industrial chain is the <strong>roller chain</strong>, standardized under ANSI (American) and ISO (International) specifications. Understanding its construction is essential for proper selection and maintenance.</p>
+<div id="roller-chain-anatomy" class="section level3 hasAnchor" number="11.3.1">
+<h3><span class="header-section-number">11.3.1</span> Roller Chain Anatomy<a href="chap-11-chains.html#roller-chain-anatomy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-anatomy"></span>
+<img src="_main_files/figure-html/chain-anatomy-1.png" alt="Roller chain link construction showing key components" width="1056" />
+<p class="caption">
+Figure 11.1: Roller chain link construction showing key components
+</p>
+</div>
+</div>
+<div id="chain-component-functions" class="section level3 hasAnchor" number="11.3.2">
+<h3><span class="header-section-number">11.3.2</span> Chain Component Functions<a href="chap-11-chains.html#chain-component-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Component</th>
+<th align="left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Roller</strong></td>
+<td align="left">Engages with sprocket teeth; rolls to reduce friction</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Bushing</strong></td>
+<td align="left">Provides bearing surface between pin and roller</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Pin</strong></td>
+<td align="left">Connects outer plates; transfers load between links</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Inner Plates</strong></td>
+<td align="left">Hold bushings; transfer tension through chain</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Outer Plates</strong></td>
+<td align="left">Connect pins; alternate with inner links</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="standard-chain-sizes" class="section level3 hasAnchor" number="11.3.3">
+<h3><span class="header-section-number">11.3.3</span> Standard Chain Sizes<a href="chap-11-chains.html#standard-chain-sizes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Roller chains are designated by standardized numbers that encode their pitch and construction:</p>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:chain-sizes-table">Table 11.1: </span>Common ANSI Roller Chain Specifications
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+ANSI No. 
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Pitch (in)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Pitch (mm)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Roller Ø (in)
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Avg. Tensile (lbs)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+1/4
+</td>
+<td style="text-align:center;">
+6.35
+</td>
+<td style="text-align:center;">
+0.130
+</td>
+<td style="text-align:center;">
+780
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+35
+</td>
+<td style="text-align:center;">
+3/8
+</td>
+<td style="text-align:center;">
+9.525
+</td>
+<td style="text-align:center;">
+0.200
+</td>
+<td style="text-align:center;">
+1,760
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+40
+</td>
+<td style="text-align:center;">
+1/2
+</td>
+<td style="text-align:center;">
+12.70
+</td>
+<td style="text-align:center;">
+0.312
+</td>
+<td style="text-align:center;">
+3,125
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+41
+</td>
+<td style="text-align:center;">
+1/2
+</td>
+<td style="text-align:center;">
+12.70
+</td>
+<td style="text-align:center;">
+0.306
+</td>
+<td style="text-align:center;">
+2,000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+50
+</td>
+<td style="text-align:center;">
+5/8
+</td>
+<td style="text-align:center;">
+15.875
+</td>
+<td style="text-align:center;">
+0.400
+</td>
+<td style="text-align:center;">
+4,880
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+60
+</td>
+<td style="text-align:center;">
+3/4
+</td>
+<td style="text-align:center;">
+19.05
+</td>
+<td style="text-align:center;">
+0.469
+</td>
+<td style="text-align:center;">
+7,030
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+80
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+25.40
+</td>
+<td style="text-align:center;">
+0.625
+</td>
+<td style="text-align:center;">
+12,500
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+100
+</td>
+<td style="text-align:center;">
+1-1/4
+</td>
+<td style="text-align:center;">
+31.75
+</td>
+<td style="text-align:center;">
+0.750
+</td>
+<td style="text-align:center;">
+19,531
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+120
+</td>
+<td style="text-align:center;">
+1-1/2
+</td>
+<td style="text-align:center;">
+38.10
+</td>
+<td style="text-align:center;">
+0.875
+</td>
+<td style="text-align:center;">
+28,125
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+140
+</td>
+<td style="text-align:center;">
+1-3/4
+</td>
+<td style="text-align:center;">
+44.45
+</td>
+<td style="text-align:center;">
+1.000
+</td>
+<td style="text-align:center;">
+38,280
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;">Note: </span>
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> Chain numbers: First digit(s) = pitch in 1/8”, last digit: 0 = standard, 1 = lightweight, 5 = rollerless
+</td>
+</tr>
+</tfoot>
+</table>
+<blockquote>
+<p><strong>Understanding Chain Numbers:</strong> The ANSI chain number system is logical. For example, chain #40 has a pitch of 4/8” = 1/2”. Chain #60 has a pitch of 6/8” = 3/4”. The final digit indicates the series: 0 for standard roller, 1 for lightweight, and 5 for rollerless (bushing) chains.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="sec:chain-sprockets" class="section level2 hasAnchor" number="11.4">
+<h2><span class="header-section-number">11.4</span> Sprocket Design and Selection<a href="chap-11-chains.html#sec:chain-sprockets" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sprockets are toothed wheels designed to engage with chain links. Proper sprocket selection is critical for chain drive performance and longevity.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sprocket-diagram"></span>
+<img src="_main_files/figure-html/sprocket-diagram-1.png" alt="Sprocket tooth geometry and engagement with roller chain" width="960" />
+<p class="caption">
+Figure 11.2: Sprocket tooth geometry and engagement with roller chain
+</p>
+</div>
+<div id="sprocket-terminology" class="section level3 hasAnchor" number="11.4.1">
+<h3><span class="header-section-number">11.4.1</span> Sprocket Terminology<a href="chap-11-chains.html#sprocket-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Definition</th>
+<th align="left">Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Number of Teeth (N)</strong></td>
+<td align="left">Count of teeth on sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Pitch (P)</strong></td>
+<td align="left">Distance between roller centers</td>
+<td align="left">—</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Pitch Diameter (D)</strong></td>
+<td align="left">Diameter of circle through roller centers</td>
+<td align="left"><span class="math inline">\(D = \frac{P}{\sin(180°/N)}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Outside Diameter</strong></td>
+<td align="left">Diameter to tooth tips</td>
+<td align="left"><span class="math inline">\(D_o \approx P \times \left(\cot\frac{180°}{N} + 1\right)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Root Diameter</strong></td>
+<td align="left">Diameter at tooth base</td>
+<td align="left"><span class="math inline">\(D_r = D - \text{Roller Ø}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Chordal Action</strong></td>
+<td align="left">Velocity variation due to polygon effect</td>
+<td align="left">Minimized with more teeth</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="minimum-sprocket-teeth" class="section level3 hasAnchor" number="11.4.2">
+<h3><span class="header-section-number">11.4.2</span> Minimum Sprocket Teeth<a href="chap-11-chains.html#minimum-sprocket-teeth" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The number of teeth affects smooth operation. Fewer teeth cause more “chordal action” (speed variation as chain engages).</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Application</th>
+<th align="center">Minimum Driver Teeth</th>
+<th align="center">Minimum Driven Teeth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">High-speed, smooth operation</td>
+<td align="center">21-25</td>
+<td align="center">17-21</td>
+</tr>
+<tr class="even">
+<td align="left">Moderate speed</td>
+<td align="center">17-19</td>
+<td align="center">15-17</td>
+</tr>
+<tr class="odd">
+<td align="left">Low speed, high torque</td>
+<td align="center">12-15</td>
+<td align="center">12-15</td>
+</tr>
+<tr class="even">
+<td align="left">Absolute minimum</td>
+<td align="center">9</td>
+<td align="center">9</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Design Rule:</strong> For smooth operation at moderate to high speeds, use at least 17 teeth on the smaller sprocket. Below 12 teeth, noise and wear increase significantly.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="sec:chain-calculations" class="section level2 hasAnchor" number="11.5">
+<h2><span class="header-section-number">11.5</span> Chain Drive Calculations<a href="chap-11-chains.html#sec:chain-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="speed-ratio" class="section level3 hasAnchor" number="11.5.1">
+<h3><span class="header-section-number">11.5.1</span> Speed Ratio<a href="chap-11-chains.html#speed-ratio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Like belt and gear drives, chain drives follow a simple speed ratio relationship:</p>
+<p><span class="math display">\[\frac{n_2}{n_1} = \frac{N_1}{N_2} = \frac{1}{i}\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(n_1\)</span></td>
+<td align="left">Driver sprocket speed</td>
+<td align="left">rpm</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(n_2\)</span></td>
+<td align="left">Driven sprocket speed</td>
+<td align="left">rpm</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(N_1\)</span></td>
+<td align="left">Number of teeth on driver sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(N_2\)</span></td>
+<td align="left">Number of teeth on driven sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(i\)</span></td>
+<td align="left">Speed ratio</td>
+<td align="left">—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Key Point:</strong> Since chain engagement is positive (no slip), the speed ratio is exact and constant—unlike belt drives where slip can occur.</p>
+</blockquote>
+</div>
+<div id="chain-length-calculation" class="section level3 hasAnchor" number="11.5.2">
+<h3><span class="header-section-number">11.5.2</span> Chain Length Calculation<a href="chap-11-chains.html#chain-length-calculation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The chain length is calculated in terms of <strong>pitches</strong> (number of links):</p>
+<p><span class="math display">\[L_p = 2C_p + \frac{N_1 + N_2}{2} + \frac{(N_2 - N_1)^2}{4\pi^2 C_p}\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(L_p\)</span></td>
+<td align="left">Chain length in pitches</td>
+<td align="left">pitches</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(C_p\)</span></td>
+<td align="left">Center distance in pitches (<span class="math inline">\(C/P\)</span>)</td>
+<td align="left">pitches</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(N_1\)</span></td>
+<td align="left">Teeth on smaller sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(N_2\)</span></td>
+<td align="left">Teeth on larger sprocket</td>
+<td align="left">—</td>
+</tr>
+</tbody>
+</table>
+<p>The actual chain length is:
+<span class="math display">\[L = L_p \times P\]</span></p>
+<blockquote>
+<p><strong>Important:</strong> Chain length must be a whole number of pitches. An <strong>even number</strong> of pitches is preferred to avoid offset links, which are weaker than standard links.</p>
+</blockquote>
+</div>
+<div id="center-distance-calculation" class="section level3 hasAnchor" number="11.5.3">
+<h3><span class="header-section-number">11.5.3</span> Center Distance Calculation<a href="chap-11-chains.html#center-distance-calculation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Given a chain length, the center distance can be calculated:</p>
+<p><span class="math display">\[C_p = \frac{1}{4}\left[L_p - \frac{N_1 + N_2}{2} + \sqrt{\left(L_p - \frac{N_1 + N_2}{2}\right)^2 - \frac{8(N_2 - N_1)^2}{4\pi^2}}\right]\]</span></p>
+<p>Or approximately:</p>
+<p><span class="math display">\[C \approx \frac{P}{4}\left[2L_p - N_1 - N_2 + \sqrt{(2L_p - N_1 - N_2)^2 - 0.81(N_2 - N_1)^2}\right]\]</span></p>
+</div>
+<div id="chain-speed" class="section level3 hasAnchor" number="11.5.4">
+<h3><span class="header-section-number">11.5.4</span> Chain Speed<a href="chap-11-chains.html#chain-speed" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The linear chain speed is:</p>
+<p><span class="math display">\[v = \frac{P \times N \times n}{60,000}\]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(v\)</span></td>
+<td align="left">Chain speed</td>
+<td align="left">m/s</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Chain pitch</td>
+<td align="left">mm</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(N\)</span></td>
+<td align="left">Number of teeth on sprocket</td>
+<td align="left">—</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(n\)</span></td>
+<td align="left">Sprocket rotational speed</td>
+<td align="left">rpm</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="sec:chain-layout" class="section level2 hasAnchor" number="11.6">
+<h2><span class="header-section-number">11.6</span> Chain Drive System Layout<a href="chap-11-chains.html#sec:chain-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-drive-layout"></span>
+<img src="_main_files/figure-html/chain-drive-layout-1.png" alt="Chain drive system showing driver and driven sprockets with chain path" width="1056" />
+<p class="caption">
+Figure 11.3: Chain drive system showing driver and driven sprockets with chain path
+</p>
+</div>
+<hr />
+</div>
+<div id="worked-example-chain-drive-design" class="section level2 unnumbered hasAnchor">
+<h2>🧮 Worked Example: Chain Drive Design<a href="#worked-example-chain-drive-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem:</strong> Design a chain drive to transmit power from a 1200 rpm motor to a conveyor shaft that must rotate at 400 rpm. The center distance should be approximately 500 mm. Select an appropriate chain size for moderate industrial service.</p>
+<details>
+<summary>
+<strong>Click to reveal solution</strong>
+</summary>
+<p><strong>Step 1: Calculate the required speed ratio</strong></p>
+<p><span class="math display">\[i = \frac{n_1}{n_2} = \frac{1200}{400} = 3.0\]</span></p>
+<p><strong>Step 2: Select sprocket teeth</strong></p>
+<p>Choose driver sprocket: <span class="math inline">\(N_1 = 17\)</span> teeth (good minimum for smooth operation)</p>
+<p>Calculate driven sprocket: <span class="math inline">\(N_2 = N_1 \times i = 17 \times 3 = 51\)</span> teeth</p>
+<p><strong>Step 3: Select chain size</strong></p>
+<p>For moderate industrial service at 1200 rpm, let’s select <strong>ANSI #40</strong> chain (1/2” = 12.7 mm pitch).</p>
+<p><strong>Step 4: Calculate pitch diameters</strong></p>
+<p>Driver pitch diameter:
+<span class="math display">\[D_1 = \frac{P}{\sin(180°/N_1)} = \frac{12.7}{\sin(180°/17)} = \frac{12.7}{0.1837} = 69.1 \text{ mm}\]</span></p>
+<p>Driven pitch diameter:
+<span class="math display">\[D_2 = \frac{P}{\sin(180°/N_2)} = \frac{12.7}{\sin(180°/51)} = \frac{12.7}{0.0616} = 206.2 \text{ mm}\]</span></p>
+<p><strong>Step 5: Calculate chain length</strong></p>
+<p>Convert center distance to pitches:
+<span class="math display">\[C_p = \frac{C}{P} = \frac{500}{12.7} = 39.37 \text{ pitches}\]</span></p>
+<p>Chain length in pitches:
+<span class="math display">\[L_p = 2(39.37) + \frac{17 + 51}{2} + \frac{(51 - 17)^2}{4\pi^2(39.37)}\]</span></p>
+<p><span class="math display">\[L_p = 78.74 + 34 + \frac{1156}{1554.5} = 78.74 + 34 + 0.74 = 113.48 \text{ pitches}\]</span></p>
+<p>Round to nearest <strong>even number</strong>: <span class="math inline">\(L_p = 114\)</span> pitches</p>
+<p>Actual chain length: <span class="math inline">\(L = 114 \times 12.7 = 1447.8\)</span> mm</p>
+<p><strong>Step 6: Recalculate actual center distance</strong></p>
+<p>Using the rounded chain length:
+<span class="math display">\[C_p = \frac{1}{4}\left[114 - 34 + \sqrt{(114-34)^2 - 0.81(34)^2}\right]\]</span></p>
+<p><span class="math display">\[C_p = \frac{1}{4}\left[80 + \sqrt{6400 - 936.4}\right] = \frac{1}{4}[80 + 73.9] = 38.5 \text{ pitches}\]</span></p>
+<p><span class="math display">\[C = 38.5 \times 12.7 = 489 \text{ mm}\]</span></p>
+<p><strong>Step 7: Check chain speed</strong></p>
+<p><span class="math display">\[v = \frac{12.7 \times 17 \times 1200}{60,000} = 4.32 \text{ m/s}\]</span></p>
+<p>This is acceptable for #40 chain (max recommended ~7-10 m/s for this size).</p>
+<p><strong>Summary:</strong>
+- Chain: ANSI #40 (1/2” pitch)
+- Driver sprocket: 17 teeth, 69.1 mm pitch diameter
+- Driven sprocket: 51 teeth, 206.2 mm pitch diameter
+- Chain length: 114 pitches (1448 mm)
+- Center distance: 489 mm
+- Output speed: 400 rpm (exact)</p>
+</details>
+<hr />
+</div>
+<div id="chain-tensioning-and-adjustment" class="section level2 unnumbered hasAnchor">
+<h2>⚡ Chain Tensioning and Adjustment<a href="chap-11-chains.html#chain-tensioning-and-adjustment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Unlike belts, chains do not stretch significantly, but they do <strong>wear</strong>. As chain links wear, the effective pitch increases (chain “elongation”), requiring adjustment.</p>
+<div id="chain-slack" class="section level3 hasAnchor" number="11.6.1">
+<h3><span class="header-section-number">11.6.1</span> Chain Slack<a href="chap-11-chains.html#chain-slack" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Proper chain slack on the <strong>slack side</strong> (typically the lower span) is essential:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Chain Span Length</th>
+<th align="left">Recommended Slack</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Up to 300 mm</td>
+<td align="left">2-3% of span</td>
+</tr>
+<tr class="even">
+<td align="left">300-600 mm</td>
+<td align="left">3-4% of span</td>
+</tr>
+<tr class="odd">
+<td align="left">Over 600 mm</td>
+<td align="left">4-5% of span</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-slack-diagram"></span>
+<img src="_main_files/figure-html/chain-slack-diagram-1.png" alt="Chain slack measurement on the slack side span" width="960" />
+<p class="caption">
+Figure 11.4: Chain slack measurement on the slack side span
+</p>
+</div>
+</div>
+<div id="tensioning-methods-1" class="section level3 hasAnchor" number="11.6.2">
+<h3><span class="header-section-number">11.6.2</span> Tensioning Methods<a href="chap-11-chains.html#tensioning-methods-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Adjustable shaft position</strong> – Move one sprocket to take up slack</li>
+<li><strong>Idler sprocket</strong> – Engages with chain to increase wrap and tension</li>
+<li><strong>Shoe tensioner</strong> – Spring-loaded shoe presses against chain back</li>
+<li><strong>Automatic tensioner</strong> – Self-adjusting mechanism for varying loads</li>
+</ol>
+</div>
+<div id="chain-wear-and-replacement" class="section level3 hasAnchor" number="11.6.3">
+<h3><span class="header-section-number">11.6.3</span> Chain Wear and Replacement<a href="chap-11-chains.html#chain-wear-and-replacement" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Chain wear is measured as <strong>elongation</strong> (increase in pitch length):</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Elongation</th>
+<th align="left">Action Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">&lt; 1%</td>
+<td align="left">Normal wear; continue monitoring</td>
+</tr>
+<tr class="even">
+<td align="left">1-1.5%</td>
+<td align="left">Plan replacement; increase lubrication</td>
+</tr>
+<tr class="odd">
+<td align="left">1.5-2%</td>
+<td align="left">Replace immediately for precision drives</td>
+</tr>
+<tr class="even">
+<td align="left">&gt; 3%</td>
+<td align="left">Replace immediately; inspect sprockets</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Measurement Tip:</strong> To measure chain wear, measure a span of 10-20 pitches and compare to the theoretical length. A 1% elongation over 20 pitches of 1” chain means the measured length is 20.2” instead of 20”.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="sec:chain-lubrication" class="section level2 hasAnchor" number="11.7">
+<h2><span class="header-section-number">11.7</span> Lubrication Requirements<a href="chap-11-chains.html#sec:chain-lubrication" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Proper lubrication is critical for chain drive life. The lubrication method depends on chain speed.</p>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:lubrication-table">Table 11.2: </span>Chain Lubrication Methods by Speed
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Chain Speed
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Method
+</th>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Description
+</th>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Typical Application
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+&lt; 4 m/s
+</td>
+<td style="text-align:center;">
+Manual/Drip
+</td>
+<td style="text-align:left;">
+Periodic manual application or drip oiler
+</td>
+<td style="text-align:left;">
+Low-speed conveyors, hand-operated equipment
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4-7 m/s
+</td>
+<td style="text-align:center;">
+Bath/Disc
+</td>
+<td style="text-align:left;">
+Chain runs through oil bath or disc splashes oil
+</td>
+<td style="text-align:left;">
+General industrial machinery
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7-12 m/s
+</td>
+<td style="text-align:center;">
+Oil Stream
+</td>
+<td style="text-align:left;">
+Continuous oil stream directed at chain
+</td>
+<td style="text-align:left;">
+High-speed industrial drives
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+&gt; 12 m/s
+</td>
+<td style="text-align:center;">
+Oil Mist/Spray
+</td>
+<td style="text-align:left;">
+Pressurized oil mist or spray system
+</td>
+<td style="text-align:left;">
+Very high-speed, precision equipment
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="chain-vs.-belt-comparison" class="section level2 unnumbered hasAnchor">
+<h2>🔄 Chain vs. Belt Comparison<a href="#chain-vs.-belt-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When should you choose a chain drive over a belt drive?</p>
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:comparison-table">Table 11.3: </span>Chain Drive vs. Belt Drive Comparison
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Characteristic
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Chain Drive
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(74, 134, 199, 255) !important;">
+Belt Drive
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Slip
+</td>
+<td style="text-align:center;">
+None (positive)
+</td>
+<td style="text-align:center;">
+1-3%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Efficiency
+</td>
+<td style="text-align:center;">
+97-98%
+</td>
+<td style="text-align:center;">
+95-98%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Speed Ratio Accuracy
+</td>
+<td style="text-align:center;">
+Exact
+</td>
+<td style="text-align:center;">
+Good (V-belt) to Exact (timing)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Load Capacity
+</td>
+<td style="text-align:center;">
+High
+</td>
+<td style="text-align:center;">
+Moderate to High
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shock Absorption
+</td>
+<td style="text-align:center;">
+Poor
+</td>
+<td style="text-align:center;">
+Excellent
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Noise
+</td>
+<td style="text-align:center;">
+Higher
+</td>
+<td style="text-align:center;">
+Low
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maintenance
+</td>
+<td style="text-align:center;">
+Regular lubrication
+</td>
+<td style="text-align:center;">
+Minimal
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cost
+</td>
+<td style="text-align:center;">
+Higher initial
+</td>
+<td style="text-align:center;">
+Lower
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Speed Capability
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+<td style="text-align:center;">
+High to Very High
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Environment Tolerance
+</td>
+<td style="text-align:center;">
+Good (with proper lube)
+</td>
+<td style="text-align:center;">
+Moderate
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Choose Chain Drives When:</strong></p>
+<ul>
+<li>Exact speed ratio is required</li>
+<li>High loads must be transmitted</li>
+<li>Compact design is needed</li>
+<li>Operating environment is harsh (heat, oil, dust)</li>
+<li>Long service life is important</li>
+</ul>
+<p><strong>Choose Belt Drives When:</strong></p>
+<ul>
+<li>Shock absorption is important</li>
+<li>Quiet operation is required</li>
+<li>High speeds are needed</li>
+<li>Low maintenance is preferred</li>
+<li>Cost is a primary concern</li>
+</ul>
+<hr />
+</div>
+<div id="design-guidelines-and-best-practices-1" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Design Guidelines and Best Practices<a href="#design-guidelines-and-best-practices-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="sprocket-selection" class="section level3 hasAnchor" number="11.7.1">
+<h3><span class="header-section-number">11.7.1</span> Sprocket Selection<a href="chap-11-chains.html#sprocket-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Parameter</th>
+<th align="left">Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Minimum driver teeth</td>
+<td align="left">17-21 for smooth operation</td>
+</tr>
+<tr class="even">
+<td align="left">Maximum speed ratio</td>
+<td align="left">7:1 (single stage), 10:1 with tensioner</td>
+</tr>
+<tr class="odd">
+<td align="left">Teeth difference</td>
+<td align="left">At least 4-5 teeth between sprockets</td>
+</tr>
+<tr class="even">
+<td align="left">Material</td>
+<td align="left">Hardened steel for drivers; cast iron acceptable for slow driven</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="installation-best-practices-1" class="section level3 hasAnchor" number="11.7.2">
+<h3><span class="header-section-number">11.7.2</span> Installation Best Practices<a href="chap-11-chains.html#installation-best-practices-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Alignment</strong> – Sprockets must be parallel and in the same plane</li>
+<li><strong>Initial tension</strong> – Set slack per recommendations; slightly tight is better</li>
+<li><strong>Run-in</strong> – Check adjustment after first 24-48 hours</li>
+<li><strong>Lubrication</strong> – Establish lubrication schedule before startup</li>
+<li><strong>Guards</strong> – Always install safety guards around chain drives</li>
+</ol>
+</div>
+<div id="common-problems-and-solutions-1" class="section level3 hasAnchor" number="11.7.3">
+<h3><span class="header-section-number">11.7.3</span> Common Problems and Solutions<a href="chap-11-chains.html#common-problems-and-solutions-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Problem</th>
+<th align="left">Likely Cause</th>
+<th align="left">Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Rapid wear</td>
+<td align="left">Poor lubrication or misalignment</td>
+<td align="left">Improve lubrication; realign sprockets</td>
+</tr>
+<tr class="even">
+<td align="left">Chain climbing sprocket</td>
+<td align="left">Worn chain or sprocket teeth</td>
+<td align="left">Replace both chain and sprockets</td>
+</tr>
+<tr class="odd">
+<td align="left">Excessive noise</td>
+<td align="left">Misalignment, worn components, improper tension</td>
+<td align="left">Align, replace worn parts, adjust slack</td>
+</tr>
+<tr class="even">
+<td align="left">Chain breaking</td>
+<td align="left">Overload, shock loading, or fatigue</td>
+<td align="left">Verify load; upgrade chain size</td>
+</tr>
+<tr class="odd">
+<td align="left">Sprocket wear</td>
+<td align="left">Chain elongation</td>
+<td align="left">Replace chain before elongation exceeds 2%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="sec:chain-resources" class="section level2 hasAnchor" number="11.8">
+<h2><span class="header-section-number">11.8</span> Related Topics<a href="chap-11-chains.html#sec:chain-resources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Chain drives are part of the power transmission family. For related content, see:</p>
+<ul>
+<li><strong>Chapter 4: Gears</strong> – When more compact, quieter transmission is needed</li>
+<li><strong>Chapter 10: Belt &amp; Pulley Systems</strong> – For shock absorption and quiet operation</li>
+<li><strong>Chapter 8: Bearings</strong> – Essential for supporting sprocket shafts</li>
+</ul>
+<hr />
+</div>
+<div id="chapter-summary-1" class="section level2 unnumbered hasAnchor">
+<h2>📚 Chapter Summary<a href="#chapter-summary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Chain drives provide reliable, positive power transmission for many applications:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Roller chains</strong> use rollers, bushings, pins, and plates for efficient power transfer</p></li>
+<li><p><strong>Speed ratio</strong> is exactly determined by sprocket tooth counts: <span class="math inline">\(i = N_2/N_1\)</span></p></li>
+<li><p><strong>Chain length</strong> must be calculated in pitches and rounded to an even number</p></li>
+<li><p><strong>Sprocket selection</strong> should use at least 17 teeth on the driver for smooth operation</p></li>
+<li><p><strong>Proper lubrication</strong> is critical and depends on chain speed</p></li>
+<li><p><strong>Chain wear</strong> should be monitored; replace when elongation exceeds 2%</p></li>
+</ol>
+<hr />
+</div>
+<div id="sec:chain-problems" class="section level2 hasAnchor" number="11.9">
+<h2><span class="header-section-number">11.9</span> Practice Problems<a href="chap-11-chains.html#sec:chain-problems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Problem 1:</strong> A chain drive uses a 21-tooth driver sprocket at 900 rpm. What size driven sprocket is needed for an output speed of 300 rpm?</p>
+<details>
+<summary>
+<strong>Click for answer</strong>
+</summary>
+<p>Speed ratio: <span class="math inline">\(i = 900/300 = 3.0\)</span></p>
+<p>Driven sprocket teeth: <span class="math inline">\(N_2 = N_1 \times i = 21 \times 3 = 63\)</span> teeth</p>
+</details>
+<p><strong>Problem 2:</strong> Calculate the pitch diameter of a 19-tooth sprocket using #50 chain (5/8” = 15.875 mm pitch).</p>
+<details>
+<summary>
+<strong>Click for answer</strong>
+</summary>
+<p><span class="math display">\[D = \frac{P}{\sin(180°/N)} = \frac{15.875}{\sin(180°/19)} = \frac{15.875}{\sin(9.47°)} = \frac{15.875}{0.1645} = 96.5 \text{ mm}\]</span></p>
+</details>
+<p><strong>Problem 3:</strong> A chain drive has a 15-tooth driver and 45-tooth driven sprocket using #40 chain (12.7 mm pitch). If the center distance is 400 mm, calculate the chain length in pitches.</p>
+<details>
+<summary>
+<strong>Click for answer</strong>
+</summary>
+<p>Center distance in pitches: <span class="math inline">\(C_p = 400/12.7 = 31.5\)</span> pitches</p>
+<p><span class="math display">\[L_p = 2(31.5) + \frac{15 + 45}{2} + \frac{(45 - 15)^2}{4\pi^2(31.5)}\]</span></p>
+<p><span class="math display">\[L_p = 63 + 30 + \frac{900}{1244.1} = 63 + 30 + 0.72 = 93.72 \text{ pitches}\]</span></p>
+<p>Round to nearest even number: <strong>94 pitches</strong></p>
+</details>
+<p><strong>Problem 4:</strong> What is the chain speed for a #60 chain (19.05 mm pitch) on a 23-tooth sprocket rotating at 600 rpm?</p>
+<details>
+<summary>
+<strong>Click for answer</strong>
+</summary>
+<p><span class="math display">\[v = \frac{P \times N \times n}{60,000} = \frac{19.05 \times 23 \times 600}{60,000} = 4.38 \text{ m/s}\]</span></p>
+</details>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="chap-01-casting.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="chap-10-belts.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chap-12-couplings.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -732,7 +1809,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/index.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/11-Chain-Drives.Rmd",
     "text": "Edit"
   },
   "history": {

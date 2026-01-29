@@ -1,4 +1,4 @@
-# Design for Welding
+# Design for Welding {#chap-06-welding}
 
 ```{r setup-06, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -20,7 +20,21 @@ theme_welding <- theme_minimal() +
   )
 ```
 
-## 💡 Introduction to Design for Welding {-}
+## Learning Objectives {#sec:objectives-06}
+
+By the end of this chapter, you will be able to:
+
+1. **Identify** the key components and zones of a fusion weld
+2. **Select** appropriate weld joint types and weld types for different applications
+3. **Apply** weld sizing principles for fillet and groove welds
+4. **Calculate** fillet weld strength and required weld sizes
+5. **Implement** design guidelines to minimize distortion and improve weld quality
+
+::: {.callout-think}
+**Before You Read:** Consider a bicycle frame, a ship's hull, and a skyscraper's steel structure. What do they all have in common? They all rely heavily on welded connections. Why do you think welding was chosen over bolting or riveting for these applications?
+:::
+
+## Introduction to Design for Welding {#sec:welding-intro}
 
 Welding is the most widely used method for permanently joining metals in structural, mechanical, and industrial applications. Unlike mechanical fastening, welding creates a **metallurgical bond** between components, resulting in joints that can be as strong as—or stronger than—the base materials themselves.
 
@@ -32,7 +46,7 @@ Designing for welding requires careful consideration of joint geometry, material
 
 ---
 
-## 🔥 The Welding Process Fundamentals {-}
+## The Welding Process Fundamentals {#sec:welding-fundamentals}
 
 Welding joins materials by applying **heat**, **pressure**, or both, with or without filler material. The most common welding processes use heat to melt the base metals at the joint interface.
 
@@ -138,7 +152,7 @@ The HAZ is often the weakest part of a welded joint, which is why proper heat in
 
 ---
 
-## 🔗 Types of Weld Joints {-}
+## Types of Weld Joints {#sec:weld-joints}
 
 A **weld joint** is the configuration of the parts to be joined. The five basic joint types can accommodate various types of welds.
 
@@ -219,7 +233,7 @@ A lap joint would introduce eccentricity and stress concentration, making it uns
 
 ---
 
-## 🔧 Types of Welds {-}
+## Types of Welds {#sec:weld-types}
 
 Within each joint type, different **weld types** can be applied. The two most common are fillet welds and groove welds.
 
@@ -476,7 +490,7 @@ The trade-off is that the plate must be flipped or welders must work from both s
 
 ---
 
-## 📐 Welding Symbols {-}
+## Welding Symbols {#sec:weld-symbols}
 
 Welding symbols provide a standardized way to communicate welding requirements on engineering drawings. Understanding these symbols is essential for both designers and fabricators.
 
@@ -962,7 +976,7 @@ ggplot() +
 
 ---
 
-## 🔬 Material Weldability {-}
+## Material Weldability {#sec:weld-materials}
 
 Not all materials weld equally well. **Weldability** is the ability of a material to be welded without defects and retain satisfactory mechanical properties.
 
@@ -1052,7 +1066,7 @@ With CE = 0.79 (in the "poor" weldability zone):
 
 ---
 
-## 🛠️ Common Weld Defects and Prevention {-}
+## Common Weld Defects and Prevention {#sec:weld-defects}
 
 Understanding weld defects helps designers specify requirements that prevent them.
 
@@ -1269,7 +1283,7 @@ ggplot() +
 
 ---
 
-## ✍️ Practice Problems {-}
+## Practice Problems {#sec:weld-problems}
 
 **Problem 1:** A T-joint connects a 12 mm thick plate to a 8 mm thick plate using fillet welds on both sides. What is the maximum recommended fillet weld leg size?
 
@@ -1325,7 +1339,7 @@ With CE = **0.61**, this falls in the "Fair to Poor" weldability range.
 
 ---
 
-## 🔗 Further Reading {-}
+## Further Reading {#sec:weld-resources}
 
 [Lincoln Electric Welding Design Guide](https://www.lincolnelectric.com/en/support/welding-resources)
 

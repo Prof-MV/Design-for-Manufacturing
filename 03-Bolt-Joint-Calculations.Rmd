@@ -1,4 +1,4 @@
-# Strength of Bolt Joint Calculations 
+# Strength of Bolt Joint Calculations {#chap-03-bolts}
 
 ```{r setup-03, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,8 +7,21 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
+## Learning Objectives {#sec:objectives-03}
 
-## Mechanics of Bolted Joint Integrity. {-#bolted-joints}
+By the end of this chapter, you will be able to:
+
+1. **Calculate** bolt preload and the relationship between tightening torque and tension
+2. **Determine** fastener stiffness ($k_b$) and member stiffness ($k_m$) for bolted joints
+3. **Apply** the joint stiffness constant to analyze load distribution
+4. **Evaluate** safety factors for bolt joint integrity (yield, load, and separation factors)
+5. **Design** bolted connections that prevent joint separation and fatigue failure
+
+::: {.callout-think}
+**Before You Read:** Why do mechanics use torque wrenches when tightening critical bolts, rather than just tightening "until it feels tight"? What could go wrong with an improperly tightened bolt?
+:::
+
+## Mechanics of Bolted Joint Integrity {#sec:bolted-joints}
 
 Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt Preload
 When a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_p$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself. 

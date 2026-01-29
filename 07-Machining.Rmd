@@ -1,3 +1,4 @@
+# Design for Machining {#chap-07-machining}
 
 ```{r setup-07, include=FALSE}
 # include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -6,15 +7,27 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-# Design for Machining
+## Learning Objectives {#sec:objectives-07}
 
-Welcome to the chapter on Design for Machining (DFM)! As mechanical engineering students, understanding how to design parts that are easy and cost-effective to machine is crucial for your future careers. DFM principles help reduce manufacturing costs, improve quality, and speed up production time. In this chapter, we'll explore the fundamentals of DFM, with real-world examples from the automotive, food, and defense industries. We'll dive into the theory, perform calculations using R, and create visualizations to illustrate key concepts.
+By the end of this chapter, you will be able to:
 
-By the end of this chapter, you'll be equipped to apply DFM principles in your designs, making them more manufacturable. Let's get started—remember, great designs aren't just innovative; they're practical to produce!
+1. **Apply** Design for Machining (DFM) principles to reduce manufacturing costs
+2. **Calculate** spindle speed and machining time for turning operations
+3. **Identify** common design features that make parts difficult to machine
+4. **Implement** guidelines for tolerances, hole sizes, and feature accessibility
+5. **Evaluate** machining designs for automotive, food, and defense industry applications
 
-For a visual introduction to DFM in machining, check out this helpful YouTube video: [Top Design Tips & Manufacturing Processes for Mechanical Engineers | DFM Guide](https://www.youtube.com/watch?v=sq3Ht-ivG5U). Another excellent resource is [Only Real Mechanical Engineers Can Spot These Design Mistakes | CNC Machining](https://www.youtube.com/watch?v=rauL_J048sI).
+::: {.callout-think}
+**Before You Read:** Why do you think DFM is particularly important in high-volume industries like automotive? Can you think of a part in your daily life that might have been designed poorly for machining?
+:::
 
-## Challenge Questions
+## Introduction to Design for Machining {#sec:machining-intro}
+
+Design for Machining (DFM) helps engineers create parts that are easy and cost-effective to machine. DFM principles reduce manufacturing costs, improve quality, and speed up production time. In this chapter, we'll explore the fundamentals of DFM, with real-world examples from the automotive, food, and defense industries.
+
+For a visual introduction to DFM in machining, check out these helpful YouTube videos: [Top Design Tips & Manufacturing Processes for Mechanical Engineers | DFM Guide](https://www.youtube.com/watch?v=sq3Ht-ivG5U) and [Only Real Mechanical Engineers Can Spot These Design Mistakes | CNC Machining](https://www.youtube.com/watch?v=rauL_J048sI).
+
+## Theory and Calculations {#sec:machining-theory}
 
 1. Why do you think DFM is particularly important in high-volume industries like automotive?
 2. Can you think of a part in your daily life that might have been designed poorly for machining?
