@@ -45,17 +45,31 @@ embed_youtube("Hr4DKHX9Hsg", "How Does 3D Printing Work?")
 
 #### Design
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Designs"}
+knitr::include_graphics("images/image1.png")
+```
+
 3D printers create parts from three-dimensional models, the mathematical representations of any three-dimensional surface created using computer-aided design (CAD) software or developed from 3D scan data. The design is then exported as an STL or OBJ file readable by print preparation software.
 
-3D printers include software to specify print settings and slice the digital model into layers that represent horizontal cross-sections of the part. Adjustable printing settings include orientation, support structures (if needed), layer height, and material. Once setup is complete, the software sends the instructions to the printer via a wireless or cable connection.
+3D printers include [software](https://formlabs.com/software/) to specify print settings and slice the digital model into layers that represent horizontal cross-sections of the part. Adjustable printing settings include orientation, support structures (if needed), layer height, and material. Once setup is complete, the software sends the instructions to the printer via a wireless or cable connection.
 
 #### 3D Print
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="3D Print"}
+knitr::include_graphics("images/image27.png")
+```
 
 Some 3D printers use a laser to cure liquid resin into hardened plastic, others fuse small particles of polymer powder at high temperatures to build parts. Most 3D printers can run unattended until the print is complete, and modern systems automatically refill the material required for the parts from cartridges.
 
 #### Post-Process
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Post Process"}
+knitr::include_graphics("images/image15.png")
+```
+
 Depending on the technology and the material, the printed parts may require rinsing in isopropyl alcohol (IPA) to remove any uncured resin from their surface, post-curing to stabilize mechanical properties, manual work to remove support structures, or cleaning with compressed air or a media blaster to remove excess powder. Some of these processes can be automated with accessories.
+
+3D printed parts can be used directly or post-processed for specific applications and the required finish by annealing, machining, priming, painting, [fastening](https://formlabs.com/blog/adding-screw-threads-3d-printed-parts/) or [joining](https://formlabs.com/blog/how-to-create-models-larger-than-your-3d-printers-build-volume/). Often, 3D printing also serves as an intermediate step alongside conventional manufacturing methods, such as positives for investment casting jewelry and dental appliances, or [molds](https://formlabs.com/blog/low-volume-production-injection-molding-casting-thermoforming/) for custom parts.
 
 ### Types of 3D Printers {#sec:3d-printer-types}
 
@@ -67,6 +81,14 @@ SLA resin 3D printers have become vastly popular for their ability to produce hi
 
 [Resin 3D printing](https://formlabs.com/blog/resin-3d-printer-comparison-sla-vs-dlp/) is a great option for highly detailed prototypes requiring tight tolerances and smooth surfaces, such as molds, patterns, and functional parts. SLA 3D printers are widely used in a range of industries from engineering and product design to manufacturing, dentistry, jewelry, model making, and education.
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Resin Print Schematic"}
+knitr::include_graphics("images/image16.png")
+```
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Resin Printer"}
+knitr::include_graphics("images/image3.png")
+```
+
 #### SLS (Selective Laser Sintering) {#sec:sls}
 
 Selective laser sintering (SLS) 3D printers use a high-power laser to sinter small particles of polymer powder into a solid structure. The unfused powder supports the part during printing and eliminates the need for dedicated support structures. This makes SLS ideal for complex geometries, including interior features, undercuts, thin walls, and negative features. Parts produced with SLS printing have excellent mechanical characteristics, with strength resembling that of injection-molded parts.
@@ -75,11 +97,25 @@ The most common material for selective laser sintering is nylon, a popular engin
 
 The combination of low cost per part, high productivity, and established materials make SLS a popular choice among engineers for functional prototyping, and a cost-effective alternative to injection molding for limited-run or bridge manufacturing.
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="SLS Schematic"}
+knitr::include_graphics("images/image10.png")
+```
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="SLS Printed Part"}
+knitr::include_graphics("images/image24.png")
+```
+
 #### FDM (Fused Deposition Modelling) or FFF (Fused Filament Fabrication) {#sec:fdm}
 
 Fused deposition modeling (FDM), also known as fused filament fabrication (FFF), is the most widely used type of 3D printing at the consumer level. FDM 3D printers work by extruding thermoplastic filaments, such as ABS (Acrylonitrile Butadiene Styrene) or PLA (Polylactic Acid), through a heated nozzle, melting the material and applying the plastic layer by layer to a build platform. Each layer is laid down one at a time until the part is complete.
 
 For more information, see the [FDM Print Process Introduction](https://www.hubs.com/knowledge-base/what-is-fdm-3d-printing/).
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="FDM Schematic"}
+knitr::include_graphics("images/image18.png")
+```
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="FDM Printed Part"}
+knitr::include_graphics("images/image17.png")
+```
 
 ### Design Considerations {#sec:design-considerations-3d-print}
 
@@ -91,21 +127,45 @@ The minimum wall thickness is 2x the nozzle size or 0.8mm for Prusa MK4 which ha
 
 The minimum feature size is 2mm.
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="minimum feature size"}
+knitr::include_graphics("images/image6.png")
+```
+
 Thin vertical pins are the most challenging features for a FDM 3D printer. Excessive heights of them are difficult to print.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="tall pillars"}
+knitr::include_graphics("images/image11.png")
+```
 
 #### Bridges, Overhangs and Support Material {#sec:bridges-overhangs}
 
 Bridges are possible up to about 10mm. However, you will have to account for unknown droop between the risers. This will result in smaller dimensions in the height of the gap.
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Bridges"}
+knitr::include_graphics("images/image13.png")
+```
+
 Overhangs up to 45° are possible. For steeper overhangs, support material is required. Consider orienting the part differently on the printer bed first.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Overhangs"}
+knitr::include_graphics("images/image5.png")
+```
 
 #### Print in Place {#sec:print-in-place}
 
 This means that the finished part has moving parts that are not assembled, but printed together at the same time (in place). When the parts are removed from the print bed, the parts stay together and are freely movable. This is used for hinges.
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Print in Place"}
+knitr::include_graphics("images/image12.png")
+```
+
 #### Living Hinge {#sec:living-hinge}
 
 A living hinge connects two parts together with some flexible material. 3D print material is solid; in order to make it bend, thin wall thickness and extra length has to be given. The idea is to distribute the stress over more material so that each material sees only a little stress.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Living Hinge"}
+knitr::include_graphics("images/image23.png")
+```
 
 A good guide on how to design living hinges with minimum length formula can be found here: [How to Design 3D Printed Hinges](https://www.protolabs.com/resources/design-tips/how-to-design-3d-printed-hinges/)
 
@@ -115,13 +175,25 @@ These inserts are heated with the tip of a soldering iron and pressed into the u
 
 More detailed description with pull out strength comparison is published at [CNC Kitchen - Threaded Inserts for 3D Prints](https://www.cnckitchen.com/blog/threaded-inserts-for-3d-prints-cheap-vs-expensive).
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Thread Inserts"}
+knitr::include_graphics("images/image8.png")
+```
+
 #### Embedding Parts {#sec:embedding-parts}
 
 In this method, the print is paused when a cavity for the part to be inserted is finished. The part is inserted and then the cavity is closed by printing over top of it. Take care of tolerances and clearances with this method! You cannot remove the part from the print bed to insert the part.
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Embedding Parts"}
+knitr::include_graphics("images/image14.png")
+```
+
 A step by step process can be found at [Captive Nuts and More in 3D Printing](https://www.instructables.com/CAPTIVE-NUTS-AND-MORE-IN-3D-PRINTING/). Examples of parts to be embedded: Nuts, Magnets, Bearings, Bushings, Carbon Fibre struts, and many more.
 
 #### Watertight Parts {#sec:watertight-parts}
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Printed Wall cross sections"}
+knitr::include_graphics("images/image4.png")
+```
 
 Printing parts that are watertight is not easy because the layers are built up of individual beads of material. Typical ways to improve the watertightness include:
 
@@ -134,11 +206,15 @@ All of this is done in an effort to have very good re-melting of the lower layer
 
 #### Stronger Parts {#sec:stronger-parts}
 
-How to increase the strength of the part?
+[How to increase the strength of the part?](https://www.cnckitchen.com/blog/how-the-color-of-pla-filament-influences-3d-printed-part-strength)
 
 - Ensure the printed part is stressed in the XY direction (remember, XY is twice as strong as the Z direction)
 - Increase the number of external walls
 - Design holes into the part instead of relying on infill. This forces the slicer to add extra walls giving it more strength than increasing the infill percentage
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Infill Percentage Changes"}
+knitr::include_graphics("images/image7.png")
+```
 
 #### Holes {#sec:holes}
 
@@ -146,9 +222,21 @@ How to increase the strength of the part?
 
 Vertical holes (diameter in XY plane) suffer from being undersized. This is because the export file of the CAD model approximates the hole as a polygon. The dimension across the hole between the flat parts is less than the diameter. This can be limited with slicer settings, but not completely removed. Add 0.2mm to the hole diameter.
 
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Vertical Holes"}
+knitr::include_graphics("images/image25.png")
+```
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Hole size adjustment"}
+knitr::include_graphics("images/image2.png")
+```
+
 ##### Horizontal Holes and Arches
 
 Horizontal holes require the slicer to bridge the hole at the top layer. There will be droop and this reduces the diameter of the holes to an unknown dimension. This can be desirable if a bolt has to cut its own thread. This can also mean that the pin cannot be assembled because the hole is too small. In this case, change the top geometry of the hole to avoid bridging and rely on the rest of the hole/arch for the fit you desire.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Horizontal Holes -> Arches"}
+knitr::include_graphics("images/image22.png")
+```
 
 #### Splitting and Connecting 3D Prints {#sec:splitting-connecting}
 
@@ -157,6 +245,20 @@ Horizontal holes require the slicer to bridge the hole at the top layer. There w
 #### Vase Mode {#sec:vase-mode}
 
 Vase Mode is a special mode the slicer offers where the CAD model is printed as a single wall in a spiral pattern. No infill and no overhangs will be generated. There won't be any seams where the slicer steps Z height up a step. Instead, the slicer builds up the part in a single bead of material following a spiral representing the outer contour only.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Vase Mode"}
+knitr::include_graphics("images/image20.png")
+```
+
+You will find [many designs for vases](https://www.printables.com/contest/124-vase-mode-vases), but this can also be used for technical parts if the part is designed for it. For example this [wing](https://www.reddit.com/r/3Dprinting/comments/ecv329/this_is_a_wing_section_i_designed_as_a_proof_of/) is printed in vase mode. The image on the bottom shows how the CAD model (red) is created so that the internal spars and stringers are resolved by the slicer to create a single beat of material (yellow)
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="RC plane wing in Vase Mode"}
+knitr::include_graphics("images/image19.png")
+```
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Model setup to achieve Vase Mode on wing"}
+knitr::include_graphics("images/image26.png")
+```
 
 ### Print Defects {#sec:print-defects}
 
@@ -180,7 +282,7 @@ There are many print defects. If you encounter one, check out this [excellent su
 
 #### Annealing {#sec:annealing}
 
-Annealing is a heat treatment process that can improve the mechanical properties of 3D printed parts. By heating the part to a temperature below its melting point and then slowly cooling it, internal stresses are relieved and the crystalline structure of the material can be improved. This is particularly useful for PLA and other semi-crystalline polymers, resulting in increased strength, heat resistance, and dimensional stability.
+[Annealing](https://www.cnckitchen.com/blog/better-performing-3d-prints-with-annealing-but-part-1-pla) is a heat treatment process that can improve the mechanical properties of 3D printed parts. By [heating](https://www.cnckitchen.com/blog/testing-the-strength-of-3d-prints-re-melted-in-salt) the part to a temperature below its melting point and then slowly cooling it, internal stresses are relieved and the crystalline structure of the material can be improved. This is particularly useful for PLA and other semi-crystalline polymers, resulting in increased strength, heat resistance, and dimensional stability.
 
 ### Check Your Understanding
 
