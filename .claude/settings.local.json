@@ -4,7 +4,11 @@
       "Bash(powershell -Command \"Remove-Item -Recurse -Force ''y:\\\\Martin\\\\Documents\\\\!_Fanshawe\\\\26W\\\\ENGR-1025\\\\DesignForManufacturing\\\\_bookdown_files'' -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force ''y:\\\\Martin\\\\Documents\\\\!_Fanshawe\\\\26W\\\\ENGR-1025\\\\DesignForManufacturing\\\\libs'' -ErrorAction SilentlyContinue\")",
       "Bash(powershell -Command \"Expand-Archive -Path ''bookdown-chapter.skill'' -DestinationPath ''./extracted'' -Force\")",
       "Bash(copy:*)",
-      "Bash(powershell -Command \"Expand-Archive -Path ''bookdown-chapter.zip'' -DestinationPath ''./extracted'' -Force\")"
+      "Bash(powershell -Command \"Expand-Archive -Path ''bookdown-chapter.zip'' -DestinationPath ''./extracted'' -Force\")",
+      "Bash(Rscript:*)",
+      "Bash(powershell -Command \"\\(Get-Content ''08-Bearings.Rmd'' | Select-Object -Index @\\(403,404,405,473,474,475,656,657,658,730,731,732\\)\\) | ForEach-Object { $_-replace '' '', ''·'' -replace ''\\\\t'', ''→'' }\")",
+      "Bash(powershell -Command:*)",
+      "Bash(powershell:*)"
     ]
   }
 }

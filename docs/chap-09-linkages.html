@@ -1160,9 +1160,8 @@ Output dwells while input continues
 </div>
 <div id="linkage-example-1" class="section level2 hasAnchor" number="9.3">
 <h2><span class="header-section-number">9.3</span> Applied Example: Grashof Classification<a href="chap-09-linkages.html#linkage-example-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="problem-statement-3" class="section level5 unnumbered hasAnchor question">
-<h5>Problem Statement<a href="chap-09-linkages.html#problem-statement-3" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-</div>
+<div id="problem-statement-1" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="chap-09-linkages.html#problem-statement-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>A four-bar linkage has the following link lengths:
 - Link 1 (ground): <span class="math inline">\(g = 100\)</span> mm
 - Link 2 (input): <span class="math inline">\(a = 40\)</span> mm
@@ -1172,9 +1171,10 @@ Output dwells while input continues
 1. Whether this is a Grashof or non-Grashof linkage
 2. The type of mechanism (crank-rocker, double-crank, etc.)
 3. Which link should be the input for continuous rotation</p>
-<div id="solution-2" class="section level5 unnumbered hasAnchor answer">
-<h5>Solution<a href="chap-09-linkages.html#solution-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 </div>
+<div class="answer">
+<div id="solution" class="section level5 unnumbered hasAnchor">
+<h5>Solution<a href="chap-09-linkages.html#solution" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:grashof-example-calc">Table 9.3: </span>Grashof Classification Example
@@ -1195,8 +1195,7 @@ Result
 <tbody>
 <tr>
 <td style="text-align:left;">
-<ol style="list-style-type: decimal">
-<li>Identify shortest (S)
+Step 1: Identify shortest (S)
 </td>
 <td style="text-align:left;">
 S = min(40, 80, 60, 100)
@@ -1207,8 +1206,7 @@ S = min(40, 80, 60, 100)
 </tr>
 <tr>
 <td style="text-align:left;">
-<ol start="2" style="list-style-type: decimal">
-<li>Identify longest (L)
+Step 2: Identify longest (L)
 </td>
 <td style="text-align:left;">
 L = max(40, 80, 60, 100)
@@ -1219,8 +1217,7 @@ L = max(40, 80, 60, 100)
 </tr>
 <tr>
 <td style="text-align:left;">
-<ol start="3" style="list-style-type: decimal">
-<li>Calculate S + L
+Step 3: Calculate S + L
 </td>
 <td style="text-align:left;">
 S + L = 40 + 100
@@ -1231,8 +1228,7 @@ S + L = 40 + 100
 </tr>
 <tr>
 <td style="text-align:left;">
-<ol start="4" style="list-style-type: decimal">
-<li>Calculate P + Q
+Step 4: Calculate P + Q
 </td>
 <td style="text-align:left;">
 P + Q = 60 + 80
@@ -1243,8 +1239,7 @@ P + Q = 60 + 80
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
-<ol start="5" style="list-style-type: decimal">
-<li>Compare (Grashof test)
+Step 5: Compare (Grashof test)
 </td>
 <td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
 S + L (140) vs P + Q (140)
@@ -1255,8 +1250,7 @@ S + L = P + Q: CHANGE POINT
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
-<ol start="6" style="list-style-type: decimal">
-<li>Mechanism type
+Step 6: Mechanism type
 </td>
 <td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
 Based on shortest link position
@@ -1266,13 +1260,8 @@ Crank-Rocker
 </td>
 </tr>
 </tbody>
-</table></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol>
+</table>
+</div>
 <div id="interpretation-1" class="section level5 unnumbered hasAnchor">
 <h5>Interpretation<a href="chap-09-linkages.html#interpretation-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <ul>
@@ -1281,20 +1270,20 @@ Crank-Rocker
 <li>When the shortest link is the input (crank), the mechanism is a <strong>Crank-Rocker</strong>.</li>
 <li>The input (link 2) will rotate continuously while the output (link 4) oscillates.</li>
 </ul>
-<hr />
 </div>
+</div>
+<hr />
 </div>
 <div id="linkage-example-2" class="section level2 hasAnchor" number="9.4">
 <h2><span class="header-section-number">9.4</span> Applied Example: Transmission Angle Analysis<a href="chap-09-linkages.html#linkage-example-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="problem-statement-4" class="section level5 unnumbered hasAnchor question">
-<h5>Problem Statement<a href="chap-09-linkages.html#problem-statement-4" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-</div>
+<div id="problem-statement-2" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="chap-09-linkages.html#problem-statement-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), calculate the transmission angle when the input is at:
 1. <span class="math inline">\(\theta_2 = 60°\)</span>
 2. Determine the minimum transmission angle through the full rotation</p>
-<div id="solution-3" class="section level5 unnumbered hasAnchor answer">
-<h5>Solution<a href="chap-09-linkages.html#solution-3" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 </div>
+<div id="solution-1" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="chap-09-linkages.html#solution-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:trans-angle-example">Table 9.4: </span>Transmission Angle Analysis
@@ -1359,6 +1348,7 @@ theta2 where mu is minimum
 </tr>
 </tbody>
 </table>
+</div>
 <div id="quality-assessment" class="section level5 unnumbered hasAnchor">
 <h5>Quality Assessment<a href="chap-09-linkages.html#quality-assessment" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p><strong>Design Quality:</strong> GOOD</p>

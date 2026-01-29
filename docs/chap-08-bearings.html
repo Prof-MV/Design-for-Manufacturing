@@ -1442,9 +1442,7 @@ Figure 8.3: Bearing life as a function of load ratio (C/P).
 </div>
 <div id="bearing-example" class="section level2 hasAnchor" number="8.4">
 <h2><span class="header-section-number">8.4</span> Applied Example: Ball Bearing Life Calculation<a href="chap-08-bearings.html#bearing-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="problem-statement-1" class="section level5 unnumbered hasAnchor question">
-<h5>Problem Statement<a href="chap-08-bearings.html#problem-statement-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-</div>
+<div class="question">
 <p>A deep groove ball bearing (6207) supports a shaft rotating at <strong>1,750 RPM</strong>. The bearing experiences a <strong>radial load of 3,500 N</strong> and an <strong>axial load of 800 N</strong>. Determine:</p>
 <ol style="list-style-type: decimal">
 <li>The equivalent dynamic load (<span class="math inline">\(P\)</span>)</li>
@@ -1455,9 +1453,9 @@ Figure 8.3: Bearing life as a function of load ratio (C/P).
 - Bearing: 6207
 - Dynamic load rating: <span class="math inline">\(C = 26.0\)</span> kN = 26,000 N
 - For Fa/Fr ratio, use: <span class="math inline">\(e = 0.24\)</span>, <span class="math inline">\(X = 0.56\)</span>, <span class="math inline">\(Y = 1.6\)</span></p>
-<div id="solution" class="section level5 unnumbered hasAnchor answer">
-<h5>Solution<a href="chap-08-bearings.html#solution" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 </div>
+<hr />
+<div class="answer">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:bearing-example-calc">Table 8.5: </span>Ball Bearing Life Calculation Steps
@@ -1478,8 +1476,7 @@ Result
 <tbody>
 <tr>
 <td style="text-align:left;">
-<ol style="list-style-type: decimal">
-<li>Check load ratio
+Step 1: Check load ratio
 </td>
 <td style="text-align:left;">
 Fa/Fr = 800 / 3500 = 0.229
@@ -1490,8 +1487,7 @@ Fa/Fr = 800 / 3500 = 0.229
 </tr>
 <tr>
 <td style="text-align:left;">
-<ol start="2" style="list-style-type: decimal">
-<li>Equivalent load (P)
+Step 2: Equivalent load (P)
 </td>
 <td style="text-align:left;">
 P = X·Fr + Y·Fa = 0.56×3500 + 1.6×800
@@ -1502,8 +1498,7 @@ P = X·Fr + Y·Fa = 0.56×3500 + 1.6×800
 </tr>
 <tr>
 <td style="text-align:left;">
-<ol start="3" style="list-style-type: decimal">
-<li>L10 (revolutions)
+Step 3: L10 (revolutions)
 </td>
 <td style="text-align:left;">
 L10 = (C/P)³ × 10⁶ = (26/3.5)³ × 10⁶
@@ -1514,8 +1509,7 @@ L10 = (C/P)³ × 10⁶ = (26/3.5)³ × 10⁶
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
-<ol start="4" style="list-style-type: decimal">
-<li>L10 (hours)
+Step 4: L10 (hours)
 </td>
 <td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
 L10h = L10 / (60 × n) = 409.9×10⁶ / (60 × 1750)
@@ -1526,8 +1520,7 @@ L10h = L10 / (60 × n) = 409.9×10⁶ / (60 × 1750)
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
-<ol start="5" style="list-style-type: decimal">
-<li>L5 (95% reliability)
+Step 5: L5 (95% reliability)
 </td>
 <td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
 L5 = a₁ × L10 = 0.64 × 3904
@@ -1537,12 +1530,7 @@ L5 = a₁ × L10 = 0.64 × 3904
 </td>
 </tr>
 </tbody>
-</table></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol>
+</table>
 <div id="interpretation" class="section level5 unnumbered hasAnchor">
 <h5>Interpretation<a href="chap-08-bearings.html#interpretation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <ul>
@@ -1550,7 +1538,7 @@ L5 = a₁ × L10 = 0.64 × 3904
 <li>For applications requiring <strong>95% reliability</strong>, use the L5 life of 2,499 hours.</li>
 <li>At 24/7 operation, L10 represents approximately 0.4 years of service.</li>
 </ul>
-<hr />
+</div>
 </div>
 </div>
 <div id="bushings" class="section level2 hasAnchor" number="8.5">
@@ -1787,11 +1775,11 @@ Dry or minimal
 <div id="pv-limit-visualization" class="section level3 unnumbered hasAnchor">
 <h3>PV Limit Visualization<a href="chap-08-bearings.html#pv-limit-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <pre><code>## Warning in geom_point(aes(x = 1000, y = 30), color = &quot;darkgreen&quot;, size = 4): All aesthetics have length 1, but the data has 396 rows.
-## ℹ Please consider using `annotate()` or provide this layer with data containing a single
-##   row.</code></pre>
+## ℹ Please consider using `annotate()` or provide this
+##   layer with data containing a single row.</code></pre>
 <pre><code>## Warning in geom_point(aes(x = 2500, y = 100), color = &quot;red&quot;, size = 4, shape = 4, : All aesthetics have length 1, but the data has 396 rows.
-## ℹ Please consider using `annotate()` or provide this layer with data containing a single
-##   row.</code></pre>
+## ℹ Please consider using `annotate()` or provide this
+##   layer with data containing a single row.</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:pv-limit-plot"></span>
 <img src="_main_files/figure-html/pv-limit-plot-1.png" alt="PV limit diagram showing safe operating region for different bushing materials." width="960" />
 <p class="caption">
@@ -1941,18 +1929,15 @@ PEEK
 </div>
 <div id="bushing-example" class="section level2 hasAnchor" number="8.7">
 <h2><span class="header-section-number">8.7</span> Applied Example: Bushing PV Calculation<a href="chap-08-bearings.html#bushing-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="problem-statement-2" class="section level5 unnumbered hasAnchor question">
-<h5>Problem Statement<a href="chap-08-bearings.html#problem-statement-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-</div>
+<div class="question">
 <p>A shaft rotating at <strong>500 RPM</strong> is supported by a bronze bushing. The shaft diameter is <strong>1.5 inches</strong> and the bushing length is <strong>2.0 inches</strong>. The radial load on the bushing is <strong>800 lbf</strong>.</p>
 <p>Determine:
 1. The bearing pressure (<span class="math inline">\(P\)</span>)
 2. The sliding velocity (<span class="math inline">\(V\)</span>)
 3. The PV value
 4. Whether a SAE 660 bronze bushing is suitable</p>
-<div id="solution-1" class="section level5 unnumbered hasAnchor answer">
-<h5>Solution<a href="chap-08-bearings.html#solution-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 </div>
+<div class="answer">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:bushing-example-calc">Table 8.8: </span>Bushing PV Calculation Steps
@@ -1976,8 +1961,7 @@ Result
 <tbody>
 <tr>
 <td style="text-align:left;">
-<ol style="list-style-type: decimal">
-<li>Bearing Pressure
+Step 1: Bearing Pressure
 </td>
 <td style="text-align:left;">
 P = F / (d × L)
@@ -1991,8 +1975,7 @@ P = 800 / (1.5 × 2)
 </tr>
 <tr>
 <td style="text-align:left;">
-<ol start="2" style="list-style-type: decimal">
-<li>Sliding Velocity
+Step 2: Sliding Velocity
 </td>
 <td style="text-align:left;">
 V = π·d·n / 12
@@ -2006,8 +1989,7 @@ V = π × 1.5 × 500 / 12
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
-<ol start="3" style="list-style-type: decimal">
-<li>PV Factor
+Step 3: PV Factor
 </td>
 <td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
 PV = P × V
@@ -2021,8 +2003,7 @@ PV = 266.7 × 196.3
 </tr>
 <tr>
 <td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
-<ol start="4" style="list-style-type: decimal">
-<li>Check P Limit
+Step 4: Check P Limit
 </td>
 <td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
 P &lt; P_max (4,000 psi)
@@ -2036,8 +2017,7 @@ OK ✓
 </tr>
 <tr>
 <td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
-<ol start="5" style="list-style-type: decimal">
-<li>Check V Limit
+Step 5: Check V Limit
 </td>
 <td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
 V &lt; V_max (750 ft/min)
@@ -2051,8 +2031,7 @@ OK ✓
 </tr>
 <tr>
 <td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
-<ol start="6" style="list-style-type: decimal">
-<li>Check PV Limit
+Step 6: Check PV Limit
 </td>
 <td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
 PV &lt; PV_max (75,000)
@@ -2066,8 +2045,7 @@ OK ✓
 </tr>
 <tr>
 <td style="text-align:left;">
-<ol start="7" style="list-style-type: decimal">
-<li>Safety Factor
+Step 7: Safety Factor
 </td>
 <td style="text-align:left;">
 SF = PV_limit / PV_actual
@@ -2080,14 +2058,7 @@ SF = 75,000 / 52360
 </td>
 </tr>
 </tbody>
-</table></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol>
+</table>
 <div id="conclusion" class="section level5 unnumbered hasAnchor">
 <h5>Conclusion<a href="chap-08-bearings.html#conclusion" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>The SAE 660 bronze bushing is <strong>suitable</strong> for this application:</p>
@@ -2096,8 +2067,9 @@ SF = 75,000 / 52360
 <li>The actual PV (52,360 psi·ft/min) is well below the material limit (75,000 psi·ft/min)</li>
 <li>Safety factor of 1.43 provides adequate margin</li>
 </ul>
-<hr />
 </div>
+</div>
+<hr />
 </div>
 <div id="bearing-vs.-bushing-selection-guide" class="section level2 unnumbered hasAnchor">
 <h2>Bearing vs. Bushing Selection Guide<a href="chap-08-bearings.html#bearing-vs.-bushing-selection-guide" class="anchor-section" aria-label="Anchor link to header"></a></h2>

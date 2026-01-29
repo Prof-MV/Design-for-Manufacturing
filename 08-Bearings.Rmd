@@ -390,8 +390,6 @@ ggplot(life_data, aes(x = CP_Ratio, y = Life_Millions, color = Type, linetype = 
 ## Applied Example: Ball Bearing Life Calculation {#bearing-example}
 
 ::: {.question}
-##### Problem Statement {-}
-:::
 
 A deep groove ball bearing (6207) supports a shaft rotating at **1,750 RPM**. The bearing experiences a **radial load of 3,500 N** and an **axial load of 800 N**. Determine:
 
@@ -403,10 +401,12 @@ A deep groove ball bearing (6207) supports a shaft rotating at **1,750 RPM**. Th
 - Bearing: 6207
 - Dynamic load rating: $C = 26.0$ kN = 26,000 N
 - For Fa/Fr ratio, use: $e = 0.24$, $X = 0.56$, $Y = 1.6$
+:::
+
+---
 
 ::: {.answer}
-##### Solution {-}
-:::
+
 
 ```{r bearing-example-calc, echo=FALSE, message=FALSE}
 # Given values
@@ -445,15 +445,15 @@ L5_hours <- a1_95 * L10_hours
 # Create results table
 results <- tribble(
   ~Step, ~Calculation, ~Result,
-  "1. Check load ratio", paste0("Fa/Fr = ", Fa, " / ", Fr, " = ", round(ratio, 3)),
+  "Step 1: Check load ratio", paste0("Fa/Fr = ", Fa, " / ", Fr, " = ", round(ratio, 3)),
   ifelse(ratio <= 0.24, "≤ e: Use X=1, Y=0", "> e: Use X=0.56, Y=1.6"),
-  "2. Equivalent load (P)", paste0("P = X·Fr + Y·Fa = ", X, "×", Fr, " + ", Y, "×", Fa),
+  "Step 2: Equivalent load (P)", paste0("P = X·Fr + Y·Fa = ", X, "×", Fr, " + ", Y, "×", Fa),
   paste0(round(P, 0), " N"),
-  "3. L10 (revolutions)", paste0("L10 = (C/P)³ × 10⁶ = (", C/1000, "/", round(P/1000, 2), ")³ × 10⁶"),
+  "Step 3: L10 (revolutions)", paste0("L10 = (C/P)³ × 10⁶ = (", C/1000, "/", round(P/1000, 2), ")³ × 10⁶"),
   paste0(formatC(L10_rev/1e6, format = "f", digits = 1), " million rev"),
-  "4. L10 (hours)", paste0("L10h = L10 / (60 × n) = ", formatC(L10_rev/1e6, format = "f", digits = 1), "×10⁶ / (60 × ", n, ")"),
+  "Step 4: L10 (hours)", paste0("L10h = L10 / (60 × n) = ", formatC(L10_rev/1e6, format = "f", digits = 1), "×10⁶ / (60 × ", n, ")"),
   paste0(formatC(L10_hours, format = "f", digits = 0, big.mark = ","), " hours"),
-  "5. L5 (95% reliability)", paste0("L5 = a₁ × L10 = 0.64 × ", formatC(L10_hours, format = "f", digits = 0)),
+  "Step 5: L5 (95% reliability)", paste0("L5 = a₁ × L10 = 0.64 × ", formatC(L10_hours, format = "f", digits = 0)),
   paste0(formatC(L5_hours, format = "f", digits = 0, big.mark = ","), " hours")
 )
 
@@ -467,13 +467,14 @@ results %>%
   row_spec(5, background = "#E3F2FD", bold = TRUE)
 ```
 
+
 ##### Interpretation {-}
 
 - The **L10 life** of `r formatC(L10_hours, format = "f", digits = 0, big.mark = ",")` hours means that 90% of these bearings will operate at least this long before fatigue failure.
 - For applications requiring **95% reliability**, use the L5 life of `r formatC(L5_hours, format = "f", digits = 0, big.mark = ",")` hours.
 - At 24/7 operation, L10 represents approximately `r round(L10_hours / (24*365), 1)` years of service.
 
----
+:::
 
 
 ## Plain Bearings (Bushings) {#bushings}
@@ -648,8 +649,6 @@ limits_data %>%
 ## Applied Example: Bushing PV Calculation {#bushing-example}
 
 ::: {.question}
-##### Problem Statement {-}
-:::
 
 A shaft rotating at **500 RPM** is supported by a bronze bushing. The shaft diameter is **1.5 inches** and the bushing length is **2.0 inches**. The radial load on the bushing is **800 lbf**.
 
@@ -658,10 +657,9 @@ Determine:
 2. The sliding velocity ($V$)
 3. The PV value
 4. Whether a SAE 660 bronze bushing is suitable
+:::
 
 ::: {.answer}
-##### Solution {-}
-:::
 
 ```{r bushing-example-calc, echo=FALSE, message=FALSE}
 # Given values
@@ -686,31 +684,31 @@ SF <- PV_limit_bronze / PV_actual
 # Create results table
 bushing_results <- tribble(
   ~Step, ~Formula, ~Calculation, ~Result,
-  "1. Bearing Pressure", "P = F / (d × L)",
+  "Step 1: Bearing Pressure", "P = F / (d × L)",
   paste0("P = ", F_load, " / (", d_shaft, " × ", L_bush, ")"),
   paste0(round(P_bearing, 1), " psi"),
 
-  "2. Sliding Velocity", "V = π·d·n / 12",
+  "Step 2: Sliding Velocity", "V = π·d·n / 12",
   paste0("V = π × ", d_shaft, " × ", n_rpm, " / 12"),
   paste0(round(V_sliding, 1), " ft/min"),
 
-  "3. PV Factor", "PV = P × V",
+  "Step 3: PV Factor", "PV = P × V",
   paste0("PV = ", round(P_bearing, 1), " × ", round(V_sliding, 1)),
   paste0(formatC(PV_actual, format = "f", digits = 0, big.mark = ","), " psi·ft/min"),
 
-  "4. Check P Limit", "P < P_max (4,000 psi)",
+  "Step 4: Check P Limit", "P < P_max (4,000 psi)",
   paste0(round(P_bearing, 1), " < 4,000?"),
   ifelse(P_bearing < P_max_bronze, "OK ✓", "FAIL ✗"),
 
-  "5. Check V Limit", "V < V_max (750 ft/min)",
+  "Step 5: Check V Limit", "V < V_max (750 ft/min)",
   paste0(round(V_sliding, 1), " < 750?"),
   ifelse(V_sliding < V_max_bronze, "OK ✓", "FAIL ✗"),
 
-  "6. Check PV Limit", "PV < PV_max (75,000)",
+  "Step 6: Check PV Limit", "PV < PV_max (75,000)",
   paste0(formatC(PV_actual, format = "f", digits = 0), " < 75,000?"),
   ifelse(PV_actual < PV_limit_bronze, "OK ✓", "FAIL ✗"),
 
-  "7. Safety Factor", "SF = PV_limit / PV_actual",
+  "Step 7: Safety Factor", "SF = PV_limit / PV_actual",
   paste0("SF = 75,000 / ", formatC(PV_actual, format = "f", digits = 0)),
   paste0(round(SF, 2))
 )
@@ -732,6 +730,9 @@ The SAE 660 bronze bushing is **suitable** for this application:
 - All individual limits (P, V) are satisfied
 - The actual PV (`r formatC(PV_actual, format = "f", digits = 0, big.mark = ",")` psi·ft/min) is well below the material limit (75,000 psi·ft/min)
 - Safety factor of `r round(SF, 2)` provides adequate margin
+
+:::
+
 
 ---
 

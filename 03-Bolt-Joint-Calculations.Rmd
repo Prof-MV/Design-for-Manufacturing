@@ -866,7 +866,7 @@ In this example we are verifying if the bolts can hold the applied load and how 
 knitr::include_graphics("images/BoltJointExample.png")
 ```
 
-:::{.question}
+::: {.question}
 ##### **1)** What is the spring constant of the bolt $k_b$? {-}
 :::
 
@@ -1001,7 +1001,7 @@ $$ F_m = (1 - 0.405) \cdot 2500 - 10194 = -8707 \text{ lbf} $$
 
 :::
 
-:::{.question}
+::: {.question}
 ##### **6)** Tensile Stress in Bolt  {-}
 :::
 ::: {.answer}
@@ -1012,7 +1012,7 @@ The following calculations determine the tensile stress and various safety facto
 $$\sigma_b = \frac{F_b}{A_t} = \frac{11207}{0.1599 \, in^2} = 70 \, ksi$$
 
 :::
-:::{.question}
+::: {.question}
 ##### **7)** What are the safety factors $n_L$, $n_P$, $n_O$?   {-}
 :::
 ::: {.answer}
@@ -1027,7 +1027,7 @@ $$n_o = \frac{F_i}{P(1 - C)} = \frac{10194}{2500(1 - 0.405)} = 6.85$$
 
 :::
 
-:::{.question}
+::: {.question}
 ##### **8)** Torque Requirements and Lubrication Effects  {-}
 :::
 ::: {.answer}
@@ -1051,5 +1051,7 @@ $$\sigma = \frac{F_i}{A_t} = \frac{20380}{0.1599} = 127454 \, psi$$
 > **Result:** Bolt will break while tightening.
 
 :::
+
+---
 
 

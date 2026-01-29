@@ -736,7 +736,6 @@ coupler_types %>%
 
 ::: {.question}
 ##### Problem Statement {-}
-:::
 
 A four-bar linkage has the following link lengths:
 - Link 1 (ground): $g = 100$ mm
@@ -749,9 +748,11 @@ Determine:
 2. The type of mechanism (crank-rocker, double-crank, etc.)
 3. Which link should be the input for continuous rotation
 
+:::
+
 ::: {.answer}
 ##### Solution {-}
-:::
+
 
 ```{r grashof-example-calc, echo=FALSE, message=FALSE}
 # Given link lengths
@@ -796,13 +797,13 @@ if (is_grashof) {
 # Create results table
 results <- tribble(
   ~Step, ~Calculation, ~Result,
-  "1. Identify shortest (S)", paste0("S = min(", a, ", ", b, ", ", c, ", ", g, ")"), paste0(S, " mm (", S_name, ")"),
-  "2. Identify longest (L)", paste0("L = max(", a, ", ", b, ", ", c, ", ", g, ")"), paste0(L, " mm (", L_name, ")"),
-  "3. Calculate S + L", paste0("S + L = ", S, " + ", L), paste0(SL, " mm"),
-  "4. Calculate P + Q", paste0("P + Q = ", P, " + ", Q), paste0(PQ, " mm"),
-  "5. Compare (Grashof test)", paste0("S + L (", SL, ") vs P + Q (", PQ, ")"),
+  "Step 1: Identify shortest (S)", paste0("S = min(", a, ", ", b, ", ", c, ", ", g, ")"), paste0(S, " mm (", S_name, ")"),
+  "Step 2: Identify longest (L)", paste0("L = max(", a, ", ", b, ", ", c, ", ", g, ")"), paste0(L, " mm (", L_name, ")"),
+  "Step 3: Calculate S + L", paste0("S + L = ", S, " + ", L), paste0(SL, " mm"),
+  "Step 4: Calculate P + Q", paste0("P + Q = ", P, " + ", Q), paste0(PQ, " mm"),
+  "Step 5: Compare (Grashof test)", paste0("S + L (", SL, ") vs P + Q (", PQ, ")"),
   ifelse(SL < PQ, "S + L < P + Q: GRASHOF", ifelse(SL == PQ, "S + L = P + Q: CHANGE POINT", "S + L > P + Q: NON-GRASHOF")),
-  "6. Mechanism type", "Based on shortest link position", mech_type
+  "Step 6: Mechanism type", "Based on shortest link position", mech_type
 )
 
 results %>%
@@ -822,21 +823,25 @@ results %>%
 - When the shortest link is the input (crank), the mechanism is a **Crank-Rocker**.
 - The input (link 2) will rotate continuously while the output (link 4) oscillates.
 
+:::
+
 ***
 
 ## Applied Example: Transmission Angle Analysis {#linkage-example-2}
 
 ::: {.question}
 ##### Problem Statement {-}
-:::
+
 
 For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), calculate the transmission angle when the input is at:
 1. $\theta_2 = 60°$
 2. Determine the minimum transmission angle through the full rotation
 
+:::
+
 ::: {.answer}
 ##### Solution {-}
-:::
+
 
 ```{r trans-angle-example, echo=FALSE, message=FALSE}
 # Given
@@ -891,6 +896,9 @@ trans_results %>%
   row_spec(0, background = "#D81B60", color = "white") %>%
   row_spec(2, background = ifelse(mu_min > 40, "#E8F5E9", "#FFEBEE"), bold = TRUE)
 ```
+
+:::
+
 
 ##### Quality Assessment {-}
 
