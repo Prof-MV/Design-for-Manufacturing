@@ -1,8 +1,16 @@
 # Design for Welding
 
+<<<<<<< HEAD
+```{r setup-06, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+=======
 ```{r welding-setup, include=FALSE}
 library(ggplot2)
 library(grid)
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
 
 # Set a consistent theme for all plots
 theme_welding <- theme_minimal() +

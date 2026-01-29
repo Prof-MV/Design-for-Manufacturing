@@ -1,8 +1,17 @@
 # Strength of Bolt Joint Calculations 
 
+```{r setup-03, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+```
+
+
 ## Mechanics of Bolted Joint Integrity. {-#bolted-joints}
 
-Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt PreloadWhen a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_p$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself. 
+Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt Preload
+When a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_p$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself. 
 The relationship between the applied torque ($T$) and the resulting preload is typically approximated by the "short-form" torque equation:$$T = K \cdot D \cdot F_p$$
 Where: $T$ is the tightening torque.$K$ is the torque coefficient (often ~0.2 for unlubricated steel).$D$ is the nominal diameter of the bolt. $F_p$ is the desired preload. Note: Relying solely on torque to determine preload is notoriously imprecise due to friction variables. Advanced applications may use the "turn-of-nut" method or ultrasonic tension sensors [@shigley2020]. Load Distribution and Joint Stiffness. When an external tensile load ($P$) is applied to a joint, only a fraction of that load is actually felt by the bolt. The rest is absorbed by the decompression of the clamped members. This is defined by the joint stiffness constant, $C$:$$C = \frac{k_b}{k_b + k_m}$$ In this equation, $k_b$ represents the stiffness of the bolt and $k_m$ represents the stiffness of the members. The total force acting on the bolt ($F_b$) after the external load is applied is:$$F_b = F_p + C \cdot P$$ Visualizing Factor of Safety to ensure the joint does not fail via yielding or separation, we must calculate the factor of safety. The following R code demonstrates how the bolt force increases relative to the external load until the point of joint separation.
 
@@ -826,7 +835,10 @@ The calculation results are summarized below. The Joint Constant ($C$) indicates
 
 
 ---
+<<<<<<< HEAD
+=======
 
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
 
 ## Example 2
 

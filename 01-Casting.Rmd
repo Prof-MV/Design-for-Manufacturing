@@ -1,5 +1,14 @@
 # Design for Casting
 
+```{r setup-01, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+```
+
+
+
 ## 💡 Introduction to the Casting Process {-}
 
 Casting is one of the oldest and most fundamental processes in manufacturing, dating back thousands of years. It involves pouring a liquid material, typically a molten metal, into a mold cavity where it is allowed to solidify in the desired shape. The resulting solidified object is called a **casting**. 

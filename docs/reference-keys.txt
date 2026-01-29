@@ -73,6 +73,10 @@ fig:fatigue-improvement
 fig:carbon-equivalent
 fig:weld-defects
 fig:frame-case-study
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 fig:plot-auto
 fig:plot-food
 fig:bearing-classification
@@ -88,6 +92,7 @@ fig:pv-limit-plot
 tab:individual-limits-table
 tab:bushing-example-calc
 tab:selection-guide
+<<<<<<< HEAD
 fig:four-bar-anatomy
 fig:grashof-classification
 tab:grashof-table
@@ -101,6 +106,10 @@ tab:coupler-types-table
 tab:grashof-example-calc
 tab:trans-angle-example
 tab:applications-table
+=======
+=======
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 design-for-casting
 sand-mould-casting-the-versatile-workhorse
 introduction
@@ -237,6 +246,10 @@ fatigue-and-strength
 understanding-welding-symbols
 weld-joint-types-explained
 controlling-weld-distortion
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 design-for-machining
 challenge-questions
 theory-math
@@ -254,6 +267,11 @@ bearing-example
 bushings
 pv-limits
 bushing-example
+<<<<<<< HEAD
 four-bar-linkages
 linkage-example-1
 linkage-example-2
+=======
+=======
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae

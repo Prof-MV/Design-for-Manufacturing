@@ -461,6 +461,10 @@ results %>%
 
 ---
 
+<<<<<<< HEAD
+=======
+\newpage
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 
 ## Plain Bearings (Bushings) {#bushings}
 
@@ -721,6 +725,10 @@ The SAE 660 bronze bushing is **suitable** for this application:
 
 ---
 
+<<<<<<< HEAD
+=======
+\newpage
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 
 ## Bearing vs. Bushing Selection Guide {-}
 

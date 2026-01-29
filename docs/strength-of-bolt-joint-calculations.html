@@ -23,7 +23,15 @@
 <meta name="author" content="Martin Volkening" />
 
 
+<<<<<<< HEAD
 <meta name="date" content="2026-01-28" />
+=======
+<<<<<<< HEAD
+<meta name="date" content="2026-01-28" />
+=======
+<meta name="date" content="2026-01-23" />
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -171,9 +179,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Design for Manufacturing</a></li>
-<li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
-
+<li><a href="./">Design for Manufacturing</a></li><li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
 <li class="chapter" data-level="1" data-path="design-for-casting.html"><a href="design-for-casting.html"><i class="fa fa-check"></i><b>1</b> Design for Casting</a>
@@ -406,6 +412,10 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#references-2"><i class="fa fa-check"></i>📖 References</a></li>
 </ul></li>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 <li class="chapter" data-level="7" data-path="design-for-machining.html"><a href="design-for-machining.html"><i class="fa fa-check"></i><b>7</b> Design for Machining</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions"><i class="fa fa-check"></i><b>7.1</b> Challenge Questions</a></li>
@@ -467,6 +477,7 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#design-checklist"><i class="fa fa-check"></i>Design Checklist</a></li>
 </ul></li>
+<<<<<<< HEAD
 <li class="chapter" data-level="9" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html"><i class="fa fa-check"></i><b>9</b> Four-Bar Linkages</a>
 <ul>
 <li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#introduction-to-four-bar-linkages"><i class="fa fa-check"></i>Introduction to Four-Bar Linkages</a></li>
@@ -512,6 +523,10 @@ div.csl-indent {
 <li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#design-checklist-1"><i class="fa fa-check"></i>Design Checklist</a></li>
 <li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#common-applications"><i class="fa fa-check"></i>Common Applications</a></li>
 </ul></li>
+=======
+=======
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 </ul>
 
       </nav>
@@ -533,7 +548,8 @@ div.csl-indent {
 <h1><span class="header-section-number">Chapter 3</span> Strength of Bolt Joint Calculations<a href="strength-of-bolt-joint-calculations.html#strength-of-bolt-joint-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="bolted-joints" class="section level2 unnumbered hasAnchor">
 <h2>Mechanics of Bolted Joint Integrity.<a href="strength-of-bolt-joint-calculations.html#bolted-joints" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt PreloadWhen a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload (<span class="math inline">\(F_p\)</span>). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself.
+<p>Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt Preload
+When a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload (<span class="math inline">\(F_p\)</span>). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself.
 The relationship between the applied torque (<span class="math inline">\(T\)</span>) and the resulting preload is typically approximated by the “short-form” torque equation:<span class="math display">\[T = K \cdot D \cdot F_p\]</span>
 Where: <span class="math inline">\(T\)</span> is the tightening torque.<span class="math inline">\(K\)</span> is the torque coefficient (often ~0.2 for unlubricated steel).<span class="math inline">\(D\)</span> is the nominal diameter of the bolt. <span class="math inline">\(F_p\)</span> is the desired preload. Note: Relying solely on torque to determine preload is notoriously imprecise due to friction variables. Advanced applications may use the “turn-of-nut” method or ultrasonic tension sensors <span class="citation">(<a href="#ref-shigley2020">Budynas and Nisbett 2020</a>)</span>. Load Distribution and Joint Stiffness. When an external tensile load (<span class="math inline">\(P\)</span>) is applied to a joint, only a fraction of that load is actually felt by the bolt. The rest is absorbed by the decompression of the clamped members. This is defined by the joint stiffness constant, <span class="math inline">\(C\)</span>:<span class="math display">\[C = \frac{k_b}{k_b + k_m}\]</span> In this equation, <span class="math inline">\(k_b\)</span> represents the stiffness of the bolt and <span class="math inline">\(k_m\)</span> represents the stiffness of the members. The total force acting on the bolt (<span class="math inline">\(F_b\)</span>) after the external load is applied is:<span class="math display">\[F_b = F_p + C \cdot P\]</span> Visualizing Factor of Safety to ensure the joint does not fail via yielding or separation, we must calculate the factor of safety. The following R code demonstrates how the bolt force increases relative to the external load until the point of joint separation.</p>
 <div class="figure"><span style="display:block;" id="fig:bolt-plot"></span>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(ggplot2)
@@ -5,6 +6,16 @@ library(plotly)
 library(dplyr)
 ```
 
+=======
+```{r setup-07, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+```
+
+
+>>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 # Design for Machining
 
 Welcome to the chapter on Design for Machining (DFM)! As mechanical engineering students, understanding how to design parts that are easy and cost-effective to machine is crucial for your future careers. DFM principles help reduce manufacturing costs, improve quality, and speed up production time. In this chapter, we'll explore the fundamentals of DFM, with real-world examples from the automotive, food, and defense industries. We'll dive into the theory, perform calculations using R, and create visualizations to illustrate key concepts.

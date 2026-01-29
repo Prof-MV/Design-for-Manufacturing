@@ -5,9 +5,14 @@ date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
+<<<<<<< HEAD
+url: "https://github.com/Prof-MV/Design-for-Manufacturing"
+description: "This book collects design guidelines to be used for different manufacturing processes."
+=======
 url: https://github.com/Prof-MV/Design-for-Manufacturing
 description: |
   This book collects design guidelines to be used for different manufacturing processes.
+>>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
 link-citations: yes
 github-repo: Prof-MV/Design-for-Manufacturing
 ---
