@@ -160,32 +160,12 @@ knitr::include_graphics("images/SandCastingCompany.png")
 </details>
 
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/2CIcvB72dmk" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="strict-origin-when-cross-origin" 
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-foundry-process, echo=FALSE, results='asis'}
+embed_youtube("2CIcvB72dmk", "Foundry Casting Process")
 ```
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/pwaXCko_Tkw" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="strict-origin-when-cross-origin" 
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-sand-casting, echo=FALSE, results='asis'}
+embed_youtube("pwaXCko_Tkw", "Sand Casting Process")
 ```
 
 Further reading:

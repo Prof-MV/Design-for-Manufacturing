@@ -27,6 +27,14 @@ Design for Machining (DFM) helps engineers create parts that are easy and cost-e
 
 For a visual introduction to DFM in machining, check out these helpful YouTube videos: [Top Design Tips & Manufacturing Processes for Mechanical Engineers | DFM Guide](https://www.youtube.com/watch?v=sq3Ht-ivG5U) and [Only Real Mechanical Engineers Can Spot These Design Mistakes | CNC Machining](https://www.youtube.com/watch?v=rauL_J048sI).
 
+```{r video-dfm-guide, echo=FALSE, results='asis'}
+embed_youtube("sq3Ht-ivG5U", "Top Design Tips & Manufacturing Processes for Mechanical Engineers | DFM Guide")
+```
+
+```{r video-cnc-design-mistakes, echo=FALSE, results='asis'}
+embed_youtube("rauL_J048sI", "Only Real Mechanical Engineers Can Spot These Design Mistakes | CNC Machining")
+```
+
 ### Theory and Calculations {#sec:machining-theory}
 
 1. Why do you think DFM is particularly important in high-volume industries like automotive?

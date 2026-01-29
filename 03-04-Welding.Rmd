@@ -1355,50 +1355,20 @@ With CE = **0.61**, this falls in the "Fair to Poor" weldability range.
 
 #### Understanding Welding Symbols
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/Svoi1v_o5yI"
-    title="Understanding Welding Symbols"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-welding-symbols, echo=FALSE, results='asis'}
+embed_youtube("Svoi1v_o5yI", "Understanding Welding Symbols")
 ```
 
 #### Weld Joint Types Explained
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/CpSWUSSDquk"
-    title="Weld Joint Types"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-weld-joint-types, echo=FALSE, results='asis'}
+embed_youtube("CpSWUSSDquk", "Weld Joint Types")
 ```
 
 #### Controlling Weld Distortion
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/w_iqJDfbzMM"
-    title="Controlling Weld Distortion"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-weld-distortion, echo=FALSE, results='asis'}
+embed_youtube("w_iqJDfbzMM", "Controlling Weld Distortion")
 ```
 
 ---

@@ -1272,66 +1272,26 @@ $$n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}$$
 
 #### How Gear Ratios Work
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/JOLtS4VUcvQ"
-    title="How Gear Ratios Work"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-gear-ratios, echo=FALSE, results='asis'}
+embed_youtube("JOLtS4VUcvQ", "How Gear Ratios Work")
 ```
 
 #### Planetary Gears Explained
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/ARd-Om2VyiE"
-    title="Planetary Gears Explained"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-planetary-gears, echo=FALSE, results='asis'}
+embed_youtube("ARd-Om2VyiE", "Planetary Gears Explained")
 ```
 
 #### How Manual Transmissions Work
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/wCu9W9xNwtI"
-    title="Manual Transmission Explained"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-manual-transmission, echo=FALSE, results='asis'}
+embed_youtube("wCu9W9xNwtI", "Manual Transmission Explained")
 ```
 
 #### How Differentials Work
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/yYAw79386WI"
-    title="How Differentials Work"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-differentials, echo=FALSE, results='asis'}
+embed_youtube("yYAw79386WI", "How Differentials Work")
 ```
 
 ---

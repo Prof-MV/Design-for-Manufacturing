@@ -487,32 +487,12 @@ ggplot() +
 
 ---
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/RPzv3WJ3mqM"
-    title="Advantages of Progressive Die Stamping"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-progressive-die-advantages, echo=FALSE, results='asis'}
+embed_youtube("RPzv3WJ3mqM", "Advantages of Progressive Die Stamping")
 ```
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/NuFpzJLMnFs"
-    title="Progressive Die Stamping"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-progressive-die-stamping, echo=FALSE, results='asis'}
+embed_youtube("NuFpzJLMnFs", "Progressive Die Stamping")
 ```
 
 
@@ -1561,50 +1541,20 @@ The die should over-bend the part to 96° so that after springback, the final an
 
 #### How Stamping Dies Work
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/ipMnAe0xNwM"
-    title="How Stamping Dies Work"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-stamping-dies, echo=FALSE, results='asis'}
+embed_youtube("ipMnAe0xNwM", "How Stamping Dies Work")
 ```
 
 #### Deep Drawing Process Explained
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/2KZRQSI8GkQ"
-    title="Deep Drawing Process"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-deep-drawing, echo=FALSE, results='asis'}
+embed_youtube("2KZRQSI8GkQ", "Deep Drawing Process")
 ```
 
 #### Stamping by 'Smarter Every Day'
 
-```{=html}
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/GDzBE6vz5r0"
-    title="Stamping by Smarter Every Day"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
-</div>
+```{r video-stamping-smarter-every-day, echo=FALSE, results='asis'}
+embed_youtube("GDzBE6vz5r0", "Stamping by Smarter Every Day")
 ```
 
 ---
