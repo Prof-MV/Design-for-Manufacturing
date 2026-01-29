@@ -1,3 +1,4 @@
+fig:unnamed-chunk-1
 fig:unnamed-chunk-2
 fig:unnamed-chunk-3
 fig:unnamed-chunk-4
@@ -9,15 +10,14 @@ fig:unnamed-chunk-9
 fig:unnamed-chunk-10
 fig:unnamed-chunk-11
 fig:unnamed-chunk-12
-fig:unnamed-chunk-13
 fig:bolt-plot
-fig:unnamed-chunk-14
+fig:unnamed-chunk-13
 fig:basic-profile
-fig:unnamed-chunk-15
+fig:unnamed-chunk-14
 tab:english-cross-section-area-table
 tab:metric-cross-section-area-table
+fig:unnamed-chunk-15
 fig:unnamed-chunk-16
-fig:unnamed-chunk-17
 tab:english-nut-dimensions-table
 tab:metric-nut-dimensions-table
 tab:english-washer-dimensions-table
@@ -25,7 +25,7 @@ tab:metric-washer-dimensions
 fig:force-triangle-plot
 fig:joint-working-load
 tab:design-data
-fig:unnamed-chunk-18
+fig:unnamed-chunk-17
 fig:gear-mesh-basic
 fig:gear-terminology
 fig:spur-gear
@@ -73,10 +73,6 @@ fig:fatigue-improvement
 fig:carbon-equivalent
 fig:weld-defects
 fig:frame-case-study
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 fig:plot-auto
 fig:plot-food
 fig:bearing-classification
@@ -92,7 +88,6 @@ fig:pv-limit-plot
 tab:individual-limits-table
 tab:bushing-example-calc
 tab:selection-guide
-<<<<<<< HEAD
 fig:four-bar-anatomy
 fig:grashof-classification
 tab:grashof-table
@@ -106,10 +101,6 @@ tab:coupler-types-table
 tab:grashof-example-calc
 tab:trans-angle-example
 tab:applications-table
-=======
-=======
->>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
->>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 design-for-casting
 sand-mould-casting-the-versatile-workhorse
 introduction
@@ -246,10 +237,6 @@ fatigue-and-strength
 understanding-welding-symbols
 weld-joint-types-explained
 controlling-weld-distortion
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae
 design-for-machining
 challenge-questions
 theory-math
@@ -267,11 +254,6 @@ bearing-example
 bushings
 pv-limits
 bushing-example
-<<<<<<< HEAD
 four-bar-linkages
 linkage-example-1
 linkage-example-2
-=======
-=======
->>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
->>>>>>> 05ec50ea75be3bfdf61380a6f0e02914ac2861ae

@@ -5,14 +5,9 @@ date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
-<<<<<<< HEAD
-url: "https://github.com/Prof-MV/Design-for-Manufacturing"
-description: "This book collects design guidelines to be used for different manufacturing processes."
-=======
 url: https://github.com/Prof-MV/Design-for-Manufacturing
 description: |
   This book collects design guidelines to be used for different manufacturing processes.
->>>>>>> 89320afab10d99f46d4fed0bf15e7dfd91d675f1
 link-citations: yes
 github-repo: Prof-MV/Design-for-Manufacturing
 ---
@@ -20,11 +15,3 @@ github-repo: Prof-MV/Design-for-Manufacturing
 # About {-}
 
 This book collects the main manufacturing methods and provides guidelines for a good part design to minimize defects and increase manufacturing efficiency.
-
-
-```{r include=FALSE}
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown', 'ggplot2', 'rlang', 'vctrs', 'dplyr'
-), 'packages.bib')
-```
