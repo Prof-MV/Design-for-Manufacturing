@@ -14,6 +14,7 @@ required_packages <- c(
   "stringr",
   "gridExtra",
   "ggforce",
+  "plotly",
   # add any other packages you use in the book here
   NULL
 )
