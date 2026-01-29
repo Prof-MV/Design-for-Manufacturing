@@ -1,0 +1,795 @@
+# Ball Bearings and Bushings
+
+```{r setup-08, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+
+# Set a consistent theme for all plots
+theme_bearing <- theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  )
+```
+
+## Introduction to Bearings {-}
+
+Bearings are machine elements that **constrain relative motion** and **reduce friction** between moving parts. They are fundamental to virtually every rotating machine—from tiny precision instruments to massive industrial equipment.
+
+Bearings serve three primary functions:
+
+1. **Support loads** (radial and/or thrust)
+2. **Reduce friction** between moving surfaces
+3. **Guide motion** with precision and repeatability
+
+---
+
+### Classification of Bearings {-}
+
+Bearings are broadly classified into two main categories:
+
+```{r bearing-classification, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Classification of bearing types."}
+# Create a hierarchical diagram
+ggplot() +
+  # Main header
+  geom_rect(aes(xmin = 4, xmax = 8, ymin = 9, ymax = 10), fill = "steelblue", color = "black") +
+  annotate("text", x = 6, y = 9.5, label = "BEARINGS", fontface = "bold", size = 5, color = "white") +
+
+  # Connecting lines
+  geom_segment(aes(x = 6, xend = 6, y = 9, yend = 8), linewidth = 1) +
+  geom_segment(aes(x = 3, xend = 9, y = 8, yend = 8), linewidth = 1) +
+  geom_segment(aes(x = 3, xend = 3, y = 8, yend = 7), linewidth = 1) +
+  geom_segment(aes(x = 9, xend = 9, y = 8, yend = 7), linewidth = 1) +
+
+  # Rolling Element Bearings
+  geom_rect(aes(xmin = 1, xmax = 5, ymin = 6, ymax = 7), fill = "orange", color = "black") +
+  annotate("text", x = 3, y = 6.5, label = "Rolling Element\n(Anti-Friction)", fontface = "bold", size = 3.5) +
+
+  # Plain Bearings
+  geom_rect(aes(xmin = 7, xmax = 11, ymin = 6, ymax = 7), fill = "forestgreen", color = "black") +
+  annotate("text", x = 9, y = 6.5, label = "Plain Bearings\n(Sliding/Bushings)", fontface = "bold", size = 3.5, color = "white") +
+
+  # Sub-types for Rolling Element
+  geom_segment(aes(x = 3, xend = 3, y = 6, yend = 5), linewidth = 0.5) +
+  geom_segment(aes(x = 1.5, xend = 4.5, y = 5, yend = 5), linewidth = 0.5) +
+
+  geom_rect(aes(xmin = 0.5, xmax = 2.5, ymin = 3.5, ymax = 5), fill = "lightyellow", color = "black") +
+  annotate("text", x = 1.5, y = 4.5, label = "Ball\nBearings", size = 3) +
+  annotate("text", x = 1.5, y = 3.8, label = "• Deep groove\n• Angular contact\n• Thrust", size = 2.2, hjust = 0.5) +
+
+  geom_rect(aes(xmin = 3.5, xmax = 5.5, ymin = 3.5, ymax = 5), fill = "lightyellow", color = "black") +
+  annotate("text", x = 4.5, y = 4.5, label = "Roller\nBearings", size = 3) +
+  annotate("text", x = 4.5, y = 3.8, label = "• Cylindrical\n• Tapered\n• Spherical", size = 2.2, hjust = 0.5) +
+
+  # Sub-types for Plain Bearings
+  geom_segment(aes(x = 9, xend = 9, y = 6, yend = 5), linewidth = 0.5) +
+  geom_segment(aes(x = 7.5, xend = 10.5, y = 5, yend = 5), linewidth = 0.5) +
+
+  geom_rect(aes(xmin = 6.5, xmax = 8.5, ymin = 3.5, ymax = 5), fill = "lightgreen", color = "black") +
+  annotate("text", x = 7.5, y = 4.5, label = "Journal\nBearings", size = 3) +
+  annotate("text", x = 7.5, y = 3.8, label = "• Hydrodynamic\n• Hydrostatic", size = 2.2, hjust = 0.5) +
+
+  geom_rect(aes(xmin = 9.5, xmax = 11.5, ymin = 3.5, ymax = 5), fill = "lightgreen", color = "black") +
+  annotate("text", x = 10.5, y = 4.5, label = "Bushings", size = 3) +
+  annotate("text", x = 10.5, y = 3.8, label = "• Bronze\n• Polymer\n• Sintered", size = 2.2, hjust = 0.5) +
+
+  # Key difference box
+  geom_rect(aes(xmin = 2.5, xmax = 9.5, ymin = 1, ymax = 2.5), fill = "lavender", color = "black") +
+  annotate("text", x = 6, y = 2.1, label = "KEY DIFFERENCE:", fontface = "bold", size = 3.5) +
+  annotate("text", x = 6, y = 1.5, label = "Rolling elements use balls/rollers to convert sliding to rolling friction\nPlain bearings rely on a lubricant film or low-friction materials", size = 2.8) +
+
+  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.5, 10.5)) +
+  theme_void()
+```
+
+---
+
+## Ball Bearings {-}
+
+Ball bearings are the most common type of rolling element bearing. They use spherical balls as the rolling elements, held between an inner race and an outer race.
+
+### Anatomy of a Ball Bearing {-}
+
+```{r ball-bearing-anatomy, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="Cross-section of a deep groove ball bearing showing main components."}
+# Create ball bearing cross-section
+theta <- seq(0, 2*pi, length.out = 100)
+
+ggplot() +
+  # Outer race (external)
+  geom_polygon(aes(x = 4 * cos(theta), y = 4 * sin(theta)), fill = "gray60", color = "black") +
+  geom_polygon(aes(x = 3.3 * cos(theta), y = 3.3 * sin(theta)), fill = "white", color = "black") +
+
+  # Inner race
+  geom_polygon(aes(x = 2.2 * cos(theta), y = 2.2 * sin(theta)), fill = "gray60", color = "black") +
+  geom_polygon(aes(x = 1.5 * cos(theta), y = 1.5 * sin(theta)), fill = "white", color = "black") +
+
+  # Balls (8 balls)
+  geom_point(aes(x = 2.75 * cos(seq(0, 2*pi - pi/4, by = pi/4)),
+                 y = 2.75 * sin(seq(0, 2*pi - pi/4, by = pi/4))),
+             size = 12, color = "black") +
+  geom_point(aes(x = 2.75 * cos(seq(0, 2*pi - pi/4, by = pi/4)),
+                 y = 2.75 * sin(seq(0, 2*pi - pi/4, by = pi/4))),
+             size = 10, color = "steelblue") +
+
+  # Labels with lines
+  geom_segment(aes(x = 3.7, xend = 5.5, y = 0, yend = 0.5), color = "red", linewidth = 0.8) +
+  annotate("text", x = 6.2, y = 0.5, label = "Outer Race", color = "red", size = 3.5, hjust = 0) +
+
+  geom_segment(aes(x = 1.85, xend = 5.5, y = 0, yend = -0.5), color = "blue", linewidth = 0.8) +
+  annotate("text", x = 6.2, y = -0.5, label = "Inner Race", color = "blue", size = 3.5, hjust = 0) +
+
+  geom_segment(aes(x = 2.75, xend = 5.5, y = 2.75, yend = 2), color = "darkgreen", linewidth = 0.8) +
+  annotate("text", x = 6.2, y = 2, label = "Rolling Elements\n(Balls)", color = "darkgreen", size = 3.5, hjust = 0) +
+
+  geom_segment(aes(x = 0, xend = -3, y = 1.5, yend = 3), color = "purple", linewidth = 0.8) +
+  annotate("text", x = -3.5, y = 3.5, label = "Bore\n(Shaft fits here)", color = "purple", size = 3.5, hjust = 0.5) +
+
+  # Pitch diameter indicator
+  geom_segment(aes(x = -2.75, xend = 2.75, y = -4.5, yend = -4.5),
+               arrow = arrow(ends = "both", length = unit(0.15, "cm")), linewidth = 0.8) +
+  annotate("text", x = 0, y = -5, label = "Pitch Diameter (Dp)", size = 3.5) +
+
+  coord_fixed(ratio = 1, xlim = c(-5, 9), ylim = c(-5.5, 5)) +
+  labs(title = "Deep Groove Ball Bearing Cross-Section") +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+```
+
+**Key Components:**
+
+| Component | Function |
+|:----------|:---------|
+| **Inner Race** | Mounted on the shaft; rotates with the shaft |
+| **Outer Race** | Mounted in the housing; typically stationary |
+| **Rolling Elements** | Balls that roll between races, carrying the load |
+| **Cage (Retainer)** | Separates and guides the balls to prevent contact |
+| **Seals/Shields** | Keep lubricant in and contaminants out |
+
+---
+
+### Types of Ball Bearings {-}
+
+```{r ball-bearing-types-table, echo=FALSE, message=FALSE}
+bearing_types <- tribble(
+  ~Type, ~Load_Capacity, ~Applications, ~Key_Feature,
+  "Deep Groove", "Radial + light axial", "Electric motors, pumps, gearboxes", "Most versatile; handles combined loads",
+  "Angular Contact", "Combined radial + high axial", "Machine tool spindles, pumps", "Contact angle 15-40 deg; paired for bidirectional thrust",
+  "Self-Aligning", "Radial + light axial", "Conveyors, fans, textile machinery", "Tolerates shaft deflection and misalignment",
+  "Thrust Ball", "Axial only", "Automotive steering, crane hooks", "90 deg contact angle; cannot handle radial loads"
+)
+
+bearing_types %>%
+  kbl(caption = "Common Ball Bearing Types and Applications",
+      col.names = c("Type", "Load Capacity", "Typical Applications", "Key Feature"),
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white")
+```
+
+---
+
+## Ball Bearing Life Calculations {#bearing-life}
+
+The life of a rolling element bearing is inherently statistical—even identical bearings under identical conditions will fail at different times due to material fatigue. The **L10 life** (or **basic rating life**) is the standard measure used in bearing selection.
+
+### The L10 Life Concept {-}
+
+> **Definition:** The L10 life is the number of revolutions (or hours at a given speed) that **90% of a group of identical bearings** will complete or exceed before the first evidence of fatigue failure (flaking/spalling).
+
+In other words, 10% of bearings will fail before reaching L10 life, while 90% will survive.
+
+### Basic Life Equation {-}
+
+The fundamental bearing life equation is:
+
+$$L_{10} = \left(\frac{C}{P}\right)^p \times 10^6 \text{ revolutions}$$
+
+**Where:**
+
+| Symbol | Description | Units |
+|:-------|:------------|:------|
+| $L_{10}$ | Basic rating life | revolutions |
+| $C$ | Basic dynamic load rating | N or lbf |
+| $P$ | Equivalent dynamic bearing load | N or lbf |
+| $p$ | Life exponent | — |
+
+**Life Exponent Values:**
+
+- **Ball bearings:** $p = 3$
+- **Roller bearings:** $p = 10/3 \approx 3.33$
+
+### Converting to Hours {-}
+
+For bearings operating at constant speed, it is more practical to express life in hours:
+
+$$L_{10h} = \frac{L_{10}}{60 \cdot n} = \frac{1}{60 \cdot n}\left(\frac{C}{P}\right)^p \times 10^6 \text{ hours}$$
+
+Where $n$ is the rotational speed in RPM.
+
+This simplifies to:
+
+$$L_{10h} = \frac{10^6}{60 \cdot n}\left(\frac{C}{P}\right)^p$$
+
+---
+
+### Equivalent Dynamic Load {-}
+
+When a bearing experiences both radial ($F_r$) and axial ($F_a$) loads simultaneously, an **equivalent dynamic load** ($P$) must be calculated:
+
+$$P = X \cdot F_r + Y \cdot F_a$$
+
+**Where:**
+
+| Factor | Description |
+|:-------|:------------|
+| $X$ | Radial load factor (from bearing tables) |
+| $Y$ | Axial load factor (from bearing tables) |
+| $F_r$ | Applied radial load |
+| $F_a$ | Applied axial (thrust) load |
+
+For **pure radial loading** (most common case): $P = F_r$
+
+```{r load-factor-table, echo=FALSE, message=FALSE}
+load_factors <- tribble(
+  ~Bearing_Type, ~X_Light, ~Y_Light, ~X_Heavy, ~Y_Heavy, ~e,
+  "Deep Groove (single row)", 1.0, 0, 0.56, "1.0-2.3*", "0.19-0.44",
+  "Angular Contact (a=15 deg)", 1.0, 0, 0.44, "1.18", "0.38",
+  "Angular Contact (a=25 deg)", 1.0, 0, 0.44, "0.87", "0.68",
+  "Angular Contact (a=40 deg)", 1.0, 0, 0.44, "0.55", "1.14",
+  "Self-Aligning", 1.0, 0, 0.65, "3.7*cot(a)", "0.22*cot(a)"
+)
+
+load_factors %>%
+  kbl(caption = "Load Factors for Ball Bearings (ISO 281)",
+      col.names = c("Bearing Type", "X", "Y", "X", "Y", "e"),
+      booktabs = TRUE,
+      escape = FALSE) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  add_header_above(c(" " = 1, "Fa/Fr ≤ e" = 2, "Fa/Fr > e" = 2, " " = 1)) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  footnote(general = "*Values depend on bearing geometry; consult manufacturer catalog",
+           general_title = "Note: ")
+```
+
+---
+
+### Basic Dynamic Load Rating (C) {-}
+
+The **basic dynamic load rating** ($C$) is a catalog value provided by the manufacturer. It represents:
+
+> The constant radial load that a bearing can theoretically endure for a basic rating life of **one million revolutions**.
+
+Typical catalog format:
+
+```{r catalog-table, echo=FALSE, message=FALSE}
+catalog_data <- tribble(
+  ~Designation, ~d_mm, ~D_mm, ~B_mm, ~C_kN, ~C0_kN, ~Speed_rpm,
+  "6205", 25, 52, 15, 14.8, 7.8, 13000,
+  "6206", 30, 62, 16, 20.3, 11.2, 11000,
+  "6207", 35, 72, 17, 26.0, 15.0, 9500,
+  "6208", 40, 80, 18, 30.7, 18.2, 8500,
+  "6209", 45, 85, 19, 33.2, 20.0, 7500,
+  "6210", 50, 90, 20, 35.1, 21.6, 7000
+)
+
+catalog_data %>%
+  kbl(caption = "Example Bearing Catalog Data (Deep Groove Series 62xx)",
+      col.names = c("Designation", "d (mm)", "D (mm)", "B (mm)", "C (kN)", "C₀ (kN)", "Limiting Speed (rpm)"),
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  column_spec(5, background = "#F9E7F0") %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  footnote(general = "C = Dynamic load rating; C₀ = Static load rating",
+           general_title = "Legend: ")
+```
+
+---
+
+### Adjusted Rating Life {-}
+
+The basic L10 equation assumes ideal operating conditions. In practice, factors such as **reliability requirements**, **lubrication quality**, and **contamination** affect bearing life. The **adjusted rating life** accounts for these factors:
+
+$$L_{na} = a_1 \cdot a_2 \cdot a_3 \cdot L_{10}$$
+
+Or using the modern ISO 281 formulation:
+
+$$L_{nm} = a_1 \cdot a_{ISO} \cdot L_{10}$$
+
+**Where:**
+
+| Factor | Description | Typical Values |
+|:-------|:------------|:---------------|
+| $a_1$ | Life adjustment factor for reliability | See table below |
+| $a_2$ | Material factor | 0.5 to 2.0 (modern steels ≈ 1.0) |
+| $a_3$ | Operating conditions factor | 0.1 to 1.0 |
+| $a_{ISO}$ | Combined lubrication-contamination factor | 0.1 to 50 |
+
+**Reliability Factor ($a_1$):**
+
+```{r reliability-table, echo=FALSE, message=FALSE}
+reliability_data <- tribble(
+  ~Reliability, ~Ln, ~a1,
+  "90%", "L10", 1.00,
+  "95%", "L5", 0.64,
+  "96%", "L4", 0.55,
+  "97%", "L3", 0.47,
+  "98%", "L2", 0.37,
+  "99%", "L1", 0.25
+)
+
+reliability_data %>%
+  kbl(caption = "Reliability Factor a₁",
+      col.names = c("Reliability", "Life Symbol", "a₁"),
+      booktabs = TRUE,
+      align = "c") %>%
+  kable_styling(latex_options = "hold_position", full_width = FALSE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(1, background = "#E8F5E9")
+```
+
+---
+
+### Life Calculation Plot {-}
+
+The following plot illustrates how bearing life varies with the C/P ratio:
+
+```{r bearing-life-plot, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Bearing life as a function of load ratio (C/P)."}
+# Calculate life for various C/P ratios
+cp_ratio <- seq(1, 10, by = 0.1)
+L10_ball <- (cp_ratio)^3 * 1e6 / 1e6  # in millions of revolutions
+L10_roller <- (cp_ratio)^(10/3) * 1e6 / 1e6
+
+life_data <- data.frame(
+  CP_Ratio = rep(cp_ratio, 2),
+  Life_Millions = c(L10_ball, L10_roller),
+  Type = rep(c("Ball Bearing (p=3)", "Roller Bearing (p=10/3)"), each = length(cp_ratio))
+)
+
+ggplot(life_data, aes(x = CP_Ratio, y = Life_Millions, color = Type, linetype = Type)) +
+  geom_line(linewidth = 1.2) +
+  geom_vline(xintercept = 3, linetype = "dashed", alpha = 0.5) +
+  annotate("text", x = 3.2, y = 800, label = "C/P = 3\nDesign target", hjust = 0, size = 3) +
+  geom_hline(yintercept = 27, linetype = "dotted", alpha = 0.5) +
+  annotate("text", x = 8, y = 35, label = "~27M rev @ C/P=3", size = 3) +
+  scale_y_log10(labels = scales::comma) +
+  scale_color_manual(values = c("steelblue", "darkorange")) +
+  labs(
+    title = "Ball Bearing Life vs. Load Ratio",
+    subtitle = "L10 = (C/P)^p × 10⁶ revolutions",
+    x = "Load Ratio (C/P)",
+    y = "Life L₁₀ (millions of revolutions)",
+    color = "Bearing Type",
+    linetype = "Bearing Type"
+  ) +
+  theme_bearing +
+  theme(legend.position = "bottom")
+```
+
+> **Design Insight:** A small increase in bearing size (higher C) or reduction in load (lower P) dramatically increases bearing life due to the cubic relationship.
+
+---
+
+## Applied Example: Ball Bearing Life Calculation {#bearing-example}
+
+::: {.question}
+##### Problem Statement {-}
+:::
+
+A deep groove ball bearing (6207) supports a shaft rotating at **1,750 RPM**. The bearing experiences a **radial load of 3,500 N** and an **axial load of 800 N**. Determine:
+
+1. The equivalent dynamic load ($P$)
+2. The basic L10 life in hours
+3. The L5 life (95% reliability) in hours
+
+**Given data from catalog:**
+- Bearing: 6207
+- Dynamic load rating: $C = 26.0$ kN = 26,000 N
+- For Fa/Fr ratio, use: $e = 0.24$, $X = 0.56$, $Y = 1.6$
+
+::: {.answer}
+##### Solution {-}
+:::
+
+```{r bearing-example-calc, echo=FALSE, message=FALSE}
+# Given values
+Fr <- 3500      # N, radial load
+Fa <- 800       # N, axial load
+C <- 26000      # N, dynamic load rating
+n <- 1750       # RPM
+p <- 3          # ball bearing exponent
+
+# Check Fa/Fr ratio
+ratio <- Fa / Fr
+
+# Since Fa/Fr = 0.229 < e = 0.24, use X=1, Y=0
+# But let's demonstrate the general case where Fa/Fr > e
+X <- 0.56
+Y <- 1.6
+
+# Equivalent dynamic load
+P_light <- Fr  # When Fa/Fr <= e
+P_heavy <- X * Fr + Y * Fa  # When Fa/Fr > e
+
+# For this example, Fa/Fr ≈ 0.23 which is close to e
+# We'll use the combined load formula for demonstration
+P <- max(P_light, P_heavy)
+
+# L10 life in revolutions
+L10_rev <- (C / P)^p * 1e6
+
+# L10 life in hours
+L10_hours <- L10_rev / (60 * n)
+
+# L5 life (95% reliability)
+a1_95 <- 0.64
+L5_hours <- a1_95 * L10_hours
+
+# Create results table
+results <- tribble(
+  ~Step, ~Calculation, ~Result,
+  "1. Check load ratio", paste0("Fa/Fr = ", Fa, " / ", Fr, " = ", round(ratio, 3)),
+  ifelse(ratio <= 0.24, "≤ e: Use X=1, Y=0", "> e: Use X=0.56, Y=1.6"),
+  "2. Equivalent load (P)", paste0("P = X·Fr + Y·Fa = ", X, "×", Fr, " + ", Y, "×", Fa),
+  paste0(round(P, 0), " N"),
+  "3. L10 (revolutions)", paste0("L10 = (C/P)³ × 10⁶ = (", C/1000, "/", round(P/1000, 2), ")³ × 10⁶"),
+  paste0(formatC(L10_rev/1e6, format = "f", digits = 1), " million rev"),
+  "4. L10 (hours)", paste0("L10h = L10 / (60 × n) = ", formatC(L10_rev/1e6, format = "f", digits = 1), "×10⁶ / (60 × ", n, ")"),
+  paste0(formatC(L10_hours, format = "f", digits = 0, big.mark = ","), " hours"),
+  "5. L5 (95% reliability)", paste0("L5 = a₁ × L10 = 0.64 × ", formatC(L10_hours, format = "f", digits = 0)),
+  paste0(formatC(L5_hours, format = "f", digits = 0, big.mark = ","), " hours")
+)
+
+results %>%
+  kbl(caption = "Ball Bearing Life Calculation Steps",
+      booktabs = TRUE,
+      col.names = c("Step", "Calculation", "Result")) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(4, background = "#E8F5E9", bold = TRUE) %>%
+  row_spec(5, background = "#E3F2FD", bold = TRUE)
+```
+
+##### Interpretation {-}
+
+- The **L10 life** of `r formatC(L10_hours, format = "f", digits = 0, big.mark = ",")` hours means that 90% of these bearings will operate at least this long before fatigue failure.
+- For applications requiring **95% reliability**, use the L5 life of `r formatC(L5_hours, format = "f", digits = 0, big.mark = ",")` hours.
+- At 24/7 operation, L10 represents approximately `r round(L10_hours / (24*365), 1)` years of service.
+
+---
+
+
+## Plain Bearings (Bushings) {#bushings}
+
+Plain bearings, also called **bushings** or **sleeve bearings**, are the simplest form of bearing. They consist of a bearing surface with no rolling elements—the shaft slides directly against the bearing material.
+
+### Advantages of Bushings {-}
+
+| Advantage | Explanation |
+|:----------|:------------|
+| **Compact design** | No need for rolling elements; minimal radial space |
+| **Low cost** | Simple manufacturing; no precision balls or races |
+| **Quiet operation** | No rolling elements to generate noise |
+| **High load capacity** | Large contact area; excellent for shock loads |
+| **Self-lubricating options** | Polymer and sintered metal bushings need no external lubrication |
+
+### Types of Bushings {-}
+
+```{r bushing-types-table, echo=FALSE, message=FALSE}
+bushing_types <- tribble(
+  ~Type, ~Material, ~PV_Limit, ~Applications, ~Lubrication,
+  "Bronze Bushings", "Cast bronze, SAE 660", "50,000 - 75,000 psi·ft/min", "Heavy machinery, pumps", "Oil/grease required",
+  "Oil-Impregnated Bronze", "Sintered bronze (porous)", "25,000 - 50,000 psi·ft/min", "Fractional HP motors, fans", "Self-lubricating",
+  "PTFE-Lined", "Steel + PTFE coating", "10,000 - 25,000 psi·ft/min", "Food processing, medical", "Dry running",
+  "Polymer (Nylon, Acetal)", "Engineering plastics", "3,000 - 10,000 psi·ft/min", "Light duty, instrumentation", "Often dry",
+  "PEEK Composite", "High-performance polymer", "15,000 - 40,000 psi·ft/min", "Aerospace, high temperature", "Dry or minimal"
+)
+
+bushing_types %>%
+  kbl(caption = "Common Bushing Materials and PV Limits",
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"), full_width = TRUE) %>%
+  column_spec(3, background = "#F9E7F0") %>%
+  row_spec(0, background = "#D81B60", color = "white")
+```
+
+---
+
+## PV Limits for Bushings {#pv-limits}
+
+The **PV limit** is the most important design criterion for plain bearings. It represents the maximum combination of **bearing pressure** (P) and **sliding velocity** (V) that the bearing material can sustain without excessive wear or failure.
+
+### The PV Concept {-}
+
+$$PV = P \times V$$
+
+**Where:**
+
+| Symbol | Description | Typical Units |
+|:-------|:------------|:--------------|
+| $P$ | Bearing pressure | psi (or MPa) |
+| $V$ | Sliding velocity | ft/min (or m/s) |
+| $PV$ | PV factor | psi·ft/min (or MPa·m/s) |
+
+### Calculating Bearing Pressure (P) {-}
+
+For a journal bearing (shaft in a bushing):
+
+$$P = \frac{F}{d \times L}$$
+
+**Where:**
+
+| Symbol | Description |
+|:-------|:------------|
+| $F$ | Radial load on the bearing (lbf or N) |
+| $d$ | Shaft (journal) diameter (in or mm) |
+| $L$ | Bearing length (in or mm) |
+
+> **Note:** This is the **projected area** method, using $A = d \times L$, not the cylindrical surface area.
+
+### Calculating Sliding Velocity (V) {-}
+
+$$V = \pi \times d \times n$$
+
+For consistent units:
+
+**English:**
+$$V = \frac{\pi \times d \times n}{12} \quad \text{(ft/min, where } d \text{ in inches, } n \text{ in RPM)}$$
+
+**Metric:**
+$$V = \frac{\pi \times d \times n}{60,000} \quad \text{(m/s, where } d \text{ in mm, } n \text{ in RPM)}$$
+
+---
+
+### PV Limit Visualization {-}
+
+```{r pv-limit-plot, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="PV limit diagram showing safe operating region for different bushing materials."}
+# Create PV limit curves
+P_values <- seq(100, 5000, by = 50)
+
+# PV limits for different materials (psi·ft/min)
+pv_bronze <- 50000
+pv_sintered <- 35000
+pv_ptfe <- 15000
+pv_nylon <- 5000
+
+pv_data <- data.frame(
+  P = rep(P_values, 4),
+  V = c(pv_bronze/P_values, pv_sintered/P_values, pv_ptfe/P_values, pv_nylon/P_values),
+  Material = rep(c("Bronze (PV=50,000)", "Sintered Bronze (PV=35,000)",
+                   "PTFE-Lined (PV=15,000)", "Nylon (PV=5,000)"), each = length(P_values))
+)
+
+# Limit velocity data for realistic display
+pv_data$V <- pmin(pv_data$V, 1000)
+
+ggplot(pv_data, aes(x = P, y = V, color = Material)) +
+  geom_line(linewidth = 1.2) +
+
+  # Add safe operating point example
+  geom_point(aes(x = 1000, y = 30), color = "darkgreen", size = 4) +
+  annotate("text", x = 1200, y = 35, label = "Safe\noperating point", color = "darkgreen", size = 3, hjust = 0) +
+
+  # Add unsafe point example
+  geom_point(aes(x = 2500, y = 100), color = "red", size = 4, shape = 4, stroke = 2) +
+  annotate("text", x = 2700, y = 110, label = "Exceeds Nylon\nPV limit!", color = "red", size = 3, hjust = 0) +
+
+  # Shade regions
+  annotate("rect", xmin = 100, xmax = 5000, ymin = 0, ymax = 50,
+           fill = "lightgreen", alpha = 0.2) +
+  annotate("text", x = 4500, y = 25, label = "Safe for all", size = 3, hjust = 1) +
+
+  scale_color_manual(values = c("Bronze (PV=50,000)" = "sienna",
+                                "Sintered Bronze (PV=35,000)" = "darkorange",
+                                "PTFE-Lined (PV=15,000)" = "steelblue",
+                                "Nylon (PV=5,000)" = "purple")) +
+  labs(
+    title = "PV Limit Curves for Common Bushing Materials",
+    subtitle = "Operating point must fall BELOW the curve for the selected material",
+    x = "Bearing Pressure P (psi)",
+    y = "Sliding Velocity V (ft/min)",
+    color = "Material"
+  ) +
+  coord_cartesian(ylim = c(0, 500)) +
+  theme_bearing +
+  theme(legend.position = "bottom",
+        legend.title = element_text(face = "bold"))
+```
+
+---
+
+### Design Rules for PV {-}
+
+1. **Calculate the actual PV** for your application
+2. **Select a bushing material** with a PV limit **at least 2× higher** than calculated
+3. **Check individual P and V limits** separately (materials have maximums for each)
+4. **Consider temperature effects**—PV limits decrease at elevated temperatures
+
+```{r individual-limits-table, echo=FALSE, message=FALSE}
+limits_data <- tribble(
+  ~Material, ~Max_P_psi, ~Max_V_ftmin, ~Max_PV, ~Max_Temp_F,
+  "SAE 660 Bronze", 4000, 750, 75000, 450,
+  "Sintered Bronze (oil-impreg.)", 2000, 400, 50000, 300,
+  "PTFE/Bronze Composite", 2500, 500, 25000, 500,
+  "Acetal (Delrin)", 1500, 600, 10000, 180,
+  "Nylon 6/6", 1000, 400, 5000, 200,
+  "PEEK", 3000, 650, 40000, 480
+)
+
+limits_data %>%
+  kbl(caption = "Individual P, V, and PV Limits for Common Bushing Materials",
+      col.names = c("Material", "Max P (psi)", "Max V (ft/min)", "Max PV (psi-ft/min)", "Max Temp (F)"),
+      booktabs = TRUE,
+      align = "lcccc") %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  column_spec(4, background = "#F9E7F0") %>%
+  row_spec(0, background = "#D81B60", color = "white")
+```
+
+---
+
+## Applied Example: Bushing PV Calculation {#bushing-example}
+
+::: {.question}
+##### Problem Statement {-}
+:::
+
+A shaft rotating at **500 RPM** is supported by a bronze bushing. The shaft diameter is **1.5 inches** and the bushing length is **2.0 inches**. The radial load on the bushing is **800 lbf**.
+
+Determine:
+1. The bearing pressure ($P$)
+2. The sliding velocity ($V$)
+3. The PV value
+4. Whether a SAE 660 bronze bushing is suitable
+
+::: {.answer}
+##### Solution {-}
+:::
+
+```{r bushing-example-calc, echo=FALSE, message=FALSE}
+# Given values
+F_load <- 800    # lbf
+d_shaft <- 1.5   # inches
+L_bush <- 2.0    # inches
+n_rpm <- 500     # RPM
+
+# Calculations
+P_bearing <- F_load / (d_shaft * L_bush)  # psi
+V_sliding <- (pi * d_shaft * n_rpm) / 12   # ft/min
+PV_actual <- P_bearing * V_sliding          # psi·ft/min
+
+# SAE 660 Bronze limits
+PV_limit_bronze <- 75000
+P_max_bronze <- 4000
+V_max_bronze <- 750
+
+# Safety factor
+SF <- PV_limit_bronze / PV_actual
+
+# Create results table
+bushing_results <- tribble(
+  ~Step, ~Formula, ~Calculation, ~Result,
+  "1. Bearing Pressure", "P = F / (d × L)",
+  paste0("P = ", F_load, " / (", d_shaft, " × ", L_bush, ")"),
+  paste0(round(P_bearing, 1), " psi"),
+
+  "2. Sliding Velocity", "V = π·d·n / 12",
+  paste0("V = π × ", d_shaft, " × ", n_rpm, " / 12"),
+  paste0(round(V_sliding, 1), " ft/min"),
+
+  "3. PV Factor", "PV = P × V",
+  paste0("PV = ", round(P_bearing, 1), " × ", round(V_sliding, 1)),
+  paste0(formatC(PV_actual, format = "f", digits = 0, big.mark = ","), " psi·ft/min"),
+
+  "4. Check P Limit", "P < P_max (4,000 psi)",
+  paste0(round(P_bearing, 1), " < 4,000?"),
+  ifelse(P_bearing < P_max_bronze, "OK ✓", "FAIL ✗"),
+
+  "5. Check V Limit", "V < V_max (750 ft/min)",
+  paste0(round(V_sliding, 1), " < 750?"),
+  ifelse(V_sliding < V_max_bronze, "OK ✓", "FAIL ✗"),
+
+  "6. Check PV Limit", "PV < PV_max (75,000)",
+  paste0(formatC(PV_actual, format = "f", digits = 0), " < 75,000?"),
+  ifelse(PV_actual < PV_limit_bronze, "OK ✓", "FAIL ✗"),
+
+  "7. Safety Factor", "SF = PV_limit / PV_actual",
+  paste0("SF = 75,000 / ", formatC(PV_actual, format = "f", digits = 0)),
+  paste0(round(SF, 2))
+)
+
+bushing_results %>%
+  kbl(caption = "Bushing PV Calculation Steps",
+      booktabs = TRUE,
+      col.names = c("Step", "Formula", "Calculation", "Result")) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(3, background = "#E8F5E9", bold = TRUE) %>%
+  row_spec(4:6, background = "#E3F2FD")
+```
+
+##### Conclusion {-}
+
+The SAE 660 bronze bushing is **suitable** for this application:
+
+- All individual limits (P, V) are satisfied
+- The actual PV (`r formatC(PV_actual, format = "f", digits = 0, big.mark = ",")` psi·ft/min) is well below the material limit (75,000 psi·ft/min)
+- Safety factor of `r round(SF, 2)` provides adequate margin
+
+---
+
+
+## Bearing vs. Bushing Selection Guide {-}
+
+When should you use a ball bearing versus a bushing? The following table provides guidance:
+
+```{r selection-guide, echo=FALSE, message=FALSE}
+selection_guide <- tribble(
+  ~Factor, ~Ball_Bearing, ~Bushing,
+  "Speed", "High speeds (>3,000 RPM)", "Low to moderate speeds",
+  "Load Type", "Radial and/or axial", "Primarily radial",
+  "Shock Loads", "Poor—balls can indent races", "Excellent—large contact area",
+  "Space (radial)", "Requires more radial space", "Very compact",
+  "Lubrication", "Sealed or periodic greasing", "Self-lubricating options available",
+  "Noise", "Some noise from rolling elements", "Quieter operation",
+  "Cost", "Higher initial cost", "Lower cost",
+  "Maintenance", "Replace entire bearing", "Can often be replaced in-situ",
+  "Life Prediction", "Well-established (L10)", "Less precise; wear-based"
+)
+
+selection_guide %>%
+  kbl(caption = "Ball Bearing vs. Bushing Selection Criteria",
+      col.names = c("Factor", "Ball Bearing", "Bushing (Plain Bearing)"),
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  column_spec(2, background = "#FFF3E0") %>%
+  column_spec(3, background = "#E8F5E9")
+```
+
+---
+
+## Summary Equations {-}
+
+### Ball Bearing Life {-}
+
+| Equation | Description |
+|:---------|:------------|
+| $L_{10} = \left(\frac{C}{P}\right)^3 \times 10^6$ | Basic L10 life (revolutions) for ball bearings |
+| $L_{10h} = \frac{10^6}{60n}\left(\frac{C}{P}\right)^3$ | L10 life in hours |
+| $P = X \cdot F_r + Y \cdot F_a$ | Equivalent dynamic load |
+| $L_{na} = a_1 \cdot a_{ISO} \cdot L_{10}$ | Adjusted rating life |
+
+### Bushing PV Limits {-}
+
+| Equation | Description |
+|:---------|:------------|
+| $P = \frac{F}{d \times L}$ | Bearing pressure (projected area) |
+| $V = \frac{\pi d n}{12}$ | Sliding velocity (ft/min) |
+| $PV = P \times V$ | PV factor—must be less than material PV limit |
+
+---
+
+## Design Checklist {-}
+
+**For Ball Bearings:**
+
+- [ ] Determine radial and axial loads
+- [ ] Calculate equivalent dynamic load ($P$)
+- [ ] Select bearing with $C/P$ ratio giving adequate life
+- [ ] Verify speed is below limiting speed
+- [ ] Apply reliability and operating condition factors if needed
+- [ ] Specify lubrication and sealing requirements
+
+**For Bushings:**
+
+- [ ] Calculate bearing pressure ($P$)
+- [ ] Calculate sliding velocity ($V$)
+- [ ] Verify $P < P_{max}$ for selected material
+- [ ] Verify $V < V_{max}$ for selected material
+- [ ] Verify $PV < PV_{limit}$ with safety factor ≥ 2
+- [ ] Consider temperature effects on PV limits
+- [ ] Specify lubrication (if required) or confirm dry-running capability

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Design for Casting | Design for Manufacturing</title>
+  <title>Chapter 8 Ball Bearings and Bushings | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Design for Casting | Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 8 Ball Bearings and Bushings | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Design for Casting | Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 8 Ball Bearings and Bushings | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="design-for-joining.html"/>
+<link rel="prev" href="design-for-machining.html"/>
+<link rel="next" href="four-bar-linkages.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -529,379 +529,1608 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="design-for-casting" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Design for Casting<a href="design-for-casting.html#design-for-casting" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="introduction-to-the-casting-process" class="section level2 unnumbered hasAnchor">
-<h2>💡 Introduction to the Casting Process<a href="#introduction-to-the-casting-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Casting is one of the oldest and most fundamental processes in manufacturing, dating back thousands of years. It involves pouring a liquid material, typically a molten metal, into a mold cavity where it is allowed to solidify in the desired shape. The resulting solidified object is called a <strong>casting</strong>.</p>
-<p>The significance of casting lies in its ability to produce complex, intricate shapes—including those with internal cavities or non-symmetrical geometries—that would be difficult or impossible to create using methods like machining or forging. This makes casting essential for industries ranging from aerospace and automotive to jewelry and construction.</p>
-<hr />
-</div>
-<div id="essential-components-of-casting" class="section level2 unnumbered hasAnchor">
-<h2>🧱 Essential Components of Casting<a href="#essential-components-of-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Every casting operation requires two basic elements:</p>
+<div id="ball-bearings-and-bushings" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Ball Bearings and Bushings<a href="ball-bearings-and-bushings.html#ball-bearings-and-bushings" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-bearings" class="section level2 unnumbered hasAnchor">
+<h2>Introduction to Bearings<a href="ball-bearings-and-bushings.html#introduction-to-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Bearings are machine elements that <strong>constrain relative motion</strong> and <strong>reduce friction</strong> between moving parts. They are fundamental to virtually every rotating machine—from tiny precision instruments to massive industrial equipment.</p>
+<p>Bearings serve three primary functions:</p>
 <ol style="list-style-type: decimal">
-<li><strong>The Casting Material:</strong> This is the material, usually metal (such as iron, steel, aluminum, or bronze), that is melted into a liquid state.</li>
-<li><strong>The Mold:</strong> This is the container that holds the liquid material and determines the final shape of the part. The mold contains a cavity that is the inverse of the part being made.</li>
+<li><strong>Support loads</strong> (radial and/or thrust)</li>
+<li><strong>Reduce friction</strong> between moving surfaces</li>
+<li><strong>Guide motion</strong> with precision and repeatability</li>
 </ol>
-</div>
-<div id="the-basic-steps-of-casting" class="section level2 unnumbered hasAnchor">
-<h2>⚙️ The Basic Steps of Casting<a href="design-for-casting.html#the-basic-steps-of-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>While the specifics vary greatly depending on the material and method (e.g., sand casting vs. die casting), the fundamental steps remain consistent:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Melting:</strong> The casting material is heated to a liquid state in a furnace.</li>
-<li><strong>Pouring:</strong> The molten material is introduced into the mold cavity.</li>
-<li><strong>Solidification:</strong> The material is allowed to cool and solidify within the mold, taking the shape of the cavity.</li>
-<li><strong>Removal (Fettling):</strong> The solidified casting is removed from the mold.</li>
-<li><strong>Cleaning and Finishing:</strong> The casting is cleaned of any excess material (like gates or risers) and prepared for its intended use.</li>
-</ol>
-</div>
-<div id="applications-and-scope" class="section level2 unnumbered hasAnchor">
-<h2>🌍 Applications and Scope<a href="#applications-and-scope" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The versatility of casting allows it to produce parts ranging in size from a few grams (e.g., dental crowns) to hundreds of tons (e.g., steam turbine housings). The choice of a specific casting method—such as sand casting, investment casting, die casting, or continuous casting—depends on the required surface finish, dimensional accuracy, batch size, and the type of material being processed.</p>
-</div>
-<div id="sand-mould-casting-the-versatile-workhorse" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Sand Mould Casting: The Versatile Workhorse<a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="introduction" class="section level3 hasAnchor" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> 💡 Introduction<a href="#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Sand casting, also known as sand mould casting, is the oldest and most frequently used metal casting process, responsible for producing over 70% of all metal castings. It is highly valued for its <strong>versatility</strong> and <strong>cost-effectiveness</strong>, making it the foundational method for manufacturing a vast array of metal components, from massive engine blocks and turbine parts to small fittings and decorative items.</p>
-<p>The basic principle is simple: create a mould using sand, pour molten metal into the cavity, let it solidify, and then break the mould to retrieve the part.</p>
 <hr />
-</div>
-<div id="components-and-steps-of-the-process" class="section level3 hasAnchor" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> ⚙️ Components and Steps of the Process<a href="design-for-casting.html#components-and-steps-of-the-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The sand casting process is typically performed in two halves and involves five main steps.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
-<img src="images/Sand-Casting-Infographic-2048x1366.png" alt="Sand Casting Process" width="50%" />
+<div id="classification-of-bearings" class="section level3 unnumbered hasAnchor">
+<h3>Classification of Bearings<a href="ball-bearings-and-bushings.html#classification-of-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Bearings are broadly classified into two main categories:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bearing-classification"></span>
+<img src="_main_files/figure-html/bearing-classification-1.png" alt="Classification of bearing types." width="960" />
 <p class="caption">
-Figure 1.1: Sand Casting Process
+Figure 8.1: Classification of bearing types.
 </p>
 </div>
-<div id="mold-preparation" class="section level4 hasAnchor" number="1.1.2.1">
-<h4><span class="header-section-number">1.1.2.1</span> Mold Preparation<a href="design-for-casting.html#mold-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The mold is created inside a metal frame called a <strong>flask</strong> (or molding box). The flask has two halves: the <strong>cope</strong> (top half) and the <strong>drag</strong> (bottom half).</p>
-<ul>
-<li><strong>Pattern:</strong> A pattern, which is a reusable, full-sized model of the part to be cast (often made of wood, plastic, or metal), is placed inside the flask.</li>
-<li><strong>Gating System:</strong> Additional shapes are included with the pattern to form the channels through which the molten metal will flow:
-<ul>
-<li><strong>Sprue:</strong> The vertical channel where the molten metal is poured.</li>
-<li><strong>Runners:</strong> Horizontal channels leading from the sprue to the mold cavity.</li>
-<li><strong>Risers:</strong> Reservoirs that feed extra molten metal back into the mold cavity as the metal shrinks during solidification.</li>
-</ul></li>
-<li><strong>Compacting:</strong> Molding sand—typically a mix of sand, clay (bentonite), and water or other bonding agents—is packed tightly around the pattern inside the flask.</li>
-<li><strong>Pattern Removal:</strong> The flask is separated, and the pattern is carefully removed, leaving the inverse cavity of the part.</li>
-</ul>
-</div>
-<div id="core-placement-optional" class="section level4 hasAnchor" number="1.1.2.2">
-<h4><span class="header-section-number">1.1.2.2</span> Core Placement (Optional)<a href="design-for-casting.html#core-placement-optional" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>If the casting requires <strong>internal features</strong> (like a hollow pipe or engine cylinder), a pre-formed core (usually made of a different, rigid sand mix) is placed into the mold cavity. This core remains suspended inside the cavity and prevents the molten metal from filling that space.</p>
-</div>
-<div id="mold-closure-and-pouring" class="section level4 hasAnchor" number="1.1.2.3">
-<h4><span class="header-section-number">1.1.2.3</span> Mold Closure and Pouring<a href="design-for-casting.html#mold-closure-and-pouring" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li>The cope and drag are sealed and clamped together.</li>
-<li>Molten metal is poured from a ladle down the <strong>sprue</strong> and through the gating system until the mold cavity and risers are completely filled.</li>
-</ul>
-</div>
-<div id="solidification-cooling-and-shakeout" class="section level4 hasAnchor" number="1.1.2.4">
-<h4><span class="header-section-number">1.1.2.4</span> Solidification, Cooling, and Shakeout<a href="design-for-casting.html#solidification-cooling-and-shakeout" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The metal cools and solidifies within the sand mold. Since sand molds are non-reusable (they are broken to remove the part), this step is often called <strong>shakeout</strong>.</p>
-</div>
-<div id="finishing" class="section level4 hasAnchor" number="1.1.2.5">
-<h4><span class="header-section-number">1.1.2.5</span> Finishing<a href="design-for-casting.html#finishing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The final casting is removed, and the metal from the sprue, runners, and risers (the non-part material) is cut away (a process called <strong>fettling</strong>) and typically recycled.</p>
 <hr />
 </div>
 </div>
-<div id="advantages-and-disadvantages" class="section level3 hasAnchor" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> 📊 Advantages and Disadvantages<a href="#advantages-and-disadvantages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="ball-bearings" class="section level2 unnumbered hasAnchor">
+<h2>Ball Bearings<a href="ball-bearings-and-bushings.html#ball-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ball bearings are the most common type of rolling element bearing. They use spherical balls as the rolling elements, held between an inner race and an outer race.</p>
+<div id="anatomy-of-a-ball-bearing" class="section level3 unnumbered hasAnchor">
+<h3>Anatomy of a Ball Bearing<a href="ball-bearings-and-bushings.html#anatomy-of-a-ball-bearing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ball-bearing-anatomy"></span>
+<img src="_main_files/figure-html/ball-bearing-anatomy-1.png" alt="Cross-section of a deep groove ball bearing showing main components." width="960" />
+<p class="caption">
+Figure 8.2: Cross-section of a deep groove ball bearing showing main components.
+</p>
+</div>
+<p><strong>Key Components:</strong></p>
 <table>
 <colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
+<col width="52%" />
+<col width="47%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">Feature</th>
-<th align="left">Advantage</th>
-<th align="left">Disadvantage</th>
+<th align="left">Component</th>
+<th align="left">Function</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Cost</strong></td>
-<td align="left"><strong>Low tool and equipment cost</strong>, making it economical for small batches or prototypes.</td>
-<td align="left"><strong>Labor-intensive</strong> and requires significant energy for sand processing and handling.</td>
+<td align="left"><strong>Inner Race</strong></td>
+<td align="left">Mounted on the shaft; rotates with the shaft</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Material/Size</strong></td>
-<td align="left"><strong>Highly versatile:</strong> can handle almost all metals and produce castings ranging from very small to very large (up to 200 tons).</td>
-<td align="left"><strong>Poor surface finish</strong> and <strong>low dimensional accuracy</strong> compared to die casting or investment casting.</td>
+<td align="left"><strong>Outer Race</strong></td>
+<td align="left">Mounted in the housing; typically stationary</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Mold</strong></td>
-<td align="left">Molds are rapidly made and disposable, facilitating complex shapes.</td>
-<td align="left">Low production rate due to the non-reusable nature of the mold.</td>
+<td align="left"><strong>Rolling Elements</strong></td>
+<td align="left">Balls that roll between races, carrying the load</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Cage (Retainer)</strong></td>
+<td align="left">Separates and guides the balls to prevent contact</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Seals/Shields</strong></td>
+<td align="left">Keep lubricant in and contaminants out</td>
 </tr>
 </tbody>
 </table>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
-<img src="images/SandCastingCompany.png" alt="Typical Casting Company." width="50%" />
+<hr />
+</div>
+<div id="types-of-ball-bearings" class="section level3 unnumbered hasAnchor">
+<h3>Types of Ball Bearings<a href="ball-bearings-and-bushings.html#types-of-ball-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ball-bearing-types-table">Table 8.1: </span>Common Ball Bearing Types and Applications
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Type
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Load Capacity
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Typical Applications
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Key Feature
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Deep Groove
+</td>
+<td style="text-align:left;">
+Radial + light axial
+</td>
+<td style="text-align:left;">
+Electric motors, pumps, gearboxes
+</td>
+<td style="text-align:left;">
+Most versatile; handles combined loads
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angular Contact
+</td>
+<td style="text-align:left;">
+Combined radial + high axial
+</td>
+<td style="text-align:left;">
+Machine tool spindles, pumps
+</td>
+<td style="text-align:left;">
+Contact angle 15-40 deg; paired for bidirectional thrust
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Self-Aligning
+</td>
+<td style="text-align:left;">
+Radial + light axial
+</td>
+<td style="text-align:left;">
+Conveyors, fans, textile machinery
+</td>
+<td style="text-align:left;">
+Tolerates shaft deflection and misalignment
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Thrust Ball
+</td>
+<td style="text-align:left;">
+Axial only
+</td>
+<td style="text-align:left;">
+Automotive steering, crane hooks
+</td>
+<td style="text-align:left;">
+90 deg contact angle; cannot handle radial loads
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="bearing-life" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Ball Bearing Life Calculations<a href="ball-bearings-and-bushings.html#bearing-life" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The life of a rolling element bearing is inherently statistical—even identical bearings under identical conditions will fail at different times due to material fatigue. The <strong>L10 life</strong> (or <strong>basic rating life</strong>) is the standard measure used in bearing selection.</p>
+<div id="the-l10-life-concept" class="section level3 unnumbered hasAnchor">
+<h3>The L10 Life Concept<a href="ball-bearings-and-bushings.html#the-l10-life-concept" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<blockquote>
+<p><strong>Definition:</strong> The L10 life is the number of revolutions (or hours at a given speed) that <strong>90% of a group of identical bearings</strong> will complete or exceed before the first evidence of fatigue failure (flaking/spalling).</p>
+</blockquote>
+<p>In other words, 10% of bearings will fail before reaching L10 life, while 90% will survive.</p>
+</div>
+<div id="basic-life-equation" class="section level3 unnumbered hasAnchor">
+<h3>Basic Life Equation<a href="ball-bearings-and-bushings.html#basic-life-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The fundamental bearing life equation is:</p>
+<p><span class="math display">\[L_{10} = \left(\frac{C}{P}\right)^p \times 10^6 \text{ revolutions}\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(L_{10}\)</span></td>
+<td align="left">Basic rating life</td>
+<td align="left">revolutions</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(C\)</span></td>
+<td align="left">Basic dynamic load rating</td>
+<td align="left">N or lbf</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Equivalent dynamic bearing load</td>
+<td align="left">N or lbf</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(p\)</span></td>
+<td align="left">Life exponent</td>
+<td align="left">—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Life Exponent Values:</strong></p>
+<ul>
+<li><strong>Ball bearings:</strong> <span class="math inline">\(p = 3\)</span></li>
+<li><strong>Roller bearings:</strong> <span class="math inline">\(p = 10/3 \approx 3.33\)</span></li>
+</ul>
+</div>
+<div id="converting-to-hours" class="section level3 unnumbered hasAnchor">
+<h3>Converting to Hours<a href="ball-bearings-and-bushings.html#converting-to-hours" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For bearings operating at constant speed, it is more practical to express life in hours:</p>
+<p><span class="math display">\[L_{10h} = \frac{L_{10}}{60 \cdot n} = \frac{1}{60 \cdot n}\left(\frac{C}{P}\right)^p \times 10^6 \text{ hours}\]</span></p>
+<p>Where <span class="math inline">\(n\)</span> is the rotational speed in RPM.</p>
+<p>This simplifies to:</p>
+<p><span class="math display">\[L_{10h} = \frac{10^6}{60 \cdot n}\left(\frac{C}{P}\right)^p\]</span></p>
+<hr />
+</div>
+<div id="equivalent-dynamic-load" class="section level3 unnumbered hasAnchor">
+<h3>Equivalent Dynamic Load<a href="ball-bearings-and-bushings.html#equivalent-dynamic-load" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When a bearing experiences both radial (<span class="math inline">\(F_r\)</span>) and axial (<span class="math inline">\(F_a\)</span>) loads simultaneously, an <strong>equivalent dynamic load</strong> (<span class="math inline">\(P\)</span>) must be calculated:</p>
+<p><span class="math display">\[P = X \cdot F_r + Y \cdot F_a\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(X\)</span></td>
+<td align="left">Radial load factor (from bearing tables)</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(Y\)</span></td>
+<td align="left">Axial load factor (from bearing tables)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(F_r\)</span></td>
+<td align="left">Applied radial load</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(F_a\)</span></td>
+<td align="left">Applied axial (thrust) load</td>
+</tr>
+</tbody>
+</table>
+<p>For <strong>pure radial loading</strong> (most common case): <span class="math inline">\(P = F_r\)</span></p>
+<table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:load-factor-table">Table 8.2: </span>Load Factors for Ball Bearings (ISO 281)
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Fa/Fr ≤ e
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Fa/Fr &gt; e
+</div>
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+</tr>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Bearing Type
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+X
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Y
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+X
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Y
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+e
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Deep Groove (single row)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.56
+</td>
+<td style="text-align:left;">
+1.0-2.3*
+</td>
+<td style="text-align:left;">
+0.19-0.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angular Contact (a=15 deg)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:left;">
+1.18
+</td>
+<td style="text-align:left;">
+0.38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angular Contact (a=25 deg)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:left;">
+0.87
+</td>
+<td style="text-align:left;">
+0.68
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angular Contact (a=40 deg)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:left;">
+0.55
+</td>
+<td style="text-align:left;">
+1.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Self-Aligning
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.65
+</td>
+<td style="text-align:left;">
+3.7*cot(a)
+</td>
+<td style="text-align:left;">
+0.22*cot(a)
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;">Note: </span>
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> *Values depend on bearing geometry; consult manufacturer catalog
+</td>
+</tr>
+</tfoot>
+</table>
+<hr />
+</div>
+<div id="basic-dynamic-load-rating-c" class="section level3 unnumbered hasAnchor">
+<h3>Basic Dynamic Load Rating (C)<a href="ball-bearings-and-bushings.html#basic-dynamic-load-rating-c" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>basic dynamic load rating</strong> (<span class="math inline">\(C\)</span>) is a catalog value provided by the manufacturer. It represents:</p>
+<blockquote>
+<p>The constant radial load that a bearing can theoretically endure for a basic rating life of <strong>one million revolutions</strong>.</p>
+</blockquote>
+<p>Typical catalog format:</p>
+<table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:catalog-table">Table 8.3: </span>Example Bearing Catalog Data (Deep Groove Series 62xx)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Designation
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+d (mm)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+D (mm)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+B (mm)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+C (kN)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+C₀ (kN)
+</th>
+<th style="text-align:right;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Limiting Speed (rpm)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+6205
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+14.8
+</td>
+<td style="text-align:right;">
+7.8
+</td>
+<td style="text-align:right;">
+13000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6206
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+20.3
+</td>
+<td style="text-align:right;">
+11.2
+</td>
+<td style="text-align:right;">
+11000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6207
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+26.0
+</td>
+<td style="text-align:right;">
+15.0
+</td>
+<td style="text-align:right;">
+9500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6208
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+30.7
+</td>
+<td style="text-align:right;">
+18.2
+</td>
+<td style="text-align:right;">
+8500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6209
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+33.2
+</td>
+<td style="text-align:right;">
+20.0
+</td>
+<td style="text-align:right;">
+7500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6210
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;background-color: rgba(249, 231, 240, 255) !important;">
+35.1
+</td>
+<td style="text-align:right;">
+21.6
+</td>
+<td style="text-align:right;">
+7000
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;">Legend: </span>
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> C = Dynamic load rating; C₀ = Static load rating
+</td>
+</tr>
+</tfoot>
+</table>
+<hr />
+</div>
+<div id="adjusted-rating-life" class="section level3 unnumbered hasAnchor">
+<h3>Adjusted Rating Life<a href="ball-bearings-and-bushings.html#adjusted-rating-life" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The basic L10 equation assumes ideal operating conditions. In practice, factors such as <strong>reliability requirements</strong>, <strong>lubrication quality</strong>, and <strong>contamination</strong> affect bearing life. The <strong>adjusted rating life</strong> accounts for these factors:</p>
+<p><span class="math display">\[L_{na} = a_1 \cdot a_2 \cdot a_3 \cdot L_{10}\]</span></p>
+<p>Or using the modern ISO 281 formulation:</p>
+<p><span class="math display">\[L_{nm} = a_1 \cdot a_{ISO} \cdot L_{10}\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="left">Description</th>
+<th align="left">Typical Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(a_1\)</span></td>
+<td align="left">Life adjustment factor for reliability</td>
+<td align="left">See table below</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(a_2\)</span></td>
+<td align="left">Material factor</td>
+<td align="left">0.5 to 2.0 (modern steels ≈ 1.0)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(a_3\)</span></td>
+<td align="left">Operating conditions factor</td>
+<td align="left">0.1 to 1.0</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(a_{ISO}\)</span></td>
+<td align="left">Combined lubrication-contamination factor</td>
+<td align="left">0.1 to 50</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reliability Factor (<span class="math inline">\(a_1\)</span>):</strong></p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:reliability-table">Table 8.4: </span>Reliability Factor a₁
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Reliability
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Life Symbol
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+a₁
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;background-color: rgba(232, 245, 233, 255) !important;">
+90%
+</td>
+<td style="text-align:center;background-color: rgba(232, 245, 233, 255) !important;">
+L10
+</td>
+<td style="text-align:center;background-color: rgba(232, 245, 233, 255) !important;">
+1.00
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+95%
+</td>
+<td style="text-align:center;">
+L5
+</td>
+<td style="text-align:center;">
+0.64
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+96%
+</td>
+<td style="text-align:center;">
+L4
+</td>
+<td style="text-align:center;">
+0.55
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+97%
+</td>
+<td style="text-align:center;">
+L3
+</td>
+<td style="text-align:center;">
+0.47
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+98%
+</td>
+<td style="text-align:center;">
+L2
+</td>
+<td style="text-align:center;">
+0.37
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+99%
+</td>
+<td style="text-align:center;">
+L1
+</td>
+<td style="text-align:center;">
+0.25
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="life-calculation-plot" class="section level3 unnumbered hasAnchor">
+<h3>Life Calculation Plot<a href="ball-bearings-and-bushings.html#life-calculation-plot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The following plot illustrates how bearing life varies with the C/P ratio:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bearing-life-plot"></span>
+<img src="_main_files/figure-html/bearing-life-plot-1.png" alt="Bearing life as a function of load ratio (C/P)." width="960" />
 <p class="caption">
-Figure 1.2: Typical Casting Company.
+Figure 8.3: Bearing life as a function of load ratio (C/P).
 </p>
 </div>
-<details>
-<summary>
-This diagram illustrates the integrated flow of a metal casting facility, tracing the journey from raw scrap and sand to a finished product.
-</summary>
-<p>The process is characterized by two main streams: <strong>Metal Melting</strong> and <strong>Sand/Core Preparation</strong>, which converge at the pouring stage.</p>
-<div id="primary-metal-melting-methods" class="section level4 unnumbered hasAnchor">
-<h4>Primary Metal Melting Methods<a href="design-for-casting.html#primary-metal-melting-methods" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The image identifies three distinct industrial furnaces. Each uses a different physical principle to reach the melting point of the metal (often exceeding 1,370°C or 2,500°F for iron).</p>
-<div id="electric-arc-furnace-eaf" class="section level5 unnumbered hasAnchor">
-<h5>Electric Arc Furnace (EAF)<a href="design-for-casting.html#electric-arc-furnace-eaf" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> This furnace uses high-voltage electric arcs to melt the charge. Large graphite electrodes are lowered toward the metal scrap; electricity “arcs” from the electrodes to the metal, generating intense thermal energy.
-<ul>
-<li><strong>Emissions:</strong> As indicated by the “Gas and Particulate Emissions” label, this process is volatile. The arc can cause rapid vaporization of surface contaminants on the scrap metal.</li>
-</ul></li>
-</ul>
-</div>
-<div id="induction-furnace" class="section level5 unnumbered hasAnchor">
-<h5>Induction Furnace<a href="design-for-casting.html#induction-furnace" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> This method utilizes a high-voltage electrical source passed through a copper coil. This creates a rapidly reversing magnetic field that induces “eddy currents” inside the metal. The metal’s own electrical resistance generates the heat internally.
-<ul>
-<li><strong>Characteristics:</strong> It is generally cleaner than the EAF and provides a natural “stirring” action due to electromagnetic forces, which ensures a consistent alloy mix.</li>
-</ul></li>
-</ul>
-</div>
-<div id="cupola-furnace" class="section level5 unnumbered hasAnchor">
-<h5>Cupola Furnace<a href="design-for-casting.html#cupola-furnace" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> A Cupola is a vertical, cylindrical furnace. It is a “combustion” furnace where layers of <strong>Coke</strong> (fuel), <strong>Flux</strong>, and <strong>Metallics</strong> are layered. A blower forces air into the bottom to facilitate the burning of the coke, which melts the metal as it drops through the stack.
-<ul>
-<li><strong>Characteristics:</strong> This is a continuous melting process. The diagram shows a tall stack to manage the significant volume of flue gases produced by the burning fuel.</li>
-</ul></li>
-</ul>
+<blockquote>
+<p><strong>Design Insight:</strong> A small increase in bearing size (higher C) or reduction in load (lower P) dramatically increases bearing life due to the cubic relationship.</p>
+</blockquote>
+<hr />
 </div>
 </div>
-<div id="mold-and-core-preparation" class="section level4 unnumbered hasAnchor">
-<h4>Mold and Core Preparation<a href="design-for-casting.html#mold-and-core-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>For a casting to have a specific shape, the molten metal must be poured into a “negative” space.</p>
-<ul>
-<li><strong>Sand Preparation:</strong> Raw sand is mixed with a <strong>Binder</strong> (like clay or chemical resin) to ensure it holds its shape.
-<ul>
-<li><strong>Molding:</strong> The sand is packed around a pattern to create the external shape of the part.</li>
-<li><strong>Core Making &amp; Baking:</strong> <strong>Cores</strong> are used to create hollow internal cavities (like the inside of an engine block). These are often “baked” in an oven to harden the binder so the core doesn’t collapse when hit by molten metal.</li>
-</ul></li>
-</ul>
+<div id="bearing-example" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Applied Example: Ball Bearing Life Calculation<a href="ball-bearings-and-bushings.html#bearing-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="problem-statement-1" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="ball-bearings-and-bushings.html#problem-statement-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 </div>
-<div id="post-melting-and-finishing" class="section level4 unnumbered hasAnchor">
-<h4>Post-Melting and Finishing<a href="design-for-casting.html#post-melting-and-finishing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Once the metal is liquid and the molds are ready, the final steps of production occur:</p>
+<p>A deep groove ball bearing (6207) supports a shaft rotating at <strong>1,750 RPM</strong>. The bearing experiences a <strong>radial load of 3,500 N</strong> and an <strong>axial load of 800 N</strong>. Determine:</p>
 <ol style="list-style-type: decimal">
-<li><strong>Ductile Iron Inoculation:</strong> The metal is treated with alloys (like Magnesium) to improve its strength and ductility.</li>
-<li><strong>Pouring:</strong> The “Hot Metal” is poured into the molds.</li>
-<li><strong>Casting Shakeout:</strong> Once solidified, the sand mold is vibrated until it breaks apart, releasing the metal casting.
-<ul>
-<li><em>Note: The “Return Sand” is sent back to the start of the process to be recycled.</em></li>
-</ul></li>
-<li><strong>Cooling and Cleaning:</strong> The casting is cooled and cleaned of any remaining sand or “flash” (excess metal).</li>
-<li><strong>Finishing:</strong> Final grinding or machining is performed before <strong>Shipping</strong>.</li>
+<li>The equivalent dynamic load (<span class="math inline">\(P\)</span>)</li>
+<li>The basic L10 life in hours</li>
+<li>The L5 life (95% reliability) in hours</li>
 </ol>
-<hr />
-<strong>Environmental Note:</strong> The diagram emphasizes that every stage of the foundry—from melting to shakeout—generates dust and gases, highlighting the need for robust industrial ventilation systems.
-</details>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/2CIcvB72dmk" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="strict-origin-when-cross-origin" 
-    allowfullscreen>
-  </iframe>
+<p><strong>Given data from catalog:</strong>
+- Bearing: 6207
+- Dynamic load rating: <span class="math inline">\(C = 26.0\)</span> kN = 26,000 N
+- For Fa/Fr ratio, use: <span class="math inline">\(e = 0.24\)</span>, <span class="math inline">\(X = 0.56\)</span>, <span class="math inline">\(Y = 1.6\)</span></p>
+<div id="solution" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="ball-bearings-and-bushings.html#solution" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 </div>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/pwaXCko_Tkw" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="strict-origin-when-cross-origin" 
-    allowfullscreen>
-  </iframe>
-</div>
-<p>Further reading:</p>
-<p><a href="https://www.reliance-foundry.com/blog/sand-casting">Reliance Foundry</a></p>
-<p><a href="https://www.3dpcasting.com/blogs/sand-casting-8-key-steps-in-detail/">3DPCasting</a></p>
-<p><a href="https://www.generalkinematics.com/blog/sand-casting/">General Kinematics</a></p>
-<p><a href="https://diecasting.zinc.org/properties/en/design/eng_prop_d_design-rules/">Design Rules</a></p>
-</div>
-</div>
-</div>
-<div id="full-mould-casting-casting" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> Full Mould Casting Casting<a href="design-for-casting.html#full-mould-casting-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="investment-casting" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Investment Casting<a href="design-for-casting.html#investment-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<hr />
-</div>
-<div id="design-for-casting-reliance-casting-design" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Design for Casting <span class="citation">(<a href="#ref-reliance-casting-design">Reliance Foundry Co. Ltd. 2025</a>)</span><a href="design-for-casting.html#design-for-casting-reliance-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="engineering-metal-castings-for-quality-and-value" class="section level3 hasAnchor" number="1.4.1">
-<h3><span class="header-section-number">1.4.1</span> 🔩 Engineering Metal Castings for Quality and Value<a href="#engineering-metal-castings-for-quality-and-value" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Good metal casting design aims to create the simplest mold that will produce the desired shape. This process requires expert knowledge of metals and casting methods to strike the best balance between quality and value in the final product.</p>
-<p>Engineers and designers select metals and casting methods based on the mechanical requirements of the end-user. They must determine how the cast object will behave under load, when struck, and in different heat conditions—specifically, whether it will crack, warp, or deform over time. Metal designs may also require a specific grade of finishing for either mechanical or aesthetic reasons.</p>
-<p>Ultimately, the designer uses their experience of how material properties and casting methods influence each other in the foundry to create the final design. A key skill is knowing the behavior of metal in its liquid, cooling, and solid states to create a design that minimizes production problems.</p>
-</div>
-<div id="variables-in-metal-casting-design" class="section level3 hasAnchor" number="1.4.2">
-<h3><span class="header-section-number">1.4.2</span> 🔬 Variables in Metal Casting Design<a href="#variables-in-metal-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Several characteristics of the metal itself and the physics of heat transfer significantly affect the outcome of a casting design.</p>
-<div id="metal-castability" class="section level4 hasAnchor" number="1.4.2.1">
-<h4><span class="header-section-number">1.4.2.1</span> Metal Castability<a href="design-for-casting.html#metal-castability" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Four main metal characteristics influence the casting process:</p>
-<ul>
-<li><strong>Fluidity:</strong> This describes the ease with which a molten metal flows. Metals with high fluidity are better able to capture small details within a mold.</li>
-<li><strong>Shrinkage:</strong> This is the rate at which molten metal contracts as it cools. Shrinkage is categorized by three stages:
-<ul>
-<li><strong>Liquid Shrinkage:</strong> Contraction rate when the metal first begins to cool.</li>
-<li><strong>Solidification Shrinkage:</strong> Contraction rate when the metal is actively freezing from a liquid to a solid state.</li>
-<li><strong>Solid Shrinkage:</strong> Contraction rate once the metal has fully set.</li>
-<li>These rates help predict strains and defects, especially if parts of the design freeze much faster than others, which can challenge the casting’s integrity.</li>
-</ul></li>
-<li><strong>Slag or Dross Formation:</strong> This describes the presence of non-metallic inclusions in the casting. Slag/dross on the surface may be acceptable, but sub-surface inclusions are detrimental.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
-<img src="images/dross-slag-titanium.jpg" alt="Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging." width="50%" />
-<p class="caption">
-Figure 1.3: Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging.
-</p>
-</div>
-<ul>
-<li><strong>Pouring Temperature:</strong> This is the specific temperature at which an alloy can be poured. Generally, the hotter the metal, the more production challenges are introduced.</li>
-</ul>
-</div>
-<div id="heat-transfer-and-solidification-patterns" class="section level4 hasAnchor" number="1.4.2.2">
-<h4><span class="header-section-number">1.4.2.2</span> Heat Transfer and Solidification Patterns<a href="design-for-casting.html#heat-transfer-and-solidification-patterns" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Solidification is controlled by how heat is transferred and dispersed:</p>
-<ul>
-<li><strong>Heat Transfer Rates:</strong> Two rates affect solidification speed:
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:bearing-example-calc">Table 8.5: </span>Ball Bearing Life Calculation Steps
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Step
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Calculation
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Result
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
 <ol style="list-style-type: decimal">
-<li>The dispersion of heat through the metal itself.</li>
-<li>The rate of heat transfer from the casting surface to the mold.</li>
+<li>Check load ratio
+</td>
+<td style="text-align:left;">
+Fa/Fr = 800 / 3500 = 0.229
+</td>
+<td style="text-align:left;">
+≤ e: Use X=1, Y=0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Equivalent load (P)
+</td>
+<td style="text-align:left;">
+P = X·Fr + Y·Fa = 0.56×3500 + 1.6×800
+</td>
+<td style="text-align:left;">
+3500 N
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>L10 (revolutions)
+</td>
+<td style="text-align:left;">
+L10 = (C/P)³ × 10⁶ = (26/3.5)³ × 10⁶
+</td>
+<td style="text-align:left;">
+409.9 million rev
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+<ol start="4" style="list-style-type: decimal">
+<li>L10 (hours)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+L10h = L10 / (60 × n) = 409.9×10⁶ / (60 × 1750)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+3,904 hours
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="5" style="list-style-type: decimal">
+<li>L5 (95% reliability)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+L5 = a₁ × L10 = 0.64 × 3904
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+2,499 hours
+</td>
+</tr>
+</tbody>
+</table></li>
 </ol></li>
-<li>These rates determine the overall temperature differential across the casting, which can lead to differential cooling as sections change state at different times.</li>
-<li><strong>Solidification Pattern:</strong> A casting usually crystallizes from the edge inward, cooling quickly where it touches the mold.</li>
-<li>Engineers use the crystallization, heat transfer, and shrinkage rates to predict the solidification pattern and design the mold accordingly to minimize shrinkage problems.
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<div id="interpretation" class="section level5 unnumbered hasAnchor">
+<h5>Interpretation<a href="ball-bearings-and-bushings.html#interpretation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <ul>
-<li><strong>Chills:</strong> Molds may be designed with chills to create more rapid shrinkage in a specific section.</li>
-<li><strong>Risers:</strong> Reservoirs, called risers, are connected to the cooling casting to slowly feed liquid metal into it, preventing cavities from forming as the metal shrinks.</li>
-</ul></li>
+<li>The <strong>L10 life</strong> of 3,904 hours means that 90% of these bearings will operate at least this long before fatigue failure.</li>
+<li>For applications requiring <strong>95% reliability</strong>, use the L5 life of 2,499 hours.</li>
+<li>At 24/7 operation, L10 represents approximately 0.4 years of service.</li>
 </ul>
-</div>
-</div>
-<div id="design-considerations-for-shape-and-mold" class="section level3 hasAnchor" number="1.4.3">
-<h3><span class="header-section-number">1.4.3</span> 📐 Design Considerations for Shape and Mold<a href="#design-considerations-for-shape-and-mold" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Designers must structure the geometry of the casting and the mold components to manage heat and metal flow.</p>
-<div id="shape-and-section-size-changes" class="section level4 hasAnchor" number="1.4.3.1">
-<h4><span class="header-section-number">1.4.3.1</span> Shape and Section Size Changes<a href="design-for-casting.html#shape-and-section-size-changes" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Hot Spots:</strong> Increased thickness in material can create hot spots in cooling castings.</li>
-<li><strong>Uniform Thickness:</strong> Where possible, designing castings with uniform thickness is helpful.</li>
-<li><strong>Tapering:</strong> For large diameter changes, sections should be tapered slowly to prevent cooling strain.</li>
-<li><strong>Smoothing and Cores:</strong> Engineers prevent high-volume hotspots by smoothing sharp angles and adding cores.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
-<img src="images/metal-casting-wall-slope.png" alt="Metal castings with large diameter changes should be tapered slowly to prevent cooling strain." width="50%" />
-<p class="caption">
-Figure 1.4: Metal castings with large diameter changes should be tapered slowly to prevent cooling strain.
-</p>
-</div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
-<img src="images/metal-casting-volume-change.png" alt="By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming." width="50%" />
-<p class="caption">
-Figure 1.5: By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming.
-</p>
-</div>
-</div>
-<div id="junctions-between-sections" class="section level4 hasAnchor" number="1.4.3.2">
-<h4><span class="header-section-number">1.4.3.2</span> Junctions Between Sections<a href="design-for-casting.html#junctions-between-sections" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Volume Consistency:</strong> Sharp angles where two or more sections meet can create a larger volume of metal (a hotspot) at the junction.</li>
-<li><strong>Rounding Corners:</strong> Designers can smooth these corners, rounding them away from sharp angles, to make the metal volume at the junction more consistent with the surrounding metal volumes.</li>
-</ul>
-</div>
-<div id="mold-stability-and-surface-finish" class="section level4 hasAnchor" number="1.4.3.3">
-<h4><span class="header-section-number">1.4.3.3</span> Mold Stability and Surface Finish<a href="design-for-casting.html#mold-stability-and-surface-finish" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Mold Integrity:</strong> The mold material must be able to withstand the metal’s behavior (expansion, contraction, and off-gassing) while it cools, without fracturing or collapsing.</li>
-<li><strong>Surface Finish Capability:</strong> The molding method dictates the final surface finish.
-<ul>
-<li>Fine finishes often require more expensive molding processes.</li>
-<li>For parts requiring precision finishes only in certain areas, the casting can be machined afterward, but the metal must be easily machinable.</li>
-<li>While intensive molding processes yield smoother finishes and are often costly, for large objects, this can be less expensive than machining the entire surface.</li>
-</ul></li>
-</ul>
-</div>
-<div id="other-mold-design-considerations" class="section level4 hasAnchor" number="1.4.3.4">
-<h4><span class="header-section-number">1.4.3.4</span> Other Mold Design Considerations<a href="design-for-casting.html#other-mold-design-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>To achieve an excellent casting at a good price, the designer should try to minimize or eliminate deep drafts, expensive cores, and irregular parting.</p>
-<ul>
-<li><strong>Drafts:</strong> These are necessary tapers on the vertical walls of a casting. They ensure the pattern (the positive image of the object) can be removed from the mold without disturbing the walls.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
-<img src="images/Gemini_Generated_Image_b6qi6zb6qi6zb6qi.png" alt="Design with Draft Angles" width="50%" />
-<p class="caption">
-Figure 1.6: Design with Draft Angles
-</p>
-</div>
-<ul>
-<li><strong>Cores:</strong> Cores are used to create intentional voids or holes inside a casting. They can be costly to produce, but can sometimes be avoided by changing the orientation of the casting or the mold’s parting line.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
-<img src="images/sand-mold-with-core.jpg" alt="A sand mold with a core. Where the halves of the mold come together is the parting line." width="50%" />
-<p class="caption">
-Figure 1.7: A sand mold with a core. Where the halves of the mold come together is the parting line.
-</p>
-</div>
-<ul>
-<li><strong>Parting Lines:</strong> This is the line where the two halves of the mold meet. Risers and gates are often placed along the parting line.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
-<img src="images/Gemini_Generated_Image_67wz4x67wz4x67wz.png" alt="Parting Lines" width="50%" />
-<p class="caption">
-Figure 1.8: Parting Lines
-</p>
-</div>
-<pre><code>* **Flash:** Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.</code></pre>
-</div>
-<div id="excellence-in-casting-design" class="section level4 hasAnchor" number="1.4.3.5">
-<h4><span class="header-section-number">1.4.3.5</span> 🌟 Excellence in Casting Design<a href="#excellence-in-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Designing a superior product at the lowest price requires understanding the complex dependencies between materials and methods. The required mechanical properties of the final product determine the metal needed, and that metal’s liquid, cooling, and solid behavior dictates the necessary mold features.</p>
-<ul>
-<li><strong>Example:</strong> Brittle metals are less suited for designs with sharp edges prone to chipping. Metals with low fluidity require molds with less small detail.</li>
-<li><strong>Process Challenges:</strong> A high melting point (like that of steel) demands a higher level of monitoring and precision throughout the process.</li>
-</ul>
-<p>Experience and clear communication among designers, engineers, and metalworkers are crucial for creating a product of quality and value.</p>
 <hr />
 </div>
 </div>
+<div id="bushings" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Plain Bearings (Bushings)<a href="ball-bearings-and-bushings.html#bushings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Plain bearings, also called <strong>bushings</strong> or <strong>sleeve bearings</strong>, are the simplest form of bearing. They consist of a bearing surface with no rolling elements—the shaft slides directly against the bearing material.</p>
+<div id="advantages-of-bushings" class="section level3 unnumbered hasAnchor">
+<h3>Advantages of Bushings<a href="ball-bearings-and-bushings.html#advantages-of-bushings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="45%" />
+<col width="54%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Advantage</th>
+<th align="left">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Compact design</strong></td>
+<td align="left">No need for rolling elements; minimal radial space</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Low cost</strong></td>
+<td align="left">Simple manufacturing; no precision balls or races</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Quiet operation</strong></td>
+<td align="left">No rolling elements to generate noise</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>High load capacity</strong></td>
+<td align="left">Large contact area; excellent for shock loads</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Self-lubricating options</strong></td>
+<td align="left">Polymer and sintered metal bushings need no external lubrication</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="defects-in-casting-process" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Defects in Casting process<a href="design-for-casting.html#defects-in-casting-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="types-of-bushings" class="section level3 unnumbered hasAnchor">
+<h3>Types of Bushings<a href="ball-bearings-and-bushings.html#types-of-bushings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:bushing-types-table">Table 8.6: </span>Common Bushing Materials and PV Limits
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Type
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Material
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+PV_Limit
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Applications
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Lubrication
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bronze Bushings
+</td>
+<td style="text-align:left;">
+Cast bronze, SAE 660
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+50,000 - 75,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Heavy machinery, pumps
+</td>
+<td style="text-align:left;">
+Oil/grease required
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oil-Impregnated Bronze
+</td>
+<td style="text-align:left;">
+Sintered bronze (porous)
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+25,000 - 50,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Fractional HP motors, fans
+</td>
+<td style="text-align:left;">
+Self-lubricating
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PTFE-Lined
+</td>
+<td style="text-align:left;">
+Steel + PTFE coating
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+10,000 - 25,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Food processing, medical
+</td>
+<td style="text-align:left;">
+Dry running
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polymer (Nylon, Acetal)
+</td>
+<td style="text-align:left;">
+Engineering plastics
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+3,000 - 10,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Light duty, instrumentation
+</td>
+<td style="text-align:left;">
+Often dry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PEEK Composite
+</td>
+<td style="text-align:left;">
+High-performance polymer
+</td>
+<td style="text-align:left;background-color: rgba(249, 231, 240, 255) !important;">
+15,000 - 40,000 psi·ft/min
+</td>
+<td style="text-align:left;">
+Aerospace, high temperature
+</td>
+<td style="text-align:left;">
+Dry or minimal
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="pv-limits" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> PV Limits for Bushings<a href="ball-bearings-and-bushings.html#pv-limits" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>PV limit</strong> is the most important design criterion for plain bearings. It represents the maximum combination of <strong>bearing pressure</strong> (P) and <strong>sliding velocity</strong> (V) that the bearing material can sustain without excessive wear or failure.</p>
+<div id="the-pv-concept" class="section level3 unnumbered hasAnchor">
+<h3>The PV Concept<a href="ball-bearings-and-bushings.html#the-pv-concept" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[PV = P \times V\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+<th align="left">Typical Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Bearing pressure</td>
+<td align="left">psi (or MPa)</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(V\)</span></td>
+<td align="left">Sliding velocity</td>
+<td align="left">ft/min (or m/s)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(PV\)</span></td>
+<td align="left">PV factor</td>
+<td align="left">psi·ft/min (or MPa·m/s)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="calculating-bearing-pressure-p" class="section level3 unnumbered hasAnchor">
+<h3>Calculating Bearing Pressure (P)<a href="ball-bearings-and-bushings.html#calculating-bearing-pressure-p" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a journal bearing (shaft in a bushing):</p>
+<p><span class="math display">\[P = \frac{F}{d \times L}\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(F\)</span></td>
+<td align="left">Radial load on the bearing (lbf or N)</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(d\)</span></td>
+<td align="left">Shaft (journal) diameter (in or mm)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(L\)</span></td>
+<td align="left">Bearing length (in or mm)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note:</strong> This is the <strong>projected area</strong> method, using <span class="math inline">\(A = d \times L\)</span>, not the cylindrical surface area.</p>
+</blockquote>
+</div>
+<div id="calculating-sliding-velocity-v" class="section level3 unnumbered hasAnchor">
+<h3>Calculating Sliding Velocity (V)<a href="ball-bearings-and-bushings.html#calculating-sliding-velocity-v" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[V = \pi \times d \times n\]</span></p>
+<p>For consistent units:</p>
+<p><strong>English:</strong>
+<span class="math display">\[V = \frac{\pi \times d \times n}{12} \quad \text{(ft/min, where } d \text{ in inches, } n \text{ in RPM)}\]</span></p>
+<p><strong>Metric:</strong>
+<span class="math display">\[V = \frac{\pi \times d \times n}{60,000} \quad \text{(m/s, where } d \text{ in mm, } n \text{ in RPM)}\]</span></p>
+<hr />
+</div>
+<div id="pv-limit-visualization" class="section level3 unnumbered hasAnchor">
+<h3>PV Limit Visualization<a href="ball-bearings-and-bushings.html#pv-limit-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pv-limit-plot"></span>
+<img src="_main_files/figure-html/pv-limit-plot-1.png" alt="PV limit diagram showing safe operating region for different bushing materials." width="960" />
+<p class="caption">
+Figure 8.4: PV limit diagram showing safe operating region for different bushing materials.
+</p>
+</div>
+<hr />
+</div>
+<div id="design-rules-for-pv" class="section level3 unnumbered hasAnchor">
+<h3>Design Rules for PV<a href="ball-bearings-and-bushings.html#design-rules-for-pv" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Calculate the actual PV</strong> for your application</li>
+<li><strong>Select a bushing material</strong> with a PV limit <strong>at least 2× higher</strong> than calculated</li>
+<li><strong>Check individual P and V limits</strong> separately (materials have maximums for each)</li>
+<li><strong>Consider temperature effects</strong>—PV limits decrease at elevated temperatures</li>
+</ol>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:individual-limits-table">Table 8.7: </span>Individual P, V, and PV Limits for Common Bushing Materials
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Material
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Max P (psi)
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Max V (ft/min)
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Max PV (psi-ft/min)
+</th>
+<th style="text-align:center;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Max Temp (F)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+SAE 660 Bronze
+</td>
+<td style="text-align:center;">
+4000
+</td>
+<td style="text-align:center;">
+750
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+75000
+</td>
+<td style="text-align:center;">
+450
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sintered Bronze (oil-impreg.)
+</td>
+<td style="text-align:center;">
+2000
+</td>
+<td style="text-align:center;">
+400
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+50000
+</td>
+<td style="text-align:center;">
+300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PTFE/Bronze Composite
+</td>
+<td style="text-align:center;">
+2500
+</td>
+<td style="text-align:center;">
+500
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+25000
+</td>
+<td style="text-align:center;">
+500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Acetal (Delrin)
+</td>
+<td style="text-align:center;">
+1500
+</td>
+<td style="text-align:center;">
+600
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+10000
+</td>
+<td style="text-align:center;">
+180
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nylon 6/6
+</td>
+<td style="text-align:center;">
+1000
+</td>
+<td style="text-align:center;">
+400
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+5000
+</td>
+<td style="text-align:center;">
+200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PEEK
+</td>
+<td style="text-align:center;">
+3000
+</td>
+<td style="text-align:center;">
+650
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+40000
+</td>
+<td style="text-align:center;">
+480
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="bushing-example" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Applied Example: Bushing PV Calculation<a href="ball-bearings-and-bushings.html#bushing-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="problem-statement-2" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="ball-bearings-and-bushings.html#problem-statement-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<p>A shaft rotating at <strong>500 RPM</strong> is supported by a bronze bushing. The shaft diameter is <strong>1.5 inches</strong> and the bushing length is <strong>2.0 inches</strong>. The radial load on the bushing is <strong>800 lbf</strong>.</p>
+<p>Determine:
+1. The bearing pressure (<span class="math inline">\(P\)</span>)
+2. The sliding velocity (<span class="math inline">\(V\)</span>)
+3. The PV value
+4. Whether a SAE 660 bronze bushing is suitable</p>
+<div id="solution-1" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="ball-bearings-and-bushings.html#solution-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:bushing-example-calc">Table 8.8: </span>Bushing PV Calculation Steps
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Step
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Formula
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Calculation
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Result
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>Bearing Pressure
+</td>
+<td style="text-align:left;">
+P = F / (d × L)
+</td>
+<td style="text-align:left;">
+P = 800 / (1.5 × 2)
+</td>
+<td style="text-align:left;">
+266.7 psi
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Sliding Velocity
+</td>
+<td style="text-align:left;">
+V = π·d·n / 12
+</td>
+<td style="text-align:left;">
+V = π × 1.5 × 500 / 12
+</td>
+<td style="text-align:left;">
+196.3 ft/min
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+<ol start="3" style="list-style-type: decimal">
+<li>PV Factor
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+PV = P × V
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+PV = 266.7 × 196.3
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+52,360 psi·ft/min
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="4" style="list-style-type: decimal">
+<li>Check P Limit
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+P &lt; P_max (4,000 psi)
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+266.7 &lt; 4,000?
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+OK ✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="5" style="list-style-type: decimal">
+<li>Check V Limit
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+V &lt; V_max (750 ft/min)
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+196.3 &lt; 750?
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+OK ✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="6" style="list-style-type: decimal">
+<li>Check PV Limit
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+PV &lt; PV_max (75,000)
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+52360 &lt; 75,000?
+</td>
+<td style="text-align:left;background-color: rgba(227, 242, 253, 255) !important;">
+OK ✓
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="7" style="list-style-type: decimal">
+<li>Safety Factor
+</td>
+<td style="text-align:left;">
+SF = PV_limit / PV_actual
+</td>
+<td style="text-align:left;">
+SF = 75,000 / 52360
+</td>
+<td style="text-align:left;">
+1.43
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<div id="conclusion" class="section level5 unnumbered hasAnchor">
+<h5>Conclusion<a href="ball-bearings-and-bushings.html#conclusion" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The SAE 660 bronze bushing is <strong>suitable</strong> for this application:</p>
+<ul>
+<li>All individual limits (P, V) are satisfied</li>
+<li>The actual PV (52,360 psi·ft/min) is well below the material limit (75,000 psi·ft/min)</li>
+<li>Safety factor of 1.43 provides adequate margin</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="bearing-vs.-bushing-selection-guide" class="section level2 unnumbered hasAnchor">
+<h2>Bearing vs. Bushing Selection Guide<a href="ball-bearings-and-bushings.html#bearing-vs.-bushing-selection-guide" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When should you use a ball bearing versus a bushing? The following table provides guidance:</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:selection-guide">Table 8.9: </span>Ball Bearing vs. Bushing Selection Criteria
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Factor
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Ball Bearing
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Bushing (Plain Bearing)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Speed
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+High speeds (&gt;3,000 RPM)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Low to moderate speeds
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Load Type
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Radial and/or axial
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Primarily radial
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shock Loads
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Poor—balls can indent races
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Excellent—large contact area
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Space (radial)
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Requires more radial space
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Very compact
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lubrication
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Sealed or periodic greasing
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Self-lubricating options available
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Noise
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Some noise from rolling elements
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Quieter operation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cost
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Higher initial cost
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Lower cost
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maintenance
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Replace entire bearing
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Can often be replaced in-situ
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Life Prediction
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Well-established (L10)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Less precise; wear-based
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="summary-equations" class="section level2 unnumbered hasAnchor">
+<h2>Summary Equations<a href="ball-bearings-and-bushings.html#summary-equations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ball-bearing-life" class="section level3 unnumbered hasAnchor">
+<h3>Ball Bearing Life<a href="ball-bearings-and-bushings.html#ball-bearing-life" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="43%" />
+<col width="56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(L_{10} = \left(\frac{C}{P}\right)^3 \times 10^6\)</span></td>
+<td align="left">Basic L10 life (revolutions) for ball bearings</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(L_{10h} = \frac{10^6}{60n}\left(\frac{C}{P}\right)^3\)</span></td>
+<td align="left">L10 life in hours</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P = X \cdot F_r + Y \cdot F_a\)</span></td>
+<td align="left">Equivalent dynamic load</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(L_{na} = a_1 \cdot a_{ISO} \cdot L_{10}\)</span></td>
+<td align="left">Adjusted rating life</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="bushing-pv-limits" class="section level3 unnumbered hasAnchor">
+<h3>Bushing PV Limits<a href="ball-bearings-and-bushings.html#bushing-pv-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P = \frac{F}{d \times L}\)</span></td>
+<td align="left">Bearing pressure (projected area)</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(V = \frac{\pi d n}{12}\)</span></td>
+<td align="left">Sliding velocity (ft/min)</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(PV = P \times V\)</span></td>
+<td align="left">PV factor—must be less than material PV limit</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="design-checklist" class="section level2 unnumbered hasAnchor">
+<h2>Design Checklist<a href="ball-bearings-and-bushings.html#design-checklist" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>For Ball Bearings:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Determine radial and axial loads</label></li>
+<li><label><input type="checkbox" />Calculate equivalent dynamic load (<span class="math inline">\(P\)</span>)</label></li>
+<li><label><input type="checkbox" />Select bearing with <span class="math inline">\(C/P\)</span> ratio giving adequate life</label></li>
+<li><label><input type="checkbox" />Verify speed is below limiting speed</label></li>
+<li><label><input type="checkbox" />Apply reliability and operating condition factors if needed</label></li>
+<li><label><input type="checkbox" />Specify lubrication and sealing requirements</label></li>
+</ul>
+<p><strong>For Bushings:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Calculate bearing pressure (<span class="math inline">\(P\)</span>)</label></li>
+<li><label><input type="checkbox" />Calculate sliding velocity (<span class="math inline">\(V\)</span>)</label></li>
+<li><label><input type="checkbox" />Verify <span class="math inline">\(P &lt; P_{max}\)</span> for selected material</label></li>
+<li><label><input type="checkbox" />Verify <span class="math inline">\(V &lt; V_{max}\)</span> for selected material</label></li>
+<li><label><input type="checkbox" />Verify <span class="math inline">\(PV &lt; PV_{limit}\)</span> with safety factor ≥ 2</label></li>
+<li><label><input type="checkbox" />Consider temperature effects on PV limits</label></li>
+<li><label><input type="checkbox" />Specify lubrication (if required) or confirm dry-running capability</label></li>
+</ul>
 
-</div>
-</div>
-<h3>References</h3>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-reliance-casting-design" class="csl-entry">
-Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
 </div>
 </div>
             </section>
@@ -909,8 +2138,8 @@ Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="design-for-joining.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="design-for-machining.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="four-bar-linkages.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -941,7 +2170,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/01-Casting.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/08-Bearings.Rmd",
     "text": "Edit"
   },
   "history": {

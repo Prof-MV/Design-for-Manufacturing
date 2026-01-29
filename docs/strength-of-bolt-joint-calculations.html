@@ -23,7 +23,7 @@
 <meta name="author" content="Martin Volkening" />
 
 
-<meta name="date" content="2026-01-23" />
+<meta name="date" content="2026-01-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,8 +54,81 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -332,6 +405,112 @@ div.csl-indent {
 <li class="chapter" data-level="6.0.22" data-path="design-for-welding.html"><a href="design-for-welding.html#controlling-weld-distortion"><i class="fa fa-check"></i><b>6.0.22</b> Controlling Weld Distortion</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="design-for-welding.html"><a href="design-for-welding.html#references-2"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="design-for-machining.html"><a href="design-for-machining.html"><i class="fa fa-check"></i><b>7</b> Design for Machining</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions"><i class="fa fa-check"></i><b>7.1</b> Challenge Questions</a></li>
+<li class="chapter" data-level="7.2" data-path="design-for-machining.html"><a href="design-for-machining.html#theory-math"><i class="fa fa-check"></i><b>7.2</b> Theory &amp; Math</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions-1"><i class="fa fa-check"></i><b>7.2.1</b> Challenge Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="design-for-machining.html"><a href="design-for-machining.html#hands-on-examples"><i class="fa fa-check"></i><b>7.3</b> Hands-on Examples</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="design-for-machining.html"><a href="design-for-machining.html#automotive-industry-1"><i class="fa fa-check"></i><b>7.3.1</b> Automotive Industry</a></li>
+<li class="chapter" data-level="7.3.2" data-path="design-for-machining.html"><a href="design-for-machining.html#food-industry"><i class="fa fa-check"></i><b>7.3.2</b> Food Industry</a></li>
+<li class="chapter" data-level="7.3.3" data-path="design-for-machining.html"><a href="design-for-machining.html#defense-industry-1"><i class="fa fa-check"></i><b>7.3.3</b> Defense Industry</a></li>
+<li class="chapter" data-level="7.3.4" data-path="design-for-machining.html"><a href="design-for-machining.html#challenge-questions-2"><i class="fa fa-check"></i><b>7.3.4</b> Challenge Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="design-for-machining.html"><a href="design-for-machining.html#interactive-exercises"><i class="fa fa-check"></i><b>7.4</b> Interactive Exercises</a></li>
+<li class="chapter" data-level="7.5" data-path="design-for-machining.html"><a href="design-for-machining.html#check-your-understanding"><i class="fa fa-check"></i><b>7.5</b> Check Your Understanding</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html"><i class="fa fa-check"></i><b>8</b> Ball Bearings and Bushings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#introduction-to-bearings"><i class="fa fa-check"></i>Introduction to Bearings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#classification-of-bearings"><i class="fa fa-check"></i>Classification of Bearings</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#ball-bearings"><i class="fa fa-check"></i>Ball Bearings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#anatomy-of-a-ball-bearing"><i class="fa fa-check"></i>Anatomy of a Ball Bearing</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#types-of-ball-bearings"><i class="fa fa-check"></i>Types of Ball Bearings</a></li>
+</ul></li>
+<li class="chapter" data-level="8.1" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-life"><i class="fa fa-check"></i><b>8.1</b> Ball Bearing Life Calculations</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#the-l10-life-concept"><i class="fa fa-check"></i>The L10 Life Concept</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#basic-life-equation"><i class="fa fa-check"></i>Basic Life Equation</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#converting-to-hours"><i class="fa fa-check"></i>Converting to Hours</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#equivalent-dynamic-load"><i class="fa fa-check"></i>Equivalent Dynamic Load</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#basic-dynamic-load-rating-c"><i class="fa fa-check"></i>Basic Dynamic Load Rating (C)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#adjusted-rating-life"><i class="fa fa-check"></i>Adjusted Rating Life</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#life-calculation-plot"><i class="fa fa-check"></i>Life Calculation Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-example"><i class="fa fa-check"></i><b>8.2</b> Applied Example: Ball Bearing Life Calculation</a></li>
+<li class="chapter" data-level="8.3" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushings"><i class="fa fa-check"></i><b>8.3</b> Plain Bearings (Bushings)</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#advantages-of-bushings"><i class="fa fa-check"></i>Advantages of Bushings</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#types-of-bushings"><i class="fa fa-check"></i>Types of Bushings</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#pv-limits"><i class="fa fa-check"></i><b>8.4</b> PV Limits for Bushings</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#the-pv-concept"><i class="fa fa-check"></i>The PV Concept</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#calculating-bearing-pressure-p"><i class="fa fa-check"></i>Calculating Bearing Pressure (P)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#calculating-sliding-velocity-v"><i class="fa fa-check"></i>Calculating Sliding Velocity (V)</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#pv-limit-visualization"><i class="fa fa-check"></i>PV Limit Visualization</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#design-rules-for-pv"><i class="fa fa-check"></i>Design Rules for PV</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushing-example"><i class="fa fa-check"></i><b>8.5</b> Applied Example: Bushing PV Calculation</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bearing-vs.-bushing-selection-guide"><i class="fa fa-check"></i>Bearing vs. Bushing Selection Guide</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#summary-equations"><i class="fa fa-check"></i>Summary Equations</a>
+<ul>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#ball-bearing-life"><i class="fa fa-check"></i>Ball Bearing Life</a></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#bushing-pv-limits"><i class="fa fa-check"></i>Bushing PV Limits</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ball-bearings-and-bushings.html"><a href="ball-bearings-and-bushings.html#design-checklist"><i class="fa fa-check"></i>Design Checklist</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html"><i class="fa fa-check"></i><b>9</b> Four-Bar Linkages</a>
+<ul>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#introduction-to-four-bar-linkages"><i class="fa fa-check"></i>Introduction to Four-Bar Linkages</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#anatomy-of-a-four-bar-linkage"><i class="fa fa-check"></i>Anatomy of a Four-Bar Linkage</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#grashofs-law"><i class="fa fa-check"></i>Grashof’s Law</a>
+<ul>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#the-grashof-criterion"><i class="fa fa-check"></i>The Grashof Criterion</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#classification-by-grashof-condition"><i class="fa fa-check"></i>Classification by Grashof Condition</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#grashof-classification-summary"><i class="fa fa-check"></i>Grashof Classification Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#types-of-four-bar-linkages"><i class="fa fa-check"></i>Types of Four-Bar Linkages</a>
+<ul>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#crank-rocker-mechanism"><i class="fa fa-check"></i>Crank-Rocker Mechanism</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#double-crank-drag-link-mechanism"><i class="fa fa-check"></i>Double-Crank (Drag-Link) Mechanism</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#triple-rocker-non-grashof"><i class="fa fa-check"></i>Triple-Rocker (Non-Grashof)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#position-analysis"><i class="fa fa-check"></i>Position Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#loop-closure-equation"><i class="fa fa-check"></i>Loop Closure Equation</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#freudensteins-equation"><i class="fa fa-check"></i>Freudenstein’s Equation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#transmission-angle"><i class="fa fa-check"></i>Transmission Angle</a>
+<ul>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#transmission-angle-formula"><i class="fa fa-check"></i>Transmission Angle Formula</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#coupler-curves"><i class="fa fa-check"></i>Coupler Curves</a>
+<ul>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#famous-coupler-curves"><i class="fa fa-check"></i>Famous Coupler Curves</a></li>
+</ul></li>
+<li class="chapter" data-level="9.1" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#linkage-example-1"><i class="fa fa-check"></i><b>9.1</b> Applied Example: Grashof Classification</a></li>
+<li class="chapter" data-level="9.2" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#linkage-example-2"><i class="fa fa-check"></i><b>9.2</b> Applied Example: Transmission Angle Analysis</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#design-guidelines-1"><i class="fa fa-check"></i>Design Guidelines</a>
+<ul>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#link-length-selection"><i class="fa fa-check"></i>Link Length Selection</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#time-ratio"><i class="fa fa-check"></i>Time Ratio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#summary-equations-1"><i class="fa fa-check"></i>Summary Equations</a>
+<ul>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#grashof-classification"><i class="fa fa-check"></i>Grashof Classification</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#position-analysis-1"><i class="fa fa-check"></i>Position Analysis</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#transmission-angle-1"><i class="fa fa-check"></i>Transmission Angle</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#design-checklist-1"><i class="fa fa-check"></i>Design Checklist</a></li>
+<li class="chapter" data-level="" data-path="four-bar-linkages.html"><a href="four-bar-linkages.html#common-applications"><i class="fa fa-check"></i>Common Applications</a></li>
 </ul></li>
 </ul>
 

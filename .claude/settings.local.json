@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''y:\\\\Martin\\\\Documents\\\\!_Fanshawe\\\\26W\\\\ENGR-1025\\\\DesignForManufacturing\\\\_bookdown_files'' -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force ''y:\\\\Martin\\\\Documents\\\\!_Fanshawe\\\\26W\\\\ENGR-1025\\\\DesignForManufacturing\\\\libs'' -ErrorAction SilentlyContinue\")"
+    ]
+  }
+}

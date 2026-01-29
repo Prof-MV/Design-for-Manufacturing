@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Design for Casting | Design for Manufacturing</title>
+  <title>Chapter 7 Design for Machining | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Design for Casting | Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 7 Design for Machining | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Design for Casting | Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 7 Design for Machining | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="design-for-joining.html"/>
+<link rel="prev" href="design-for-welding.html"/>
+<link rel="next" href="ball-bearings-and-bushings.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -529,379 +529,158 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="design-for-casting" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Design for Casting<a href="design-for-casting.html#design-for-casting" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="introduction-to-the-casting-process" class="section level2 unnumbered hasAnchor">
-<h2>💡 Introduction to the Casting Process<a href="#introduction-to-the-casting-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Casting is one of the oldest and most fundamental processes in manufacturing, dating back thousands of years. It involves pouring a liquid material, typically a molten metal, into a mold cavity where it is allowed to solidify in the desired shape. The resulting solidified object is called a <strong>casting</strong>.</p>
-<p>The significance of casting lies in its ability to produce complex, intricate shapes—including those with internal cavities or non-symmetrical geometries—that would be difficult or impossible to create using methods like machining or forging. This makes casting essential for industries ranging from aerospace and automotive to jewelry and construction.</p>
-<hr />
-</div>
-<div id="essential-components-of-casting" class="section level2 unnumbered hasAnchor">
-<h2>🧱 Essential Components of Casting<a href="#essential-components-of-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Every casting operation requires two basic elements:</p>
+<div id="design-for-machining" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Design for Machining<a href="design-for-machining.html#design-for-machining" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Welcome to the chapter on Design for Machining (DFM)! As mechanical engineering students, understanding how to design parts that are easy and cost-effective to machine is crucial for your future careers. DFM principles help reduce manufacturing costs, improve quality, and speed up production time. In this chapter, we’ll explore the fundamentals of DFM, with real-world examples from the automotive, food, and defense industries. We’ll dive into the theory, perform calculations using R, and create visualizations to illustrate key concepts.</p>
+<p>By the end of this chapter, you’ll be equipped to apply DFM principles in your designs, making them more manufacturable. Let’s get started—remember, great designs aren’t just innovative; they’re practical to produce!</p>
+<p>For a visual introduction to DFM in machining, check out this helpful YouTube video: <a href="https://www.youtube.com/watch?v=sq3Ht-ivG5U">Top Design Tips &amp; Manufacturing Processes for Mechanical Engineers | DFM Guide</a>. Another excellent resource is <a href="https://www.youtube.com/watch?v=rauL_J048sI">Only Real Mechanical Engineers Can Spot These Design Mistakes | CNC Machining</a>.</p>
+<div id="challenge-questions" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Challenge Questions<a href="design-for-machining.html#challenge-questions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
-<li><strong>The Casting Material:</strong> This is the material, usually metal (such as iron, steel, aluminum, or bronze), that is melted into a liquid state.</li>
-<li><strong>The Mold:</strong> This is the container that holds the liquid material and determines the final shape of the part. The mold contains a cavity that is the inverse of the part being made.</li>
+<li>Why do you think DFM is particularly important in high-volume industries like automotive?</li>
+<li>Can you think of a part in your daily life that might have been designed poorly for machining?</li>
 </ol>
 </div>
-<div id="the-basic-steps-of-casting" class="section level2 unnumbered hasAnchor">
-<h2>⚙️ The Basic Steps of Casting<a href="design-for-casting.html#the-basic-steps-of-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>While the specifics vary greatly depending on the material and method (e.g., sand casting vs. die casting), the fundamental steps remain consistent:</p>
+<div id="theory-math" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Theory &amp; Math<a href="design-for-machining.html#theory-math" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Design for Machining involves considering the capabilities and limitations of machining processes like milling, turning, and drilling during the design phase. Key principles include minimizing material removal, avoiding deep pockets, using standard hole sizes, and ensuring adequate tolerances.</p>
+<p>Mathematically, one core aspect is calculating spindle speed and feed rates to optimize machining. The spindle speed <span class="math inline">\(N\)</span> (in RPM) is given by:</p>
+<p><span class="math display">\[ N = \frac{1000 \times v}{\pi \times D} \]</span></p>
+<p>where <span class="math inline">\(v\)</span> is the cutting speed (m/min), and <span class="math inline">\(D\)</span> is the tool diameter (mm).</p>
+<p>Machining time <span class="math inline">\(T\)</span> for a turning operation can be:</p>
+<p><span class="math display">\[ T = \frac{L}{f \times N} \]</span></p>
+<p>where <span class="math inline">\(L\)</span> is the length of cut (mm), and <span class="math inline">\(f\)</span> is the feed rate (mm/rev).</p>
+<p>Let’s use R to perform a detailed example calculation. Suppose we’re machining a shaft in the automotive industry with <span class="math inline">\(v = 150\)</span> m/min, <span class="math inline">\(D = 20\)</span> mm, <span class="math inline">\(L = 100\)</span> mm, and <span class="math inline">\(f = 0.2\)</span> mm/rev.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="design-for-machining.html#cb2-1" tabindex="-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb2-2"><a href="design-for-machining.html#cb2-2" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="dv">150</span>  <span class="co"># cutting speed in m/min</span></span>
+<span id="cb2-3"><a href="design-for-machining.html#cb2-3" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="dv">20</span>   <span class="co"># diameter in mm</span></span>
+<span id="cb2-4"><a href="design-for-machining.html#cb2-4" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="dv">100</span>  <span class="co"># length in mm</span></span>
+<span id="cb2-5"><a href="design-for-machining.html#cb2-5" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fl">0.2</span>  <span class="co"># feed in mm/rev</span></span>
+<span id="cb2-6"><a href="design-for-machining.html#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="design-for-machining.html#cb2-7" tabindex="-1"></a><span class="co"># Calculate spindle speed N</span></span>
+<span id="cb2-8"><a href="design-for-machining.html#cb2-8" tabindex="-1"></a>N <span class="ot">&lt;-</span> (<span class="dv">1000</span> <span class="sc">*</span> v) <span class="sc">/</span> (pi <span class="sc">*</span> D)</span>
+<span id="cb2-9"><a href="design-for-machining.html#cb2-9" tabindex="-1"></a>N</span></code></pre></div>
+<pre><code>## [1] 2387.324</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="design-for-machining.html#cb4-1" tabindex="-1"></a><span class="co"># Calculate machining time T</span></span>
+<span id="cb4-2"><a href="design-for-machining.html#cb4-2" tabindex="-1"></a>T <span class="ot">&lt;-</span> L <span class="sc">/</span> (f <span class="sc">*</span> N)</span>
+<span id="cb4-3"><a href="design-for-machining.html#cb4-3" tabindex="-1"></a>T  <span class="co"># in minutes</span></span></code></pre></div>
+<pre><code>## [1] 0.2094395</code></pre>
+<p>This shows a spindle speed of approximately 2387.32 RPM and machining time of about 0.209 minutes. Adjust these parameters in your own code to see how they affect the results!</p>
+<p>In industries like defense, where precision is critical, tolerances must be tight but achievable. Overly tight tolerances increase costs exponentially.</p>
+<div id="challenge-questions-1" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Challenge Questions<a href="design-for-machining.html#challenge-questions-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><strong>Melting:</strong> The casting material is heated to a liquid state in a furnace.</li>
-<li><strong>Pouring:</strong> The molten material is introduced into the mold cavity.</li>
-<li><strong>Solidification:</strong> The material is allowed to cool and solidify within the mold, taking the shape of the cavity.</li>
-<li><strong>Removal (Fettling):</strong> The solidified casting is removed from the mold.</li>
-<li><strong>Cleaning and Finishing:</strong> The casting is cleaned of any excess material (like gates or risers) and prepared for its intended use.</li>
+<li>Derive the formula for machining time if the feed rate changes with material hardness.</li>
+<li>How would you adjust the cutting speed for a food industry application using stainless steel?</li>
 </ol>
 </div>
-<div id="applications-and-scope" class="section level2 unnumbered hasAnchor">
-<h2>🌍 Applications and Scope<a href="#applications-and-scope" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The versatility of casting allows it to produce parts ranging in size from a few grams (e.g., dental crowns) to hundreds of tons (e.g., steam turbine housings). The choice of a specific casting method—such as sand casting, investment casting, die casting, or continuous casting—depends on the required surface finish, dimensional accuracy, batch size, and the type of material being processed.</p>
 </div>
-<div id="sand-mould-casting-the-versatile-workhorse" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Sand Mould Casting: The Versatile Workhorse<a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="introduction" class="section level3 hasAnchor" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> 💡 Introduction<a href="#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Sand casting, also known as sand mould casting, is the oldest and most frequently used metal casting process, responsible for producing over 70% of all metal castings. It is highly valued for its <strong>versatility</strong> and <strong>cost-effectiveness</strong>, making it the foundational method for manufacturing a vast array of metal components, from massive engine blocks and turbine parts to small fittings and decorative items.</p>
-<p>The basic principle is simple: create a mould using sand, pour molten metal into the cavity, let it solidify, and then break the mould to retrieve the part.</p>
-<hr />
-</div>
-<div id="components-and-steps-of-the-process" class="section level3 hasAnchor" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> ⚙️ Components and Steps of the Process<a href="design-for-casting.html#components-and-steps-of-the-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The sand casting process is typically performed in two halves and involves five main steps.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
-<img src="images/Sand-Casting-Infographic-2048x1366.png" alt="Sand Casting Process" width="50%" />
+<div id="hands-on-examples" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Hands-on Examples<a href="design-for-machining.html#hands-on-examples" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now, let’s apply DFM to specific industries using R for analysis and visualization.</p>
+<div id="automotive-industry-1" class="section level3 hasAnchor" number="7.3.1">
+<h3><span class="header-section-number">7.3.1</span> Automotive Industry<a href="design-for-machining.html#automotive-industry-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In automotive, DFM is used for engine components like pistons and crankshafts. Using the built-in <code>mtcars</code> dataset, we can analyze how design parameters (e.g., horsepower and weight) relate to machined parts’ performance. Imagine horsepower as a proxy for engine complexity, which affects machining time.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="design-for-machining.html#cb6-1" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb6-2"><a href="design-for-machining.html#cb6-2" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">y =</span> hp)) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="design-for-machining.html#cb6-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="design-for-machining.html#cb6-4" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-5"><a href="design-for-machining.html#cb6-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Horsepower vs Vehicle Weight&quot;</span>,</span>
+<span id="cb6-6"><a href="design-for-machining.html#cb6-6" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Weight (1000 lbs)&quot;</span>,</span>
+<span id="cb6-7"><a href="design-for-machining.html#cb6-7" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Horsepower&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="design-for-machining.html#cb6-8" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()  <span class="co"># Colorblind-friendly</span></span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:plot-auto"></span>
+<img src="_main_files/figure-html/plot-auto-1.png" alt="Horsepower vs Weight in Automotive Designs" width="672" />
 <p class="caption">
-Figure 1.1: Sand Casting Process
+Figure 7.1: Horsepower vs Weight in Automotive Designs
 </p>
 </div>
-<div id="mold-preparation" class="section level4 hasAnchor" number="1.1.2.1">
-<h4><span class="header-section-number">1.1.2.1</span> Mold Preparation<a href="design-for-casting.html#mold-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The mold is created inside a metal frame called a <strong>flask</strong> (or molding box). The flask has two halves: the <strong>cope</strong> (top half) and the <strong>drag</strong> (bottom half).</p>
-<ul>
-<li><strong>Pattern:</strong> A pattern, which is a reusable, full-sized model of the part to be cast (often made of wood, plastic, or metal), is placed inside the flask.</li>
-<li><strong>Gating System:</strong> Additional shapes are included with the pattern to form the channels through which the molten metal will flow:
-<ul>
-<li><strong>Sprue:</strong> The vertical channel where the molten metal is poured.</li>
-<li><strong>Runners:</strong> Horizontal channels leading from the sprue to the mold cavity.</li>
-<li><strong>Risers:</strong> Reservoirs that feed extra molten metal back into the mold cavity as the metal shrinks during solidification.</li>
-</ul></li>
-<li><strong>Compacting:</strong> Molding sand—typically a mix of sand, clay (bentonite), and water or other bonding agents—is packed tightly around the pattern inside the flask.</li>
-<li><strong>Pattern Removal:</strong> The flask is separated, and the pattern is carefully removed, leaving the inverse cavity of the part.</li>
-</ul>
+<p>This scatter plot shows that heavier vehicles often require more powerful (and thus more complex to machine) engines.</p>
 </div>
-<div id="core-placement-optional" class="section level4 hasAnchor" number="1.1.2.2">
-<h4><span class="header-section-number">1.1.2.2</span> Core Placement (Optional)<a href="design-for-casting.html#core-placement-optional" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>If the casting requires <strong>internal features</strong> (like a hollow pipe or engine cylinder), a pre-formed core (usually made of a different, rigid sand mix) is placed into the mold cavity. This core remains suspended inside the cavity and prevents the molten metal from filling that space.</p>
-</div>
-<div id="mold-closure-and-pouring" class="section level4 hasAnchor" number="1.1.2.3">
-<h4><span class="header-section-number">1.1.2.3</span> Mold Closure and Pouring<a href="design-for-casting.html#mold-closure-and-pouring" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li>The cope and drag are sealed and clamped together.</li>
-<li>Molten metal is poured from a ladle down the <strong>sprue</strong> and through the gating system until the mold cavity and risers are completely filled.</li>
-</ul>
-</div>
-<div id="solidification-cooling-and-shakeout" class="section level4 hasAnchor" number="1.1.2.4">
-<h4><span class="header-section-number">1.1.2.4</span> Solidification, Cooling, and Shakeout<a href="design-for-casting.html#solidification-cooling-and-shakeout" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The metal cools and solidifies within the sand mold. Since sand molds are non-reusable (they are broken to remove the part), this step is often called <strong>shakeout</strong>.</p>
-</div>
-<div id="finishing" class="section level4 hasAnchor" number="1.1.2.5">
-<h4><span class="header-section-number">1.1.2.5</span> Finishing<a href="design-for-casting.html#finishing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The final casting is removed, and the metal from the sprue, runners, and risers (the non-part material) is cut away (a process called <strong>fettling</strong>) and typically recycled.</p>
-<hr />
-</div>
-</div>
-<div id="advantages-and-disadvantages" class="section level3 hasAnchor" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> 📊 Advantages and Disadvantages<a href="#advantages-and-disadvantages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<table>
-<colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Feature</th>
-<th align="left">Advantage</th>
-<th align="left">Disadvantage</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><strong>Cost</strong></td>
-<td align="left"><strong>Low tool and equipment cost</strong>, making it economical for small batches or prototypes.</td>
-<td align="left"><strong>Labor-intensive</strong> and requires significant energy for sand processing and handling.</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Material/Size</strong></td>
-<td align="left"><strong>Highly versatile:</strong> can handle almost all metals and produce castings ranging from very small to very large (up to 200 tons).</td>
-<td align="left"><strong>Poor surface finish</strong> and <strong>low dimensional accuracy</strong> compared to die casting or investment casting.</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Mold</strong></td>
-<td align="left">Molds are rapidly made and disposable, facilitating complex shapes.</td>
-<td align="left">Low production rate due to the non-reusable nature of the mold.</td>
-</tr>
-</tbody>
-</table>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
-<img src="images/SandCastingCompany.png" alt="Typical Casting Company." width="50%" />
+<div id="food-industry" class="section level3 hasAnchor" number="7.3.2">
+<h3><span class="header-section-number">7.3.2</span> Food Industry<a href="design-for-machining.html#food-industry" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In the food industry, machined parts include conveyor rollers and mixing blades, often in food-grade stainless steel. Let’s simulate data for machining costs vs. part complexity.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="design-for-machining.html#cb7-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb7-2"><a href="design-for-machining.html#cb7-2" tabindex="-1"></a>complexity <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">2</span>)</span>
+<span id="cb7-3"><a href="design-for-machining.html#cb7-3" tabindex="-1"></a>cost <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">*</span> complexity <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb7-4"><a href="design-for-machining.html#cb7-4" tabindex="-1"></a>food_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(complexity, cost)</span>
+<span id="cb7-5"><a href="design-for-machining.html#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="design-for-machining.html#cb7-6" tabindex="-1"></a><span class="fu">ggplot</span>(food_data, <span class="fu">aes</span>(<span class="at">x =</span> complexity, <span class="at">y =</span> cost)) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="design-for-machining.html#cb7-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;green&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="design-for-machining.html#cb7-8" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkgreen&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="design-for-machining.html#cb7-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-10"><a href="design-for-machining.html#cb7-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Machining Cost vs Part Complexity&quot;</span>,</span>
+<span id="cb7-11"><a href="design-for-machining.html#cb7-11" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Complexity Score&quot;</span>,</span>
+<span id="cb7-12"><a href="design-for-machining.html#cb7-12" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Cost ($)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-13"><a href="design-for-machining.html#cb7-13" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:plot-food"></span>
+<img src="_main_files/figure-html/plot-food-1.png" alt="Simulated Machining Cost vs Complexity in Food Industry" width="672" />
 <p class="caption">
-Figure 1.2: Typical Casting Company.
+Figure 7.2: Simulated Machining Cost vs Complexity in Food Industry
 </p>
 </div>
-<details>
-<summary>
-This diagram illustrates the integrated flow of a metal casting facility, tracing the journey from raw scrap and sand to a finished product.
-</summary>
-<p>The process is characterized by two main streams: <strong>Metal Melting</strong> and <strong>Sand/Core Preparation</strong>, which converge at the pouring stage.</p>
-<div id="primary-metal-melting-methods" class="section level4 unnumbered hasAnchor">
-<h4>Primary Metal Melting Methods<a href="design-for-casting.html#primary-metal-melting-methods" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The image identifies three distinct industrial furnaces. Each uses a different physical principle to reach the melting point of the metal (often exceeding 1,370°C or 2,500°F for iron).</p>
-<div id="electric-arc-furnace-eaf" class="section level5 unnumbered hasAnchor">
-<h5>Electric Arc Furnace (EAF)<a href="design-for-casting.html#electric-arc-furnace-eaf" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> This furnace uses high-voltage electric arcs to melt the charge. Large graphite electrodes are lowered toward the metal scrap; electricity “arcs” from the electrodes to the metal, generating intense thermal energy.
-<ul>
-<li><strong>Emissions:</strong> As indicated by the “Gas and Particulate Emissions” label, this process is volatile. The arc can cause rapid vaporization of surface contaminants on the scrap metal.</li>
-</ul></li>
-</ul>
+<p>Higher complexity leads to higher costs—DFM aims to minimize this.</p>
 </div>
-<div id="induction-furnace" class="section level5 unnumbered hasAnchor">
-<h5>Induction Furnace<a href="design-for-casting.html#induction-furnace" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> This method utilizes a high-voltage electrical source passed through a copper coil. This creates a rapidly reversing magnetic field that induces “eddy currents” inside the metal. The metal’s own electrical resistance generates the heat internally.
-<ul>
-<li><strong>Characteristics:</strong> It is generally cleaner than the EAF and provides a natural “stirring” action due to electromagnetic forces, which ensures a consistent alloy mix.</li>
-</ul></li>
-</ul>
+<div id="defense-industry-1" class="section level3 hasAnchor" number="7.3.3">
+<h3><span class="header-section-number">7.3.3</span> Defense Industry<a href="design-for-machining.html#defense-industry-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For defense, parts like aircraft fittings require high precision. Let’s create an interactive plot of tolerance distributions using simulated data.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="design-for-machining.html#cb8-1" tabindex="-1"></a><span class="co"># Simulated tolerance data</span></span>
+<span id="cb8-2"><a href="design-for-machining.html#cb8-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb8-3"><a href="design-for-machining.html#cb8-3" tabindex="-1"></a>tolerances <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.01</span>)</span>
+<span id="cb8-4"><a href="design-for-machining.html#cb8-4" tabindex="-1"></a>defense_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(tolerances)</span>
+<span id="cb8-5"><a href="design-for-machining.html#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="design-for-machining.html#cb8-6" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(defense_data, <span class="fu">aes</span>(<span class="at">x =</span> tolerances)) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="design-for-machining.html#cb8-7" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">20</span>, <span class="at">fill =</span> <span class="st">&quot;red&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="design-for-machining.html#cb8-8" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb8-9"><a href="design-for-machining.html#cb8-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribution of Machining Tolerances&quot;</span>,</span>
+<span id="cb8-10"><a href="design-for-machining.html#cb8-10" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Tolerance Deviation (mm)&quot;</span>,</span>
+<span id="cb8-11"><a href="design-for-machining.html#cb8-11" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Frequency&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="design-for-machining.html#cb8-12" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>()</span>
+<span id="cb8-13"><a href="design-for-machining.html#cb8-13" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="design-for-machining.html#cb8-14" tabindex="-1"></a><span class="fu">ggplotly</span>(p)</span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-1d5df3d80f5735caaf13" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-1d5df3d80f5735caaf13">{"x":{"data":[{"orientation":"v","width":[0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723069,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104,0.0023665799308723104],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[-0.023091688756408126,-0.020725108825535816,-0.018358528894663505,-0.015991948963791195,-0.013625369032918886,-0.011258789102046578,-0.0088922091711742673,-0.006525629240301957,-0.0041590493094296466,-0.0017924693785573362,0.00057411055231497421,0.0029406904831872829,0.0053072704140595915,0.0076738503449319019,0.010040430275804212,0.012407010206676523,0.014773590137548833,0.017140170068421143,0.019506749999293454,0.021873329930165764],"y":[1,1,0,2,2,8,0,10,11,11,9,10,9,6,6,4,5,2,1,2],"text":["count:  1<br />tolerances: -0.0230916888","count:  1<br />tolerances: -0.0207251088","count:  0<br />tolerances: -0.0183585289","count:  2<br />tolerances: -0.0159919490","count:  2<br />tolerances: -0.0136253690","count:  8<br />tolerances: -0.0112587891","count:  0<br />tolerances: -0.0088922092","count: 10<br />tolerances: -0.0065256292","count: 11<br />tolerances: -0.0041590493","count: 11<br />tolerances: -0.0017924694","count:  9<br />tolerances:  0.0005741106","count: 10<br />tolerances:  0.0029406905","count:  9<br />tolerances:  0.0053072704","count:  6<br />tolerances:  0.0076738503","count:  6<br />tolerances:  0.0100404303","count:  4<br />tolerances:  0.0124070102","count:  5<br />tolerances:  0.0147735901","count:  2<br />tolerances:  0.0171401701","count:  1<br />tolerances:  0.0195067500","count:  2<br />tolerances:  0.0218733299"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(255,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":40.840182648401829,"r":7.3059360730593621,"b":37.260273972602747,"l":31.415525114155255},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Machining Tolerances","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.026641558652716592,0.02542319982647423],"tickmode":"array","ticktext":["-0.02","-0.01","0.00","0.01","0.02"],"tickvals":[-0.019999999999999997,-0.0099999999999999985,-3.4694469519536142e-18,0.010000000000000002,0.020000000000000004],"categoryorder":"array","categoryarray":["-0.02","-0.01","0.00","0.01","0.02"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Tolerance Deviation (mm)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.55000000000000004,11.550000000000001],"tickmode":"array","ticktext":["0","3","6","9"],"tickvals":[0,3,6.0000000000000009,9],"categoryorder":"array","categoryarray":["0","3","6","9"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"Frequency","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"74d450f441a9":{"x":{},"type":"bar"}},"cur_data":"74d450f441a9","visdat":{"74d450f441a9":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>This interactive histogram allows you to hover over bins to see details—useful for understanding variability in defense applications.</p>
 </div>
-<div id="cupola-furnace" class="section level5 unnumbered hasAnchor">
-<h5>Cupola Furnace<a href="design-for-casting.html#cupola-furnace" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> A Cupola is a vertical, cylindrical furnace. It is a “combustion” furnace where layers of <strong>Coke</strong> (fuel), <strong>Flux</strong>, and <strong>Metallics</strong> are layered. A blower forces air into the bottom to facilitate the burning of the coke, which melts the metal as it drops through the stack.
-<ul>
-<li><strong>Characteristics:</strong> This is a continuous melting process. The diagram shows a tall stack to manage the significant volume of flue gases produced by the burning fuel.</li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div id="mold-and-core-preparation" class="section level4 unnumbered hasAnchor">
-<h4>Mold and Core Preparation<a href="design-for-casting.html#mold-and-core-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>For a casting to have a specific shape, the molten metal must be poured into a “negative” space.</p>
-<ul>
-<li><strong>Sand Preparation:</strong> Raw sand is mixed with a <strong>Binder</strong> (like clay or chemical resin) to ensure it holds its shape.
-<ul>
-<li><strong>Molding:</strong> The sand is packed around a pattern to create the external shape of the part.</li>
-<li><strong>Core Making &amp; Baking:</strong> <strong>Cores</strong> are used to create hollow internal cavities (like the inside of an engine block). These are often “baked” in an oven to harden the binder so the core doesn’t collapse when hit by molten metal.</li>
-</ul></li>
-</ul>
-</div>
-<div id="post-melting-and-finishing" class="section level4 unnumbered hasAnchor">
-<h4>Post-Melting and Finishing<a href="design-for-casting.html#post-melting-and-finishing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Once the metal is liquid and the molds are ready, the final steps of production occur:</p>
+<div id="challenge-questions-2" class="section level3 hasAnchor" number="7.3.4">
+<h3><span class="header-section-number">7.3.4</span> Challenge Questions<a href="design-for-machining.html#challenge-questions-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><strong>Ductile Iron Inoculation:</strong> The metal is treated with alloys (like Magnesium) to improve its strength and ductility.</li>
-<li><strong>Pouring:</strong> The “Hot Metal” is poured into the molds.</li>
-<li><strong>Casting Shakeout:</strong> Once solidified, the sand mold is vibrated until it breaks apart, releasing the metal casting.
-<ul>
-<li><em>Note: The “Return Sand” is sent back to the start of the process to be recycled.</em></li>
-</ul></li>
-<li><strong>Cooling and Cleaning:</strong> The casting is cooled and cleaned of any remaining sand or “flash” (excess metal).</li>
-<li><strong>Finishing:</strong> Final grinding or machining is performed before <strong>Shipping</strong>.</li>
+<li>Modify the automotive plot to filter for cars with more than 6 cylinders. What insights do you gain?</li>
+<li>In the food industry simulation, add a variable for material type and replot. How does it affect costs?</li>
+<li>For the defense plot, change the standard deviation to 0.005. How does tighter tolerance impact the distribution?</li>
 </ol>
-<hr />
-<strong>Environmental Note:</strong> The diagram emphasizes that every stage of the foundry—from melting to shakeout—generates dust and gases, highlighting the need for robust industrial ventilation systems.
-</details>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/2CIcvB72dmk" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="strict-origin-when-cross-origin" 
-    allowfullscreen>
-  </iframe>
-</div>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/pwaXCko_Tkw" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="strict-origin-when-cross-origin" 
-    allowfullscreen>
-  </iframe>
-</div>
-<p>Further reading:</p>
-<p><a href="https://www.reliance-foundry.com/blog/sand-casting">Reliance Foundry</a></p>
-<p><a href="https://www.3dpcasting.com/blogs/sand-casting-8-key-steps-in-detail/">3DPCasting</a></p>
-<p><a href="https://www.generalkinematics.com/blog/sand-casting/">General Kinematics</a></p>
-<p><a href="https://diecasting.zinc.org/properties/en/design/eng_prop_d_design-rules/">Design Rules</a></p>
 </div>
 </div>
+<div id="interactive-exercises" class="section level2 hasAnchor" number="7.4">
+<h2><span class="header-section-number">7.4</span> Interactive Exercises<a href="design-for-machining.html#interactive-exercises" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Try modifying the R code chunks above! For example, change the parameters in the machining calculation and rerun. Think critically: How would DFM principles alter a design with sharp internal corners in an automotive bracket?</p>
 </div>
-<div id="full-mould-casting-casting" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> Full Mould Casting Casting<a href="design-for-casting.html#full-mould-casting-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="investment-casting" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Investment Casting<a href="design-for-casting.html#investment-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<hr />
-</div>
-<div id="design-for-casting-reliance-casting-design" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Design for Casting <span class="citation">(<a href="#ref-reliance-casting-design">Reliance Foundry Co. Ltd. 2025</a>)</span><a href="design-for-casting.html#design-for-casting-reliance-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="engineering-metal-castings-for-quality-and-value" class="section level3 hasAnchor" number="1.4.1">
-<h3><span class="header-section-number">1.4.1</span> 🔩 Engineering Metal Castings for Quality and Value<a href="#engineering-metal-castings-for-quality-and-value" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Good metal casting design aims to create the simplest mold that will produce the desired shape. This process requires expert knowledge of metals and casting methods to strike the best balance between quality and value in the final product.</p>
-<p>Engineers and designers select metals and casting methods based on the mechanical requirements of the end-user. They must determine how the cast object will behave under load, when struck, and in different heat conditions—specifically, whether it will crack, warp, or deform over time. Metal designs may also require a specific grade of finishing for either mechanical or aesthetic reasons.</p>
-<p>Ultimately, the designer uses their experience of how material properties and casting methods influence each other in the foundry to create the final design. A key skill is knowing the behavior of metal in its liquid, cooling, and solid states to create a design that minimizes production problems.</p>
-</div>
-<div id="variables-in-metal-casting-design" class="section level3 hasAnchor" number="1.4.2">
-<h3><span class="header-section-number">1.4.2</span> 🔬 Variables in Metal Casting Design<a href="#variables-in-metal-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Several characteristics of the metal itself and the physics of heat transfer significantly affect the outcome of a casting design.</p>
-<div id="metal-castability" class="section level4 hasAnchor" number="1.4.2.1">
-<h4><span class="header-section-number">1.4.2.1</span> Metal Castability<a href="design-for-casting.html#metal-castability" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Four main metal characteristics influence the casting process:</p>
-<ul>
-<li><strong>Fluidity:</strong> This describes the ease with which a molten metal flows. Metals with high fluidity are better able to capture small details within a mold.</li>
-<li><strong>Shrinkage:</strong> This is the rate at which molten metal contracts as it cools. Shrinkage is categorized by three stages:
-<ul>
-<li><strong>Liquid Shrinkage:</strong> Contraction rate when the metal first begins to cool.</li>
-<li><strong>Solidification Shrinkage:</strong> Contraction rate when the metal is actively freezing from a liquid to a solid state.</li>
-<li><strong>Solid Shrinkage:</strong> Contraction rate once the metal has fully set.</li>
-<li>These rates help predict strains and defects, especially if parts of the design freeze much faster than others, which can challenge the casting’s integrity.</li>
-</ul></li>
-<li><strong>Slag or Dross Formation:</strong> This describes the presence of non-metallic inclusions in the casting. Slag/dross on the surface may be acceptable, but sub-surface inclusions are detrimental.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
-<img src="images/dross-slag-titanium.jpg" alt="Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging." width="50%" />
-<p class="caption">
-Figure 1.3: Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging.
-</p>
-</div>
-<ul>
-<li><strong>Pouring Temperature:</strong> This is the specific temperature at which an alloy can be poured. Generally, the hotter the metal, the more production challenges are introduced.</li>
-</ul>
-</div>
-<div id="heat-transfer-and-solidification-patterns" class="section level4 hasAnchor" number="1.4.2.2">
-<h4><span class="header-section-number">1.4.2.2</span> Heat Transfer and Solidification Patterns<a href="design-for-casting.html#heat-transfer-and-solidification-patterns" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Solidification is controlled by how heat is transferred and dispersed:</p>
-<ul>
-<li><strong>Heat Transfer Rates:</strong> Two rates affect solidification speed:
+<div id="check-your-understanding" class="section level2 hasAnchor" number="7.5">
+<h2><span class="header-section-number">7.5</span> Check Your Understanding<a href="design-for-machining.html#check-your-understanding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
-<li>The dispersion of heat through the metal itself.</li>
-<li>The rate of heat transfer from the casting surface to the mold.</li>
+<li>What is the formula for spindle speed?
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(N = \frac{\pi D}{1000 v}\)</span><br />
+</li>
+<li><span class="math inline">\(N = \frac{1000 v}{\pi D}\)</span><br />
+</li>
+<li><span class="math inline">\(N = \pi D v\)</span><br />
+<strong>Answer: b</strong></li>
 </ol></li>
-<li>These rates determine the overall temperature differential across the casting, which can lead to differential cooling as sections change state at different times.</li>
-<li><strong>Solidification Pattern:</strong> A casting usually crystallizes from the edge inward, cooling quickly where it touches the mold.</li>
-<li>Engineers use the crystallization, heat transfer, and shrinkage rates to predict the solidification pattern and design the mold accordingly to minimize shrinkage problems.
-<ul>
-<li><strong>Chills:</strong> Molds may be designed with chills to create more rapid shrinkage in a specific section.</li>
-<li><strong>Risers:</strong> Reservoirs, called risers, are connected to the cooling casting to slowly feed liquid metal into it, preventing cavities from forming as the metal shrinks.</li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div id="design-considerations-for-shape-and-mold" class="section level3 hasAnchor" number="1.4.3">
-<h3><span class="header-section-number">1.4.3</span> 📐 Design Considerations for Shape and Mold<a href="#design-considerations-for-shape-and-mold" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Designers must structure the geometry of the casting and the mold components to manage heat and metal flow.</p>
-<div id="shape-and-section-size-changes" class="section level4 hasAnchor" number="1.4.3.1">
-<h4><span class="header-section-number">1.4.3.1</span> Shape and Section Size Changes<a href="design-for-casting.html#shape-and-section-size-changes" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Hot Spots:</strong> Increased thickness in material can create hot spots in cooling castings.</li>
-<li><strong>Uniform Thickness:</strong> Where possible, designing castings with uniform thickness is helpful.</li>
-<li><strong>Tapering:</strong> For large diameter changes, sections should be tapered slowly to prevent cooling strain.</li>
-<li><strong>Smoothing and Cores:</strong> Engineers prevent high-volume hotspots by smoothing sharp angles and adding cores.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
-<img src="images/metal-casting-wall-slope.png" alt="Metal castings with large diameter changes should be tapered slowly to prevent cooling strain." width="50%" />
-<p class="caption">
-Figure 1.4: Metal castings with large diameter changes should be tapered slowly to prevent cooling strain.
-</p>
-</div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
-<img src="images/metal-casting-volume-change.png" alt="By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming." width="50%" />
-<p class="caption">
-Figure 1.5: By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming.
-</p>
-</div>
-</div>
-<div id="junctions-between-sections" class="section level4 hasAnchor" number="1.4.3.2">
-<h4><span class="header-section-number">1.4.3.2</span> Junctions Between Sections<a href="design-for-casting.html#junctions-between-sections" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Volume Consistency:</strong> Sharp angles where two or more sections meet can create a larger volume of metal (a hotspot) at the junction.</li>
-<li><strong>Rounding Corners:</strong> Designers can smooth these corners, rounding them away from sharp angles, to make the metal volume at the junction more consistent with the surrounding metal volumes.</li>
-</ul>
-</div>
-<div id="mold-stability-and-surface-finish" class="section level4 hasAnchor" number="1.4.3.3">
-<h4><span class="header-section-number">1.4.3.3</span> Mold Stability and Surface Finish<a href="design-for-casting.html#mold-stability-and-surface-finish" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Mold Integrity:</strong> The mold material must be able to withstand the metal’s behavior (expansion, contraction, and off-gassing) while it cools, without fracturing or collapsing.</li>
-<li><strong>Surface Finish Capability:</strong> The molding method dictates the final surface finish.
-<ul>
-<li>Fine finishes often require more expensive molding processes.</li>
-<li>For parts requiring precision finishes only in certain areas, the casting can be machined afterward, but the metal must be easily machinable.</li>
-<li>While intensive molding processes yield smoother finishes and are often costly, for large objects, this can be less expensive than machining the entire surface.</li>
-</ul></li>
-</ul>
-</div>
-<div id="other-mold-design-considerations" class="section level4 hasAnchor" number="1.4.3.4">
-<h4><span class="header-section-number">1.4.3.4</span> Other Mold Design Considerations<a href="design-for-casting.html#other-mold-design-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>To achieve an excellent casting at a good price, the designer should try to minimize or eliminate deep drafts, expensive cores, and irregular parting.</p>
-<ul>
-<li><strong>Drafts:</strong> These are necessary tapers on the vertical walls of a casting. They ensure the pattern (the positive image of the object) can be removed from the mold without disturbing the walls.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
-<img src="images/Gemini_Generated_Image_b6qi6zb6qi6zb6qi.png" alt="Design with Draft Angles" width="50%" />
-<p class="caption">
-Figure 1.6: Design with Draft Angles
-</p>
-</div>
-<ul>
-<li><strong>Cores:</strong> Cores are used to create intentional voids or holes inside a casting. They can be costly to produce, but can sometimes be avoided by changing the orientation of the casting or the mold’s parting line.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
-<img src="images/sand-mold-with-core.jpg" alt="A sand mold with a core. Where the halves of the mold come together is the parting line." width="50%" />
-<p class="caption">
-Figure 1.7: A sand mold with a core. Where the halves of the mold come together is the parting line.
-</p>
-</div>
-<ul>
-<li><strong>Parting Lines:</strong> This is the line where the two halves of the mold meet. Risers and gates are often placed along the parting line.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
-<img src="images/Gemini_Generated_Image_67wz4x67wz4x67wz.png" alt="Parting Lines" width="50%" />
-<p class="caption">
-Figure 1.8: Parting Lines
-</p>
-</div>
-<pre><code>* **Flash:** Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.</code></pre>
-</div>
-<div id="excellence-in-casting-design" class="section level4 hasAnchor" number="1.4.3.5">
-<h4><span class="header-section-number">1.4.3.5</span> 🌟 Excellence in Casting Design<a href="#excellence-in-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Designing a superior product at the lowest price requires understanding the complex dependencies between materials and methods. The required mechanical properties of the final product determine the metal needed, and that metal’s liquid, cooling, and solid behavior dictates the necessary mold features.</p>
-<ul>
-<li><strong>Example:</strong> Brittle metals are less suited for designs with sharp edges prone to chipping. Metals with low fluidity require molds with less small detail.</li>
-<li><strong>Process Challenges:</strong> A high melting point (like that of steel) demands a higher level of monitoring and precision throughout the process.</li>
-</ul>
-<p>Experience and clear communication among designers, engineers, and metalworkers are crucial for creating a product of quality and value.</p>
-<hr />
-</div>
-</div>
-</div>
-<div id="defects-in-casting-process" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Defects in Casting process<a href="design-for-casting.html#defects-in-casting-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<li>In which industry might hygiene requirements most affect material choice for machining?
+<ol style="list-style-type: lower-alpha">
+<li>Automotive<br />
+</li>
+<li>Food<br />
+</li>
+<li>Defense<br />
+<strong>Answer: b</strong></li>
+</ol></li>
+<li>True or False: Tighter tolerances always reduce manufacturing costs.<br />
+<strong>Answer: False</strong></li>
+</ol>
+<p>Great job completing this chapter! Keep practicing DFM to become a proficient mechanical engineer.</p>
 
-</div>
-</div>
-<h3>References</h3>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-reliance-casting-design" class="csl-entry">
-Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
 </div>
 </div>
             </section>
@@ -909,8 +688,8 @@ Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="design-for-joining.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="design-for-welding.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ball-bearings-and-bushings.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -941,7 +720,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/01-Casting.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/07-Machining.Rmd",
     "text": "Edit"
   },
   "history": {

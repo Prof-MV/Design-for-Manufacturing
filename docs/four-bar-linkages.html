@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Design for Casting | Design for Manufacturing</title>
+  <title>Chapter 9 Four-Bar Linkages | Design for Manufacturing</title>
   <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Design for Casting | Design for Manufacturing" />
+  <meta property="og:title" content="Chapter 9 Four-Bar Linkages | Design for Manufacturing" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Design for Casting | Design for Manufacturing" />
+  <meta name="twitter:title" content="Chapter 9 Four-Bar Linkages | Design for Manufacturing" />
   
   <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="design-for-joining.html"/>
+<link rel="prev" href="ball-bearings-and-bushings.html"/>
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -529,379 +529,952 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="design-for-casting" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Design for Casting<a href="design-for-casting.html#design-for-casting" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="introduction-to-the-casting-process" class="section level2 unnumbered hasAnchor">
-<h2>💡 Introduction to the Casting Process<a href="#introduction-to-the-casting-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Casting is one of the oldest and most fundamental processes in manufacturing, dating back thousands of years. It involves pouring a liquid material, typically a molten metal, into a mold cavity where it is allowed to solidify in the desired shape. The resulting solidified object is called a <strong>casting</strong>.</p>
-<p>The significance of casting lies in its ability to produce complex, intricate shapes—including those with internal cavities or non-symmetrical geometries—that would be difficult or impossible to create using methods like machining or forging. This makes casting essential for industries ranging from aerospace and automotive to jewelry and construction.</p>
+<div id="four-bar-linkages" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Four-Bar Linkages<a href="four-bar-linkages.html#four-bar-linkages" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-four-bar-linkages" class="section level2 unnumbered hasAnchor">
+<h2>Introduction to Four-Bar Linkages<a href="four-bar-linkages.html#introduction-to-four-bar-linkages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>four-bar linkage</strong> is one of the most fundamental and versatile mechanisms in mechanical engineering. Despite its apparent simplicity—just four rigid links connected by four revolute (pin) joints—it can produce an extraordinary variety of motions. Four-bar linkages are found in countless applications, from automobile suspensions to robotic arms, from aircraft landing gear to simple hand tools.</p>
+<p>A four-bar linkage converts <strong>rotary motion</strong> into complex <strong>output motion</strong> that can be:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Another rotation</strong> (with variable angular velocity)</li>
+<li><strong>Oscillating motion</strong> (back-and-forth rotation)</li>
+<li><strong>Complex path motion</strong> (coupler curves)</li>
+</ol>
+<hr />
+<blockquote>
+<p><strong>Think About It:</strong> When you open a car hood, the hinges guide it through a specific path—rising up and forward—rather than just swinging in a simple arc. This carefully designed motion comes from a four-bar linkage hidden in the hinge mechanism!</p>
+</blockquote>
 <hr />
 </div>
-<div id="essential-components-of-casting" class="section level2 unnumbered hasAnchor">
-<h2>🧱 Essential Components of Casting<a href="#essential-components-of-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Every casting operation requires two basic elements:</p>
-<ol style="list-style-type: decimal">
-<li><strong>The Casting Material:</strong> This is the material, usually metal (such as iron, steel, aluminum, or bronze), that is melted into a liquid state.</li>
-<li><strong>The Mold:</strong> This is the container that holds the liquid material and determines the final shape of the part. The mold contains a cavity that is the inverse of the part being made.</li>
-</ol>
-</div>
-<div id="the-basic-steps-of-casting" class="section level2 unnumbered hasAnchor">
-<h2>⚙️ The Basic Steps of Casting<a href="design-for-casting.html#the-basic-steps-of-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>While the specifics vary greatly depending on the material and method (e.g., sand casting vs. die casting), the fundamental steps remain consistent:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Melting:</strong> The casting material is heated to a liquid state in a furnace.</li>
-<li><strong>Pouring:</strong> The molten material is introduced into the mold cavity.</li>
-<li><strong>Solidification:</strong> The material is allowed to cool and solidify within the mold, taking the shape of the cavity.</li>
-<li><strong>Removal (Fettling):</strong> The solidified casting is removed from the mold.</li>
-<li><strong>Cleaning and Finishing:</strong> The casting is cleaned of any excess material (like gates or risers) and prepared for its intended use.</li>
-</ol>
-</div>
-<div id="applications-and-scope" class="section level2 unnumbered hasAnchor">
-<h2>🌍 Applications and Scope<a href="#applications-and-scope" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The versatility of casting allows it to produce parts ranging in size from a few grams (e.g., dental crowns) to hundreds of tons (e.g., steam turbine housings). The choice of a specific casting method—such as sand casting, investment casting, die casting, or continuous casting—depends on the required surface finish, dimensional accuracy, batch size, and the type of material being processed.</p>
-</div>
-<div id="sand-mould-casting-the-versatile-workhorse" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Sand Mould Casting: The Versatile Workhorse<a href="design-for-casting.html#sand-mould-casting-the-versatile-workhorse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="introduction" class="section level3 hasAnchor" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> 💡 Introduction<a href="#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Sand casting, also known as sand mould casting, is the oldest and most frequently used metal casting process, responsible for producing over 70% of all metal castings. It is highly valued for its <strong>versatility</strong> and <strong>cost-effectiveness</strong>, making it the foundational method for manufacturing a vast array of metal components, from massive engine blocks and turbine parts to small fittings and decorative items.</p>
-<p>The basic principle is simple: create a mould using sand, pour molten metal into the cavity, let it solidify, and then break the mould to retrieve the part.</p>
-<hr />
-</div>
-<div id="components-and-steps-of-the-process" class="section level3 hasAnchor" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> ⚙️ Components and Steps of the Process<a href="design-for-casting.html#components-and-steps-of-the-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The sand casting process is typically performed in two halves and involves five main steps.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
-<img src="images/Sand-Casting-Infographic-2048x1366.png" alt="Sand Casting Process" width="50%" />
+<div id="anatomy-of-a-four-bar-linkage" class="section level2 unnumbered hasAnchor">
+<h2>Anatomy of a Four-Bar Linkage<a href="four-bar-linkages.html#anatomy-of-a-four-bar-linkage" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A four-bar linkage consists of four rigid members (links) connected in a closed loop by four revolute joints (pins).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:four-bar-anatomy"></span>
+<img src="_main_files/figure-html/four-bar-anatomy-1.png" alt="Components of a four-bar linkage mechanism." width="960" />
 <p class="caption">
-Figure 1.1: Sand Casting Process
+Figure 9.1: Components of a four-bar linkage mechanism.
 </p>
 </div>
-<div id="mold-preparation" class="section level4 hasAnchor" number="1.1.2.1">
-<h4><span class="header-section-number">1.1.2.1</span> Mold Preparation<a href="design-for-casting.html#mold-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The mold is created inside a metal frame called a <strong>flask</strong> (or molding box). The flask has two halves: the <strong>cope</strong> (top half) and the <strong>drag</strong> (bottom half).</p>
-<ul>
-<li><strong>Pattern:</strong> A pattern, which is a reusable, full-sized model of the part to be cast (often made of wood, plastic, or metal), is placed inside the flask.</li>
-<li><strong>Gating System:</strong> Additional shapes are included with the pattern to form the channels through which the molten metal will flow:
-<ul>
-<li><strong>Sprue:</strong> The vertical channel where the molten metal is poured.</li>
-<li><strong>Runners:</strong> Horizontal channels leading from the sprue to the mold cavity.</li>
-<li><strong>Risers:</strong> Reservoirs that feed extra molten metal back into the mold cavity as the metal shrinks during solidification.</li>
-</ul></li>
-<li><strong>Compacting:</strong> Molding sand—typically a mix of sand, clay (bentonite), and water or other bonding agents—is packed tightly around the pattern inside the flask.</li>
-<li><strong>Pattern Removal:</strong> The flask is separated, and the pattern is carefully removed, leaving the inverse cavity of the part.</li>
-</ul>
-</div>
-<div id="core-placement-optional" class="section level4 hasAnchor" number="1.1.2.2">
-<h4><span class="header-section-number">1.1.2.2</span> Core Placement (Optional)<a href="design-for-casting.html#core-placement-optional" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>If the casting requires <strong>internal features</strong> (like a hollow pipe or engine cylinder), a pre-formed core (usually made of a different, rigid sand mix) is placed into the mold cavity. This core remains suspended inside the cavity and prevents the molten metal from filling that space.</p>
-</div>
-<div id="mold-closure-and-pouring" class="section level4 hasAnchor" number="1.1.2.3">
-<h4><span class="header-section-number">1.1.2.3</span> Mold Closure and Pouring<a href="design-for-casting.html#mold-closure-and-pouring" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li>The cope and drag are sealed and clamped together.</li>
-<li>Molten metal is poured from a ladle down the <strong>sprue</strong> and through the gating system until the mold cavity and risers are completely filled.</li>
-</ul>
-</div>
-<div id="solidification-cooling-and-shakeout" class="section level4 hasAnchor" number="1.1.2.4">
-<h4><span class="header-section-number">1.1.2.4</span> Solidification, Cooling, and Shakeout<a href="design-for-casting.html#solidification-cooling-and-shakeout" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The metal cools and solidifies within the sand mold. Since sand molds are non-reusable (they are broken to remove the part), this step is often called <strong>shakeout</strong>.</p>
-</div>
-<div id="finishing" class="section level4 hasAnchor" number="1.1.2.5">
-<h4><span class="header-section-number">1.1.2.5</span> Finishing<a href="design-for-casting.html#finishing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The final casting is removed, and the metal from the sprue, runners, and risers (the non-part material) is cut away (a process called <strong>fettling</strong>) and typically recycled.</p>
-<hr />
-</div>
-</div>
-<div id="advantages-and-disadvantages" class="section level3 hasAnchor" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> 📊 Advantages and Disadvantages<a href="#advantages-and-disadvantages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Key Components:</strong></p>
 <table>
 <colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
+<col width="34%" />
+<col width="25%" />
+<col width="40%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">Feature</th>
-<th align="left">Advantage</th>
-<th align="left">Disadvantage</th>
+<th align="left">Component</th>
+<th align="left">Symbol</th>
+<th align="left">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Cost</strong></td>
-<td align="left"><strong>Low tool and equipment cost</strong>, making it economical for small batches or prototypes.</td>
-<td align="left"><strong>Labor-intensive</strong> and requires significant energy for sand processing and handling.</td>
+<td align="left"><strong>Ground (Link 1)</strong></td>
+<td align="left"><span class="math inline">\(g\)</span></td>
+<td align="left">Fixed link connecting the two ground pivots</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Material/Size</strong></td>
-<td align="left"><strong>Highly versatile:</strong> can handle almost all metals and produce castings ranging from very small to very large (up to 200 tons).</td>
-<td align="left"><strong>Poor surface finish</strong> and <strong>low dimensional accuracy</strong> compared to die casting or investment casting.</td>
+<td align="left"><strong>Input Link (Link 2)</strong></td>
+<td align="left"><span class="math inline">\(a\)</span></td>
+<td align="left">Driven by motor or actuator; connected to ground at O2</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Mold</strong></td>
-<td align="left">Molds are rapidly made and disposable, facilitating complex shapes.</td>
-<td align="left">Low production rate due to the non-reusable nature of the mold.</td>
+<td align="left"><strong>Coupler (Link 3)</strong></td>
+<td align="left"><span class="math inline">\(b\)</span></td>
+<td align="left">“Floating” link connecting the two moving pivots</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Output Link (Link 4)</strong></td>
+<td align="left"><span class="math inline">\(c\)</span></td>
+<td align="left">Delivers output motion; connected to ground at O4</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Ground Pivots</strong></td>
+<td align="left">O2, O4</td>
+<td align="left">Fixed pivot points attached to the frame</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Moving Pivots</strong></td>
+<td align="left">A, B</td>
+<td align="left">Pivot points that move during operation</td>
 </tr>
 </tbody>
 </table>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
-<img src="images/SandCastingCompany.png" alt="Typical Casting Company." width="50%" />
-<p class="caption">
-Figure 1.2: Typical Casting Company.
-</p>
-</div>
-<details>
-<summary>
-This diagram illustrates the integrated flow of a metal casting facility, tracing the journey from raw scrap and sand to a finished product.
-</summary>
-<p>The process is characterized by two main streams: <strong>Metal Melting</strong> and <strong>Sand/Core Preparation</strong>, which converge at the pouring stage.</p>
-<div id="primary-metal-melting-methods" class="section level4 unnumbered hasAnchor">
-<h4>Primary Metal Melting Methods<a href="design-for-casting.html#primary-metal-melting-methods" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The image identifies three distinct industrial furnaces. Each uses a different physical principle to reach the melting point of the metal (often exceeding 1,370°C or 2,500°F for iron).</p>
-<div id="electric-arc-furnace-eaf" class="section level5 unnumbered hasAnchor">
-<h5>Electric Arc Furnace (EAF)<a href="design-for-casting.html#electric-arc-furnace-eaf" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> This furnace uses high-voltage electric arcs to melt the charge. Large graphite electrodes are lowered toward the metal scrap; electricity “arcs” from the electrodes to the metal, generating intense thermal energy.
-<ul>
-<li><strong>Emissions:</strong> As indicated by the “Gas and Particulate Emissions” label, this process is volatile. The arc can cause rapid vaporization of surface contaminants on the scrap metal.</li>
-</ul></li>
-</ul>
-</div>
-<div id="induction-furnace" class="section level5 unnumbered hasAnchor">
-<h5>Induction Furnace<a href="design-for-casting.html#induction-furnace" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> This method utilizes a high-voltage electrical source passed through a copper coil. This creates a rapidly reversing magnetic field that induces “eddy currents” inside the metal. The metal’s own electrical resistance generates the heat internally.
-<ul>
-<li><strong>Characteristics:</strong> It is generally cleaner than the EAF and provides a natural “stirring” action due to electromagnetic forces, which ensures a consistent alloy mix.</li>
-</ul></li>
-</ul>
-</div>
-<div id="cupola-furnace" class="section level5 unnumbered hasAnchor">
-<h5>Cupola Furnace<a href="design-for-casting.html#cupola-furnace" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<ul>
-<li><strong>Mechanism:</strong> A Cupola is a vertical, cylindrical furnace. It is a “combustion” furnace where layers of <strong>Coke</strong> (fuel), <strong>Flux</strong>, and <strong>Metallics</strong> are layered. A blower forces air into the bottom to facilitate the burning of the coke, which melts the metal as it drops through the stack.
-<ul>
-<li><strong>Characteristics:</strong> This is a continuous melting process. The diagram shows a tall stack to manage the significant volume of flue gases produced by the burning fuel.</li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div id="mold-and-core-preparation" class="section level4 unnumbered hasAnchor">
-<h4>Mold and Core Preparation<a href="design-for-casting.html#mold-and-core-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>For a casting to have a specific shape, the molten metal must be poured into a “negative” space.</p>
-<ul>
-<li><strong>Sand Preparation:</strong> Raw sand is mixed with a <strong>Binder</strong> (like clay or chemical resin) to ensure it holds its shape.
-<ul>
-<li><strong>Molding:</strong> The sand is packed around a pattern to create the external shape of the part.</li>
-<li><strong>Core Making &amp; Baking:</strong> <strong>Cores</strong> are used to create hollow internal cavities (like the inside of an engine block). These are often “baked” in an oven to harden the binder so the core doesn’t collapse when hit by molten metal.</li>
-</ul></li>
-</ul>
-</div>
-<div id="post-melting-and-finishing" class="section level4 unnumbered hasAnchor">
-<h4>Post-Melting and Finishing<a href="design-for-casting.html#post-melting-and-finishing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Once the metal is liquid and the molds are ready, the final steps of production occur:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Ductile Iron Inoculation:</strong> The metal is treated with alloys (like Magnesium) to improve its strength and ductility.</li>
-<li><strong>Pouring:</strong> The “Hot Metal” is poured into the molds.</li>
-<li><strong>Casting Shakeout:</strong> Once solidified, the sand mold is vibrated until it breaks apart, releasing the metal casting.
-<ul>
-<li><em>Note: The “Return Sand” is sent back to the start of the process to be recycled.</em></li>
-</ul></li>
-<li><strong>Cooling and Cleaning:</strong> The casting is cooled and cleaned of any remaining sand or “flash” (excess metal).</li>
-<li><strong>Finishing:</strong> Final grinding or machining is performed before <strong>Shipping</strong>.</li>
-</ol>
-<hr />
-<strong>Environmental Note:</strong> The diagram emphasizes that every stage of the foundry—from melting to shakeout—generates dust and gases, highlighting the need for robust industrial ventilation systems.
-</details>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/2CIcvB72dmk" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="strict-origin-when-cross-origin" 
-    allowfullscreen>
-  </iframe>
-</div>
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/pwaXCko_Tkw" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="strict-origin-when-cross-origin" 
-    allowfullscreen>
-  </iframe>
-</div>
-<p>Further reading:</p>
-<p><a href="https://www.reliance-foundry.com/blog/sand-casting">Reliance Foundry</a></p>
-<p><a href="https://www.3dpcasting.com/blogs/sand-casting-8-key-steps-in-detail/">3DPCasting</a></p>
-<p><a href="https://www.generalkinematics.com/blog/sand-casting/">General Kinematics</a></p>
-<p><a href="https://diecasting.zinc.org/properties/en/design/eng_prop_d_design-rules/">Design Rules</a></p>
-</div>
-</div>
-</div>
-<div id="full-mould-casting-casting" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> Full Mould Casting Casting<a href="design-for-casting.html#full-mould-casting-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="investment-casting" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Investment Casting<a href="design-for-casting.html#investment-casting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <hr />
 </div>
-<div id="design-for-casting-reliance-casting-design" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Design for Casting <span class="citation">(<a href="#ref-reliance-casting-design">Reliance Foundry Co. Ltd. 2025</a>)</span><a href="design-for-casting.html#design-for-casting-reliance-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="engineering-metal-castings-for-quality-and-value" class="section level3 hasAnchor" number="1.4.1">
-<h3><span class="header-section-number">1.4.1</span> 🔩 Engineering Metal Castings for Quality and Value<a href="#engineering-metal-castings-for-quality-and-value" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Good metal casting design aims to create the simplest mold that will produce the desired shape. This process requires expert knowledge of metals and casting methods to strike the best balance between quality and value in the final product.</p>
-<p>Engineers and designers select metals and casting methods based on the mechanical requirements of the end-user. They must determine how the cast object will behave under load, when struck, and in different heat conditions—specifically, whether it will crack, warp, or deform over time. Metal designs may also require a specific grade of finishing for either mechanical or aesthetic reasons.</p>
-<p>Ultimately, the designer uses their experience of how material properties and casting methods influence each other in the foundry to create the final design. A key skill is knowing the behavior of metal in its liquid, cooling, and solid states to create a design that minimizes production problems.</p>
+<div id="grashofs-law" class="section level2 unnumbered hasAnchor">
+<h2>Grashof’s Law<a href="four-bar-linkages.html#grashofs-law" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Grashof’s Law</strong> determines whether a four-bar linkage can achieve continuous rotation or is limited to oscillating (rocking) motion. This is the most fundamental criterion for classifying four-bar linkages.</p>
+<div id="the-grashof-criterion" class="section level3 unnumbered hasAnchor">
+<h3>The Grashof Criterion<a href="four-bar-linkages.html#the-grashof-criterion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a four-bar linkage with link lengths <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(g\)</span>:</p>
+<p><span class="math display">\[S + L \leq P + Q\]</span></p>
+<p><strong>Where:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(S\)</span></td>
+<td align="left">Length of the <strong>shortest</strong> link</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(L\)</span></td>
+<td align="left">Length of the <strong>longest</strong> link</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P\)</span></td>
+<td align="left">Length of one remaining link</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(Q\)</span></td>
+<td align="left">Length of the other remaining link</td>
+</tr>
+</tbody>
+</table>
+<hr />
 </div>
-<div id="variables-in-metal-casting-design" class="section level3 hasAnchor" number="1.4.2">
-<h3><span class="header-section-number">1.4.2</span> 🔬 Variables in Metal Casting Design<a href="#variables-in-metal-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Several characteristics of the metal itself and the physics of heat transfer significantly affect the outcome of a casting design.</p>
-<div id="metal-castability" class="section level4 hasAnchor" number="1.4.2.1">
-<h4><span class="header-section-number">1.4.2.1</span> Metal Castability<a href="design-for-casting.html#metal-castability" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Four main metal characteristics influence the casting process:</p>
-<ul>
-<li><strong>Fluidity:</strong> This describes the ease with which a molten metal flows. Metals with high fluidity are better able to capture small details within a mold.</li>
-<li><strong>Shrinkage:</strong> This is the rate at which molten metal contracts as it cools. Shrinkage is categorized by three stages:
-<ul>
-<li><strong>Liquid Shrinkage:</strong> Contraction rate when the metal first begins to cool.</li>
-<li><strong>Solidification Shrinkage:</strong> Contraction rate when the metal is actively freezing from a liquid to a solid state.</li>
-<li><strong>Solid Shrinkage:</strong> Contraction rate once the metal has fully set.</li>
-<li>These rates help predict strains and defects, especially if parts of the design freeze much faster than others, which can challenge the casting’s integrity.</li>
-</ul></li>
-<li><strong>Slag or Dross Formation:</strong> This describes the presence of non-metallic inclusions in the casting. Slag/dross on the surface may be acceptable, but sub-surface inclusions are detrimental.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
-<img src="images/dross-slag-titanium.jpg" alt="Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging." width="50%" />
+<div id="classification-by-grashof-condition" class="section level3 unnumbered hasAnchor">
+<h3>Classification by Grashof Condition<a href="four-bar-linkages.html#classification-by-grashof-condition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:grashof-classification"></span>
+<img src="_main_files/figure-html/grashof-classification-1.png" alt="Classification of four-bar linkages based on Grashof's Law." width="960" />
 <p class="caption">
-Figure 1.3: Slag is the dark layer floating on this titanium as it flows from an arc furnace during de-slagging.
+Figure 9.2: Classification of four-bar linkages based on Grashof’s Law.
 </p>
 </div>
-<ul>
-<li><strong>Pouring Temperature:</strong> This is the specific temperature at which an alloy can be poured. Generally, the hotter the metal, the more production challenges are introduced.</li>
-</ul>
+<hr />
 </div>
-<div id="heat-transfer-and-solidification-patterns" class="section level4 hasAnchor" number="1.4.2.2">
-<h4><span class="header-section-number">1.4.2.2</span> Heat Transfer and Solidification Patterns<a href="design-for-casting.html#heat-transfer-and-solidification-patterns" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Solidification is controlled by how heat is transferred and dispersed:</p>
-<ul>
-<li><strong>Heat Transfer Rates:</strong> Two rates affect solidification speed:
+<div id="grashof-classification-summary" class="section level3 unnumbered hasAnchor">
+<h3>Grashof Classification Summary<a href="four-bar-linkages.html#grashof-classification-summary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:grashof-table">Table 9.1: </span>Four-Bar Linkage Classification by Grashof Condition
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Type
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Condition
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Shortest Link
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Input
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Output
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Example Applications
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Crank-Rocker
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+S + L &lt; P + Q
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Input link (a)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Continuous rotation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Oscillation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Windshield wipers, pumps
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Double-Crank
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+S + L &lt; P + Q
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Ground (g)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Continuous rotation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Continuous rotation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Locomotive wheels
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Rocker-Crank
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+S + L &lt; P + Q
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Output link (c)
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Oscillation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Continuous rotation
+</td>
+<td style="text-align:left;background-color: rgba(232, 245, 233, 255) !important;">
+Treadle pumps
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Triple-Rocker
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+S + L &gt; P + Q
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Any
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Oscillation only
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Oscillation only
+</td>
+<td style="text-align:left;background-color: rgba(255, 243, 224, 255) !important;">
+Rocking mechanisms
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="types-of-four-bar-linkages" class="section level2 unnumbered hasAnchor">
+<h2>Types of Four-Bar Linkages<a href="four-bar-linkages.html#types-of-four-bar-linkages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="crank-rocker-mechanism" class="section level3 unnumbered hasAnchor">
+<h3>Crank-Rocker Mechanism<a href="four-bar-linkages.html#crank-rocker-mechanism" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>crank-rocker</strong> is the most common four-bar linkage configuration. The input link (crank) rotates continuously while the output link (rocker) oscillates back and forth.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:crank-rocker"></span>
+<img src="_main_files/figure-html/crank-rocker-1.png" alt="Crank-rocker mechanism: input rotates, output oscillates." width="960" />
+<p class="caption">
+Figure 9.3: Crank-rocker mechanism: input rotates, output oscillates.
+</p>
+</div>
+<hr />
+</div>
+<div id="double-crank-drag-link-mechanism" class="section level3 unnumbered hasAnchor">
+<h3>Double-Crank (Drag-Link) Mechanism<a href="four-bar-linkages.html#double-crank-drag-link-mechanism" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In a <strong>double-crank</strong> or <strong>drag-link</strong> mechanism, both the input and output links can rotate continuously. This occurs when the <strong>ground link is the shortest</strong>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:double-crank"></span>
+<img src="_main_files/figure-html/double-crank-1.png" alt="Double-crank mechanism: both input and output rotate continuously." width="960" />
+<p class="caption">
+Figure 9.4: Double-crank mechanism: both input and output rotate continuously.
+</p>
+</div>
+<hr />
+</div>
+<div id="triple-rocker-non-grashof" class="section level3 unnumbered hasAnchor">
+<h3>Triple-Rocker (Non-Grashof)<a href="four-bar-linkages.html#triple-rocker-non-grashof" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When the Grashof condition is <strong>not satisfied</strong> (<span class="math inline">\(S + L &gt; P + Q\)</span>), no link can complete a full revolution. All links are restricted to oscillating (rocking) motion.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:triple-rocker"></span>
+<img src="_main_files/figure-html/triple-rocker-1.png" alt="Triple-rocker mechanism: all links oscillate, none can fully rotate." width="960" />
+<p class="caption">
+Figure 9.5: Triple-rocker mechanism: all links oscillate, none can fully rotate.
+</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="position-analysis" class="section level2 unnumbered hasAnchor">
+<h2>Position Analysis<a href="four-bar-linkages.html#position-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Position analysis determines the configuration of a linkage for a given input angle. This is fundamental for understanding linkage motion and for design.</p>
+<div id="loop-closure-equation" class="section level3 unnumbered hasAnchor">
+<h3>Loop Closure Equation<a href="four-bar-linkages.html#loop-closure-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The four-bar linkage forms a closed vector loop:</p>
+<p><span class="math display">\[\vec{a} + \vec{b} = \vec{g} + \vec{c}\]</span></p>
+<p>In component form (x and y):</p>
+<p><span class="math display">\[a \cos\theta_2 + b \cos\theta_3 = g + c \cos\theta_4\]</span>
+<span class="math display">\[a \sin\theta_2 + b \sin\theta_3 = c \sin\theta_4\]</span></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:vector-loop"></span>
+<img src="_main_files/figure-html/vector-loop-1.png" alt="Vector loop closure for position analysis." width="960" />
+<p class="caption">
+Figure 9.6: Vector loop closure for position analysis.
+</p>
+</div>
+</div>
+<div id="freudensteins-equation" class="section level3 unnumbered hasAnchor">
+<h3>Freudenstein’s Equation<a href="four-bar-linkages.html#freudensteins-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Freudenstein’s Equation</strong> provides a relationship between input angle <span class="math inline">\(\theta_2\)</span> and output angle <span class="math inline">\(\theta_4\)</span>:</p>
+<p><span class="math display">\[K_1 \cos\theta_4 - K_2 \cos\theta_2 + K_3 = \cos(\theta_2 - \theta_4)\]</span></p>
+<p><strong>Where:</strong></p>
+<p><span class="math display">\[K_1 = \frac{g}{c}, \quad K_2 = \frac{g}{a}, \quad K_3 = \frac{a^2 - b^2 + c^2 + g^2}{2ac}\]</span></p>
+<p>This equation is particularly useful for <strong>function generation</strong> problems, where a specific input-output relationship is desired.</p>
+<hr />
+</div>
+</div>
+<div id="transmission-angle" class="section level2 unnumbered hasAnchor">
+<h2>Transmission Angle<a href="four-bar-linkages.html#transmission-angle" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>transmission angle</strong> (<span class="math inline">\(\mu\)</span>) is the angle between the coupler and the output link. It is a critical measure of linkage quality—how effectively force is transmitted through the mechanism.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:transmission-angle"></span>
+<img src="_main_files/figure-html/transmission-angle-1.png" alt="Transmission angle and its significance for linkage performance." width="960" />
+<p class="caption">
+Figure 9.7: Transmission angle and its significance for linkage performance.
+</p>
+</div>
+<div id="transmission-angle-formula" class="section level3 unnumbered hasAnchor">
+<h3>Transmission Angle Formula<a href="four-bar-linkages.html#transmission-angle-formula" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The transmission angle can be calculated using the <strong>law of cosines</strong>:</p>
+<p><span class="math display">\[\cos\mu = \frac{b^2 + c^2 - (a^2 + g^2 - 2ag\cos\theta_2)}{2bc}\]</span></p>
+<p><strong>Design Rules:</strong></p>
+<table>
+<colgroup>
+<col width="44%" />
+<col width="20%" />
+<col width="35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Transmission Angle</th>
+<th align="left">Quality</th>
+<th align="left">Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\mu = 90°\)</span></td>
+<td align="left">Optimal</td>
+<td align="left">Maximum force transmission</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(40° &lt; \mu &lt; 140°\)</span></td>
+<td align="left">Good</td>
+<td align="left">Acceptable for most applications</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(30° &lt; \mu &lt; 150°\)</span></td>
+<td align="left">Marginal</td>
+<td align="left">May need stronger components</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\mu &lt; 30°\)</span> or <span class="math inline">\(\mu &gt; 150°\)</span></td>
+<td align="left">Poor</td>
+<td align="left">Avoid—high forces, poor motion quality</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="coupler-curves" class="section level2 unnumbered hasAnchor">
+<h2>Coupler Curves<a href="four-bar-linkages.html#coupler-curves" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the most powerful features of four-bar linkages is the ability to generate complex curves using a point attached to the coupler link. These <strong>coupler curves</strong> can approximate straight lines, circles, or other complex shapes.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:coupler-curve-concept"></span>
+<img src="_main_files/figure-html/coupler-curve-concept-1.png" alt="Coupler point P traces a coupler curve as the linkage moves." width="960" />
+<p class="caption">
+Figure 9.8: Coupler point P traces a coupler curve as the linkage moves.
+</p>
+</div>
+<div id="famous-coupler-curves" class="section level3 unnumbered hasAnchor">
+<h3>Famous Coupler Curves<a href="four-bar-linkages.html#famous-coupler-curves" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:coupler-types-table">Table 9.2: </span>Famous Four-Bar Coupler Curve Mechanisms
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Name
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Shape
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Application
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Watt’s Curve
+</td>
+<td style="text-align:left;">
+Figure-8 with straight segment
+</td>
+<td style="text-align:left;">
+Steam engine guides
+</td>
+<td style="text-align:left;">
+Approximate straight line over portion of path
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Roberts’ Curve
+</td>
+<td style="text-align:left;">
+Symmetrical with straight portion
+</td>
+<td style="text-align:left;">
+Mechanism design
+</td>
+<td style="text-align:left;">
+Three-point straight line approximation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chebyshev Linkage
+</td>
+<td style="text-align:left;">
+Nearly straight line
+</td>
+<td style="text-align:left;">
+Drafting machines, presses
+</td>
+<td style="text-align:left;">
+Very accurate straight line approximation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hoeken’s Linkage
+</td>
+<td style="text-align:left;">
+Extended straight portion
+</td>
+<td style="text-align:left;">
+Film projectors
+</td>
+<td style="text-align:left;">
+Long straight portion with low deviation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lambda Mechanism
+</td>
+<td style="text-align:left;">
+Complex curve with dwell
+</td>
+<td style="text-align:left;">
+Indexing mechanisms
+</td>
+<td style="text-align:left;">
+Output dwells while input continues
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="linkage-example-1" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Applied Example: Grashof Classification<a href="four-bar-linkages.html#linkage-example-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="problem-statement-3" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="four-bar-linkages.html#problem-statement-3" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<p>A four-bar linkage has the following link lengths:
+- Link 1 (ground): <span class="math inline">\(g = 100\)</span> mm
+- Link 2 (input): <span class="math inline">\(a = 40\)</span> mm
+- Link 3 (coupler): <span class="math inline">\(b = 80\)</span> mm
+- Link 4 (output): <span class="math inline">\(c = 60\)</span> mm</p>
+<p>Determine:
+1. Whether this is a Grashof or non-Grashof linkage
+2. The type of mechanism (crank-rocker, double-crank, etc.)
+3. Which link should be the input for continuous rotation</p>
+<div id="solution-2" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="four-bar-linkages.html#solution-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:grashof-example-calc">Table 9.3: </span>Grashof Classification Example
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Step
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Calculation
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Result
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
 <ol style="list-style-type: decimal">
-<li>The dispersion of heat through the metal itself.</li>
-<li>The rate of heat transfer from the casting surface to the mold.</li>
+<li>Identify shortest (S)
+</td>
+<td style="text-align:left;">
+S = min(40, 80, 60, 100)
+</td>
+<td style="text-align:left;">
+40 mm (a (input))
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Identify longest (L)
+</td>
+<td style="text-align:left;">
+L = max(40, 80, 60, 100)
+</td>
+<td style="text-align:left;">
+100 mm (g (ground))
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>Calculate S + L
+</td>
+<td style="text-align:left;">
+S + L = 40 + 100
+</td>
+<td style="text-align:left;">
+140 mm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="4" style="list-style-type: decimal">
+<li>Calculate P + Q
+</td>
+<td style="text-align:left;">
+P + Q = 60 + 80
+</td>
+<td style="text-align:left;">
+140 mm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+<ol start="5" style="list-style-type: decimal">
+<li>Compare (Grashof test)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+S + L (140) vs P + Q (140)
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+S + L = P + Q: CHANGE POINT
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+<ol start="6" style="list-style-type: decimal">
+<li>Mechanism type
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+Based on shortest link position
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(227, 242, 253, 255) !important;">
+Crank-Rocker
+</td>
+</tr>
+</tbody>
+</table></li>
 </ol></li>
-<li>These rates determine the overall temperature differential across the casting, which can lead to differential cooling as sections change state at different times.</li>
-<li><strong>Solidification Pattern:</strong> A casting usually crystallizes from the edge inward, cooling quickly where it touches the mold.</li>
-<li>Engineers use the crystallization, heat transfer, and shrinkage rates to predict the solidification pattern and design the mold accordingly to minimize shrinkage problems.
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<div id="interpretation-1" class="section level5 unnumbered hasAnchor">
+<h5>Interpretation<a href="four-bar-linkages.html#interpretation-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <ul>
-<li><strong>Chills:</strong> Molds may be designed with chills to create more rapid shrinkage in a specific section.</li>
-<li><strong>Risers:</strong> Reservoirs, called risers, are connected to the cooling casting to slowly feed liquid metal into it, preventing cavities from forming as the metal shrinks.</li>
-</ul></li>
+<li>Since <span class="math inline">\(S + L\)</span> (140 mm) is less than <span class="math inline">\(P + Q\)</span> (140 mm), this is a <strong>Grashof linkage</strong>.</li>
+<li>The shortest link is the <strong>input link (a = 40 mm)</strong>.</li>
+<li>When the shortest link is the input (crank), the mechanism is a <strong>Crank-Rocker</strong>.</li>
+<li>The input (link 2) will rotate continuously while the output (link 4) oscillates.</li>
 </ul>
-</div>
-</div>
-<div id="design-considerations-for-shape-and-mold" class="section level3 hasAnchor" number="1.4.3">
-<h3><span class="header-section-number">1.4.3</span> 📐 Design Considerations for Shape and Mold<a href="#design-considerations-for-shape-and-mold" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Designers must structure the geometry of the casting and the mold components to manage heat and metal flow.</p>
-<div id="shape-and-section-size-changes" class="section level4 hasAnchor" number="1.4.3.1">
-<h4><span class="header-section-number">1.4.3.1</span> Shape and Section Size Changes<a href="design-for-casting.html#shape-and-section-size-changes" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Hot Spots:</strong> Increased thickness in material can create hot spots in cooling castings.</li>
-<li><strong>Uniform Thickness:</strong> Where possible, designing castings with uniform thickness is helpful.</li>
-<li><strong>Tapering:</strong> For large diameter changes, sections should be tapered slowly to prevent cooling strain.</li>
-<li><strong>Smoothing and Cores:</strong> Engineers prevent high-volume hotspots by smoothing sharp angles and adding cores.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
-<img src="images/metal-casting-wall-slope.png" alt="Metal castings with large diameter changes should be tapered slowly to prevent cooling strain." width="50%" />
-<p class="caption">
-Figure 1.4: Metal castings with large diameter changes should be tapered slowly to prevent cooling strain.
-</p>
-</div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
-<img src="images/metal-casting-volume-change.png" alt="By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming." width="50%" />
-<p class="caption">
-Figure 1.5: By smoothing sharp angles and adding cores, engineers prevent high-volume hotspots from forming.
-</p>
-</div>
-</div>
-<div id="junctions-between-sections" class="section level4 hasAnchor" number="1.4.3.2">
-<h4><span class="header-section-number">1.4.3.2</span> Junctions Between Sections<a href="design-for-casting.html#junctions-between-sections" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Volume Consistency:</strong> Sharp angles where two or more sections meet can create a larger volume of metal (a hotspot) at the junction.</li>
-<li><strong>Rounding Corners:</strong> Designers can smooth these corners, rounding them away from sharp angles, to make the metal volume at the junction more consistent with the surrounding metal volumes.</li>
-</ul>
-</div>
-<div id="mold-stability-and-surface-finish" class="section level4 hasAnchor" number="1.4.3.3">
-<h4><span class="header-section-number">1.4.3.3</span> Mold Stability and Surface Finish<a href="design-for-casting.html#mold-stability-and-surface-finish" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<ul>
-<li><strong>Mold Integrity:</strong> The mold material must be able to withstand the metal’s behavior (expansion, contraction, and off-gassing) while it cools, without fracturing or collapsing.</li>
-<li><strong>Surface Finish Capability:</strong> The molding method dictates the final surface finish.
-<ul>
-<li>Fine finishes often require more expensive molding processes.</li>
-<li>For parts requiring precision finishes only in certain areas, the casting can be machined afterward, but the metal must be easily machinable.</li>
-<li>While intensive molding processes yield smoother finishes and are often costly, for large objects, this can be less expensive than machining the entire surface.</li>
-</ul></li>
-</ul>
-</div>
-<div id="other-mold-design-considerations" class="section level4 hasAnchor" number="1.4.3.4">
-<h4><span class="header-section-number">1.4.3.4</span> Other Mold Design Considerations<a href="design-for-casting.html#other-mold-design-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>To achieve an excellent casting at a good price, the designer should try to minimize or eliminate deep drafts, expensive cores, and irregular parting.</p>
-<ul>
-<li><strong>Drafts:</strong> These are necessary tapers on the vertical walls of a casting. They ensure the pattern (the positive image of the object) can be removed from the mold without disturbing the walls.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
-<img src="images/Gemini_Generated_Image_b6qi6zb6qi6zb6qi.png" alt="Design with Draft Angles" width="50%" />
-<p class="caption">
-Figure 1.6: Design with Draft Angles
-</p>
-</div>
-<ul>
-<li><strong>Cores:</strong> Cores are used to create intentional voids or holes inside a casting. They can be costly to produce, but can sometimes be avoided by changing the orientation of the casting or the mold’s parting line.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
-<img src="images/sand-mold-with-core.jpg" alt="A sand mold with a core. Where the halves of the mold come together is the parting line." width="50%" />
-<p class="caption">
-Figure 1.7: A sand mold with a core. Where the halves of the mold come together is the parting line.
-</p>
-</div>
-<ul>
-<li><strong>Parting Lines:</strong> This is the line where the two halves of the mold meet. Risers and gates are often placed along the parting line.</li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
-<img src="images/Gemini_Generated_Image_67wz4x67wz4x67wz.png" alt="Parting Lines" width="50%" />
-<p class="caption">
-Figure 1.8: Parting Lines
-</p>
-</div>
-<pre><code>* **Flash:** Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.</code></pre>
-</div>
-<div id="excellence-in-casting-design" class="section level4 hasAnchor" number="1.4.3.5">
-<h4><span class="header-section-number">1.4.3.5</span> 🌟 Excellence in Casting Design<a href="#excellence-in-casting-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Designing a superior product at the lowest price requires understanding the complex dependencies between materials and methods. The required mechanical properties of the final product determine the metal needed, and that metal’s liquid, cooling, and solid behavior dictates the necessary mold features.</p>
-<ul>
-<li><strong>Example:</strong> Brittle metals are less suited for designs with sharp edges prone to chipping. Metals with low fluidity require molds with less small detail.</li>
-<li><strong>Process Challenges:</strong> A high melting point (like that of steel) demands a higher level of monitoring and precision throughout the process.</li>
-</ul>
-<p>Experience and clear communication among designers, engineers, and metalworkers are crucial for creating a product of quality and value.</p>
 <hr />
 </div>
 </div>
+<div id="linkage-example-2" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Applied Example: Transmission Angle Analysis<a href="four-bar-linkages.html#linkage-example-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="problem-statement-4" class="section level5 unnumbered hasAnchor question">
+<h5>Problem Statement<a href="four-bar-linkages.html#problem-statement-4" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 </div>
-<div id="defects-in-casting-process" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Defects in Casting process<a href="design-for-casting.html#defects-in-casting-process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), calculate the transmission angle when the input is at:
+1. <span class="math inline">\(\theta_2 = 60°\)</span>
+2. Determine the minimum transmission angle through the full rotation</p>
+<div id="solution-3" class="section level5 unnumbered hasAnchor answer">
+<h5>Solution<a href="four-bar-linkages.html#solution-3" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+</div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:trans-angle-example">Table 9.4: </span>Transmission Angle Analysis
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Parameter
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Formula/Description
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+At theta2 = 60 deg
+</td>
+<td style="text-align:left;">
+cos(mu) = (b^2 + c^2 - f^2) / 2bc
+</td>
+<td style="text-align:left;">
+75.5 deg
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+Minimum transmission angle
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+Through full crank rotation
+</td>
+<td style="text-align:left;font-weight: bold;background-color: rgba(232, 245, 233, 255) !important;">
+48.2 deg
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maximum transmission angle
+</td>
+<td style="text-align:left;">
+Through full crank rotation
+</td>
+<td style="text-align:left;">
+180 deg
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Input angle at min mu
+</td>
+<td style="text-align:left;">
+theta2 where mu is minimum
+</td>
+<td style="text-align:left;">
+0 deg
+</td>
+</tr>
+</tbody>
+</table>
+<div id="quality-assessment" class="section level5 unnumbered hasAnchor">
+<h5>Quality Assessment<a href="four-bar-linkages.html#quality-assessment" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><strong>Design Quality:</strong> GOOD</p>
+<p><strong>Recommendation:</strong> Minimum transmission angle exceeds 40 deg - acceptable design</p>
+<hr />
+</div>
+</div>
+<div id="design-guidelines-1" class="section level2 unnumbered hasAnchor">
+<h2>Design Guidelines<a href="four-bar-linkages.html#design-guidelines-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="link-length-selection" class="section level3 unnumbered hasAnchor">
+<h3>Link Length Selection<a href="four-bar-linkages.html#link-length-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="54%" />
+<col width="45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Design Goal</th>
+<th align="left">Guideline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Continuous crank rotation</strong></td>
+<td align="left">Ensure Grashof condition: <span class="math inline">\(S + L \leq P + Q\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Crank-rocker mechanism</strong></td>
+<td align="left">Make the input link the shortest</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Good transmission angle</strong></td>
+<td align="left">Keep <span class="math inline">\(\mu_{min} &gt; 40°\)</span> throughout motion</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Avoid toggle positions</strong></td>
+<td align="left">Transmission angle should not approach 0° or 180°</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Symmetrical output</strong></td>
+<td align="left">Consider time ratio requirements</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="time-ratio" class="section level3 unnumbered hasAnchor">
+<h3>Time Ratio<a href="four-bar-linkages.html#time-ratio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>time ratio</strong> (TR) describes how the output motion is divided between forward and return strokes:</p>
+<p><span class="math display">\[TR = \frac{\text{Time for forward stroke}}{\text{Time for return stroke}} = \frac{\alpha}{\beta}\]</span></p>
+<p>Where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are the crank angles for forward and return strokes.</p>
+<p>For a <strong>quick-return mechanism</strong>, TR &gt; 1, meaning the return stroke is faster than the forward stroke.</p>
+<hr />
+</div>
+</div>
+<div id="summary-equations-1" class="section level2 unnumbered hasAnchor">
+<h2>Summary Equations<a href="four-bar-linkages.html#summary-equations-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="grashof-classification" class="section level3 unnumbered hasAnchor">
+<h3>Grashof Classification<a href="four-bar-linkages.html#grashof-classification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(S + L \leq P + Q\)</span></td>
+<td align="left">Grashof condition for continuous rotation</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(S\)</span> = shortest, <span class="math inline">\(L\)</span> = longest</td>
+<td align="left">Identify extreme link lengths</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="position-analysis-1" class="section level3 unnumbered hasAnchor">
+<h3>Position Analysis<a href="four-bar-linkages.html#position-analysis-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="43%" />
+<col width="56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(a\cos\theta_2 + b\cos\theta_3 = g + c\cos\theta_4\)</span></td>
+<td align="left">X-component loop closure</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(a\sin\theta_2 + b\sin\theta_3 = c\sin\theta_4\)</span></td>
+<td align="left">Y-component loop closure</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(K_1\cos\theta_4 - K_2\cos\theta_2 + K_3 = \cos(\theta_2 - \theta_4)\)</span></td>
+<td align="left">Freudenstein’s equation</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="transmission-angle-1" class="section level3 unnumbered hasAnchor">
+<h3>Transmission Angle<a href="four-bar-linkages.html#transmission-angle-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="43%" />
+<col width="56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Equation</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\cos\mu = \frac{b^2 + c^2 - f^2}{2bc}\)</span></td>
+<td align="left">Transmission angle from diagonal</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(f^2 = a^2 + g^2 - 2ag\cos\theta_2\)</span></td>
+<td align="left">Diagonal length squared</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="design-checklist-1" class="section level2 unnumbered hasAnchor">
+<h2>Design Checklist<a href="four-bar-linkages.html#design-checklist-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>For Four-Bar Linkage Design:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Define the motion requirement (continuous rotation, oscillation, path)</label></li>
+<li><label><input type="checkbox" />Apply Grashof’s Law to classify mechanism type</label></li>
+<li><label><input type="checkbox" />Verify <span class="math inline">\(S + L &lt; P + Q\)</span> for crank-rocker applications</label></li>
+<li><label><input type="checkbox" />Calculate transmission angle range through full motion</label></li>
+<li><label><input type="checkbox" />Ensure <span class="math inline">\(\mu_{min} &gt; 40°\)</span> for good force transmission</label></li>
+<li><label><input type="checkbox" />Check for toggle positions (dead points)</label></li>
+<li><label><input type="checkbox" />Verify link proportions avoid interference</label></li>
+<li><label><input type="checkbox" />Consider time ratio for quick-return applications</label></li>
+<li><label><input type="checkbox" />Analyze coupler curve if path generation is required</label></li>
+<li><label><input type="checkbox" />Check that mechanism fits within available space</label></li>
+</ul>
+<hr />
+</div>
+<div id="common-applications" class="section level2 unnumbered hasAnchor">
+<h2>Common Applications<a href="four-bar-linkages.html#common-applications" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:applications-table">Table 9.5: </span>Common Four-Bar Linkage Applications
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Application
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Mechanism_Type
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Function
+</th>
+<th style="text-align:left;color: white !important;background-color: rgba(216, 27, 96, 255) !important;">
+Key_Feature
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Windshield wipers
+</td>
+<td style="text-align:left;">
+Crank-rocker
+</td>
+<td style="text-align:left;">
+Convert motor rotation to blade oscillation
+</td>
+<td style="text-align:left;">
+Consistent sweep angle
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Automobile suspension
+</td>
+<td style="text-align:left;">
+Four-bar variant
+</td>
+<td style="text-align:left;">
+Control wheel motion during travel
+</td>
+<td style="text-align:left;">
+Maintains wheel orientation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aircraft landing gear
+</td>
+<td style="text-align:left;">
+Four-bar linkage
+</td>
+<td style="text-align:left;">
+Retract/extend gear in specific path
+</td>
+<td style="text-align:left;">
+Compact stowage
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Reciprocating pumps
+</td>
+<td style="text-align:left;">
+Crank-rocker
+</td>
+<td style="text-align:left;">
+Convert rotation to linear pumping
+</td>
+<td style="text-align:left;">
+Smooth motion transfer
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sewing machines
+</td>
+<td style="text-align:left;">
+Crank-rocker
+</td>
+<td style="text-align:left;">
+Drive needle up/down motion
+</td>
+<td style="text-align:left;">
+Precise positioning
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Excavator bucket
+</td>
+<td style="text-align:left;">
+Four-bar linkage
+</td>
+<td style="text-align:left;">
+Control bucket angle during digging
+</td>
+<td style="text-align:left;">
+Force amplification
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Door closers
+</td>
+<td style="text-align:left;">
+Four-bar linkage
+</td>
+<td style="text-align:left;">
+Control closing speed and force
+</td>
+<td style="text-align:left;">
+Damped motion
+</td>
+</tr>
+</tbody>
+</table>
 
-</div>
-</div>
-<h3>References</h3>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-reliance-casting-design" class="csl-entry">
+<div class="csl-entry">
+Budynas, Richard G., and J. Keith Nisbett. 2020. <em>Shigley’s Mechanical Engineering Design</em>. 11th ed. McGraw-Hill Education.
+</div>
+<div class="csl-entry">
+Fastenal Company. n.d. <em>Fastenal Fastener Technical Reference Guide</em>. Winona, MN: Fastenal Engineering; Design Support. <a href="http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf">http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&amp;COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf</a>.
+</div>
+<div class="csl-entry">
 Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality and Value.”</span> 2025. <a href="https://www.reliance-foundry.com/blog/metal-casting-design">https://www.reliance-foundry.com/blog/metal-casting-design</a>.
+</div>
+</div>
 </div>
 </div>
             </section>
@@ -909,8 +1482,8 @@ Reliance Foundry Co. Ltd. 2025. <span>“Engineering Metal Castings for Quality 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="design-for-joining.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="ball-bearings-and-bushings.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -941,7 +1514,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/01-Casting.Rmd",
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/09-Four-Bar-Linkage.Rmd",
     "text": "Edit"
   },
   "history": {
