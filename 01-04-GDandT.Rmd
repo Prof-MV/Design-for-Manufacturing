@@ -1,0 +1,924 @@
+### Geometric Dimensioning and Tolerancing (GD&T)
+
+#### Learning Objectives {-}
+
+By the end of this chapter, you will be able to:
+
+- Understand the fundamental principles of GD&T per ASME Y14.5 standards
+- Differentiate between dimensional and geometric tolerances
+- Apply datums, tolerance zones, and modifier symbols correctly
+- Create and interpret feature control frames
+- Understand the hierarchy of geometric controls
+- Apply GD&T to real-world engineering problems
+- Use interactive visualizations to verify tolerance stack-up
+
+#### 1. Introduction to GD&T
+
+Geometric Dimensioning and Tolerancing (GD&T) is a standardized method of specifying and communicating engineering tolerances. Unlike traditional plus-minus dimensioning, GD&T uses a symbolic language that provides a clear, concise description of part geometry and allowable variations.
+
+##### Why GD&T Matters
+
+Traditional dimensioning (Figure \\@ref(fig:traditional-vs-gdt)) can lead to:
+- Ambiguous interpretations of design intent
+- Excessive part cost due to overly tight tolerances
+- Functional failures due to under-constrained features
+- Increased manufacturing costs and waste
+
+GD&T solves these problems by:
+- Clearly communicating design intent
+- Maximizing functional tolerance zones
+- Reducing manufacturing costs
+- Improving part interchangeability
+```{r traditional-vs-gdt, echo=FALSE, fig.cap="Comparison: Traditional vs. GD&T Dimensioning"}
+
+## Create a comparison visualization
+
+library(ggplot2)
+library(ggforce)
+library(gridExtra)
+
+## Traditional approach
+
+p1 <- ggplot() +
+
+  annotate("rect", xmin=0, xmax=4, ymin=0, ymax=3, 
+
+           fill="white", color="black", linewidth=1) +
+
+  annotate("text", x=2, y=2.5, label="Feature", fontface="bold", size=5) +
+
+  annotate("text", x=2, y=1.5, label="25.0 ± 0.5 mm", size=4) +
+
+  annotate("text", x=2, y=0.5, label="Traditional: Square Tolerance Zone", 
+
+           fontface="italic", size=3) +
+
+  xlim(-0.5, 4.5) + ylim(-0.5, 3) +
+
+  theme_void() +
+
+  ggtitle("Traditional Plus-Minus")
+
+## GD&T approach
+
+p2 <- ggplot() +
+
+  annotate("rect", xmin=0.2, xmax=3.8, ymin=0.2, ymax=2.8, 
+
+           fill="white", color="black", linewidth=1) +
+
+  geom_circle(aes(x0=2, y0=1.5, r=0.5), 
+
+           fill="lightblue", color="red", linewidth=1.5) +
+
+  annotate("text", x=2, y=2.5, label="Feature", fontface="bold", size=5) +
+
+  annotate("text", x=2, y=1.5, label="Ø0.5 mm", size=4) +
+
+  annotate("text", x=2, y=0.2, label="GD&T: Circular Tolerance Zone", 
+
+           fontface="italic", size=3) +
+
+  xlim(-0.5, 4.5) + ylim(-0.5, 3) +
+
+  theme_void() +
+
+  ggtitle("GD&T with Positional Tolerance")
+
+grid.arrange(p1, p2, ncol=2)
+```
+
+#### 2. Fundamental Principles
+
+##### 2.1 The Rule of Interchangeability
+
+GD&T is built on the principle that parts must be interchangeable while satisfying functional requirements. This means:
+
+- All parts produced to specification must fit and function together
+- Tolerance zones maximize functional space
+- Manufacturing processes can operate at economical levels
+
+##### 2.2 Key Definitions
+
+**Datum**: A theoretically exact geometric reference (plane, line, or point) from which other geometric characteristics are measured.
+
+**Tolerance Zone**: The allowable area or volume within which a feature must lie.
+
+**Feature of Size**: A cylindrical feature (hole, shaft) or a pair of parallel surfaces (slot width) to which a tolerance is applied.
+
+**Maximum Material Condition (MMC)**: The condition where a feature contains the maximum amount of material (smallest hole, largest shaft).
+
+**Least Material Condition (LMC)**: The condition where a feature contains the minimum amount of material (largest hole, smallest shaft).
+
+#### 3. The Feature Control Frame
+
+The Feature Control Frame (FCF) is the foundation of GD&T notation. It's a rectangular box divided into compartments that specify the geometric characteristic and its requirements.
+```{r fcf-diagram, echo=FALSE, fig.cap="Feature Control Frame Structure"}
+library(grid)
+library(gridExtra)
+
+## Create a Feature Control Frame
+grid.newpage()
+vp <- viewport(width=0.8, height=0.6, x=0.5, y=0.5)
+pushViewport(vp)
+
+## Draw the FCF boxes
+fcf_x <- c(0.1, 0.25, 0.45, 0.65, 0.85)
+fcf_labels <- c("A\\n(Symbol)", "B\\n(Tolerance)", "C\\n(Datum A)", "D\\n(Datum B)", "E\\n(Datum C)")
+fcf_colors <- c("lightcoral", "lightyellow", "lightblue", "lightblue", "lightblue")
+
+for (i in 1:5) {
+  grid.rect(x=fcf_x[i], y=0.5, width=0.15, height=0.3, 
+            gp=gpar(fill=fcf_colors[i], col="black", lwd=2))
+  grid.text(fcf_labels[i], x=fcf_x[i], y=0.5, gp=gpar(fontsize=9, fontface="bold"))
+}
+
+## Add annotations
+grid.text("Feature Control Frame Components", 
+          x=0.5, y=0.95, gp=gpar(fontsize=14, fontface="bold"))
+
+popViewport()
+```
+
+##### 3.1 Component Breakdown
+
+| Position | Component | Content | Example |
+|----------|-----------|---------|---------|
+| 1 | Geometric Characteristic Symbol | Defines the type of control | ⊙ (Position), ⊥ (Perpendicular), ∥ (Parallel) |
+| 2 | Tolerance Value | Diameter and numerical value | Ø 0.5 mm, 0.3 mm |
+| 3 | Datum A | Primary datum reference | A |
+| 4 | Datum B | Secondary datum reference | B |
+| 5 | Datum C | Tertiary datum reference | C |
+
+##### 3.2 Modifier Symbols
+
+Modifiers are used after the tolerance value and datum references to specify material condition constraints:
+
+- **M (Maximum Material Condition)**: Tolerance increases as feature departs from MMC
+- **L (Least Material Condition)**: Tolerance increases as feature departs from LMC
+- **S (Regardless of Feature Size)**: Tolerance remains constant regardless of feature size
+```{r modifiers-table, echo=FALSE}
+library(knitr)
+
+modifiers_df <- data.frame(
+  Symbol = c("Ø", "⊙", "M", "L", "S"),
+  Name = c("Diameter", "Position", "Max Material Condition", "Least Material Condition", "Regardless of Size"),
+  Application = c(
+    "Circular tolerance zone",
+    "Indicates positional tolerance",
+    "Tolerance varies with feature size",
+    "Tolerance varies inversely with feature size",
+    "Fixed tolerance, independent of size"
+  )
+)
+
+kable(modifiers_df, caption="Common GD&T Modifiers and Symbols", booktabs=TRUE)
+```
+
+#### 4. The 14 Geometric Characteristics
+
+GD&T defines 14 geometric characteristics organized into four categories:
+
+##### 4.1 Form Controls (No Datum Required)
+
+These controls constrain the shape of individual features.
+```{r form-controls, echo=FALSE, fig.cap="Form Control Characteristics"}
+library(ggplot2)
+
+form_controls <- data.frame(
+  Symbol = c("⌢", "⌭", "⌒", "◯"),
+  Name = c("Straightness", "Flatness", "Circularity", "Cylindricity"),
+  Definition = c(
+    "All points lie on straight line",
+    "All points lie on same plane",
+    "All points equidistant from center",
+    "All points equidistant from axis"
+  )
+)
+
+kable(form_controls, caption="Form Control Characteristics", booktabs=TRUE)
+```
+
+**Interactive Example: Straightness**
+```{r straightness-demo, echo=FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(gridExtra)
+
+## Generate a perfect vs. crooked line
+set.seed(42)
+x_coord <- seq(0, 10, by=0.1)
+
+## Perfect straightness
+perfect <- data.frame(
+  x = x_coord,
+  y = 2 * x_coord,
+  type = "Perfect (0.0 mm)"
+)
+
+## With straightness deviation
+crooked <- data.frame(
+  x = x_coord,
+  y = 2 * x_coord + rnorm(length(x_coord), mean=0, sd=0.15),
+  type = "With 0.3 mm Tolerance"
+)
+
+data <- rbind(perfect, crooked)
+
+ggplot(data, aes(x=x, y=y, color=type, linewidth=type)) +
+  geom_line() +
+  geom_point(alpha=0.3) +
+  scale_linewidth_manual(values=c("Perfect (0.0 mm)" = 1, "With 0.3 mm Tolerance" = 0.5)) +
+  scale_color_manual(values=c("Perfect (0.0 mm)" = "green", "With 0.3 mm Tolerance" = "blue")) +
+  theme_minimal() +
+  labs(
+    title="Straightness Control Example",
+    x="Distance (mm)",
+    y="Deviation (mm)",
+    subtitle="Feature must remain within 0.3 mm total straightness tolerance"
+  ) +
+  theme(legend.position="bottom")
+```
+
+##### 4.2 Orientation Controls (Datum Required)
+
+These controls define how features are oriented relative to a datum.
+```{r orientation-controls, echo=FALSE}
+orientation_controls <- data.frame(
+  Symbol = c("⊥", "∥", "∠"),
+  Name = c("Perpendicularity", "Parallelism", "Angularity"),
+  Definition = c(
+    "Feature is perpendicular to datum",
+    "Feature is parallel to datum",
+    "Feature at specific angle to datum"
+  ),
+  Use_Case = c(
+    "Holes perpendicular to mounting surface",
+    "Surfaces parallel for assembly",
+    "Angled surfaces at specific degrees"
+  )
+)
+
+kable(orientation_controls, caption="Orientation Control Characteristics", booktabs=TRUE)
+```
+
+##### 4.3 Location Controls (Datum Required)
+
+These controls define where features are positioned.
+```{r location-controls, echo=FALSE}
+location_controls <- data.frame(
+  Symbol = c("⊙", "⊕", "◉"),
+  Name = c("Position", "Concentricity", "Symmetry"),
+  Definition = c(
+    "Feature location relative to datums",
+    "Feature axis coincident with datum axis",
+    "Feature symmetrical about datum plane"
+  ),
+  Example = c(
+    "Bolt hole pattern",
+    "Concentric bores",
+    "Symmetrical slot"
+  )
+)
+
+kable(location_controls, caption="Location Control Characteristics", booktabs=TRUE)
+```
+
+**Interactive Example: Positional Tolerance**
+```{r position-demo, echo=FALSE, fig.cap="Positional Tolerance Visualization"}
+
+library(ggplot2)
+library(ggforce)
+
+### Create ideal and actual hole positions
+
+positions <- data.frame(
+
+  x = c(50, 50.3),
+
+  y = c(50, 49.8),
+
+  type = c("Ideal Position", "Actual Position"),
+
+  size = 8
+
+)
+
+ggplot() +
+
+  ### Datum axes
+
+  geom_vline(xintercept=50, color="red", linetype="dashed", alpha=0.5) +
+
+  geom_hline(yintercept=50, color="red", linetype="dashed", alpha=0.5) +
+
+  annotate("text", x=51.5, y=50.5, label="Datum Intersection", fontsize=3, color="red") +
+
+  
+
+  ### Tolerance zone (circular)
+
+  geom_circle(aes(x0=50, y0=50, r=0.35), 
+
+            fill="lightblue", color="blue", alpha=0.3, linewidth=1) +
+
+  annotate("text", x=50, y=49.3, label="Ø0.7 mm\\nTolerance Zone", 
+
+           fontsize=3, color="blue", fontface="bold") +
+
+  
+
+  ## Hole positions
+
+  geom_point(data=positions, aes(x=x, y=y, color=type), size=5) +
+
+  geom_circle(data=positions, aes(x0=x, y0=y, r=1.5, color=type), 
+
+              fill=NA, linewidth=0.5) +
+
+  
+
+  scale_color_manual(values=c("Ideal Position"="green", "Actual Position"="orange")) +
+
+  coord_fixed() +
+
+  xlim(47, 53) + ylim(47, 53) +
+
+  theme_minimal() +
+
+  labs(
+
+    title="Positional Tolerance Example",
+
+    subtitle="Hole position tolerance Ø0.7 mm at MMC",
+
+    x="X Axis (mm)",
+
+    y="Y Axis (mm)"
+
+  ) +
+
+  theme(legend.position="top")
+```
+
+#### 4.4 Runout Controls (Datum Required)
+
+These controls define circular or total runout of features about a datum axis.
+```{r runout-controls, echo=FALSE}
+runout_controls <- data.frame(
+  Symbol = c("⌬", "⌭"),
+  Name = c("Circular Runout", "Total Runout"),
+  Definition = c(
+    "Runout at each circular element about datum axis",
+    "Total runout across all circular elements"
+  ),
+  Application = c(
+    "Rotating bearing surfaces",
+    "Shaft wobble tolerance"
+  )
+)
+
+kable(runout_controls, caption="Runout Control Characteristics", booktabs=TRUE)
+```
+
+### 5. Datum Systems
+
+Datums are the foundation of GD&T. They establish the reference framework from which all tolerances are applied.
+
+#### 5.1 Datum Selection Hierarchy
+
+The datum system typically follows a three-plane reference:
+```{r datum-system, echo=FALSE, fig.cap="Three-Plane Datum System"}
+library(ggplot2)
+library(gridExtra)
+
+## Primary datum (large surface)
+p1 <- ggplot() +
+  geom_rect(aes(xmin=0, xmax=10, ymin=0, ymax=7), 
+            fill="lightcoral", color="black", linewidth=1) +
+  annotate("text", x=5, y=3.5, label="PRIMARY DATUM (A)\\nLargest, most stable surface", 
+           fontsize=4, fontface="bold") +
+  xlim(-1, 11) + ylim(-1, 8) +
+  theme_void() +
+  ggtitle("Step 1: Primary")
+
+## Secondary datum (perpendicular surface)
+p2 <- ggplot() +
+  geom_rect(aes(xmin=0, xmax=10, ymin=0, ymax=7), 
+            fill="white", color="black", linewidth=1) +
+  geom_rect(aes(xmin=8, xmax=10, ymin=0, ymax=7), 
+            fill="lightblue", color="black", linewidth=1) +
+  annotate("text", x=9, y=3.5, label="SECONDARY\\nDATUM (B)", 
+           fontsize=3, fontface="bold") +
+  xlim(-1, 11) + ylim(-1, 8) +
+  theme_void() +
+  ggtitle("Step 2: Secondary (perpendicular to A)")
+
+## Tertiary datum (edge)
+p3 <- ggplot() +
+  geom_rect(aes(xmin=0, xmax=10, ymin=0, ymax=7), 
+            fill="white", color="black", linewidth=1) +
+  geom_rect(aes(xmin=8, xmax=10, ymin=0, ymax=7), 
+            fill="white", color="black", linewidth=1) +
+  geom_rect(aes(xmin=0, xmax=10, ymin=6.5, ymax=7), 
+            fill="lightgreen", color="black", linewidth=1) +
+  annotate("text", x=5, y=6.75, label="TERTIARY DATUM (C)", 
+           fontsize=3, fontface="bold") +
+  xlim(-1, 11) + ylim(-1, 8) +
+  theme_void() +
+  ggtitle("Step 3: Tertiary (perpendicular to A & B)")
+
+grid.arrange(p1, p2, p3, ncol=3)
+```
+
+#### 5.2 Datum Reference Frame
+
+The Datum Reference Frame (DRF) is a coordinate system established by the datums:
+```{r datum-ref-frame, echo=FALSE}
+drf_table <- data.frame(
+  Position = c("Primary", "Secondary", "Tertiary"),
+  Abbreviation = c("A", "B", "C"),
+  Constraint = c("3 DOF restricted", "2 DOF restricted", "1 DOF restricted"),
+  Feature = c("Largest plane/surface", "Perpendicular surface", "Edge or smallest feature"),
+  Purpose = c("Establish origin", "Establish X-axis", "Establish Y-axis")
+)
+
+kable(drf_table, caption="Datum Reference Frame Structure", booktabs=TRUE)
+```
+
+### 6. Material Conditions and Bonus Tolerances
+
+#### 6.1 Maximum Material Condition (MMC)
+
+MMC is the condition where a feature contains the maximum amount of material:
+- Smallest hole diameter
+- Largest shaft diameter
+- Widest slot
+```{r mmc-demo, echo=FALSE, fig.cap="Maximum Material Condition Example"}
+library(ggplot2)
+
+## Hole diameter tolerances
+hole_data <- data.frame(
+  condition = c("MMC", "Nominal", "LMC"),
+  diameter = c(9.8, 10.0, 10.2),
+  description = c("Smallest hole\\n(most material)", "Mid-range", "Largest hole\\n(least material)")
+)
+
+ggplot(hole_data, aes(x=reorder(condition, diameter), y=diameter, fill=condition)) +
+  geom_col(width=0.6) +
+  geom_text(aes(label=diameter), vjust=-0.5, fontsize=5, fontface="bold") +
+  scale_fill_manual(values=c("MMC"="darkgreen", "Nominal"="gray", "LMC"="darkred")) +
+  ylim(9.5, 10.5) +
+  theme_minimal() +
+  labs(
+    title="Hole Diameter: MMC vs. LMC",
+    subtitle="Hole Ø10 ±0.2 mm",
+    x="Condition",
+    y="Diameter (mm)"
+  ) +
+  theme(legend.position="none")
+```
+
+#### 6.2 Bonus Tolerance
+
+When using MMC modifier, a **bonus tolerance** is granted as the feature departs from MMC. This maximizes functional tolerance while ensuring assembly.
+```{r bonus-tolerance, echo=FALSE, fig.cap="Bonus Tolerance Calculation"}
+library(ggplot2)
+
+## Positional tolerance with bonus
+actual_size <- seq(9.8, 10.2, by=0.1)
+positional_tolerance <- 0.4 + (actual_size - 9.8)
+
+bonus_df <- data.frame(
+  actual_size = actual_size,
+  positional_tolerance = positional_tolerance,
+  bonus = actual_size - 9.8
+)
+
+ggplot(bonus_df, aes(x=actual_size, y=positional_tolerance)) +
+  geom_line(linewidth=1.5, color="blue") +
+  geom_point(size=4, color="blue") +
+  geom_ribbon(aes(ymin=0.4, ymax=positional_tolerance), alpha=0.2, fill="blue") +
+  annotate("text", x=9.9, y=0.35, label="Base Tolerance = 0.4 mm", fontsize=4) +
+  annotate("text", x=10.1, y=0.65, label="Bonus Tolerance = Actual - MMC", fontsize=3, angle=45) +
+  theme_minimal() +
+  labs(
+    title="Bonus Tolerance Example",
+    subtitle="Position: Ø0.4 @ MMC | Hole Size: Ø10 ±0.2",
+    x="Actual Hole Size (mm)",
+    y="Positional Tolerance (mm)"
+  ) +
+  xlim(9.7, 10.3) +
+  ylim(0.2, 0.7)
+```
+
+### 7. Common GD&T Applications
+
+#### 7.1 Bolt Hole Pattern
+
+**Problem**: Ensure bolt holes align for assembly.
+
+**Solution**: Use position tolerance relative to three datums.
+```{r bolt-pattern, echo=FALSE, fig.cap="Bolt Hole Pattern with GD&T"}
+
+library(ggplot2)
+library(ggforce)
+
+## Create bolt hole pattern
+
+bolt_holes <- data.frame(
+
+  x = c(10, 40, 10, 40),
+
+  y = c(10, 10, 40, 40),
+
+  hole_type = "Bolt Hole"
+
+)
+
+datums <- data.frame(
+
+  x = c(0, 50, 25),
+
+  y = c(0, 0, 0),
+
+  label = c("Datum A", "Datum A", "Datum B")
+
+)
+
+ggplot() +
+
+  ## Reference frame
+
+  geom_vline(xintercept=25, color="red", linetype="dashed", alpha=0.5) +
+
+  geom_hline(yintercept=0, color="red", linetype="dashed", alpha=0.5) +
+
+  
+
+  ## Bolt holes with tolerance zones
+
+  geom_point(data=bolt_holes, aes(x=x, y=y), size=6, color="black") +
+
+  geom_circle(data=bolt_holes, aes(x0=x, y0=y, r=1.5), 
+
+            fill="lightblue", color="blue", alpha=0.3, linewidth=0.5) +
+
+  
+
+  ## Dimensions
+
+  annotate("text", x=5, y=10, label="10", fontsize=3) +
+
+  annotate("text", x=25, y=5, label="25", fontsize=3, color="red", fontface="bold") +
+
+  
+
+  ## GD&T callout
+
+  annotate("text", x=25, y=50, label="Position: Ø1.5 @ MMC | A | B", 
+
+           fontsize=4, fontface="bold", bbox=list(boxstyle="round", fill="yellow", alpha=0.7)) +
+
+  
+
+  coord_fixed() +
+
+  xlim(-5, 55) + ylim(-10, 55) +
+
+  theme_minimal() +
+
+  labs(title="Bolt Hole Pattern with Positional Tolerance")
+```
+
+#### 7.2 Shaft Runout Control
+
+**Problem**: Ensure rotating shaft doesn't wobble excessively.
+
+**Solution**: Apply total runout tolerance about the shaft axis (Datum A).
+```{r shaft-runout, echo=FALSE, fig.cap="Shaft Runout Control"}
+
+library(ggplot2)
+
+## Shaft with runout indication
+
+theta <- seq(0, 2*pi, length.out=100)
+
+nominal_radius <- 5
+
+## Perfect shaft
+
+perfect_shaft <- data.frame(
+
+  x = nominal_radius * cos(theta),
+
+  y = nominal_radius * sin(theta),
+
+  type = "Nominal"
+
+)
+
+## Shaft with runout (FIXED: Added missing * operator)
+
+runout_shaft <- data.frame(
+
+  x = (nominal_radius + 0.3 * sin(4*theta)) * cos(theta),
+
+  y = (nominal_radius + 0.3 * sin(4*theta)) * sin(theta),
+
+  type = "With 0.5 mm Runout"
+
+)
+
+data <- rbind(perfect_shaft, runout_shaft)
+
+ggplot(data, aes(x=x, y=y, color=type, linewidth=type)) +
+
+  geom_path() +
+
+  scale_linewidth_manual(values=c("Nominal"=0.5, "With 0.5 mm Runout"=1)) +
+
+  scale_color_manual(values=c("Nominal"="green", "With 0.5 mm Runout"="red")) +
+
+  ## Datum axis
+
+  geom_vline(xintercept=0, color="blue", linetype="dashed", alpha=0.5) +
+
+  geom_hline(yintercept=0, color="blue", linetype="dashed", alpha=0.5) +
+
+  annotate("text", x=0.5, y=6, label="Datum A\\n(Shaft Axis)", fontsize=3, color="blue") +
+
+  coord_fixed() +
+
+  theme_minimal() +
+
+  labs(
+
+    title="Total Runout: Rotating Shaft",
+
+    subtitle="Total runout 0.5 mm | A",
+
+    x="X (mm)",
+
+    y="Y (mm)"
+
+  ) +
+
+  theme(legend.position="bottom")
+```
+
+### 8. Tolerance Stack-Up Analysis
+
+#### 8.1 Worst-Case Analysis
+```{r stack-up-worst, echo=FALSE, fig.cap="Worst-Case Tolerance Stack-Up"}
+library(ggplot2)
+
+## Component dimensions and tolerances
+components <- data.frame(
+  part = c("Part 1", "Part 2", "Part 3"),
+  nominal = c(10, 8, 15),
+  lower = c(-0.2, -0.3, -0.25),
+  upper = c(0.2, 0.3, 0.25)
+)
+
+components$min_size <- components$nominal + components$lower
+components$max_size <- components$nominal + components$upper
+
+## Calculate stack-up
+nominal_total <- sum(components$nominal)
+min_total <- sum(components$min_size)
+max_total <- sum(components$max_size)
+tolerance_stack <- max_total - min_total
+
+results_df <- data.frame(
+  Condition = c("Minimum", "Nominal", "Maximum"),
+  Total_Length = c(min_total, nominal_total, max_total)
+)
+
+ggplot(results_df, aes(x=reorder(Condition, Total_Length), y=Total_Length, fill=Condition)) +
+  geom_col(width=0.6) +
+  geom_text(aes(label=paste(Total_Length, "mm")), vjust=-0.5, fontsize=5, fontface="bold") +
+  scale_fill_manual(values=c("Minimum"="blue", "Nominal"="gray", "Maximum"="red")) +
+  ylim(32, 35) +
+  theme_minimal() +
+  labs(
+    title="Tolerance Stack-Up: Worst-Case",
+    subtitle=paste("Total Stack-Up Tolerance = ±", tolerance_stack/2, "mm"),
+    x="Condition",
+    y="Total Length (mm)"
+  ) +
+  theme(legend.position="none")
+```
+
+#### 8.2 Statistical Stack-Up (Optional Advanced Topic)
+
+Statistical stack-up uses probability to reduce required tolerances:
+```{r stack-up-statistical, echo=FALSE, fig.cap="Statistical vs. Worst-Case Stack-Up"}
+library(ggplot2)
+
+## Distribution comparison
+size_range <- seq(32, 35, by=0.1)
+
+## Worst-case (uniform distribution)
+worst_case <- data.frame(
+  size = size_range,
+  probability = ifelse(size_range >= 32.3 & size_range <= 34.7, 0.4, 0),
+  method = "Worst-Case"
+)
+
+## Statistical (normal distribution)
+statistical <- data.frame(
+  size = size_range,
+  probability = dnorm(size_range, mean=33.5, sd=0.3),
+  method = "Statistical"
+)
+
+data <- rbind(worst_case, statistical)
+
+ggplot(data, aes(x=size, y=probability, fill=method)) +
+  geom_area(alpha=0.6, position="identity") +
+  scale_fill_manual(values=c("Worst-Case"="lightcoral", "Statistical"="lightblue")) +
+  theme_minimal() +
+  labs(
+    title="Tolerance Distribution Methods",
+    x="Dimension (mm)",
+    y="Probability Density",
+    subtitle="Statistical allows tighter tolerances than worst-case"
+  ) +
+  theme(legend.position="top")
+```
+
+### 9. Practical Exercises
+
+#### Exercise 1: Interpreting a Feature Control Frame
+
+**Given**: A part with the following FCF: 
+```
+┌─────────────────────────────────┐
+│ ⊙    │ Ø0.8 │ A │ B │ C │
+│      │      │   │   │   │
+└─────────────────────────────────┘
+```
+
+**Question**: 
+- What type of control is being applied?
+- What is the tolerance value?
+- How many datums are referenced?
+- In what order should datums be established?
+
+**Answer**: 
+This is a **position control** (⊙) with:
+- Tolerance: Ø0.8 mm (circular zone)
+- Three datums: A (primary), B (secondary), C (tertiary)
+- Datum establishment order: A (largest plane) → B (perpendicular) → C (tertiary reference)
+
+#### Exercise 2: Applying GD&T to a Bolt Hole
+
+**Design requirement**: Four bolt holes arranged in a square (0° spacing) with hole diameter Ø10 mm on a 40 mm × 40 mm grid. Holes must align within 0.5 mm for assembly.
+
+**Your task**: Create a GD&T specification for this requirement.
+
+**Solution**:
+```
+- Primary Datum A: Bottom face (mounting surface)
+- Secondary Datum B: Left edge
+- Tertiary Datum C: Front edge
+- Position tolerance: ⊙ Ø0.5 @ A B C
+  (Circular tolerance zone, 0.5 mm diameter)
+```
+
+#### Exercise 3: Tolerance Stack-Up Problem
+
+**Given**:
+- Part 1: 10.0 ± 0.1 mm
+- Part 2: 8.0 ± 0.15 mm
+- Part 3: 6.0 ± 0.1 mm
+
+**Calculate**:
+- Minimum total length
+- Maximum total length
+- Total tolerance stack-up
+
+**Solution**:
+```{r exercise3-solution, echo=FALSE}
+## Component tolerances
+part_1 <- list(nominal = 10.0, tolerance = 0.1)
+part_2 <- list(nominal = 8.0, tolerance = 0.15)
+part_3 <- list(nominal = 6.0, tolerance = 0.1)
+
+## Calculate stack-up
+nominal_total <- part_1$nominal + part_2$nominal + part_3$nominal
+total_tolerance <- part_1$tolerance + part_2$tolerance + part_3$tolerance
+
+min_length <- nominal_total - total_tolerance
+max_length <- nominal_total + total_tolerance
+
+cat("Minimum total length:", min_length, "mm\\n")
+cat("Nominal total length:", nominal_total, "mm\\n")
+cat("Maximum total length:", max_length, "mm\\n")
+cat("Total tolerance stack-up: ±", total_tolerance, "mm\\n")
+```
+
+### 10. Classroom Activity: Interactive Tolerance Design
+```{r shiny-gdt-tool, echo=FALSE, eval=FALSE}
+## Save this as app.R in your Shiny app directory
+## This creates an interactive GD&T tool for classroom use
+
+library(shiny)
+library(ggplot2)
+library(gridExtra)
+
+ui <- fluidPage(
+  titlePanel("Interactive GD&T Calculator"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      h3("Design Parameters"),
+      numericInput("nominal", "Nominal Size (mm):", value=10, min=1, max=100),
+      numericInput("tolerance", "Tolerance Value (mm):", value=0.5, min=0.01, max=5),
+      selectInput("mmc", "Material Condition:", 
+                  choices=list("MMC (Maximum)"="mmc", "LMC (Least)"="lmc", "RFS (Regardless)"="rfs")),
+      
+      h3("Bonus Tolerance"),
+      numericInput("feature_actual", "Actual Feature Size (mm):", value=10, min=1, max=100),
+      
+      actionButton("calculate", "Calculate Bonus", class="btn-primary")
+    ),
+    
+    mainPanel(
+      h3("Results"),
+      verbatimTextOutput("results"),
+      plotOutput("tolerance_plot")
+    )
+  )
+)
+
+server <- function(input, output) {
+  observeEvent(input$calculate, {
+    nominal <- input$nominal
+    tolerance <- input$tolerance
+    actual <- input$feature_actual
+    mmc <- nominal - tolerance
+    
+    bonus <- actual - mmc
+    total_tolerance <- tolerance + bonus
+    
+    output$results <- renderPrint({
+      cat("=== GD&T Calculation Results ===\\n\\n")
+      cat("Nominal Size:", nominal, "mm\\n")
+      cat("Base Tolerance:", tolerance, "mm\\n")
+      cat("MMC Condition:", mmc, "mm\\n")
+      cat("Actual Feature Size:", actual, "mm\\n")
+      cat("Bonus Tolerance:", bonus, "mm\\n")
+      cat("Total Tolerance:", total_tolerance, "mm\\n")
+    })
+    
+    output$tolerance_plot <- renderPlot({
+      sizes <- seq(mmc, nominal + tolerance, length.out=50)
+      bonuses <- pmax(0, sizes - mmc)
+      total_tol <- tolerance + bonuses
+      
+      data <- data.frame(
+        size = sizes,
+        tolerance = total_tol,
+        type = "Applicable Tolerance"
+      )
+      
+      ggplot(data, aes(x=size, y=tolerance)) +
+        geom_line(linewidth=1.5, color="blue") +
+        geom_point(data=data.frame(size=actual, tolerance=total_tolerance), 
+                   size=5, color="red") +
+        theme_minimal() +
+        labs(
+          title="Tolerance Variation with Feature Size",
+          x="Feature Size (mm)",
+          y="Applicable Tolerance (mm)"
+        )
+    })
+  })
+}
+
+shinyApp(ui, server)
+```
+
+### 11. Summary and Key Takeaways
+
+- **GD&T provides unambiguous communication** of engineering design intent
+- **Datum systems establish reference frameworks** that organize tolerance zones
+- **Bonus tolerances reward tighter fits** with additional positional tolerance
+- **The 14 geometric characteristics** address form, orientation, location, and runout
+- **Proper application** improves manufacturability, reduces cost, and ensures assembly
+
+### 12. Additional Resources
+
+- ASME Y14.5-2018: Dimensioning and Tolerancing
+- ISO 1101: Geometrical Product Specifications
+- GD&T training videos and webinars
+- CAD software built-in GD&T annotation tools
+
+---
+
+### Answers to Classroom Exercises {-}
+
+**Exercise 1 Answer**: Position control, Ø0.8 mm tolerance, 3 datums
+**Exercise 2 Answer**: Position ⊙ Ø0.5 @ A B C
+**Exercise 3 Answer**: Min = 23.55 mm, Max = 24.35 mm, Stack = ±0.4 mm

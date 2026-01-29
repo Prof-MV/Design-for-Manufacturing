@@ -1,0 +1,1349 @@
+## Gears, Gear Trains, and Transmissions {#chap-04-gears}
+
+```{r setup-04, include=FALSE}
+## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+## include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+
+## Set a consistent theme for all plots
+theme_gear <- theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  )
+
+## Function to create gear tooth profile (simplified involute approximation)
+gear_profile <- function(cx, cy, r_pitch, n_teeth, rotation = 0) {
+  angles <- seq(0, 2*pi, length.out = n_teeth * 4 + 1) + rotation
+  r_outer <- r_pitch * 1.15
+  r_inner <- r_pitch * 0.85
+
+  radii <- rep(c(r_outer, r_pitch * 1.05, r_inner, r_pitch * 1.05), n_teeth)
+  radii <- c(radii, radii[1])
+
+  data.frame(
+    x = cx + radii * cos(angles),
+    y = cy + radii * sin(angles)
+  )
+}
+```
+
+### Learning Objectives {#sec:objectives-04}
+
+By the end of this chapter, you will be able to:
+
+1. **Explain** the fundamental principles of gear operation and power transmission
+2. **Calculate** gear ratios, speed changes, and torque changes in gear systems
+3. **Identify** different gear types and their appropriate applications
+4. **Apply** gear terminology including module, diametral pitch, and pressure angle
+5. **Analyze** simple and compound gear trains to determine overall speed ratios
+
+::: {.callout-think}
+**Before You Read:** Your car's engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this speed reduction, and why is it necessary?
+:::
+
+### Introduction to Gears {#sec:gears-intro}
+
+Gears are toothed mechanical components that transmit **power and motion** between rotating shafts. They are among the oldest and most important machine elements, found in virtually every mechanical system—from wristwatches to wind turbines, from automotive transmissions to industrial robots.
+
+Gears serve three fundamental purposes:
+
+1. **Transmit power** from one shaft to another
+2. **Change rotational speed** (increase or decrease RPM)
+3. **Change torque** (increase or decrease turning force)
+4. **Change direction** of rotation or axis of rotation
+
+---
+
+> **🤔 Think About It:** Your car's engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this? And why does a truck need more gear ratios than a sports car?
+
+---
+
+### Fundamental Gear Concepts {#sec:gear-fundamentals}
+
+#### The Basic Principle
+
+When two gears mesh, their teeth interlock. As one gear (the **driver** or **pinion**) rotates, it pushes against the teeth of the other gear (the **driven gear**), causing it to rotate.
+
+```{r gear-mesh-basic, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Basic gear mesh showing driver (pinion) and driven gear."}
+## Create two meshing gears
+pinion <- gear_profile(3, 4, 1.2, 12, rotation = pi/24)
+driven <- gear_profile(6.5, 4, 2, 20, rotation = 0)
+
+ggplot() +
+  ## Driven gear (larger)
+  geom_polygon(data = driven, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 6.5, y = 4), size = 4, color = "black") +
+  geom_point(aes(x = 6.5, y = 4), size = 2, color = "white") +
+
+  ## Pinion (smaller, driver)
+  geom_polygon(data = pinion, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 3, y = 4), size = 4, color = "black") +
+  geom_point(aes(x = 3, y = 4), size = 2, color = "white") +
+
+  ## Rotation arrows
+  geom_curve(aes(x = 3, xend = 3.6, y = 5.5, yend = 5.8),
+             arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+             curvature = -0.3, linewidth = 1, color = "darkorange") +
+  annotate("text", x = 3, y = 6.2, label = "Driver\n(Pinion)", fontface = "bold", size = 3.5) +
+  annotate("text", x = 3, y = 2.3, label = "12 teeth\nω₁ = input", size = 3, color = "darkorange") +
+
+  geom_curve(aes(x = 6.5, xend = 5.7, y = 6.3, yend = 6.5),
+             arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+             curvature = 0.3, linewidth = 1, color = "steelblue") +
+  annotate("text", x = 6.5, y = 7, label = "Driven\nGear", fontface = "bold", size = 3.5) +
+  annotate("text", x = 6.5, y = 1.5, label = "20 teeth\nω₂ = output", size = 3, color = "steelblue") +
+
+  ## Pitch circles (dashed)
+  geom_point(aes(x = 4.15, y = 4), size = 3, color = "red") +
+  annotate("text", x = 4.15, y = 3.3, label = "Pitch\nPoint", color = "red", size = 3) +
+
+  ## Key principle box
+  geom_rect(aes(xmin = 0.5, xmax = 4.5, ymin = 0.3, ymax = 1.5), fill = "lightyellow", color = "black") +
+  annotate("text", x = 2.5, y = 1.1, label = "KEY PRINCIPLE:", fontface = "bold", size = 3) +
+  annotate("text", x = 2.5, y = 0.7, label = "Small gear drives large gear → Speed DOWN, Torque UP", size = 2.8) +
+
+  coord_fixed(ratio = 1, xlim = c(0, 9), ylim = c(0, 7.5)) +
+  labs(title = "Meshing Gears: Driver and Driven") +
+  theme_gear
+```
+
+#### The Fundamental Law of Gearing
+
+For smooth, constant-velocity power transmission, the **common normal** at the point of contact between gear teeth must always pass through a fixed point called the **pitch point**. This is achieved through the **involute tooth profile**, which is the standard for most modern gears.
+
+---
+
+### Gear Terminology {#sec:gear-terminology}
+
+Understanding gear terminology is essential for specifying, designing, and manufacturing gears.
+
+```{r gear-terminology, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Essential gear terminology and dimensions."}
+## Create a partial gear showing teeth detail
+theta <- seq(0, pi/2, length.out = 100)
+r_pitch <- 3
+r_outer <- 3.5
+r_root <- 2.6
+r_base <- 2.8
+
+ggplot() +
+  ## Gear body (partial)
+  geom_polygon(aes(x = c(0, r_root * cos(theta), 0),
+                   y = c(0, r_root * sin(theta), 0)),
+               fill = "gray80", color = "black") +
+
+  ## Several teeth
+  geom_polygon(aes(x = c(2.6*cos(0.15), 3.5*cos(0.2), 3.5*cos(0.35), 2.6*cos(0.4),
+                        2.6*cos(0.55), 3.5*cos(0.6), 3.5*cos(0.75), 2.6*cos(0.8)),
+                   y = c(2.6*sin(0.15), 3.5*sin(0.2), 3.5*sin(0.35), 2.6*sin(0.4),
+                        2.6*sin(0.55), 3.5*sin(0.6), 3.5*sin(0.75), 2.6*sin(0.8))),
+               fill = "steelblue", color = "black", linewidth = 1) +
+
+  ## Pitch circle
+  geom_path(aes(x = r_pitch * cos(theta), y = r_pitch * sin(theta)),
+            linetype = "dashed", color = "red", linewidth = 1) +
+
+  ## Outside circle
+  geom_path(aes(x = r_outer * cos(theta), y = r_outer * sin(theta)),
+            linetype = "dotted", color = "blue", linewidth = 1) +
+
+  ## Root circle
+  geom_path(aes(x = r_root * cos(theta), y = r_root * sin(theta)),
+            linetype = "dotted", color = "darkgreen", linewidth = 1) +
+
+  ## Dimension lines and labels
+  ## Pitch circle label
+  annotate("text", x = 3.2, y = 1.8, label = "Pitch Circle", color = "red", size = 3, angle = 30) +
+
+  ## Addendum
+  geom_segment(aes(x = 3*cos(0.5), xend = 3.5*cos(0.5), y = 3*sin(0.5), yend = 3.5*sin(0.5)),
+               arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
+  annotate("text", x = 3.5, y = 2.2, label = "Addendum (a)", size = 3) +
+
+  ## Dedendum
+  geom_segment(aes(x = 2.6*cos(0.5), xend = 3*cos(0.5), y = 2.6*sin(0.5), yend = 3*sin(0.5)),
+               arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
+  annotate("text", x = 2.3, y = 1.8, label = "Dedendum (b)", size = 3) +
+
+  ## Whole depth
+  geom_segment(aes(x = 4, xend = 4, y = 2.6, yend = 3.5),
+               arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
+  annotate("text", x = 4.5, y = 3.05, label = "Whole\nDepth", size = 2.8) +
+
+  ## Circular pitch on outside
+  geom_curve(aes(x = 3*cos(0.27), xend = 3*cos(0.67), y = 3*sin(0.27), yend = 3*sin(0.67)),
+             curvature = -0.15, linewidth = 0.8, color = "purple",
+             arrow = arrow(length = unit(0.1, "cm"), ends = "both")) +
+  annotate("text", x = 2, y = 3.2, label = "Circular\nPitch (p)", color = "purple", size = 3) +
+
+  ## Tooth thickness
+  geom_segment(aes(x = 3*cos(0.2), xend = 3*cos(0.35), y = 3*sin(0.2), yend = 3*sin(0.35)),
+               linewidth = 1.5, color = "orange") +
+  annotate("text", x = 3.3, y = 2.8, label = "Tooth\nThickness", color = "darkorange", size = 2.8) +
+
+  ## Center point
+  geom_point(aes(x = 0, y = 0), size = 3) +
+
+  ## Terminology table
+  geom_rect(aes(xmin = 4.5, xmax = 9.5, ymin = 0.5, ymax = 4.5), fill = "white", color = "black") +
+  annotate("text", x = 7, y = 4.2, label = "KEY TERMS", fontface = "bold", size = 4) +
+  annotate("text", x = 5, y = 3.7, label = "Pitch Circle:", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 5, y = 3.3, label = "  Theoretical circle for calculations", size = 2.8, hjust = 0) +
+  annotate("text", x = 5, y = 2.9, label = "Module (m):", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 5, y = 2.5, label = "  m = d / N (mm)", size = 2.8, hjust = 0) +
+  annotate("text", x = 5, y = 2.1, label = "Diametral Pitch (P):", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 5, y = 1.7, label = "  P = N / d (teeth/inch)", size = 2.8, hjust = 0) +
+  annotate("text", x = 5, y = 1.3, label = "Pressure Angle (φ):", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 5, y = 0.9, label = "  Typically 14.5°, 20°, or 25°", size = 2.8, hjust = 0) +
+
+  coord_fixed(ratio = 1, xlim = c(-0.5, 10), ylim = c(-0.5, 5)) +
+  labs(title = "Gear Terminology") +
+  theme_gear
+```
+
+#### Essential Gear Formulas
+
+| Parameter | Metric (Module) | Imperial (Diametral Pitch) |
+|:----------|:----------------|:---------------------------|
+| **Pitch Diameter** | $d = m \times N$ | $d = N / P$ |
+| **Circular Pitch** | $p = \pi \times m$ | $p = \pi / P$ |
+| **Addendum** | $a = m$ | $a = 1 / P$ |
+| **Dedendum** | $b = 1.25 \times m$ | $b = 1.25 / P$ |
+| **Outside Diameter** | $d_o = m(N + 2)$ | $d_o = (N + 2) / P$ |
+| **Center Distance** | $C = m(N_1 + N_2)/2$ | $C = (N_1 + N_2) / 2P$ |
+
+Where: $m$ = module, $P$ = diametral pitch, $N$ = number of teeth, $d$ = pitch diameter
+
+> **⚠️ Important:** Module (mm) and Diametral Pitch (teeth/inch) are inversely related: $m = 25.4 / P$. **Never mix metric and imperial gears!**
+
+---
+
+> **❓ Quick Calculation:** A gear has 40 teeth and a module of 3 mm. Calculate: (a) pitch diameter, (b) outside diameter, (c) circular pitch.
+
+<details>
+<summary>Click to reveal solution</summary>
+
+**(a) Pitch Diameter:**
+$$d = m \times N = 3 \times 40 = 120 \text{ mm}$$
+
+**(b) Outside Diameter:**
+$$d_o = m(N + 2) = 3(40 + 2) = 126 \text{ mm}$$
+
+**(c) Circular Pitch:**
+$$p = \pi \times m = \pi \times 3 = 9.42 \text{ mm}$$
+
+</details>
+
+---
+
+### Types of Gears {#sec:gear-types}
+
+Different gear types are designed for different applications based on shaft orientation, load capacity, speed, and noise requirements.
+
+#### Spur Gears
+
+**Spur gears** have straight teeth parallel to the axis of rotation. They are the simplest, most common, and most economical type.
+
+```{r spur-gear, echo=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="Spur gears: parallel shafts, straight teeth."}
+spur1 <- gear_profile(2.5, 2.5, 1.5, 16, 0)
+spur2 <- gear_profile(5.7, 2.5, 1.2, 12, pi/24)
+
+ggplot() +
+  ## Gear 1
+  geom_polygon(data = spur1, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 2.5, y = 2.5), size = 8, color = "gray40") +
+  geom_point(aes(x = 2.5, y = 2.5), size = 4, color = "white") +
+
+  ## Gear 2
+  geom_polygon(data = spur2, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 5.7, y = 2.5), size = 6, color = "gray40") +
+  geom_point(aes(x = 5.7, y = 2.5), size = 3, color = "white") +
+
+  ## Shaft lines
+  geom_segment(aes(x = 2.5, xend = 2.5, y = 0, yend = 0.8), linewidth = 3, color = "gray40") +
+  geom_segment(aes(x = 5.7, xend = 5.7, y = 0, yend = 1), linewidth = 3, color = "gray40") +
+
+  ## Labels
+  annotate("text", x = 4, y = 4.5, label = "SPUR GEARS", fontface = "bold", size = 5) +
+
+  ## Characteristics box
+  geom_rect(aes(xmin = 0.3, xmax = 3.5, ymin = -0.3, ymax = 0.8), fill = "lightyellow", color = "black") +
+  annotate("text", x = 1.9, y = 0.5, label = "• Parallel shafts", size = 2.8, hjust = 0) +
+  annotate("text", x = 1.9, y = 0.1, label = "• Straight teeth", size = 2.8, hjust = 0) +
+
+  ## Pros/Cons
+  geom_rect(aes(xmin = 5, xmax = 8, ymin = -0.3, ymax = 1.2), fill = "white", color = "black") +
+  annotate("text", x = 5.2, y = 0.9, label = "✓ Simple, economical", size = 2.5, hjust = 0, color = "darkgreen") +
+  annotate("text", x = 5.2, y = 0.5, label = "✓ High efficiency (98-99%)", size = 2.5, hjust = 0, color = "darkgreen") +
+  annotate("text", x = 5.2, y = 0.1, label = "✗ Noisy at high speed", size = 2.5, hjust = 0, color = "red") +
+
+  coord_fixed(ratio = 1, xlim = c(0, 8.5), ylim = c(-0.5, 5)) +
+  theme_gear
+```
+
+**Applications:** Gearboxes, conveyors, food processing equipment, clocks, printers
+
+---
+
+#### Helical Gears
+
+**Helical gears** have teeth cut at an angle (helix angle) to the shaft axis. This allows gradual tooth engagement, resulting in smoother, quieter operation.
+
+```{r helical-gear, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Helical gears: angled teeth for smoother operation."}
+ggplot() +
+  ## Gear body 1 (cylinder representation)
+  geom_rect(aes(xmin = 1, xmax = 3.5, ymin = 1.5, ymax = 3.5), fill = "steelblue", color = "black", linewidth = 1) +
+  ## Helical lines on face
+  geom_segment(aes(x = c(1.3, 1.7, 2.1, 2.5, 2.9, 3.3), xend = c(1.5, 1.9, 2.3, 2.7, 3.1, 3.5),
+                   y = rep(1.5, 6), yend = rep(3.5, 6)), color = "black", linewidth = 0.8) +
+
+  ## Gear body 2
+  geom_rect(aes(xmin = 3.7, xmax = 6.2, ymin = 1.5, ymax = 3.5), fill = "orange", color = "black", linewidth = 1) +
+  ## Opposite helical lines
+  geom_segment(aes(x = c(3.9, 4.3, 4.7, 5.1, 5.5, 5.9), xend = c(3.7, 4.1, 4.5, 4.9, 5.3, 5.7),
+                   y = rep(1.5, 6), yend = rep(3.5, 6)), color = "black", linewidth = 0.8) +
+
+  ## Shafts
+  geom_segment(aes(x = 2.25, xend = 2.25, y = 0.5, yend = 1.5), linewidth = 4, color = "gray40") +
+  geom_segment(aes(x = 4.95, xend = 4.95, y = 0.5, yend = 1.5), linewidth = 4, color = "gray40") +
+
+  ## Helix angle annotation
+  geom_segment(aes(x = 1.3, xend = 1.3, y = 1.5, yend = 3.5), linetype = "dashed", color = "red") +
+  geom_segment(aes(x = 1.3, xend = 1.5, y = 1.5, yend = 3.5), linewidth = 1.5, color = "red") +
+  geom_curve(aes(x = 1.3, xend = 1.35, y = 2.8, yend = 3), curvature = 0.3, color = "red") +
+  annotate("text", x = 0.8, y = 2.5, label = "Helix\nAngle", color = "red", size = 3) +
+
+  ## Title
+  annotate("text", x = 3.6, y = 4.5, label = "HELICAL GEARS", fontface = "bold", size = 5) +
+
+  ## Axial thrust arrow
+  geom_segment(aes(x = 2.25, xend = 2.25, y = 3.7, yend = 4.3),
+               arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1, color = "purple") +
+  annotate("text", x = 2.25, y = 4.6, label = "Axial\nThrust", color = "purple", size = 2.8) +
+
+  ## Characteristics
+  geom_rect(aes(xmin = 6.8, xmax = 10, ymin = 1, ymax = 4), fill = "white", color = "black") +
+  annotate("text", x = 7, y = 3.7, label = "Characteristics:", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 7, y = 3.2, label = "✓ Quieter than spur", size = 2.8, hjust = 0, color = "darkgreen") +
+  annotate("text", x = 7, y = 2.7, label = "✓ Gradual engagement", size = 2.8, hjust = 0, color = "darkgreen") +
+  annotate("text", x = 7, y = 2.2, label = "✓ Higher load capacity", size = 2.8, hjust = 0, color = "darkgreen") +
+  annotate("text", x = 7, y = 1.7, label = "✗ Produces axial thrust", size = 2.8, hjust = 0, color = "red") +
+  annotate("text", x = 7, y = 1.2, label = "✗ More expensive", size = 2.8, hjust = 0, color = "red") +
+
+  coord_fixed(ratio = 1, xlim = c(0, 10.5), ylim = c(0, 5)) +
+  theme_gear
+```
+
+**Applications:** Automotive transmissions, industrial gearboxes, machine tools, elevators
+
+---
+
+#### Bevel Gears
+
+**Bevel gears** transmit power between shafts that intersect, typically at 90°. The teeth are cut on a conical surface.
+
+```{r bevel-gear, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Bevel gears: intersecting shafts, typically at 90°."}
+ggplot() +
+  ## Bevel gear 1 (cone shape)
+  geom_polygon(aes(x = c(2, 4, 4, 2.5, 2.5, 2), y = c(3, 3, 3.3, 3.3, 5, 5)),
+               fill = "steelblue", color = "black", linewidth = 1) +
+
+  ## Bevel gear 2 (cone shape - horizontal)
+  geom_polygon(aes(x = c(4, 4, 4.3, 4.3, 6, 6), y = c(3.3, 3, 3, 2.5, 2.5, 3)),
+               fill = "orange", color = "black", linewidth = 1) +
+
+  ## Teeth suggestion on gear 1
+  geom_segment(aes(x = seq(2.1, 2.4, 0.1), xend = seq(2.1, 2.4, 0.1),
+                   y = rep(5, 4), yend = rep(5.15, 4)), linewidth = 2, color = "steelblue4") +
+
+  ## Teeth suggestion on gear 2
+  geom_segment(aes(x = rep(6, 4), xend = rep(6.15, 4),
+                   y = seq(2.6, 2.9, 0.1), yend = seq(2.6, 2.9, 0.1)), linewidth = 2, color = "darkorange") +
+
+  ## Shafts
+  geom_segment(aes(x = 2.25, xend = 2.25, y = 5, yend = 6.5), linewidth = 4, color = "gray40") +
+  geom_segment(aes(x = 6, xend = 7.5, y = 2.75, yend = 2.75), linewidth = 4, color = "gray40") +
+
+  ## 90° angle indicator
+  geom_segment(aes(x = 2.25, xend = 2.25, y = 2.75, yend = 3.5), linetype = "dashed", color = "gray50") +
+  geom_segment(aes(x = 2.25, xend = 3, y = 2.75, yend = 2.75), linetype = "dashed", color = "gray50") +
+  geom_rect(aes(xmin = 2.25, xmax = 2.6, ymin = 2.75, ymax = 3.1), fill = NA, color = "red", linewidth = 0.8) +
+  annotate("text", x = 2.9, y = 3.3, label = "90°", color = "red", fontface = "bold", size = 4) +
+
+  ## Title
+  annotate("text", x = 5, y = 6.2, label = "BEVEL GEARS", fontface = "bold", size = 5) +
+
+  ## Types box
+  geom_rect(aes(xmin = 6.5, xmax = 10, ymin = 3.5, ymax = 6), fill = "white", color = "black") +
+  annotate("text", x = 6.7, y = 5.7, label = "Types:", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 6.7, y = 5.2, label = "• Straight bevel", size = 2.8, hjust = 0) +
+  annotate("text", x = 6.7, y = 4.7, label = "• Spiral bevel (quieter)", size = 2.8, hjust = 0) +
+  annotate("text", x = 6.7, y = 4.2, label = "• Zerol bevel", size = 2.8, hjust = 0) +
+  annotate("text", x = 6.7, y = 3.7, label = "• Hypoid (offset shafts)", size = 2.8, hjust = 0) +
+
+  ## Applications
+  geom_rect(aes(xmin = 0.5, xmax = 4, ymin = 0.5, ymax = 2), fill = "lightyellow", color = "black") +
+  annotate("text", x = 0.7, y = 1.7, label = "Applications:", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 0.7, y = 1.2, label = "• Automotive differentials", size = 2.8, hjust = 0) +
+  annotate("text", x = 0.7, y = 0.7, label = "• Hand drills, mixers", size = 2.8, hjust = 0) +
+
+  coord_fixed(ratio = 1, xlim = c(0, 10.5), ylim = c(0, 7)) +
+  theme_gear
+```
+
+**Applications:** Automotive differentials, hand tools, food mixers, rotorcraft transmissions
+
+---
+
+#### Worm Gears
+
+**Worm gears** consist of a worm (screw-like) driving a worm wheel. They provide very high reduction ratios in a compact space and can be self-locking.
+
+```{r worm-gear, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Worm gear set: high reduction ratio, right-angle drive."}
+library(ggplot2)
+
+## Ensure the number of thread lines matches exactly
+n_threads <- 8
+thread_x <- seq(1.3, 4, length.out = n_threads)
+
+ggplot() +
+  ## Worm wheel (large gear)
+  annotate("rect", xmin = 4, xmax = 4.8, ymin = 1, ymax = 5, 
+           fill = "steelblue", color = "black", linewidth = 1) +
+  annotate("curve", x = 4, xend = 4, y = 1, yend = 5, 
+           curvature = -0.15, linewidth = 2, color = "steelblue4") +
+
+  ## Worm (screw)
+  annotate("rect", xmin = 1, xmax = 4.2, ymin = 2.5, ymax = 3.5, 
+           fill = "orange", color = "black", linewidth = 1) +
+  
+  ## Thread lines
+  annotate("segment", 
+           x = thread_x, 
+           xend = thread_x + 0.3,
+           y = rep(2.5, n_threads), 
+           yend = rep(3.5, n_threads),
+           linewidth = 1, color = "darkorange3") +
+
+  ## Shafts
+  annotate("segment", x = 0.3, xend = 1, y = 3, yend = 3, linewidth = 5, color = "gray40") +
+  annotate("segment", x = 4.4, xend = 4.4, y = 5, yend = 6, linewidth = 5, color = "gray40") +
+
+  ## Text Labels
+  annotate("text", x = 4.8, y = 4.5, label = "90°", color = "red", size = 3.5) +
+  annotate("text", x = 5.5, y = 6.5, label = "WORM GEAR", fontface = "bold", size = 5) +
+  annotate("text", x = 2.5, y = 4.2, label = "Worm\n(Driver)", fontface = "bold", size = 3.5, color = "darkorange") +
+  annotate("text", x = 6, y = 3, label = "Worm Wheel\n(Driven)", fontface = "bold", size = 3.5, color = "steelblue") +
+
+  ## Info Boxes
+  annotate("rect", xmin = 6, xmax = 10, ymin = 4, ymax = 6.3, fill = "white", color = "black") +
+  annotate("text", x = 6.2, y = 6, label = "Key Features:", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 6.2, y = 5.5, label = "✓ High ratio (5:1 to 100:1)", size = 2.8, hjust = 0, color = "darkgreen") +
+  
+  annotate("rect", xmin = 6, xmax = 10, ymin = 1, ymax = 2.5, fill = "mistyrose", color = "black") +
+  annotate("text", x = 6.2, y = 2.2, label = "Limitations:", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 6.2, y = 1.7, label = "✗ Lower efficiency (40-90%)", size = 2.8, hjust = 0, color = "red") +
+
+  coord_fixed(ratio = 1, xlim = c(0, 10.5), ylim = c(0.5, 7)) +
+  theme_gear
+```
+
+
+**Applications:** Conveyor drives, elevator lifts, tuning mechanisms, steering systems
+
+---
+
+#### Rack and Pinion
+
+**Rack and pinion** converts rotational motion to linear motion (or vice versa). The rack is essentially a gear with infinite radius.
+
+```{r rack-pinion, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Rack and pinion: rotary to linear motion conversion."}
+pinion_rp <- gear_profile(3, 3.5, 1, 14, -pi/28)
+
+ggplot() +
+  ## Rack (linear gear)
+  geom_rect(aes(xmin = 0.5, xmax = 8, ymin = 1.5, ymax = 2.3), fill = "steelblue", color = "black", linewidth = 1) +
+  ## Rack teeth
+  geom_rect(aes(xmin = seq(1, 7.5, 0.5), xmax = seq(1.25, 7.75, 0.5),
+                ymin = rep(2.3, 14), ymax = rep(2.7, 14)), fill = "steelblue", color = "black") +
+
+  ## Pinion
+  geom_polygon(data = pinion_rp, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 3, y = 3.5), size = 5, color = "gray40") +
+  geom_point(aes(x = 3, y = 3.5), size = 2.5, color = "white") +
+
+  ## Rotation arrow
+  geom_curve(aes(x = 3.7, xend = 3.9, y = 4.3, yend = 3.8),
+             arrow = arrow(length = unit(0.15, "cm"), type = "closed"),
+             curvature = 0.4, linewidth = 1, color = "darkorange") +
+
+  ## Linear motion arrow
+  geom_segment(aes(x = 5, xend = 7, y = 1.9, yend = 1.9),
+               arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
+               linewidth = 1.5, color = "steelblue") +
+
+  ## Labels
+  annotate("text", x = 3, y = 5, label = "Pinion\n(rotates)", fontface = "bold", size = 3.5, color = "darkorange") +
+  annotate("text", x = 7, y = 1.2, label = "Rack\n(translates)", fontface = "bold", size = 3.5, color = "steelblue") +
+
+  ## Title
+  annotate("text", x = 5, y = 5.8, label = "RACK AND PINION", fontface = "bold", size = 5) +
+
+  ## Applications
+  geom_rect(aes(xmin = 6.5, xmax = 10, ymin = 2.5, ymax = 4.5), fill = "lightyellow", color = "black") +
+  annotate("text", x = 6.7, y = 4.2, label = "Applications:", fontface = "bold", size = 3, hjust = 0) +
+  annotate("text", x = 6.7, y = 3.7, label = "• Steering systems", size = 2.8, hjust = 0) +
+  annotate("text", x = 6.7, y = 3.2, label = "• CNC machine axes", size = 2.8, hjust = 0) +
+  annotate("text", x = 6.7, y = 2.7, label = "• Railway cog systems", size = 2.8, hjust = 0) +
+
+  coord_fixed(ratio = 1, xlim = c(0, 10.5), ylim = c(0.8, 6.2)) +
+  theme_gear
+```
+
+**Applications:** Automotive steering, CNC machines, actuators, stairlifts
+
+---
+
+#### Gear Type Comparison
+
+| Gear Type | Shaft Arrangement | Ratio Range | Efficiency | Noise Level | Cost |
+|:----------|:------------------|:------------|:-----------|:------------|:-----|
+| **Spur** | Parallel | 1:1 to 6:1 | 98-99% | High | Low |
+| **Helical** | Parallel | 1:1 to 10:1 | 97-99% | Low | Medium |
+| **Bevel** | Intersecting (90°) | 1:1 to 5:1 | 97-99% | Medium | High |
+| **Worm** | Right angle (non-intersecting) | 5:1 to 100:1 | 40-90% | Low | Medium |
+| **Rack & Pinion** | Rotary to linear | N/A | 97-99% | Medium | Medium |
+
+> **🤔 Design Decision:** A food packaging machine requires a 25:1 speed reduction in a compact space. The drive must be self-locking to prevent the load from back-driving the motor when power is off. Which gear type would you recommend?
+
+<details>
+<summary>Click to reveal analysis</summary>
+
+**Recommended: Worm Gear**
+
+Reasons:
+1. **High ratio** - 25:1 is within the typical worm gear range (5:1 to 100:1)
+2. **Compact** - Achieves high ratio in single stage
+3. **Self-locking** - When lead angle < friction angle (typically < 5°), the worm gear cannot be back-driven
+4. **Quiet operation** - Important in food processing environments
+
+**Trade-offs to consider:**
+- Lower efficiency (70-85% at this ratio) means more heat and energy loss
+- May require cooling or lubrication considerations
+- Higher sliding friction causes wear - use appropriate materials (bronze wheel, hardened steel worm)
+
+</details>
+
+---
+
+### Gear Ratios and Calculations {#sec:gear-ratios}
+
+#### Speed and Torque Relationships
+
+The **gear ratio** is the fundamental relationship between meshing gears:
+
+$$\text{Gear Ratio} = \frac{N_{driven}}{N_{driver}} = \frac{\omega_{driver}}{\omega_{driven}} = \frac{T_{driven}}{T_{driver}}$$
+
+Where: $N$ = number of teeth, $\omega$ = angular velocity, $T$ = torque
+
+```{r gear-ratio-visual, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Gear ratio demonstration: speed reduction and torque multiplication."}
+small_gear <- gear_profile(2.5, 3.5, 1, 15, 0)
+large_gear <- gear_profile(6.5, 3.5, 2, 30, pi/30)
+
+ggplot() +
+  ## Small gear (driver)
+  geom_polygon(data = small_gear, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 2.5, y = 3.5), size = 4, color = "black") +
+
+  ## Large gear (driven)
+  geom_polygon(data = large_gear, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 6.5, y = 3.5), size = 5, color = "black") +
+
+  ## Input arrow
+  geom_segment(aes(x = 0.5, xend = 1.3, y = 3.5, yend = 3.5),
+               arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
+               linewidth = 1.5, color = "red") +
+
+  ## Output arrow
+  geom_segment(aes(x = 8.7, xend = 9.5, y = 3.5, yend = 3.5),
+               arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
+               linewidth = 1.5, color = "darkgreen") +
+
+  ## Input specifications
+  geom_rect(aes(xmin = 0.3, xmax = 2.7, ymin = 5.5, ymax = 7), fill = "mistyrose", color = "black") +
+  annotate("text", x = 1.5, y = 6.7, label = "INPUT (Driver)", fontface = "bold", size = 3.5) +
+  annotate("text", x = 1.5, y = 6.3, label = "15 teeth", size = 3) +
+  annotate("text", x = 1.5, y = 5.9, label = "1000 RPM", size = 3, color = "red") +
+  annotate("text", x = 1.5, y = 5.5, label = "10 N·m torque", size = 3) +
+
+  ## Output specifications
+  geom_rect(aes(xmin = 6.3, xmax = 9.7, ymin = 5.5, ymax = 7), fill = "honeydew", color = "black") +
+  annotate("text", x = 8, y = 6.7, label = "OUTPUT (Driven)", fontface = "bold", size = 3.5) +
+  annotate("text", x = 8, y = 6.3, label = "30 teeth", size = 3) +
+  annotate("text", x = 8, y = 5.9, label = "500 RPM", size = 3, color = "darkgreen") +
+  annotate("text", x = 8, y = 5.5, label = "20 N·m torque*", size = 3) +
+
+  ## Gear ratio calculation
+  geom_rect(aes(xmin = 3, xmax = 7, ymin = 0.5, ymax = 2), fill = "lightyellow", color = "black") +
+  annotate("text", x = 5, y = 1.7, label = "Gear Ratio = 30/15 = 2:1", fontface = "bold", size = 4) +
+  annotate("text", x = 5, y = 1.2, label = "Speed: ÷2    Torque: ×2", size = 3.5) +
+  annotate("text", x = 5, y = 0.7, label = "*Assuming 100% efficiency", size = 2.5, fontface = "italic") +
+
+  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 7.5)) +
+  labs(title = "Gear Ratio: 2:1 Speed Reduction") +
+  theme_gear
+```
+
+#### Key Relationships
+
+**For a simple gear pair:**
+
+| If the driven gear is... | Then speed is... | And torque is... |
+|:-------------------------|:-----------------|:-----------------|
+| **Larger** (more teeth) | **Reduced** | **Increased** |
+| **Smaller** (fewer teeth) | **Increased** | **Reduced** |
+| **Same size** | **Same** | **Same** |
+
+**Power relationship (accounting for efficiency):**
+
+$$P_{out} = P_{in} \times \eta$$
+
+$$T_{out} \times \omega_{out} = T_{in} \times \omega_{in} \times \eta$$
+
+Where $\eta$ = efficiency (typically 0.97-0.99 per gear mesh)
+
+---
+
+> **❓ Calculation Challenge:** A motor runs at 1750 RPM and delivers 5 kW. It drives a gear with 20 teeth meshed with a gear having 80 teeth. Calculate: (a) output speed, (b) gear ratio, (c) output torque (assume 98% efficiency).
+
+<details>
+<summary>Click to reveal solution</summary>
+
+**(a) Gear Ratio:**
+$$GR = \frac{N_{driven}}{N_{driver}} = \frac{80}{20} = 4:1$$
+
+**(b) Output Speed:**
+$$n_{out} = \frac{n_{in}}{GR} = \frac{1750}{4} = 437.5 \text{ RPM}$$
+
+**(c) Input Torque:**
+$$T_{in} = \frac{P}{\omega_{in}} = \frac{5000}{1750 \times \frac{2\pi}{60}} = \frac{5000}{183.3} = 27.3 \text{ N·m}$$
+
+**(d) Output Torque:**
+$$T_{out} = T_{in} \times GR \times \eta = 27.3 \times 4 \times 0.98 = 107 \text{ N·m}$$
+
+Or verify using power:
+$$T_{out} = \frac{P_{out}}{\omega_{out}} = \frac{5000 \times 0.98}{437.5 \times \frac{2\pi}{60}} = \frac{4900}{45.8} = 107 \text{ N·m}$$ ✓
+
+</details>
+
+---
+
+### 🔄 Gear Trains {-}
+
+A **gear train** is a combination of two or more gears used to transmit power from one shaft to another. Gear trains allow for larger speed ratios and more complex motion transmission than a single gear pair.
+
+#### Simple Gear Train
+
+In a **simple gear train**, each shaft carries only one gear. The intermediate gears are called **idlers** and do not affect the overall gear ratio—they only change the direction of rotation.
+
+```{r simple-gear-train, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Simple gear train with idler gear."}
+gear1 <- gear_profile(2, 3, 1.2, 20, 0)
+gear2 <- gear_profile(5, 3, 1, 16, pi/32)
+gear3 <- gear_profile(8, 3, 1.5, 24, 0)
+
+ggplot() +
+  ## Gear 1 (Driver)
+  geom_polygon(data = gear1, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 2, y = 3), size = 4, color = "black") +
+  annotate("text", x = 2, y = 4.8, label = "Driver\n20 teeth", size = 3, fontface = "bold") +
+
+  ## Rotation arrow 1
+  geom_curve(aes(x = 2.7, xend = 2.9, y = 4.2, yend = 3.6),
+             arrow = arrow(length = unit(0.15, "cm")), curvature = 0.4, color = "darkorange") +
+  annotate("text", x = 3.2, y = 4.2, label = "CW", size = 3) +
+
+  ## Gear 2 (Idler)
+  geom_polygon(data = gear2, aes(x = x, y = y), fill = "gray70", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 5, y = 3), size = 4, color = "black") +
+  annotate("text", x = 5, y = 4.5, label = "Idler\n16 teeth", size = 3, fontface = "bold") +
+
+  ## Rotation arrow 2
+  geom_curve(aes(x = 5.6, xend = 5.4, y = 3.9, yend = 3.3),
+             arrow = arrow(length = unit(0.15, "cm")), curvature = 0.4, color = "gray50") +
+  annotate("text", x = 5.9, y = 3.8, label = "CCW", size = 3) +
+
+  ## Gear 3 (Driven)
+  geom_polygon(data = gear3, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 8, y = 3), size = 5, color = "black") +
+  annotate("text", x = 8, y = 5, label = "Driven\n24 teeth", size = 3, fontface = "bold") +
+
+  ## Rotation arrow 3
+  geom_curve(aes(x = 8.9, xend = 9.1, y = 4.5, yend = 3.8),
+             arrow = arrow(length = unit(0.15, "cm")), curvature = 0.4, color = "steelblue") +
+  annotate("text", x = 9.5, y = 4.3, label = "CW", size = 3) +
+
+  ## Formula box
+  geom_rect(aes(xmin = 0.5, xmax = 5.5, ymin = 0.3, ymax = 1.8), fill = "lightyellow", color = "black") +
+  annotate("text", x = 3, y = 1.5, label = "Simple Gear Train Ratio:", fontface = "bold", size = 3.5) +
+  annotate("text", x = 3, y = 1, label = "GR = N_driven / N_driver = 24/20 = 1.2:1", size = 3) +
+  annotate("text", x = 3, y = 0.5, label = "(Idler teeth don't affect ratio!)", size = 2.8, fontface = "italic") +
+
+  ## Direction note
+  geom_rect(aes(xmin = 6, xmax = 10.5, ymin = 0.3, ymax = 1.5), fill = "mistyrose", color = "black") +
+  annotate("text", x = 8.25, y = 1.2, label = "Odd ## of gears: Same direction", size = 2.8) +
+  annotate("text", x = 8.25, y = 0.7, label = "Even ## of gears: Opposite direction", size = 2.8) +
+
+  coord_fixed(ratio = 1, xlim = c(0, 11), ylim = c(0, 5.5)) +
+  labs(title = "Simple Gear Train") +
+  theme_gear
+```
+
+**Simple gear train ratio:**
+$$GR = \frac{N_{driven}}{N_{driver}} = \frac{N_{last}}{N_{first}}$$
+
+The idler gears only affect **direction of rotation**, not the gear ratio.
+
+---
+
+#### Compound Gear Train
+
+In a **compound gear train**, two or more gears are mounted on the same shaft, rotating together. This allows for much higher gear ratios in a compact space.
+
+```{r compound-gear-train, echo=FALSE, fig.width=12, fig.height=6, fig.align='center', fig.cap="Compound gear train: higher ratios in less space."}
+gear_a <- gear_profile(2, 3.5, 1, 16, 0)
+gear_b <- gear_profile(4.5, 3.5, 1.5, 24, pi/48)
+gear_c <- gear_profile(4.5, 3.5, 0.7, 12, pi/24)
+gear_d <- gear_profile(7.3, 3.5, 2, 32, 0)
+
+ggplot() +
+  ## Gear A (Driver)
+  geom_polygon(data = gear_a, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 2, y = 3.5), size = 4, color = "black") +
+  annotate("text", x = 2, y = 5, label = "Gear A\n16 teeth", size = 3, fontface = "bold", color = "darkorange") +
+
+  ## Gear B (on compound shaft)
+  geom_polygon(data = gear_b, aes(x = x, y = y), fill = "forestgreen", color = "black", linewidth = 0.5) +
+
+  ## Gear C (on same shaft as B, smaller)
+  geom_polygon(data = gear_c, aes(x = x, y = y), fill = "lightgreen", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 4.5, y = 3.5), size = 4, color = "black") +
+  annotate("text", x = 4.5, y = 5.5, label = "Gear B: 24 teeth\nGear C: 12 teeth", size = 3, fontface = "bold", color = "darkgreen") +
+  annotate("text", x = 4.5, y = 1.5, label = "COMPOUND\nSHAFT", size = 3, fontface = "bold") +
+
+  ## Gear D (Output)
+  geom_polygon(data = gear_d, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 7.3, y = 3.5), size = 5, color = "black") +
+  annotate("text", x = 7.3, y = 6, label = "Gear D\n32 teeth", size = 3, fontface = "bold", color = "steelblue") +
+
+  ## Shaft connection indicator
+  geom_segment(aes(x = 4.5, xend = 4.5, y = 2, yend = 2.5), linewidth = 4, color = "gray40") +
+
+  ## Input/Output labels
+  geom_segment(aes(x = 0.5, xend = 1.2, y = 3.5, yend = 3.5),
+               arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1.2, color = "red") +
+  annotate("text", x = 0.5, y = 3, label = "Input", color = "red", fontface = "bold", size = 3) +
+
+  geom_segment(aes(x = 9.3, xend = 10, y = 3.5, yend = 3.5),
+               arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1.2, color = "darkgreen") +
+  annotate("text", x = 10, y = 3, label = "Output", color = "darkgreen", fontface = "bold", size = 3) +
+
+  ## Formula box
+  geom_rect(aes(xmin = 0.3, xmax = 5.5, ymin = -0.3, ymax = 1.2), fill = "lightyellow", color = "black") +
+  annotate("text", x = 2.9, y = 0.9, label = "Compound Gear Train Ratio:", fontface = "bold", size = 3) +
+  annotate("text", x = 2.9, y = 0.4, label = "GR = (N_B/N_A) × (N_D/N_C)", size = 3) +
+  annotate("text", x = 2.9, y = -0.1, label = "GR = (24/16) × (32/12) = 1.5 × 2.67 = 4:1", size = 3) +
+
+  ## Advantage note
+  geom_rect(aes(xmin = 6, xmax = 10.5, ymin = -0.3, ymax = 0.8), fill = "honeydew", color = "black") +
+  annotate("text", x = 8.25, y = 0.5, label = "Advantage: 4:1 ratio in", size = 2.8) +
+  annotate("text", x = 8.25, y = 0, label = "compact space!", size = 2.8, fontface = "bold") +
+
+  coord_fixed(ratio = 1, xlim = c(0, 11), ylim = c(-0.5, 6.5)) +
+  labs(title = "Compound Gear Train") +
+  theme_gear
+```
+
+**Compound gear train ratio:**
+$$GR = \frac{N_{B}}{N_{A}} \times \frac{N_{D}}{N_{C}} = \frac{\text{Product of driven teeth}}{\text{Product of driver teeth}}$$
+
+---
+
+#### Planetary (Epicyclic) Gear Train
+
+**Planetary gear systems** are compact, high-ratio gear trains widely used in automatic transmissions, power tools, and aerospace applications.
+
+```{r planetary-gear, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Planetary gear system components and arrangement."}
+## Sun gear
+sun <- gear_profile(5, 4, 0.8, 18, 0)
+## Planet gears
+planet1 <- gear_profile(5, 6, 0.6, 12, pi/24)
+planet2 <- gear_profile(6.7, 4.9, 0.6, 12, pi/24)
+planet3 <- gear_profile(6.7, 3.1, 0.6, 12, pi/24)
+planet4 <- gear_profile(5, 2, 0.6, 12, pi/24)
+planet5 <- gear_profile(3.3, 3.1, 0.6, 12, pi/24)
+planet6 <- gear_profile(3.3, 4.9, 0.6, 12, pi/24)
+
+## Ring gear (internal teeth - simplified)
+theta <- seq(0, 2*pi, length.out = 100)
+ring_outer <- data.frame(x = 5 + 3 * cos(theta), y = 4 + 3 * sin(theta))
+ring_inner <- data.frame(x = 5 + 2.4 * cos(theta), y = 4 + 2.4 * sin(theta))
+
+ggplot() +
+  ## Ring gear (outer circle)
+  geom_polygon(data = ring_outer, aes(x = x, y = y), fill = "gray60", color = "black", linewidth = 1) +
+  ## Ring gear (inner circle - makes it hollow)
+  geom_polygon(data = ring_inner, aes(x = x, y = y), fill = "white", color = "black", linewidth = 0.5) +
+
+  ## Internal teeth suggestion
+  geom_point(aes(x = 5 + 2.35 * cos(seq(0, 2*pi, length.out = 37)[-37]),
+                 y = 4 + 2.35 * sin(seq(0, 2*pi, length.out = 37)[-37])),
+             size = 1.5, color = "gray40") +
+
+  ## Planet carrier (circle)
+  geom_point(aes(x = 5, y = 4), size = 50, color = "tan", shape = 16, alpha = 0.3) +
+
+  ## Sun gear
+  geom_polygon(data = sun, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 5, y = 4), size = 4, color = "black") +
+
+  ## Planet gears (showing 3 for clarity)
+  geom_polygon(data = planet1, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 5, y = 6), size = 2, color = "black") +
+
+  geom_polygon(data = planet2, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 6.7, y = 4.9), size = 2, color = "black") +
+
+  geom_polygon(data = planet5, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 3.3, y = 3.1), size = 2, color = "black") +
+
+  ## Labels
+  annotate("text", x = 5, y = 4, label = "SUN", fontface = "bold", size = 3, color = "darkorange") +
+  annotate("text", x = 5, y = 6.9, label = "Planet", size = 2.8, color = "steelblue") +
+  annotate("text", x = 1.5, y = 4, label = "Ring\n(Annulus)", fontface = "bold", size = 3, color = "gray40") +
+
+  ## Carrier indication
+  geom_curve(aes(x = 7.5, xend = 6, y = 5.5, yend = 5),
+             arrow = arrow(length = unit(0.15, "cm")), curvature = 0.2, color = "tan4") +
+  annotate("text", x = 8, y = 5.8, label = "Carrier\n(holds planets)", size = 2.8, color = "tan4") +
+
+  ## Title
+  annotate("text", x = 5, y = 8, label = "PLANETARY GEAR SYSTEM", fontface = "bold", size = 5) +
+
+  ## Operating modes table
+  geom_rect(aes(xmin = 8.5, xmax = 12.5, ymin = 0.5, ymax = 4), fill = "white", color = "black") +
+  annotate("text", x = 10.5, y = 3.7, label = "Operating Modes:", fontface = "bold", size = 3) +
+  annotate("text", x = 8.7, y = 3.2, label = "Input   Fixed   Output  Ratio", size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7, y = 2.7, label = "Sun     Ring    Carrier  Reduction", size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7, y = 2.2, label = "Carrier Ring    Sun     Increase", size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7, y = 1.7, label = "Sun     Carrier Ring    Reduction", size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7, y = 1.2, label = "Ring    Carrier Sun     Reverse", size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7, y = 0.7, label = "All connected: Direct (1:1)", size = 2.5, hjust = 0) +
+
+  ## Advantages
+  geom_rect(aes(xmin = -1.5, xmax = 2, ymin = 0.5, ymax = 2.5), fill = "honeydew", color = "black") +
+  annotate("text", x = 0.25, y = 2.2, label = "Advantages:", fontface = "bold", size = 3) +
+  annotate("text", x = -1.3, y = 1.7, label = "• Compact", size = 2.8, hjust = 0) +
+  annotate("text", x = -1.3, y = 1.2, label = "• High torque capacity", size = 2.8, hjust = 0) +
+  annotate("text", x = -1.3, y = 0.7, label = "• Multiple ratios", size = 2.8, hjust = 0) +
+
+  coord_fixed(ratio = 1, xlim = c(-2, 13), ylim = c(0, 8.5)) +
+  theme_gear
+```
+
+**Planetary gear ratio** (sun input, carrier output, ring fixed):
+$$GR = 1 + \frac{N_{ring}}{N_{sun}}$$
+
+**Applications:**
+- **Automotive:** Automatic transmissions, hybrid drives, transfer cases
+- **Aerospace:** Helicopter transmissions, jet engine gearboxes
+- **Industrial:** Wind turbines, conveyors, hoists
+
+> **🤔 Automotive Connection:** Why do automatic transmissions use planetary gear sets instead of conventional gear trains?
+
+<details>
+<summary>Click to reveal explanation</summary>
+
+**Planetary gears in automatic transmissions offer several advantages:**
+
+1. **Multiple ratios from one gear set** - By holding different elements (sun, ring, or carrier) stationary using clutches and bands, different gear ratios are achieved without physically moving gears
+
+2. **Constant mesh** - All gears remain engaged; ratio changes are smooth and fast
+
+3. **Compact design** - High power density; fits in limited space
+
+4. **Load sharing** - Multiple planet gears share the load (typically 3-5 planets)
+
+5. **Coaxial input/output** - Input and output shafts can be on the same axis
+
+A typical 6-speed automatic uses 2-3 planetary gear sets with multiple clutches to achieve all forward gears plus reverse.
+
+</details>
+
+---
+
+### 🏭 Industry Applications {-}
+
+#### Automotive Industry
+
+```{r automotive-gears, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Gear applications in automotive systems."}
+ggplot() +
+  ## Manual Transmission
+  geom_rect(aes(xmin = 0.5, xmax = 4, ymin = 1, ymax = 4.5), fill = "lightgray", color = "black", linewidth = 1) +
+  annotate("text", x = 2.25, y = 4.8, label = "Manual Transmission", fontface = "bold", size = 3.5) +
+
+  ## Simplified gear arrangement
+  geom_rect(aes(xmin = 0.8, xmax = 3.7, ymin = 2.8, ymax = 3.2), fill = "gray50", color = "black") +
+  geom_rect(aes(xmin = 0.8, xmax = 3.7, ymin = 1.8, ymax = 2.2), fill = "gray50", color = "black") +
+  geom_point(aes(x = c(1.3, 2, 2.7, 3.4), y = rep(3, 4)), size = c(6, 8, 10, 12), color = "steelblue") +
+  geom_point(aes(x = c(1.3, 2, 2.7, 3.4), y = rep(2, 4)), size = c(12, 10, 8, 6), color = "orange") +
+  annotate("text", x = 2.25, y = 1.3, label = "Helical gears\nMultiple ratios", size = 2.5) +
+
+  ## Differential
+  geom_rect(aes(xmin = 4.5, xmax = 8, ymin = 1, ymax = 4.5), fill = "lightgray", color = "black", linewidth = 1) +
+  annotate("text", x = 6.25, y = 4.8, label = "Differential", fontface = "bold", size = 3.5) +
+
+  ## Ring and pinion representation
+  geom_point(aes(x = 6.25, y = 2.8), size = 25, color = "steelblue") +
+  geom_point(aes(x = 5.5, y = 2.8), size = 8, color = "orange") +
+  geom_segment(aes(x = 4.5, xend = 5.3, y = 2.8, yend = 2.8), linewidth = 3, color = "gray40") +
+  annotate("text", x = 6.25, y = 1.3, label = "Spiral bevel/Hypoid\nFinal drive ratio", size = 2.5) +
+
+  ## Steering
+  geom_rect(aes(xmin = 8.5, xmax = 12, ymin = 1, ymax = 4.5), fill = "lightgray", color = "black", linewidth = 1) +
+  annotate("text", x = 10.25, y = 4.8, label = "Steering System", fontface = "bold", size = 3.5) +
+
+  ## Rack and pinion
+  geom_rect(aes(xmin = 8.8, xmax = 11.7, ymin = 2.5, ymax = 3), fill = "steelblue", color = "black") +
+  geom_point(aes(x = 10.25, y = 3.5), size = 10, color = "orange") +
+  geom_segment(aes(x = 10.25, xend = 10.25, y = 3.8, yend = 4.3), linewidth = 3, color = "gray40") +
+  annotate("text", x = 10.25, y = 1.3, label = "Rack and pinion\nPrecise control", size = 2.5) +
+
+  coord_cartesian(xlim = c(0, 12.5), ylim = c(0.8, 5.3)) +
+  labs(title = "Automotive Gear Applications") +
+  theme_gear
+```
+
+**Key automotive gear applications:**
+
+| System | Gear Types | Purpose |
+|:-------|:-----------|:--------|
+| Manual Transmission | Helical, synchronizer | Multiple speed ratios |
+| Automatic Transmission | Planetary, helical | Smooth ratio changes |
+| Differential | Spiral bevel, hypoid | Final drive, allows wheel speed difference |
+| Transfer Case | Spur, chain/gear | 4WD/AWD power distribution |
+| Steering | Rack and pinion, recirculating ball | Convert rotation to linear |
+| Starter Motor | Spur, planetary | High reduction for cranking torque |
+
+---
+
+#### Food Processing Industry
+
+```{r food-industry-gears, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Gear applications in food processing equipment."}
+ggplot() +
+  ## Conveyor system
+  geom_rect(aes(xmin = 0.5, xmax = 4, ymin = 1, ymax = 4), fill = "white", color = "black", linewidth = 1) +
+  annotate("text", x = 2.25, y = 4.3, label = "Conveyor Systems", fontface = "bold", size = 3.5) +
+  ## Motor + gearbox
+  geom_rect(aes(xmin = 0.8, xmax = 1.8, ymin = 2, ymax = 3), fill = "gray70", color = "black") +
+  annotate("text", x = 1.3, y = 2.5, label = "Motor +\nGearbox", size = 2.3) +
+  ## Belt representation
+  geom_segment(aes(x = 1.8, xend = 3.8, y = 2.2, yend = 2.2), linewidth = 2, color = "tan") +
+  geom_segment(aes(x = 1.8, xend = 3.8, y = 2.8, yend = 2.8), linewidth = 2, color = "tan") +
+  annotate("text", x = 2.25, y = 1.4, label = "Helical/Worm\nSpeed reduction", size = 2.5) +
+
+  ## Mixer
+  geom_rect(aes(xmin = 4.5, xmax = 8, ymin = 1, ymax = 4), fill = "white", color = "black", linewidth = 1) +
+  annotate("text", x = 6.25, y = 4.3, label = "Industrial Mixers", fontface = "bold", size = 3.5) +
+  ## Bowl
+  geom_curve(aes(x = 5, xend = 7.5, y = 1.5, yend = 1.5), curvature = 0.5, linewidth = 2, color = "gray50") +
+  ## Mixing arm
+  geom_segment(aes(x = 6.25, xend = 6.25, y = 2.5, yend = 3.5), linewidth = 3, color = "gray40") +
+  geom_point(aes(x = 6.25, y = 3.5), size = 8, color = "steelblue") +
+  ## Planetary gear symbol
+  geom_point(aes(x = 6.25, y = 2.5), size = 5, color = "orange") +
+  annotate("text", x = 6.25, y = 1.1, label = "Planetary\nOrbital mixing action", size = 2.5) +
+
+  ## Packaging
+  geom_rect(aes(xmin = 8.5, xmax = 12, ymin = 1, ymax = 4), fill = "white", color = "black", linewidth = 1) +
+  annotate("text", x = 10.25, y = 4.3, label = "Packaging Equipment", fontface = "bold", size = 3.5) +
+  ## Indexing mechanism
+  geom_point(aes(x = 9.5, y = 2.5), size = 12, color = "steelblue") +
+  geom_point(aes(x = 11, y = 2.5), size = 8, color = "orange") +
+  geom_segment(aes(x = 9.5, xend = 9.5, y = 1.5, yend = 2), linewidth = 2, color = "gray40") +
+  annotate("text", x = 10.25, y = 1.1, label = "Spur/Timing\nPrecise indexing", size = 2.5) +
+
+  coord_cartesian(xlim = c(0, 12.5), ylim = c(0.8, 4.8)) +
+  labs(title = "Food Processing Gear Applications") +
+  theme_gear
+```
+
+**Food industry gear requirements:**
+
+- **Stainless steel** or **food-grade materials** for hygiene
+- **Sealed gearboxes** to prevent lubricant contamination
+- **Washdown capability** for sanitation
+- **Smooth operation** to prevent product damage
+- **Variable speed** capability for different products
+
+---
+
+#### Defense Industry
+
+```{r defense-gears, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Gear applications in defense systems."}
+ggplot() +
+  ## Vehicle drivetrain
+  geom_rect(aes(xmin = 0.5, xmax = 4, ymin = 1, ymax = 4), fill = "olivedrab4", color = "black", linewidth = 1) +
+  annotate("text", x = 2.25, y = 4.3, label = "Military Vehicle\nDrivetrain", fontface = "bold", size = 3.2, color = "white") +
+  ## Transmission
+  geom_rect(aes(xmin = 1, xmax = 3.5, ymin = 1.8, ymax = 3.2), fill = "gray40", color = "black") +
+  annotate("text", x = 2.25, y = 2.5, label = "Heavy-duty\nPlanetary", size = 2.5, color = "white") +
+  annotate("text", x = 2.25, y = 1.3, label = "High torque\nReliability critical", size = 2.3, color = "tan") +
+
+  ## Turret/weapon system
+  geom_rect(aes(xmin = 4.5, xmax = 8, ymin = 1, ymax = 4), fill = "olivedrab4", color = "black", linewidth = 1) +
+  annotate("text", x = 6.25, y = 4.3, label = "Turret Systems", fontface = "bold", size = 3.2, color = "white") +
+  ## Ring gear (turret ring)
+  geom_point(aes(x = 6.25, y = 2.5), size = 25, shape = 1, stroke = 2, color = "gray70") +
+  geom_point(aes(x = 5.5, y = 2.5), size = 6, color = "orange") +
+  annotate("text", x = 6.25, y = 1.3, label = "Ring gear/Pinion\nPrecise positioning", size = 2.3, color = "tan") +
+
+  ## Aerospace
+  geom_rect(aes(xmin = 8.5, xmax = 12, ymin = 1, ymax = 4), fill = "gray30", color = "black", linewidth = 1) +
+  annotate("text", x = 10.25, y = 4.3, label = "Aerospace\nActuators", fontface = "bold", size = 3.2, color = "white") +
+  ## Actuator
+  geom_rect(aes(xmin = 9, xmax = 11.5, ymin = 2, ymax = 3), fill = "gray50", color = "black") +
+  geom_point(aes(x = 9.5, y = 2.5), size = 5, color = "steelblue") +
+  geom_rect(aes(xmin = 10, xmax = 11.3, ymin = 2.2, ymax = 2.8), fill = "gray70", color = "black") +
+  annotate("text", x = 10.25, y = 1.3, label = "Harmonic drive\nZero backlash", size = 2.3, color = "tan") +
+
+  coord_cartesian(xlim = c(0, 12.5), ylim = c(0.8, 4.8)) +
+  labs(title = "Defense Industry Gear Applications") +
+  theme_gear
+```
+
+**Defense gear requirements:**
+
+- **Extreme reliability** - Mission critical, no field repair
+- **High strength-to-weight ratio** - Often use aerospace-grade materials
+- **Environmental resistance** - Temperature extremes, dust, water
+- **Zero or minimal backlash** - Precision positioning systems
+- **Noise reduction** - Stealth requirements
+- **Shock loading capability** - Combat conditions
+
+---
+
+### Gear Design Considerations {#sec:gear-design}
+
+#### Material Selection
+
+| Material | Applications | Advantages | Limitations |
+|:---------|:-------------|:-----------|:------------|
+| **Carbon Steel** (1045, 4140) | General purpose, automotive | Good strength, economical | Requires heat treatment |
+| **Alloy Steel** (4340, 8620) | High-load applications | High strength, hardenable | More expensive |
+| **Cast Iron** | Low-speed, low-load | Good damping, economical | Brittle, low strength |
+| **Bronze** | Worm wheels, low-speed | Good wear with steel | Lower strength |
+| **Nylon/Acetal** | Light loads, quiet operation | Self-lubricating, quiet | Limited load, temperature |
+| **Stainless Steel** | Food, medical, marine | Corrosion resistant | Lower hardness possible |
+
+#### Common Failure Modes
+
+```{r gear-failures, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Common gear failure modes."}
+ggplot() +
+  ## Bending Fatigue
+  geom_rect(aes(xmin = 0.5, xmax = 3.5, ymin = 1, ymax = 4), fill = "white", color = "black", linewidth = 1) +
+  annotate("text", x = 2, y = 4.3, label = "Bending Fatigue", fontface = "bold", size = 3.5) +
+  ## Tooth with crack
+  geom_polygon(aes(x = c(1.5, 2, 2.5, 2.3, 2, 1.7), y = c(1.8, 3.5, 1.8, 1.8, 1.5, 1.8)),
+               fill = "steelblue", color = "black") +
+  ## Crack
+  geom_path(aes(x = c(1.7, 1.85, 1.75, 1.9), y = c(1.8, 2.2, 2.4, 2.6)), color = "red", linewidth = 1.5) +
+  annotate("text", x = 2, y = 1.3, label = "Crack at root fillet\nfrom cyclic loading", size = 2.5) +
+
+  ## Pitting
+  geom_rect(aes(xmin = 4, xmax = 7, ymin = 1, ymax = 4), fill = "white", color = "black", linewidth = 1) +
+  annotate("text", x = 5.5, y = 4.3, label = "Surface Pitting", fontface = "bold", size = 3.5) +
+  ## Tooth with pits
+  geom_polygon(aes(x = c(5, 5.5, 6, 5.8, 5.5, 5.2), y = c(1.8, 3.5, 1.8, 1.8, 1.5, 1.8)),
+               fill = "steelblue", color = "black") +
+  ## Pits
+  geom_point(aes(x = c(5.3, 5.5, 5.7, 5.4, 5.6), y = c(2.5, 2.8, 2.4, 3, 2.2)),
+             size = 2, color = "black") +
+  annotate("text", x = 5.5, y = 1.3, label = "Surface fatigue\nfrom contact stress", size = 2.5) +
+
+  ## Wear
+  geom_rect(aes(xmin = 7.5, xmax = 10.5, ymin = 1, ymax = 4), fill = "white", color = "black", linewidth = 1) +
+  annotate("text", x = 9, y = 4.3, label = "Adhesive Wear", fontface = "bold", size = 3.5) +
+  ## Normal tooth (dashed)
+  geom_polygon(aes(x = c(8.5, 9, 9.5, 9.3, 9, 8.7), y = c(1.8, 3.5, 1.8, 1.8, 1.5, 1.8)),
+               fill = NA, color = "gray50", linetype = "dashed") +
+  ## Worn tooth
+  geom_polygon(aes(x = c(8.5, 9, 9.5, 9.25, 9, 8.75), y = c(1.8, 3.2, 1.8, 1.8, 1.6, 1.8)),
+               fill = "steelblue", color = "black") +
+  annotate("text", x = 9, y = 1.3, label = "Material loss from\ninsufficient lubrication", size = 2.5) +
+
+  coord_cartesian(xlim = c(0, 11), ylim = c(0.8, 4.8)) +
+  labs(title = "Common Gear Failure Modes") +
+  theme_gear
+```
+
+#### Design Guidelines
+
+1. **Minimum teeth:** To avoid undercut (20° pressure angle):
+   - Minimum pinion teeth ≈ 17 for standard gears
+   - Use profile shift for fewer teeth
+
+2. **Contact ratio:** Should be > 1.2 for smooth operation
+   $$\text{Contact Ratio} = \frac{\text{Arc of Action}}{\text{Circular Pitch}}$$
+
+3. **Face width:** Typically 9-13 × module for spur gears
+
+4. **Backlash:** Small clearance between teeth (typically 0.04-0.10 × module)
+
+5. **Lubrication:** Critical for all enclosed gear systems
+
+---
+
+### 📋 Design Checklist for Gears {-}
+
+#### Gear Specification
+- [ ] Gear type selected based on shaft arrangement
+- [ ] Module/diametral pitch specified
+- [ ] Number of teeth determined for required ratio
+- [ ] Pressure angle specified (typically 20°)
+- [ ] Face width determined
+- [ ] Material selected based on load and environment
+
+#### Strength Verification
+- [ ] Bending stress calculated and within limits
+- [ ] Contact (Hertzian) stress calculated and within limits
+- [ ] Service factors applied for shock loading
+- [ ] Safety factor adequate (typically 1.5-2.5)
+
+#### Gear Train Design
+- [ ] Overall ratio achieved
+- [ ] Intermediate shafts and bearings specified
+- [ ] Center distances calculated
+- [ ] Shaft alignment considered
+- [ ] Housing/mounting provisions adequate
+
+#### Manufacturing and Assembly
+- [ ] Gear quality grade specified (AGMA or ISO)
+- [ ] Surface finish requirements defined
+- [ ] Heat treatment specified if required
+- [ ] Assembly procedure considered
+- [ ] Lubrication system designed
+
+---
+
+### 🎯 Case Study: Food Packaging Line Drive {-}
+
+**Design Requirements:**
+
+A food packaging machine requires a gear drive with the following specifications:
+
+* Motor speed: 1800 RPM
+* Output speed: 45 RPM (±2%)
+* Output torque: 200 N·m
+* Must fit in 300 mm × 200 mm envelope
+* Food-safe requirements (no contamination risk)
+* 16 hours/day operation, 6 days/week
+
+> **🤔 Your Turn:** Design a gear train to meet these requirements. Consider gear types, stages, materials, and food safety.
+
+<details>
+<summary>Click to reveal design solution</summary>
+
+**1. Calculate Required Ratio:**
+$$GR = \frac{1800}{45} = 40:1$$
+
+**2. Select Gear Train Configuration:**
+
+**Option A: Two-stage helical** (preferred for food industry)
+- Stage 1: 6.3:1 (16T pinion, 101T gear - round to 100T) → actual 6.25:1
+- Stage 2: 6.4:1 (15T pinion, 96T gear) → actual 6.4:1
+- Total: 6.25 × 6.4 = **40:1** ✓
+
+**Option B: Worm + Helical**
+- Worm stage: 20:1
+- Helical stage: 2:1
+- Total: 40:1
+- Self-locking feature may be beneficial
+
+**3. Material Selection:**
+- Gears: **Stainless steel 17-4 PH** (food-safe, hardenable)
+- Alternative: Carbon steel with **food-grade coating**
+- Housing: Cast aluminum with epoxy coating
+
+**4. Food Safety Features:**
+- **Sealed gearbox** with NSF-approved seals
+- **Food-grade synthetic lubricant** (NSF H1)
+- **Smooth exterior** for easy cleaning
+- **Stainless fasteners**
+
+**5. Verify Size:**
+- Module 3 for both stages
+- Stage 1 center distance: 3 × (16 + 100) / 2 = 174 mm
+- Stage 2 center distance: 3 × (15 + 96) / 2 = 166.5 mm
+- Fits within 300 × 200 mm envelope ✓
+
+**6. Efficiency Check:**
+- Two-stage helical: ~97% × 97% = 94%
+- Input power: (200 × 45 × 2π/60) / 0.94 = 1003 W
+- Motor rating: 1.1 kW minimum ✓
+
+</details>
+
+---
+
+### Practice Problems {#sec:gear-problems}
+
+**Problem 1:** A spur gear has 24 teeth and a module of 4 mm. Calculate: (a) pitch diameter, (b) circular pitch, (c) addendum, (d) outside diameter.
+
+<details>
+<summary>Click for solution</summary>
+
+**(a) Pitch Diameter:**
+$$d = m \times N = 4 \times 24 = 96 \text{ mm}$$
+
+**(b) Circular Pitch:**
+$$p = \pi \times m = \pi \times 4 = 12.57 \text{ mm}$$
+
+**(c) Addendum:**
+$$a = m = 4 \text{ mm}$$
+
+**(d) Outside Diameter:**
+$$d_o = m(N + 2) = 4(24 + 2) = 104 \text{ mm}$$
+
+</details>
+
+---
+
+**Problem 2:** A compound gear train has: Gear A (20 teeth) driving Gear B (50 teeth), which is on the same shaft as Gear C (18 teeth), which drives Gear D (72 teeth). Calculate the overall gear ratio and output speed if the input is 1200 RPM.
+
+<details>
+<summary>Click for solution</summary>
+
+**Gear Ratio:**
+$$GR = \frac{N_B}{N_A} \times \frac{N_D}{N_C} = \frac{50}{20} \times \frac{72}{18} = 2.5 \times 4 = 10:1$$
+
+**Output Speed:**
+$$n_{out} = \frac{n_{in}}{GR} = \frac{1200}{10} = 120 \text{ RPM}$$
+
+</details>
+
+---
+
+**Problem 3:** A planetary gear set has a sun gear with 20 teeth and a ring gear with 80 teeth. If the ring is held stationary and the sun is the input at 500 RPM, what is the carrier (output) speed?
+
+<details>
+<summary>Click for solution</summary>
+
+For sun input, carrier output, ring fixed:
+
+$$GR = 1 + \frac{N_{ring}}{N_{sun}} = 1 + \frac{80}{20} = 1 + 4 = 5:1$$
+
+**Carrier Speed:**
+$$n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}$$
+
+</details>
+
+---
+
+### Further Reading {#sec:gear-resources}
+
+[AGMA Gear Standards](https://www.agma.org/)
+
+[Gear Technology Magazine](https://www.geartechnology.com/)
+
+[KHK Gear Technical Reference](https://khkgears.net/new/gear_knowledge/)
+
+[Machinery's Handbook - Gearing Section](https://www.industrialpress.com/)
+
+---
+
+### 🎬 Supplemental Videos {-}
+
+#### How Gear Ratios Work
+
+```{=html}
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/JOLtS4VUcvQ"
+    title="How Gear Ratios Work"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+```
+
+#### Planetary Gears Explained
+
+```{=html}
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/ARd-Om2VyiE"
+    title="Planetary Gears Explained"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+```
+
+#### How Manual Transmissions Work
+
+```{=html}
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/wCu9W9xNwtI"
+    title="Manual Transmission Explained"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+```
+
+#### How Differentials Work
+
+```{=html}
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/yYAw79386WI"
+    title="How Differentials Work"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+</div>
+```
+
+---
+
+### 📖 References {-}
+
+1. Shigley, J. E., & Mischke, C. R. (2011). *Mechanical Engineering Design* (10th ed.). McGraw-Hill.
+
+2. Dudley, D. W. (1994). *Handbook of Practical Gear Design*. CRC Press.
+
+3. AGMA. (2019). *AGMA 2001-D04: Fundamental Rating Factors and Calculation Methods for Involute Spur and Helical Gear Teeth*. American Gear Manufacturers Association.
+
+4. Radzevich, S. P. (2012). *Dudley's Handbook of Practical Gear Design and Manufacture* (2nd ed.). CRC Press.
+
+5. Jelaska, D. (2012). *Gears and Gear Drives*. Wiley.

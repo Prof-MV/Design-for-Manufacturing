@@ -1,0 +1,91 @@
+## Interpreting and Creating Drawings {#interpreting}
+
+#### Introduction to Engineering Working Drawings [@Hijazi]
+
+##### Engineering Working Drawings Basics
+
+Engineering graphics is an effective way of communicating technical ideas and it is an essential tool in engineering design where most of the design process is graphically based. Engineering graphics is used in the design process for **visualization**, **communication**, and **documentation**.
+
+Graphics is a visual communications language that include images, text, and numeric information. Graphics communications using engineering drawings and models is a clear and precise language with definite rules that must be mastered in order to be successful in engineering design. Graphics communications are used in every phase of engineering design starting from concept illustration all the way to the manufacturing phase.
+
+* **An engineering (or technical) drawing** is a graphical representation of a part, assembly, system, or structure and it can be produced using freehand, mechanical tools, or computer methods.
+* **Working drawings** are the set of technical drawings used during the manufacturing phase of a product. They contain all the information needed to manufacture and assemble a product.
+
+##### Codes and Standards
+
+Codes and standards are made to organize and unify the engineering work. 
+
+*Imagine; what if there was no standard for bolts?*
+
+* **A code** is a set of specifications for the analysis, design, manufacture, and construction of something.
+* **A standard** is a set of specifications for parts, materials, or processes intended to achieve uniformity, efficiency and specific quality.
+
+###### Organizations {-}
+Examples of the organizations that establish standards and design codes include: 
+**ISO, AISI, SAE, ASTM, ASME, ANSI, DIN.**
+
+There are many different standards related to technical drawings. The ISO standards for technical drawings are found in a two-volume handbook:
+
+* **ISO Standards Handbook: Technical drawings, Volume 1:** Technical drawings in general.
+* **ISO Standards Handbook: Technical drawings, Volume 2:** Mechanical engineering drawings; Construction drawings; Drawing equipment.
+
+##### Drawing Sheet Layout
+
+Standard layouts of drawing sheets are specified by the various standards organizations.
+
+The figure below shows the layout of a typical sheet, showing the drawing frame, a typical title block, parts list (bill of materials), and revision table.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Title Block of Technical Drawing"}
+knitr::include_graphics("images/7-2-1-1536x1192.png")
+```
+
+###### Title Block Components [@lorier2025blueprint]
+
+* **Part Title**: The title is a descriptive name given to the drawing, typically the largest box in the title block.
+* **Company Information**: The name of the company responsible for the drawing will also appear in a larger box in the title block. Often, a logo for the company will be displayed as well.
+* **Size**: The size block displays the letter of the sheet size of the print (e.g., A, B, C, or A4, A3).
+* **Drawing Number**: A numbering system the company uses to aid in filing and tracking the drawing.
+* **Part Number**: A part number may be used to identify a specific part, such as in an assembly parts list.
+* **Scale**: The scale displays the proportion of the drawing compared to the object. 
+    * **Reduction**: When the part is too large to fit on the sheet, the drawing may be reduced to $1/2, 1/4, 1/8$, etc.
+    * **Enlargement**: When the part is smaller than the sheet, the drawing may be increased proportionally. 
+    * **"DO" Scale**: The ratio is arranged as **Drawing:Object**. 
+        * A scale of **1:2** indicates the drawing is half the size of the part. 
+        * A scale of **2:1** indicates the drawing is twice the size of the part. 
+        * A scale of **1:1** or **"Full"** indicates they are the same size. 
+    * **NTS**: Stands for "Not To Scale," used if the drawing does not follow a basic proportional size.
+* **Drawn**: Contains the name or initials of the drafter and the date of the drawing, as well as any other individuals involved (checkers, engineers).
+* **Projection**: Identifies whether the drawing is a **first-angle** or **third-angle** projection. This is typically indicated with a standard projection cone symbol.
+
+
+
+* **Weight**: Used to indicate the weight of the finished part when required.
+* **Sheet**: Displays the current and total number of sheets in that drawing set (e.g., Sheet 1 of 3).
+* **Material**: Identifies the specific material requirements for the part.
+* **Finish**: Displays any part finish specifications. These may be indicated for specific regions using leader lines.
+* **Application**: Used to identify the assemblies on which the part is used.
+
+###### Default Tolerances
+
+**Default Tolerance Box**: Displays the amount of variation allowed on dimension values that do not have a specific tolerance attached to them. These are usually categorized by the number of decimal places.
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Default Tolerances"}
+knitr::include_graphics("images/7-3-768x508.png")
+```
+> 
+>
+> *Example based on Figure 7-3:*
+> * A two-place dimension of **2.00** allows for a $\pm 0.02$ tolerance (Range: $1.98$ to $2.02$).
+> * A three-place dimension of **2.000** allows for a $\pm 0.010$ tolerance (Range: $1.990$ to $2.010$).
+
+###### Document Control and Layout
+
+* **Revision**: Revisions are changes made to the drawing after the original release to correct errors, improve design, or reduce manufacturing costs.
+    * The **revision level** (letter or number) is located in the lower right.
+    * The **revision history** is typically located in the upper right of the sheet.
+    * A **dash (-)** or the letter **"A"** often indicates the initial release.
+
+
+
+* **Zones**: Sheet zones (using letters and numbers along the border) help locate particular details or views, which is especially beneficial on large-format drawings.
+

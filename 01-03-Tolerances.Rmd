@@ -1,0 +1,168 @@
+## Tolerances in Mechanical Design {#tolerances}
+
+
+In mechanical engineering and manufacturing, no part can be produced to exact absolute dimensions every single time due to inherent variations in machinery, material properties, and environmental conditions. Therefore, designers must specify an acceptable range of variation. This chapter explores the fundamental concepts of tolerances, basic sizes, and allowances, as defined in standards such as ASME Y14.5 [@ASME_Y145_2018].
+
+### Fundamental Concepts
+
+To understand tolerancing, we must first define three key terms:
+
+1.  **Basic Size**: The theoretical exact size from which limits of size are derived by the application of allowances and tolerances.
+2.  **Tolerance**: The total amount a specific dimension is permitted to vary. It is the difference between the maximum and minimum limits.
+3.  **Allowance**: An intentional difference between the maximum material limits of mating parts (e.g., the tightest fit between a shaft and a hole).
+
+
+Mathematically, if we denote the Upper Limit as $L_{max}$ and the Lower Limit as $L_{min}$, the tolerance $T$ is calculated as:
+
+$$
+T = L_{max} - L_{min}
+$$
+
+These concepts apply universally, whether designing a cylindrical shaft diameter, a slot width, or the overall length of a prismatic part.
+
+### Tolerancing Methods
+
+There are two primary methods used to express tolerances on technical drawings: **Limit Dimensions** and **Plus-Minus Tolerancing**.
+
+#### Limit Dimensions
+
+In limit dimensioning, the high and low limits are specified directly. The machinist does not need to calculate the limits; they are explicitly stated.
+
+* **Example**: $\begin{matrix} 25.05 \\ 24.95 \end{matrix}$
+
+#### Plus-Minus Tolerancing
+
+This method uses a basic size followed by a permissible variance. This category is further divided based on how the variance is distributed relative to the basic size.
+
+##### 1. Equal Bilateral Tolerance {-}
+The variation is permitted equally in both directions (plus and minus) from the basic size.
+
+> **Example**: $25.00 \pm 0.05$
+
+##### 2. Unequal Bilateral Tolerance {-}
+The variation is permitted in both directions, but the amount differs.
+
+> **Example**: $25.00 \,\, {}^{+0.05}_{-0.02}$
+
+##### 3. Unilateral Tolerance {-}
+The variation is permitted in only one direction (either positive or negative) from the basic size. The limit in the other direction is zero.
+
+> **Example**: $25.00 \,\, {}^{+0.05}_{-0.00}$
+
+### Specifying Limits in Tolerancing
+
+When defining the permissible variation of a part, designers choose between specifying a range (two limits) or a single boundary (one limit) based on the functional requirements of the feature.
+
+#### Tolerance with Two Limits (Limit Dimensioning)
+
+In this method, the maximum and minimum dimensions are specified directly on the drawing. The tolerance is the absolute difference between these two values. This is the most direct method for a machinist to read, as it eliminates the need for mental math to find the boundaries.
+
+* **Format**: The limits are usually placed in a stack, with the high limit on top.
+* **Calculation**: $Tolerance = Upper Limit - Lower Limit$
+* **Example**: For a dimension specified as $\begin{matrix} 1.505 \\ 1.495 \end{matrix}$
+    * The **Upper Limit** is $1.505$
+    * The **Lower Limit** is $1.495$
+    * The **Tolerance** is $0.010$
+
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Allowances with two limits"}
+knitr::include_graphics("images/Allowances_TwoLimits.png")
+```
+
+
+
+#### Tolerance with One Limit (Single Limit)
+
+Single-limit dimensioning is used when the dimension in one direction is not critical, or when the "other" limit is naturally constrained by the geometry or the manufacturing process. These are indicated by the suffixes **MAX** or **MIN**.
+
+* **MAX (Maximum)**: Specifies that the feature must not exceed the given value. The lower limit is often zero or determined by the part's shape. This is commonly used for fillet radii or chamfers to prevent interference with a mating part.
+    * *Example*: $R.015 \text{ MAX}$
+* **MIN (Minimum)**: Specifies that the feature must be at least the given value. The upper limit is often determined by the material stock or is not functionally critical. This is commonly used for the depth of holes or the width of a bearing surface.
+    * *Example*: $.500 \text{ MIN}$ (Full Thread)
+
+
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Allowances with a single limit"}
+knitr::include_graphics("images/Allowances_SingleLimit.png")
+```
+
+
+---
+
+#### Comparison Summary
+
+| Method | Syntax | Primary Use Case |
+|:---|:---|:---|
+| **Two Limits** | $\begin{matrix} High \\ Low \end{matrix}$ | Critical fits (shafts, holes, mating surfaces). |
+| **One Limit (MAX)** | $.010 \text{ MAX}$ | Clearance for corners, weight reduction, or edge breaks. |
+| **One Limit (MIN)** | $.500 \text{ MIN}$ | Minimum engagement for fasteners or structural thickness. |
+
+
+#### Visualizing Tolerance Distributions
+
+To better understand how manufactured parts align with these limits, we can visualize a production run. Figure \@ref(fig:tolerance-plot) below simulates a batch of 1000 shafts manufactured with a target diameter of 25.0 mm and a tolerance of $\pm 0.05$ mm.
+
+```{r tolerance-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Distribution of manufactured shaft diameters relative to tolerance limits."}
+library(ggplot2)
+library(dplyr)
+
+## Set seed for reproducibility
+set.seed(42)
+
+# Parameters
+target_mean <- 25.00
+tolerance <- 0.05
+upper_limit <- target_mean + tolerance
+lower_limit <- target_mean - tolerance
+
+# Generate synthetic data for 1000 parts
+parts_data <- data.frame(
+  diameter = rnorm(1000, mean = target_mean, sd = 0.015)
+)
+
+# Plot the distribution
+ggplot(parts_data, aes(x = diameter)) +
+  geom_histogram(aes(y = after_stat(density)), binwidth = 0.005, 
+                 fill = "#69b3a2", color = "white", alpha = 0.8) +
+  geom_density(color = "#404080", size = 1) +
+  geom_vline(xintercept = lower_limit, linetype = "dashed", color = "red", size = 1) +
+  geom_vline(xintercept = upper_limit, linetype = "dashed", color = "red", size = 1) +
+  annotate("text", x = upper_limit + 0.01, y = 5, label = "USL", color = "red") +
+  annotate("text", x = lower_limit - 0.01, y = 5, label = "LSL", color = "red") +
+  theme_minimal() +
+  labs(
+    title = "Production Consistency vs. Tolerance Limits",
+    x = "Measured Diameter (mm)",
+    y = "Density"
+  )
+```
+
+As seen in Figure \@ref(fig:tolerance-plot), the dashed red lines represent the Upper Specification Limit (USL) and Lower Specification Limit (LSL). Parts falling outside these lines would be rejected.
+
+### Drawing Standards: Metric vs. Inch
+
+One of the most critical aspects of technical documentation is adhering to the specific syntax rules for Metric (SI) and Inch (Imperial) units. These rules differ significantly regarding zero suppression and decimal consistency.
+
+#### Metric Rules (SI)
+
+When dimensioning in millimeters, the following rules apply:
+
+* **Leading Zeros**: For dimensions and tolerances less than 1 mm, a leading zero **must** be used.
+    * *Correct*: $0.5$
+    * *Incorrect*: $.5$
+* **Decimal Consistency**: The number of decimal places **can vary** between the dimension and the tolerance.
+    * *Example*: $25 \pm 0.25$ (The basic size has 0 decimals; tolerance has 2).
+* **Unilateral Zero**: A zero in a unilateral tolerance is written as a single digit "0" without a plus or minus sign.
+    * *Example*: $30 \,\, {}^{+0.1}_{0}$
+
+#### Inch Rules (Imperial)
+
+When dimensioning in inches, the conventions are distinct:
+
+* **Leading Zeros**: For dimensions and tolerances less than 1 inch, a leading zero is **never** used.
+    * *Correct*: $.500$
+    * *Incorrect*: $0.500$
+* **Decimal Consistency**: The number of decimal places **must be identical** for the dimension and the tolerance.
+    * *Example*: $1.000 \pm .005$ (Both must show 3 decimal places).
+* **Zeros in Tolerances**:
+    * **Bilateral**: If a tolerance limit is zero, it still requires a plus or minus sign and must display the same number of decimal places as the dimension to express precision.
+    * *Example*: $1.000 \,\, {}^{+.005}_{-.000}$

@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 1 Design and Drafting | Design for Manufacturing</title>
+  <meta name="description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 1 Design and Drafting | Design for Manufacturing" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  <meta name="github-repo" content="Prof-MV/Design-for-Manufacturing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 1 Design and Drafting | Design for Manufacturing" />
+  
+  <meta name="twitter:description" content="This book collects design guidelines to be used for different manufacturing processes." />
+  
+
+<meta name="author" content="Martin Volkening" />
+
+
+<meta name="date" content="2026-01-29" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="machine_elements.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Design for Manufacturing</a></li><li class="toc-logo"><a href="./"><img src="images/Fanshawe.png"></a></li>
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a></li>
+<li class="chapter" data-level="1" data-path="design_and_drafting.html"><a href="design_and_drafting.html"><i class="fa fa-check"></i><b>1</b> Design and Drafting</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="design_and_drafting.html"><a href="design_and_drafting.html#interpreting"><i class="fa fa-check"></i><b>1.1</b> Interpreting and Creating Drawings</a></li>
+<li class="chapter" data-level="1.2" data-path="design_and_drafting.html"><a href="design_and_drafting.html#dimensioningrules"><i class="fa fa-check"></i><b>1.2</b> Dimensioning Rules</a></li>
+<li class="chapter" data-level="1.3" data-path="design_and_drafting.html"><a href="design_and_drafting.html#tolerances"><i class="fa fa-check"></i><b>1.3</b> Tolerances in Mechanical Design</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="design_and_drafting.html"><a href="design_and_drafting.html#fundamental-concepts"><i class="fa fa-check"></i><b>1.3.1</b> Fundamental Concepts</a></li>
+<li class="chapter" data-level="1.3.2" data-path="design_and_drafting.html"><a href="design_and_drafting.html#tolerancing-methods"><i class="fa fa-check"></i><b>1.3.2</b> Tolerancing Methods</a></li>
+<li class="chapter" data-level="1.3.3" data-path="design_and_drafting.html"><a href="design_and_drafting.html#specifying-limits-in-tolerancing"><i class="fa fa-check"></i><b>1.3.3</b> Specifying Limits in Tolerancing</a></li>
+<li class="chapter" data-level="1.3.4" data-path="design_and_drafting.html"><a href="design_and_drafting.html#drawing-standards-metric-vs.-inch"><i class="fa fa-check"></i><b>1.3.4</b> Drawing Standards: Metric vs. Inch</a></li>
+<li class="chapter" data-level="1.3.5" data-path="design_and_drafting.html"><a href="design_and_drafting.html#geometric-dimensioning-and-tolerancing-gdt"><i class="fa fa-check"></i><b>1.3.5</b> Geometric Dimensioning and Tolerancing (GD&amp;T)</a></li>
+<li class="chapter" data-level="1.3.6" data-path="design_and_drafting.html"><a href="design_and_drafting.html#datum-systems"><i class="fa fa-check"></i><b>1.3.6</b> 5. Datum Systems</a></li>
+<li class="chapter" data-level="1.3.7" data-path="design_and_drafting.html"><a href="design_and_drafting.html#material-conditions-and-bonus-tolerances"><i class="fa fa-check"></i><b>1.3.7</b> 6. Material Conditions and Bonus Tolerances</a></li>
+<li class="chapter" data-level="1.3.8" data-path="design_and_drafting.html"><a href="design_and_drafting.html#common-gdt-applications"><i class="fa fa-check"></i><b>1.3.8</b> 7. Common GD&amp;T Applications</a></li>
+<li class="chapter" data-level="1.3.9" data-path="design_and_drafting.html"><a href="design_and_drafting.html#tolerance-stack-up-analysis"><i class="fa fa-check"></i><b>1.3.9</b> 8. Tolerance Stack-Up Analysis</a></li>
+<li class="chapter" data-level="1.3.10" data-path="design_and_drafting.html"><a href="design_and_drafting.html#practical-exercises"><i class="fa fa-check"></i><b>1.3.10</b> 9. Practical Exercises</a></li>
+<li class="chapter" data-level="1.3.11" data-path="design_and_drafting.html"><a href="design_and_drafting.html#classroom-activity-interactive-tolerance-design"><i class="fa fa-check"></i><b>1.3.11</b> 10. Classroom Activity: Interactive Tolerance Design</a></li>
+<li class="chapter" data-level="1.3.12" data-path="design_and_drafting.html"><a href="design_and_drafting.html#summary-and-key-takeaways"><i class="fa fa-check"></i><b>1.3.12</b> 11. Summary and Key Takeaways</a></li>
+<li class="chapter" data-level="1.3.13" data-path="design_and_drafting.html"><a href="design_and_drafting.html#additional-resources"><i class="fa fa-check"></i><b>1.3.13</b> 12. Additional Resources</a></li>
+<li class="chapter" data-level="" data-path="design_and_drafting.html"><a href="design_and_drafting.html#answers-to-classroom-exercises"><i class="fa fa-check"></i>Answers to Classroom Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="design_and_drafting.html"><a href="design_and_drafting.html#fits"><i class="fa fa-check"></i><b>1.4</b> Engineering Fits and Tolerances</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="design_and_drafting.html"><a href="design_and_drafting.html#the-concept-of-basis-systems"><i class="fa fa-check"></i><b>1.4.1</b> The Concept of Basis Systems</a></li>
+<li class="chapter" data-level="1.4.2" data-path="design_and_drafting.html"><a href="design_and_drafting.html#imperial-fits"><i class="fa fa-check"></i><b>1.4.2</b> Imperial Fits</a></li>
+<li class="chapter" data-level="1.4.3" data-path="design_and_drafting.html"><a href="design_and_drafting.html#metric-fits"><i class="fa fa-check"></i><b>1.4.3</b> Metric Fits and the ISO Letter System</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="machine_elements.html"><a href="machine_elements.html"><i class="fa fa-check"></i><b>2</b> Machine Elements</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="machine_elements.html"><a href="machine_elements.html#chap-03-bolts"><i class="fa fa-check"></i><b>2.1</b> Strength of Bolt Joint Calculations</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="machine_elements.html"><a href="machine_elements.html#sec:objectives-03"><i class="fa fa-check"></i><b>2.1.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.1.2" data-path="machine_elements.html"><a href="machine_elements.html#sec:bolted-joints"><i class="fa fa-check"></i><b>2.1.2</b> Mechanics of Bolted Joint Integrity</a></li>
+<li class="chapter" data-level="2.1.3" data-path="machine_elements.html"><a href="machine_elements.html#bolt-definitions"><i class="fa fa-check"></i><b>2.1.3</b> Bolt Definitions</a></li>
+<li class="chapter" data-level="2.1.4" data-path="machine_elements.html"><a href="machine_elements.html#bolt-joints"><i class="fa fa-check"></i><b>2.1.4</b> Understanding Bolt Joints and Force Triangles</a></li>
+<li class="chapter" data-level="2.1.5" data-path="machine_elements.html"><a href="machine_elements.html#bolted-analysis-formulas"><i class="fa fa-check"></i><b>2.1.5</b> Advanced Analysis of Bolted Joints with applicable Formulas</a></li>
+<li class="chapter" data-level="2.1.6" data-path="machine_elements.html"><a href="machine_elements.html#bolt-example"><i class="fa fa-check"></i><b>2.1.6</b> Applied Example: Bolted Joint Safety Calculation</a></li>
+<li class="chapter" data-level="2.1.7" data-path="machine_elements.html"><a href="machine_elements.html#example-2"><i class="fa fa-check"></i><b>2.1.7</b> Example 2</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="machine_elements.html"><a href="machine_elements.html#chap-04-gears"><i class="fa fa-check"></i><b>2.2</b> Gears, Gear Trains, and Transmissions</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="machine_elements.html"><a href="machine_elements.html#sec:objectives-04"><i class="fa fa-check"></i><b>2.2.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.2.2" data-path="machine_elements.html"><a href="machine_elements.html#sec:gears-intro"><i class="fa fa-check"></i><b>2.2.2</b> Introduction to Gears</a></li>
+<li class="chapter" data-level="2.2.3" data-path="machine_elements.html"><a href="machine_elements.html#sec:gear-fundamentals"><i class="fa fa-check"></i><b>2.2.3</b> Fundamental Gear Concepts</a></li>
+<li class="chapter" data-level="2.2.4" data-path="machine_elements.html"><a href="machine_elements.html#sec:gear-terminology"><i class="fa fa-check"></i><b>2.2.4</b> Gear Terminology</a></li>
+<li class="chapter" data-level="2.2.5" data-path="machine_elements.html"><a href="machine_elements.html#sec:gear-types"><i class="fa fa-check"></i><b>2.2.5</b> Types of Gears</a></li>
+<li class="chapter" data-level="2.2.6" data-path="machine_elements.html"><a href="machine_elements.html#sec:gear-ratios"><i class="fa fa-check"></i><b>2.2.6</b> Gear Ratios and Calculations</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#gear-trains"><i class="fa fa-check"></i>🔄 Gear Trains</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#industry-applications"><i class="fa fa-check"></i>🏭 Industry Applications</a></li>
+<li class="chapter" data-level="2.2.7" data-path="machine_elements.html"><a href="machine_elements.html#sec:gear-design"><i class="fa fa-check"></i><b>2.2.7</b> Gear Design Considerations</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#design-checklist-for-gears"><i class="fa fa-check"></i>📋 Design Checklist for Gears</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#case-study-food-packaging-line-drive"><i class="fa fa-check"></i>🎯 Case Study: Food Packaging Line Drive</a></li>
+<li class="chapter" data-level="2.2.8" data-path="machine_elements.html"><a href="machine_elements.html#sec:gear-problems"><i class="fa fa-check"></i><b>2.2.8</b> Practice Problems</a></li>
+<li class="chapter" data-level="2.2.9" data-path="machine_elements.html"><a href="machine_elements.html#sec:gear-resources"><i class="fa fa-check"></i><b>2.2.9</b> Further Reading</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#supplemental-videos"><i class="fa fa-check"></i>🎬 Supplemental Videos</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#references"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="machine_elements.html"><a href="machine_elements.html#chap-08-bearings"><i class="fa fa-check"></i><b>2.3</b> Ball Bearings and Bushings</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="machine_elements.html"><a href="machine_elements.html#sec:objectives-08"><i class="fa fa-check"></i><b>2.3.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.3.2" data-path="machine_elements.html"><a href="machine_elements.html#sec:bearings-intro"><i class="fa fa-check"></i><b>2.3.2</b> Introduction to Bearings</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#ball-bearings"><i class="fa fa-check"></i>Ball Bearings</a></li>
+<li class="chapter" data-level="2.3.3" data-path="machine_elements.html"><a href="machine_elements.html#bearing-life"><i class="fa fa-check"></i><b>2.3.3</b> Ball Bearing Life Calculations</a></li>
+<li class="chapter" data-level="2.3.4" data-path="machine_elements.html"><a href="machine_elements.html#bearing-example"><i class="fa fa-check"></i><b>2.3.4</b> Applied Example: Ball Bearing Life Calculation</a></li>
+<li class="chapter" data-level="2.3.5" data-path="machine_elements.html"><a href="machine_elements.html#bushings"><i class="fa fa-check"></i><b>2.3.5</b> Plain Bearings (Bushings)</a></li>
+<li class="chapter" data-level="2.3.6" data-path="machine_elements.html"><a href="machine_elements.html#pv-limits"><i class="fa fa-check"></i><b>2.3.6</b> PV Limits for Bushings</a></li>
+<li class="chapter" data-level="2.3.7" data-path="machine_elements.html"><a href="machine_elements.html#bushing-example"><i class="fa fa-check"></i><b>2.3.7</b> Applied Example: Bushing PV Calculation</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#bearing-vs.-bushing-selection-guide"><i class="fa fa-check"></i>Bearing vs. Bushing Selection Guide</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#summary-equations"><i class="fa fa-check"></i>Summary Equations</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#design-checklist"><i class="fa fa-check"></i>Design Checklist</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="machine_elements.html"><a href="machine_elements.html#chap-09-linkages"><i class="fa fa-check"></i><b>2.4</b> Four-Bar Linkages</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="machine_elements.html"><a href="machine_elements.html#sec:objectives-09"><i class="fa fa-check"></i><b>2.4.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.4.2" data-path="machine_elements.html"><a href="machine_elements.html#sec:linkages-intro"><i class="fa fa-check"></i><b>2.4.2</b> Introduction to Four-Bar Linkages</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#anatomy-of-a-four-bar-linkage"><i class="fa fa-check"></i>Anatomy of a Four-Bar Linkage</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#grashofs-law"><i class="fa fa-check"></i>Grashof’s Law</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#types-of-four-bar-linkages"><i class="fa fa-check"></i>Types of Four-Bar Linkages</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#position-analysis"><i class="fa fa-check"></i>Position Analysis</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#transmission-angle"><i class="fa fa-check"></i>Transmission Angle</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#coupler-curves"><i class="fa fa-check"></i>Coupler Curves</a></li>
+<li class="chapter" data-level="2.4.3" data-path="machine_elements.html"><a href="machine_elements.html#linkage-example-1"><i class="fa fa-check"></i><b>2.4.3</b> Applied Example: Grashof Classification</a></li>
+<li class="chapter" data-level="2.4.4" data-path="machine_elements.html"><a href="machine_elements.html#linkage-example-2"><i class="fa fa-check"></i><b>2.4.4</b> Applied Example: Transmission Angle Analysis</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#design-guidelines-1"><i class="fa fa-check"></i>Design Guidelines</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#summary-equations-1"><i class="fa fa-check"></i>Summary Equations</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#design-checklist-1"><i class="fa fa-check"></i>Design Checklist</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#common-applications"><i class="fa fa-check"></i>Common Applications</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="machine_elements.html"><a href="machine_elements.html#chap-10-belts"><i class="fa fa-check"></i><b>2.5</b> Power Transmission: Belt and Pulley Systems</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="machine_elements.html"><a href="machine_elements.html#sec:objectives-10"><i class="fa fa-check"></i><b>2.5.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.5.2" data-path="machine_elements.html"><a href="machine_elements.html#sec:belts-intro"><i class="fa fa-check"></i><b>2.5.2</b> Introduction to Belt and Pulley Systems</a></li>
+<li class="chapter" data-level="2.5.3" data-path="machine_elements.html"><a href="machine_elements.html#sec:belt-fundamentals"><i class="fa fa-check"></i><b>2.5.3</b> Fundamental Belt Drive Concepts</a></li>
+<li class="chapter" data-level="2.5.4" data-path="machine_elements.html"><a href="machine_elements.html#sec:belt-terminology"><i class="fa fa-check"></i><b>2.5.4</b> Essential Belt Drive Terminology</a></li>
+<li class="chapter" data-level="2.5.5" data-path="machine_elements.html"><a href="machine_elements.html#sec:belt-types"><i class="fa fa-check"></i><b>2.5.5</b> Types of Belts</a></li>
+<li class="chapter" data-level="2.5.6" data-path="machine_elements.html"><a href="machine_elements.html#sec:belt-calculations"><i class="fa fa-check"></i><b>2.5.6</b> Belt Drive Calculations</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#worked-example-belt-drive-design"><i class="fa fa-check"></i>🧮 Worked Example: Belt Drive Design</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#belt-tensioning"><i class="fa fa-check"></i>⚡ Belt Tensioning</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#design-guidelines-and-best-practices"><i class="fa fa-check"></i>🎯 Design Guidelines and Best Practices</a></li>
+<li class="chapter" data-level="2.5.7" data-path="machine_elements.html"><a href="machine_elements.html#sec:belt-resources"><i class="fa fa-check"></i><b>2.5.7</b> Related Topics</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#chapter-summary"><i class="fa fa-check"></i>📚 Chapter Summary</a></li>
+<li class="chapter" data-level="2.5.8" data-path="machine_elements.html"><a href="machine_elements.html#sec:belt-problems"><i class="fa fa-check"></i><b>2.5.8</b> Practice Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="machine_elements.html"><a href="machine_elements.html#chap-11-chains"><i class="fa fa-check"></i><b>2.6</b> Power Transmission: Chain Drives</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="machine_elements.html"><a href="machine_elements.html#sec:objectives-11"><i class="fa fa-check"></i><b>2.6.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.6.2" data-path="machine_elements.html"><a href="machine_elements.html#sec:chains-intro"><i class="fa fa-check"></i><b>2.6.2</b> Introduction to Chain Drives</a></li>
+<li class="chapter" data-level="2.6.3" data-path="machine_elements.html"><a href="machine_elements.html#sec:chain-fundamentals"><i class="fa fa-check"></i><b>2.6.3</b> Roller Chain Fundamentals</a></li>
+<li class="chapter" data-level="2.6.4" data-path="machine_elements.html"><a href="machine_elements.html#sec:chain-sprockets"><i class="fa fa-check"></i><b>2.6.4</b> Sprocket Design and Selection</a></li>
+<li class="chapter" data-level="2.6.5" data-path="machine_elements.html"><a href="machine_elements.html#sec:chain-calculations"><i class="fa fa-check"></i><b>2.6.5</b> Chain Drive Calculations</a></li>
+<li class="chapter" data-level="2.6.6" data-path="machine_elements.html"><a href="machine_elements.html#sec:chain-layout"><i class="fa fa-check"></i><b>2.6.6</b> Chain Drive System Layout</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#worked-example-chain-drive-design"><i class="fa fa-check"></i>🧮 Worked Example: Chain Drive Design</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#chain-tensioning-and-adjustment"><i class="fa fa-check"></i>⚡ Chain Tensioning and Adjustment</a></li>
+<li class="chapter" data-level="2.6.7" data-path="machine_elements.html"><a href="machine_elements.html#sec:chain-lubrication"><i class="fa fa-check"></i><b>2.6.7</b> Lubrication Requirements</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#chain-vs.-belt-comparison"><i class="fa fa-check"></i>🔄 Chain vs. Belt Comparison</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#design-guidelines-and-best-practices-1"><i class="fa fa-check"></i>🎯 Design Guidelines and Best Practices</a></li>
+<li class="chapter" data-level="2.6.8" data-path="machine_elements.html"><a href="machine_elements.html#sec:chain-resources"><i class="fa fa-check"></i><b>2.6.8</b> Related Topics</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#chapter-summary-1"><i class="fa fa-check"></i>📚 Chapter Summary</a></li>
+<li class="chapter" data-level="2.6.9" data-path="machine_elements.html"><a href="machine_elements.html#sec:chain-problems"><i class="fa fa-check"></i><b>2.6.9</b> Practice Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="machine_elements.html"><a href="machine_elements.html#chap-12-couplings"><i class="fa fa-check"></i><b>2.7</b> Power Transmission: Couplings and Clutches</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="machine_elements.html"><a href="machine_elements.html#sec:objectives-12"><i class="fa fa-check"></i><b>2.7.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.7.2" data-path="machine_elements.html"><a href="machine_elements.html#sec:couplings-intro"><i class="fa fa-check"></i><b>2.7.2</b> Introduction to Couplings and Clutches</a></li>
+<li class="chapter" data-level="2.7.3" data-path="machine_elements.html"><a href="machine_elements.html#sec:shaft-couplings"><i class="fa fa-check"></i><b>2.7.3</b> Shaft Couplings</a></li>
+<li class="chapter" data-level="2.7.4" data-path="machine_elements.html"><a href="machine_elements.html#sec:rigid-couplings"><i class="fa fa-check"></i><b>2.7.4</b> Rigid Couplings</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#flexible-couplings"><i class="fa fa-check"></i>🔄 Flexible Couplings</a></li>
+<li class="chapter" data-level="2.7.5" data-path="machine_elements.html"><a href="machine_elements.html#sec:coupling-selection"><i class="fa fa-check"></i><b>2.7.5</b> Coupling Selection Criteria</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#clutches"><i class="fa fa-check"></i>⚡ Clutches</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#friction-clutches"><i class="fa fa-check"></i>🔴 Friction Clutches</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#positive-engagement-clutches"><i class="fa fa-check"></i>🔵 Positive Engagement Clutches</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#overrunning-clutches"><i class="fa fa-check"></i>🟢 Overrunning Clutches</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#worked-example-clutch-torque-calculation"><i class="fa fa-check"></i>🧮 Worked Example: Clutch Torque Calculation</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#design-guidelines-and-best-practices-2"><i class="fa fa-check"></i>🎯 Design Guidelines and Best Practices</a></li>
+<li class="chapter" data-level="2.7.6" data-path="machine_elements.html"><a href="machine_elements.html#sec:coupling-resources"><i class="fa fa-check"></i><b>2.7.6</b> Related Topics</a></li>
+<li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#chapter-summary-2"><i class="fa fa-check"></i>📚 Chapter Summary</a></li>
+<li class="chapter" data-level="2.7.7" data-path="machine_elements.html"><a href="machine_elements.html#sec:coupling-problems"><i class="fa fa-check"></i><b>2.7.7</b> Practice Problems</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html"><i class="fa fa-check"></i><b>3</b> Design for Manufacturing</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#chap-casting"><i class="fa fa-check"></i><b>3.1</b> Design for Casting</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:objectives-01"><i class="fa fa-check"></i><b>3.1.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="3.1.2" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:casting-intro"><i class="fa fa-check"></i><b>3.1.2</b> Introduction to the Casting Process</a></li>
+<li class="chapter" data-level="3.1.3" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:casting-components"><i class="fa fa-check"></i><b>3.1.3</b> Essential Components of Casting</a></li>
+<li class="chapter" data-level="3.1.4" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:casting-steps"><i class="fa fa-check"></i><b>3.1.4</b> The Basic Steps of Casting</a></li>
+<li class="chapter" data-level="3.1.5" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:casting-applications"><i class="fa fa-check"></i><b>3.1.5</b> Applications and Scope</a></li>
+<li class="chapter" data-level="3.1.6" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sand-mould-casting-the-versatile-workhorse"><i class="fa fa-check"></i><b>3.1.6</b> Sand Mould Casting: The Versatile Workhorse</a></li>
+<li class="chapter" data-level="3.1.7" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#full-mould-casting-casting"><i class="fa fa-check"></i><b>3.1.7</b> Full Mould Casting Casting</a></li>
+<li class="chapter" data-level="3.1.8" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#investment-casting"><i class="fa fa-check"></i><b>3.1.8</b> Investment Casting</a></li>
+<li class="chapter" data-level="3.1.9" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#design-for-casting-reliance-casting-design"><i class="fa fa-check"></i><b>3.1.9</b> Design for Casting <span class="citation">(Reliance Foundry Co. Ltd. 2025)</span></a></li>
+<li class="chapter" data-level="3.1.10" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#defects-in-casting-process"><i class="fa fa-check"></i><b>3.1.10</b> Defects in Casting process</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#chap-joining"><i class="fa fa-check"></i><b>3.2</b> Design for Joining</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:objectives-02"><i class="fa fa-check"></i><b>3.2.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="3.2.2" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:joining-intro"><i class="fa fa-check"></i><b>3.2.2</b> Joining Processes: Uniting Materials for Function</a></li>
+<li class="chapter" data-level="3.2.3" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:welding-process"><i class="fa fa-check"></i><b>3.2.3</b> The Welding Process</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#chap-stamping"><i class="fa fa-check"></i><b>3.3</b> Design for Stamping</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:objectives-05"><i class="fa fa-check"></i><b>3.3.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="3.3.2" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-intro"><i class="fa fa-check"></i><b>3.3.2</b> Introduction to the Stamping Process</a></li>
+<li class="chapter" data-level="3.3.3" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-components"><i class="fa fa-check"></i><b>3.3.3</b> Essential Components of Stamping</a></li>
+<li class="chapter" data-level="3.3.4" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-operations"><i class="fa fa-check"></i><b>3.3.4</b> Types of Stamping Operations</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#stamping-press-types-and-progressive-dies"><i class="fa fa-check"></i>🏭 Stamping Press Types and Progressive Dies</a></li>
+<li class="chapter" data-level="3.3.5" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-pros-cons"><i class="fa fa-check"></i><b>3.3.5</b> Advantages and Limitations of Stamping</a></li>
+<li class="chapter" data-level="3.3.6" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-materials"><i class="fa fa-check"></i><b>3.3.6</b> Material Considerations for Stamping</a></li>
+<li class="chapter" data-level="3.3.7" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-guidelines"><i class="fa fa-check"></i><b>3.3.7</b> Design Guidelines for Stamping</a></li>
+<li class="chapter" data-level="3.3.8" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-defects"><i class="fa fa-check"></i><b>3.3.8</b> Common Stamping Defects and Prevention</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#design-checklist-for-stamping"><i class="fa fa-check"></i>📋 Design Checklist for Stamping</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#case-study-automotive-bracket-design"><i class="fa fa-check"></i>🎯 Case Study: Automotive Bracket Design</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#summary-key-design-rules-for-stamping"><i class="fa fa-check"></i>📚 “Summary: Key Design Rules for Stamping”</a></li>
+<li class="chapter" data-level="3.3.9" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-problems"><i class="fa fa-check"></i><b>3.3.9</b> Practice Problems</a></li>
+<li class="chapter" data-level="3.3.10" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:stamping-resources"><i class="fa fa-check"></i><b>3.3.10</b> Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#supplemental-videos-1"><i class="fa fa-check"></i>🎬 Supplemental Videos</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#references-1"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#chap-welding"><i class="fa fa-check"></i><b>3.4</b> Design for Welding</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:objectives-06"><i class="fa fa-check"></i><b>3.4.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="3.4.2" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:welding-intro"><i class="fa fa-check"></i><b>3.4.2</b> Introduction to Design for Welding</a></li>
+<li class="chapter" data-level="3.4.3" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:welding-fundamentals"><i class="fa fa-check"></i><b>3.4.3</b> The Welding Process Fundamentals</a></li>
+<li class="chapter" data-level="3.4.4" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-joints"><i class="fa fa-check"></i><b>3.4.4</b> Types of Weld Joints</a></li>
+<li class="chapter" data-level="3.4.5" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-types"><i class="fa fa-check"></i><b>3.4.5</b> Types of Welds</a></li>
+<li class="chapter" data-level="3.4.6" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-symbols"><i class="fa fa-check"></i><b>3.4.6</b> Welding Symbols</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#design-guidelines-for-welded-joints"><i class="fa fa-check"></i>📏 Design Guidelines for Welded Joints</a></li>
+<li class="chapter" data-level="3.4.7" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-materials"><i class="fa fa-check"></i><b>3.4.7</b> Material Weldability</a></li>
+<li class="chapter" data-level="3.4.8" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-defects"><i class="fa fa-check"></i><b>3.4.8</b> Common Weld Defects and Prevention</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#design-checklist-for-welding"><i class="fa fa-check"></i>📋 Design Checklist for Welding</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#case-study-welded-frame-design"><i class="fa fa-check"></i>🎯 Case Study: Welded Frame Design</a></li>
+<li class="chapter" data-level="3.4.9" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-problems"><i class="fa fa-check"></i><b>3.4.9</b> Practice Problems</a></li>
+<li class="chapter" data-level="3.4.10" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-resources"><i class="fa fa-check"></i><b>3.4.10</b> Further Reading</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#supplemental-videos-2"><i class="fa fa-check"></i>🎬 Supplemental Videos</a></li>
+<li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#references-2"><i class="fa fa-check"></i>📖 References</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#chap-machining"><i class="fa fa-check"></i><b>3.5</b> Design for Machining</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:objectives-07"><i class="fa fa-check"></i><b>3.5.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="3.5.2" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:machining-intro"><i class="fa fa-check"></i><b>3.5.2</b> Introduction to Design for Machining</a></li>
+<li class="chapter" data-level="3.5.3" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:machining-theory"><i class="fa fa-check"></i><b>3.5.3</b> Theory and Calculations</a></li>
+<li class="chapter" data-level="3.5.4" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#theory-math"><i class="fa fa-check"></i><b>3.5.4</b> Theory &amp; Math</a></li>
+<li class="chapter" data-level="3.5.5" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#hands-on-examples"><i class="fa fa-check"></i><b>3.5.5</b> Hands-on Examples</a></li>
+<li class="chapter" data-level="3.5.6" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#interactive-exercises"><i class="fa fa-check"></i><b>3.5.6</b> Interactive Exercises</a></li>
+<li class="chapter" data-level="3.5.7" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#check-your-understanding"><i class="fa fa-check"></i><b>3.5.7</b> Check Your Understanding</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Design for Manufacturing</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="design_and_drafting" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Design and Drafting<a href="design_and_drafting.html#design_and_drafting" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+
+<div id="interpreting" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Interpreting and Creating Drawings<a href="design_and_drafting.html#interpreting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="introduction-to-engineering-working-drawings-hijazi" class="section level4 hasAnchor" number="1.1.0.1">
+<h4><span class="header-section-number">1.1.0.1</span> Introduction to Engineering Working Drawings <span class="citation">(<a href="#ref-Hijazi">Hijazi 2025</a>)</span><a href="design_and_drafting.html#introduction-to-engineering-working-drawings-hijazi" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="engineering-working-drawings-basics" class="section level5 hasAnchor" number="1.1.0.1.1">
+<h5><span class="header-section-number">1.1.0.1.1</span> Engineering Working Drawings Basics<a href="design_and_drafting.html#engineering-working-drawings-basics" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Engineering graphics is an effective way of communicating technical ideas and it is an essential tool in engineering design where most of the design process is graphically based. Engineering graphics is used in the design process for <strong>visualization</strong>, <strong>communication</strong>, and <strong>documentation</strong>.</p>
+<p>Graphics is a visual communications language that include images, text, and numeric information. Graphics communications using engineering drawings and models is a clear and precise language with definite rules that must be mastered in order to be successful in engineering design. Graphics communications are used in every phase of engineering design starting from concept illustration all the way to the manufacturing phase.</p>
+<ul>
+<li><strong>An engineering (or technical) drawing</strong> is a graphical representation of a part, assembly, system, or structure and it can be produced using freehand, mechanical tools, or computer methods.</li>
+<li><strong>Working drawings</strong> are the set of technical drawings used during the manufacturing phase of a product. They contain all the information needed to manufacture and assemble a product.</li>
+</ul>
+</div>
+<div id="codes-and-standards" class="section level5 hasAnchor" number="1.1.0.1.2">
+<h5><span class="header-section-number">1.1.0.1.2</span> Codes and Standards<a href="design_and_drafting.html#codes-and-standards" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Codes and standards are made to organize and unify the engineering work.</p>
+<p><em>Imagine; what if there was no standard for bolts?</em></p>
+<ul>
+<li><strong>A code</strong> is a set of specifications for the analysis, design, manufacture, and construction of something.</li>
+<li><strong>A standard</strong> is a set of specifications for parts, materials, or processes intended to achieve uniformity, efficiency and specific quality.</li>
+</ul>
+<div id="organizations" class="section level6 unnumbered hasAnchor">
+<h6>Organizations<a href="design_and_drafting.html#organizations" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Examples of the organizations that establish standards and design codes include:
+<strong>ISO, AISI, SAE, ASTM, ASME, ANSI, DIN.</strong></p>
+<p>There are many different standards related to technical drawings. The ISO standards for technical drawings are found in a two-volume handbook:</p>
+<ul>
+<li><strong>ISO Standards Handbook: Technical drawings, Volume 1:</strong> Technical drawings in general.</li>
+<li><strong>ISO Standards Handbook: Technical drawings, Volume 2:</strong> Mechanical engineering drawings; Construction drawings; Drawing equipment.</li>
+</ul>
+</div>
+</div>
+<div id="drawing-sheet-layout" class="section level5 hasAnchor" number="1.1.0.1.3">
+<h5><span class="header-section-number">1.1.0.1.3</span> Drawing Sheet Layout<a href="design_and_drafting.html#drawing-sheet-layout" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Standard layouts of drawing sheets are specified by the various standards organizations.</p>
+<p>The figure below shows the layout of a typical sheet, showing the drawing frame, a typical title block, parts list (bill of materials), and revision table.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
+<img src="images/7-2-1-1536x1192.png" alt="Title Block of Technical Drawing" width="50%" />
+<p class="caption">
+Figure 1.1: Title Block of Technical Drawing
+</p>
+</div>
+<div id="title-block-components-lorier2025blueprint" class="section level6 hasAnchor" number="1.1.0.1.3.1">
+<h6><span class="header-section-number">1.1.0.1.3.1</span> Title Block Components <span class="citation">(<a href="#ref-lorier2025blueprint">Lorier 2025</a>)</span><a href="design_and_drafting.html#title-block-components-lorier2025blueprint" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<ul>
+<li><p><strong>Part Title</strong>: The title is a descriptive name given to the drawing, typically the largest box in the title block.</p></li>
+<li><p><strong>Company Information</strong>: The name of the company responsible for the drawing will also appear in a larger box in the title block. Often, a logo for the company will be displayed as well.</p></li>
+<li><p><strong>Size</strong>: The size block displays the letter of the sheet size of the print (e.g., A, B, C, or A4, A3).</p></li>
+<li><p><strong>Drawing Number</strong>: A numbering system the company uses to aid in filing and tracking the drawing.</p></li>
+<li><p><strong>Part Number</strong>: A part number may be used to identify a specific part, such as in an assembly parts list.</p></li>
+<li><p><strong>Scale</strong>: The scale displays the proportion of the drawing compared to the object.</p>
+<ul>
+<li><strong>Reduction</strong>: When the part is too large to fit on the sheet, the drawing may be reduced to <span class="math inline">\(1/2, 1/4, 1/8\)</span>, etc.</li>
+<li><strong>Enlargement</strong>: When the part is smaller than the sheet, the drawing may be increased proportionally.</li>
+<li><strong>“DO” Scale</strong>: The ratio is arranged as <strong>Drawing:Object</strong>.
+<ul>
+<li>A scale of <strong>1:2</strong> indicates the drawing is half the size of the part.</li>
+<li>A scale of <strong>2:1</strong> indicates the drawing is twice the size of the part.</li>
+<li>A scale of <strong>1:1</strong> or <strong>“Full”</strong> indicates they are the same size.</li>
+</ul></li>
+<li><strong>NTS</strong>: Stands for “Not To Scale,” used if the drawing does not follow a basic proportional size.</li>
+</ul></li>
+<li><p><strong>Drawn</strong>: Contains the name or initials of the drafter and the date of the drawing, as well as any other individuals involved (checkers, engineers).</p></li>
+<li><p><strong>Projection</strong>: Identifies whether the drawing is a <strong>first-angle</strong> or <strong>third-angle</strong> projection. This is typically indicated with a standard projection cone symbol.</p></li>
+<li><p><strong>Weight</strong>: Used to indicate the weight of the finished part when required.</p></li>
+<li><p><strong>Sheet</strong>: Displays the current and total number of sheets in that drawing set (e.g., Sheet 1 of 3).</p></li>
+<li><p><strong>Material</strong>: Identifies the specific material requirements for the part.</p></li>
+<li><p><strong>Finish</strong>: Displays any part finish specifications. These may be indicated for specific regions using leader lines.</p></li>
+<li><p><strong>Application</strong>: Used to identify the assemblies on which the part is used.</p></li>
+</ul>
+</div>
+<div id="default-tolerances" class="section level6 hasAnchor" number="1.1.0.1.3.2">
+<h6><span class="header-section-number">1.1.0.1.3.2</span> Default Tolerances<a href="design_and_drafting.html#default-tolerances" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p><strong>Default Tolerance Box</strong>: Displays the amount of variation allowed on dimension values that do not have a specific tolerance attached to them. These are usually categorized by the number of decimal places.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
+<img src="images/7-3-768x508.png" alt="Default Tolerances" width="50%" />
+<p class="caption">
+Figure 1.2: Default Tolerances
+</p>
+</div>
+<blockquote>
+<p><em>Example based on Figure 7-3:</em>
+* A two-place dimension of <strong>2.00</strong> allows for a <span class="math inline">\(\pm 0.02\)</span> tolerance (Range: <span class="math inline">\(1.98\)</span> to <span class="math inline">\(2.02\)</span>).
+* A three-place dimension of <strong>2.000</strong> allows for a <span class="math inline">\(\pm 0.010\)</span> tolerance (Range: <span class="math inline">\(1.990\)</span> to <span class="math inline">\(2.010\)</span>).</p>
+</blockquote>
+</div>
+<div id="document-control-and-layout" class="section level6 hasAnchor" number="1.1.0.1.3.3">
+<h6><span class="header-section-number">1.1.0.1.3.3</span> Document Control and Layout<a href="design_and_drafting.html#document-control-and-layout" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<ul>
+<li><strong>Revision</strong>: Revisions are changes made to the drawing after the original release to correct errors, improve design, or reduce manufacturing costs.
+<ul>
+<li>The <strong>revision level</strong> (letter or number) is located in the lower right.</li>
+<li>The <strong>revision history</strong> is typically located in the upper right of the sheet.</li>
+<li>A <strong>dash (-)</strong> or the letter <strong>“A”</strong> often indicates the initial release.</li>
+</ul></li>
+<li><strong>Zones</strong>: Sheet zones (using letters and numbers along the border) help locate particular details or views, which is especially beneficial on large-format drawings.</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+<div id="dimensioningrules" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Dimensioning Rules<a href="design_and_drafting.html#dimensioningrules" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+
+</div>
+<div id="tolerances" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Tolerances in Mechanical Design<a href="design_and_drafting.html#tolerances" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In mechanical engineering and manufacturing, no part can be produced to exact absolute dimensions every single time due to inherent variations in machinery, material properties, and environmental conditions. Therefore, designers must specify an acceptable range of variation. This chapter explores the fundamental concepts of tolerances, basic sizes, and allowances, as defined in standards such as ASME Y14.5 <span class="citation">(<a href="#ref-ASME_Y145_2018">American Society of Mechanical Engineers 2019</a>)</span>.</p>
+<div id="fundamental-concepts" class="section level3 hasAnchor" number="1.3.1">
+<h3><span class="header-section-number">1.3.1</span> Fundamental Concepts<a href="design_and_drafting.html#fundamental-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To understand tolerancing, we must first define three key terms:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Basic Size</strong>: The theoretical exact size from which limits of size are derived by the application of allowances and tolerances.</li>
+<li><strong>Tolerance</strong>: The total amount a specific dimension is permitted to vary. It is the difference between the maximum and minimum limits.</li>
+<li><strong>Allowance</strong>: An intentional difference between the maximum material limits of mating parts (e.g., the tightest fit between a shaft and a hole).</li>
+</ol>
+<p>Mathematically, if we denote the Upper Limit as <span class="math inline">\(L_{max}\)</span> and the Lower Limit as <span class="math inline">\(L_{min}\)</span>, the tolerance <span class="math inline">\(T\)</span> is calculated as:</p>
+<p><span class="math display">\[
+T = L_{max} - L_{min}
+\]</span></p>
+<p>These concepts apply universally, whether designing a cylindrical shaft diameter, a slot width, or the overall length of a prismatic part.</p>
+</div>
+<div id="tolerancing-methods" class="section level3 hasAnchor" number="1.3.2">
+<h3><span class="header-section-number">1.3.2</span> Tolerancing Methods<a href="design_and_drafting.html#tolerancing-methods" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>There are two primary methods used to express tolerances on technical drawings: <strong>Limit Dimensions</strong> and <strong>Plus-Minus Tolerancing</strong>.</p>
+<div id="limit-dimensions" class="section level4 hasAnchor" number="1.3.2.1">
+<h4><span class="header-section-number">1.3.2.1</span> Limit Dimensions<a href="design_and_drafting.html#limit-dimensions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In limit dimensioning, the high and low limits are specified directly. The machinist does not need to calculate the limits; they are explicitly stated.</p>
+<ul>
+<li><strong>Example</strong>: <span class="math inline">\(\begin{matrix} 25.05 \\ 24.95 \end{matrix}\)</span></li>
+</ul>
+</div>
+<div id="plus-minus-tolerancing" class="section level4 hasAnchor" number="1.3.2.2">
+<h4><span class="header-section-number">1.3.2.2</span> Plus-Minus Tolerancing<a href="design_and_drafting.html#plus-minus-tolerancing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>This method uses a basic size followed by a permissible variance. This category is further divided based on how the variance is distributed relative to the basic size.</p>
+<div id="equal-bilateral-tolerance" class="section level5 unnumbered hasAnchor">
+<h5>1. Equal Bilateral Tolerance<a href="design_and_drafting.html#equal-bilateral-tolerance" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The variation is permitted equally in both directions (plus and minus) from the basic size.</p>
+<blockquote>
+<p><strong>Example</strong>: <span class="math inline">\(25.00 \pm 0.05\)</span></p>
+</blockquote>
+</div>
+<div id="unequal-bilateral-tolerance" class="section level5 unnumbered hasAnchor">
+<h5>2. Unequal Bilateral Tolerance<a href="design_and_drafting.html#unequal-bilateral-tolerance" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The variation is permitted in both directions, but the amount differs.</p>
+<blockquote>
+<p><strong>Example</strong>: <span class="math inline">\(25.00 \,\, {}^{+0.05}_{-0.02}\)</span></p>
+</blockquote>
+</div>
+<div id="unilateral-tolerance" class="section level5 unnumbered hasAnchor">
+<h5>3. Unilateral Tolerance<a href="design_and_drafting.html#unilateral-tolerance" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The variation is permitted in only one direction (either positive or negative) from the basic size. The limit in the other direction is zero.</p>
+<blockquote>
+<p><strong>Example</strong>: <span class="math inline">\(25.00 \,\, {}^{+0.05}_{-0.00}\)</span></p>
+</blockquote>
+</div>
+</div>
+</div>
+<div id="specifying-limits-in-tolerancing" class="section level3 hasAnchor" number="1.3.3">
+<h3><span class="header-section-number">1.3.3</span> Specifying Limits in Tolerancing<a href="design_and_drafting.html#specifying-limits-in-tolerancing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When defining the permissible variation of a part, designers choose between specifying a range (two limits) or a single boundary (one limit) based on the functional requirements of the feature.</p>
+<div id="tolerance-with-two-limits-limit-dimensioning" class="section level4 hasAnchor" number="1.3.3.1">
+<h4><span class="header-section-number">1.3.3.1</span> Tolerance with Two Limits (Limit Dimensioning)<a href="design_and_drafting.html#tolerance-with-two-limits-limit-dimensioning" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In this method, the maximum and minimum dimensions are specified directly on the drawing. The tolerance is the absolute difference between these two values. This is the most direct method for a machinist to read, as it eliminates the need for mental math to find the boundaries.</p>
+<ul>
+<li><strong>Format</strong>: The limits are usually placed in a stack, with the high limit on top.</li>
+<li><strong>Calculation</strong>: <span class="math inline">\(Tolerance = Upper Limit - Lower Limit\)</span></li>
+<li><strong>Example</strong>: For a dimension specified as <span class="math inline">\(\begin{matrix} 1.505 \\ 1.495 \end{matrix}\)</span>
+<ul>
+<li>The <strong>Upper Limit</strong> is <span class="math inline">\(1.505\)</span></li>
+<li>The <strong>Lower Limit</strong> is <span class="math inline">\(1.495\)</span></li>
+<li>The <strong>Tolerance</strong> is <span class="math inline">\(0.010\)</span></li>
+</ul></li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<img src="images/Allowances_TwoLimits.png" alt="Allowances with two limits" width="50%" />
+<p class="caption">
+Figure 1.3: Allowances with two limits
+</p>
+</div>
+</div>
+<div id="tolerance-with-one-limit-single-limit" class="section level4 hasAnchor" number="1.3.3.2">
+<h4><span class="header-section-number">1.3.3.2</span> Tolerance with One Limit (Single Limit)<a href="design_and_drafting.html#tolerance-with-one-limit-single-limit" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Single-limit dimensioning is used when the dimension in one direction is not critical, or when the “other” limit is naturally constrained by the geometry or the manufacturing process. These are indicated by the suffixes <strong>MAX</strong> or <strong>MIN</strong>.</p>
+<ul>
+<li><strong>MAX (Maximum)</strong>: Specifies that the feature must not exceed the given value. The lower limit is often zero or determined by the part’s shape. This is commonly used for fillet radii or chamfers to prevent interference with a mating part.
+<ul>
+<li><em>Example</em>: <span class="math inline">\(R.015 \text{ MAX}\)</span></li>
+</ul></li>
+<li><strong>MIN (Minimum)</strong>: Specifies that the feature must be at least the given value. The upper limit is often determined by the material stock or is not functionally critical. This is commonly used for the depth of holes or the width of a bearing surface.
+<ul>
+<li><em>Example</em>: <span class="math inline">\(.500 \text{ MIN}\)</span> (Full Thread)</li>
+</ul></li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<img src="images/Allowances_SingleLimit.png" alt="Allowances with a single limit" width="50%" />
+<p class="caption">
+Figure 1.4: Allowances with a single limit
+</p>
+</div>
+<hr />
+</div>
+<div id="comparison-summary" class="section level4 hasAnchor" number="1.3.3.3">
+<h4><span class="header-section-number">1.3.3.3</span> Comparison Summary<a href="design_and_drafting.html#comparison-summary" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Method</th>
+<th align="left">Syntax</th>
+<th align="left">Primary Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Two Limits</strong></td>
+<td align="left"><span class="math inline">\(\begin{matrix} High \\ Low \end{matrix}\)</span></td>
+<td align="left">Critical fits (shafts, holes, mating surfaces).</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>One Limit (MAX)</strong></td>
+<td align="left"><span class="math inline">\(.010 \text{ MAX}\)</span></td>
+<td align="left">Clearance for corners, weight reduction, or edge breaks.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>One Limit (MIN)</strong></td>
+<td align="left"><span class="math inline">\(.500 \text{ MIN}\)</span></td>
+<td align="left">Minimum engagement for fasteners or structural thickness.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visualizing-tolerance-distributions" class="section level4 hasAnchor" number="1.3.3.4">
+<h4><span class="header-section-number">1.3.3.4</span> Visualizing Tolerance Distributions<a href="design_and_drafting.html#visualizing-tolerance-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>To better understand how manufactured parts align with these limits, we can visualize a production run. Figure <a href="design_and_drafting.html#fig:tolerance-plot">1.5</a> below simulates a batch of 1000 shafts manufactured with a target diameter of 25.0 mm and a tolerance of <span class="math inline">\(\pm 0.05\)</span> mm.</p>
+<div class="figure"><span style="display:block;" id="fig:tolerance-plot"></span>
+<img src="_main_files/figure-html/tolerance-plot-1.png" alt="Distribution of manufactured shaft diameters relative to tolerance limits." width="672" />
+<p class="caption">
+Figure 1.5: Distribution of manufactured shaft diameters relative to tolerance limits.
+</p>
+</div>
+<p>As seen in Figure <a href="design_and_drafting.html#fig:tolerance-plot">1.5</a>, the dashed red lines represent the Upper Specification Limit (USL) and Lower Specification Limit (LSL). Parts falling outside these lines would be rejected.</p>
+</div>
+</div>
+<div id="drawing-standards-metric-vs.-inch" class="section level3 hasAnchor" number="1.3.4">
+<h3><span class="header-section-number">1.3.4</span> Drawing Standards: Metric vs. Inch<a href="design_and_drafting.html#drawing-standards-metric-vs.-inch" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One of the most critical aspects of technical documentation is adhering to the specific syntax rules for Metric (SI) and Inch (Imperial) units. These rules differ significantly regarding zero suppression and decimal consistency.</p>
+<div id="metric-rules-si" class="section level4 hasAnchor" number="1.3.4.1">
+<h4><span class="header-section-number">1.3.4.1</span> Metric Rules (SI)<a href="design_and_drafting.html#metric-rules-si" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>When dimensioning in millimeters, the following rules apply:</p>
+<ul>
+<li><strong>Leading Zeros</strong>: For dimensions and tolerances less than 1 mm, a leading zero <strong>must</strong> be used.
+<ul>
+<li><em>Correct</em>: <span class="math inline">\(0.5\)</span></li>
+<li><em>Incorrect</em>: <span class="math inline">\(.5\)</span></li>
+</ul></li>
+<li><strong>Decimal Consistency</strong>: The number of decimal places <strong>can vary</strong> between the dimension and the tolerance.
+<ul>
+<li><em>Example</em>: <span class="math inline">\(25 \pm 0.25\)</span> (The basic size has 0 decimals; tolerance has 2).</li>
+</ul></li>
+<li><strong>Unilateral Zero</strong>: A zero in a unilateral tolerance is written as a single digit “0” without a plus or minus sign.
+<ul>
+<li><em>Example</em>: <span class="math inline">\(30 \,\, {}^{+0.1}_{0}\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div id="inch-rules-imperial" class="section level4 hasAnchor" number="1.3.4.2">
+<h4><span class="header-section-number">1.3.4.2</span> Inch Rules (Imperial)<a href="design_and_drafting.html#inch-rules-imperial" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>When dimensioning in inches, the conventions are distinct:</p>
+<ul>
+<li><strong>Leading Zeros</strong>: For dimensions and tolerances less than 1 inch, a leading zero is <strong>never</strong> used.
+<ul>
+<li><em>Correct</em>: <span class="math inline">\(.500\)</span></li>
+<li><em>Incorrect</em>: <span class="math inline">\(0.500\)</span></li>
+</ul></li>
+<li><strong>Decimal Consistency</strong>: The number of decimal places <strong>must be identical</strong> for the dimension and the tolerance.
+<ul>
+<li><em>Example</em>: <span class="math inline">\(1.000 \pm .005\)</span> (Both must show 3 decimal places).</li>
+</ul></li>
+<li><strong>Zeros in Tolerances</strong>:
+<ul>
+<li><strong>Bilateral</strong>: If a tolerance limit is zero, it still requires a plus or minus sign and must display the same number of decimal places as the dimension to express precision.</li>
+<li><em>Example</em>: <span class="math inline">\(1.000 \,\, {}^{+.005}_{-.000}\)</span></li>
+</ul></li>
+</ul>
+
+</div>
+</div>
+<div id="geometric-dimensioning-and-tolerancing-gdt" class="section level3 hasAnchor" number="1.3.5">
+<h3><span class="header-section-number">1.3.5</span> Geometric Dimensioning and Tolerancing (GD&amp;T)<a href="design_and_drafting.html#geometric-dimensioning-and-tolerancing-gdt" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="learning-objectives" class="section level4 unnumbered hasAnchor">
+<h4>Learning Objectives<a href="design_and_drafting.html#learning-objectives" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>By the end of this chapter, you will be able to:</p>
+<ul>
+<li>Understand the fundamental principles of GD&amp;T per ASME Y14.5 standards</li>
+<li>Differentiate between dimensional and geometric tolerances</li>
+<li>Apply datums, tolerance zones, and modifier symbols correctly</li>
+<li>Create and interpret feature control frames</li>
+<li>Understand the hierarchy of geometric controls</li>
+<li>Apply GD&amp;T to real-world engineering problems</li>
+<li>Use interactive visualizations to verify tolerance stack-up</li>
+</ul>
+</div>
+<div id="introduction-to-gdt" class="section level4 hasAnchor" number="1.3.5.1">
+<h4><span class="header-section-number">1.3.5.1</span> 1. Introduction to GD&amp;T<a href="design_and_drafting.html#introduction-to-gdt" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Geometric Dimensioning and Tolerancing (GD&amp;T) is a standardized method of specifying and communicating engineering tolerances. Unlike traditional plus-minus dimensioning, GD&amp;T uses a symbolic language that provides a clear, concise description of part geometry and allowable variations.</p>
+<div id="why-gdt-matters" class="section level5 hasAnchor" number="1.3.5.1.1">
+<h5><span class="header-section-number">1.3.5.1.1</span> Why GD&amp;T Matters<a href="design_and_drafting.html#why-gdt-matters" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Traditional dimensioning (Figure \<span class="citation">(<a href="#ref-ref"><strong>ref?</strong></a>)</span>(fig:traditional-vs-gdt)) can lead to:
+- Ambiguous interpretations of design intent
+- Excessive part cost due to overly tight tolerances
+- Functional failures due to under-constrained features
+- Increased manufacturing costs and waste</p>
+<p>GD&amp;T solves these problems by:
+- Clearly communicating design intent
+- Maximizing functional tolerance zones
+- Reducing manufacturing costs
+- Improving part interchangeability</p>
+<pre><code>## 
+## Attaching package: &#39;gridExtra&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     combine</code></pre>
+<div class="figure"><span style="display:block;" id="fig:traditional-vs-gdt"></span>
+<img src="_main_files/figure-html/traditional-vs-gdt-1.png" alt="Comparison: Traditional vs. GD&amp;T Dimensioning" width="672" />
+<p class="caption">
+Figure 1.6: Comparison: Traditional vs. GD&amp;T Dimensioning
+</p>
+</div>
+</div>
+</div>
+<div id="fundamental-principles" class="section level4 hasAnchor" number="1.3.5.2">
+<h4><span class="header-section-number">1.3.5.2</span> 2. Fundamental Principles<a href="design_and_drafting.html#fundamental-principles" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="the-rule-of-interchangeability" class="section level5 hasAnchor" number="1.3.5.2.1">
+<h5><span class="header-section-number">1.3.5.2.1</span> 2.1 The Rule of Interchangeability<a href="design_and_drafting.html#the-rule-of-interchangeability" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>GD&amp;T is built on the principle that parts must be interchangeable while satisfying functional requirements. This means:</p>
+<ul>
+<li>All parts produced to specification must fit and function together</li>
+<li>Tolerance zones maximize functional space</li>
+<li>Manufacturing processes can operate at economical levels</li>
+</ul>
+</div>
+<div id="key-definitions" class="section level5 hasAnchor" number="1.3.5.2.2">
+<h5><span class="header-section-number">1.3.5.2.2</span> 2.2 Key Definitions<a href="design_and_drafting.html#key-definitions" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><strong>Datum</strong>: A theoretically exact geometric reference (plane, line, or point) from which other geometric characteristics are measured.</p>
+<p><strong>Tolerance Zone</strong>: The allowable area or volume within which a feature must lie.</p>
+<p><strong>Feature of Size</strong>: A cylindrical feature (hole, shaft) or a pair of parallel surfaces (slot width) to which a tolerance is applied.</p>
+<p><strong>Maximum Material Condition (MMC)</strong>: The condition where a feature contains the maximum amount of material (smallest hole, largest shaft).</p>
+<p><strong>Least Material Condition (LMC)</strong>: The condition where a feature contains the minimum amount of material (largest hole, smallest shaft).</p>
+</div>
+</div>
+<div id="the-feature-control-frame" class="section level4 hasAnchor" number="1.3.5.3">
+<h4><span class="header-section-number">1.3.5.3</span> 3. The Feature Control Frame<a href="design_and_drafting.html#the-feature-control-frame" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+The Feature Control Frame (FCF) is the foundation of GD&amp;T notation. It’s a rectangular box divided into compartments that specify the geometric characteristic and its requirements.
+<div class="figure"><span style="display:block;" id="fig:fcf-diagram"></span>
+<img src="_main_files/figure-html/fcf-diagram-1.png" alt="Feature Control Frame Structure" width="672" />
+<p class="caption">
+Figure 1.7: Feature Control Frame Structure
+</p>
+</div>
+<div id="component-breakdown" class="section level5 hasAnchor" number="1.3.5.3.1">
+<h5><span class="header-section-number">1.3.5.3.1</span> 3.1 Component Breakdown<a href="design_and_drafting.html#component-breakdown" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="28%" />
+<col width="23%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Position</th>
+<th>Component</th>
+<th>Content</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Geometric Characteristic Symbol</td>
+<td>Defines the type of control</td>
+<td>⊙ (Position), ⊥ (Perpendicular), ∥ (Parallel)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Tolerance Value</td>
+<td>Diameter and numerical value</td>
+<td>Ø 0.5 mm, 0.3 mm</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Datum A</td>
+<td>Primary datum reference</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Datum B</td>
+<td>Secondary datum reference</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Datum C</td>
+<td>Tertiary datum reference</td>
+<td>C</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="modifier-symbols" class="section level5 hasAnchor" number="1.3.5.3.2">
+<h5><span class="header-section-number">1.3.5.3.2</span> 3.2 Modifier Symbols<a href="design_and_drafting.html#modifier-symbols" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Modifiers are used after the tolerance value and datum references to specify material condition constraints:</p>
+<ul>
+<li><strong>M (Maximum Material Condition)</strong>: Tolerance increases as feature departs from MMC</li>
+<li><strong>L (Least Material Condition)</strong>: Tolerance increases as feature departs from LMC</li>
+<li><strong>S (Regardless of Feature Size)</strong>: Tolerance remains constant regardless of feature size</li>
+</ul>
+<table>
+<caption><span id="tab:modifiers-table">Table 1.1: </span>Common GD&amp;T Modifiers and Symbols</caption>
+<colgroup>
+<col width="9%" />
+<col width="32%" />
+<col width="58%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Name</th>
+<th align="left">Application</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Ø</td>
+<td align="left">Diameter</td>
+<td align="left">Circular tolerance zone</td>
+</tr>
+<tr class="even">
+<td align="left">⊙</td>
+<td align="left">Position</td>
+<td align="left">Indicates positional tolerance</td>
+</tr>
+<tr class="odd">
+<td align="left">M</td>
+<td align="left">Max Material Condition</td>
+<td align="left">Tolerance varies with feature size</td>
+</tr>
+<tr class="even">
+<td align="left">L</td>
+<td align="left">Least Material Condition</td>
+<td align="left">Tolerance varies inversely with feature size</td>
+</tr>
+<tr class="odd">
+<td align="left">S</td>
+<td align="left">Regardless of Size</td>
+<td align="left">Fixed tolerance, independent of size</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="the-14-geometric-characteristics" class="section level4 hasAnchor" number="1.3.5.4">
+<h4><span class="header-section-number">1.3.5.4</span> 4. The 14 Geometric Characteristics<a href="design_and_drafting.html#the-14-geometric-characteristics" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>GD&amp;T defines 14 geometric characteristics organized into four categories:</p>
+<div id="form-controls-no-datum-required" class="section level5 hasAnchor" number="1.3.5.4.1">
+<h5><span class="header-section-number">1.3.5.4.1</span> 4.1 Form Controls (No Datum Required)<a href="design_and_drafting.html#form-controls-no-datum-required" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>These controls constrain the shape of individual features.</p>
+<table>
+<caption><span id="tab:form-controls">Table 1.2: </span>Form Control Characteristics</caption>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Name</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">⌢</td>
+<td align="left">Straightness</td>
+<td align="left">All points lie on straight line</td>
+</tr>
+<tr class="even">
+<td align="left">⌭</td>
+<td align="left">Flatness</td>
+<td align="left">All points lie on same plane</td>
+</tr>
+<tr class="odd">
+<td align="left">⌒</td>
+<td align="left">Circularity</td>
+<td align="left">All points equidistant from center</td>
+</tr>
+<tr class="even">
+<td align="left">◯</td>
+<td align="left">Cylindricity</td>
+<td align="left">All points equidistant from axis</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interactive Example: Straightness</strong>
+<img src="_main_files/figure-html/straightness-demo-1.png" alt="" width="672" /></p>
+</div>
+<div id="orientation-controls-datum-required" class="section level5 hasAnchor" number="1.3.5.4.2">
+<h5><span class="header-section-number">1.3.5.4.2</span> 4.2 Orientation Controls (Datum Required)<a href="design_and_drafting.html#orientation-controls-datum-required" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>These controls define how features are oriented relative to a datum.</p>
+<table>
+<caption><span id="tab:orientation-controls">Table 1.3: </span>Orientation Control Characteristics</caption>
+<colgroup>
+<col width="7%" />
+<col width="17%" />
+<col width="35%" />
+<col width="40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Name</th>
+<th align="left">Definition</th>
+<th align="left">Use_Case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">⊥</td>
+<td align="left">Perpendicularity</td>
+<td align="left">Feature is perpendicular to datum</td>
+<td align="left">Holes perpendicular to mounting surface</td>
+</tr>
+<tr class="even">
+<td align="left">∥</td>
+<td align="left">Parallelism</td>
+<td align="left">Feature is parallel to datum</td>
+<td align="left">Surfaces parallel for assembly</td>
+</tr>
+<tr class="odd">
+<td align="left">∠</td>
+<td align="left">Angularity</td>
+<td align="left">Feature at specific angle to datum</td>
+<td align="left">Angled surfaces at specific degrees</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="location-controls-datum-required" class="section level5 hasAnchor" number="1.3.5.4.3">
+<h5><span class="header-section-number">1.3.5.4.3</span> 4.3 Location Controls (Datum Required)<a href="design_and_drafting.html#location-controls-datum-required" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>These controls define where features are positioned.</p>
+<table>
+<caption><span id="tab:location-controls">Table 1.4: </span>Location Control Characteristics</caption>
+<colgroup>
+<col width="8%" />
+<col width="17%" />
+<col width="50%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Name</th>
+<th align="left">Definition</th>
+<th align="left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">⊙</td>
+<td align="left">Position</td>
+<td align="left">Feature location relative to datums</td>
+<td align="left">Bolt hole pattern</td>
+</tr>
+<tr class="even">
+<td align="left">⊕</td>
+<td align="left">Concentricity</td>
+<td align="left">Feature axis coincident with datum axis</td>
+<td align="left">Concentric bores</td>
+</tr>
+<tr class="odd">
+<td align="left">◉</td>
+<td align="left">Symmetry</td>
+<td align="left">Feature symmetrical about datum plane</td>
+<td align="left">Symmetrical slot</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interactive Example: Positional Tolerance</strong></p>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 51.5, y = 50.5, label = &quot;Datum Intersection&quot;, :
+## Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 50, y = 49.3, label = &quot;Ø0.7 mm\\nTolerance
+## Zone&quot;, : Ignoring unknown parameters: `fontsize`</code></pre>
+<div class="figure"><span style="display:block;" id="fig:position-demo"></span>
+<img src="_main_files/figure-html/position-demo-1.png" alt="Positional Tolerance Visualization" width="672" />
+<p class="caption">
+Figure 1.8: Positional Tolerance Visualization
+</p>
+</div>
+</div>
+</div>
+<div id="runout-controls-datum-required" class="section level4 hasAnchor" number="1.3.5.5">
+<h4><span class="header-section-number">1.3.5.5</span> 4.4 Runout Controls (Datum Required)<a href="design_and_drafting.html#runout-controls-datum-required" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>These controls define circular or total runout of features about a datum axis.</p>
+<table>
+<caption><span id="tab:runout-controls">Table 1.5: </span>Runout Control Characteristics</caption>
+<colgroup>
+<col width="7%" />
+<col width="16%" />
+<col width="50%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Name</th>
+<th align="left">Definition</th>
+<th align="left">Application</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">⌬</td>
+<td align="left">Circular Runout</td>
+<td align="left">Runout at each circular element about datum axis</td>
+<td align="left">Rotating bearing surfaces</td>
+</tr>
+<tr class="even">
+<td align="left">⌭</td>
+<td align="left">Total Runout</td>
+<td align="left">Total runout across all circular elements</td>
+<td align="left">Shaft wobble tolerance</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="datum-systems" class="section level3 hasAnchor" number="1.3.6">
+<h3><span class="header-section-number">1.3.6</span> 5. Datum Systems<a href="design_and_drafting.html#datum-systems" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Datums are the foundation of GD&amp;T. They establish the reference framework from which all tolerances are applied.</p>
+<div id="datum-selection-hierarchy" class="section level4 hasAnchor" number="1.3.6.1">
+<h4><span class="header-section-number">1.3.6.1</span> 5.1 Datum Selection Hierarchy<a href="design_and_drafting.html#datum-selection-hierarchy" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The datum system typically follows a three-plane reference:</p>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 5, y = 3.5, label = &quot;PRIMARY DATUM
+## (A)\\nLargest, most stable surface&quot;, : Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 9, y = 3.5, label = &quot;SECONDARY\\nDATUM (B)&quot;, :
+## Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 5, y = 6.75, label = &quot;TERTIARY DATUM (C)&quot;, :
+## Ignoring unknown parameters: `fontsize`</code></pre>
+<div class="figure"><span style="display:block;" id="fig:datum-system"></span>
+<img src="_main_files/figure-html/datum-system-1.png" alt="Three-Plane Datum System" width="672" />
+<p class="caption">
+Figure 1.9: Three-Plane Datum System
+</p>
+</div>
+</div>
+<div id="datum-reference-frame" class="section level4 hasAnchor" number="1.3.6.2">
+<h4><span class="header-section-number">1.3.6.2</span> 5.2 Datum Reference Frame<a href="design_and_drafting.html#datum-reference-frame" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Datum Reference Frame (DRF) is a coordinate system established by the datums:</p>
+<table>
+<caption><span id="tab:datum-ref-frame">Table 1.6: </span>Datum Reference Frame Structure</caption>
+<colgroup>
+<col width="12%" />
+<col width="15%" />
+<col width="20%" />
+<col width="30%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Position</th>
+<th align="left">Abbreviation</th>
+<th align="left">Constraint</th>
+<th align="left">Feature</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Primary</td>
+<td align="left">A</td>
+<td align="left">3 DOF restricted</td>
+<td align="left">Largest plane/surface</td>
+<td align="left">Establish origin</td>
+</tr>
+<tr class="even">
+<td align="left">Secondary</td>
+<td align="left">B</td>
+<td align="left">2 DOF restricted</td>
+<td align="left">Perpendicular surface</td>
+<td align="left">Establish X-axis</td>
+</tr>
+<tr class="odd">
+<td align="left">Tertiary</td>
+<td align="left">C</td>
+<td align="left">1 DOF restricted</td>
+<td align="left">Edge or smallest feature</td>
+<td align="left">Establish Y-axis</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="material-conditions-and-bonus-tolerances" class="section level3 hasAnchor" number="1.3.7">
+<h3><span class="header-section-number">1.3.7</span> 6. Material Conditions and Bonus Tolerances<a href="design_and_drafting.html#material-conditions-and-bonus-tolerances" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="maximum-material-condition-mmc" class="section level4 hasAnchor" number="1.3.7.1">
+<h4><span class="header-section-number">1.3.7.1</span> 6.1 Maximum Material Condition (MMC)<a href="design_and_drafting.html#maximum-material-condition-mmc" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>MMC is the condition where a feature contains the maximum amount of material:
+- Smallest hole diameter
+- Largest shaft diameter
+- Widest slot</p>
+<pre><code>## Warning in geom_text(aes(label = diameter), vjust = -0.5, fontsize = 5, :
+## Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning: Removed 3 rows containing missing values or values outside the scale
+## range (`geom_col()`).</code></pre>
+<div class="figure"><span style="display:block;" id="fig:mmc-demo"></span>
+<img src="_main_files/figure-html/mmc-demo-1.png" alt="Maximum Material Condition Example" width="672" />
+<p class="caption">
+Figure 1.10: Maximum Material Condition Example
+</p>
+</div>
+</div>
+<div id="bonus-tolerance" class="section level4 hasAnchor" number="1.3.7.2">
+<h4><span class="header-section-number">1.3.7.2</span> 6.2 Bonus Tolerance<a href="design_and_drafting.html#bonus-tolerance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>When using MMC modifier, a <strong>bonus tolerance</strong> is granted as the feature departs from MMC. This maximizes functional tolerance while ensuring assembly.</p>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 9.9, y = 0.35, label = &quot;Base Tolerance = 0.4
+## mm&quot;, : Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 10.1, y = 0.65, label = &quot;Bonus Tolerance =
+## Actual - MMC&quot;, : Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale
+## range (`geom_line()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale
+## range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale
+## range (`geom_ribbon()`).</code></pre>
+<div class="figure"><span style="display:block;" id="fig:bonus-tolerance"></span>
+<img src="_main_files/figure-html/bonus-tolerance-1.png" alt="Bonus Tolerance Calculation" width="672" />
+<p class="caption">
+Figure 1.11: Bonus Tolerance Calculation
+</p>
+</div>
+</div>
+</div>
+<div id="common-gdt-applications" class="section level3 hasAnchor" number="1.3.8">
+<h3><span class="header-section-number">1.3.8</span> 7. Common GD&amp;T Applications<a href="design_and_drafting.html#common-gdt-applications" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="bolt-hole-pattern" class="section level4 hasAnchor" number="1.3.8.1">
+<h4><span class="header-section-number">1.3.8.1</span> 7.1 Bolt Hole Pattern<a href="design_and_drafting.html#bolt-hole-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Problem</strong>: Ensure bolt holes align for assembly.</p>
+<p><strong>Solution</strong>: Use position tolerance relative to three datums.</p>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 5, y = 10, label = &quot;10&quot;, fontsize = 3):
+## Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 25, y = 5, label = &quot;25&quot;, fontsize = 3, color =
+## &quot;red&quot;, : Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 25, y = 50, label = &quot;Position: Ø1.5 @ MMC | A |
+## B&quot;, : Ignoring unknown parameters: `fontsize` and `bbox`</code></pre>
+<div class="figure"><span style="display:block;" id="fig:bolt-pattern"></span>
+<img src="_main_files/figure-html/bolt-pattern-1.png" alt="Bolt Hole Pattern with GD&amp;T" width="672" />
+<p class="caption">
+Figure 1.12: Bolt Hole Pattern with GD&amp;T
+</p>
+</div>
+</div>
+<div id="shaft-runout-control" class="section level4 hasAnchor" number="1.3.8.2">
+<h4><span class="header-section-number">1.3.8.2</span> 7.2 Shaft Runout Control<a href="design_and_drafting.html#shaft-runout-control" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Problem</strong>: Ensure rotating shaft doesn’t wobble excessively.</p>
+<p><strong>Solution</strong>: Apply total runout tolerance about the shaft axis (Datum A).</p>
+<pre><code>## Warning in annotate(&quot;text&quot;, x = 0.5, y = 6, label = &quot;Datum A\\n(Shaft Axis)&quot;, :
+## Ignoring unknown parameters: `fontsize`</code></pre>
+<div class="figure"><span style="display:block;" id="fig:shaft-runout"></span>
+<img src="_main_files/figure-html/shaft-runout-1.png" alt="Shaft Runout Control" width="672" />
+<p class="caption">
+Figure 1.13: Shaft Runout Control
+</p>
+</div>
+</div>
+</div>
+<div id="tolerance-stack-up-analysis" class="section level3 hasAnchor" number="1.3.9">
+<h3><span class="header-section-number">1.3.9</span> 8. Tolerance Stack-Up Analysis<a href="design_and_drafting.html#tolerance-stack-up-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="worst-case-analysis" class="section level4 hasAnchor" number="1.3.9.1">
+<h4><span class="header-section-number">1.3.9.1</span> 8.1 Worst-Case Analysis<a href="design_and_drafting.html#worst-case-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<pre><code>## Warning in geom_text(aes(label = paste(Total_Length, &quot;mm&quot;)), vjust = -0.5, :
+## Ignoring unknown parameters: `fontsize`</code></pre>
+<pre><code>## Warning: Removed 3 rows containing missing values or values outside the scale
+## range (`geom_col()`).</code></pre>
+<div class="figure"><span style="display:block;" id="fig:stack-up-worst"></span>
+<img src="_main_files/figure-html/stack-up-worst-1.png" alt="Worst-Case Tolerance Stack-Up" width="672" />
+<p class="caption">
+Figure 1.14: Worst-Case Tolerance Stack-Up
+</p>
+</div>
+</div>
+<div id="statistical-stack-up-optional-advanced-topic" class="section level4 hasAnchor" number="1.3.9.2">
+<h4><span class="header-section-number">1.3.9.2</span> 8.2 Statistical Stack-Up (Optional Advanced Topic)<a href="design_and_drafting.html#statistical-stack-up-optional-advanced-topic" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+Statistical stack-up uses probability to reduce required tolerances:
+<div class="figure"><span style="display:block;" id="fig:stack-up-statistical"></span>
+<img src="_main_files/figure-html/stack-up-statistical-1.png" alt="Statistical vs. Worst-Case Stack-Up" width="672" />
+<p class="caption">
+Figure 1.15: Statistical vs. Worst-Case Stack-Up
+</p>
+</div>
+</div>
+</div>
+<div id="practical-exercises" class="section level3 hasAnchor" number="1.3.10">
+<h3><span class="header-section-number">1.3.10</span> 9. Practical Exercises<a href="design_and_drafting.html#practical-exercises" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="exercise-1-interpreting-a-feature-control-frame" class="section level4 hasAnchor" number="1.3.10.1">
+<h4><span class="header-section-number">1.3.10.1</span> Exercise 1: Interpreting a Feature Control Frame<a href="design_and_drafting.html#exercise-1-interpreting-a-feature-control-frame" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Given</strong>: A part with the following FCF:</p>
+<pre><code>┌─────────────────────────────────┐
+│ ⊙    │ Ø0.8 │ A │ B │ C │
+│      │      │   │   │   │
+└─────────────────────────────────┘</code></pre>
+<p><strong>Question</strong>:
+- What type of control is being applied?
+- What is the tolerance value?
+- How many datums are referenced?
+- In what order should datums be established?</p>
+<p><strong>Answer</strong>:
+This is a <strong>position control</strong> (⊙) with:
+- Tolerance: Ø0.8 mm (circular zone)
+- Three datums: A (primary), B (secondary), C (tertiary)
+- Datum establishment order: A (largest plane) → B (perpendicular) → C (tertiary reference)</p>
+</div>
+<div id="exercise-2-applying-gdt-to-a-bolt-hole" class="section level4 hasAnchor" number="1.3.10.2">
+<h4><span class="header-section-number">1.3.10.2</span> Exercise 2: Applying GD&amp;T to a Bolt Hole<a href="design_and_drafting.html#exercise-2-applying-gdt-to-a-bolt-hole" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Design requirement</strong>: Four bolt holes arranged in a square (0° spacing) with hole diameter Ø10 mm on a 40 mm × 40 mm grid. Holes must align within 0.5 mm for assembly.</p>
+<p><strong>Your task</strong>: Create a GD&amp;T specification for this requirement.</p>
+<p><strong>Solution</strong>:</p>
+<pre><code>- Primary Datum A: Bottom face (mounting surface)
+- Secondary Datum B: Left edge
+- Tertiary Datum C: Front edge
+- Position tolerance: ⊙ Ø0.5 @ A B C
+  (Circular tolerance zone, 0.5 mm diameter)</code></pre>
+</div>
+<div id="exercise-3-tolerance-stack-up-problem" class="section level4 hasAnchor" number="1.3.10.3">
+<h4><span class="header-section-number">1.3.10.3</span> Exercise 3: Tolerance Stack-Up Problem<a href="design_and_drafting.html#exercise-3-tolerance-stack-up-problem" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Given</strong>:
+- Part 1: 10.0 ± 0.1 mm
+- Part 2: 8.0 ± 0.15 mm
+- Part 3: 6.0 ± 0.1 mm</p>
+<p><strong>Calculate</strong>:
+- Minimum total length
+- Maximum total length
+- Total tolerance stack-up</p>
+<p><strong>Solution</strong>:</p>
+<pre><code>## Minimum total length: 23.65 mm\n</code></pre>
+<pre><code>## Nominal total length: 24 mm\n</code></pre>
+<pre><code>## Maximum total length: 24.35 mm\n</code></pre>
+<pre><code>## Total tolerance stack-up: ± 0.35 mm\n</code></pre>
+</div>
+</div>
+<div id="classroom-activity-interactive-tolerance-design" class="section level3 hasAnchor" number="1.3.11">
+<h3><span class="header-section-number">1.3.11</span> 10. Classroom Activity: Interactive Tolerance Design<a href="design_and_drafting.html#classroom-activity-interactive-tolerance-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="summary-and-key-takeaways" class="section level3 hasAnchor" number="1.3.12">
+<h3><span class="header-section-number">1.3.12</span> 11. Summary and Key Takeaways<a href="design_and_drafting.html#summary-and-key-takeaways" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>GD&amp;T provides unambiguous communication</strong> of engineering design intent</li>
+<li><strong>Datum systems establish reference frameworks</strong> that organize tolerance zones</li>
+<li><strong>Bonus tolerances reward tighter fits</strong> with additional positional tolerance</li>
+<li><strong>The 14 geometric characteristics</strong> address form, orientation, location, and runout</li>
+<li><strong>Proper application</strong> improves manufacturability, reduces cost, and ensures assembly</li>
+</ul>
+</div>
+<div id="additional-resources" class="section level3 hasAnchor" number="1.3.13">
+<h3><span class="header-section-number">1.3.13</span> 12. Additional Resources<a href="design_and_drafting.html#additional-resources" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>ASME Y14.5-2018: Dimensioning and Tolerancing</li>
+<li>ISO 1101: Geometrical Product Specifications</li>
+<li>GD&amp;T training videos and webinars</li>
+<li>CAD software built-in GD&amp;T annotation tools</li>
+</ul>
+<hr />
+</div>
+<div id="answers-to-classroom-exercises" class="section level3 unnumbered hasAnchor">
+<h3>Answers to Classroom Exercises<a href="design_and_drafting.html#answers-to-classroom-exercises" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Exercise 1 Answer</strong>: Position control, Ø0.8 mm tolerance, 3 datums
+<strong>Exercise 2 Answer</strong>: Position ⊙ Ø0.5 @ A B C
+<strong>Exercise 3 Answer</strong>: Min = 23.55 mm, Max = 24.35 mm, Stack = ±0.4 mm</p>
+
+</div>
+</div>
+<div id="fits" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Engineering Fits and Tolerances<a href="design_and_drafting.html#fits" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In precision manufacturing, the relationship between two mating parts—typically a hole and a shaft—is defined by the “fit.” Understanding imperial fits is crucial for ensuring that mechanical assemblies function correctly, whether they need to slide freely or be permanently locked together.</p>
+<div id="the-concept-of-basis-systems" class="section level3 hasAnchor" number="1.4.1">
+<h3><span class="header-section-number">1.4.1</span> The Concept of Basis Systems<a href="design_and_drafting.html#the-concept-of-basis-systems" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before diving into the types of fits, we must establish the reference point for the tolerance. In the imperial system, we generally use one of two approaches:</p>
+<ul>
+<li><strong>Hole Basis System</strong>: The hole size is kept constant (usually at the basic size), and the shaft size is varied to achieve the desired fit. This is the most common industry standard because it is easier to drill or ream a hole to a standard size than it is to precision-grind a shaft.</li>
+<li><strong>Shaft Basis System</strong>: The shaft size is kept constant, and the hole size is varied. This is typically reserved for specific cases, such as when a single shaft must host multiple components with different fit requirements.</li>
+</ul>
+<hr />
+</div>
+<div id="imperial-fits" class="section level3 hasAnchor" number="1.4.2">
+<h3><span class="header-section-number">1.4.2</span> Imperial Fits<a href="design_and_drafting.html#imperial-fits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Imperial fits are categorized by their function and the resulting “allowance” (the minimum clearance or maximum interference) between parts.</p>
+<div id="a-clearance-fits" class="section level4 unnumbered hasAnchor">
+<h4>a) Clearance Fits<a href="design_and_drafting.html#a-clearance-fits" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Clearance fits always provide a positive space between the hole and the shaft. This ensures the parts can move or rotate.</p>
+<ul>
+<li><strong>Running or Sliding Fits (RC)</strong>: Intended to provide a similar running performance with suitable lubrication allowance.</li>
+<li><strong>Locational Clearance Fits (LC)</strong>: Designed for parts that are normally stationary but can be freely assembled or disassembled.</li>
+</ul>
+</div>
+<div id="b-interference-fits" class="section level4 unnumbered hasAnchor">
+<h4>b) Interference Fits<a href="design_and_drafting.html#b-interference-fits" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Interference fits (or “press fits”) occur when the shaft is intentionally larger than the hole.</p>
+<ul>
+<li><strong>Force and Shrink Fits (FN)</strong>: These require significant force or thermal expansion/contraction (e.g., heating the hole or freezing the shaft) to assemble. They are used for permanent attachments.</li>
+</ul>
+</div>
+<div id="c-transition-fits-locational" class="section level4 unnumbered hasAnchor">
+<h4>c) Transition Fits (Locational)<a href="design_and_drafting.html#c-transition-fits-locational" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Transition fits (<strong>LT</strong>) are the middle ground. Depending on the actual size of the manufactured parts within their tolerance zones, the result could be either a slight clearance or a slight interference. These are used where accurate location is important, but a small amount of clearance or interference is permissible.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
+<img src="images/C20_F02_pg145.jpg" alt="Fit Categories [@jensen2015interpreting]" width="75%" />
+<p class="caption">
+Figure 1.16: Fit Categories <span class="citation">(<a href="#ref-jensen2015interpreting">Branoff, Jensen, and Helsel 2015</a>)</span>
+</p>
+</div>
+</div>
+<div id="description-of-imperial-fits" class="section level4 hasAnchor" number="1.4.2.1">
+<h4><span class="header-section-number">1.4.2.1</span> Description of Imperial Fits<a href="design_and_drafting.html#description-of-imperial-fits" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The classes of fits are arranged in three general groups: running and sliding fits, locational fits, and force fits. These classifications ensure that mechanical components interact with the intended level of friction, precision, and permanence <span class="citation">(<a href="#ref-jensen2015interpreting">Branoff, Jensen, and Helsel 2015</a>)</span>.</p>
+<div id="running-fits" class="section level5 hasAnchor" number="1.4.2.1.1">
+<h5><span class="header-section-number">1.4.2.1.1</span> Running and Sliding Fits (RC)<a href="design_and_drafting.html#running-fits" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Running and sliding fits are intended to provide a similar running performance, with suitable lubrication allowance, throughout the range of sizes. The clearances for the first two classes, used chiefly as slide fits, increase more slowly with the diameter than for the other classes so that accurate location is maintained even at the expense of free relative motion.</p>
+<ul>
+<li><strong>RC 1 Close sliding fits</strong>: Intended for the accurate location of parts that must assemble without perceptible play.</li>
+<li><strong>RC 2 Sliding fits</strong>: Intended for accurate location, but with greater maximum clearance than class RC 1. Parts move and turn easily but are not intended to run freely; larger sizes may seize with small temperature changes.</li>
+<li><strong>RC 3 Precision running fits</strong>: The closest fits expected to run freely. Intended for precision work at slow speeds and light journal pressures. Not suitable where appreciable temperature differences are likely.</li>
+<li><strong>RC 4 Close running fits</strong>: Intended chiefly for running fits on accurate machinery with moderate surface speeds and journal pressures, where accurate location and minimum play are desired.</li>
+<li><strong>RC 5 and RC 6 Medium running fits</strong>: Intended for higher running speeds, heavy journal pressures, or both.</li>
+<li><strong>RC 7 Free running fits</strong>: Intended for use where accuracy is not essential, or where large temperature variations are likely to be encountered.</li>
+<li><strong>RC 8 and RC 9 Loose running fits</strong>: Intended for use where wide commercial tolerances may be necessary, together with an allowance on the external member.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
+<img src="images/ANSI_ASME_B41_RC1_4.png" alt="[RC1 to RC4](images/ANSI_ASME_B41_RC1_4.png)" width="75%" />
+<p class="caption">
+Figure 1.17: <a href="images/ANSI_ASME_B41_RC1_4.png">RC1 to RC4</a>
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
+<img src="images/ANSI_ASME_B41_RC5_9.png" alt="[RC5 to RC9](images/ANSI_ASME_B41_RC5_9.png)" width="75%" />
+<p class="caption">
+Figure 1.18: <a href="images/ANSI_ASME_B41_RC5_9.png">RC5 to RC9</a>
+</p>
+</div>
+<hr />
+</div>
+<div id="locational-fits" class="section level5 hasAnchor" number="1.4.2.1.2">
+<h5><span class="header-section-number">1.4.2.1.2</span> Locational Fits (LC, LT, and LN)<a href="design_and_drafting.html#locational-fits" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Locational fits are intended to determine only the location of the mating parts; they may provide rigid or accurate location (as with interference fits) or provide some freedom of location (as with clearance fits).</p>
+<ul>
+<li><strong>LC Locational clearance fits</strong>: Intended for parts that are normally stationary but can be freely assembled or disassembled. They range from snug fits to looser fastener fits.</li>
+<li><strong>LT Locational transition fits</strong>: A compromise between clearance and interference for applications where accuracy of location is important but a small amount of either clearance or interference is permissible.</li>
+<li><strong>LN Locational interference fits</strong>: Used where accuracy of location is of prime importance, providing rigidity and alignment with no special requirements for bore pressure.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
+<img src="images/ANSI_ASME_B41_LC1_5.png" alt="[LC1 to LC5](images/ANSI_ASME_B41_LC1_5.png)" width="75%" />
+<p class="caption">
+Figure 1.19: <a href="images/ANSI_ASME_B41_LC1_5.png">LC1 to LC5</a>
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
+<img src="images/ANSI_ASME_B41_LC6_11.png" alt="[LC6 to LC11](images/ANSI_ASME_B41_LC6_11.png)" width="75%" />
+<p class="caption">
+Figure 1.20: <a href="images/ANSI_ASME_B41_LC6_11.png">LC6 to LC11</a>
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-10"></span>
+<img src="images/ANSI_ASME_B41_LT1_6.png" alt="[LT1 to LT6](images/ANSI_ASME_B41_LT1_6.png)" width="75%" />
+<p class="caption">
+Figure 1.21: <a href="images/ANSI_ASME_B41_LT1_6.png">LT1 to LT6</a>
+</p>
+</div>
+<hr />
+</div>
+<div id="force-fits" class="section level5 hasAnchor" number="1.4.2.1.3">
+<h5><span class="header-section-number">1.4.2.1.3</span> Force Fits (FN)<a href="design_and_drafting.html#force-fits" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Force or shrink fits constitute a special type of interference fit, normally characterized by maintenance of constant bore pressures throughout the range of sizes. As shown in the mathematical section of Chapter <a href="design_and_drafting.html#imperial-fits">1.4.2</a>, the interference varies almost directly with diameter.</p>
+<ul>
+<li><strong>FN 1 Light drive fits</strong>: Require light assembly pressures and produce more or less permanent assemblies. Suitable for thin sections or long fits.</li>
+<li><strong>FN 2 Medium drive fits</strong>: Suitable for ordinary steel parts or for shrink fits on light sections. These are the tightest fits typically used with high-grade cast-iron external members.</li>
+<li><strong>FN 3 Heavy drive fits</strong>: Suitable for heavier steel parts or for shrink fits in medium sections.</li>
+<li><strong>FN 4 and FN 5 Force fits</strong>: Suitable for parts that can be highly stressed or for shrink fits where the heavy pressing forces required are impractical.</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-11"></span>
+<img src="images/ANSI_ASME_B41_FN1_5.png" alt="[FN1 to FN5 small diameters](images/ANSI_ASME_B41_FN1_5.png)" width="75%" />
+<p class="caption">
+Figure 1.22: <a href="images/ANSI_ASME_B41_FN1_5.png">FN1 to FN5 small diameters</a>
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-12"></span>
+<img src="images/ANSI_ASME_B41_FN1_5_big.png" alt="[FN1 to FN5 big diameters](images/ANSI_ASME_B41_FN1_5_big.png)" width="75%" />
+<p class="caption">
+Figure 1.23: <a href="images/ANSI_ASME_B41_FN1_5_big.png">FN1 to FN5 big diameters</a>
+</p>
+</div>
+<blockquote>
+<p><strong>Note:</strong> For other numerical limits of clearance or interference for these classes, refer to the standard ANSI B4.1 tables.</p>
+</blockquote>
+<hr />
+<hr />
+</div>
+</div>
+</div>
+<div id="metric-fits" class="section level3 hasAnchor" number="1.4.3">
+<h3><span class="header-section-number">1.4.3</span> Metric Fits and the ISO Letter System<a href="design_and_drafting.html#metric-fits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In precision engineering, the relationship between two mating parts—typically a hole and a shaft—is defined by a “fit.” The ISO system uses a specific alphanumeric code to define the tolerances of these parts, ensuring that components manufactured in different locations will assemble correctly according to <span class="citation">(<a href="#ref-ansi_b41">American National Standards Institute 1967</a>)</span>.</p>
+<div id="the-letter-system-holes-vs.-shafts" class="section level4 hasAnchor" number="1.4.3.1">
+<h4><span class="header-section-number">1.4.3.1</span> The Letter System: Holes vs. Shafts<a href="design_and_drafting.html#the-letter-system-holes-vs.-shafts" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The fundamental rule of the metric tolerance system is the distinction between internal and external features through the use of character casing:</p>
+<ul>
+<li><strong>Capital Letters (A–ZC):</strong> Used exclusively for <strong>Internal Features</strong> (e.g., Holes).</li>
+<li><strong>Lower-case Letters (a–zc):</strong> Used exclusively for <strong>External Features</strong> (e.g., Shafts).</li>
+</ul>
+</div>
+<div id="alphabetical-progression-and-the-h-pivot" class="section level4 hasAnchor" number="1.4.3.2">
+<h4><span class="header-section-number">1.4.3.2</span> Alphabetical Progression and the “H” Pivot<a href="design_and_drafting.html#alphabetical-progression-and-the-h-pivot" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The “H” (for holes) and “h” (for shafts) designations serve as the central pivot point of the metric system. In a standard hole-basis system, an <strong>H</strong> hole has a lower deviation of zero, meaning the hole is never smaller than the nominal “Basic Size.”</p>
+<p>The type of fit is determined by where the mating part’s letter falls in the alphabet relative to this pivot:</p>
+<ul>
+<li><strong>Earlier in the Alphabet (A–G / a–g):</strong> When these letters are combined with an H/h feature, they result in a <strong>Clearance Fit</strong>. For example, an <span class="math inline">\(f7\)</span> shaft is significantly smaller than the nominal size, ensuring space between parts.</li>
+<li><strong>The Middle (H / h):</strong> These represent the basic sizes where the tolerance zone sits exactly on the zero line.</li>
+<li><strong>Later in the Alphabet (P–ZC / p–zc):</strong> Letters appearing after H/h (specifically starting around <span class="math inline">\(p\)</span> for shafts) produce an <strong>Interference Fit</strong>. These parts are mathematically larger than the hole, requiring force for assembly. Letters between G and P (like <span class="math inline">\(j, k, m, n\)</span>) typically result in <strong>Transition Fits</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> Either the shaft or the hole must have an <strong>H/h</strong>. Both can have it.</p>
+</blockquote>
+<p>The <strong>number</strong> following the letter (e.g., the ‘7’ in <span class="math inline">\(H7\)</span>) represents the <strong>International Tolerance Grade (IT)</strong>. This represents the magnitude of the tolerance zone. Mathematically, as the IT grade increases, the manufacturing window widens, meaning a looser requirement for precision.</p>
+<p>Please see a description of the preferred metric fits below. Select from those if possible.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<img src="images/DescriptionPreferredMetric.png" alt="[Preferred Sizes (metric)](images/DescriptionPreferredMetric.png)" width="75%" />
+<p class="caption">
+Figure 1.24: <a href="images/DescriptionPreferredMetric.png">Preferred Sizes (metric)</a>
+</p>
+</div>
+</div>
+<div id="metric-fits-hole" class="section level4 hasAnchor" number="1.4.3.3">
+<h4><span class="header-section-number">1.4.3.3</span> Metric Hole Basis Fits<a href="design_and_drafting.html#metric-fits-hole" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In hole basis fits the hole always has the <strong>H</strong>. Preferred combinations of hole and shaft sizes can be found in this chart below.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-14"></span>
+<img src="images/PreferredHoleBasis_metric.png" alt="[Preferred Hole Basis Sizes (metric)](images/PreferredHoleBasis_metric.png)" width="75%" />
+<p class="caption">
+Figure 1.25: <a href="images/PreferredHoleBasis_metric.png">Preferred Hole Basis Sizes (metric)</a>
+</p>
+</div>
+<p>Depending on the combination of the hole and shaft tolerance zones, fits are categorized into two primary types:</p>
+<div id="metric-clearance-fit" class="section level5 hasAnchor" number="1.4.3.3.1">
+<h5><span class="header-section-number">1.4.3.3.1</span> <strong>Metric Clearance Fit:</strong><a href="design_and_drafting.html#metric-clearance-fit" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The shaft is always smaller than the hole. This allows for rotation or sliding.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-15"></span>
+<img src="images/ANSI_ASME_B41_metric_clearance1.png" alt="[Metric Clearance Fits Hole Basis Part 1](images/ANSI_ASME_B41_metric_clearance1.png)" width="75%" />
+<p class="caption">
+Figure 1.26: <a href="images/ANSI_ASME_B41_metric_clearance1.png">Metric Clearance Fits Hole Basis Part 1</a>
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-16"></span>
+<img src="images/ANSI_ASME_B41_metric_clearance2.png" alt="[Metric Clearance Fits Hole Basis Part 2](images/ANSI_ASME_B41_metric_clearance2.png)" width="75%" />
+<p class="caption">
+Figure 1.27: <a href="images/ANSI_ASME_B41_metric_clearance2.png">Metric Clearance Fits Hole Basis Part 2</a>
+</p>
+</div>
+</div>
+<div id="metric-interference-fit" class="section level5 hasAnchor" number="1.4.3.3.2">
+<h5><span class="header-section-number">1.4.3.3.2</span> <strong>Metric Interference Fit:</strong><a href="design_and_drafting.html#metric-interference-fit" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The shaft is always larger than the hole. Assembly usually requires force, heat expansion, or cryo-shrinking.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-17"></span>
+<img src="images/ANSI_ASME_B41_metric_transition1.png" alt="[Metric Interference Fits Hole Basis Part 1](images/ANSI_ASME_B41_metric_transition1.png)" width="75%" />
+<p class="caption">
+Figure 1.28: <a href="images/ANSI_ASME_B41_metric_transition1.png">Metric Interference Fits Hole Basis Part 1</a>
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-18"></span>
+<img src="images/ANSI_ASME_B41_metric_transition2.png" alt="[Metric Interference Fits Hole Basis Part 2](images/ANSI_ASME_B41_metric_transition2.png)" width="75%" />
+<p class="caption">
+Figure 1.29: <a href="images/ANSI_ASME_B41_metric_transition2.png">Metric Interference Fits Hole Basis Part 2</a>
+</p>
+</div>
+</div>
+</div>
+<div id="metric-fits-shaft" class="section level4 hasAnchor" number="1.4.3.4">
+<h4><span class="header-section-number">1.4.3.4</span> Metric Shaft Basis Fits<a href="design_and_drafting.html#metric-fits-shaft" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In shaft basis fits the shaft always has the <strong>h</strong>. Preferred combinations of hole and shaft sizes can be found in this chart below.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-19"></span>
+<img src="images/PreferredShaftBasis_metric.png" alt="[Preferred Shaft Basis Sizes (metric)](images/PreferredShaftBasis_metric.png)" width="75%" />
+<p class="caption">
+Figure 1.30: <a href="images/PreferredShaftBasis_metric.png">Preferred Shaft Basis Sizes (metric)</a>
+</p>
+</div>
+<p>Depending on the combination of the hole and shaft tolerance zones, fits are categorized into two primary types:</p>
+<div id="metric-clearance-fit-1" class="section level5 hasAnchor" number="1.4.3.4.1">
+<h5><span class="header-section-number">1.4.3.4.1</span> <strong>Metric Clearance Fit:</strong><a href="design_and_drafting.html#metric-clearance-fit-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The shaft is always smaller than the hole. This allows for rotation or sliding.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-20"></span>
+<img src="images/ANSI_ASME_B41_metric_clearance1S.png" alt="[Metric Clearance Fits Shaft Basis Part 1](images/ANSI_ASME_B41_metric_clearance1S.png)" width="75%" />
+<p class="caption">
+Figure 1.31: <a href="images/ANSI_ASME_B41_metric_clearance1S.png">Metric Clearance Fits Shaft Basis Part 1</a>
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-21"></span>
+<img src="images/ANSI_ASME_B41_metric_clearance2S.png" alt="[Metric Clearance Fits Shaft Basis Part 2](images/ANSI_ASME_B41_metric_clearance2S.png)" width="75%" />
+<p class="caption">
+Figure 1.32: <a href="images/ANSI_ASME_B41_metric_clearance2S.png">Metric Clearance Fits Shaft Basis Part 2</a>
+</p>
+</div>
+</div>
+<div id="metric-interference-fit-1" class="section level5 hasAnchor" number="1.4.3.4.2">
+<h5><span class="header-section-number">1.4.3.4.2</span> <strong>Metric Interference Fit:</strong><a href="design_and_drafting.html#metric-interference-fit-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The shaft is always larger than the hole. Assembly usually requires force, heat expansion, or cryo-shrinking.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-22"></span>
+<img src="images/ANSI_ASME_B41_metric_transition1S.png" alt="[Metric Interference Fits Shaft Basis Part 1](images/ANSI_ASME_B41_metric_transition1S.png)" width="75%" />
+<p class="caption">
+Figure 1.33: <a href="images/ANSI_ASME_B41_metric_transition1S.png">Metric Interference Fits Shaft Basis Part 1</a>
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-23"></span>
+<img src="images/ANSI_ASME_B41_metric_transition2S.png" alt="[Metric Interference Fits Shaft Basis Part 2](images/ANSI_ASME_B41_metric_transition2S.png)" width="75%" />
+<p class="caption">
+Figure 1.34: <a href="images/ANSI_ASME_B41_metric_transition2S.png">Metric Interference Fits Shaft Basis Part 2</a>
+</p>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-ansi_b41" class="csl-entry">
+American National Standards Institute. 1967. <span>“Preferred Limits and Fits for Cylindrical Parts.”</span> ANSI B4.1-1967. ANSI.
+</div>
+<div id="ref-ASME_Y145_2018" class="csl-entry">
+American Society of Mechanical Engineers. 2019. <em>Y14.5-2018: Dimensioning and Tolerancing</em>. New York, NY: ASME. <a href="https://www.alekvs.com/wp-content/uploads/2025/06/ASME-Y14.5-2018-R2024-Dimensioning-and-Tolerancing.pdf">https://www.alekvs.com/wp-content/uploads/2025/06/ASME-Y14.5-2018-R2024-Dimensioning-and-Tolerancing.pdf</a>.
+</div>
+<div id="ref-jensen2015interpreting" class="csl-entry">
+Branoff, Ted, Cecil H. Jensen, and Jay D. Helsel. 2015. <em>Interpreting Engineering Drawings</em>. 8th ed. Boston, MA: Delmar Cengage Learning.
+</div>
+<div id="ref-Hijazi" class="csl-entry">
+Hijazi, Rd. Ala. 2025. <em>Engineering Working Drawings Basics"</em>. <a href="https://s3vi.ndc.nasa.gov/ssri-kb/static/resources/Engineering+Working+Drawing+Basics.pdf">https://s3vi.ndc.nasa.gov/ssri-kb/static/resources/Engineering+Working+Drawing+Basics.pdf</a>.
+</div>
+<div id="ref-lorier2025blueprint" class="csl-entry">
+Lorier, Mark. 2025. <em>Blueprint Reading</em>. WisTech Open. <a href="https://wtcs.pressbooks.pub/blueprintreading/chapter/7-title-blocks/">https://wtcs.pressbooks.pub/blueprintreading/chapter/7-title-blocks/</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="machine_elements.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/Prof-MV/Design-for-Manufacturing/blob/master/01-00-Design.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
