@@ -25,6 +25,9 @@ By the end of this chapter, you will be able to:
 3. **Calculate** bearing life (L10) using the basic rating life equation
 4. **Apply** load factors to determine equivalent dynamic bearing loads
 5. **Determine** required dynamic load ratings for specified life requirements
+6. **Explain** the hydrodynamic wedge effect and how a rotating shaft floats on an oil cushion
+7. **Interpret** the Stribeck curve and identify the three lubrication regimes (boundary, mixed, hydrodynamic)
+8. **Connect** bushing performance to sintered bearing manufacturing (see Chapter \@ref(chap-sintering))
 
 ::: {.callout-think}
 **Before You Read:** Every rotating machine—from tiny precision instruments to massive industrial equipment—relies on bearings. What functions do you think bearings serve, and why can't rotating shafts simply rest directly in their housings?
@@ -481,6 +484,10 @@ results %>%
 
 Plain bearings, also called **bushings** or **sleeve bearings**, are the simplest form of bearing. They consist of a bearing surface with no rolling elements—the shaft slides directly against the bearing material.
 
+::: {.callout-think}
+**Before You Read:** When a shaft rotates inside a bushing, what prevents the two metal surfaces from grinding together and wearing out rapidly? Is there something more sophisticated happening than just "oil between two surfaces"?
+:::
+
 #### Advantages of Bushings {-}
 
 | Advantage | Explanation |
@@ -491,13 +498,15 @@ Plain bearings, also called **bushings** or **sleeve bearings**, are the simples
 | **High load capacity** | Large contact area; excellent for shock loads |
 | **Self-lubricating options** | Polymer and sintered metal bushings need no external lubrication |
 
+Many of the most successful bushing designs use **sintered metals**—porous metal structures created through powder metallurgy. These porous bushings can store lubricant within their structure and release it during operation, creating truly maintenance-free bearings. For a detailed understanding of how sintered bearings are manufactured and how their porosity is controlled, see Chapter \@ref(chap-sintering).
+
 #### Types of Bushings {-}
 
 ```{r bushing-types-table, echo=FALSE, message=FALSE}
 bushing_types <- tribble(
   ~Type, ~Material, ~PV_Limit, ~Applications, ~Lubrication,
   "Bronze Bushings", "Cast bronze, SAE 660", "50,000 - 75,000 psi·ft/min", "Heavy machinery, pumps", "Oil/grease required",
-  "Oil-Impregnated Bronze", "Sintered bronze (porous)", "25,000 - 50,000 psi·ft/min", "Fractional HP motors, fans", "Self-lubricating",
+  "Oil-Impregnated Bronze", "Sintered bronze (porous)*", "25,000 - 50,000 psi·ft/min", "Fractional HP motors, fans", "Self-lubricating",
   "PTFE-Lined", "Steel + PTFE coating", "10,000 - 25,000 psi·ft/min", "Food processing, medical", "Dry running",
   "Polymer (Nylon, Acetal)", "Engineering plastics", "3,000 - 10,000 psi·ft/min", "Light duty, instrumentation", "Often dry",
   "PEEK Composite", "High-performance polymer", "15,000 - 40,000 psi·ft/min", "Aerospace, high temperature", "Dry or minimal"
@@ -508,10 +517,525 @@ bushing_types %>%
       booktabs = TRUE) %>%
   kable_styling(latex_options = c("hold_position", "scale_down"), full_width = TRUE) %>%
   column_spec(3, background = "#F9E7F0") %>%
-  row_spec(0, background = "#D81B60", color = "white")
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  footnote(symbol = c("See Chapter 7 (Powder Metallurgy and Sintering) for manufacturing details of sintered bearings"))
 ```
 
 ---
+
+---
+
+### Hydrodynamic Lubrication and the Oil Cushion {#sec-hydrodynamic-lubrication}
+
+One of the most remarkable phenomena in bearing engineering is **hydrodynamic lubrication**—the ability of a rotating shaft to "float" on a thin cushion of oil, with complete separation between the metal surfaces. Understanding this mechanism is essential for designing reliable bushing applications.
+
+#### The Wedge Effect {#sec-wedge-effect}
+
+When a shaft begins to rotate inside a lubricated bushing, something remarkable happens. The shaft doesn't rotate concentrically within the bore—instead, it shifts slightly off-center, creating a **converging wedge** of oil between the shaft and bearing surfaces.
+
+```{r fig-hydrodynamic-wedge, echo=FALSE, fig.cap="The hydrodynamic wedge: shaft rotation drags oil into the converging gap, building pressure that lifts the shaft.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+library(ggforce)
+
+# Create hydrodynamic wedge illustration
+ggplot() +
+  # Bearing bore (outer circle)
+  geom_circle(aes(x0 = 5, y0 = 5, r = 3.5), color = "gray40", fill = "tan", size = 1.5) +
+  geom_circle(aes(x0 = 5, y0 = 5, r = 3), color = "gray40", fill = "white", size = 1) +
+
+  # Shaft (offset - the key to hydrodynamic action)
+  # At rest: shaft sits at bottom. Running: shaft climbs up and to the side
+  geom_circle(aes(x0 = 5.3, y0 = 5.4, r = 2.7), color = "black", fill = "gray50", size = 1) +
+
+  # Minimum film thickness point
+  annotate("point", x = 6.8, y = 6.5, color = "red", size = 3) +
+  annotate("segment", x = 6.8, y = 6.5, xend = 8.2, yend = 7.2, color = "red", linewidth = 0.8) +
+  annotate("text", x = 8.5, y = 7.4, label = "Minimum film\nthickness (h_min)",
+           color = "red", size = 3, hjust = 0) +
+
+  # Maximum film thickness (opposite side)
+  annotate("segment", x = 3.2, y = 3.8, xend = 1.8, yend = 3, color = "blue", linewidth = 0.8) +
+  annotate("text", x = 1.5, y = 2.7, label = "Maximum film\nthickness",
+           color = "blue", size = 3, hjust = 1) +
+
+  # Converging wedge zone (highlighted)
+  annotate("curve", x = 7.5, y = 4.5, xend = 5.5, yend = 2.3, curvature = 0.3,
+           color = "darkorange", linewidth = 2, lineend = "round") +
+  annotate("text", x = 7, y = 3.2, label = "Converging\nwedge zone",
+           color = "darkorange", size = 3, fontface = "bold") +
+
+  # Rotation arrow on shaft
+  geom_curve(aes(x = 5.3, xend = 6.2, y = 5.4, yend = 6), curvature = -0.5,
+             arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
+             linewidth = 1.2, color = "black") +
+  annotate("text", x = 6.5, y = 5.5, label = "ω", size = 5, fontface = "bold") +
+
+  # Oil flow arrows (dragged by shaft rotation)
+  geom_curve(aes(x = 7, y = 3.5, xend = 7.3, yend = 4.5), curvature = -0.2,
+             arrow = arrow(length = unit(0.15, "cm")), color = "gold3", linewidth = 1) +
+  geom_curve(aes(x = 7.4, y = 4.8, xend = 7.2, yend = 5.8), curvature = -0.2,
+             arrow = arrow(length = unit(0.15, "cm")), color = "gold3", linewidth = 1) +
+  annotate("text", x = 8, y = 4.2, label = "Oil dragged\ninto wedge",
+           color = "gold3", size = 2.8, fontface = "italic") +
+
+  # Pressure distribution (shown as arrows pushing shaft)
+  geom_segment(aes(x = 4.2, xend = 4.7, y = 2.6, yend = 3.4),
+               arrow = arrow(length = unit(0.15, "cm")), color = "purple", linewidth = 1.2) +
+  geom_segment(aes(x = 5, xend = 5.3, y = 2.4, yend = 3.2),
+               arrow = arrow(length = unit(0.15, "cm")), color = "purple", linewidth = 1.5) +
+  geom_segment(aes(x = 5.8, xend = 5.8, y = 2.5, yend = 3.3),
+               arrow = arrow(length = unit(0.15, "cm")), color = "purple", linewidth = 1.2) +
+  geom_segment(aes(x = 6.5, xend = 6.2, y = 2.8, yend = 3.5),
+               arrow = arrow(length = unit(0.15, "cm")), color = "purple", linewidth = 1) +
+
+  annotate("text", x = 5, y = 1.8, label = "Pressure buildup\nlifts shaft",
+           color = "purple", size = 3, fontface = "bold") +
+
+  # Load arrow
+  geom_segment(aes(x = 5.3, xend = 5.3, y = 8, yend = 7),
+               arrow = arrow(length = unit(0.25, "cm")), color = "darkred", linewidth = 1.5) +
+  annotate("text", x = 5.3, y = 8.3, label = "W (Load)", color = "darkred", size = 3.5, fontface = "bold") +
+
+  # Center markers
+  annotate("point", x = 5, y = 5, shape = 3, size = 3, stroke = 1.5, color = "gray40") +
+  annotate("text", x = 4.5, y = 5, label = "Bearing\ncenter", size = 2.5, hjust = 1) +
+  annotate("point", x = 5.3, y = 5.4, shape = 3, size = 3, stroke = 1.5, color = "black") +
+  annotate("text", x = 4.8, y = 5.8, label = "Shaft\ncenter", size = 2.5, hjust = 1) +
+
+  # Eccentricity line
+  geom_segment(aes(x = 5, xend = 5.3, y = 5, yend = 5.4),
+               linetype = "dashed", color = "gray30", linewidth = 0.8) +
+  annotate("text", x = 5.4, y = 5.15, label = "e", size = 4, fontface = "italic") +
+
+  coord_fixed(xlim = c(0, 10), ylim = c(1, 9)) +
+  theme_void() +
+  labs(title = "Hydrodynamic Wedge Effect in Journal Bearings",
+       subtitle = "Shaft rotation creates pressure that lifts the shaft off the bearing surface") +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    plot.subtitle = element_text(hjust = 0.5, size = 10, color = "gray40")
+  )
+```
+
+The physics of this process are elegant:
+
+1. **Shaft rotation drags oil** into the narrowing gap (viscous drag)
+2. **Oil cannot escape fast enough** through the narrow exit
+3. **Pressure builds up** in the converging zone
+4. **The pressure "pushes back"** against the shaft, lifting it
+5. **At sufficient speed**, the shaft floats entirely on oil—no metal contact
+
+This is the **hydrodynamic cushion**: a self-generated oil film that supports the shaft load through fluid pressure alone.
+
+#### The Pressure Distribution {#sec-pressure-distribution}
+
+The pressure profile that develops in the oil film is not uniform. Maximum pressure occurs in the converging wedge region, just before the minimum film thickness point:
+
+\begin{equation}
+p = \frac{6 \mu U}{h^2} \frac{dh}{dx}
+(\#eq:reynolds-simplified)
+\end{equation}
+
+**Where:**
+
+| Symbol | Description |
+|:-------|:------------|
+| $p$ | Local pressure in the oil film |
+| $\mu$ | Dynamic viscosity of the lubricant |
+| $U$ | Surface velocity of the shaft |
+| $h$ | Local film thickness |
+| $dh/dx$ | Rate of change of film thickness |
+
+This is a simplified form of the **Reynolds equation**, which governs hydrodynamic lubrication. The key insight is that pressure only develops where the film is **converging** ($dh/dx < 0$)—in diverging regions, the pressure drops back to ambient.
+
+::: {.callout-industry}
+**Industry Application:** Modern automotive engines rely entirely on hydrodynamic lubrication for their crankshaft main bearings and connecting rod bearings. At idle speed (~800 RPM), a typical crankshaft main bearing develops oil film pressures of 5-10 MPa, supporting loads of several kilonewtons on a film just 2-5 micrometers thick. At highway speeds, this film pressure can exceed 50 MPa.
+:::
+
+#### Eccentricity Ratio {#sec-eccentricity}
+
+The position of the shaft within the bearing is characterized by the **eccentricity ratio** ($\varepsilon$):
+
+\begin{equation}
+\varepsilon = \frac{e}{c}
+(\#eq:eccentricity-ratio)
+\end{equation}
+
+**Where:**
+
+- $e$ = distance between bearing center and shaft center (eccentricity)
+- $c$ = radial clearance = $(D - d)/2$ (bearing bore radius minus shaft radius)
+
+| $\varepsilon$ Value | Meaning |
+|:--------------------|:--------|
+| 0 | Shaft is perfectly centered (no load, or very high speed) |
+| 0.3 - 0.7 | Normal operating range for hydrodynamic bearings |
+| → 1.0 | Shaft approaching contact with bearing (high load or low speed) |
+
+The minimum film thickness is directly related to eccentricity:
+
+\begin{equation}
+h_{min} = c(1 - \varepsilon)
+(\#eq:min-film-thickness)
+\end{equation}
+
+For safe operation, the minimum film thickness must exceed the combined surface roughness of the shaft and bearing, plus a safety margin for contaminants and vibration.
+
+---
+
+### Oil Circulation in Sintered Bearings {#sec-oil-circulation}
+
+For sintered oil-impregnated bushings (see Chapter \@ref(chap-sintering) for manufacturing details), the hydrodynamic mechanism works in concert with the porous structure. The following diagram shows how oil circulates through a sintered bearing during operation:
+
+```{r fig-oil-circulation, echo=FALSE, message=FALSE, fig.cap="Oil circulation mechanism in a sintered oil-impregnated bearing. The porous structure stores oil that is released during operation and recovered during rest periods.", fig.align='center', fig.width=10, fig.height=8}
+library(ggplot2)
+library(ggforce) # Essential for circles and smooth shapes
+
+# --- Define Geometry and Colors ---
+# Centers and Radii
+c_bearing <- c(0, 0)
+r_housing <- 5.5
+r_bearing_out <- 5.0
+r_bearing_in <- 3.1
+# Crucial: Shaft is OFFSET upwards and left to create the wedge/cushion effect
+c_shaft <- c(-0.2, 0.7) 
+r_shaft <- 2.8
+
+# Colors based on the diagram
+col_housing <- "grey70"
+col_porous <- "#AEEEEE" # Pale turquoise for sintered bearing
+col_porous_outline <- "#5F9EA0"
+col_shaft <- "#FF9933"  # Orange
+col_oil_film <- "#0066CC" # Dark blue thick film
+col_pressure <- "#87CEFA" # Light blue for pressure distribution blob
+col_arrow <- "black"
+col_text <- "#003366" # Dark blue for labels
+
+# --- Generate Data for Irregular Shapes ---
+
+# 1. Pressure Distribution 'Blob' (Teardrop shape)
+# Using a b-spline to create a smooth, irregular pressure zone that is
+# wider at the bottom-left (high pressure) and narrows around the top.
+pressure_pts <- data.frame(
+  x = c(0,  2.5, 3.5,  2,   -1, -4, -6, -6.5, -4, -1),
+  y = c(3.5, 3,   0,   -3,  -5, -6, -5, -2,    2,  3.5)
+)
+
+# --- Plotting ---
+ggplot() +
+  coord_fixed() + # Ensure circles look like circles
+  
+  # --- LAYER 1: The Pressure "Cushion" ---
+  # This goes first so it sits behind the bearing structure
+  ggforce::geom_bspline_closed(data = pressure_pts, aes(x=x, y=y), 
+                               fill = col_pressure, alpha = 0.6, color = NA) +
+  
+  # Pressure MAX dashed line and label
+  annotate("segment", x = c_bearing[1], y = c_bearing[2], xend = -5.8, yend = -4.8,
+           linetype = "dashed", color = "black") +
+  annotate("text", x = -5.2, y = -5.2, label = "MAX", fontface = "bold", size = 3.5) +
+  
+  # --- LAYER 2: Bearing Structure ---
+  # Housing (Outer Ring)
+  geom_circle(aes(x0 = c_bearing[1], y0 = c_bearing[2], r = r_housing), 
+              fill = NA, color = col_housing, size = 2) +
+  
+  # Sintered Porous Bearing (Middle Ring)
+  # We draw the outer boundary, then fill the center with white to create the "donut"
+  geom_circle(aes(x0 = c_bearing[1], y0 = c_bearing[2], r = r_bearing_out), 
+              fill = col_porous, color = col_porous_outline, alpha = 0.4, size = 0.8) +
+  # The "hole" in the bearing (white to obscure the pressure blob behind the shaft area)
+  geom_circle(aes(x0 = c_bearing[1], y0 = c_bearing[2], r = r_bearing_in), 
+              fill = "white", color = col_porous_outline, size = 0.8) +
+  
+  # --- LAYER 3: The Shaft and Oil Film ---
+  # The thick Oil Film (Crescent right under the shaft)
+  annotate("curve", 
+           x = c_shaft[1] - r_shaft*0.5, y = c_shaft[2] - r_shaft*0.85,
+           xend = c_shaft[1] + r_shaft*0.7, yend = c_shaft[2] - r_shaft*0.7,
+           curvature = 0.3, color = col_oil_film, size = 4, lineend = "round") +
+  
+  # The Shaft itself (Orange circle, offset center)
+  geom_circle(aes(x0 = c_shaft[1], y0 = c_shaft[2], r = r_shaft), 
+              fill = col_shaft, color = "black") +
+  
+  # Shaft Axis Marker (+)
+  annotate("segment", x = c_shaft[1]-0.3, xend = c_shaft[1]+0.3, y = c_shaft[2], yend = c_shaft[2]) +
+  annotate("segment", x = c_shaft[1], xend = c_shaft[1], y = c_shaft[2]-0.3, yend = c_shaft[2]+0.3) +
+  
+  # --- Arrows indicating movement and flow ---
+  # 1. Shaft Rotation Arrow (Clockwise)
+  annotate("curve", x = c_shaft[1]+1.8, y = c_shaft[2]+0.5, 
+           xend = c_shaft[1]+1.8, yend = c_shaft[2]-1.2,
+           curvature = -0.5, arrow = arrow(length = unit(0.4, "cm"), type="closed"), 
+           size = 1.2, color = col_arrow) +
+  
+  # 2. Oil Supply (Inward pump action at top)
+  annotate("curve", x = -0.5, y = 4.5, xend = 0.5, yend = 3.3,
+           curvature = -0.2, arrow = arrow(length = unit(0.2, "cm"), type="closed"), size=0.8) +
+  annotate("curve", x = -2.5, y = 3.8, xend = -1.5, yend = 2.8,
+           curvature = -0.2, arrow = arrow(length = unit(0.2, "cm"), type="closed"), size=0.8) +
+  
+  # 3. Oil Escape (Outward into bearing at high pressure zone)
+  annotate("segment", x = -1, y = -3.3, xend = -1.8, yend = -4.2,
+           arrow = arrow(length = unit(0.2, "cm"), type="closed"), size=0.8) +
+  annotate("segment", x = 1, y = -3.3, xend = 1.8, yend = -4.2,
+           arrow = arrow(length = unit(0.2, "cm"), type="closed"), size=0.8) +
+  
+  # --- Text Labels ---
+  # Main Title
+  ggtitle("Schematic illustration of oil circulation mechanism\nin sintered oil-impregnated bearing") +
+  
+  # Component Labels
+  annotate("text", x=6, y=6, label="Sintered oil-impregnated\nbearing", color=col_text, hjust=0, size=4) +
+  annotate("segment", x=6, y=6, xend=4.5, yend=4.5, color=col_housing) +
+  
+  annotate("text", x=7, y=4, label="Housing", color=col_text, hjust=0, size=4) +
+  annotate("segment", x=7, y=4, xend=5.6, yend=2.5, color=col_housing) +
+  
+  annotate("text", x=0, y=0.5, label="Axis\n(shaft)", fontface="bold", size=3.5) +
+  
+  # Action Labels
+  annotate("text", x=-7, y=6, label="Supply of oil from top of inner surface\nof bearing by pump-like action", 
+           color=col_text, hjust=0, size=4) +
+  annotate("segment", x=-4, y=5.5, xend=-1, yend=4.2, color=col_housing) +
+  
+  annotate("text", x=7, y=-2, label="Supply of oil to\nsliding surface by\nrotation of shaft", 
+           color=col_text, hjust=0, size=4) +
+  annotate("segment", x=7, y=-2, xend=3.5, yend=-1, color=col_housing) +
+  
+  annotate("text", x=-7, y=-2, label="Pressure distribution\nof oil", 
+           color=col_text, hjust=1, size=4) +
+  annotate("segment", x=-7.1, y=-2, xend=-6.2, yend=-4, color=col_housing) +
+  
+  annotate("text", x=3, y=-6.5, label="Escape of oil from sliding surface into interior of bearing", 
+           color=col_text, hjust=0.5, size=4) +
+  annotate("segment", x=0, y=-6.2, xend=0, yend=-4.5, color=col_housing) +
+  
+  annotate("text", x=4.5, y=-4.5, label="Oil film", color=col_text, hjust=0, size=4) +
+  annotate("segment", x=4.4, y=-4.5, xend=1, yend=-3.2, color=col_housing) +
+  
+  # Theme Cleanup
+  theme_void() + # Remove axes and grids
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold", color = "white", 
+                              margin=margin(b=10), debug=FALSE),
+    plot.background = element_rect(fill = "white", color = NA),
+    # Simulate the dark blue title header bar
+    plot.margin = margin(t=40, r=10, b=10, l=10)
+  ) +
+  # Add the blue title bar rectangle behind the title text
+  annotation_custom(grid::rectGrob(gp=grid::gpar(fill="#003399", col=NA)), 
+                    xmin=-Inf, xmax=Inf, ymin=7.2, ymax=9)
+
+```
+
+---
+
+### The Stribeck Curve: Understanding Lubrication Regimes {#sec-stribeck-curve}
+
+The transition from metal-to-metal contact to full hydrodynamic separation doesn't happen instantly. German engineer Richard Stribeck (1861-1950) systematically studied this transition and developed one of the most important diagrams in tribology—the **Stribeck curve**.
+
+```{r fig-stribeck-curve, echo=FALSE, message=FALSE, fig.cap="The Stribeck curve showing the three lubrication regimes as a function of the bearing parameter.", fig.align='center', fig.width=10, fig.height=7}
+library(ggplot2)
+
+# Create the data for the curve using the Hersey number (dimensionless bearing parameter)
+# Hersey number = (viscosity × speed) / pressure
+hersey <- seq(0.001, 2, length.out = 300)
+
+# Stribeck behavior: high at low Hersey, drops to minimum, then rises linearly
+# f = a/H + b*H + c (simplified model)
+friction <- 0.12 * exp(-8 * hersey) + 0.008 * hersey + 0.015
+
+df <- data.frame(Hersey = hersey, Friction = friction)
+
+# Find the minimum point for annotation
+min_idx <- which.min(friction)
+min_hersey <- hersey[min_idx]
+min_friction <- friction[min_idx]
+
+ggplot(df, aes(x = Hersey, y = Friction)) +
+  # Background regions
+  annotate("rect", xmin = 0, xmax = 0.15, ymin = 0, ymax = 0.14,
+           fill = "coral", alpha = 0.2) +
+  annotate("rect", xmin = 0.15, xmax = 0.5, ymin = 0, ymax = 0.14,
+           fill = "lightyellow", alpha = 0.4) +
+  annotate("rect", xmin = 0.5, xmax = 2, ymin = 0, ymax = 0.14,
+           fill = "lightgreen", alpha = 0.3) +
+
+  # The main Stribeck curve
+  geom_line(color = "#D93025", linewidth = 1.5) +
+
+  # Vertical boundary lines
+  geom_vline(xintercept = c(0.15, 0.5), linetype = "dashed", color = "gray40", linewidth = 0.8) +
+
+  # Zone labels at top
+  annotate("text", x = 0.075, y = 0.13, label = "BOUNDARY", fontface = "bold", size = 4, color = "darkred") +
+  annotate("text", x = 0.325, y = 0.13, label = "MIXED", fontface = "bold", size = 4, color = "darkorange4") +
+  annotate("text", x = 1.25, y = 0.13, label = "HYDRODYNAMIC", fontface = "bold", size = 4, color = "darkgreen") +
+
+  # Descriptive text in each zone
+  annotate("text", x = 0.075, y = 0.08,
+           label = "Metal-to-\nmetal\ncontact",
+           size = 3, color = "gray30") +
+  annotate("text", x = 0.325, y = 0.055,
+           label = "Partial\nfilm +\nasperities",
+           size = 3, color = "gray30") +
+  annotate("text", x = 1.25, y = 0.06,
+           label = "Full fluid film\n(no contact)",
+           size = 3, color = "gray30") +
+
+  # Minimum friction point
+  geom_point(aes(x = min_hersey, y = min_friction), color = "blue", size = 4) +
+  annotate("segment", x = min_hersey, xend = min_hersey + 0.2, y = min_friction, yend = min_friction + 0.02,
+           color = "blue", linewidth = 0.8) +
+  annotate("text", x = min_hersey + 0.25, y = min_friction + 0.025,
+           label = "Optimal\noperating point",
+           color = "blue", size = 3.5, hjust = 0) +
+
+  # Axis formatting
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 2.1),
+                     name = expression(paste("Bearing Parameter  ", eta, "N/P  (viscosity × speed / pressure)"))) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.145),
+                     name = "Coefficient of Friction") +
+
+  labs(title = "The Stribeck Curve",
+       subtitle = "Friction coefficient vs. bearing operating parameter") +
+
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    plot.subtitle = element_text(hjust = 0.5, size = 10, color = "gray40"),
+    axis.title = element_text(size = 11),
+    panel.grid.minor = element_blank()
+  )
+```
+
+#### The Three Lubrication Regimes {#sec-lubrication-regimes}
+
+The Stribeck curve reveals three distinct operating regimes, determined by the **bearing parameter** (also called the Hersey number or Sommerfeld variable):
+
+\begin{equation}
+\text{Bearing Parameter} = \frac{\mu N}{P}
+(\#eq:hersey-number)
+\end{equation}
+
+**Where:**
+
+| Symbol | Description |
+|:-------|:------------|
+| $\mu$ | Dynamic viscosity of the lubricant |
+| $N$ | Rotational speed (or sliding velocity) |
+| $P$ | Bearing pressure (load per unit projected area) |
+
+---
+
+**1. Boundary Lubrication** (Low bearing parameter)
+
+At low speeds, high loads, or low viscosity, the oil film is too thin to separate the surfaces. The shaft and bearing make direct metal-to-metal contact at their surface asperities (microscopic peaks).
+
+- **Friction coefficient:** 0.08 - 0.15 (high)
+- **Wear:** Significant—asperities deform and break off
+- **Protection:** Depends on boundary additives in the oil (anti-wear, extreme pressure)
+- **Typical conditions:** Startup, shutdown, slow oscillating motion
+
+::: {.callout-check}
+**Quick Check:** Why is startup the most damaging period for a hydrodynamic bearing?
+:::
+
+---
+
+**2. Mixed Lubrication** (Intermediate bearing parameter)
+
+As speed increases or load decreases, a partial fluid film develops. The load is shared between the oil film (hydrodynamic pressure) and the remaining asperity contacts.
+
+- **Friction coefficient:** 0.02 - 0.08 (decreasing rapidly)
+- **Wear:** Moderate—some contact remains
+- **Transition zone:** Most sensitive to operating conditions
+- **Typical conditions:** Acceleration/deceleration, variable loads
+
+---
+
+**3. Hydrodynamic Lubrication** (High bearing parameter)
+
+At sufficient speed, the shaft "lifts off" completely and floats on the oil cushion. There is no metal-to-metal contact—all load is carried by fluid pressure.
+
+- **Friction coefficient:** 0.001 - 0.01 (very low)
+- **Wear:** Essentially zero (only contamination-related)
+- **Friction source:** Viscous shearing of the oil film
+- **Typical conditions:** Continuous rotation at design speed
+
+Notice that friction actually **increases** slightly at very high bearing parameters. This is because the viscous drag in the oil film increases with speed—but this "friction" doesn't cause wear since no contact occurs.
+
+---
+
+#### Practical Implications for Bearing Design {#sec-stribeck-implications}
+
+The Stribeck curve has profound implications for bearing selection and design:
+
+| Design Goal | Implication |
+|:------------|:------------|
+| **Maximize bearing life** | Operate in the hydrodynamic regime; avoid boundary conditions |
+| **Minimum speed requirement** | Must exceed the transition speed for hydrodynamic lubrication |
+| **Oil selection** | Higher viscosity → lower bearing parameter → earlier transition to hydrodynamic |
+| **Clearance design** | Affects film thickness and transition point |
+| **Startup/shutdown wear** | Unavoidable boundary contact; limit start-stop cycles or use hydrostatic assist |
+
+::: {.callout-industry}
+**Industry Application:** Large turbine bearings in power plants use **hydrostatic jacking**—externally pressurized oil is pumped into the bearing at startup to lift the shaft before rotation begins. This eliminates the boundary lubrication phase entirely, preventing wear during the 10-15 seconds it takes to reach hydrodynamic speed.
+:::
+
+For sintered self-lubricating bearings (see Chapter \@ref(chap-sintering)), the oil stored in the porous structure is released by heat and pumping action during operation. However, at very low speeds or oscillating motion, hydrodynamic films cannot develop—this is why **graphite-impregnated sintered bearings** are used instead for such applications, providing solid lubrication rather than relying on fluid film formation.
+
+---
+
+### Oil Circulation in Sintered Bearings (continued) {#sec-oil-circulation-diagram}
+
+The following diagram illustrates how oil circulates through a sintered oil-impregnated bearing during operation. The porous structure acts as an oil reservoir, continuously replenishing the hydrodynamic film:
+
+```{r bushing-striebeck-curve-old, echo=FALSE, message=FALSE, include=FALSE}
+# This old simple curve is replaced by the more detailed version above
+# Keeping for reference but not displaying
+library(ggplot2)
+library(ggforce) # For the ellipses/ovals
+
+# 1. Create the data for the curve
+# Using a function to simulate the Stribeck behavior:
+# Friction = a * exp(-b * speed) + c * speed + d
+speed <- seq(0, 100, length.out = 300)
+friction <- 0.15 * exp(-0.15 * speed) + 0.0005 * speed + 0.02
+
+df <- data.frame(Speed = speed, Friction = friction)
+
+# 2. Build the plot
+ggplot(df, aes(x = Speed, y = Friction)) +
+  # The main Stribeck curve (Red line)
+  geom_line(color = "#D93025", size = 1.2) +
+
+  # Vertical dashed boundary lines
+  geom_vline(xintercept = c(10, 40), linetype = "dotted", color = "black") +
+
+  # Text Labels for Lubrication Zones
+  annotate("text", x = 5, y = 0.18, label = "Boundary Lubrication", angle = 90, size = 4) +
+  annotate("text", x = 25, y = 0.18, label = "Mixed Lubrication", angle = 90, size = 4) +
+  annotate("text", x = 70, y = 0.15, label = "Hydrodynamic lubrication", size = 5) +
+
+
+
+  # Stylized Arrows for the axes
+  theme_classic() +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 110)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.22)) +
+  labs(x = "Speed [rpm]", y = "Friction Coefficient") +
+  theme(
+    axis.line = element_line(arrow = arrow(type = "closed", length = unit(0.15, "inches"))),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_text(size = 14, face = "plain", hjust = 1),
+    plot.margin = margin(20, 20, 20, 20)
+  )
+```
+
 
 ### PV Limits for Bushings {#pv-limits}
 
@@ -585,11 +1109,11 @@ ggplot(pv_data, aes(x = P, y = V, color = Material)) +
   geom_line(linewidth = 1.2) +
 
   ## Add safe operating point example
-  geom_point(aes(x = 1000, y = 30), color = "darkgreen", size = 4) +
+  annotate("point", x = 1000, y = 30, color = "darkgreen", size = 4) +
   annotate("text", x = 1200, y = 35, label = "Safe\noperating point", color = "darkgreen", size = 3, hjust = 0) +
 
   ## Add unsafe point example
-  geom_point(aes(x = 2500, y = 100), color = "red", size = 4, shape = 4, stroke = 2) +
+  annotate("point", x = 2500, y = 100, color = "red", size = 4, shape = 4, stroke = 2) +
   annotate("text", x = 2700, y = 110, label = "Exceeds Nylon\nPV limit!", color = "red", size = 3, hjust = 0) +
 
   ## Shade regions
@@ -736,9 +1260,11 @@ The SAE 660 bronze bushing is **suitable** for this application:
 
 ---
 
-### Bearing vs. Bushing Selection Guide {-}
+### Bearing vs. Bushing Selection Guide {#sec-selection-guide}
 
-When should you use a ball bearing versus a bushing? The following table provides guidance:
+When should you use a ball bearing versus a bushing? The choice depends on operating conditions, space constraints, and maintenance requirements. For bushings, the decision between oil-impregnated and solid-lubricant types depends on the motion profile and environment—continuous rotation favors oil-impregnated bearings that can develop hydrodynamic films, while oscillating or high-temperature applications favor graphite-impregnated designs (see Chapter \@ref(chap-sintering) for details on manufacturing both types).
+
+The following table provides guidance:
 
 ```{r selection-guide, echo=FALSE, message=FALSE}
 selection_guide <- tribble(
@@ -785,6 +1311,16 @@ selection_guide %>%
 | $V = \frac{\pi d n}{12}$ | Sliding velocity (ft/min) |
 | $PV = P \times V$ | PV factor—must be less than material PV limit |
 
+#### Hydrodynamic Lubrication {-}
+
+| Equation | Description |
+|:---------|:------------|
+| $\varepsilon = \frac{e}{c}$ | Eccentricity ratio (shaft offset / clearance) |
+| $h_{min} = c(1 - \varepsilon)$ | Minimum oil film thickness |
+| $\frac{\mu N}{P}$ | Bearing parameter (Stribeck curve x-axis) |
+
+> **Note:** For sintered self-lubricating bearings, the porous structure provides an internal oil reservoir. See Chapter \@ref(chap-sintering) for details on how porosity is controlled during manufacturing to optimize oil storage capacity.
+
 ---
 
 ### Design Checklist {-}
@@ -807,3 +1343,19 @@ selection_guide %>%
 - [ ] Verify $PV < PV_{limit}$ with safety factor ≥ 2
 - [ ] Consider temperature effects on PV limits
 - [ ] Specify lubrication (if required) or confirm dry-running capability
+
+**For Hydrodynamic Lubrication (Oil-Impregnated Bushings):**
+
+- [ ] Verify minimum operating speed exceeds transition to hydrodynamic regime
+- [ ] Calculate bearing parameter ($\mu N / P$) and confirm operation in hydrodynamic zone
+- [ ] Estimate minimum film thickness and compare to surface roughness
+- [ ] For sintered bearings: verify porosity level (20-30%) for adequate oil storage—see Chapter \@ref(chap-sintering)
+- [ ] Consider startup/shutdown wear; limit start-stop cycles or use hydrostatic jacking
+- [ ] Select oil viscosity appropriate for operating temperature range
+
+**For Solid-Lubricant Bushings (Graphite/MoS₂):**
+
+- [ ] Confirm motion type: oscillating, reciprocating, or slow rotation (hydrodynamic not feasible)
+- [ ] Verify temperature requirements (graphite to 500°C, MoS₂ to 400°C)
+- [ ] Check environmental requirements (vacuum, contamination, food-safe)
+- [ ] See Chapter \@ref(chap-sintering) for graphite impregnation specifications

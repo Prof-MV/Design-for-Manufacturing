@@ -1,6 +1,6 @@
 ---
 title: "Design for Manufacturing"
-author: "Martin Volkening"
+author: "Martin Volkening and Claude Opus 4.6 (Anthropic)"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
@@ -14,4 +14,12 @@ github-repo: Prof-MV/Design-for-Manufacturing
 
 # About {-}
 
-This book collects the main manufacturing methods and provides guidelines for a good part design to minimize defects and increase manufacturing efficiency.
+This book serves as a comprehensive resource for engineering students and practitioners, bridging the gap between design theory and manufacturing practice. It is organized into three main parts:
+
+**Part I: Design and Drafting** covers the foundational skills needed to communicate engineering designs effectively. Topics include technical drafting conventions, dimensioning standards, tolerances and their influence on cost, geometric dimensioning and tolerancing (GD&T), and the practical application of imperial and metric fit systems.
+
+**Part II: Machine Elements** explores the analysis and selection of common mechanical components used in power transmission and machine design. This section covers bolted joint calculations, gear systems, bearings, four-bar linkages, belt and pulley drives, chain drives, and couplings and clutches.
+
+**Part III: Design for Manufacturing** provides process-specific design guidelines to minimize defects and optimize production efficiency. Manufacturing processes covered include casting, joining methods (welding, brazing, soldering), stamping, machining, additive manufacturing (3D printing), and powder metallurgy (sintering).
+
+Together, these sections equip readers with the knowledge to design parts that are not only functional but also economical and practical to manufacture.
