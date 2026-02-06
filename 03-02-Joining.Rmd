@@ -135,3 +135,283 @@ Welding is not always the best solution, but it is the superior choice over othe
 | **Mechanical Fasteners** | Allows for **disassembly** and repair. | When a joint must be **permanent** and transmit **structural forces** without the risk of loosening under vibration. |
 | **Brazing / Soldering** | Lower heat input prevents distortion/damage to base metal. | When the joint needs the **full strength** of the parent metal, and the service temperature exceeds the filler metal's melting point. |
 | **Adhesive Bonding** | Joins dissimilar materials; distributes stress over a wide area. | When high strength is required in **high-temperature environments** where most adhesives would degrade, or when a **rapidly cured joint** is necessary. |
+
+::: {.callout-industry}
+**Automotive Application:** Modern vehicle bodies use a combination of joining methods. The body-in-white (unpainted body structure) typically uses over 4,000 spot welds, supplemented by structural adhesives at critical joints and mechanical fasteners for panels that may need replacement.
+:::
+
+---
+
+### Brazing and Soldering {#sec:brazing-soldering}
+
+Both brazing and soldering use a filler metal to join parts without melting the base materials. The key difference is the filler metal's melting temperature.
+
+#### Brazing
+
+**Brazing** uses filler metals that melt above 450°C (840°F). The process relies on **capillary action** to draw the molten filler into the joint gap.
+
+```{r fig-brazing-process, echo=FALSE, fig.cap="Capillary action draws brazing filler metal into the joint gap.", fig.align='center', fig.width=8, fig.height=5}
+library(ggplot2)
+
+ggplot() +
+  # Base parts
+  geom_rect(aes(xmin = 1, xmax = 4, ymin = 2, ymax = 3), fill = "steelblue", color = "black", linewidth = 1) +
+  geom_rect(aes(xmin = 1, xmax = 4, ymin = 3.1, ymax = 4.1), fill = "steelblue", color = "black", linewidth = 1) +
+
+  # Gap (exaggerated for visibility)
+  geom_rect(aes(xmin = 1, xmax = 3.5, ymin = 3, ymax = 3.1), fill = "darkorange", color = "darkorange") +
+
+  # Filler metal source
+  geom_polygon(aes(x = c(3.5, 4.2, 4.2), y = c(3.05, 2.5, 3.6)), fill = "darkorange", color = "black") +
+
+  # Labels
+  annotate("text", x = 2.5, y = 2.5, label = "Base Metal", color = "white", fontface = "bold") +
+  annotate("text", x = 2.5, y = 3.6, label = "Base Metal", color = "white", fontface = "bold") +
+  annotate("text", x = 4.8, y = 3.05, label = "Filler Metal\n(Brazing Alloy)", size = 3.5) +
+  annotate("text", x = 2.25, y = 3.05, label = "Capillary Flow", color = "darkorange", size = 3, fontface = "italic") +
+
+  # Flow arrows
+  geom_segment(aes(x = 3.3, xend = 2, y = 3.05, yend = 3.05),
+               arrow = arrow(length = unit(0.15, "cm")), color = "red", linewidth = 1) +
+
+  # Gap dimension
+  geom_segment(aes(x = 0.5, xend = 0.5, y = 3, yend = 3.1),
+               arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
+  annotate("text", x = 0.2, y = 3.05, label = "Gap\n0.05-0.15mm", size = 2.5) +
+
+  coord_fixed(ratio = 1, xlim = c(-0.5, 6), ylim = c(1.5, 4.5)) +
+  theme_void() +
+  labs(title = "Brazing: Capillary Action Fills the Joint") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+```
+
+**Key Brazing Parameters:**
+
+- **Joint clearance:** 0.05–0.15 mm for optimal capillary action
+- **Common filler metals:** Silver alloys, copper-phosphorus, nickel alloys
+- **Flux:** Required to remove oxides and promote wetting (unless using a controlled atmosphere)
+
+**Applications:** HVAC systems (copper tubing), bicycle frames, carbide tool tips, heat exchangers
+
+#### Soldering
+
+**Soldering** uses filler metals that melt below 450°C (840°F). It creates joints with lower mechanical strength but excellent electrical conductivity.
+
+**Common Solder Alloys:**
+
+| Alloy | Melting Point | Application |
+|:------|:--------------|:------------|
+| Sn63/Pb37 | 183°C | Traditional electronics (leaded) |
+| SAC305 (Sn96.5/Ag3/Cu0.5) | 217-220°C | Lead-free electronics |
+| Sn/Pb/Ag | 179°C | Plumbing, high-reliability electronics |
+
+::: {.callout-check}
+**Quick Check:** A joint will operate at 300°C. Should you use brazing or soldering? Why?
+:::
+
+---
+
+### Adhesive Bonding {#sec:adhesive-bonding}
+
+Adhesive bonding uses chemical compounds that cure to form a bond between surfaces. Modern structural adhesives can achieve remarkable strength while offering unique advantages.
+
+#### Advantages of Adhesive Bonding
+
+- **Joins dissimilar materials** (metal to plastic, glass to composite)
+- **Distributes stress** over large areas (no stress concentration at holes)
+- **Seals and bonds** simultaneously
+- **Minimal thermal distortion** (no heat required for many adhesives)
+- **Electrical and thermal insulation** between parts
+
+#### Limitations
+
+- **Surface preparation** is critical (cleaning, roughening, priming)
+- **Cure time** can be long (minutes to hours)
+- **Temperature limitations** (most degrade above 150-200°C)
+- **Difficult to inspect** non-destructively
+- **Limited peel and cleavage strength** compared to tensile shear
+
+#### Common Structural Adhesive Types
+
+| Type | Cure Mechanism | Typical Applications |
+|:-----|:---------------|:---------------------|
+| **Epoxy** | Two-part chemical reaction | Aerospace structures, automotive bonding |
+| **Acrylic** | Two-part or anaerobic | Metal bonding, threadlocking |
+| **Polyurethane** | Moisture or two-part | Automotive glass, flexible joints |
+| **Cyanoacrylate** | Moisture (instant) | Small parts, rapid assembly |
+
+::: {.callout-industry}
+**Aerospace Application:** The Boeing 787 Dreamliner uses structural adhesives extensively to bond composite panels, reducing weight and improving fatigue resistance compared to mechanical fasteners alone.
+:::
+
+---
+
+### Mechanical Fastening {#sec:mechanical-fastening}
+
+Mechanical fasteners provide non-permanent joining that allows for disassembly. For detailed coverage of bolted joints, see Chapter \@ref(chap-bolts).
+
+#### Categories of Mechanical Fasteners
+
+```{r fig-fastener-types, echo=FALSE, fig.cap="Categories of mechanical fasteners and their characteristics.", fig.align='center', fig.width=10, fig.height=5}
+library(ggplot2)
+
+fasteners <- data.frame(
+  type = c("Bolts/Screws", "Rivets", "Pins", "Clips/Retainers"),
+  removable = c(10, 2, 8, 7),
+  strength = c(9, 8, 6, 4),
+  cost = c(5, 7, 8, 9)
+)
+
+library(tidyr)
+fasteners_long <- pivot_longer(fasteners, cols = c(removable, strength, cost),
+                                names_to = "attribute", values_to = "value")
+
+ggplot(fasteners_long, aes(x = type, y = value, fill = attribute)) +
+  geom_col(position = "dodge", width = 0.7) +
+  scale_fill_manual(values = c("removable" = "steelblue", "strength" = "coral", "cost" = "forestgreen"),
+                    labels = c("Cost Effectiveness", "Removability", "Strength")) +
+  labs(
+    title = "Fastener Comparison",
+    x = "Fastener Type",
+    y = "Rating (1-10)",
+    fill = "Attribute"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text.x = element_text(angle = 15, hjust = 1)
+  )
+```
+
+::: {.callout-think}
+**Design Decision:** You need to join aluminum panels on an aircraft. The joint must be inspectable, repairable, and resist fatigue loading. Would you choose adhesive bonding, riveting, or a combination? Justify your choice.
+:::
+
+---
+
+### Joining Process Selection Guide {#sec:joining-selection}
+
+Selecting the right joining process requires considering multiple factors:
+
+```{r fig-joining-selection, echo=FALSE, fig.cap="Decision factors for joining process selection.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+
+# Create comparison matrix
+processes <- c("Welding", "Brazing", "Soldering", "Adhesive", "Bolts", "Rivets")
+criteria <- c("Permanent", "High Temp", "Dissimilar\nMaterials", "Thin Sheet", "Removable", "Low Cost")
+
+# Score matrix (1-5)
+scores <- matrix(c(
+  5, 5, 2, 3, 1, 3,  # Welding
+  4, 4, 3, 4, 1, 4,  # Brazing
+  3, 1, 3, 5, 1, 5,  # Soldering
+  4, 1, 5, 5, 1, 4,  # Adhesive
+  2, 5, 4, 2, 5, 3,  # Bolts
+  5, 4, 3, 4, 2, 4   # Rivets
+), nrow = 6, byrow = TRUE)
+
+# Create data frame
+selection_data <- expand.grid(Process = processes, Criterion = criteria)
+selection_data$Score <- as.vector(t(scores))
+
+ggplot(selection_data, aes(x = Criterion, y = Process, fill = Score)) +
+  geom_tile(color = "white", linewidth = 0.5) +
+  geom_text(aes(label = Score), color = "white", fontface = "bold", size = 4) +
+  scale_fill_gradient(low = "coral", high = "forestgreen", limits = c(1, 5)) +
+  labs(
+    title = "Joining Process Selection Matrix",
+    subtitle = "Scores: 1 (Poor) to 5 (Excellent)",
+    x = "",
+    y = "",
+    fill = "Score"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank()
+  )
+```
+
+---
+
+### Practice Problems {#sec:joining-practice}
+
+::: {.question}
+**Problem 1:** A food processing plant needs to join stainless steel pipes carrying hot (90°C) acidic liquids. The joints must be leak-proof and cleanable. Which joining method would you recommend?
+:::
+
+::: {.answer}
+**Recommendation: Welding (TIG/GTAW)**
+
+**Reasoning:**
+- Creates smooth, crevice-free joints for hygiene
+- Provides leak-proof seal for liquid containment
+- Stainless steel is readily weldable with proper technique
+- Service temperature (90°C) is well within weld capability
+- No filler metals or adhesives that could contaminate product
+
+Orbital TIG welding would be ideal for consistent, high-quality pipe joints.
+:::
+
+::: {.question}
+**Problem 2:** An electronics manufacturer needs to attach small surface-mount components to a PCB. Components are heat-sensitive. What joining method should be used?
+:::
+
+::: {.answer}
+**Recommendation: Soldering (Reflow)**
+
+**Reasoning:**
+- Low temperature (< 250°C peak) protects heat-sensitive components
+- Provides excellent electrical conductivity
+- Industry-standard process for PCB assembly
+- Can be automated for high-volume production
+- Lead-free solder (SAC305) meets environmental regulations
+:::
+
+::: {.question}
+**Problem 3:** Compare the total cost of joining 1000 brackets using (a) welding and (b) bolted connections. Each bracket requires 4 joints. Welding costs $2 per joint but requires no additional hardware. Bolting costs $0.50 per joint in labor but requires $1.50 in hardware per joint.
+:::
+
+::: {.answer}
+**Welding:**
+- Cost per bracket: 4 joints × $2/joint = $8
+- Total cost: 1000 × $8 = **$8,000**
+
+**Bolting:**
+- Labor per bracket: 4 joints × $0.50/joint = $2
+- Hardware per bracket: 4 joints × $1.50/joint = $6
+- Cost per bracket: $2 + $6 = $8
+- Total cost: 1000 × $8 = **$8,000**
+
+**Analysis:** In this case, the costs are equal. However, welding provides a permanent joint with no risk of loosening, while bolting allows for future disassembly. The choice depends on whether the brackets will ever need to be removed.
+:::
+
+---
+
+### Key Takeaways {#sec:joining-takeaways}
+
+1. **Process classification:** Joining methods are classified by bonding mechanism—fusion (welding), filler metals (brazing/soldering), adhesion (adhesives), or mechanical (fasteners).
+
+2. **Temperature threshold:** The 450°C boundary distinguishes brazing (above) from soldering (below), affecting joint strength and service temperature.
+
+3. **No universal solution:** Each joining method has strengths and limitations. The best choice depends on materials, strength requirements, operating conditions, and cost.
+
+4. **Combination approaches:** Modern designs often combine multiple joining methods (e.g., weld-bonding, rivet-bonding) to leverage the advantages of each.
+
+5. **Design integration:** Consider joining requirements early in the design process. Joint accessibility, material selection, and production volume all influence process selection.
+
+---
+
+### Further Resources {#sec:joining-resources}
+
+**Videos:**
+```{r video-welding-basics, echo=FALSE, results='asis'}
+embed_youtube("2CIcvB72dmk", "Welding Process Overview")
+```
+
+**Reading:**
+- AWS D1.1 Structural Welding Code - Steel
+- ASM Handbook Volume 6: Welding, Brazing, and Soldering
+- Adhesive Bonding of Aluminum Alloys (EAA/AA)

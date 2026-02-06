@@ -179,11 +179,211 @@ Further reading:
 [Design Rules](https://diecasting.zinc.org/properties/en/design/eng_prop_d_design-rules/)
 
 
-### Full Mould Casting Casting
+### Full Mould Casting (Lost Foam Casting) {#sec:full-mould-casting}
 
+Full mould casting, also known as **lost foam casting** or **evaporative pattern casting**, is an innovative process that uses expendable foam patterns instead of traditional reusable patterns. The foam pattern is coated with a refractory material, placed in unbonded sand, and vaporizes when the molten metal is poured—leaving behind a precise casting.
 
+#### The Process
 
-### Investment Casting
+```{r fig-lost-foam-process, echo=FALSE, fig.cap="Lost foam casting process: the foam pattern vaporizes as molten metal replaces it.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+
+# Create a multi-stage diagram
+ggplot() +
+  # Stage 1: Foam Pattern
+  annotate("text", x = 1.5, y = 5.5, label = "1. FOAM PATTERN", fontface = "bold", size = 3.5) +
+  geom_rect(aes(xmin = 0.5, xmax = 2.5, ymin = 2.5, ymax = 5), fill = "lightyellow", color = "black", linewidth = 1) +
+  geom_polygon(aes(x = c(1, 1, 1.3, 1.3, 1.7, 1.7, 2, 2, 1.5),
+                   y = c(3, 4.5, 4.5, 4, 4, 4.5, 4.5, 3, 2.8)),
+               fill = "pink", color = "black") +
+  annotate("text", x = 1.5, y = 3.7, label = "EPS\nFoam", size = 2.5) +
+  annotate("text", x = 1.5, y = 2, label = "Polystyrene\npattern created", size = 2.5, fontface = "italic") +
+
+  # Stage 2: Coated Pattern
+  annotate("text", x = 4.5, y = 5.5, label = "2. REFRACTORY COATING", fontface = "bold", size = 3.5) +
+  geom_rect(aes(xmin = 3.5, xmax = 5.5, ymin = 2.5, ymax = 5), fill = "lightyellow", color = "black", linewidth = 1) +
+  geom_polygon(aes(x = c(4, 4, 4.3, 4.3, 4.7, 4.7, 5, 5, 4.5),
+                   y = c(3, 4.5, 4.5, 4, 4, 4.5, 4.5, 3, 2.8)),
+               fill = "pink", color = "gray40", linewidth = 2) +
+  annotate("text", x = 4.5, y = 2, label = "Ceramic coating\napplied & dried", size = 2.5, fontface = "italic") +
+
+  # Stage 3: In Sand
+  annotate("text", x = 7.5, y = 5.5, label = "3. EMBEDDED IN SAND", fontface = "bold", size = 3.5) +
+  geom_rect(aes(xmin = 6.5, xmax = 8.5, ymin = 2.5, ymax = 5), fill = "tan", color = "black", linewidth = 1) +
+  geom_polygon(aes(x = c(7, 7, 7.3, 7.3, 7.7, 7.7, 8, 8, 7.5),
+                   y = c(3, 4.5, 4.5, 4, 4, 4.5, 4.5, 3, 2.8)),
+               fill = "pink", color = "gray40", linewidth = 1) +
+  geom_rect(aes(xmin = 7.4, xmax = 7.6, ymin = 4.5, ymax = 5.2), fill = "tan", color = "black") +
+  annotate("text", x = 7.5, y = 2, label = "Unbonded sand\ncompacted around", size = 2.5, fontface = "italic") +
+
+  # Stage 4: Metal Poured
+  annotate("text", x = 10.5, y = 5.5, label = "4. METAL REPLACES FOAM", fontface = "bold", size = 3.5) +
+  geom_rect(aes(xmin = 9.5, xmax = 11.5, ymin = 2.5, ymax = 5), fill = "tan", color = "black", linewidth = 1) +
+  geom_polygon(aes(x = c(10, 10, 10.3, 10.3, 10.7, 10.7, 11, 11, 10.5),
+                   y = c(3, 4.5, 4.5, 4, 4, 4.5, 4.5, 3, 2.8)),
+               fill = "darkorange", color = "black", linewidth = 1) +
+  geom_rect(aes(xmin = 10.4, xmax = 10.6, ymin = 4.5, ymax = 5.2), fill = "darkorange", color = "black") +
+  annotate("text", x = 10.5, y = 2, label = "Foam vaporizes;\nmetal fills void", size = 2.5, fontface = "italic") +
+
+  # Arrows between stages
+  geom_segment(aes(x = 2.7, xend = 3.3, y = 3.75, yend = 3.75),
+               arrow = arrow(length = unit(0.2, "cm")), linewidth = 1) +
+  geom_segment(aes(x = 5.7, xend = 6.3, y = 3.75, yend = 3.75),
+               arrow = arrow(length = unit(0.2, "cm")), linewidth = 1) +
+  geom_segment(aes(x = 8.7, xend = 9.3, y = 3.75, yend = 3.75),
+               arrow = arrow(length = unit(0.2, "cm")), linewidth = 1) +
+
+  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(1.5, 6)) +
+  theme_void() +
+  labs(title = "Lost Foam Casting Process") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+```
+
+**Key Steps:**
+
+1. **Pattern Creation:** A polystyrene foam pattern (typically expanded polystyrene, EPS) is created, often by molding or CNC machining. Complex patterns can be glued together from multiple pieces.
+
+2. **Coating:** The foam pattern is coated with a permeable refractory material that provides a barrier between the sand and molten metal, controls gas escape, and creates the surface finish.
+
+3. **Embedding:** The coated pattern is placed in a flask and surrounded by unbonded (loose) sand, which is compacted by vibration.
+
+4. **Pouring:** Molten metal is poured directly onto the foam pattern. The heat vaporizes the foam, and the metal fills the resulting void, replicating the pattern exactly.
+
+5. **Shakeout:** After solidification, the sand is simply poured away—no mold breaking is required.
+
+#### Advantages and Disadvantages
+
+| Feature | Advantage | Disadvantage |
+|:--------|:----------|:-------------|
+| **Complexity** | Can produce very complex shapes including internal passages without cores | Pattern must be remade for each casting |
+| **Accuracy** | No parting lines, no draft angles required, excellent dimensional accuracy | Foam pattern production adds cost and time |
+| **Tooling** | Eliminates expensive core boxes and pattern maintenance | EPS patterns are fragile and require careful handling |
+| **Environment** | Sand is recyclable; no chemical binders required | Foam vaporization produces gases that must be managed |
+| **Finish** | Good surface finish; reduced machining requirements | Limited to metals with pouring temperatures that vaporize foam effectively |
+
+::: {.callout-industry}
+**Industry Application:** General Motors pioneered the use of lost foam casting for automotive engine blocks and cylinder heads. The process allows complex water jacket passages to be cast without cores, reducing weight and improving cooling efficiency.
+:::
+
+---
+
+### Investment Casting (Lost Wax Casting) {#sec:investment-casting}
+
+**Investment casting**, also known as **lost wax casting**, is a precision casting process capable of producing intricate, near-net-shape parts with excellent surface finish and dimensional accuracy. The process derives its name from the ceramic mold material that is "invested" (surrounded) around a wax pattern.
+
+#### The Process
+
+```{r fig-investment-casting-process, echo=FALSE, fig.cap="Investment casting process from wax pattern to finished casting.", fig.align='center', fig.width=12, fig.height=5}
+library(ggplot2)
+
+ggplot() +
+  # Stage 1: Wax Pattern
+  annotate("text", x = 1, y = 4.8, label = "1. WAX\nPATTERN", fontface = "bold", size = 3) +
+  geom_polygon(aes(x = c(0.5, 0.5, 0.7, 0.7, 1.3, 1.3, 1.5, 1.5),
+                   y = c(2, 4, 4, 3.5, 3.5, 4, 4, 2)),
+               fill = "green3", color = "black") +
+  annotate("text", x = 1, y = 1.5, label = "Wax injected\ninto die", size = 2.2, fontface = "italic") +
+
+  # Stage 2: Pattern Tree
+  annotate("text", x = 3, y = 4.8, label = "2. PATTERN\nTREE", fontface = "bold", size = 3) +
+  geom_rect(aes(xmin = 2.9, xmax = 3.1, ymin = 2, ymax = 4.3), fill = "green3", color = "black") +
+  geom_polygon(aes(x = c(2.5, 2.5, 2.7, 2.9), y = c(2.5, 3.2, 3.2, 3)),
+               fill = "green3", color = "black") +
+  geom_polygon(aes(x = c(3.5, 3.5, 3.3, 3.1), y = c(2.5, 3.2, 3.2, 3)),
+               fill = "green3", color = "black") +
+  geom_polygon(aes(x = c(2.5, 2.5, 2.7, 2.9), y = c(3.5, 4.2, 4.2, 4)),
+               fill = "green3", color = "black") +
+  geom_polygon(aes(x = c(3.5, 3.5, 3.3, 3.1), y = c(3.5, 4.2, 4.2, 4)),
+               fill = "green3", color = "black") +
+  annotate("text", x = 3, y = 1.5, label = "Multiple patterns\non central sprue", size = 2.2, fontface = "italic") +
+
+  # Stage 3: Ceramic Shell
+  annotate("text", x = 5, y = 4.8, label = "3. CERAMIC\nSHELL", fontface = "bold", size = 3) +
+  geom_rect(aes(xmin = 4.7, xmax = 5.3, ymin = 1.8, ymax = 4.5), fill = "tan", color = "black", linewidth = 1.5) +
+  geom_rect(aes(xmin = 4.85, xmax = 5.15, ymin = 2, ymax = 4.3), fill = "green3", color = "darkgreen") +
+  annotate("text", x = 5, y = 1.5, label = "Dipped in slurry\n& stuccoed", size = 2.2, fontface = "italic") +
+
+  # Stage 4: Dewax
+  annotate("text", x = 7, y = 4.8, label = "4. DEWAX", fontface = "bold", size = 3) +
+  geom_rect(aes(xmin = 6.7, xmax = 7.3, ymin = 1.8, ymax = 4.5), fill = "tan", color = "black", linewidth = 1.5) +
+  geom_rect(aes(xmin = 6.85, xmax = 7.15, ymin = 2, ymax = 4.3), fill = "white", color = "gray") +
+  geom_segment(aes(x = 7, xend = 7, y = 1.8, yend = 1.3),
+               arrow = arrow(length = unit(0.15, "cm")), color = "green3", linewidth = 1) +
+  annotate("text", x = 7, y = 1, label = "Wax\nmelted out", size = 2, color = "green4") +
+  annotate("text", x = 7, y = 1.5, label = "Steam autoclave\nor flash fire", size = 2.2, fontface = "italic") +
+
+  # Stage 5: Pour
+  annotate("text", x = 9, y = 4.8, label = "5. POUR\nMETAL", fontface = "bold", size = 3) +
+  geom_rect(aes(xmin = 8.7, xmax = 9.3, ymin = 1.8, ymax = 4.5), fill = "tan", color = "black", linewidth = 1.5) +
+  geom_rect(aes(xmin = 8.85, xmax = 9.15, ymin = 2, ymax = 4.3), fill = "darkorange", color = "orange") +
+  geom_polygon(aes(x = c(8.7, 9, 9.3), y = c(5.2, 4.7, 5.2)), fill = "darkorange", color = "black") +
+  annotate("text", x = 9, y = 1.5, label = "Preheated mold\nfilled with metal", size = 2.2, fontface = "italic") +
+
+  # Stage 6: Finished
+  annotate("text", x = 11, y = 4.8, label = "6. FINISHED\nCASTINGS", fontface = "bold", size = 3) +
+  geom_polygon(aes(x = c(10.5, 10.5, 10.7, 10.7, 11.3, 11.3, 11.5, 11.5),
+                   y = c(2, 4, 4, 3.5, 3.5, 4, 4, 2)),
+               fill = "gray50", color = "black") +
+  geom_polygon(aes(x = c(10.5, 10.5, 10.7, 10.7, 11.3, 11.3, 11.5, 11.5) + 0.3,
+                   y = c(2, 4, 4, 3.5, 3.5, 4, 4, 2) - 0.5),
+               fill = "gray60", color = "black") +
+  annotate("text", x = 11, y = 1.5, label = "Shell broken;\nparts cut off", size = 2.2, fontface = "italic") +
+
+  # Arrows
+  geom_segment(aes(x = 1.7, xend = 2.3, y = 3, yend = 3),
+               arrow = arrow(length = unit(0.15, "cm")), linewidth = 0.8) +
+  geom_segment(aes(x = 3.7, xend = 4.5, y = 3, yend = 3),
+               arrow = arrow(length = unit(0.15, "cm")), linewidth = 0.8) +
+  geom_segment(aes(x = 5.5, xend = 6.5, y = 3, yend = 3),
+               arrow = arrow(length = unit(0.15, "cm")), linewidth = 0.8) +
+  geom_segment(aes(x = 7.5, xend = 8.5, y = 3, yend = 3),
+               arrow = arrow(length = unit(0.15, "cm")), linewidth = 0.8) +
+  geom_segment(aes(x = 9.5, xend = 10.3, y = 3, yend = 3),
+               arrow = arrow(length = unit(0.15, "cm")), linewidth = 0.8) +
+
+  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.5, 5.5)) +
+  theme_void() +
+  labs(title = "Investment Casting (Lost Wax) Process") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+```
+
+**Key Steps:**
+
+1. **Wax Pattern Injection:** A wax (or wax-like polymer) pattern is created by injecting material into a metal die. Each pattern is an exact replica of the desired part.
+
+2. **Pattern Assembly:** Multiple wax patterns are attached to a central wax sprue (runner system), creating a "tree" that allows multiple parts to be cast simultaneously.
+
+3. **Shell Building:** The pattern tree is repeatedly dipped into ceramic slurry and coated with fine sand (stucco). Multiple layers build up a ceramic shell typically 5-10 mm thick.
+
+4. **Dewaxing:** The ceramic shell is heated (via steam autoclave or flash fire) to melt and drain the wax, leaving a hollow ceramic mold. This is why it's called "lost wax."
+
+5. **Firing:** The empty shell is fired at high temperature to cure the ceramic and burn out any remaining wax residue.
+
+6. **Pouring:** Molten metal is poured into the preheated ceramic shell, often under vacuum or centrifugal force for difficult alloys.
+
+7. **Shell Removal:** After solidification, the ceramic shell is broken away, and individual castings are cut from the tree.
+
+#### Advantages and Disadvantages
+
+| Feature | Advantage | Disadvantage |
+|:--------|:----------|:-------------|
+| **Precision** | Excellent dimensional accuracy (±0.1% typical); minimal machining required | Higher cost per part than sand casting |
+| **Surface Finish** | Superior finish (1.6-3.2 µm Ra); can cast fine detail and text | Long lead time for shell building (multiple dipping cycles) |
+| **Materials** | Can cast difficult alloys (superalloys, titanium) that can't be machined easily | Wax patterns are fragile and temperature-sensitive |
+| **Complexity** | No draft angles required; undercuts and complex internal passages possible | Part size limited (typically < 50 kg) |
+| **Repeatability** | Consistent results; excellent for high-volume precision parts | Shell cracking can cause defects |
+
+::: {.callout-industry}
+**Industry Applications:**
+- **Aerospace:** Turbine blades for jet engines (single-crystal superalloy castings)
+- **Medical:** Orthopedic implants (hip joints, knee replacements)
+- **Defense:** Firearm components, missile parts
+- **Automotive:** Turbocharger wheels, valve bodies
+:::
+
+::: {.callout-check}
+**Quick Check:** Why is investment casting also called "lost wax" casting? What happens to the wax pattern during the process?
+:::
 
 ---
 
@@ -303,4 +503,230 @@ Experience and clear communication among designers, engineers, and metalworkers 
 
 ---
 
-### Defects in Casting process
+### Defects in Casting {#sec:casting-defects}
+
+Understanding common casting defects is essential for both designers and quality engineers. By recognizing these defects and their causes, designers can modify their designs to reduce the likelihood of problems, and quality personnel can identify root causes when defects occur.
+
+#### Classification of Casting Defects
+
+Casting defects can be classified into several categories based on their origin:
+
+```{r fig-defect-categories, echo=FALSE, fig.cap="Classification of common casting defects by their primary cause.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+library(dplyr)
+
+# Create defect data
+defects <- data.frame(
+  category = c("Gas-Related", "Gas-Related", "Shrinkage-Related", "Shrinkage-Related",
+               "Mold-Related", "Mold-Related", "Metallurgical", "Metallurgical"),
+  defect = c("Porosity", "Blowholes", "Shrinkage Cavity", "Hot Tears",
+             "Sand Inclusions", "Misrun", "Cold Shuts", "Segregation"),
+  severity = c(7, 6, 8, 9, 5, 6, 7, 6),
+  frequency = c(8, 5, 7, 4, 6, 5, 6, 4)
+)
+
+ggplot(defects, aes(x = frequency, y = severity, color = category)) +
+  geom_point(size = 5) +
+  geom_text(aes(label = defect), vjust = -1, size = 3.5) +
+  scale_color_manual(values = c("Gas-Related" = "steelblue",
+                                 "Shrinkage-Related" = "coral",
+                                 "Mold-Related" = "forestgreen",
+                                 "Metallurgical" = "purple")) +
+  labs(
+    title = "Casting Defects: Severity vs. Frequency",
+    x = "Relative Frequency of Occurrence",
+    y = "Severity of Impact",
+    color = "Defect Category"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "right"
+  ) +
+  xlim(3, 10) +
+  ylim(3, 10)
+```
+
+#### Gas-Related Defects
+
+**Porosity** occurs when gas becomes trapped in the solidifying metal, creating small voids throughout the casting.
+
+| Cause | Prevention |
+|:------|:-----------|
+| Dissolved gases in molten metal | Degas the melt before pouring |
+| Moisture in the mold | Dry molds thoroughly |
+| Turbulent pouring | Design proper gating systems |
+| Inadequate venting | Add vents to allow gas escape |
+
+**Blowholes** are larger, rounded cavities caused by gas bubbles that form during solidification.
+
+::: {.callout-think}
+**Think About It:** Why might aluminum castings be more susceptible to porosity than steel castings? (Hint: Consider the solubility of hydrogen in molten aluminum.)
+:::
+
+#### Shrinkage-Related Defects
+
+**Shrinkage cavities** form when liquid metal solidifies and contracts, but there is insufficient feed metal to compensate.
+
+**Hot tears** (or hot cracks) occur when the casting is restrained from shrinking during the final stages of solidification, causing internal stresses that exceed the metal's strength.
+
+```{r fig-shrinkage-diagram, echo=FALSE, fig.cap="Shrinkage defects form when feed metal cannot reach areas that solidify last.", fig.align='center', fig.width=8, fig.height=5}
+library(ggplot2)
+
+ggplot() +
+  # Casting cross-section
+  geom_rect(aes(xmin = 1, xmax = 9, ymin = 1, ymax = 5), fill = "gray70", color = "black", linewidth = 1) +
+
+  # Thick section (hot spot)
+  geom_rect(aes(xmin = 4, xmax = 6, ymin = 1, ymax = 5), fill = "gray60", color = "black", linewidth = 1) +
+
+  # Shrinkage cavity
+  geom_polygon(aes(x = c(4.5, 5, 5.5, 5.3, 5, 4.7),
+                   y = c(3.5, 4, 3.5, 3, 2.8, 3)),
+               fill = "white", color = "red", linewidth = 1.5) +
+
+  # Annotations
+  annotate("text", x = 5, y = 3.3, label = "Shrinkage\nCavity", color = "red", fontface = "bold", size = 3.5) +
+  annotate("text", x = 5, y = 5.5, label = "Thick Section\n(Last to Solidify)", size = 3.5) +
+  annotate("text", x = 2.5, y = 3, label = "Thin\nSection", size = 3) +
+  annotate("text", x = 7.5, y = 3, label = "Thin\nSection", size = 3) +
+
+  # Solidification direction arrows
+  geom_segment(aes(x = 1.5, xend = 3.5, y = 3, yend = 3),
+               arrow = arrow(length = unit(0.2, "cm")), color = "blue", linewidth = 1) +
+  geom_segment(aes(x = 8.5, xend = 6.5, y = 3, yend = 3),
+               arrow = arrow(length = unit(0.2, "cm")), color = "blue", linewidth = 1) +
+  geom_segment(aes(x = 5, xend = 5, y = 1.5, yend = 2.5),
+               arrow = arrow(length = unit(0.2, "cm")), color = "blue", linewidth = 1) +
+  geom_segment(aes(x = 5, xend = 5, y = 4.5, yend = 3.8),
+               arrow = arrow(length = unit(0.2, "cm")), color = "blue", linewidth = 1) +
+
+  annotate("text", x = 5, y = 0.5, label = "Blue arrows show solidification direction (outside-in)",
+           color = "blue", size = 3, fontface = "italic") +
+
+  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 6)) +
+  theme_void() +
+  labs(title = "How Shrinkage Cavities Form") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+```
+
+**Design solutions for shrinkage:**
+
+- Maintain uniform wall thickness
+- Use risers to feed thick sections
+- Taper sections toward risers (directional solidification)
+- Avoid isolated heavy sections
+
+#### Mold-Related Defects
+
+**Sand inclusions** occur when pieces of the mold break off and become embedded in the casting.
+
+**Misruns** happen when the molten metal solidifies before completely filling the mold cavity.
+
+| Defect | Cause | Prevention |
+|:-------|:------|:-----------|
+| Sand inclusions | Weak mold, erosion from metal flow | Improve sand strength, optimize gating |
+| Misrun | Metal too cold, mold too cold, restricted flow | Increase pouring temp, preheat mold, enlarge gates |
+| Metal penetration | Metal forced into sand pores | Use finer sand, apply mold coating |
+| Mold shift | Cope/drag misalignment | Improve flask alignment, use locating pins |
+
+#### Metallurgical Defects
+
+**Cold shuts** form when two streams of metal meet but fail to fuse completely, creating a visible line or seam in the casting.
+
+**Segregation** refers to non-uniform distribution of alloying elements or impurities, which can cause localized variations in mechanical properties.
+
+::: {.callout-check}
+**Quick Check:** A casting shows a large void near the center of its thickest section. Is this more likely a gas porosity defect or a shrinkage cavity? How would you tell the difference?
+:::
+
+#### Defect Prevention Through Design
+
+The table below summarizes key design guidelines to prevent common casting defects:
+
+| Design Guideline | Defects Prevented |
+|:-----------------|:------------------|
+| Maintain uniform wall thickness | Shrinkage, hot tears, warping |
+| Avoid sharp corners (use fillets) | Hot tears, stress concentration |
+| Provide adequate draft angles | Mold damage, surface tears |
+| Design for directional solidification | Shrinkage cavities |
+| Minimize core complexity | Sand inclusions, misruns |
+| Avoid thin sections adjacent to thick | Cold shuts, shrinkage |
+
+::: {.callout-discussion}
+**Group Discussion:** You receive a batch of aluminum castings with small, rounded voids scattered throughout. Working in teams, develop a troubleshooting plan: What tests would you perform? What process changes would you investigate?
+:::
+
+---
+
+### Practice Problems {#sec:casting-practice}
+
+::: {.question}
+**Problem 1:** A cylindrical aluminum casting (100 mm diameter, 200 mm height) exhibits shrinkage porosity at its center. Sketch the solidification pattern and propose two design modifications to eliminate this defect.
+:::
+
+::: {.answer}
+**Solution:** The cylinder solidifies from the outside inward and from the ends toward the middle. The center is the last area to solidify and becomes isolated from liquid feed metal.
+
+**Design modifications:**
+1. Add a riser at the top connected to the center of the casting to provide feed metal during solidification
+2. Taper the cylinder slightly (larger diameter at top) to promote directional solidification toward the riser
+:::
+
+::: {.question}
+**Problem 2:** Calculate the required draft angle for a 150 mm deep sand casting if the foundry recommends 1.5° per 25 mm of depth for the first 50 mm, and 1° per 25 mm for depths beyond 50 mm.
+:::
+
+::: {.answer}
+**Solution:**
+- First 50 mm: $\frac{50}{25} \times 1.5° = 3°$
+- Remaining 100 mm: $\frac{100}{25} \times 1° = 4°$
+- Total draft angle: $3° + 4° = 7°$
+
+The pattern should have a 7° draft angle on vertical surfaces.
+:::
+
+::: {.question}
+**Problem 3:** Compare sand casting and investment casting for producing 500 units of a 2 kg steel valve body with internal passages. Which process would you recommend and why?
+:::
+
+::: {.answer}
+**Recommendation: Investment Casting**
+
+**Reasoning:**
+- Internal passages are easier to achieve without cores
+- Steel's high melting point works well with ceramic shells
+- 500 units justifies the higher per-part cost
+- Superior surface finish reduces machining
+- Better dimensional accuracy for valve sealing surfaces
+
+Sand casting would require complex cores and extensive machining, likely making it more expensive at this volume despite lower tooling costs.
+:::
+
+---
+
+### Key Takeaways {#sec:casting-takeaways}
+
+1. **Casting fundamentals:** All casting processes involve melting, pouring, solidification, and finishing—but the mold type and material handling vary significantly.
+
+2. **Process selection:** Choose sand casting for large parts and low volumes, investment casting for precision and complex geometries, and lost foam for complex internal features.
+
+3. **Design for manufacturability:** Uniform wall thickness, adequate draft angles, proper filleting, and consideration of parting line placement are essential for quality castings.
+
+4. **Defect prevention:** Most casting defects can be prevented through proper design, controlled process parameters, and quality raw materials.
+
+5. **Material behavior:** Understanding how metals behave during solidification—including shrinkage, fluidity, and solidification patterns—is crucial for successful casting design.
+
+---
+
+### Further Resources {#sec:casting-resources}
+
+**Videos:**
+```{r video-investment-casting, echo=FALSE, results='asis'}
+embed_youtube("fKLKSN8H6Xg", "Investment Casting Process")
+```
+
+**Reading:**
+- [Reliance Foundry: Casting Design Guidelines](https://www.reliance-foundry.com/blog/metal-casting-design)
+- [3DPCasting: Sand Casting Detailed Steps](https://www.3dpcasting.com/blogs/sand-casting-8-key-steps-in-detail/)
+- [General Kinematics: Sand Casting Overview](https://www.generalkinematics.com/blog/sand-casting/)

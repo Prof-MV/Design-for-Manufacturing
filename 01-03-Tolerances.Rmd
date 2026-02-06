@@ -1,7 +1,33 @@
 ## Tolerances in Mechanical Design {#tolerances}
 
+```{r setup-01-03, include=FALSE}
+# Include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# Include the required packages to make sure the page can be built
+source("R/required_packages.R")
+```
 
-In mechanical engineering and manufacturing, no part can be produced to exact absolute dimensions every single time due to inherent variations in machinery, material properties, and environmental conditions. Therefore, designers must specify an acceptable range of variation. This chapter explores the fundamental concepts of tolerances, basic sizes, and allowances, as defined in standards such as ASME Y14.5 [@ASME_Y145_2018].
+### Learning Objectives {-}
+
+By the end of this chapter, you will be able to:
+
+- Define basic size, tolerance, and allowance in mechanical design
+- Apply limit dimensioning and plus-minus tolerancing methods
+- Distinguish between bilateral and unilateral tolerances
+- Interpret single-limit (MAX/MIN) specifications
+- Apply correct decimal and zero conventions for metric and imperial units
+
+::: {.callout-think}
+**Before You Read:** Why can't we simply manufacture every part to its exact
+specified dimension? What factors might cause variation in manufacturing?
+:::
+
+In mechanical engineering and manufacturing, no part can be produced to exact
+absolute dimensions every single time due to inherent variations in machinery,
+material properties, and environmental conditions. Therefore, designers must
+specify an acceptable range of variation. This chapter explores the fundamental
+concepts of tolerances, basic sizes, and allowances, as defined in standards
+such as ASME Y14.5 [@ASME_Y145_2018].
 
 ### Fundamental Concepts
 
@@ -121,11 +147,13 @@ parts_data <- data.frame(
 
 # Plot the distribution
 ggplot(parts_data, aes(x = diameter)) +
-  geom_histogram(aes(y = after_stat(density)), binwidth = 0.005, 
+  geom_histogram(aes(y = after_stat(density)), binwidth = 0.005,
                  fill = "#69b3a2", color = "white", alpha = 0.8) +
-  geom_density(color = "#404080", size = 1) +
-  geom_vline(xintercept = lower_limit, linetype = "dashed", color = "red", size = 1) +
-  geom_vline(xintercept = upper_limit, linetype = "dashed", color = "red", size = 1) +
+  geom_density(color = "#404080", linewidth = 1) +
+  geom_vline(xintercept = lower_limit, linetype = "dashed",
+             color = "red", linewidth = 1) +
+  geom_vline(xintercept = upper_limit, linetype = "dashed",
+             color = "red", linewidth = 1) +
   annotate("text", x = upper_limit + 0.01, y = 5, label = "USL", color = "red") +
   annotate("text", x = lower_limit - 0.01, y = 5, label = "LSL", color = "red") +
   theme_minimal() +
@@ -164,5 +192,29 @@ When dimensioning in inches, the conventions are distinct:
 * **Decimal Consistency**: The number of decimal places **must be identical** for the dimension and the tolerance.
     * *Example*: $1.000 \pm .005$ (Both must show 3 decimal places).
 * **Zeros in Tolerances**:
-    * **Bilateral**: If a tolerance limit is zero, it still requires a plus or minus sign and must display the same number of decimal places as the dimension to express precision.
+    * **Bilateral**: If a tolerance limit is zero, it still requires a plus or
+      minus sign and must display the same number of decimal places as the
+      dimension to express precision.
     * *Example*: $1.000 \,\, {}^{+.005}_{-.000}$
+
+::: {.callout-industry}
+**Industry Application:** In food processing equipment manufacturing, tolerance
+specifications must account for sanitary requirements. Parts must fit together
+without gaps that could harbor bacteria, yet still allow for disassembly during
+cleaning. This requires careful selection of clearance and interference fits.
+:::
+
+### Key Takeaways {-}
+
+- Tolerances define the acceptable range of variation for manufactured parts
+- Limit dimensioning explicitly states upper and lower bounds
+- Plus-minus tolerancing can be bilateral (equal or unequal) or unilateral
+- Metric and imperial systems have different rules for leading zeros and
+  decimal places
+- Single-limit tolerances (MAX/MIN) are used when only one boundary is critical
+
+::: {.callout-check}
+**Quick Check:** Given a dimension of $25.00 \pm 0.05$ mm, what are the upper
+limit, lower limit, and total tolerance? How would this be written using limit
+dimensioning?
+:::

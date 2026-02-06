@@ -489,7 +489,196 @@ metric_washer_data %>%
 ```
 
 
-\newpage
+
+### Bolt Tightening Methods {#bolt-tightening-methods}
+
+Achieving the correct preload in a bolted joint is critical for joint integrity. Three primary methods are used in industry to control bolt tension during assembly: torque-controlled tightening, torque-angle tightening, and direct elongation measurement. Each method offers different levels of accuracy and is suited to different applications.
+
+#### Why Tighten the Nut, Not the Bolt?
+
+In most bolted joint assemblies, it is preferable to **rotate the nut while holding the bolt stationary** rather than turning the bolt head. This practice offers several important advantages:
+
+1. **Reduced Torsional Stress in the Bolt:** When the bolt is rotated during tightening, the threads experience friction that induces torsional stress in addition to the desired tensile stress. This combined loading reduces the effective preload and can lead to premature fatigue failure. Rotating the nut instead transfers the frictional torque to the nut-to-washer interface, keeping the bolt in pure tension.
+
+2. **Consistent Friction Conditions:** The friction coefficient under the bolt head is typically more consistent when the bolt remains stationary. The bearing surface under a rotating bolt head can gall or score, leading to unpredictable torque-tension relationships.
+
+3. **Prevention of Bolt Rotation Damage:** In many assemblies, the bolt passes through a clearance hole in the top member. If the bolt rotates during tightening, it may damage the hole surface or any protective coatings. Holding the bolt stationary prevents this damage.
+
+4. **Accessibility:** In structural applications, the nut side is often more accessible for wrench placement, making it the natural choice for the rotating element.
+
+> **Note:** There are exceptions to this rule. In some applications where the nut is captured or inaccessible, the bolt must be rotated. In these cases, anti-seize compounds or specialized lubricants help reduce the torsional stress effects.
+
+---
+
+#### Method 1: Torque-Controlled Tightening (Torque Wrench) {#torque-wrench-method}
+
+The most common method for achieving bolt preload is **torque-controlled tightening** using a torque wrench. This method relies on the relationship between applied torque and resulting bolt tension.
+
+##### How It Works {-}
+
+A torque wrench measures the rotational force applied to the nut. When the specified torque value is reached, the wrench signals the operator (via a click, breakover, or digital display) to stop tightening. The torque is related to preload by the short-form torque equation:
+
+$$T = K \cdot d \cdot F_i$$
+
+Where $T$ is the applied torque, $K$ is the nut factor (typically 0.15–0.25), $d$ is the nominal bolt diameter, and $F_i$ is the resulting preload.
+
+##### Advantages {-}
+
+* **Simplicity:** Torque wrenches are widely available, easy to use, and require minimal training.
+* **Speed:** Tightening is fast compared to more precise methods.
+* **Cost-Effective:** Equipment costs are low, and the method is suitable for high-volume production.
+* **Traceability:** Torque values can be documented for quality records.
+
+##### Disadvantages {-}
+
+* **High Variability:** Approximately 70–90% of the applied torque is consumed by friction in the threads and under the nut face. Small changes in lubrication, surface finish, or thread condition can cause preload variations of ±25–35%.
+* **No Direct Tension Measurement:** The actual bolt tension is not measured; it is inferred from the torque-tension relationship.
+* **Sensitive to Lubrication:** Accidental lubrication can dramatically increase preload, potentially causing bolt failure (as demonstrated in Example 2, Question 8).
+
+---
+
+#### Method 2: Torque-Angle Tightening {#torque-angle-method}
+
+The **torque-angle method** (also called "turn-of-nut" method) improves upon pure torque control by adding a controlled angular rotation after reaching an initial "snug" torque. This method is widely used in automotive and structural steel applications.
+
+##### How It Works {-}
+
+1. **Snug Tightening:** The bolt is first tightened to a low "snug" torque that brings all joint surfaces into firm contact. This establishes a consistent starting point.
+2. **Angle Turn:** From the snug position, the nut is rotated through a specified additional angle (e.g., 60°, 90°, or 120°). This rotation directly corresponds to bolt elongation.
+
+The relationship between rotation angle and elongation is:
+
+$$\delta = \frac{\theta}{360°} \cdot p$$
+
+Where $\delta$ is the bolt elongation, $\theta$ is the rotation angle in degrees, and $p$ is the thread pitch.
+
+```{r torque-angle-plot, echo=TRUE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Torque-Angle Tightening Curve"}
+library(ggplot2)
+library(dplyr)
+
+# Create synthetic data that matches the general shape
+set.seed(10)
+
+tibble(
+  angle = seq(0, 100, length.out = 400),
+  torque_base = 8.5 * (1 - exp(-angle / 18)) +   # sigmoid-like rise
+    0.7 * sin(angle/18 * 2*pi) * exp(-angle/60),  # small dip
+  extra = pmax(0, (angle - 65)/35)^1.9 * 3.2,          # late sharp rise
+  torque = pmin(torque_base + extra, 9.8)              # hard cap
+) -> dat
+
+# Limit line value (for annotation)
+limit_y <- 9.8
+
+ggplot(dat, aes(angle, torque)) +
+
+  # Main curve
+  geom_line(linewidth = 1.1, color = "#1e88e5") +
+
+  # Limit line
+  geom_hline(yintercept = limit_y,
+             color = "red", linewidth = 1.1, linetype = "solid") +
+
+  # Arrows / annotations
+  annotate("segment",
+           x = 68, xend = 68, y = limit_y - 0.4, yend = limit_y + 0.4,
+           color = "red", linewidth = 1.05, arrow = arrow(length = unit(3.5, "mm"))) +
+
+  annotate("segment",
+           x = 68, xend = 92, y = limit_y + 0.15, yend = limit_y + 0.15,
+           color = "red", linewidth = 1.05,
+           arrow = arrow(length = unit(3.5, "mm"), type = "closed")) +
+
+  # Text labels
+  annotate("text", x = 38, y = limit_y + 0.55,
+           label = "Limit", color = "red", size = 4.6, hjust = 0, fontface = "bold") +
+
+  annotate("text", x = 80, y = limit_y + 0.55,
+           label = "Additional\nAngle", color = "red", size = 4, hjust = 0.5) +
+
+  annotate("text", x = 92, y = max(dat$torque) + 0.25,
+           label = "→", color = "#1e88e5", size = 7, hjust = 0.5, vjust = 0.4) +
+
+  # Theme & labels
+  labs(
+    x = "Angle",
+    y = "Torque",
+    title = NULL
+  ) +
+
+  scale_x_continuous(expand = expansion(mult = c(0.02, 0.08))) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.12))) +
+
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank(),
+    plot.margin = margin(12, 20, 12, 12)
+  )
+```
+
+As shown in Figure \@ref(fig:torque-angle-plot), the tightening process begins with a rapid torque rise as surfaces come into contact. Once the "snug" limit is reached, the additional angle rotation stretches the bolt into the elastic (or slightly plastic) region, achieving consistent preload regardless of friction variations.
+
+##### Advantages {-}
+
+* **Reduced Friction Sensitivity:** Since the angle turn directly controls elongation, friction variations after the snug point have less effect on final preload.
+* **Higher Preload Accuracy:** Typical preload scatter is reduced to ±10–15%, compared to ±25–35% for torque-only methods.
+* **Detects Anomalies:** If the torque rises too quickly or slowly during the angle turn, it indicates problems such as cross-threading, galling, or incorrect bolt grade.
+
+##### Disadvantages {-}
+
+* **Requires Calibration:** The snug torque and angle values must be determined experimentally for each joint configuration.
+* **More Complex Tooling:** Requires angle-measuring capability (electronic torque-angle wrenches or manual protractor fixtures).
+* **Not Suitable for All Joints:** Joints with soft gaskets or highly compliant members may not respond predictably to angle control.
+
+---
+
+#### Method 3: Elongation Measurement {#elongation-method}
+
+The most accurate method for controlling bolt preload is **direct measurement of bolt elongation**. Since bolt tension is directly proportional to elongation through Hooke's law, measuring elongation eliminates the uncertainties associated with friction.
+
+##### How It Works {-}
+
+The bolt is tightened while its elongation is monitored using one of several techniques:
+
+1. **Mechanical Measurement:** Using a micrometer or dial indicator to measure the overall bolt length before and after tightening. This requires access to both ends of the bolt.
+
+2. **Ultrasonic Measurement:** An ultrasonic transducer is placed on the bolt head, and the time-of-flight of an ultrasonic pulse traveling through the bolt is measured. As the bolt stretches, the path length increases, and the travel time changes proportionally. Modern ultrasonic bolt gauges can measure elongation to ±0.0001 inches (2.5 μm).
+
+3. **Load-Indicating Washers:** Special washers with protrusions that flatten under load. The gap between the washer and the joint surface indicates the achieved preload.
+
+The relationship between elongation and preload is:
+
+$$F_i = k_b \cdot \delta = \frac{A_t \cdot E}{L} \cdot \delta$$
+
+Where $F_i$ is the preload, $k_b$ is the bolt stiffness, $\delta$ is the elongation, $A_t$ is the tensile stress area, $E$ is the modulus of elasticity, and $L$ is the grip length.
+
+##### Advantages {-}
+
+* **Highest Accuracy:** Preload accuracy of ±1–5% is achievable, as friction is completely eliminated from the measurement.
+* **Direct Measurement:** The actual bolt tension is measured, not inferred from torque.
+* **Ideal for Critical Applications:** Essential for pressure vessels, nuclear reactors, aerospace structures, and other safety-critical joints.
+* **Reusable Bolts:** Since the bolt is not over-stressed, it can be reused with confidence in its remaining life.
+
+##### Disadvantages {-}
+
+* **High Cost:** Ultrasonic equipment is expensive, and the method requires trained operators.
+* **Time-Consuming:** Each bolt must be measured individually, making the method slow for large-volume production.
+* **Access Requirements:** Mechanical methods require access to both ends of the bolt; ultrasonic methods require a clean, flat bolt head surface.
+* **Calibration Required:** Ultrasonic measurements must be calibrated for each bolt material and geometry.
+
+---
+
+#### Comparison of Tightening Methods
+
+| Method | Preload Accuracy | Speed | Cost | Best Application |
+| :--- | :---: | :---: | :---: | :--- |
+| Torque Wrench | ±25–35% | Fast | Low | General assembly, non-critical joints |
+| Torque-Angle | ±10–15% | Moderate | Medium | Automotive, structural steel |
+| Elongation Measurement | ±1–5% | Slow | High | Pressure vessels, aerospace, nuclear |
+
+> **Design Tip:** For critical applications, specify the tightening method on engineering drawings. Include the target preload, acceptable tolerance, and any special lubrication requirements.
+
 
 ### Understanding Bolt Joints and Force Triangles {#bolt-joints}
 In bolted joints, the force triangle is a conceptual tool used to visualize and analyze the distribution of forces between the bolt and the clamped members under preload and external working loads. This representation helps engineers understand how forces are balanced to maintain joint integrity and prevent failure modes such as separation or fatigue [@shigley2020].
@@ -597,7 +786,7 @@ ggplot(plot_data, aes(x = x, y = y, color = group, linetype = group)) +
 * **The Red Arrow:** This represents the additional tension the bolt carries. Notice that it is much smaller than the total external force ($P = 15,000$). This is because the members "gave up" some of their compression to support the load.
 * **Member Safety:** As long as the yellow line (member compression) does not reach $y = 0$, the joint remains "clamped." If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.
 
-\newpage
+
 
 ### Advanced Analysis of Bolted Joints with applicable Formulas {#bolted-analysis-formulas}
 
@@ -678,7 +867,6 @@ To ensure a safe design, we evaluate three safety factors:
 | $n_L$ | **Load Factor** | Guards against general overloading | $n_L = \frac{S_p A_t - F_i}{CP}$ |
 | $n_o$ | **Separation Factor** | Guards against physical joint separation | $n_o = \frac{F_i}{P(1 - C)}$ |
 
-\newpage
 
 ---
 

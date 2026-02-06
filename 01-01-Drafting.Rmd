@@ -1,21 +1,50 @@
 ## Interpreting and Creating Drawings {#interpreting}
 
-#### Introduction to Engineering Working Drawings [@Hijazi]
+```{r setup-01-01, include=FALSE}
+# Include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# Include the required packages to make sure the page can be built
+source("R/required_packages.R")
+```
 
-##### Engineering Working Drawings Basics
+### Learning Objectives {-}
 
-Engineering graphics is an effective way of communicating technical ideas and it is an essential tool in engineering design where most of the design process is graphically based. Engineering graphics is used in the design process for **visualization**, **communication**, and **documentation**.
+By the end of this chapter, you will be able to:
+
+- Explain the purpose and importance of engineering working drawings
+- Identify key components of a drawing sheet layout and title block
+- Interpret drawing standards and codes from organizations like ISO and ASME
+- Read and understand default tolerance specifications
+- Navigate drawing zones and revision systems
+
+::: {.callout-think}
+**Before You Read:** Have you ever tried to assemble furniture from instructions?
+What made the instructions easy or difficult to follow? Engineering drawings
+serve a similar purpose but for much more complex assemblies.
+:::
+
+### Introduction to Engineering Working Drawings [@Hijazi]
+
+#### Engineering Working Drawings Basics
+
+Engineering graphics is an effective way of communicating technical ideas and
+it is an essential tool in engineering design where most of the design process
+is graphically based. Engineering graphics is used in the design process for
+**visualization**, **communication**, and **documentation**.
 
 Graphics is a visual communications language that include images, text, and numeric information. Graphics communications using engineering drawings and models is a clear and precise language with definite rules that must be mastered in order to be successful in engineering design. Graphics communications are used in every phase of engineering design starting from concept illustration all the way to the manufacturing phase.
 
 * **An engineering (or technical) drawing** is a graphical representation of a part, assembly, system, or structure and it can be produced using freehand, mechanical tools, or computer methods.
 * **Working drawings** are the set of technical drawings used during the manufacturing phase of a product. They contain all the information needed to manufacture and assemble a product.
 
-##### Codes and Standards
+#### Codes and Standards
 
-Codes and standards are made to organize and unify the engineering work. 
+Codes and standards are made to organize and unify the engineering work.
 
-*Imagine; what if there was no standard for bolts?*
+::: {.callout-discussion}
+**Group Discussion:** Imagine if there was no standard for bolts. What problems
+might arise in manufacturing and maintenance? Discuss with your team.
+:::
 
 * **A code** is a set of specifications for the analysis, design, manufacture, and construction of something.
 * **A standard** is a set of specifications for parts, materials, or processes intended to achieve uniformity, efficiency and specific quality.
@@ -87,5 +116,29 @@ knitr::include_graphics("images/7-3-768x508.png")
 
 
 
-* **Zones**: Sheet zones (using letters and numbers along the border) help locate particular details or views, which is especially beneficial on large-format drawings.
+* **Zones**: Sheet zones (using letters and numbers along the border) help locate
+  particular details or views, which is especially beneficial on large-format
+  drawings.
 
+::: {.callout-industry}
+**Industry Application:** In automotive manufacturing, drawing revision control
+is critical. A single error in a drawing revision at a company like Ford or GM
+could result in thousands of incorrectly manufactured parts. Companies use
+sophisticated PLM (Product Lifecycle Management) systems to track every drawing
+change.
+:::
+
+### Key Takeaways {-}
+
+- Engineering drawings are the universal language of manufacturing
+- Standards organizations (ISO, ASME, ANSI) ensure drawings are interpreted
+  consistently worldwide
+- Title blocks contain critical information including tolerances, materials,
+  and revision history
+- Default tolerances apply when specific tolerances are not called out
+- Revision control is essential for maintaining design integrity
+
+::: {.callout-check}
+**Quick Check:** Can you identify all the required elements in a title block?
+What information would you look for first when receiving a new drawing?
+:::

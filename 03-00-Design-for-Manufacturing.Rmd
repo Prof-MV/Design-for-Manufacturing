@@ -1,2 +1,203 @@
+# (PART) Design for Manufacturing {-}
+
 # Design for Manufacturing {#design_for_manufacturing}
 
+```{r setup-dfm-intro, include=FALSE}
+## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+## include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+```
+
+## Introduction to Design for Manufacturing
+
+**Design for Manufacturing (DFM)** is a critical engineering philosophy that emphasizes designing products in a way that makes them easy, efficient, and cost-effective to manufacture. Rather than designing a product first and then figuring out how to make it, DFM encourages engineers to consider manufacturing constraints and capabilities from the very beginning of the design process.
+
+::: {.callout-think}
+**Before You Read:** Think about a product you use daily—your phone, a kitchen appliance, or your car. How do you think the designers balanced aesthetics and functionality with the practical realities of manufacturing thousands or millions of units?
+:::
+
+## Why Design for Manufacturing Matters
+
+The decisions made during the design phase determine approximately **70-80% of the final manufacturing cost** of a product. Once a design is finalized and production begins, opportunities to reduce costs become severely limited. Consider these implications:
+
+```{r fig-dfm-cost-influence, echo=FALSE, fig.cap="The influence of design decisions on product cost diminishes rapidly as a product moves through development stages.", fig.align='center', fig.width=8, fig.height=5}
+library(ggplot2)
+
+# Create data showing cost influence over product lifecycle
+stages <- c("Concept\nDesign", "Detailed\nDesign", "Prototyping", "Production\nPlanning", "Manufacturing")
+cost_influence <- c(80, 60, 30, 15, 5)
+cost_committed <- c(5, 20, 50, 80, 95)
+
+dfm_data <- data.frame(
+  stage = factor(stages, levels = stages),
+  influence = cost_influence,
+  committed = cost_committed
+)
+
+ggplot(dfm_data, aes(x = stage)) +
+  geom_col(aes(y = influence, fill = "Ability to Influence Cost"), width = 0.4, position = position_nudge(x = -0.22)) +
+  geom_col(aes(y = committed, fill = "Cost Already Committed"), width = 0.4, position = position_nudge(x = 0.22)) +
+  scale_fill_manual(values = c("Ability to Influence Cost" = "steelblue", "Cost Already Committed" = "coral")) +
+  labs(
+    title = "Design Decisions Lock In Manufacturing Costs Early",
+    x = "Product Development Stage",
+    y = "Percentage (%)",
+    fill = ""
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text.x = element_text(size = 9)
+  ) +
+  ylim(0, 100)
+```
+
+::: {.callout-industry}
+**Industry Insight:** Toyota's famous production system emphasizes "designing in quality" rather than "inspecting in quality." Their engineers spend significantly more time in the design phase to ensure parts can be manufactured consistently and efficiently, reducing waste and rework downstream.
+:::
+
+## The DFM Mindset
+
+Effective DFM requires engineers to think beyond the functional requirements of a part and consider:
+
+1. **Process Selection** — Which manufacturing process is best suited for this part's geometry, material, and production volume?
+
+2. **Material Selection** — Does the chosen material work well with the intended manufacturing process?
+
+3. **Geometric Simplification** — Can the design be simplified without compromising function?
+
+4. **Tolerance Optimization** — Are the specified tolerances truly necessary, or can they be relaxed to reduce cost?
+
+5. **Assembly Considerations** — How will this part fit with others? Can assembly be simplified?
+
+## Manufacturing Processes Covered in This Section
+
+This section of the textbook explores design considerations for six major manufacturing process families:
+
+| Chapter | Process | Key Applications |
+|:--------|:--------|:-----------------|
+| Casting | Pouring molten material into molds | Engine blocks, pump housings, decorative hardware |
+| Joining | Connecting separate components | Structural assemblies, electronics, plumbing |
+| Stamping | Forming sheet metal with dies | Automotive body panels, appliance housings, brackets |
+| Welding | Fusing materials with heat | Bridges, pressure vessels, vehicle frames |
+| Machining | Removing material with cutting tools | Precision shafts, gears, aerospace components |
+| 3D Printing | Building parts layer by layer | Prototypes, custom medical devices, tooling |
+
+```{r fig-process-comparison, echo=FALSE, fig.cap="Comparison of manufacturing processes by typical production volume and part complexity.", fig.align='center', fig.width=9, fig.height=6}
+library(ggplot2)
+
+# Create comparison data
+processes <- data.frame(
+  process = c("Sand Casting", "Die Casting", "Investment Casting",
+              "Stamping", "Machining", "3D Printing", "Welding"),
+  volume = c(3, 8, 4, 9, 5, 2, 4),
+  complexity = c(7, 6, 9, 5, 8, 10, 4),
+  category = c("Casting", "Casting", "Casting",
+               "Forming", "Subtractive", "Additive", "Joining")
+)
+
+ggplot(processes, aes(x = volume, y = complexity, color = category, label = process)) +
+  geom_point(size = 5) +
+  geom_text(vjust = -1, hjust = 0.5, size = 3.5) +
+  scale_color_manual(values = c("Casting" = "darkorange", "Forming" = "steelblue",
+                                 "Subtractive" = "forestgreen", "Additive" = "purple",
+                                 "Joining" = "brown")) +
+  labs(
+    title = "Manufacturing Process Selection Guide",
+    x = "Typical Production Volume (Low to High)",
+    y = "Geometric Complexity Capability (Low to High)",
+    color = "Process Family"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "right"
+  ) +
+  xlim(0, 11) +
+  ylim(0, 12) +
+  scale_x_continuous(breaks = c(2, 5, 8), labels = c("Low", "Medium", "High")) +
+  scale_y_continuous(breaks = c(3, 6, 9), labels = c("Low", "Medium", "High"))
+```
+
+## General DFM Guidelines
+
+While each manufacturing process has specific design rules (covered in subsequent chapters), several principles apply universally:
+
+### Simplify the Design
+
+- Reduce the number of parts whenever possible
+- Eliminate features that don't serve a functional purpose
+- Use standard components and fasteners
+- Design parts to be multifunctional
+
+### Design for the Process
+
+- Understand the capabilities and limitations of your chosen process
+- Avoid features that are difficult or impossible to produce
+- Work within standard tolerances when possible
+- Consider how the part will be held or fixtured during manufacturing
+
+### Consider Material Properties
+
+- Select materials that are compatible with your manufacturing process
+- Account for material behavior (shrinkage, springback, warpage)
+- Balance material cost with processing cost
+- Consider material availability and lead times
+
+### Plan for Assembly
+
+- Design parts that can only be assembled one way (poka-yoke)
+- Minimize the number of fasteners and fastener types
+- Provide adequate clearance for tools and hands
+- Consider automated assembly requirements
+
+::: {.callout-discussion}
+**Group Discussion:** In teams of 3-4, identify a common product (coffee maker, stapler, flashlight) and discuss: What manufacturing processes were likely used for each major component? What DFM decisions do you think the designers made?
+:::
+
+## The Cost of Poor DFM
+
+Ignoring DFM principles leads to:
+
+- **Higher material costs** — Excess material removal or waste
+- **Longer cycle times** — Complex operations take more time
+- **Quality issues** — Difficult-to-manufacture parts have higher defect rates
+- **Tooling problems** — Complex geometries require expensive, fragile tooling
+- **Assembly difficulties** — Parts that don't fit together easily increase labor costs
+
+::: {.callout-check}
+**Quick Check:** A designer specifies a tolerance of ±0.01 mm on a cast iron housing when ±0.1 mm would be functionally acceptable. What are the likely consequences of this decision?
+:::
+
+## Learning Path
+
+As you work through the chapters in this section, you will develop the ability to:
+
+1. **Analyze** a part design and identify features that may be problematic for manufacturing
+2. **Select** appropriate manufacturing processes based on part requirements
+3. **Apply** process-specific design guidelines to optimize manufacturability
+4. **Calculate** key parameters like clearances, allowances, and process limits
+5. **Evaluate** trade-offs between design features and manufacturing costs
+
+Each chapter follows a consistent structure:
+- Learning objectives
+- Process fundamentals
+- Design guidelines with calculations
+- Industry applications
+- Practice problems
+
+::: {.callout-activity}
+**Preparation Activity:** Before diving into the specific processes, sketch a simple part you'd like to manufacture (a phone stand, a hook, a bracket). As you read each chapter, consider: Could this process make my part? What design changes would be needed?
+:::
+
+## Summary
+
+Design for Manufacturing is not about limiting creativity—it's about channeling creativity toward solutions that are both functional AND producible. The best designs elegantly balance form, function, and manufacturability.
+
+In the chapters that follow, you'll learn the specific rules and guidelines for each major manufacturing process, giving you the knowledge to make informed design decisions that reduce costs, improve quality, and accelerate time-to-market.
+
+---
+
+*"The best time to think about manufacturing is at the start of design, not at the end."*

@@ -1,2 +1,41 @@
-# Design and Drafting {#design_and_drafting}
+# (PART) Design and Drafting {-}
+
+# Introduction to Design and Drafting {#chap-01-design}
+
+```{r setup-01-00, include=FALSE}
+# Include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# Include the required packages to make sure the page can be built
+source("R/required_packages.R")
+```
+
+## Learning Objectives {-}
+
+By the end of this section, you will be able to:
+
+- Interpret and create engineering working drawings according to industry standards
+- Apply proper dimensioning rules and conventions to technical drawings
+- Understand and apply tolerances in mechanical design
+- Use Geometric Dimensioning and Tolerancing (GD&T) to communicate design intent
+- Select appropriate fits for mating parts using both imperial and metric systems
+
+## Overview {-}
+
+This section covers the fundamental skills required for creating and interpreting engineering drawings. These skills form the foundation of communication between designers, engineers, and manufacturing personnel in industries ranging from automotive to aerospace to food processing.
+
+::: {.callout-industry}
+**Industry Connection:** In the automotive industry, a single vehicle may have thousands of individual drawings. Each drawing must be precise and unambiguous to ensure parts manufactured in different countries can be assembled correctly. The principles in this section are used daily by engineers at companies like Ford, Toyota, and Magna.
+:::
+
+The chapters in this section progress from basic drafting concepts through increasingly sophisticated tolerancing methods:
+
+1. **Interpreting and Creating Drawings** - Understanding the language of technical drawings
+2. **Dimensioning Rules** - Properly communicating size requirements
+3. **Tolerances in Mechanical Design** - Specifying acceptable variation
+4. **Geometric Dimensioning and Tolerancing (GD&T)** - Advanced tolerance specification
+5. **Engineering Fits and Tolerances** - Selecting fits for mating parts
+
+::: {.callout-think}
+**Before You Continue:** Think about a product you use every day. How many individual parts might it contain? How do manufacturers ensure all those parts fit together correctly?
+:::
 

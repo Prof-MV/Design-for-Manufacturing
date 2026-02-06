@@ -35,12 +35,110 @@ embed_youtube("sq3Ht-ivG5U", "Top Design Tips & Manufacturing Processes for Mech
 embed_youtube("rauL_J048sI", "Only Real Mechanical Engineers Can Spot These Design Mistakes | CNC Machining")
 ```
 
+---
+
+### DFM Guidelines for Machined Parts {#sec:machining-guidelines}
+
+Before diving into calculations, let's establish the fundamental design guidelines that make parts easier and cheaper to machine.
+
+#### Internal Corners and Fillets
+
+Sharp internal corners are impossible to machine with rotating cutters. Always specify **fillet radii** at internal corners.
+
+```{r fig-internal-corners, echo=FALSE, fig.cap="Internal corners require fillet radii matching available tool sizes.", fig.align='center', fig.width=10, fig.height=4}
+library(ggplot2)
+
+ggplot() +
+  # BAD DESIGN (left)
+  annotate("text", x = 2, y = 4.5, label = "POOR DESIGN", color = "red", fontface = "bold", size = 4) +
+  geom_rect(aes(xmin = 0.5, xmax = 3.5, ymin = 1, ymax = 4), fill = "gray70", color = "black", linewidth = 1) +
+  geom_rect(aes(xmin = 1.5, xmax = 3.5, ymin = 2, ymax = 3), fill = "white", color = "black", linewidth = 1) +
+  annotate("text", x = 2.5, y = 2.5, label = "Sharp\nCorner", color = "red", size = 3) +
+  geom_point(aes(x = 1.5, y = 2), color = "red", size = 3) +
+  geom_point(aes(x = 1.5, y = 3), color = "red", size = 3) +
+
+  # GOOD DESIGN (right)
+  annotate("text", x = 7, y = 4.5, label = "GOOD DESIGN", color = "forestgreen", fontface = "bold", size = 4) +
+  geom_rect(aes(xmin = 5.5, xmax = 8.5, ymin = 1, ymax = 4), fill = "gray70", color = "black", linewidth = 1) +
+  # Pocket with rounded corners (approximated)
+  geom_polygon(aes(x = c(6.5, 6.7, 8.5, 8.5, 6.7, 6.5),
+                   y = c(2.2, 2, 2, 3, 3, 2.8)),
+               fill = "white", color = "black", linewidth = 1) +
+  annotate("text", x = 7.5, y = 2.5, label = "Filleted\nCorner", color = "forestgreen", size = 3) +
+
+  # Tool illustration
+  annotate("text", x = 5, y = 2.5, label = "R = Tool\nRadius", size = 3) +
+
+  coord_fixed(ratio = 1, xlim = c(0, 9), ylim = c(0.5, 5)) +
+  theme_void() +
+  labs(title = "Internal Corners Must Have Fillet Radii") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+```
+
+**Guideline:** Internal fillet radius should be at least **1.5× the tool radius** to allow the tool to move smoothly without dwelling in corners.
+
+#### Standard Hole Sizes
+
+Specifying standard drill sizes reduces tooling costs and setup time.
+
+| Preferred Hole Diameters (mm) |
+|:------------------------------|
+| 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 25, 28, 30 |
+
+::: {.callout-check}
+**Quick Check:** A designer specifies a 7.3 mm diameter hole. Why might this cause problems in manufacturing?
+:::
+
+#### Depth Limitations
+
+**Hole depth:** Standard drills can reliably produce holes up to **3× diameter** deep. Deeper holes require special tooling.
+
+**Pocket depth:** Avoid pockets deeper than **4× the tool diameter** to prevent tool deflection.
+
+```{r fig-depth-guidelines, echo=FALSE, fig.cap="Hole and pocket depth guidelines relative to tool diameter.", fig.align='center', fig.width=10, fig.height=5}
+library(ggplot2)
+
+depth_data <- data.frame(
+  feature = c("Standard Drill", "Deep Hole Drill", "End Mill Pocket", "Deep Pocket"),
+  max_depth_ratio = c(3, 10, 4, 6),
+  difficulty = c("Standard", "Special", "Standard", "Special")
+)
+
+ggplot(depth_data, aes(x = feature, y = max_depth_ratio, fill = difficulty)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = paste0(max_depth_ratio, "×D")), vjust = -0.5, fontface = "bold") +
+  scale_fill_manual(values = c("Standard" = "forestgreen", "Special" = "coral")) +
+  labs(
+    title = "Maximum Depth-to-Diameter Ratios",
+    x = "Feature Type",
+    y = "Depth / Diameter Ratio",
+    fill = "Tooling Required"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text.x = element_text(angle = 15, hjust = 1)
+  ) +
+  ylim(0, 12)
+```
+
+#### Wall Thickness
+
+Thin walls deflect under cutting forces, causing chatter and poor surface finish. Minimum wall thickness depends on material and wall height.
+
+| Material | Minimum Wall Thickness |
+|:---------|:-----------------------|
+| Steel | 3 mm or 0.1× height, whichever is greater |
+| Aluminum | 2 mm or 0.08× height |
+| Plastic | 1.5 mm |
+
+::: {.callout-industry}
+**Automotive Application:** Engine block designers must balance thermal efficiency (thin walls for better cooling) against machinability (thick enough walls to resist cutting forces during cylinder boring).
+:::
+
+---
+
 ### Theory and Calculations {#sec:machining-theory}
-
-1. Why do you think DFM is particularly important in high-volume industries like automotive?
-2. Can you think of a part in your daily life that might have been designed poorly for machining?
-
-### Theory & Math
 
 Design for Machining involves considering the capabilities and limitations of machining processes like milling, turning, and drilling during the design phase. Key principles include minimizing material removal, avoiding deep pockets, using standard hole sizes, and ensuring adequate tolerances.
 
@@ -168,21 +266,186 @@ This interactive histogram allows you to hover over bins to see details—useful
 
 Try modifying the R code chunks above! For example, change the parameters in the machining calculation and rerun. Think critically: How would DFM principles alter a design with sharp internal corners in an automotive bracket?
 
+---
+
+### Tolerance and Surface Finish {#sec:machining-tolerances}
+
+Tolerances and surface finish specifications have a dramatic impact on machining cost. The relationship is exponential, not linear.
+
+```{r fig-tolerance-cost, echo=FALSE, fig.cap="Relative machining cost increases exponentially as tolerances tighten.", fig.align='center', fig.width=9, fig.height=5}
+library(ggplot2)
+
+# Create tolerance vs cost data
+tolerance_data <- data.frame(
+  tolerance_mm = c(0.5, 0.25, 0.1, 0.05, 0.025, 0.01, 0.005),
+  relative_cost = c(1, 1.5, 2.5, 4, 7, 15, 30),
+  process = c("Rough Turn", "Finish Turn", "Grind", "Fine Grind", "Lap", "Hone", "Super Finish")
+)
+
+ggplot(tolerance_data, aes(x = tolerance_mm, y = relative_cost)) +
+  geom_line(color = "steelblue", linewidth = 1.5) +
+  geom_point(color = "coral", size = 4) +
+  geom_text(aes(label = process), vjust = -1, size = 3) +
+  scale_x_reverse(trans = "log10") +
+  labs(
+    title = "Tolerance vs. Machining Cost",
+    x = "Tolerance (mm) - Log Scale",
+    y = "Relative Cost (Baseline = 1)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  ) +
+  ylim(0, 35)
+```
+
+**Design Guideline:** Only specify tight tolerances where functionally necessary. A ±0.1 mm tolerance costs approximately 2.5× more than ±0.5 mm, while ±0.01 mm costs 15× more.
+
+::: {.callout-discussion}
+**Group Discussion:** Review a mechanical assembly drawing. Identify which dimensions truly require tight tolerances (fits, sealing surfaces) and which could be relaxed without affecting function.
+:::
+
+---
+
+### Common DFM Mistakes to Avoid {#sec:machining-mistakes}
+
+| Mistake | Problem | Solution |
+|:--------|:--------|:---------|
+| Sharp internal corners | Tool cannot reach; requires EDM | Add fillet radius ≥ tool radius |
+| Non-standard hole sizes | Requires custom drills; added setup | Use standard drill sizes |
+| Deep narrow pockets | Tool deflection; poor finish | Limit depth to 4× tool diameter |
+| Unnecessary tight tolerances | Exponential cost increase | Tolerance only critical features |
+| Thin walls | Chatter; deflection | Maintain minimum wall thickness |
+| Blind holes with flat bottoms | Standard drills leave points | Accept drill point or specify boring |
+| Features on multiple sides | Multiple setups required | Consolidate features to fewer sides |
+
+::: {.callout-think}
+**Design Challenge:** You have a bracket that requires holes on three different faces. How could you redesign it to reduce the number of machining setups?
+:::
+
+---
+
 ### Check Your Understanding
 
-1. What is the formula for spindle speed?  
-   a) \( N = \frac{\pi D}{1000 v} \)  
-   b) \( N = \frac{1000 v}{\pi D} \)  
-   c) \( N = \pi D v \)  
-   **Answer: b**
+::: {.question}
+**Question 1:** What is the formula for spindle speed?
 
-2. In which industry might hygiene requirements most affect material choice for machining?  
-   a) Automotive  
-   b) Food  
-   c) Defense  
-   **Answer: b**
+a) $N = \frac{\pi D}{1000 v}$
+b) $N = \frac{1000 v}{\pi D}$
+c) $N = \pi D v$
+:::
 
-3. True or False: Tighter tolerances always reduce manufacturing costs.  
-   **Answer: False**
+::: {.answer}
+**Answer: b**
 
-Great job completing this chapter! Keep practicing DFM to become a proficient mechanical engineer.
+The spindle speed formula is $N = \frac{1000 v}{\pi D}$ where $v$ is cutting speed in m/min and $D$ is diameter in mm.
+:::
+
+::: {.question}
+**Question 2:** In which industry might hygiene requirements most affect material choice for machining?
+
+a) Automotive
+b) Food
+c) Defense
+:::
+
+::: {.answer}
+**Answer: b) Food**
+
+Food processing equipment must use materials like 316 stainless steel that resist corrosion, can be sanitized, and won't contaminate products.
+:::
+
+::: {.question}
+**Question 3:** True or False: Tighter tolerances always reduce manufacturing costs.
+:::
+
+::: {.answer}
+**Answer: False**
+
+Tighter tolerances dramatically *increase* manufacturing costs. Each order of magnitude improvement in tolerance can cost 3-5× more.
+:::
+
+---
+
+### Practice Problems {#sec:machining-practice}
+
+::: {.question}
+**Problem 1:** Calculate the spindle speed and machining time for turning a 50 mm diameter shaft, 200 mm long. The material is aluminum with a recommended cutting speed of 300 m/min. Use a feed rate of 0.3 mm/rev.
+:::
+
+::: {.answer}
+**Solution:**
+
+**Spindle Speed:**
+$$N = \frac{1000 \times v}{\pi \times D} = \frac{1000 \times 300}{\pi \times 50} = \frac{300000}{157.08} = 1910 \text{ RPM}$$
+
+**Machining Time:**
+$$T = \frac{L}{f \times N} = \frac{200}{0.3 \times 1910} = \frac{200}{573} = 0.35 \text{ minutes} = 21 \text{ seconds}$$
+:::
+
+::: {.question}
+**Problem 2:** A designer specifies internal corners with 1 mm fillet radius in a pocket. The smallest available end mill has an 8 mm diameter (4 mm radius). Will this design work? What should the designer change?
+:::
+
+::: {.answer}
+**Solution:**
+
+No, this design will not work. The 8 mm end mill has a 4 mm radius, so the minimum internal fillet it can produce is 4 mm—not 1 mm.
+
+**Recommendations:**
+1. Increase the internal fillet radius to at least 4 mm (preferably 6 mm for smoother tool motion)
+2. Or, specify that corners be finished with EDM (electrical discharge machining) at significant additional cost
+3. Or, redesign to eliminate the pocket entirely
+:::
+
+::: {.question}
+**Problem 3:** A part requires the following tolerances. Estimate the relative machining cost if the baseline (±0.5 mm) costs $10 per part.
+
+- Feature A: ±0.5 mm
+- Feature B: ±0.1 mm
+- Feature C: ±0.025 mm
+:::
+
+::: {.answer}
+**Solution:**
+
+Using the tolerance-cost relationship:
+- Feature A (±0.5 mm): 1× baseline = $10
+- Feature B (±0.1 mm): ~2.5× baseline = $25
+- Feature C (±0.025 mm): ~7× baseline = $70
+
+**Total estimated machining cost: $105 per part**
+
+Note: If Feature C could be relaxed to ±0.1 mm, the total would drop to $45—a 57% cost reduction.
+:::
+
+---
+
+### Key Takeaways {#sec:machining-takeaways}
+
+1. **Design with standard tools in mind:** Use standard drill sizes, avoid sharp internal corners, and limit feature depths to standard tool capabilities.
+
+2. **Tolerances drive cost:** The relationship between tolerance and cost is exponential. Only specify tight tolerances where functionally necessary.
+
+3. **Minimize setups:** Design parts so all features can be machined from as few orientations as possible. Each setup adds time and potential alignment error.
+
+4. **Understand spindle speed and feed:** The formulas $N = \frac{1000v}{\pi D}$ and $T = \frac{L}{fN}$ are fundamental to predicting machining time and cost.
+
+5. **Material matters:** Material selection affects cutting speeds, tool wear, and achievable tolerances. Harder materials require slower speeds and cost more to machine.
+
+---
+
+### Further Resources {#sec:machining-resources}
+
+**Videos:**
+```{r video-machining-dfm, echo=FALSE, results='asis'}
+embed_youtube("sq3Ht-ivG5U", "DFM Guide for Mechanical Engineers")
+```
+
+**Reference Tables:**
+- [Machinery's Handbook](https://www.industrialpress.com/machinerys-handbook/) - Comprehensive reference for speeds, feeds, and tolerances
+- [Cutting Speed Charts by Material](https://www.sandvik.coromant.com/) - Sandvik Coromant technical resources
+
+**Reading:**
+- Design for Manufacturability Handbook, James G. Bralla
+- Fundamentals of Modern Manufacturing, Mikell P. Groover

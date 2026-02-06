@@ -1,6 +1,32 @@
 ## Engineering Fits and Tolerances {#fits}
 
-In precision manufacturing, the relationship between two mating parts—typically a hole and a shaft—is defined by the "fit." Understanding imperial fits is crucial for ensuring that mechanical assemblies function correctly, whether they need to slide freely or be permanently locked together.
+```{r setup-01-05, include=FALSE}
+# Include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# Include the required packages to make sure the page can be built
+source("R/required_packages.R")
+```
+
+### Learning Objectives {-}
+
+By the end of this chapter, you will be able to:
+
+- Explain the difference between hole basis and shaft basis systems
+- Identify and select appropriate clearance, transition, and interference fits
+- Use ANSI B4.1 tables to determine imperial fit specifications
+- Apply the ISO metric tolerance system with letter designations
+- Select preferred metric fits for common engineering applications
+
+::: {.callout-think}
+**Before You Read:** Think about a door hinge. The pin must rotate freely in
+the knuckles. Now think about a gear pressed onto a motor shaft. It must never
+slip. How do engineers specify these very different requirements?
+:::
+
+In precision manufacturing, the relationship between two mating parts—typically
+a hole and a shaft—is defined by the "fit." Understanding fits is crucial for
+ensuring that mechanical assemblies function correctly, whether they need to
+slide freely or be permanently locked together.
 
 ### The Concept of Basis Systems
 
@@ -198,3 +224,26 @@ knitr::include_graphics("images/ANSI_ASME_B41_metric_transition1S.png")
 knitr::include_graphics("images/ANSI_ASME_B41_metric_transition2S.png")
 ```
 
+::: {.callout-industry}
+**Industry Application:** In automotive transmission manufacturing, bearings
+require precise interference fits to prevent spinning on the shaft while
+allowing the bearing to rotate freely. Companies like Ford and GM specify fits
+to the micrometer level, and incorrect fits can lead to premature bearing
+failure and warranty claims.
+:::
+
+### Key Takeaways {-}
+
+- Fits define the relationship between mating parts (hole and shaft)
+- Hole basis systems are more common because holes are easier to standardize
+- Clearance fits allow movement; interference fits create permanent joints
+- Transition fits may result in either slight clearance or interference
+- The metric ISO system uses letters (uppercase for holes, lowercase for shafts)
+  combined with IT grades to specify tolerances
+- Always select from preferred fits when possible to reduce manufacturing costs
+
+::: {.callout-check}
+**Quick Check:** For a bearing that needs to rotate freely on a shaft, would
+you specify a clearance fit or an interference fit? What class of fit (RC, LC,
+FN, etc.) might be appropriate?
+:::
