@@ -552,69 +552,54 @@ $$\delta = \frac{\theta}{360°} \cdot p$$
 
 Where $\delta$ is the bolt elongation, $\theta$ is the rotation angle in degrees, and $p$ is the thread pitch.
 
-```{r torque-angle-plot, echo=TRUE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Torque-Angle Tightening Curve"}
+```{r torque-angle-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Torque-Angle Tightening Curve"}
 library(ggplot2)
-library(dplyr)
 
-# Create synthetic data that matches the general shape
-set.seed(10)
+# 1. Generate synthetic data for the curve
+# We want an initial rise, a plateau, and then a sharp upward turn.
+x_vals <- seq(0, 10, length.out = 200)
+y_vals <- 0.1 * x_vals^3 - 1.2 * x_vals^2 + 4.5 * x_vals # Polynomial to mimic the shape
+y_vals <- y_vals / max(y_vals) * 5 # Scale for aesthetics
 
-tibble(
-  angle = seq(0, 100, length.out = 400),
-  torque_base = 8.5 * (1 - exp(-angle / 18)) +   # sigmoid-like rise
-    0.7 * sin(angle/18 * 2*pi) * exp(-angle/60),  # small dip
-  extra = pmax(0, (angle - 65)/35)^1.9 * 3.2,          # late sharp rise
-  torque = pmin(torque_base + extra, 9.8)              # hard cap
-) -> dat
+df <- data.frame(Angle = x_vals, Torque = y_vals)
 
-# Limit line value (for annotation)
-limit_y <- 9.8
+# Define specific points for the red annotations
+limit_x <- 7.8
+limit_y <- df$Torque[which.min(abs(df$Angle - limit_x))]
+extra_x <- 9.2
+extra_y <- df$Torque[which.min(abs(df$Angle - extra_x))]
 
-ggplot(dat, aes(angle, torque)) +
-
-  # Main curve
-  geom_line(linewidth = 1.1, color = "#1e88e5") +
-
-  # Limit line
-  geom_hline(yintercept = limit_y,
-             color = "red", linewidth = 1.1, linetype = "solid") +
-
-  # Arrows / annotations
-  annotate("segment",
-           x = 68, xend = 68, y = limit_y - 0.4, yend = limit_y + 0.4,
-           color = "red", linewidth = 1.05, arrow = arrow(length = unit(3.5, "mm"))) +
-
-  annotate("segment",
-           x = 68, xend = 92, y = limit_y + 0.15, yend = limit_y + 0.15,
-           color = "red", linewidth = 1.05,
-           arrow = arrow(length = unit(3.5, "mm"), type = "closed")) +
-
-  # Text labels
-  annotate("text", x = 38, y = limit_y + 0.55,
-           label = "Limit", color = "red", size = 4.6, hjust = 0, fontface = "bold") +
-
-  annotate("text", x = 80, y = limit_y + 0.55,
-           label = "Additional\nAngle", color = "red", size = 4, hjust = 0.5) +
-
-  annotate("text", x = 92, y = max(dat$torque) + 0.25,
-           label = "→", color = "#1e88e5", size = 7, hjust = 0.5, vjust = 0.4) +
-
-  # Theme & labels
-  labs(
-    x = "Angle",
-    y = "Torque",
-    title = NULL
-  ) +
-
-  scale_x_continuous(expand = expansion(mult = c(0.02, 0.08))) +
-  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.12))) +
-
-  theme_minimal(base_size = 14) +
+# 2. Build the plot
+ggplot(df, aes(x = Angle, y = Torque)) +
+  # The main curve
+  geom_line(color = "#3b5998", size = 1.5) +
+  
+  # Red limit lines (Horizontal and Vertical)
+  annotate("segment", x = 0, xend = limit_x, y = limit_y, yend = limit_y, color = "red") +
+  annotate("segment", x = limit_x, xend = limit_x, y = 0, yend = limit_y, color = "red") +
+  
+  # Additional angle vertical line
+  annotate("segment", x = extra_x, xend = extra_x, y = 0, yend = extra_y, color = "red") +
+  
+  # Red arrow following the curve
+  annotate("segment", x = 8.2, xend = 9, y = 3.2, yend = 4.2, 
+           color = "red", size = 1.2, arrow = arrow(length = unit(0.3, "cm"))) +
+  
+  # Labels
+  annotate("text", x = -0.2, y = limit_y, label = "Limit", hjust = 1, size = 5) +
+  annotate("text", x = limit_x, y = -0.3, label = "Additional\nAngle", vjust = 1, size = 4.5) +
+  
+  # Axis Arrows and styling
+  theme_classic() +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 11)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 6)) +
   theme(
-    axis.title = element_text(face = "bold"),
-    panel.grid.minor = element_blank(),
-    plot.margin = margin(12, 20, 12, 12)
-  )
+    axis.line = element_line(arrow = arrow(type = "closed", length = unit(0.15, "inches"))),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_text(size = 14, face = "plain", hjust = 1)
+  ) +
+  labs(x = "Angle", y = "Torque")
 ```
 
 As shown in Figure \@ref(fig:torque-angle-plot), the tightening process begins with a rapid torque rise as surfaces come into contact. Once the "snug" limit is reached, the additional angle rotation stretches the bolt into the elastic (or slightly plastic) region, achieving consistent preload regardless of friction variations.
@@ -653,12 +638,30 @@ $$F_i = k_b \cdot \delta = \frac{A_t \cdot E}{L} \cdot \delta$$
 
 Where $F_i$ is the preload, $k_b$ is the bolt stiffness, $\delta$ is the elongation, $A_t$ is the tensile stress area, $E$ is the modulus of elasticity, and $L$ is the grip length.
 
+4. **SmartBolts:** are specialized fasteners with a built-in Visual Indication System™ that changes color from red to black to accurately indicate when proper tension (torque) is achieved. As the bolt stretches during tightening, the indicator in the head darkens, providing real-time, precise, and permanent monitoring of joint security without extra tools. 
+
+```{r video-SmartBolts, echo=FALSE, results='asis'}
+embed_youtube("ClPwlpa86bY", "SmartBolts changing color as they are tightened")
+```
+
+
+Key Details About Color-Changing Bolts:
+
+* How it Works: The fastener incorporates a, patented mechanism within the bolt head. It appears red when loose and gradually turns black as the bolt stretches to the correct tension.
+
+* Accuracy: Unlike relying solely on torque wrenches, which can be affected by friction, dirt, or rust, these bolts measure actual clamp force (tension/elongation), providing a more reliable, real-time indication of tightness.
+
+* Applications: They are primarily used in heavy machinery, manufacturing, and critical joints to easily identify if a bolt is loose without manual inspection.
+
+* Customization: SmartBolts can be customized to change color at specific design tensions ranging from 30-90% of the fastener proof strength.
+
+These fasteners are designed to be a permanent, visual verification tool for maintenance and safety. 
+
 ##### Advantages {-}
 
-* **Highest Accuracy:** Preload accuracy of ±1–5% is achievable, as friction is completely eliminated from the measurement.
+* **Highest Accuracy:** Preload accuracy of ±1–5% is achievable with measurements, as friction is completely eliminated from the measurement.
 * **Direct Measurement:** The actual bolt tension is measured, not inferred from torque.
 * **Ideal for Critical Applications:** Essential for pressure vessels, nuclear reactors, aerospace structures, and other safety-critical joints.
-* **Reusable Bolts:** Since the bolt is not over-stressed, it can be reused with confidence in its remaining life.
 
 ##### Disadvantages {-}
 

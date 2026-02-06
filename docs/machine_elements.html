@@ -3468,68 +3468,6 @@ Maximum<br>Thickness
 <p>The relationship between rotation angle and elongation is:</p>
 <p><span class="math display">\[\delta = \frac{\theta}{360°} \cdot p\]</span></p>
 <p>Where <span class="math inline">\(\delta\)</span> is the bolt elongation, <span class="math inline">\(\theta\)</span> is the rotation angle in degrees, and <span class="math inline">\(p\)</span> is the thread pitch.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="machine_elements.html#cb25-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb25-2"><a href="machine_elements.html#cb25-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb25-3"><a href="machine_elements.html#cb25-3" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="machine_elements.html#cb25-4" tabindex="-1"></a><span class="co"># Create synthetic data that matches the general shape</span></span>
-<span id="cb25-5"><a href="machine_elements.html#cb25-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
-<span id="cb25-6"><a href="machine_elements.html#cb25-6" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="machine_elements.html#cb25-7" tabindex="-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb25-8"><a href="machine_elements.html#cb25-8" tabindex="-1"></a>  <span class="at">angle =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="at">length.out =</span> <span class="dv">400</span>),</span>
-<span id="cb25-9"><a href="machine_elements.html#cb25-9" tabindex="-1"></a>  <span class="at">torque_base =</span> <span class="fl">8.5</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span>angle <span class="sc">/</span> <span class="dv">18</span>)) <span class="sc">+</span>   <span class="co"># sigmoid-like rise</span></span>
-<span id="cb25-10"><a href="machine_elements.html#cb25-10" tabindex="-1"></a>    <span class="fl">0.7</span> <span class="sc">*</span> <span class="fu">sin</span>(angle<span class="sc">/</span><span class="dv">18</span> <span class="sc">*</span> <span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>angle<span class="sc">/</span><span class="dv">60</span>),  <span class="co"># small dip</span></span>
-<span id="cb25-11"><a href="machine_elements.html#cb25-11" tabindex="-1"></a>  <span class="at">extra =</span> <span class="fu">pmax</span>(<span class="dv">0</span>, (angle <span class="sc">-</span> <span class="dv">65</span>)<span class="sc">/</span><span class="dv">35</span>)<span class="sc">^</span><span class="fl">1.9</span> <span class="sc">*</span> <span class="fl">3.2</span>,          <span class="co"># late sharp rise</span></span>
-<span id="cb25-12"><a href="machine_elements.html#cb25-12" tabindex="-1"></a>  <span class="at">torque =</span> <span class="fu">pmin</span>(torque_base <span class="sc">+</span> extra, <span class="fl">9.8</span>)              <span class="co"># hard cap</span></span>
-<span id="cb25-13"><a href="machine_elements.html#cb25-13" tabindex="-1"></a>) <span class="ot">-&gt;</span> dat</span>
-<span id="cb25-14"><a href="machine_elements.html#cb25-14" tabindex="-1"></a></span>
-<span id="cb25-15"><a href="machine_elements.html#cb25-15" tabindex="-1"></a><span class="co"># Limit line value (for annotation)</span></span>
-<span id="cb25-16"><a href="machine_elements.html#cb25-16" tabindex="-1"></a>limit_y <span class="ot">&lt;-</span> <span class="fl">9.8</span></span>
-<span id="cb25-17"><a href="machine_elements.html#cb25-17" tabindex="-1"></a></span>
-<span id="cb25-18"><a href="machine_elements.html#cb25-18" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(angle, torque)) <span class="sc">+</span></span>
-<span id="cb25-19"><a href="machine_elements.html#cb25-19" tabindex="-1"></a></span>
-<span id="cb25-20"><a href="machine_elements.html#cb25-20" tabindex="-1"></a>  <span class="co"># Main curve</span></span>
-<span id="cb25-21"><a href="machine_elements.html#cb25-21" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">1.1</span>, <span class="at">color =</span> <span class="st">&quot;#1e88e5&quot;</span>) <span class="sc">+</span></span>
-<span id="cb25-22"><a href="machine_elements.html#cb25-22" tabindex="-1"></a></span>
-<span id="cb25-23"><a href="machine_elements.html#cb25-23" tabindex="-1"></a>  <span class="co"># Limit line</span></span>
-<span id="cb25-24"><a href="machine_elements.html#cb25-24" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> limit_y,</span>
-<span id="cb25-25"><a href="machine_elements.html#cb25-25" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.1</span>, <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>) <span class="sc">+</span></span>
-<span id="cb25-26"><a href="machine_elements.html#cb25-26" tabindex="-1"></a></span>
-<span id="cb25-27"><a href="machine_elements.html#cb25-27" tabindex="-1"></a>  <span class="co"># Arrows / annotations</span></span>
-<span id="cb25-28"><a href="machine_elements.html#cb25-28" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;segment&quot;</span>,</span>
-<span id="cb25-29"><a href="machine_elements.html#cb25-29" tabindex="-1"></a>           <span class="at">x =</span> <span class="dv">68</span>, <span class="at">xend =</span> <span class="dv">68</span>, <span class="at">y =</span> limit_y <span class="sc">-</span> <span class="fl">0.4</span>, <span class="at">yend =</span> limit_y <span class="sc">+</span> <span class="fl">0.4</span>,</span>
-<span id="cb25-30"><a href="machine_elements.html#cb25-30" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.05</span>, <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">3.5</span>, <span class="st">&quot;mm&quot;</span>))) <span class="sc">+</span></span>
-<span id="cb25-31"><a href="machine_elements.html#cb25-31" tabindex="-1"></a></span>
-<span id="cb25-32"><a href="machine_elements.html#cb25-32" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;segment&quot;</span>,</span>
-<span id="cb25-33"><a href="machine_elements.html#cb25-33" tabindex="-1"></a>           <span class="at">x =</span> <span class="dv">68</span>, <span class="at">xend =</span> <span class="dv">92</span>, <span class="at">y =</span> limit_y <span class="sc">+</span> <span class="fl">0.15</span>, <span class="at">yend =</span> limit_y <span class="sc">+</span> <span class="fl">0.15</span>,</span>
-<span id="cb25-34"><a href="machine_elements.html#cb25-34" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.05</span>,</span>
-<span id="cb25-35"><a href="machine_elements.html#cb25-35" tabindex="-1"></a>           <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">3.5</span>, <span class="st">&quot;mm&quot;</span>), <span class="at">type =</span> <span class="st">&quot;closed&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb25-36"><a href="machine_elements.html#cb25-36" tabindex="-1"></a></span>
-<span id="cb25-37"><a href="machine_elements.html#cb25-37" tabindex="-1"></a>  <span class="co"># Text labels</span></span>
-<span id="cb25-38"><a href="machine_elements.html#cb25-38" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">38</span>, <span class="at">y =</span> limit_y <span class="sc">+</span> <span class="fl">0.55</span>,</span>
-<span id="cb25-39"><a href="machine_elements.html#cb25-39" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">&quot;Limit&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="fl">4.6</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>) <span class="sc">+</span></span>
-<span id="cb25-40"><a href="machine_elements.html#cb25-40" tabindex="-1"></a></span>
-<span id="cb25-41"><a href="machine_elements.html#cb25-41" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">80</span>, <span class="at">y =</span> limit_y <span class="sc">+</span> <span class="fl">0.55</span>,</span>
-<span id="cb25-42"><a href="machine_elements.html#cb25-42" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">&quot;Additional</span><span class="sc">\n</span><span class="st">Angle&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb25-43"><a href="machine_elements.html#cb25-43" tabindex="-1"></a></span>
-<span id="cb25-44"><a href="machine_elements.html#cb25-44" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">92</span>, <span class="at">y =</span> <span class="fu">max</span>(dat<span class="sc">$</span>torque) <span class="sc">+</span> <span class="fl">0.25</span>,</span>
-<span id="cb25-45"><a href="machine_elements.html#cb25-45" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">&quot;→&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#1e88e5&quot;</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb25-46"><a href="machine_elements.html#cb25-46" tabindex="-1"></a></span>
-<span id="cb25-47"><a href="machine_elements.html#cb25-47" tabindex="-1"></a>  <span class="co"># Theme &amp; labels</span></span>
-<span id="cb25-48"><a href="machine_elements.html#cb25-48" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb25-49"><a href="machine_elements.html#cb25-49" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Angle&quot;</span>,</span>
-<span id="cb25-50"><a href="machine_elements.html#cb25-50" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Torque&quot;</span>,</span>
-<span id="cb25-51"><a href="machine_elements.html#cb25-51" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span></span>
-<span id="cb25-52"><a href="machine_elements.html#cb25-52" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb25-53"><a href="machine_elements.html#cb25-53" tabindex="-1"></a></span>
-<span id="cb25-54"><a href="machine_elements.html#cb25-54" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.08</span>))) <span class="sc">+</span></span>
-<span id="cb25-55"><a href="machine_elements.html#cb25-55" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>), <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.12</span>))) <span class="sc">+</span></span>
-<span id="cb25-56"><a href="machine_elements.html#cb25-56" tabindex="-1"></a></span>
-<span id="cb25-57"><a href="machine_elements.html#cb25-57" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
-<span id="cb25-58"><a href="machine_elements.html#cb25-58" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb25-59"><a href="machine_elements.html#cb25-59" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb25-60"><a href="machine_elements.html#cb25-60" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb25-61"><a href="machine_elements.html#cb25-61" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">12</span>, <span class="dv">20</span>, <span class="dv">12</span>, <span class="dv">12</span>)</span>
-<span id="cb25-62"><a href="machine_elements.html#cb25-62" tabindex="-1"></a>  )</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:torque-angle-plot"></span>
 <img src="_main_files/figure-html/torque-angle-plot-1.png" alt="Torque-Angle Tightening Curve" width="672" />
 <p class="caption">
@@ -3570,14 +3508,35 @@ Figure 2.7: Torque-Angle Tightening Curve
 <p>The relationship between elongation and preload is:</p>
 <p><span class="math display">\[F_i = k_b \cdot \delta = \frac{A_t \cdot E}{L} \cdot \delta\]</span></p>
 <p>Where <span class="math inline">\(F_i\)</span> is the preload, <span class="math inline">\(k_b\)</span> is the bolt stiffness, <span class="math inline">\(\delta\)</span> is the elongation, <span class="math inline">\(A_t\)</span> is the tensile stress area, <span class="math inline">\(E\)</span> is the modulus of elasticity, and <span class="math inline">\(L\)</span> is the grip length.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>SmartBolts:</strong> are specialized fasteners with a built-in Visual Indication System™ that changes color from red to black to accurately indicate when proper tension (torque) is achieved. As the bolt stretches during tightening, the indicator in the head darkens, providing real-time, precise, and permanent monitoring of joint security without extra tools.</li>
+</ol>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+<p><iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/ClPwlpa86bY"
+    title="SmartBolts changing color as they are tightened"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+</iframe></p>
+</div>
+<p>Key Details About Color-Changing Bolts:</p>
+<ul>
+<li><p>How it Works: The fastener incorporates a, patented mechanism within the bolt head. It appears red when loose and gradually turns black as the bolt stretches to the correct tension.</p></li>
+<li><p>Accuracy: Unlike relying solely on torque wrenches, which can be affected by friction, dirt, or rust, these bolts measure actual clamp force (tension/elongation), providing a more reliable, real-time indication of tightness.</p></li>
+<li><p>Applications: They are primarily used in heavy machinery, manufacturing, and critical joints to easily identify if a bolt is loose without manual inspection.</p></li>
+<li><p>Customization: SmartBolts can be customized to change color at specific design tensions ranging from 30-90% of the fastener proof strength.</p></li>
+</ul>
+<p>These fasteners are designed to be a permanent, visual verification tool for maintenance and safety.</p>
 </div>
 <div id="advantages-2" class="section level5 unnumbered hasAnchor">
 <h5>Advantages<a href="machine_elements.html#advantages-2" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <ul>
-<li><strong>Highest Accuracy:</strong> Preload accuracy of ±1–5% is achievable, as friction is completely eliminated from the measurement.</li>
+<li><strong>Highest Accuracy:</strong> Preload accuracy of ±1–5% is achievable with measurements, as friction is completely eliminated from the measurement.</li>
 <li><strong>Direct Measurement:</strong> The actual bolt tension is measured, not inferred from torque.</li>
 <li><strong>Ideal for Critical Applications:</strong> Essential for pressure vessels, nuclear reactors, aerospace structures, and other safety-critical joints.</li>
-<li><strong>Reusable Bolts:</strong> Since the bolt is not over-stressed, it can be reused with confidence in its remaining life.</li>
 </ul>
 </div>
 <div id="disadvantages-2" class="section level5 unnumbered hasAnchor">
@@ -6140,16 +6099,14 @@ Dry or minimal
 </div>
 <div id="pv-limit-visualization" class="section level4 unnumbered hasAnchor">
 <h4>PV Limit Visualization<a href="machine_elements.html#pv-limit-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<pre><code>## Warning in geom_point(aes(x = 1000, y = 30), color = &quot;darkgreen&quot;, size = 4): All aesthetics have length 1, but the data has
-## 396 rows.
-## ℹ Please consider using `annotate()` or
-##   provide this layer with data containing a
-##   single row.</code></pre>
-<pre><code>## Warning in geom_point(aes(x = 2500, y = 100), color = &quot;red&quot;, size = 4, shape = 4, : All aesthetics have length 1, but the data has
-## 396 rows.
-## ℹ Please consider using `annotate()` or
-##   provide this layer with data containing a
-##   single row.</code></pre>
+<pre><code>## Warning in geom_point(aes(x = 1000, y = 30), color = &quot;darkgreen&quot;, size = 4): All aesthetics have length 1, but the data has 396
+## rows.
+## ℹ Please consider using `annotate()` or provide this
+##   layer with data containing a single row.</code></pre>
+<pre><code>## Warning in geom_point(aes(x = 2500, y = 100), color = &quot;red&quot;, size = 4, shape = 4, : All aesthetics have length 1, but the data has 396
+## rows.
+## ℹ Please consider using `annotate()` or provide this
+##   layer with data containing a single row.</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:pv-limit-plot"></span>
 <img src="_main_files/figure-html/pv-limit-plot-1.png" alt="PV limit diagram showing safe operating region for different bushing materials." width="960" />
 <p class="caption">
