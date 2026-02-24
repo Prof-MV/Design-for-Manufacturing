@@ -23,7 +23,7 @@
 <meta name="author" content="Martin Volkening and Claude Opus 4.6 (Anthropic)" />
 
 
-<meta name="date" content="2026-02-06" />
+<meta name="date" content="2026-02-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -3694,8 +3694,152 @@ Figure 2.9: Joint Diagram with External Working Load
 <li><span class="math inline">\(A_t\)</span>: Tensile stress area of the threaded portion.</li>
 <li><span class="math inline">\(l_d\)</span>: Length of the unthreaded portion (<span class="math inline">\(L - L_T\)</span>).</li>
 <li><span class="math inline">\(l_t\)</span>: Length of the threaded portion in the grip (<span class="math inline">\(L_{grip} - l_d\)</span>).</li>
-<li><span class="math inline">\(E\)</span>: Modulus of elasticity.</li>
+<li><span class="math inline">\(E\)</span>: Modulus of elasticity based on this table:</li>
 </ul>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:elastic-modulus-table">Table 2.7: </span>Elastic Modulus of Common Engineering Metals
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Metric
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Imperial
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+Material
+</th>
+<th style="text-align:center;">
+Elastic Modulus<br>(<span class="math inline">\(E\)</span>) GPa
+</th>
+<th style="text-align:center;">
+Elastic Modulus<br>(<span class="math inline">\(E\)</span>) <span class="math inline">\(10^6\)</span> psi
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Steel (Low Carbon)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+200
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+29.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Steel (Stainless 304)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+193
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+28.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Iron (Ductile)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+165
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+24.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Iron (Gray)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+110
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+13.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Copper (Pure)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+117
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+17.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Brass (Yellow)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+105
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+15.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bronze (Phosphor)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+110
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+16.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aluminum (6061)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+69
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+10.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Titanium (Ti-6Al-4V)
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+114
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+16.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Magnesium Alloy
+</td>
+<td style="text-align:center;background-color: rgba(231, 240, 249, 255) !important;">
+45
+</td>
+<td style="text-align:center;background-color: rgba(249, 231, 240, 255) !important;">
+6.5
+</td>
+</tr>
+</tbody>
+</table>
 <hr />
 </div>
 <div id="km" class="section level4 hasAnchor" number="2.1.6.2">
@@ -3820,7 +3964,7 @@ Figure 2.9: Joint Diagram with External Working Load
 <h5>Step 2: Calculation<a href="machine_elements.html#step-2-calculation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <table>
 <caption>
-<span id="tab:design-data">Table 2.7: </span>Design Values Retrieved from Standards Tables
+<span id="tab:design-data">Table 2.8: </span>Design Values Retrieved from Standards Tables
 </caption>
 <thead>
 <tr>
@@ -3880,7 +4024,7 @@ Table 5: Washer Dimensions
 </table>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:design-data">Table 2.7: </span>Bolted Joint Safety Analysis Results
+<span id="tab:design-data">Table 2.8: </span>Bolted Joint Safety Analysis Results
 </caption>
 <thead>
 <tr>
@@ -5123,7 +5267,7 @@ Figure 2.27: Cross-section of a deep groove ball bearing showing main components
 <h4>Types of Ball Bearings<a href="machine_elements.html#types-of-ball-bearings" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:ball-bearing-types-table">Table 2.8: </span>Common Ball Bearing Types and Applications
+<span id="tab:ball-bearing-types-table">Table 2.9: </span>Common Ball Bearing Types and Applications
 </caption>
 <thead>
 <tr>
@@ -5298,7 +5442,7 @@ Automotive steering, crane hooks
 <p>For <strong>pure radial loading</strong> (most common case): <span class="math inline">\(P = F_r\)</span></p>
 <table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
 <caption>
-<span id="tab:load-factor-table">Table 2.9: </span>Load Factors for Ball Bearings (ISO 281)
+<span id="tab:load-factor-table">Table 2.10: </span>Load Factors for Ball Bearings (ISO 281)
 </caption>
 <thead>
 <tr>
@@ -5464,7 +5608,7 @@ Self-Aligning
 <p>Typical catalog format:</p>
 <table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
 <caption>
-<span id="tab:catalog-table">Table 2.10: </span>Example Bearing Catalog Data (Deep Groove Series 62xx)
+<span id="tab:catalog-table">Table 2.11: </span>Example Bearing Catalog Data (Deep Groove Series 62xx)
 </caption>
 <thead>
 <tr>
@@ -5687,7 +5831,7 @@ Limiting Speed (rpm)
 <p><strong>Reliability Factor (<span class="math inline">\(a_1\)</span>):</strong></p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:reliability-table">Table 2.11: </span>Reliability Factor a₁
+<span id="tab:reliability-table">Table 2.12: </span>Reliability Factor a₁
 </caption>
 <thead>
 <tr>
@@ -5806,7 +5950,7 @@ Figure 2.28: Bearing life as a function of load ratio (C/P).
 <div class="answer">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:bearing-example-calc">Table 2.12: </span>Ball Bearing Life Calculation Steps
+<span id="tab:bearing-example-calc">Table 2.13: </span>Ball Bearing Life Calculation Steps
 </caption>
 <thead>
 <tr>
@@ -5937,7 +6081,7 @@ L5 = a₁ × L10 = 0.64 × 3904
 <h4>Types of Bushings<a href="machine_elements.html#types-of-bushings" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
 <caption>
-<span id="tab:bushing-types-table">Table 2.13: </span>Common Bushing Materials and PV Limits
+<span id="tab:bushing-types-table">Table 2.14: </span>Common Bushing Materials and PV Limits
 </caption>
 <thead>
 <tr>
@@ -6399,7 +6543,7 @@ Figure 2.32: PV limit diagram showing safe operating region for different bushin
 </ol>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:individual-limits-table">Table 2.14: </span>Individual P, V, and PV Limits for Common Bushing Materials
+<span id="tab:individual-limits-table">Table 2.15: </span>Individual P, V, and PV Limits for Common Bushing Materials
 </caption>
 <thead>
 <tr>
@@ -6541,7 +6685,7 @@ PEEK
 <div class="answer">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:bushing-example-calc">Table 2.15: </span>Bushing PV Calculation Steps
+<span id="tab:bushing-example-calc">Table 2.16: </span>Bushing PV Calculation Steps
 </caption>
 <thead>
 <tr>
@@ -6678,7 +6822,7 @@ SF = 75,000 / 52360
 <p>The following table provides guidance:</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:selection-guide">Table 2.16: </span>Ball Bearing vs. Bushing Selection Criteria
+<span id="tab:selection-guide">Table 2.17: </span>Ball Bearing vs. Bushing Selection Criteria
 </caption>
 <thead>
 <tr>
@@ -7070,7 +7214,7 @@ Figure 2.34: Classification of four-bar linkages based on Grashof’s Law.
 <h4>Grashof Classification Summary<a href="machine_elements.html#grashof-classification-summary" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:grashof-table">Table 2.17: </span>Four-Bar Linkage Classification by Grashof Condition
+<span id="tab:grashof-table">Table 2.18: </span>Four-Bar Linkage Classification by Grashof Condition
 </caption>
 <thead>
 <tr>
@@ -7309,7 +7453,7 @@ Figure 2.40: Coupler point P traces a coupler curve as the linkage moves.
 <h4>Famous Coupler Curves<a href="machine_elements.html#famous-coupler-curves" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:coupler-types-table">Table 2.18: </span>Famous Four-Bar Coupler Curve Mechanisms
+<span id="tab:coupler-types-table">Table 2.19: </span>Famous Four-Bar Coupler Curve Mechanisms
 </caption>
 <thead>
 <tr>
@@ -7423,7 +7567,7 @@ Output dwells while input continues
 <h6>Solution<a href="machine_elements.html#solution" class="anchor-section" aria-label="Anchor link to header"></a></h6>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:grashof-example-calc">Table 2.19: </span>Grashof Classification Example
+<span id="tab:grashof-example-calc">Table 2.20: </span>Grashof Classification Example
 </caption>
 <thead>
 <tr>
@@ -7532,7 +7676,7 @@ Crank-Rocker
 <h6>Solution<a href="machine_elements.html#solution-1" class="anchor-section" aria-label="Anchor link to header"></a></h6>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:trans-angle-example">Table 2.20: </span>Transmission Angle Analysis
+<span id="tab:trans-angle-example">Table 2.21: </span>Transmission Angle Analysis
 </caption>
 <thead>
 <tr>
@@ -7750,7 +7894,7 @@ theta2 where mu is minimum
 <h3>Common Applications<a href="machine_elements.html#common-applications" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:applications-table">Table 2.21: </span>Common Four-Bar Linkage Applications
+<span id="tab:applications-table">Table 2.22: </span>Common Four-Bar Linkage Applications
 </caption>
 <thead>
 <tr>
@@ -8139,7 +8283,7 @@ Figure 2.44: Timing belt tooth profile engaging with pulley grooves
 <p>Ribbed belts combine the high-speed capability of flat belts with the grip of V-belts. Multiple small V-ribs run along the belt’s inner surface.</p>
 <table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:belt-comparison-table">Table 2.22: </span>Comparison of Belt Types
+<span id="tab:belt-comparison-table">Table 2.23: </span>Comparison of Belt Types
 </caption>
 <thead>
 <tr>
@@ -8809,7 +8953,7 @@ Figure 2.46: Roller chain link construction showing key components
 <p>Roller chains are designated by standardized numbers that encode their pitch and construction:</p>
 <table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
 <caption>
-<span id="tab:chain-sizes-table">Table 2.23: </span>Common ANSI Roller Chain Specifications
+<span id="tab:chain-sizes-table">Table 2.24: </span>Common ANSI Roller Chain Specifications
 </caption>
 <thead>
 <tr>
@@ -9393,7 +9537,7 @@ Figure 2.49: Chain slack measurement on the slack side span
 <p>Proper lubrication is critical for chain drive life. The lubrication method depends on chain speed.</p>
 <table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:lubrication-table">Table 2.24: </span>Chain Lubrication Methods by Speed
+<span id="tab:lubrication-table">Table 2.25: </span>Chain Lubrication Methods by Speed
 </caption>
 <thead>
 <tr>
@@ -9477,7 +9621,7 @@ Very high-speed, precision equipment
 <p>When should you choose a chain drive over a belt drive?</p>
 <table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:comparison-table">Table 2.25: </span>Chain Drive vs. Belt Drive Comparison
+<span id="tab:comparison-table">Table 2.26: </span>Chain Drive vs. Belt Drive Comparison
 </caption>
 <thead>
 <tr>
@@ -10129,7 +10273,7 @@ Figure 2.53: Common metallic flexible coupling designs
 <p>Select based on expected misalignment:</p>
 <table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:misalignment-capacity">Table 2.26: </span>Typical Misalignment Capacities by Coupling Type
+<span id="tab:misalignment-capacity">Table 2.27: </span>Typical Misalignment Capacities by Coupling Type
 </caption>
 <thead>
 <tr>
@@ -10327,7 +10471,7 @@ Figure 2.55: Single-plate friction clutch components
 <h4><span class="header-section-number">2.7.5.8</span> Friction Material Properties<a href="machine_elements.html#friction-material-properties" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:friction-materials">Table 2.27: </span>Common Friction Material Properties
+<span id="tab:friction-materials">Table 2.28: </span>Common Friction Material Properties
 </caption>
 <thead>
 <tr>

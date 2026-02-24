@@ -809,7 +809,51 @@ $$k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}$$
 * $A_t$: Tensile stress area of the threaded portion.
 * $l_d$: Length of the unthreaded portion ($L - L_T$).
 * $l_t$: Length of the threaded portion in the grip ($L_{grip} - l_d$).
-* $E$: Modulus of elasticity.
+* $E$: Modulus of elasticity based on this table:
+
+```{r elastic-modulus-table, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(dplyr)
+library(kableExtra)
+
+## Creating the material property data frame
+modulus_lookup <- tibble::tribble(
+  ~Material,         ~Metric_GPa, ~Imperial_Mpsi,
+  "Steel (Low Carbon)",    200,       29,
+  "Steel (Stainless 304)", 193,       28,
+  "Iron (Ductile)",        165,       24,
+  "Iron (Gray)",           110,       13,
+  "Copper (Pure)",         117,       17,
+  "Brass (Yellow)",        105,       15.2,
+  "Bronze (Phosphor)",     110,       16,
+  "Aluminum (6061)",       69,        10,
+  "Titanium (Ti-6Al-4V)",  114,       16.5,
+  "Magnesium Alloy",       45,        6.5
+)
+
+## Prepare headers with line breaks and units
+modulus_cols <- c(
+    "Material", 
+    "Elastic Modulus<br>($E$) GPa", 
+    "Elastic Modulus<br>($E$) $10^6$ psi"
+)
+
+## Render the table
+modulus_lookup %>%
+  kbl( 
+      caption = "Elastic Modulus of Common Engineering Metals",
+      booktabs = TRUE,
+      digits = 1,
+      align = "lcc",
+      escape = FALSE, 
+      col.names = modulus_cols
+      ) %>%
+  kable_styling(latex_options = c("hold_position"), full_width = FALSE) %>%
+  ## Highlighting the Metric and Imperial data columns differently
+  column_spec(2, background = "#E7F0F9") %>% 
+  column_spec(3, background = "#F9E7F0") %>%
+  add_header_above(c(" " = 1, "Metric" = 1, "Imperial" = 1))
+```
 
 ---
 

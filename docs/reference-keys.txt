@@ -53,6 +53,7 @@ tab:metric-washer-dimensions
 fig:torque-angle-plot
 fig:force-triangle-plot
 fig:joint-working-load
+tab:elastic-modulus-table
 tab:design-data
 fig:unnamed-chunk-28
 fig:gear-mesh-basic
