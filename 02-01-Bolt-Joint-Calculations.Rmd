@@ -811,6 +811,7 @@ $$k_b = \frac{A_d A_t E}{A_d l_t + A_t l_d}$$
 * $l_t$: Length of the threaded portion in the grip ($L_{grip} - l_d$).
 * $E$: Modulus of elasticity based on this table:
 
+
 ```{r elastic-modulus-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(dplyr)
