@@ -191,7 +191,94 @@ bearing_types %>%
 
 ### Ball Bearing Life Calculations {#bearing-life}
 
-The life of a rolling element bearing is inherently statistical—even identical bearings under identical conditions will fail at different times due to material fatigue. The **L10 life** (or **basic rating life**) is the standard measure used in bearing selection.
+The life of a rolling element bearing is inherently **statistical**—even identical bearings operating under identical conditions will fail at different times due to the random nature of material fatigue. Understanding this statistical behavior is essential for proper bearing selection and reliability engineering.
+
+#### Understanding Statistical Bearing Life {-}
+
+::: {.callout-think}
+**Before You Read:** If you tested 100 identical bearings under identical loads and speeds, would they all fail at the same time? What factors might cause variation in their lifetimes?
+:::
+
+When bearings fail, they do so by **fatigue spalling**—small flakes of material breaking away from the rolling surfaces due to repeated stress cycles. The location where a fatigue crack initiates depends on microscopic material imperfections (inclusions, voids, grain boundaries) that vary randomly from bearing to bearing, even in high-quality manufacturing.
+
+If we test a large group of identical bearings under identical conditions and plot the number of failures against operating time, we get a distribution of bearing lives. This distribution is **not** a normal (Gaussian) distribution—it follows a **Weibull distribution**, which is skewed to the right.
+
+```{r bearing-life-distribution, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Statistical distribution of bearing failures showing L10, L50, and mean life concepts."}
+## Simulate bearing life data using Weibull distribution
+## Shape parameter ~1.5 is typical for rolling bearings (ISO 281)
+set.seed(42)
+n_bearings <- 1000
+shape <- 1.5  ## Weibull shape parameter (beta)
+scale <- 100  ## Weibull scale parameter (characteristic life)
+
+## Generate Weibull-distributed life data
+lives <- rweibull(n_bearings, shape = shape, scale = scale)
+
+## Calculate key percentiles
+L10 <- quantile(lives, 0.10)
+L50 <- quantile(lives, 0.50)
+mean_life <- mean(lives)
+
+## Create histogram data
+life_df <- data.frame(life = lives)
+
+ggplot(life_df, aes(x = life)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 40,
+                 fill = "steelblue", color = "white", alpha = 0.7) +
+  geom_density(color = "darkblue", linewidth = 1.2) +
+  ## Add vertical lines for L10, L50, and mean
+  geom_vline(xintercept = L10, color = "red", linewidth = 1.2, linetype = "dashed") +
+  geom_vline(xintercept = L50, color = "darkgreen", linewidth = 1.2, linetype = "dashed") +
+  geom_vline(xintercept = mean_life, color = "purple", linewidth = 1.2, linetype = "dotted") +
+  ## Add labels
+  annotate("text", x = L10, y = 0.018, label = paste0("L10\n(", round(L10, 0), " hrs)"),
+           color = "red", hjust = 1.1, size = 3.5, fontface = "bold") +
+  annotate("text", x = L50, y = 0.016, label = paste0("L50\n(", round(L50, 0), " hrs)"),
+           color = "darkgreen", hjust = -0.1, size = 3.5, fontface = "bold") +
+  annotate("text", x = mean_life, y = 0.014, label = paste0("Mean\n(", round(mean_life, 0), " hrs)"),
+           color = "purple", hjust = -0.1, size = 3.5, fontface = "bold") +
+  ## Add shaded region for early failures (first 10%)
+  annotate("rect", xmin = 0, xmax = L10, ymin = 0, ymax = 0.02,
+           fill = "red", alpha = 0.2) +
+  annotate("text", x = L10/2, y = 0.001, label = "10% fail\nbefore L10",
+           color = "darkred", size = 3) +
+  labs(
+    title = "Statistical Distribution of Bearing Lives",
+    subtitle = "Weibull distribution (typical for rolling element bearings)",
+    x = "Bearing Life (hours)",
+    y = "Probability Density"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  ) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0, 0))
+```
+
+#### L10 vs. L50: Which Life Do We Use? {-}
+
+The figure above illustrates several important life values:
+
+| Life Designation | Definition | Typical Relationship |
+|:-----------------|:-----------|:---------------------|
+| **L10** | Life exceeded by 90% of bearings | **Design basis** (conservative) |
+| **L50** (median) | Life exceeded by 50% of bearings | L50 ≈ 5 × L10 |
+| **Mean life** | Average life of all bearings | Mean ≈ 5.4 × L10 |
+
+::: {.callout-industry}
+**Why L10, not L50?** In most engineering applications, we design for the **L10 life** because:
+
+1. **Safety margin:** 90% of bearings will exceed this life—conservative design
+2. **Replacement planning:** We know when 10% might start failing
+3. **Industry standard:** All bearing catalogs use L10 ratings (ISO 281)
+
+If we designed for L50 life, half of our bearings would fail before the "rated" life—unacceptable for most applications!
+:::
+
+The relationship between L10 and L50 also explains an important insight: if a bearing achieves its L10 life, it still has substantial remaining life. The **median bearing** (L50) lasts about 5 times longer than L10!
 
 #### The L10 Life Concept {-}
 
@@ -303,6 +390,541 @@ catalog_data %>%
   footnote(general = "C = Dynamic load rating; C₀ = Static load rating",
            general_title = "Legend: ")
 ```
+
+---
+
+#### Calculating the Basic Dynamic Load Rating (C) {-}
+
+While catalog values are convenient, understanding **how** the dynamic load rating is calculated provides valuable engineering insight. The basic dynamic load rating for radial ball bearings is determined by:
+
+$$C = f_c \cdot (i \cdot \cos\alpha)^{0.7} \cdot Z^{2/3} \cdot D^{1.8}$$
+
+**Where:**
+
+| Symbol | Description | Units |
+|:-------|:------------|:------|
+| $C$ | Basic dynamic load rating | N (metric) or lbf (inch) |
+| $f_c$ | Geometry and material factor | — (from table) |
+| $i$ | Number of rows of balls | — |
+| $\alpha$ | Contact angle | degrees |
+| $Z$ | Number of balls per row | — |
+| $D$ | Ball diameter | mm (metric) or inches (inch) |
+
+The factor $f_c$ depends on the bearing geometry and is tabulated based on the ratio $\frac{D \cos\alpha}{d_m}$, where $d_m$ is the pitch diameter of the ball set.
+
+::: {.callout-think}
+**Consider This:** Looking at the formula, which parameter has the greatest influence on load capacity? The ball diameter $D$ appears with an exponent of 1.8—nearly squared! This means **doubling the ball diameter increases load capacity by a factor of** $2^{1.8} \approx 3.5$.
+:::
+
+##### Values of $f_c$ (Geometry Factor) {-}
+
+The following table provides $f_c$ values based on the bearing geometry ratio. Use the **Metric** column when ball diameter $D$ is in mm (result is $C$ in Newtons). Use the **Inch** column when $D$ is in inches (result is $C$ in pounds).
+
+```{r fc-values-table, echo=FALSE, message=FALSE}
+## fc values table from ANSI-AFBMA Std. 9-1978
+fc_values <- tribble(
+  ~Ratio, ~Single_Metric, ~Single_Inch, ~Double_Metric, ~Double_Inch, ~SelfAlign_Metric, ~SelfAlign_Inch,
+  0.05, 46.7, 3550, 44.2, 3360, 17.3, 1310,
+  0.06, 49.1, 3730, 46.5, 3530, 18.6, 1420,
+  0.07, 51.1, 3880, 48.4, 3680, 19.9, 1510,
+  0.08, 52.8, 4020, 50.0, 3810, 21.1, 1600,
+  0.09, 54.3, 4130, 51.4, 3900, 22.3, 1690,
+  0.10, 55.5, 4220, 52.6, 4000, 23.4, 1770,
+  0.12, 57.5, 4370, 54.5, 4140, 25.6, 1940,
+  0.14, 58.8, 4470, 55.7, 4230, 27.7, 2100,
+  0.16, 59.6, 4530, 56.5, 4290, 29.7, 2260,
+  0.18, 59.9, 4550, 56.8, 4310, 31.7, 2410,
+  0.20, 59.9, 4550, 56.8, 4310, 33.5, 2550,
+  0.22, 59.6, 4530, 56.5, 4290, 35.2, 2680,
+  0.24, 59.0, 4480, 55.9, 4250, 36.8, 2790,
+  0.26, 58.2, 4420, 55.1, 4190, 38.2, 2910,
+  0.28, 57.1, 4340, 54.1, 4110, 39.4, 3000,
+  0.30, 56.0, 4250, 53.0, 4030, 40.3, 3060,
+  0.32, 54.6, 4160, 51.8, 3950, 40.9, 3110,
+  0.34, 53.2, 4050, 50.4, 3840, 41.2, 3130,
+  0.36, 51.7, 3930, 48.9, 3730, 41.3, 3140,
+  0.38, 50.0, 3800, 47.4, 3610, 41.0, 3110,
+  0.40, 48.4, 3670, 45.8, 3480, 40.4, 3070
+)
+
+fc_values %>%
+  kbl(caption = "Values of fc for Basic Dynamic Load Rating Calculation",
+      col.names = c("Dcosα/dm", "Metric", "Inch", "Metric", "Inch", "Metric", "Inch"),
+      booktabs = TRUE,
+      digits = c(2, 1, 0, 1, 0, 1, 0)) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"), full_width = TRUE) %>%
+  add_header_above(c(" " = 1,
+                     "Single Row Radial;\nAngular Contact" = 2,
+                     "Double Row\nRadial Contact" = 2,
+                     "Self-Aligning" = 2)) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(c(6, 10, 11), background = "#E8F5E9") %>%
+  footnote(general = "Source: ANSI-AFBMA Std. 9-1978. Metric fc gives C in Newtons (D in mm); Inch fc gives C in pounds (D in inches).",
+           general_title = "Note: ")
+```
+
+##### Conrad-Type Single-Row Radial Bearing Dimensions {-}
+
+The following table provides dimensions and basic load ratings for Conrad-type (deep groove) single-row radial ball bearings. These are among the most commonly used bearings in industry.
+
+```{r conrad-bearing-table, echo=FALSE, message=FALSE}
+## Conrad-type bearing dimensions and ratings
+conrad_bearings <- tribble(
+  ~Bearing_No, ~Bore_mm, ~Bore_in, ~OD_mm, ~OD_in, ~Width_mm, ~Width_in, ~Num_Balls, ~Ball_Dia, ~C_lbs, ~P_st,
+  "102", 15, 0.5906, 32, 1.2598, 9, 0.3543, 9, "3/16", 965, 550,
+  "202", 15, 0.5906, 35, 1.3780, 11, 0.4331, 7, "1/4", 1340, 760,
+  "302", 15, 0.5906, 42, 1.6535, 13, 0.5118, 8, "17/64", 1660, 930,
+  "103", 17, 0.6693, 35, 1.3780, 10, 0.3937, 10, "3/16", 1040, 640,
+  "203", 17, 0.6693, 40, 1.5748, 12, 0.4724, 7, "5/16", 1960, 1040,
+  "303", 17, 0.6693, 47, 1.8504, 14, 0.5512, 6, "3/8", 2400, 1240,
+  "104", 20, 0.7874, 42, 1.6535, 12, 0.4724, 9, "1/4", 1620, 980,
+  "204", 20, 0.7874, 47, 1.8504, 14, 0.5512, 8, "5/16", 2210, 1280,
+  "304", 20, 0.7874, 52, 2.0472, 15, 0.5906, 7, "3/8", 2760, 1530,
+  "105", 25, 0.9843, 47, 1.8504, 12, 0.4724, 10, "1/4", 1740, 1140,
+  "205", 25, 0.9843, 52, 2.0472, 15, 0.5906, 9, "5/16", 2420, 1520,
+  "305", 25, 0.9843, 62, 2.4409, 17, 0.6693, 8, "13/32", 3550, 2160,
+  "106", 30, 1.1811, 55, 2.1654, 13, 0.5118, 11, "9/32", 2290, 1590,
+  "206", 30, 1.1811, 62, 2.4409, 16, 0.6299, 9, "3/8", 3360, 2190,
+  "306", 30, 1.1811, 72, 2.8346, 19, 0.7480, 8, "1/2", 5120, 3200,
+  "107", 35, 1.378, 62, 2.4409, 14, 0.5512, 11, "5/16", 2760, 2010,
+  "207", 35, 1.378, 72, 2.8346, 17, 0.6693, 9, "7/16", 4440, 2980,
+  "307", 35, 1.378, 80, 3.1496, 21, 0.8268, 8, "17/32", 5750, 3710,
+  "108", 40, 1.5748, 68, 2.6772, 15, 0.5906, 13, "5/16", 3060, 2450,
+  "208", 40, 1.5748, 80, 3.1496, 18, 0.7087, 9, "1/2", 5640, 3870,
+  "308", 40, 1.5748, 90, 3.5433, 23, 0.9055, 8, "5/8", 7670, 5050,
+  "109", 45, 1.7717, 75, 2.9528, 16, 0.6299, 13, "11/32", 3630, 2970,
+  "209", 45, 1.7717, 85, 3.3465, 19, 0.7480, 9, "1/2", 5660, 3980,
+  "309", 45, 1.7717, 100, 3.9370, 25, 0.9843, 8, "11/16", 9120, 6150,
+  "110", 50, 1.9685, 80, 3.1496, 16, 0.6299, 14, "11/32", 3770, 3260,
+  "210", 50, 1.9685, 90, 3.5433, 20, 0.7874, 10, "1/2", 6070, 4540,
+  "310", 50, 1.9685, 110, 4.3307, 27, 1.0630, 8, "3/4", 10680, 7350,
+  "111", 55, 2.1654, 90, 3.5433, 18, 0.7087, 13, "13/32", 4890, 3950,
+  "211", 55, 2.1654, 100, 3.9370, 21, 0.8268, 10, "9/16", 7500, 5710,
+  "311", 55, 2.1654, 120, 4.7244, 29, 1.1417, 8, "13/16", 12350, 8660,
+  "112", 60, 2.3622, 95, 3.7402, 18, 0.7087, 14, "13/32", 5090, 4560,
+  "212", 60, 2.3622, 110, 4.3307, 22, 0.8661, 10, "5/8", 9070, 6890,
+  "312", 60, 2.3622, 130, 5.1181, 31, 1.2205, 8, "7/8", 14130, 10100,
+  "113", 65, 2.5591, 100, 3.9370, 18, 0.7087, 15, "13/32", 5280, 4950,
+  "213", 65, 2.5591, 120, 4.7244, 23, 0.9055, 10, "11/16", 10770, 8460,
+  "313", 65, 2.5591, 140, 5.5118, 33, 1.2992, 8, "15/16", 16010, 11600,
+  "114", 70, 2.7559, 110, 4.3307, 20, 0.7874, 14, "15/32", 6580, 6080,
+  "214", 70, 2.7559, 125, 4.9213, 24, 0.9449, 10, "11/16", 10760, 8740,
+  "314", 70, 2.7559, 150, 5.9055, 35, 1.3780, 8, "1", 18000, 13260
+)
+
+conrad_bearings %>%
+  select(Bearing_No, Bore_mm, Bore_in, OD_mm, OD_in, Width_mm, Width_in, Num_Balls, Ball_Dia, C_lbs, P_st) %>%
+  kbl(caption = "Dimensions and Basic Load Ratings for Conrad-Type Single-Row Radial Ball Bearings",
+      col.names = c("Bearing No.", "mm", "inch", "mm", "inch", "mm", "inch", "Z", "D (inch)", "C (lbf)", "P_st (lbf)"),
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"), full_width = TRUE) %>%
+  add_header_above(c(" " = 1, "Bore" = 2, "Outside Dia." = 2, "Width" = 2, "Balls" = 2, "Capacity" = 2)) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  column_spec(10, background = "#F9E7F0") %>%
+  pack_rows("15mm Bore Series", 1, 3) %>%
+  pack_rows("17mm Bore Series", 4, 6) %>%
+  pack_rows("20mm Bore Series", 7, 9) %>%
+  pack_rows("25mm Bore Series", 10, 12) %>%
+  pack_rows("30mm Bore Series", 13, 15) %>%
+  pack_rows("35mm Bore Series", 16, 18) %>%
+  pack_rows("40mm Bore Series", 19, 21) %>%
+  pack_rows("45mm Bore Series", 22, 24) %>%
+  pack_rows("50mm Bore Series", 25, 27) %>%
+  pack_rows("55mm Bore Series", 28, 30) %>%
+  pack_rows("60mm Bore Series", 31, 33) %>%
+  pack_rows("65mm Bore Series", 34, 36) %>%
+  pack_rows("70mm Bore Series", 37, 39) %>%
+  footnote(general = "C = Dynamic load rating; P_st = Static load rating. Source: ANSI-AFBMA standards.",
+           general_title = "Note: ")
+```
+
+##### The Load-Life Relationship: Why It Matters {-}
+
+The bearing life equation $L_{10} = \left(\frac{C}{P}\right)^3 \times 10^6$ reveals a powerful relationship: **bearing life varies with the cube of the load ratio**.
+
+This has profound practical implications:
+
+```{r load-life-relationship, echo=FALSE, message=FALSE}
+## Create load-life relationship table
+load_life <- tribble(
+  ~Load_Change, ~Load_Ratio, ~Life_Change,
+  "Double the load", "P → 2P", "L₁₀ → L₁₀/8 (life reduced to 1/8)",
+  "Halve the load", "P → P/2", "L₁₀ → 8×L₁₀ (life increased 8×)",
+  "Reduce load by 20%", "P → 0.8P", "L₁₀ → 1.95×L₁₀ (life nearly doubles)",
+  "Increase load by 20%", "P → 1.2P", "L₁₀ → 0.58×L₁₀ (life nearly halves)"
+)
+
+load_life %>%
+  kbl(caption = "Effect of Load Changes on Bearing Life (Cubic Relationship)",
+      col.names = c("Change", "Load Ratio", "Effect on Life"),
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(2, background = "#E8F5E9", bold = TRUE) %>%
+  row_spec(1, background = "#FFEBEE")
+```
+
+::: {.callout-industry}
+**Design Insight:** If you can reduce the bearing load by just 20%, you nearly **double** the bearing life! Conversely, underestimating loads by 20% will cut your bearing life nearly in half. This is why accurate load analysis is critical in bearing selection.
+
+In automotive applications, this relationship explains why bearing failures often cluster around vehicles that operate at higher loads (towing, heavy cargo) even when the bearings are "the same" as those in lightly-loaded vehicles.
+:::
+
+::: {.callout-check}
+**Quick Check:** A bearing is rated for C = 10,000 N and operates at P = 2,500 N, giving L₁₀ = 64 million revolutions. If the load is reduced to P = 1,250 N (half), what is the new L₁₀ life?
+
+*Answer: L₁₀ = (10,000/1,250)³ × 10⁶ = 8³ × 10⁶ = **512 million revolutions** (8× longer!)*
+:::
+
+---
+
+#### How Much Life is Required? {-}
+
+Before selecting a bearing, engineers must determine the **required design life** for the application. The table below provides industry guidelines for different machine types:
+
+```{r recommended-life-table, echo=FALSE, message=FALSE}
+## Recommended bearing life by application type
+life_guidelines <- tribble(
+  ~Machine_Type, ~Examples, ~Life_Hours,
+  "Instruments and apparatus used infrequently", "Demonstration apparatus, devices for operation of sliding doors", "500",
+  "Aircraft engines", "—", "500–2,000",
+  "Machines for short duration or intermittent operation (service interruptions minor)", "Hand tools, lifting tackle in machinery shops, hand-driven machines, farm machinery, assembly cranes, charging machines, foundry cranes, household machines", "4,000–8,000",
+  "Machines for intermittent service where dependable operation is important", "Auxiliary machines in power stations, conveying equipment in production lines, elevators, general-cargo cranes, machine tools used less frequently", "8,000–12,000",
+  "Machines for 8-hour service not always fully utilized", "Machines in general mechanical industries, cranes for continuous service, blowers, jackshafts", "20,000–30,000",
+  "Machines for continuous operation (24-hour service)", "Separators, compressors, pumps, mainline shafting, roller beds and conveyor rollers, mine hoists, stationary electric motors", "40,000–60,000",
+  "Machines for 24-hour service where dependability is critical", "Pulp and paper machines, public power stations, mine pumps, public pumping stations, machines for continuous service aboard ships", "100,000–200,000"
+)
+
+life_guidelines %>%
+  kbl(caption = "Recommended Bearing Life by Machine Type",
+      col.names = c("Type of Machine", "Examples", "Life (hours)"),
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"), full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(c(4, 6), background = "#E8F5E9") %>%
+  column_spec(3, width = "2.5cm", bold = TRUE)
+```
+
+::: {.callout-industry}
+**Design Tip:** When in doubt, design for longer life. A bearing that costs 20% more but lasts twice as long often reduces total cost of ownership significantly—especially when considering downtime and labor costs for replacement.
+:::
+
+---
+
+#### Two Approaches to Bearing Selection {-}
+
+There are two common scenarios when working with bearing life equations:
+
+**Scenario A: Verify a Known Bearing** — You have a specific bearing (dimensions known) and want to check if it meets application requirements.
+
+**Scenario B: Select a Bearing** — You know the application requirements (load, speed, life) and need to find a bearing that meets them.
+
+```{r bearing-selection-approaches, echo=FALSE, message=FALSE}
+approaches <- tribble(
+  ~Scenario, ~Known, ~Calculate, ~Use_Case,
+  "A: Verify existing bearing", "Bearing dimensions (Z, D, dm), or catalog C value", "C from dimensions, then L₁₀", "Checking if a bearing in a machine meets requirements; validating catalog data",
+  "B: Select new bearing", "Required life (L), speed (n), load (P)", "Required C, then select from catalog", "Designing a new machine; replacing a failed bearing with adequate life"
+)
+
+approaches %>%
+  kbl(caption = "Two Approaches to Bearing Selection",
+      col.names = c("Scenario", "What You Know", "What to Calculate", "When to Use"),
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(1, background = "#E3F2FD") %>%
+  row_spec(2, background = "#FFF3E0")
+```
+
+The following examples demonstrate both approaches.
+
+---
+
+#### Applied Example: Calculate C from Bearing Dimensions {#example-calc-C-dimensions}
+
+::: {.question}
+Find the basic dynamic load rating $C$ for a **207 radial bearing** with contact angle $\alpha = 0°$.
+
+From Table \@ref(tab:conrad-bearing-table), the 207 bearing has:
+
+- Bore: 35 mm (1.378 in)
+- Outside diameter: 72 mm (2.8346 in)
+- Number of balls: Z = 9
+- Ball diameter: D = 7/16 in = 0.4375 in
+:::
+
+::: {.answer}
+
+```{r example-C-from-dimensions, echo=FALSE, message=FALSE}
+## Given values for 207 bearing
+bore_in <- 1.378          ## inches
+OD_in <- 2.8346           ## inches
+Z <- 9                    ## number of balls
+D <- 7/16                 ## ball diameter in inches (0.4375)
+alpha <- 0                ## contact angle (degrees)
+i <- 1                    ## number of rows
+
+## Step 1: Calculate pitch diameter dm
+## dm = (bore + OD) / 2
+dm <- (OD_in + bore_in) / 2
+
+## Step 2: Calculate geometry ratio
+## For α = 0°, cos(α) = 1
+cos_alpha <- cos(alpha * pi / 180)
+ratio <- (D * cos_alpha) / dm
+
+## Step 3: Look up fc from table (interpolate between 0.20 and 0.22)
+## At ratio ≈ 0.208, fc ≈ 4550 (from table, between 0.20=4550 and 0.22=4530)
+fc <- 4550  ## Using inch units
+
+## Step 4: Calculate (i·cos α)^0.7
+term1 <- (i * cos_alpha)^0.7
+
+## Step 5: Calculate Z^(2/3)
+term2 <- Z^(2/3)
+
+## Step 6: Calculate D^1.8
+term3 <- D^1.8
+
+## Step 7: Calculate C
+C_calc <- fc * term1 * term2 * term3
+
+## Catalog value for comparison
+C_catalog <- 4440  ## lbf from Table 2
+
+## Create step-by-step table
+calc_steps <- tribble(
+  ~Step, ~Formula, ~Calculation, ~Result,
+  "Step 1: Pitch diameter", "dm = (OD + bore) / 2",
+  paste0("dm = (", OD_in, " + ", bore_in, ") / 2"),
+  paste0(round(dm, 4), " in"),
+
+  "Step 2: Geometry ratio", "(D·cos α) / dm",
+  paste0("(", D, " × 1) / ", round(dm, 4)),
+  as.character(round(ratio, 3)),
+
+  "Step 3: Look up fc", "From Table (ratio ≈ 0.208)",
+  "Interpolate between 0.20 and 0.22",
+  paste0("fc = ", fc),
+
+  "Step 4: Row-angle term", "(i·cos α)^0.7",
+  paste0("(", i, " × 1)^0.7"),
+  as.character(round(term1, 3)),
+
+  "Step 5: Ball count term", "Z^(2/3)",
+  paste0(Z, "^(2/3)"),
+  as.character(round(term2, 3)),
+
+  "Step 6: Ball diameter term", "D^1.8",
+  paste0(D, "^1.8"),
+  as.character(round(term3, 4)),
+
+  "Step 7: Dynamic load rating", "C = fc × (i·cos α)^0.7 × Z^(2/3) × D^1.8",
+  paste0(fc, " × ", round(term1, 3), " × ", round(term2, 3), " × ", round(term3, 4)),
+  paste0(round(C_calc, 0), " lbf")
+)
+
+calc_steps %>%
+  kbl(caption = "Calculating C from Bearing Dimensions (207 Bearing)",
+      booktabs = TRUE,
+      col.names = c("Step", "Formula", "Calculation", "Result")) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(7, background = "#E8F5E9", bold = TRUE)
+```
+
+###### Verification {-}
+
+$$C = f_c \cdot (i \cos\alpha)^{0.7} \cdot Z^{2/3} \cdot D^{1.8} = 4550 \times 1 \times 9^{2/3} \times 0.4375^{1.8} = \boxed{4440\ \text{lbf}}$$
+
+This matches the catalog value of **C = 4,440 lbf** from Table \@ref(tab:conrad-bearing-table), confirming our calculation.
+
+:::
+
+---
+
+#### Applied Example: Calculate Allowable Load P {#example-calc-P}
+
+::: {.question}
+For the **207 bearing** where we found C = 4,440 lbf, find the maximum radial load $P$ for a required L₁₀ life of **500 hours** at **1,500 RPM**.
+:::
+
+::: {.answer}
+
+We need to rearrange the life equation to solve for P:
+
+$$L_{10h} = \frac{10^6}{60 \cdot n}\left(\frac{C}{P}\right)^3$$
+
+Solving for P:
+
+$$P = \sqrt[3]{\frac{10^6 \cdot C^3}{60 \cdot n \cdot L_{10h}}}$$
+
+```{r example-calc-P, echo=FALSE, message=FALSE}
+## Given values
+C <- 4440        ## lbf (from previous example)
+L10h <- 500      ## hours
+n <- 1500        ## RPM
+
+## Calculate P
+## P = (10^6 × C^3 / (60 × n × L))^(1/3)
+numerator <- 1e6 * C^3
+denominator <- 60 * n * L10h
+P_calc <- (numerator / denominator)^(1/3)
+
+## Verification: Calculate life with this P
+L_verify <- (1e6 / (60 * n)) * (C / P_calc)^3
+
+## Create calculation table
+p_calc_steps <- tribble(
+  ~Step, ~Formula, ~Calculation, ~Result,
+  "Given", "C, L₁₀h, n",
+  paste0("C = ", C, " lbf, L = ", L10h, " hrs, n = ", n, " rpm"),
+  "—",
+
+  "Rearranged formula", "P = ∛(10⁶·C³ / 60·n·L)",
+  "Solve life equation for P",
+  "—",
+
+  "Numerator", "10⁶ × C³",
+  paste0("10⁶ × ", C, "³ = ", formatC(numerator, format = "e", digits = 2)),
+  formatC(numerator, format = "e", digits = 3),
+
+  "Denominator", "60 × n × L",
+  paste0("60 × ", n, " × ", L10h),
+  formatC(denominator, format = "d", big.mark = ","),
+
+  "Division", "Num / Denom",
+  paste0(formatC(numerator, format = "e", digits = 2), " / ", formatC(denominator, format = "d", big.mark = ",")),
+  formatC(numerator/denominator, format = "e", digits = 3),
+
+  "Cube root", "P = ∛(result)",
+  paste0("∛(", formatC(numerator/denominator, format = "e", digits = 2), ")"),
+  paste0(round(P_calc, 0), " lbf")
+)
+
+p_calc_steps %>%
+  kbl(caption = "Calculating Maximum Load P for Required Life",
+      booktabs = TRUE,
+      col.names = c("Step", "Formula", "Calculation", "Result")) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(6, background = "#E8F5E9", bold = TRUE)
+```
+
+###### Conclusion {-}
+
+$$P = \sqrt[3]{\frac{10^6 \times 4440^3}{60 \times 1500 \times 500}} = \sqrt[3]{1.945 \times 10^9} = \boxed{1250\ \text{lbf}}$$
+
+**Interpretation:** This bearing can support a radial load of **1,250 lbf** in an application where 90% of bearings will last at least 500 hours at 1,500 RPM.
+
+:::
+
+---
+
+#### Applied Example: Select a Bearing for Required Life {#example-select-bearing}
+
+::: {.question}
+A bearing of the **X07 family** (35 mm bore) needs to run for **2,000 hours** at **5,000 RPM** and carry a load of **415 lbf**. Which bearing from the X07 family should be selected?
+:::
+
+::: {.answer}
+
+We need to find the **required** dynamic load rating C, then select a bearing that meets or exceeds this value.
+
+Rearranging the life equation to solve for C:
+
+$$C = \sqrt[3]{\frac{60 \cdot n \cdot L_{10h} \cdot P^3}{10^6}}$$
+
+```{r example-select-bearing, echo=FALSE, message=FALSE}
+## Given values
+L10h <- 2000     ## hours
+n <- 5000        ## RPM
+P <- 415         ## lbf
+
+## Calculate required C
+## C = (60 × n × L × P³ / 10⁶)^(1/3)
+numerator <- 60 * n * L10h * P^3
+denominator <- 1e6
+C_required <- (numerator / denominator)^(1/3)
+
+## Available X07 family bearings from catalog
+bearings_X07 <- tribble(
+  ~Bearing, ~C_lbf,
+  "107", 2760,
+  "207", 4440,
+  "307", 5750
+)
+
+## Find suitable bearing
+suitable <- bearings_X07 %>% filter(C_lbf >= C_required)
+
+## Create calculation table
+select_steps <- tribble(
+  ~Step, ~Formula, ~Calculation, ~Result,
+  "Given", "L, n, P",
+  paste0("L = ", L10h, " hrs, n = ", n, " rpm, P = ", P, " lbf"),
+  "—",
+
+  "Rearranged formula", "C = ∛(60·n·L·P³ / 10⁶)",
+  "Solve life equation for C",
+  "—",
+
+  "Numerator", "60 × n × L × P³",
+  paste0("60 × ", n, " × ", L10h, " × ", P, "³"),
+  formatC(numerator, format = "e", digits = 3),
+
+  "Division", "Num / 10⁶",
+  paste0(formatC(numerator, format = "e", digits = 2), " / 10⁶"),
+  formatC(numerator/denominator, format = "e", digits = 3),
+
+  "Cube root", "C_required = ∛(result)",
+  paste0("∛(", formatC(numerator/denominator, format = "e", digits = 2), ")"),
+  paste0(round(C_required, 0), " lbf")
+)
+
+select_steps %>%
+  kbl(caption = "Calculating Required C for Bearing Selection",
+      booktabs = TRUE,
+      col.names = c("Step", "Formula", "Calculation", "Result")) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(5, background = "#E8F5E9", bold = TRUE)
+```
+
+###### Bearing Selection {-}
+
+$$C_{required} = \sqrt[3]{\frac{60 \times 5000 \times 2000 \times 415^3}{10^6}} = \sqrt[3]{4.29 \times 10^{10}} = \boxed{3500\ \text{lbf}}$$
+
+Now compare with available X07 family bearings from Table \@ref(tab:conrad-bearing-table):
+
+```{r bearing-selection-table, echo=FALSE, message=FALSE}
+selection_table <- tribble(
+  ~Bearing, ~C_lbf, ~Meets_Requirement,
+  "107", 2760, "No (2760 < 3500)",
+  "207", 4440, "Yes (4440 > 3500) ✓",
+  "307", 5750, "Yes (5750 > 3500)"
+)
+
+selection_table %>%
+  kbl(caption = "X07 Family Bearing Comparison",
+      col.names = c("Bearing", "C (lbf)", "Meets C ≥ 3500 lbf?"),
+      booktabs = TRUE) %>%
+  kable_styling(latex_options = "hold_position", full_width = FALSE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(2, background = "#E8F5E9", bold = TRUE)
+```
+
+###### Conclusion {-}
+
+Select the **207 bearing** (C = 4,440 lbf). It exceeds the required C of 3,500 lbf while being more compact and economical than the 307.
+
+The 107 bearing is **not suitable**—its C = 2,760 lbf is below the required 3,500 lbf, meaning it would fail before reaching the design life.
+
+::: {.callout-check}
+**Why not choose the 307?** While the 307 would work (C = 5,750 lbf), it's physically larger and more expensive. The 207 provides adequate life with a safety margin of 4,440/3,500 = 1.27, which is acceptable for most applications.
+:::
+
+:::
 
 ---
 
@@ -479,6 +1101,27 @@ results %>%
 
 :::
 
+---
+
+#### External Resources: Bearing Calculation Tools {-}
+
+Major bearing manufacturers provide comprehensive technical documentation and online calculators for bearing selection. These resources include detailed load rating tables, application examples, and life calculation methodologies.
+
+::: {.callout-industry}
+**Manufacturer Resources:**
+
+- **NTN Bearing Corporation** — [Technical Calculations and Bearing Data (PDF)](https://ntn.ca/wp-content/uploads/2022/02/2203E_Web.pdf)
+  - Comprehensive bearing catalog with life calculations, load ratings, and application guidelines
+  - Includes worked examples for various bearing types
+
+- **NSK Ltd.** — [Rolling Bearing Catalog: Technical Section (PDF)](https://www.nsk.com/content/dam/nsk/common/catalogs/ctrgPdf/bearings/e728.pdf)
+  - Detailed technical information on bearing selection and calculations
+  - Includes adjusted life calculations with lubrication and contamination factors
+
+These resources are invaluable for real-world bearing selection beyond the simplified examples in this chapter.
+:::
+
+---
 
 ### Plain Bearings (Bushings) {#bushings}
 
@@ -1151,16 +1794,20 @@ ggplot(pv_data, aes(x = P, y = V, color = Material)) +
 limits_data <- tribble(
   ~Material, ~Max_P_psi, ~Max_V_ftmin, ~Max_PV, ~Max_Temp_F,
   "SAE 660 Bronze", 4000, 750, 75000, 450,
-  "Sintered Bronze (oil-impreg.)", 2000, 400, 50000, 300,
+  "Bronze", 2000, 1200, 60000, 300,
   "PTFE/Bronze Composite", 2500, 500, 25000, 500,
   "Acetal (Delrin)", 1500, 600, 10000, 180,
   "Nylon 6/6", 1000, 400, 5000, 200,
-  "PEEK", 3000, 650, 40000, 480
+  "PEEK", 3000, 650, 40000, 480,
+  "Iron", 3000, 400, 30000, 750,
+  "Bronze-Iron", 2500, 800, 35000, 750,
+  "Lead-Iron", 1000, 800, 50000, 750,
+  "Aluminum", 2000, 1200, 50000, 480
 )
 
 limits_data %>%
   kbl(caption = "Individual P, V, and PV Limits for Common Bushing Materials",
-      col.names = c("Material", "Max P (psi)", "Max V (ft/min)", "Max PV (psi-ft/min)", "Max Temp (F)"),
+      col.names = c("Material", "Max Dynamic P (psi)", "Max V (ft/min)", "Max PV (psi-ft/min)", "Max Temp (F)"),
       booktabs = TRUE,
       align = "lcccc") %>%
   kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
@@ -1257,6 +1904,295 @@ The SAE 660 bronze bushing is **suitable** for this application:
 
 :::
 
+---
+
+### Applied Example: Maximum Speed Calculation {#bushing-example-speed}
+
+::: {.question}
+A bushing is loaded with **20 lbf**. The shaft has a diameter of **5/16 in**. The self-lubricating bushing is made of **Bronze-Iron**. The bushing has a length of **0.5 in**.
+
+What is the **maximum speed** (in RPM) the motor is allowed to spin?
+:::
+
+::: {.answer}
+
+```{r bushing-speed-calc, echo=FALSE, message=FALSE}
+## Given values
+F_load <- 20           ## lbf
+d_shaft <- 5/16        ## inches (0.3125)
+L_bush <- 0.5          ## inches
+
+## Bronze-Iron limits (from materials table)
+P_max <- 2500          ## psi
+V_max <- 800           ## ft/min
+PV_max <- 35000        ## psi·ft/min
+
+## Step 1: Calculate bearing pressure
+P_bearing <- F_load / (d_shaft * L_bush)  ## psi
+
+## Step 2: Calculate max velocity from V limit
+V_from_Vlimit <- V_max  ## ft/min
+
+## Step 3: Calculate max velocity from PV limit
+V_from_PVlimit <- PV_max / P_bearing  ## ft/min
+
+## Step 4: Convert velocities to RPM
+## V = π·d·n / 12  →  n = 12·V / (π·d)
+N_from_Vlimit <- (12 * V_from_Vlimit) / (pi * d_shaft)
+N_from_PVlimit <- (12 * V_from_PVlimit) / (pi * d_shaft)
+
+## Step 5: The actual maximum is the LOWER of the two values
+N_max <- min(N_from_Vlimit, N_from_PVlimit)
+limiting_factor <- ifelse(N_from_PVlimit < N_from_Vlimit, "PV limit", "V limit")
+
+## Create results table
+speed_results <- tribble(
+  ~Step, ~Formula, ~Calculation, ~Result,
+  "Step 1: Bearing Pressure", "P = F / (d × L)",
+  paste0("P = ", F_load, " / (", d_shaft, " × ", L_bush, ")"),
+  paste0(round(P_bearing, 1), " psi"),
+
+  "Step 2: Check P < P_max", "P < 2,500 psi?",
+  paste0(round(P_bearing, 1), " < 2,500?"),
+  ifelse(P_bearing < P_max, "OK ✓", "FAIL ✗"),
+
+  "Step 3: Max V from V limit", "V_max = 800 ft/min",
+  "V ≤ 800",
+  paste0(V_from_Vlimit, " ft/min"),
+
+  "Step 4: Max V from PV limit", "V = PV_max / P",
+  paste0("V = 35,000 / ", round(P_bearing, 1)),
+  paste0(round(V_from_PVlimit, 1), " ft/min"),
+
+  "Step 5: N from V limit", "N = 12·V / (π·d)",
+  paste0("N = 12 × 800 / (π × ", d_shaft, ")"),
+  paste0(formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = ","), " RPM"),
+
+  "Step 6: N from PV limit", "N = 12·V / (π·d)",
+  paste0("N = 12 × ", round(V_from_PVlimit, 1), " / (π × ", d_shaft, ")"),
+  paste0(formatC(N_from_PVlimit, format = "f", digits = 0, big.mark = ","), " RPM"),
+
+  "Step 7: Governing Limit", "N_max = min(N_V, N_PV)",
+  paste0("min(", formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = ","),
+         ", ", formatC(N_from_PVlimit, format = "f", digits = 0, big.mark = ","), ")"),
+  paste0(formatC(N_max, format = "f", digits = 0, big.mark = ","), " RPM")
+)
+
+speed_results %>%
+  kbl(caption = "Maximum Speed Calculation Steps",
+      booktabs = TRUE,
+      col.names = c("Step", "Formula", "Calculation", "Result")) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(7, background = "#E8F5E9", bold = TRUE)
+```
+
+###### Conclusion {-}
+
+The **PV limit governs** this design. Although the V limit alone would allow `r formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = ",")` RPM, the combined PV constraint limits the speed to:
+
+$$N_{max} = \boxed{`r formatC(N_max, format = "f", digits = 0, big.mark = ",")`\ \text{RPM}}$$
+
+::: {.callout-think}
+**Why does the PV limit govern?** The bearing pressure (P = `r round(P_bearing, 1)` psi) is low compared to the 2,500 psi maximum, but when multiplied by velocity, it quickly approaches the PV limit. This is a common scenario with small-diameter, lightly-loaded bushings operating at high speeds.
+:::
+
+:::
+
+---
+
+### Applied Example: Minimum Bushing Length {#bushing-example-length}
+
+::: {.question}
+A bushing is loaded with **20 lbf**. The shaft runs at **3,500 RPM** and has a diameter of **5/16 in**. The self-lubricating bushing is made of **Bronze-Iron**.
+
+What is the **minimum length** the bushing must have?
+:::
+
+::: {.answer}
+
+```{r bushing-length-calc, echo=FALSE, message=FALSE}
+## Given values
+F_load <- 20           ## lbf
+d_shaft <- 5/16        ## inches (0.3125)
+n_rpm <- 3500          ## RPM
+
+## Bronze-Iron limits (from materials table)
+P_max <- 2500          ## psi
+V_max <- 800           ## ft/min
+PV_max <- 35000        ## psi·ft/min
+
+## Step 1: Calculate sliding velocity
+V_sliding <- (pi * d_shaft * n_rpm) / 12  ## ft/min
+
+## Step 2: Check V against V_max
+V_ok <- V_sliding < V_max
+
+## Step 3: Calculate minimum L from P limit
+## P = F / (d × L) ≤ P_max  →  L ≥ F / (d × P_max)
+L_from_Plimit <- F_load / (d_shaft * P_max)
+
+## Step 4: Calculate minimum L from PV limit
+## P × V ≤ PV_max  →  P ≤ PV_max / V  →  F/(d×L) ≤ PV_max/V  →  L ≥ F·V / (d × PV_max)
+P_max_from_PV <- PV_max / V_sliding
+L_from_PVlimit <- F_load / (d_shaft * P_max_from_PV)
+
+## Step 5: The actual minimum is the LARGER of the two values
+L_min <- max(L_from_Plimit, L_from_PVlimit)
+limiting_factor <- ifelse(L_from_PVlimit > L_from_Plimit, "PV limit", "P limit")
+
+## Verify the answer
+P_actual <- F_load / (d_shaft * L_min)
+PV_actual <- P_actual * V_sliding
+
+## Create results table
+length_results <- tribble(
+  ~Step, ~Formula, ~Calculation, ~Result,
+  "Step 1: Sliding Velocity", "V = π·d·n / 12",
+  paste0("V = π × ", d_shaft, " × ", n_rpm, " / 12"),
+  paste0(round(V_sliding, 1), " ft/min"),
+
+  "Step 2: Check V < V_max", "V < 800 ft/min?",
+  paste0(round(V_sliding, 1), " < 800?"),
+  ifelse(V_ok, "OK ✓", "FAIL ✗"),
+
+  "Step 3: L from P limit", "L ≥ F / (d × P_max)",
+  paste0("L ≥ ", F_load, " / (", d_shaft, " × 2,500)"),
+  paste0(round(L_from_Plimit, 4), " in"),
+
+  "Step 4: Max P from PV limit", "P_max = PV_max / V",
+  paste0("P_max = 35,000 / ", round(V_sliding, 1)),
+  paste0(round(P_max_from_PV, 1), " psi"),
+
+  "Step 5: L from PV limit", "L ≥ F / (d × P_max)",
+  paste0("L ≥ ", F_load, " / (", d_shaft, " × ", round(P_max_from_PV, 1), ")"),
+  paste0(round(L_from_PVlimit, 3), " in"),
+
+  "Step 6: Governing Limit", "L_min = max(L_P, L_PV)",
+  paste0("max(", round(L_from_Plimit, 4), ", ", round(L_from_PVlimit, 3), ")"),
+  paste0(round(L_min, 3), " in")
+)
+
+length_results %>%
+  kbl(caption = "Minimum Length Calculation Steps",
+      booktabs = TRUE,
+      col.names = c("Step", "Formula", "Calculation", "Result")) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(6, background = "#E8F5E9", bold = TRUE)
+```
+
+###### Verification {-}
+
+Let's verify by substituting $L_{min}$ back into both constraints:
+
+- **Bearing pressure:** $P = \frac{`r F_load`}{`r d_shaft` \times `r round(L_min, 3)`} = `r round(P_actual, 1)`$ psi < 2,500 psi ✓
+- **PV factor:** $PV = `r round(P_actual, 1)` \times `r round(V_sliding, 1)` = `r formatC(PV_actual, format = "f", digits = 0, big.mark = ",")`$ psi·ft/min ≈ 35,000 psi·ft/min ✓
+
+###### Conclusion {-}
+
+The **PV limit governs** this design. The minimum bushing length is:
+
+$$L_{min} = \boxed{`r round(L_min, 2)`\ \text{in}}$$
+
+In practice, you would round up to the next standard size (e.g., **0.5625 in = 9/16 in** or **0.625 in = 5/8 in**) to provide a safety margin.
+
+:::
+
+---
+
+### Applied Example: Maximum Load Capacity {#bushing-example-load}
+
+::: {.question}
+A shaft runs at **3,500 RPM** and has a diameter of **5/16 in**. The self-lubricating bushing is made of **Bronze-Iron** and has a length of **0.5 in**.
+
+What is the **maximum load** (in lbf) the bushing can handle?
+:::
+
+::: {.answer}
+
+```{r bushing-load-calc, echo=FALSE, message=FALSE}
+## Given values
+d_shaft <- 5/16        ## inches (0.3125)
+L_bush <- 0.5          ## inches
+n_rpm <- 3500          ## RPM
+
+## Bronze-Iron limits (from materials table)
+P_max <- 2500          ## psi
+V_max <- 800           ## ft/min
+PV_max <- 35000        ## psi·ft/min
+
+## Step 1: Calculate sliding velocity
+V_sliding <- (pi * d_shaft * n_rpm) / 12  ## ft/min
+
+## Step 2: Check V against V_max
+V_ok <- V_sliding < V_max
+
+## Step 3: Calculate max F from P limit
+## P = F / (d × L) ≤ P_max  →  F ≤ P_max × d × L
+F_from_Plimit <- P_max * d_shaft * L_bush
+
+## Step 4: Calculate max F from PV limit
+## P × V ≤ PV_max  →  P ≤ PV_max / V  →  F/(d×L) ≤ PV_max/V  →  F ≤ (PV_max/V) × d × L
+P_max_from_PV <- PV_max / V_sliding
+F_from_PVlimit <- P_max_from_PV * d_shaft * L_bush
+
+## Step 5: The actual maximum is the LOWER of the two values
+F_max <- min(F_from_Plimit, F_from_PVlimit)
+limiting_factor <- ifelse(F_from_PVlimit < F_from_Plimit, "PV limit", "P limit")
+
+## Create results table
+load_results <- tribble(
+  ~Step, ~Formula, ~Calculation, ~Result,
+  "Step 1: Sliding Velocity", "V = π·d·n / 12",
+  paste0("V = π × ", d_shaft, " × ", n_rpm, " / 12"),
+  paste0(round(V_sliding, 1), " ft/min"),
+
+  "Step 2: Check V < V_max", "V < 800 ft/min?",
+  paste0(round(V_sliding, 1), " < 800?"),
+  ifelse(V_ok, "OK ✓", "FAIL ✗"),
+
+  "Step 3: F from P limit", "F ≤ P_max × d × L",
+  paste0("F ≤ 2,500 × ", d_shaft, " × ", L_bush),
+  paste0(round(F_from_Plimit, 1), " lbf"),
+
+  "Step 4: Max P from PV limit", "P_max = PV_max / V",
+  paste0("P_max = 35,000 / ", round(V_sliding, 1)),
+  paste0(round(P_max_from_PV, 1), " psi"),
+
+  "Step 5: F from PV limit", "F ≤ P_max × d × L",
+  paste0("F ≤ ", round(P_max_from_PV, 1), " × ", d_shaft, " × ", L_bush),
+  paste0(round(F_from_PVlimit, 1), " lbf"),
+
+  "Step 6: Governing Limit", "F_max = min(F_P, F_PV)",
+  paste0("min(", round(F_from_Plimit, 1), ", ", round(F_from_PVlimit, 1), ")"),
+  paste0(round(F_max, 1), " lbf")
+)
+
+load_results %>%
+  kbl(caption = "Maximum Load Calculation Steps",
+      booktabs = TRUE,
+      col.names = c("Step", "Formula", "Calculation", "Result")) %>%
+  kable_styling(latex_options = "hold_position", full_width = TRUE) %>%
+  row_spec(0, background = "#D81B60", color = "white") %>%
+  row_spec(6, background = "#E8F5E9", bold = TRUE)
+```
+
+###### Conclusion {-}
+
+Once again, the **PV limit governs** this design. The maximum allowable load is:
+
+$$F_{max} = \boxed{`r round(F_max, 1)`\ \text{lbf}}$$
+
+::: {.callout-industry}
+**Design Insight:** Notice that at 3,500 RPM with a 0.5 in bushing, the maximum load is only about `r round(F_max, 0)` lbf—very close to the 20 lbf used in the previous examples. This illustrates why it's critical to check both P/V limits AND the combined PV limit. The individual limits (P < 2,500 psi, V < 800 ft/min) are both easily satisfied, but the PV combination becomes the controlling factor at higher speeds.
+
+If your application requires 20 lbf at 3,500 RPM, you would need to either:
+1. Increase the bushing length (as calculated in the previous example: L ≥ 0.52 in)
+2. Select a material with a higher PV limit (e.g., SAE 660 Bronze with PV = 75,000)
+:::
+
+:::
 
 ---
 

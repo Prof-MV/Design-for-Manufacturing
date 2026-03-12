@@ -23,7 +23,7 @@
 <meta name="author" content="Martin Volkening and Claude Opus 4.6 (Anthropic)" />
 
 
-<meta name="date" content="2026-02-23" />
+<meta name="date" content="2026-03-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -276,7 +276,10 @@ div.csl-indent {
 <li class="chapter" data-level="2.3.9" data-path="machine_elements.html"><a href="machine_elements.html#sec-oil-circulation-diagram"><i class="fa fa-check"></i><b>2.3.9</b> Oil Circulation in Sintered Bearings (continued)</a></li>
 <li class="chapter" data-level="2.3.10" data-path="machine_elements.html"><a href="machine_elements.html#pv-limits"><i class="fa fa-check"></i><b>2.3.10</b> PV Limits for Bushings</a></li>
 <li class="chapter" data-level="2.3.11" data-path="machine_elements.html"><a href="machine_elements.html#bushing-example"><i class="fa fa-check"></i><b>2.3.11</b> Applied Example: Bushing PV Calculation</a></li>
-<li class="chapter" data-level="2.3.12" data-path="machine_elements.html"><a href="machine_elements.html#sec-selection-guide"><i class="fa fa-check"></i><b>2.3.12</b> Bearing vs. Bushing Selection Guide</a></li>
+<li class="chapter" data-level="2.3.12" data-path="machine_elements.html"><a href="machine_elements.html#bushing-example-speed"><i class="fa fa-check"></i><b>2.3.12</b> Applied Example: Maximum Speed Calculation</a></li>
+<li class="chapter" data-level="2.3.13" data-path="machine_elements.html"><a href="machine_elements.html#bushing-example-length"><i class="fa fa-check"></i><b>2.3.13</b> Applied Example: Minimum Bushing Length</a></li>
+<li class="chapter" data-level="2.3.14" data-path="machine_elements.html"><a href="machine_elements.html#bushing-example-load"><i class="fa fa-check"></i><b>2.3.14</b> Applied Example: Maximum Load Capacity</a></li>
+<li class="chapter" data-level="2.3.15" data-path="machine_elements.html"><a href="machine_elements.html#sec-selection-guide"><i class="fa fa-check"></i><b>2.3.15</b> Bearing vs. Bushing Selection Guide</a></li>
 <li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#summary-equations"><i class="fa fa-check"></i>Summary Equations</a></li>
 <li class="chapter" data-level="" data-path="machine_elements.html"><a href="machine_elements.html#design-checklist"><i class="fa fa-check"></i>Design Checklist</a></li>
 </ul></li>
@@ -1377,8 +1380,8 @@ Figure 1.9: Three-Plane Datum System
 - Widest slot</p>
 <pre><code>## Warning in geom_text(aes(label = diameter), vjust = -0.5, fontsize = 5, :
 ## Ignoring unknown parameters: `fontsize`</code></pre>
-<pre><code>## Warning: Removed 3 rows containing missing values or values
-## outside the scale range (`geom_col()`).</code></pre>
+<pre><code>## Warning: Removed 3 rows containing missing values or values outside the scale
+## range (`geom_col()`).</code></pre>
 <div class="figure"><span style="display:block;" id="fig:mmc-demo"></span>
 <img src="_main_files/figure-html/mmc-demo-1.png" alt="Maximum Material Condition Example" width="672" />
 <p class="caption">
@@ -1393,12 +1396,12 @@ Figure 1.10: Maximum Material Condition Example
 ## mm&quot;, : Ignoring unknown parameters: `fontsize`</code></pre>
 <pre><code>## Warning in annotate(&quot;text&quot;, x = 10.1, y = 0.65, label = &quot;Bonus Tolerance =
 ## Actual - MMC&quot;, : Ignoring unknown parameters: `fontsize`</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values or values
-## outside the scale range (`geom_line()`).</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values or values
-## outside the scale range (`geom_point()`).</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values or values
-## outside the scale range (`geom_ribbon()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale
+## range (`geom_line()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale
+## range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale range
+## (`geom_ribbon()`).</code></pre>
 <div class="figure"><span style="display:block;" id="fig:bonus-tolerance"></span>
 <img src="_main_files/figure-html/bonus-tolerance-1.png" alt="Bonus Tolerance Calculation" width="672" />
 <p class="caption">
@@ -1446,8 +1449,8 @@ Figure 1.13: Shaft Runout Control
 <h4>8.1 Worst-Case Analysis<a href="chap-01-design.html#worst-case-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <pre><code>## Warning in geom_text(aes(label = paste(Total_Length, &quot;mm&quot;)), vjust = -0.5, :
 ## Ignoring unknown parameters: `fontsize`</code></pre>
-<pre><code>## Warning: Removed 3 rows containing missing values or values
-## outside the scale range (`geom_col()`).</code></pre>
+<pre><code>## Warning: Removed 3 rows containing missing values or values outside the scale
+## range (`geom_col()`).</code></pre>
 <div class="figure"><span style="display:block;" id="fig:stack-up-worst"></span>
 <img src="_main_files/figure-html/stack-up-worst-1.png" alt="Worst-Case Tolerance Stack-Up" width="672" />
 <p class="caption">
