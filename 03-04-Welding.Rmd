@@ -133,6 +133,16 @@ ggplot() +
 | **Weld Root** | The points at which the back of the weld intersects the base metal |
 | **Reinforcement** | Weld metal in excess of the quantity required to fill the joint |
 
+Figure \@ref(fig:basic-weld-terms-ref) provides a professional reference showing these key terms in context for both fillet and groove weld configurations.
+
+```{r basic-weld-terms-ref, echo=FALSE, fig.cap="Basic welding terms showing fillet weld and groove weld anatomy with key dimensions labeled. Adapted from Jensen (2016).", fig.align='center', out.width='90%'}
+knitr::include_graphics("images/C26_F01_pg210.jpg")
+```
+
+::: {.callout-check}
+**Quick Check:** Looking at Figure \@ref(fig:basic-weld-terms-ref), can you identify the difference between the "weld size (leg)" on a fillet weld versus the "throat" dimension? Why is the throat dimension critical for weld strength calculations?
+:::
+
 > **❓ Quick Question:** Why might the Heat Affected Zone (HAZ) be a concern in welded structures, even though the metal there never actually melted?
 
 <details>
@@ -156,7 +166,13 @@ The HAZ is often the weakest part of a welded joint, which is why proper heat in
 
 A **weld joint** is the configuration of the parts to be joined. The five basic joint types can accommodate various types of welds.
 
-```{r joint-types, echo=FALSE, fig.width=12, fig.height=8, fig.align='center', fig.cap="The five basic types of weld joints."}
+```{r basic-joint-types-ref, echo=FALSE, fig.cap="The five basic welding joint configurations: Butt, Lap, Corner, Tee, and Edge joints. Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
+knitr::include_graphics("images/C26_F02_pg211.jpg")
+```
+
+Figure \@ref(fig:basic-joint-types-ref) shows these five fundamental joint configurations as 3D representations. Each joint type has specific applications based on the geometry of the parts being joined and the loading conditions.
+
+```{r joint-types, echo=FALSE, fig.width=12, fig.height=8, fig.align='center', fig.cap="The five basic types of weld joints with schematic cross-sections."}
 ggplot() +
   ## BUTT JOINT
   annotate("text", x = 2, y = 7.5, label = "BUTT JOINT", fontface = "bold", size = 4) +
@@ -488,13 +504,73 @@ The trade-off is that the plate must be flipped or welders must work from both s
 
 </details>
 
+#### Single vs. Double Weld Configurations
+
+Figure \@ref(fig:weld-types-config-ref) provides a comprehensive reference showing single and double configurations for various weld types.
+
+```{r weld-types-config-ref, echo=FALSE, fig.cap="Types of welds showing single and double configurations for fillet, square groove, bevel groove, V-groove, J-groove, and U-groove welds. Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
+knitr::include_graphics("images/C26_F05_pg212.jpg")
+```
+
+**When to use double-sided welds:**
+
+| Configuration | Single-Sided | Double-Sided |
+|:--------------|:-------------|:-------------|
+| **Plate thickness** | ≤ 12 mm typical | > 12 mm recommended |
+| **Access required** | One side only | Both sides |
+| **Distortion** | Higher (asymmetric heating) | Lower (balanced heating) |
+| **Filler metal** | Less preparation | Less total volume for thick plates |
+| **Weld strength** | May need backing | Full penetration easier |
+
+::: {.callout-think}
+**Design Consideration:** When designing a weldment, consider not just the weld strength but also accessibility for the welder. A theoretically optimal double-V groove is useless if the welder cannot access the back side of the joint!
+:::
+
 ---
 
 ### Welding Symbols {#sec:weld-symbols}
 
 Welding symbols provide a standardized way to communicate welding requirements on engineering drawings. Understanding these symbols is essential for both designers and fabricators.
 
-```{r weld-symbol-basic, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="Basic elements of a welding symbol."}
+::: {.callout-industry}
+**Industry Application:** In automotive manufacturing at plants like Toyota and Ford, welding symbols on assembly drawings must be precisely interpreted by robotic welding systems and quality inspectors. A misread symbol can result in structural failures or costly rework.
+:::
+
+#### Standard Welding Symbol Elements
+
+Figure \@ref(fig:weld-symbol-elements-ref) shows the standard location of elements in a welding symbol according to AWS (American Welding Society) standards.
+
+```{r weld-symbol-elements-ref, echo=FALSE, fig.cap="Standard location of elements of a welding symbol showing all possible positions for size, length, pitch, groove angle, and supplementary symbols. Adapted from Jensen (2016).", fig.align='center', out.width='85%'}
+knitr::include_graphics("images/C26_F03_pg211.jpg")
+```
+
+**Key points from Figure \@ref(fig:weld-symbol-elements-ref):**
+
+- **Reference line** - The horizontal line to which all symbol elements are attached
+- **Arrow** - Points to the joint location; the arrow side vs. other side convention determines weld placement
+- **Tail** - Contains specifications, process references, or notes (may be omitted if not needed)
+- **Basic weld symbol** - Placed on the reference line to indicate weld type
+- Size, length, pitch, and other dimensions are placed in specific positions relative to the weld symbol
+
+::: {.callout-note}
+**Important Rule:** Information placed **below** the reference line applies to the **arrow side** of the joint. Information **above** the reference line applies to the **other side** (opposite the arrow).
+:::
+
+#### Basic Weld Type Symbols
+
+Figure \@ref(fig:basic-weld-symbols-ref) shows the basic weld symbols for common weld types, organized by category.
+
+```{r basic-weld-symbols-ref, echo=FALSE, fig.cap="Basic weld symbols shown on the reference line, including fillet, plug/slot, spot, seam, and various groove weld symbols. Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
+knitr::include_graphics("images/C26_F04_pg212.jpg")
+```
+
+The symbols are designed to visually represent the cross-section of the weld:
+- **Fillet symbol** (triangle) resembles the triangular cross-section of a fillet weld
+- **V-groove symbol** looks like a "V" shape
+- **Square groove symbol** represents two parallel lines (the gap)
+- **U and J groove symbols** show the curved preparations
+
+```{r weld-symbol-basic, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="Annotated example showing the basic elements of a welding symbol in practice."}
 ggplot() +
   ## Reference line (horizontal)
   geom_segment(aes(x = 2, xend = 9, y = 4, yend = 4), linewidth = 1.5, color = "black") +
@@ -665,6 +741,19 @@ ggplot() +
   theme_welding
 ```
 
+Figure \@ref(fig:supplementary-symbols-ref) provides the standard AWS supplementary symbols as a quick reference.
+
+```{r supplementary-symbols-ref, echo=FALSE, fig.cap="Supplementary welding symbols including weld all around, field weld, melt-thru, backing/spacer material, consumable insert, and contour symbols (flush, convex, concave). Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
+knitr::include_graphics("images/C26_F06_pg213.jpg")
+```
+
+**Common supplementary symbol applications:**
+
+- **Weld all around (circle):** Used when a weld must extend completely around a joint, such as welding a tube to a plate
+- **Field weld (flag):** Indicates the weld should be made at the construction site, not in the shop
+- **Melt-thru:** Indicates complete joint penetration with visible root reinforcement on the opposite side
+- **Contour symbols:** Specify the final shape of the weld face (flush for smooth surfaces, concave for fatigue-critical applications)
+
 > **❓ Symbol Reading Practice:** A welding symbol shows a fillet weld symbol below the reference line with "6" on the left side and "50-100" on the right side. What does this specify?
 
 <details>
@@ -679,6 +768,307 @@ This symbol specifies:
 This is an **intermittent fillet weld** pattern: 50 mm long welds spaced 100 mm apart (center-to-center).
 
 </details>
+
+#### Welding Process Designations
+
+When a specific welding process is required, it is indicated in the tail of the welding symbol using standard letter designations. Figure \@ref(fig:process-designations-ref) provides the complete AWS designation system.
+
+```{r process-designations-ref, echo=FALSE, fig.cap="Designation of welding processes by letters according to AWS standards. Includes brazing, oxyfuel gas welding, resistance welding, arc welding, and other specialized processes. Adapted from Jensen (2016).", fig.align='center', out.width='70%'}
+knitr::include_graphics("images/C26_F07_pg213.jpg")
+```
+
+**Most common process designations in manufacturing:**
+
+| Designation | Process | Typical Application |
+|:------------|:--------|:--------------------|
+| **GMAW** | Gas Metal Arc Welding (MIG) | Automotive body panels, general fabrication |
+| **GTAW** | Gas Tungsten Arc Welding (TIG) | Aerospace, thin materials, critical joints |
+| **SMAW** | Shielded Metal Arc Welding (Stick) | Field welding, structural steel |
+| **FCAW** | Flux Cored Arc Welding | Heavy fabrication, shipbuilding |
+| **SAW** | Submerged Arc Welding | High-volume structural, pressure vessels |
+| **RSW** | Resistance Spot Welding | Automotive body assembly |
+
+```{r process-location-ref, echo=FALSE, fig.cap="Location of specifications, processes, and other references on welding symbols. The tail contains process designations, specification references, or notes. Adapted from Jensen (2016).", fig.align='center', out.width='85%'}
+knitr::include_graphics("images/C26_F08_pg214.jpg")
+```
+
+::: {.callout-industry}
+**Automotive Industry:** In vehicle body assembly, spot welding (RSW) dominates with thousands of spot welds per vehicle. The welding symbol would show the RSW designation in the tail, along with any specification references like AWS D8.9 (Automotive Weld Quality standards).
+:::
+
+#### Multiple Reference Lines and Welding Sequence
+
+When multiple welding operations are required at the same joint, multiple reference lines are used to indicate the sequence.
+
+```{r multiple-ref-lines, echo=FALSE, fig.cap="Multiple reference lines indicate the sequence of welding operations. The line closest to the arrow is the first operation. Adapted from Jensen (2016).", fig.align='center', out.width='75%'}
+knitr::include_graphics("images/C26_F09_pg214.jpg")
+```
+
+**Reading multiple reference lines:**
+- The reference line **closest to the arrow** represents the **first operation**
+- Subsequent operations are read from bottom to top (or closest to farthest from arrow)
+- This is critical for back gouging, backing welds, and multi-pass procedures
+
+#### Reading Fillet Weld Specifications
+
+Figure \@ref(fig:typical-fillet-welds-ref) provides a comprehensive reference for interpreting fillet weld symbols with various dimension configurations.
+
+```{r typical-fillet-welds-ref, echo=FALSE, fig.cap="Typical fillet weld symbol configurations showing: (1) arrow side, (2) other side, (3) both sides with different sizes, (4) weld all around, (5) contour symbol, (6) postweld finishing, (7-9) intermittent weld patterns. Adapted from Jensen (2016).", fig.align='center', out.width='60%'}
+knitr::include_graphics("images/C26_F10_pg214.jpg")
+```
+
+**Key interpretations from Figure \@ref(fig:typical-fillet-welds-ref):**
+
+1. **Arrow side only:** Symbol below the reference line - weld on the side the arrow points to
+2. **Other side only:** Symbol above the reference line - weld on the opposite side
+3. **Both sides, different sizes:** Dimension above and below shows different leg sizes for each side
+4. **Weld all around:** Circle at the arrow/reference line junction means continuous weld around the entire joint
+5. **Contour symbol:** Flat line indicates flush finish required (grinding)
+6. **Postweld finishing:** "G" indicates grinding required to achieve specified contour
+7. **Intermittent one side:** Length-pitch format (e.g., 3.00-8.00 means 3-inch welds, 8-inch center-to-center)
+8. **Intermittent both sides:** Same pattern on both sides, aligned
+9. **Staggered intermittent:** Welds offset between sides for better stress distribution
+
+::: {.callout-check}
+**Quick Check:** Looking at row 9 in Figure \@ref(fig:typical-fillet-welds-ref), why might an engineer specify staggered intermittent welds rather than aligned intermittent welds?
+:::
+
+<details>
+<summary>Click for answer</summary>
+
+Staggered intermittent welds provide:
+- More uniform heat distribution during welding (less distortion)
+- Better stress distribution under load
+- Reduced likelihood of fatigue crack initiation at the ends of welds
+- More uniform stiffness along the joint length
+
+This is particularly important for long joints on thin materials where distortion is a concern.
+</details>
+
+#### Weld Length Location by Dimensions
+
+When welds don't extend the full length of a joint, dimensions on the drawing locate where the weld should be placed.
+
+```{r weld-length-location-ref, echo=FALSE, fig.cap="Weld lengths located by dimensions. The drawing callout (A) shows welding symbols with length specifications, and the interpretation (B) shows how this translates to actual weld placement. Adapted from Jensen (2016).", fig.align='center', out.width='85%'}
+knitr::include_graphics("images/C26_F11_pg215.jpg")
+```
+
+**Interpreting located welds:**
+- The weld length is specified in the welding symbol (e.g., ".25 / 4.00" means 0.25" leg, 4.00" length)
+- Standard dimensioning practices locate the weld start/end points
+- This is common for gussets, brackets, and partial-length stiffeners
+
+#### When to Use All-Around Symbols
+
+Figure \@ref(fig:all-around-examples-ref) illustrates when the all-around symbol is required versus when it's not needed.
+
+```{r all-around-examples-ref, echo=FALSE, fig.cap="The use of all-around symbols. Examples 1-2 show when all-around IS required (non-circular profiles). Examples 3-4 show when all-around is NOT required (circular profiles that inherently require continuous welding). Adapted from Jensen (2016).", fig.align='center', out.width='70%'}
+knitr::include_graphics("images/C26_F12_pg216.jpg")
+```
+
+**All-around symbol rules:**
+
+| Shape | All-Around Required? | Reason |
+|:------|:---------------------|:-------|
+| Rectangular tube to plate | **Yes** | Without it, only one side might be welded |
+| Angle bracket to plate | **Yes** | Perimeter is not obvious |
+| Round tube to plate | **No** | Obviously requires circumferential weld |
+| Boss/stud to plate | **No** | Circular joint implies full circumference |
+
+::: {.callout-note}
+**Design Tip:** When in doubt, include the all-around symbol. It adds clarity and prevents misinterpretation, even if technically redundant for circular profiles.
+:::
+
+### Advanced Groove Weld Symbols {#sec:groove-weld-symbols}
+
+Groove welds require more detailed specifications than fillet welds because of the edge preparation involved. This section covers how to read and specify groove weld symbols properly.
+
+#### Arrow Break Convention for Bevel and J-Groove Welds
+
+For groove welds that require preparation on only one side (bevel, J-groove), the arrow must indicate which member receives the preparation.
+
+```{r arrow-break-ref, echo=FALSE, fig.cap="Application of break in arrow on welding symbol. (A) Arrow side preparation, (B) Other side preparation, (C) Both sides preparation. The break in the arrow points to the member requiring edge preparation. Adapted from Jensen (2016).", fig.align='center', out.width='75%'}
+knitr::include_graphics("images/C27_F01_pg219.jpg")
+```
+
+**Key rule:** When the arrow has a **break (bend)**, the break points to the member that receives the edge preparation. This is critical for:
+- Single-bevel groove welds
+- Single-J groove welds
+- Any asymmetric groove preparation
+
+::: {.callout-warning}
+**Common Error:** Misreading the arrow break direction can result in preparing the wrong member, wasting time and material. Always verify which member should be beveled before cutting!
+:::
+
+#### Groove Weld Combined Dimensions
+
+Figure \@ref(fig:groove-combined-dims-ref) shows how multiple dimensions are combined on groove weld symbols.
+
+```{r groove-combined-dims-ref, echo=FALSE, fig.cap="Groove weld symbol showing use of combined dimensions. The depth of preparation (S) is shown in parentheses, while the weld size/effective throat (E) is shown without parentheses. Both sides of a double-groove weld are fully specified. Adapted from Jensen (2016).", fig.align='center', out.width='80%'}
+knitr::include_graphics("images/C27_F02_pg219.jpg")
+```
+
+**Reading groove weld dimensions:**
+
+| Element | Position | Meaning |
+|:--------|:---------|:--------|
+| Depth of preparation (S) | In parentheses before weld symbol | How deep to cut the groove |
+| Weld size (E) | Without parentheses | Effective throat or penetration depth |
+| Groove angle | Above/beside the symbol | Included angle of the groove |
+| Root opening | Inside the weld symbol | Gap at the root before welding |
+
+**Example from Figure \@ref(fig:groove-combined-dims-ref):**
+- `.31 (.38)` means: 0.31" weld size (effective throat), 0.38" depth of groove preparation
+- `25°` is the groove angle on each side
+- The interpretation shows the actual joint geometry
+
+#### Complete Joint Penetration (CJP) Welds
+
+Complete joint penetration welds extend through the full thickness of the joint, providing maximum strength. These are required for critical structural connections.
+
+```{r cjp-welds-ref, echo=FALSE, fig.cap="Single-groove welds with complete joint penetration (CJP). Shows arrow side, grind flush, other side, V-groove, and bevel groove configurations. Note: CJP welds extend through the full material thickness. Adapted from Jensen (2016).", fig.align='center', out.width='65%'}
+knitr::include_graphics("images/C27_F03_pg220.jpg")
+```
+
+**When to specify CJP welds:**
+- Primary structural members in tension or flexure
+- Fatigue-critical connections
+- Pressure vessels and piping
+- Moment-resisting frame connections
+- Any joint where full base metal strength is required
+
+::: {.callout-industry}
+**Defense Industry:** In military vehicle armor welding, CJP welds are mandatory for ballistic performance. A partial penetration weld would create a weak point that could be exploited by projectile impact.
+:::
+
+#### Partial Joint Penetration (PJP) Welds
+
+When full penetration is not required, partial joint penetration welds are more economical. The depth of penetration is specified on the symbol.
+
+```{r pjp-welds-ref, echo=FALSE, fig.cap="Single-groove welds with partial joint penetration (PJP). The dimension in parentheses indicates the depth of groove preparation, while the dimension without parentheses indicates the effective throat (weld size). Adapted from Jensen (2016).", fig.align='center', out.width='65%'}
+knitr::include_graphics("images/C27_F04_pg220.jpg")
+```
+
+**PJP weld considerations:**
+
+| Aspect | Complete Penetration | Partial Penetration |
+|:-------|:--------------------|:--------------------|
+| **Strength** | Equal to base metal | Proportional to throat |
+| **Cost** | Higher (more prep, more filler) | Lower |
+| **Inspection** | Often requires RT/UT | Visual may suffice |
+| **Application** | Critical joints | Secondary members, brackets |
+| **Symbol** | No size shown (full by default) | Size specified |
+
+**Reading PJP symbols from Figure \@ref(fig:pjp-welds-ref):**
+- `(.75)` - depth of groove preparation is 0.75"
+- `(.50)` with groove angle - specifies both depth and geometry
+- The weld doesn't extend all the way through the material
+
+::: {.callout-check}
+**Quick Check:** A V-groove symbol shows "(.50)" with a 60° groove angle. If the material is 0.75" thick, what percentage of the thickness is penetrated by the weld preparation?
+:::
+
+<details>
+<summary>Click for answer</summary>
+
+Penetration ratio = 0.50" / 0.75" = 67%
+
+The groove preparation extends 67% through the material thickness. The remaining 33% (0.25") remains unaffected by the groove and provides the root face that the weld must penetrate.
+</details>
+
+#### Double-Groove Welds
+
+For thick plates, double-groove welds (welded from both sides) are more efficient than single-groove welds.
+
+```{r double-groove-welds-ref, echo=FALSE, fig.cap="Double-groove welds showing V-groove, bevel groove, and combined square-and-bevel configurations. Double-groove welds reduce distortion and filler metal requirements on thick sections. Adapted from Jensen (2016).", fig.align='center', out.width='70%'}
+knitr::include_graphics("images/C27_F05_pg221.jpg")
+```
+
+**Advantages of double-groove welds:**
+
+1. **Reduced filler metal volume** - Approximately 50% less than equivalent single-groove
+2. **Balanced distortion** - Welding from both sides creates symmetric shrinkage forces
+3. **Faster completion** - Two welders can work simultaneously
+4. **Better penetration control** - Back gouge and reweld ensures full fusion
+
+::: {.callout-think}
+**Design Trade-off:** Double-groove welds require access to both sides of the joint. In a closed box section or where one side is inaccessible, you must use single-groove with backing or back-gouging from one side.
+:::
+
+#### Combined Groove and Fillet Welds
+
+In T-joints and corner joints requiring full strength, groove welds may be combined with reinforcing fillet welds.
+
+```{r combined-groove-fillet-ref, echo=FALSE, fig.cap="Combined groove and fillet welds. These configurations are used when groove welds alone don't provide sufficient throat or when reinforcement is needed for fatigue resistance. Adapted from Jensen (2016).", fig.align='center', out.width='70%'}
+knitr::include_graphics("images/C27_F06_pg221.jpg")
+```
+
+**When to use combined welds:**
+
+- T-joints with high moment loads
+- Corner joints in pressure vessels
+- Fatigue-critical connections needing smooth transitions
+- When groove weld throat is insufficient for load requirements
+
+The welding symbol shows both the groove and fillet symbols, with their respective dimensions.
+
+#### Flare Groove Welds
+
+Flare groove welds are used when joining round or curved members.
+
+```{r flare-groove-welds-ref, echo=FALSE, fig.cap="Flare-V and flare bevel groove welds with partial joint penetration. These are used for joining round bars, tubes, or other curved sections. Adapted from Jensen (2016).", fig.align='center', out.width='70%'}
+knitr::include_graphics("images/C27_F07_pg221.jpg")
+```
+
+**Flare weld applications:**
+- Joining round bars to flat plates
+- Tube-to-tube connections at angles
+- Handrail and structural tube fabrication
+- Reinforcing bar (rebar) welding in construction
+
+The effective throat of flare welds depends on the radius of curvature and penetration achieved. Standard formulas or welding codes specify how to calculate the effective throat.
+
+#### Back Welds and Backing Welds
+
+Back welds and backing welds ensure complete penetration when access to both sides is possible.
+
+```{r back-backing-welds-ref, echo=FALSE, fig.cap="Application of back and backing weld symbols. (A) Back weld - made after the groove weld, on the opposite side. (B) Backing weld - made before the groove weld. (C) Backing weld with specified root opening. Adapted from Jensen (2016).", fig.align='center', out.width='80%'}
+knitr::include_graphics("images/C27_F08_pg222.jpg")
+```
+
+**Distinction between back and backing welds:**
+
+| Type | Symbol Position | Sequence | Purpose |
+|:-----|:----------------|:---------|:--------|
+| **Back Weld** | Opposite side of groove symbol | Made **after** groove weld | Reinforces root, ensures penetration |
+| **Backing Weld** | Opposite side of groove symbol | Made **before** groove weld | Provides support during main weld |
+
+::: {.callout-note}
+**Sequence Matters:** The symbol itself is the same - the note "BACK WELD" or "BACKING WELD" clarifies the sequence. In the absence of a note, AWS convention treats it as a backing weld (made first).
+:::
+
+#### Melt-Through Symbols
+
+The melt-through symbol indicates that complete joint penetration must be achieved with visible root reinforcement on the opposite side.
+
+```{r melt-through-ref, echo=FALSE, fig.cap="Application of melt-through groove weld symbols. The melt-through symbol (convex arc on opposite side) indicates that the root must show visible penetration and reinforcement. Common with square groove and single-V configurations. Adapted from Jensen (2016).", fig.align='center', out.width='70%'}
+knitr::include_graphics("images/C27_F09_pg223.jpg")
+```
+
+**When to specify melt-through:**
+
+- Pipe welding where back side is inaccessible
+- Single-sided welds requiring full penetration
+- Pressure vessel seams
+- Nuclear and aerospace applications requiring radiographic proof of penetration
+
+**Reading melt-through dimensions:**
+- The height shown (e.g., `.06`, `.12`) specifies the required root reinforcement height
+- Root reinforcement is the weld metal extending beyond the original surface on the back side
+
+::: {.callout-industry}
+**Pipeline Welding:** In cross-country pipeline construction, welders must achieve melt-through on every weld since the inside of the pipe is inaccessible. The root pass must show complete penetration, verified by visual inspection from outside before subsequent fill passes.
+:::
 
 ---
 
@@ -1283,6 +1673,92 @@ ggplot() +
 
 ---
 
+### Worked Examples: Welding Symbol Interpretation {#sec:weld-worked-examples}
+
+The following examples demonstrate how to interpret welding symbols on actual engineering drawings.
+
+#### Worked Example 1: Fillet Weld Assembly (A-66)
+
+Figure \@ref(fig:fillet-weld-assignment-ref) shows a comprehensive fillet weld assignment with multiple weld configurations.
+
+```{r fillet-weld-assignment-ref, echo=FALSE, fig.cap="Fillet weld assignment (A-66) showing five different assemblies with various fillet weld specifications. Practice interpreting weld symbols and creating drawing callouts. Adapted from Jensen (2016).", fig.align='center', out.width='75%'}
+knitr::include_graphics("images/C26_A66_pg217.jpg")
+```
+
+**Analysis of Assembly A:**
+- The symbol shows `.25` fillet welds with a flush contour symbol
+- "Weld A to be ground flat" indicates postweld finishing required
+- Process specified: Gas Metal-Arc Welding (GMAW)
+- The interpretation shows both dimension callout and final appearance
+
+**Analysis of Assembly B:**
+- Intermittent fillet welds: `.50` leg size
+- Pattern: `5.00` length with `10.00` pitch (center-to-center)
+- Welds on both sides with `3.00` spacing between
+- Concave contour specified (no postweld finishing needed)
+
+**Analysis of Assembly C:**
+- `.38` fillet weld, both sides
+- Dimensions `20.00` × `10.00` define the welded region
+- This demonstrates dimensional location of welds
+
+::: {.callout-activity}
+**Try This:** For Assembly D in Figure \@ref(fig:fillet-weld-assignment-ref), identify:
+1. What weld sizes are specified (A, B, C)?
+2. What process is indicated?
+3. What finishing is required?
+:::
+
+<details>
+<summary>Click for solution</summary>
+
+**Assembly D Analysis:**
+- A = .38 Carbon-Arc Weld
+- B = .31 Weld ground flat
+- C = .38 Carbon-Arc Weld
+- All three welds are fillet welds on a corner joint configuration
+- The "ground flat" requirement on B indicates a flush contour for appearance or fit-up with mating parts
+</details>
+
+#### Worked Example 2: Shaft Support Weldment (A-67)
+
+Figure \@ref(fig:shaft-support-assignment-ref) presents a more complex welded assembly with multiple components and weld specifications.
+
+```{r shaft-support-assignment-ref, echo=FALSE, fig.cap="Shaft support welding assignment (A-67) showing a multi-component weldment with various fillet weld specifications for ribs, arms, shafts, and base connections. Adapted from Jensen (2016).", fig.align='center', out.width='75%'}
+knitr::include_graphics("images/C26_A67_pg218.jpg")
+```
+
+**Component Identification:**
+- **Ribs** - Provide stiffening for the horizontal shafts
+- **Horizontal Shafts** - Main structural members
+- **Arms** - Connect horizontal shafts to base
+- **Vertical Shaft** - Center support element
+- **Base** - Foundation plate
+
+**Weld Specifications (from the assignment notes):**
+1. Horizontal shafts welded both sides to arms: `.25` fillet welds on outside, `.19` fillet welds inside, flat finish (no postweld finishing)
+2. Arms welded both sides to base: `.19` fillet welds
+3. Ribs welded both sides to base and arms: `.12` fillet welds
+4. Vertical shaft welded to base: `.25` fillet weld, ground concave
+
+**Process:** Carbon Arc Welding (CAW) specified for all welds
+
+::: {.callout-discussion}
+**Group Discussion:** Why might the vertical shaft weld require a concave contour (ground concave) while other welds don't specify finishing? Consider the loading conditions on each joint.
+:::
+
+<details>
+<summary>Click for discussion points</summary>
+
+The vertical shaft likely experiences:
+- **Fatigue loading** from cyclic forces transmitted through the shaft
+- **Bending moments** at the base connection
+- A concave contour provides a smoother stress flow at the weld toe, improving fatigue life
+- Other joints may be primarily in shear or compression where toe geometry is less critical
+</details>
+
+---
+
 ### Practice Problems {#sec:weld-problems}
 
 **Problem 1:** A T-joint connects a 12 mm thick plate to a 8 mm thick plate using fillet welds on both sides. What is the maximum recommended fillet weld leg size?
@@ -1339,6 +1815,77 @@ With CE = **0.61**, this falls in the "Fair to Poor" weldability range.
 
 ---
 
+### Drawing Interpretation Assignments {#sec:weld-assignments}
+
+The following assignments provide comprehensive practice in reading welding drawings with multiple weld types and specifications.
+
+#### Assignment 1: Base Skid Assembly (A-68)
+
+Figure \@ref(fig:base-skid-assignment-ref) shows a complex welded assembly with detailed dimensions and welding specifications.
+
+```{r base-skid-assignment-ref, echo=FALSE, fig.cap="Base skid welding assignment (A-68). This comprehensive assembly drawing includes multiple views, dimensioning, hole specifications, and various weld callouts. Practice identifying weld types, sizes, and locations. Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
+knitr::include_graphics("images/C27_A68_pg224-25.jpg")
+```
+
+**Assignment Questions for A-68:**
+
+1. How many Ø1.31 holes are there in the complete assembly?
+2. How deep is the .750 tapped hole?
+3. What was the original size of the Ø1.31 hole (before revision)?
+4. What is the overall height of the assembly?
+5. Determine the distance from line Y to the center line of the assembly.
+6. Determine distance X.
+7. What is the developed width of part 2? Use inside dimensions of channel.
+8. What is the clearance for fitting on the length of pt. 5?
+9. What is the length of (A) pt. 2, (B) pt. 4, allow .25 for clearance, (C) pt. 7, (D) pt. 8?
+10. What is the difference between pt. 4 and pt. 5?
+11. How many 1.00 chamfers are needed?
+12. What does G mean on .50 bevel weld symbols?
+13. What type of weld is used to fasten pt. 11 to pt. 2?
+14. What type of weld is used to join pt. 3 to pt. 2 at the sides?
+15. How many parts make up the skid assembly?
+16. Complete the missing sizes in the bill of material. Use inside travel for calculating pt. 2.
+
+::: {.callout-activity}
+**Hands-On Activity:** On a one-inch grid sheet (.10-in. squares), sketch section views at A-A and B-B, plus an enlarged view at View C. Show only the parts and the welds at scale 1:1.
+:::
+
+---
+
+#### Assignment 2: Groove Welds Interpretation (A-69)
+
+Figure \@ref(fig:groove-welds-assignment-ref) presents three assemblies focusing on groove weld specifications.
+
+```{r groove-welds-assignment-ref, echo=FALSE, fig.cap="Groove welds assignment (A-69). Three assemblies with various groove weld types including bevel, V-groove, and backing welds. The circled areas indicate locations where detailed weld sketches should be made. Adapted from Jensen (2016).", fig.align='center', out.width='75%'}
+knitr::include_graphics("images/C27_A69_pg226.jpg")
+```
+
+**Assignment for A-69:**
+
+On a grid sheet, make detailed sketches of the six welds shown in the circled areas. For each weld, your sketch should show:
+
+1. The complete weld cross-section
+2. All dimensions (groove depth, angle, root opening, weld size)
+3. The weld symbol that would appear on the drawing
+
+**Weld Analysis Guide:**
+
+| Location | Weld Type | Key Features |
+|:---------|:----------|:-------------|
+| **Top Assembly - A, B, C** | Bevel groove | .38 depth, 45° angle, OAW process, .10 root opening |
+| **Middle Assembly - A, B** | Flare-bevel groove | .75 (.50) combined with backing weld, 60° angle |
+| **Bottom Assembly - A, B** | Double-bevel groove | .38/.38 with 40° angles, .50 welds, .10 root opening |
+
+::: {.callout-check}
+**Self-Assessment:** After completing your sketches, verify:
+- Do your groove angles match the symbol specifications?
+- Are root openings shown correctly?
+- Does the weld size match the effective throat requirements?
+- Have you correctly identified which side receives the bevel?
+:::
+
+---
+
 ### Further Reading {#sec:weld-resources}
 
 [Lincoln Electric Welding Design Guide](https://www.lincolnelectric.com/en/support/welding-resources)
@@ -1384,3 +1931,5 @@ embed_youtube("w_iqJDfbzMM", "Controlling Weld Distortion")
 4. Kou, S. (2003). *Welding Metallurgy* (2nd ed.). Wiley-Interscience.
 
 5. Hicks, J. (1999). *Welded Joint Design* (3rd ed.). Industrial Press.
+
+6. Jensen, C. H. (2016). *Interpreting Engineering Drawings* (7th Canadian ed.). Nelson Education Ltd. ISBN: 0176531513. [Figures 26-1 through 26-12, 27-1 through 27-9, and Assignments A-66 through A-69 reproduced with permission.]

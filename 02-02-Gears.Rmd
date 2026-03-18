@@ -782,17 +782,15 @@ $$GR = \frac{N_{B}}{N_{A}} \times \frac{N_{D}}{N_{C}} = \frac{\text{Product of d
 ```{r planetary-gear, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Planetary gear system components and arrangement."}
 ## Sun gear
 sun <- gear_profile(5, 4, 0.8, 18, 0)
-## Planet gears
-planet1 <- gear_profile(5, 6, 0.6, 12, pi/24)
-planet2 <- gear_profile(6.7, 4.9, 0.6, 12, pi/24)
-planet3 <- gear_profile(6.7, 3.1, 0.6, 12, pi/24)
-planet4 <- gear_profile(5, 2, 0.6, 12, pi/24)
-planet5 <- gear_profile(3.3, 3.1, 0.6, 12, pi/24)
-planet6 <- gear_profile(3.3, 4.9, 0.6, 12, pi/24)
+
+## Planet gears — equally spaced at 120° (90°, 210°, 330°) on orbit radius = 2
+planet1 <- gear_profile(5,    6,    0.6, 12, pi/24)  # 90°
+planet2 <- gear_profile(6.73, 3,    0.6, 12, pi/24)  # 330°
+planet3 <- gear_profile(3.27, 3,    0.6, 12, pi/24)  # 210°
 
 ## Ring gear (internal teeth - simplified)
 theta <- seq(0, 2*pi, length.out = 100)
-ring_outer <- data.frame(x = 5 + 3 * cos(theta), y = 4 + 3 * sin(theta))
+ring_outer <- data.frame(x = 5 + 3   * cos(theta), y = 4 + 3   * sin(theta))
 ring_inner <- data.frame(x = 5 + 2.4 * cos(theta), y = 4 + 2.4 * sin(theta))
 
 ggplot() +
@@ -813,20 +811,22 @@ ggplot() +
   geom_polygon(data = sun, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
   geom_point(aes(x = 5, y = 4), size = 4, color = "black") +
 
-  ## Planet gears (showing 3 for clarity)
+  ## Planet gear 1 — top (90°)
   geom_polygon(data = planet1, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
   geom_point(aes(x = 5, y = 6), size = 2, color = "black") +
 
+  ## Planet gear 2 — bottom-right (330°)
   geom_polygon(data = planet2, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  geom_point(aes(x = 6.7, y = 4.9), size = 2, color = "black") +
+  geom_point(aes(x = 6.73, y = 3), size = 2, color = "black") +
 
-  geom_polygon(data = planet5, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  geom_point(aes(x = 3.3, y = 3.1), size = 2, color = "black") +
+  ## Planet gear 3 — bottom-left (210°)
+  geom_polygon(data = planet3, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
+  geom_point(aes(x = 3.27, y = 3), size = 2, color = "black") +
 
   ## Labels
-  annotate("text", x = 5, y = 4, label = "SUN", fontface = "bold", size = 3, color = "darkorange") +
-  annotate("text", x = 5, y = 6.9, label = "Planet", size = 2.8, color = "steelblue") +
-  annotate("text", x = 1.5, y = 4, label = "Ring\n(Annulus)", fontface = "bold", size = 3, color = "gray40") +
+  annotate("text", x = 5,    y = 4,   label = "SUN",    fontface = "bold", size = 3,   color = "darkorange") +
+  annotate("text", x = 5,    y = 6.9, label = "Planet", size = 2.8,        color = "steelblue") +
+  annotate("text", x = 1.5,  y = 4,   label = "Ring\n(Annulus)", fontface = "bold", size = 3, color = "gray40") +
 
   ## Carrier indication
   geom_curve(aes(x = 7.5, xend = 6, y = 5.5, yend = 5),
@@ -839,19 +839,19 @@ ggplot() +
   ## Operating modes table
   geom_rect(aes(xmin = 8.5, xmax = 12.5, ymin = 0.5, ymax = 4), fill = "white", color = "black") +
   annotate("text", x = 10.5, y = 3.7, label = "Operating Modes:", fontface = "bold", size = 3) +
-  annotate("text", x = 8.7, y = 3.2, label = "Input   Fixed   Output  Ratio", size = 2.5, hjust = 0) +
-  annotate("text", x = 8.7, y = 2.7, label = "Sun     Ring    Carrier  Reduction", size = 2.5, hjust = 0) +
-  annotate("text", x = 8.7, y = 2.2, label = "Carrier Ring    Sun     Increase", size = 2.5, hjust = 0) +
-  annotate("text", x = 8.7, y = 1.7, label = "Sun     Carrier Ring    Reduction", size = 2.5, hjust = 0) +
-  annotate("text", x = 8.7, y = 1.2, label = "Ring    Carrier Sun     Reverse", size = 2.5, hjust = 0) +
-  annotate("text", x = 8.7, y = 0.7, label = "All connected: Direct (1:1)", size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7,  y = 3.2, label = "Input   Fixed   Output  Ratio",         size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7,  y = 2.7, label = "Sun     Ring    Carrier  Reduction",     size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7,  y = 2.2, label = "Carrier Ring    Sun     Increase",       size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7,  y = 1.7, label = "Sun     Carrier Ring    Reduction",      size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7,  y = 1.2, label = "Ring    Carrier Sun     Reverse",        size = 2.5, hjust = 0) +
+  annotate("text", x = 8.7,  y = 0.7, label = "All connected: Direct (1:1)",            size = 2.5, hjust = 0) +
 
   ## Advantages
   geom_rect(aes(xmin = -1.5, xmax = 2, ymin = 0.5, ymax = 2.5), fill = "honeydew", color = "black") +
   annotate("text", x = 0.25, y = 2.2, label = "Advantages:", fontface = "bold", size = 3) +
-  annotate("text", x = -1.3, y = 1.7, label = "• Compact", size = 2.8, hjust = 0) +
+  annotate("text", x = -1.3, y = 1.7, label = "• Compact",             size = 2.8, hjust = 0) +
   annotate("text", x = -1.3, y = 1.2, label = "• High torque capacity", size = 2.8, hjust = 0) +
-  annotate("text", x = -1.3, y = 0.7, label = "• Multiple ratios", size = 2.8, hjust = 0) +
+  annotate("text", x = -1.3, y = 0.7, label = "• Multiple ratios",      size = 2.8, hjust = 0) +
 
   coord_fixed(ratio = 1, xlim = c(-2, 13), ylim = c(0, 8.5)) +
   theme_gear

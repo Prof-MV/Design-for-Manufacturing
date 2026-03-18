@@ -23,7 +23,7 @@
 <meta name="author" content="Martin Volkening and Claude Opus 4.6 (Anthropic)" />
 
 
-<meta name="date" content="2026-03-12" />
+<meta name="date" content="2026-03-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -424,13 +424,16 @@ div.csl-indent {
 <li class="chapter" data-level="3.12.4" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-joints"><i class="fa fa-check"></i><b>3.12.4</b> Types of Weld Joints</a></li>
 <li class="chapter" data-level="3.12.5" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-types"><i class="fa fa-check"></i><b>3.12.5</b> Types of Welds</a></li>
 <li class="chapter" data-level="3.12.6" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-symbols"><i class="fa fa-check"></i><b>3.12.6</b> Welding Symbols</a></li>
+<li class="chapter" data-level="3.12.7" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:groove-weld-symbols"><i class="fa fa-check"></i><b>3.12.7</b> Advanced Groove Weld Symbols</a></li>
 <li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#design-guidelines-for-welded-joints"><i class="fa fa-check"></i>📏 Design Guidelines for Welded Joints</a></li>
-<li class="chapter" data-level="3.12.7" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-materials"><i class="fa fa-check"></i><b>3.12.7</b> Material Weldability</a></li>
-<li class="chapter" data-level="3.12.8" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-defects"><i class="fa fa-check"></i><b>3.12.8</b> Common Weld Defects and Prevention</a></li>
+<li class="chapter" data-level="3.12.8" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-materials"><i class="fa fa-check"></i><b>3.12.8</b> Material Weldability</a></li>
+<li class="chapter" data-level="3.12.9" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-defects"><i class="fa fa-check"></i><b>3.12.9</b> Common Weld Defects and Prevention</a></li>
 <li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#design-checklist-for-welding"><i class="fa fa-check"></i>📋 Design Checklist for Welding</a></li>
 <li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#case-study-welded-frame-design"><i class="fa fa-check"></i>🎯 Case Study: Welded Frame Design</a></li>
-<li class="chapter" data-level="3.12.9" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-problems"><i class="fa fa-check"></i><b>3.12.9</b> Practice Problems</a></li>
-<li class="chapter" data-level="3.12.10" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-resources"><i class="fa fa-check"></i><b>3.12.10</b> Further Reading</a></li>
+<li class="chapter" data-level="3.12.10" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-worked-examples"><i class="fa fa-check"></i><b>3.12.10</b> Worked Examples: Welding Symbol Interpretation</a></li>
+<li class="chapter" data-level="3.12.11" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-problems"><i class="fa fa-check"></i><b>3.12.11</b> Practice Problems</a></li>
+<li class="chapter" data-level="3.12.12" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-assignments"><i class="fa fa-check"></i><b>3.12.12</b> Drawing Interpretation Assignments</a></li>
+<li class="chapter" data-level="3.12.13" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#sec:weld-resources"><i class="fa fa-check"></i><b>3.12.13</b> Further Reading</a></li>
 <li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#supplemental-videos-2"><i class="fa fa-check"></i>🎬 Supplemental Videos</a></li>
 <li class="chapter" data-level="" data-path="design_for_manufacturing.html"><a href="design_for_manufacturing.html#references-2"><i class="fa fa-check"></i>📖 References</a></li>
 </ul></li>
@@ -5360,12 +5363,14 @@ Automotive steering, crane hooks
 </div>
 <p>When bearings fail, they do so by <strong>fatigue spalling</strong>—small flakes of material breaking away from the rolling surfaces due to repeated stress cycles. The location where a fatigue crack initiates depends on microscopic material imperfections (inclusions, voids, grain boundaries) that vary randomly from bearing to bearing, even in high-quality manufacturing.</p>
 <p>If we test a large group of identical bearings under identical conditions and plot the number of failures against operating time, we get a distribution of bearing lives. This distribution is <strong>not</strong> a normal (Gaussian) distribution—it follows a <strong>Weibull distribution</strong>, which is skewed to the right.</p>
-<pre><code>## Warning: Removed 25 rows containing non-finite outside the scale range
-## (`stat_bin()`).</code></pre>
-<pre><code>## Warning: Removed 25 rows containing non-finite outside the scale range
+<pre><code>## Warning: Removed 25 rows containing non-finite
+## outside the scale range (`stat_bin()`).</code></pre>
+<pre><code>## Warning: Removed 25 rows containing non-finite
+## outside the scale range
 ## (`stat_density()`).</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale
-## range (`geom_bar()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values
+## or values outside the scale range
+## (`geom_bar()`).</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:bearing-life-distribution"></span>
 <img src="_main_files/figure-html/bearing-life-distribution-1.png" alt="Statistical distribution of bearing failures showing L10, L50, and mean life concepts." width="960" />
 <p class="caption">
@@ -9217,9 +9222,11 @@ Figure 2.31: Oil circulation mechanism in a sintered oil-impregnated bearing. Th
 <div id="sec-stribeck-curve" class="section level3 hasAnchor" number="2.3.8">
 <h3><span class="header-section-number">2.3.8</span> The Stribeck Curve: Understanding Lubrication Regimes<a href="machine_elements.html#sec-stribeck-curve" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The transition from metal-to-metal contact to full hydrodynamic separation doesn’t happen instantly. German engineer Richard Stribeck (1861-1950) systematically studied this transition and developed one of the most important diagrams in tribology—the <strong>Stribeck curve</strong>.</p>
-<pre><code>## Warning in geom_point(aes(x = min_hersey, y = min_friction), color = &quot;blue&quot;, : All aesthetics have length 1, but the data has 300 rows.
-## ℹ Please consider using `annotate()` or provide this layer with data containing a single
-##   row.</code></pre>
+<pre><code>## Warning in geom_point(aes(x = min_hersey, y = min_friction), color = &quot;blue&quot;, : All aesthetics have length 1, but the
+## data has 300 rows.
+## ℹ Please consider using `annotate()` or
+##   provide this layer with data
+##   containing a single row.</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-stribeck-curve"></span>
 <img src="_main_files/figure-html/fig-stribeck-curve-1.png" alt="The Stribeck curve showing the three lubrication regimes as a function of the bearing parameter." width="960" />
 <p class="caption">
