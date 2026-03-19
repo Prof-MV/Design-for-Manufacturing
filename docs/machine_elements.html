@@ -23,7 +23,7 @@
 <meta name="author" content="Martin Volkening and Claude Opus 4.6 (Anthropic)" />
 
 
-<meta name="date" content="2026-03-18" />
+<meta name="date" content="2026-03-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -4429,10 +4429,10 @@ Figure 2.11: Basic gear mesh showing driver (pinion) and driven gear.
 <div id="sec:gear-terminology" class="section level3 hasAnchor" number="2.2.4">
 <h3><span class="header-section-number">2.2.4</span> Gear Terminology<a href="machine_elements.html#sec:gear-terminology" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Understanding gear terminology is essential for specifying, designing, and manufacturing gears.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-terminology"></span>
-<img src="_main_files/figure-html/gear-terminology-1.png" alt="Essential gear terminology and dimensions." width="960" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-29"></span>
+<img src="images/Gear-terminology-with-defination-4-1.png" alt="Thread Standards" width="70%" />
 <p class="caption">
-Figure 2.12: Essential gear terminology and dimensions.
+Figure 2.12: Thread Standards
 </p>
 </div>
 <div id="essential-gear-formulas" class="section level4 hasAnchor" number="2.2.4.1">
@@ -4506,65 +4506,88 @@ Click to reveal solution
 <div id="spur-gears" class="section level4 hasAnchor" number="2.2.5.1">
 <h4><span class="header-section-number">2.2.5.1</span> Spur Gears<a href="machine_elements.html#spur-gears" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><strong>Spur gears</strong> have straight teeth parallel to the axis of rotation. They are the simplest, most common, and most economical type.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spur-gear"></span>
-<img src="_main_files/figure-html/spur-gear-1.png" alt="Spur gears: parallel shafts, straight teeth." width="768" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-30"></span>
+<img src="images/Animated_two_spur_gears_1_2.gif" alt="Spur Gear Animation" width="70%" />
 <p class="caption">
-Figure 2.13: Spur gears: parallel shafts, straight teeth.
+Figure 2.13: Spur Gear Animation
 </p>
 </div>
+<p><strong>Advantages:</strong> Simple, Economical, High efficiency (98-99%)</p>
+<p><strong>Disadvantages:</strong> Noisy at high speeds, Limited to parallel shafts, Moderate load capacity</p>
 <p><strong>Applications:</strong> Gearboxes, conveyors, food processing equipment, clocks, printers</p>
 <hr />
 </div>
 <div id="helical-gears" class="section level4 hasAnchor" number="2.2.5.2">
 <h4><span class="header-section-number">2.2.5.2</span> Helical Gears<a href="machine_elements.html#helical-gears" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><strong>Helical gears</strong> have teeth cut at an angle (helix angle) to the shaft axis. This allows gradual tooth engagement, resulting in smoother, quieter operation.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:helical-gear"></span>
-<img src="_main_files/figure-html/helical-gear-1.png" alt="Helical gears: angled teeth for smoother operation." width="960" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-31"></span>
+<img src="images/Anim_engrenages_helicoidaux.gif" alt="Helical Gear Animation" width="70%" />
 <p class="caption">
-Figure 2.14: Helical gears: angled teeth for smoother operation.
+Figure 2.14: Helical Gear Animation
 </p>
 </div>
-<p><strong>Applications:</strong> Automotive transmissions, industrial gearboxes, machine tools, elevators</p>
+<p><strong>Advantages:</strong> Smoother, quieter, Higher load capacity, Can transmit power between non-parallel shafts
+<strong>Disadvantages:</strong> More complex to manufacture, Higher axial thrust, Slightly lower efficiency (97-99%)
+<strong>Applications:</strong> Automotive transmissions, industrial gearboxes, machine tools, elevators</p>
+</div>
+<div id="herringbone-gears" class="section level4 hasAnchor" number="2.2.5.3">
+<h4><span class="header-section-number">2.2.5.3</span> Herringbone Gears<a href="machine_elements.html#herringbone-gears" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Herringbone gears</strong> are a special type of helical gear with two sets of teeth in a V-shaped pattern. This design cancels out axial thrust and allows for very high load capacity.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-32"></span>
+<img src="images/Herringbone_gears_(Bentley,_Sketches_of_Engine_and_Machine_Details).jpg" alt="Herringbone Gear" width="70%" />
+<p class="caption">
+Figure 2.15: Herringbone Gear
+</p>
+</div>
+<p><strong>Advantages:</strong> No axial thrust, Very high load capacity, Smooth operation</p>
+<p><strong>Disadvantages:</strong> Complex and expensive to manufacture, Large size</p>
+<p><strong>Applications:</strong> Heavy machinery, marine transmissions, power plants, large industrial gearboxes</p>
 <hr />
 </div>
-<div id="bevel-gears" class="section level4 hasAnchor" number="2.2.5.3">
-<h4><span class="header-section-number">2.2.5.3</span> Bevel Gears<a href="machine_elements.html#bevel-gears" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="bevel-gears" class="section level4 hasAnchor" number="2.2.5.4">
+<h4><span class="header-section-number">2.2.5.4</span> Bevel Gears<a href="machine_elements.html#bevel-gears" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><strong>Bevel gears</strong> transmit power between shafts that intersect, typically at 90°. The teeth are cut on a conical surface.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bevel-gear"></span>
-<img src="_main_files/figure-html/bevel-gear-1.png" alt="Bevel gears: intersecting shafts, typically at 90°." width="960" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-33"></span>
+<img src="images/Gear-kegelzahnrad.svg" alt="Bevel Gear" width="70%" />
 <p class="caption">
-Figure 2.15: Bevel gears: intersecting shafts, typically at 90°.
+Figure 2.16: Bevel Gear
 </p>
 </div>
+<p><strong>Advantages:</strong> Transmit power between intersecting shafts, Can achieve high reduction ratios, Smooth operation</p>
+<p><strong>Disadvantages:</strong> More complex to design and manufacture, Higher cost, Moderate efficiency (97-99%)</p>
 <p><strong>Applications:</strong> Automotive differentials, hand tools, food mixers, rotorcraft transmissions</p>
 <hr />
 </div>
-<div id="worm-gears" class="section level4 hasAnchor" number="2.2.5.4">
-<h4><span class="header-section-number">2.2.5.4</span> Worm Gears<a href="machine_elements.html#worm-gears" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="worm-gears" class="section level4 hasAnchor" number="2.2.5.5">
+<h4><span class="header-section-number">2.2.5.5</span> Worm Gears<a href="machine_elements.html#worm-gears" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><strong>Worm gears</strong> consist of a worm (screw-like) driving a worm wheel. They provide very high reduction ratios in a compact space and can be self-locking.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:worm-gear"></span>
-<img src="_main_files/figure-html/worm-gear-1.png" alt="Worm gear set: high reduction ratio, right-angle drive." width="960" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-34"></span>
+<img src="images/Worm_gear.gif" alt="Worm Gear" width="70%" />
 <p class="caption">
-Figure 2.16: Worm gear set: high reduction ratio, right-angle drive.
+Figure 2.17: Worm Gear
 </p>
 </div>
+<p><strong>Advantages:</strong> Very high reduction ratios, Compact design, Self-locking capability, Quiet operation</p>
+<p><strong>Disadvantages:</strong> Low efficiency (40-90%), High sliding friction, More wear, Limited to right-angle shafts</p>
 <p><strong>Applications:</strong> Conveyor drives, elevator lifts, tuning mechanisms, steering systems</p>
 <hr />
 </div>
-<div id="rack-and-pinion" class="section level4 hasAnchor" number="2.2.5.5">
-<h4><span class="header-section-number">2.2.5.5</span> Rack and Pinion<a href="machine_elements.html#rack-and-pinion" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="rack-and-pinion" class="section level4 hasAnchor" number="2.2.5.6">
+<h4><span class="header-section-number">2.2.5.6</span> Rack and Pinion<a href="machine_elements.html#rack-and-pinion" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><strong>Rack and pinion</strong> converts rotational motion to linear motion (or vice versa). The rack is essentially a gear with infinite radius.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rack-pinion"></span>
-<img src="_main_files/figure-html/rack-pinion-1.png" alt="Rack and pinion: rotary to linear motion conversion." width="960" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-35"></span>
+<img src="images/Rack_and_pinion_animation.gif" alt="Rack and Pinion" width="70%" />
 <p class="caption">
-Figure 2.17: Rack and pinion: rotary to linear motion conversion.
+Figure 2.18: Rack and Pinion
 </p>
 </div>
+<p><strong>Advantages:</strong> Simple, Precise linear motion, Can achieve high forces, Compact</p>
+<p><strong>Disadvantages:</strong> Limited to linear applications, Moderate efficiency (97-99%), Wear on rack teeth</p>
 <p><strong>Applications:</strong> Automotive steering, CNC machines, actuators, stairlifts</p>
 <hr />
 </div>
-<div id="gear-type-comparison" class="section level4 hasAnchor" number="2.2.5.6">
-<h4><span class="header-section-number">2.2.5.6</span> Gear Type Comparison<a href="machine_elements.html#gear-type-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="gear-type-comparison" class="section level4 hasAnchor" number="2.2.5.7">
+<h4><span class="header-section-number">2.2.5.7</span> Gear Type Comparison<a href="machine_elements.html#gear-type-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <table>
 <colgroup>
 <col width="14%" />
@@ -4658,7 +4681,7 @@ Click to reveal analysis
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-ratio-visual"></span>
 <img src="_main_files/figure-html/gear-ratio-visual-1.png" alt="Gear ratio demonstration: speed reduction and torque multiplication." width="960" />
 <p class="caption">
-Figure 2.18: Gear ratio demonstration: speed reduction and torque multiplication.
+Figure 2.19: Gear ratio demonstration: speed reduction and torque multiplication.
 </p>
 </div>
 </div>
@@ -4726,7 +4749,7 @@ Click to reveal solution
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:simple-gear-train"></span>
 <img src="_main_files/figure-html/simple-gear-train-1.png" alt="Simple gear train with idler gear." width="1152" />
 <p class="caption">
-Figure 2.19: Simple gear train with idler gear.
+Figure 2.20: Simple gear train with idler gear.
 </p>
 </div>
 <p><strong>Simple gear train ratio:</strong>
@@ -4740,7 +4763,7 @@ Figure 2.19: Simple gear train with idler gear.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:compound-gear-train"></span>
 <img src="_main_files/figure-html/compound-gear-train-1.png" alt="Compound gear train: higher ratios in less space." width="1152" />
 <p class="caption">
-Figure 2.20: Compound gear train: higher ratios in less space.
+Figure 2.21: Compound gear train: higher ratios in less space.
 </p>
 </div>
 <p><strong>Compound gear train ratio:</strong>
@@ -4753,7 +4776,7 @@ Figure 2.20: Compound gear train: higher ratios in less space.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:planetary-gear"></span>
 <img src="_main_files/figure-html/planetary-gear-1.png" alt="Planetary gear system components and arrangement." width="960" />
 <p class="caption">
-Figure 2.21: Planetary gear system components and arrangement.
+Figure 2.22: Planetary gear system components and arrangement.
 </p>
 </div>
 <p><strong>Planetary gear ratio</strong> (sun input, carrier output, ring fixed):
@@ -4789,7 +4812,7 @@ Click to reveal explanation
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:automotive-gears"></span>
 <img src="_main_files/figure-html/automotive-gears-1.png" alt="Gear applications in automotive systems." width="1152" />
 <p class="caption">
-Figure 2.22: Gear applications in automotive systems.
+Figure 2.23: Gear applications in automotive systems.
 </p>
 </div>
 <p><strong>Key automotive gear applications:</strong></p>
@@ -4846,7 +4869,7 @@ Figure 2.22: Gear applications in automotive systems.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:food-industry-gears"></span>
 <img src="_main_files/figure-html/food-industry-gears-1.png" alt="Gear applications in food processing equipment." width="1152" />
 <p class="caption">
-Figure 2.23: Gear applications in food processing equipment.
+Figure 2.24: Gear applications in food processing equipment.
 </p>
 </div>
 <p><strong>Food industry gear requirements:</strong></p>
@@ -4864,7 +4887,7 @@ Figure 2.23: Gear applications in food processing equipment.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:defense-gears"></span>
 <img src="_main_files/figure-html/defense-gears-1.png" alt="Gear applications in defense systems." width="1152" />
 <p class="caption">
-Figure 2.24: Gear applications in defense systems.
+Figure 2.25: Gear applications in defense systems.
 </p>
 </div>
 <p><strong>Defense gear requirements:</strong></p>
@@ -4943,7 +4966,7 @@ Figure 2.24: Gear applications in defense systems.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:gear-failures"></span>
 <img src="_main_files/figure-html/gear-failures-1.png" alt="Common gear failure modes." width="1152" />
 <p class="caption">
-Figure 2.25: Common gear failure modes.
+Figure 2.26: Common gear failure modes.
 </p>
 </div>
 </div>
@@ -5215,7 +5238,7 @@ Click for solution
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:bearing-classification"></span>
 <img src="_main_files/figure-html/bearing-classification-1.png" alt="Classification of bearing types." width="960" />
 <p class="caption">
-Figure 2.26: Classification of bearing types.
+Figure 2.27: Classification of bearing types.
 </p>
 </div>
 <hr />
@@ -5229,7 +5252,7 @@ Figure 2.26: Classification of bearing types.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:ball-bearing-anatomy"></span>
 <img src="_main_files/figure-html/ball-bearing-anatomy-1.png" alt="Cross-section of a deep groove ball bearing showing main components." width="960" />
 <p class="caption">
-Figure 2.27: Cross-section of a deep groove ball bearing showing main components.
+Figure 2.28: Cross-section of a deep groove ball bearing showing main components.
 </p>
 </div>
 <p><strong>Key Components:</strong></p>
@@ -5363,18 +5386,16 @@ Automotive steering, crane hooks
 </div>
 <p>When bearings fail, they do so by <strong>fatigue spalling</strong>—small flakes of material breaking away from the rolling surfaces due to repeated stress cycles. The location where a fatigue crack initiates depends on microscopic material imperfections (inclusions, voids, grain boundaries) that vary randomly from bearing to bearing, even in high-quality manufacturing.</p>
 <p>If we test a large group of identical bearings under identical conditions and plot the number of failures against operating time, we get a distribution of bearing lives. This distribution is <strong>not</strong> a normal (Gaussian) distribution—it follows a <strong>Weibull distribution</strong>, which is skewed to the right.</p>
-<pre><code>## Warning: Removed 25 rows containing non-finite
-## outside the scale range (`stat_bin()`).</code></pre>
-<pre><code>## Warning: Removed 25 rows containing non-finite
-## outside the scale range
+<pre><code>## Warning: Removed 25 rows containing non-finite outside the scale range
+## (`stat_bin()`).</code></pre>
+<pre><code>## Warning: Removed 25 rows containing non-finite outside the scale range
 ## (`stat_density()`).</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values
-## or values outside the scale range
-## (`geom_bar()`).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the
+## scale range (`geom_bar()`).</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:bearing-life-distribution"></span>
 <img src="_main_files/figure-html/bearing-life-distribution-1.png" alt="Statistical distribution of bearing failures showing L10, L50, and mean life concepts." width="960" />
 <p class="caption">
-Figure 2.28: Statistical distribution of bearing failures showing L10, L50, and mean life concepts.
+Figure 2.29: Statistical distribution of bearing failures showing L10, L50, and mean life concepts.
 </p>
 </div>
 </div>
@@ -8796,7 +8817,7 @@ L1
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:bearing-life-plot"></span>
 <img src="_main_files/figure-html/bearing-life-plot-1.png" alt="Bearing life as a function of load ratio (C/P)." width="960" />
 <p class="caption">
-Figure 2.29: Bearing life as a function of load ratio (C/P).
+Figure 2.30: Bearing life as a function of load ratio (C/P).
 </p>
 </div>
 <blockquote>
@@ -9105,7 +9126,7 @@ Dry or minimal
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-hydrodynamic-wedge"></span>
 <img src="_main_files/figure-html/fig-hydrodynamic-wedge-1.png" alt="The hydrodynamic wedge: shaft rotation drags oil into the converging gap, building pressure that lifts the shaft." width="960" />
 <p class="caption">
-Figure 2.30: The hydrodynamic wedge: shaft rotation drags oil into the converging gap, building pressure that lifts the shaft.
+Figure 2.31: The hydrodynamic wedge: shaft rotation drags oil into the converging gap, building pressure that lifts the shaft.
 </p>
 </div>
 <p>The physics of this process are elegant:</p>
@@ -9214,7 +9235,7 @@ h_{min} = c(1 - \varepsilon)
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-oil-circulation"></span>
 <img src="_main_files/figure-html/fig-oil-circulation-1.png" alt="Oil circulation mechanism in a sintered oil-impregnated bearing. The porous structure stores oil that is released during operation and recovered during rest periods." width="960" />
 <p class="caption">
-Figure 2.31: Oil circulation mechanism in a sintered oil-impregnated bearing. The porous structure stores oil that is released during operation and recovered during rest periods.
+Figure 2.32: Oil circulation mechanism in a sintered oil-impregnated bearing. The porous structure stores oil that is released during operation and recovered during rest periods.
 </p>
 </div>
 <hr />
@@ -9222,15 +9243,13 @@ Figure 2.31: Oil circulation mechanism in a sintered oil-impregnated bearing. Th
 <div id="sec-stribeck-curve" class="section level3 hasAnchor" number="2.3.8">
 <h3><span class="header-section-number">2.3.8</span> The Stribeck Curve: Understanding Lubrication Regimes<a href="machine_elements.html#sec-stribeck-curve" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The transition from metal-to-metal contact to full hydrodynamic separation doesn’t happen instantly. German engineer Richard Stribeck (1861-1950) systematically studied this transition and developed one of the most important diagrams in tribology—the <strong>Stribeck curve</strong>.</p>
-<pre><code>## Warning in geom_point(aes(x = min_hersey, y = min_friction), color = &quot;blue&quot;, : All aesthetics have length 1, but the
-## data has 300 rows.
-## ℹ Please consider using `annotate()` or
-##   provide this layer with data
-##   containing a single row.</code></pre>
+<pre><code>## Warning in geom_point(aes(x = min_hersey, y = min_friction), color = &quot;blue&quot;, : All aesthetics have length 1, but the data has 300 rows.
+## ℹ Please consider using `annotate()` or provide this layer with
+##   data containing a single row.</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-stribeck-curve"></span>
 <img src="_main_files/figure-html/fig-stribeck-curve-1.png" alt="The Stribeck curve showing the three lubrication regimes as a function of the bearing parameter." width="960" />
 <p class="caption">
-Figure 2.32: The Stribeck curve showing the three lubrication regimes as a function of the bearing parameter.
+Figure 2.33: The Stribeck curve showing the three lubrication regimes as a function of the bearing parameter.
 </p>
 </div>
 <div id="sec-lubrication-regimes" class="section level4 hasAnchor" number="2.3.8.1">
@@ -9424,7 +9443,7 @@ Figure 2.32: The Stribeck curve showing the three lubrication regimes as a funct
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:pv-limit-plot"></span>
 <img src="_main_files/figure-html/pv-limit-plot-1.png" alt="PV limit diagram showing safe operating region for different bushing materials." width="960" />
 <p class="caption">
-Figure 2.33: PV limit diagram showing safe operating region for different bushing materials.
+Figure 2.34: PV limit diagram showing safe operating region for different bushing materials.
 </p>
 </div>
 <hr />
@@ -10474,7 +10493,7 @@ Less precise; wear-based
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:four-bar-anatomy"></span>
 <img src="_main_files/figure-html/four-bar-anatomy-1.png" alt="Components of a four-bar linkage mechanism." width="960" />
 <p class="caption">
-Figure 2.34: Components of a four-bar linkage mechanism.
+Figure 2.35: Components of a four-bar linkage mechanism.
 </p>
 </div>
 <p><strong>Key Components:</strong></p>
@@ -10567,7 +10586,7 @@ Figure 2.34: Components of a four-bar linkage mechanism.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:grashof-classification"></span>
 <img src="_main_files/figure-html/grashof-classification-1.png" alt="Classification of four-bar linkages based on Grashof's Law." width="960" />
 <p class="caption">
-Figure 2.35: Classification of four-bar linkages based on Grashof’s Law.
+Figure 2.36: Classification of four-bar linkages based on Grashof’s Law.
 </p>
 </div>
 <hr />
@@ -10694,7 +10713,7 @@ Rocking mechanisms
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:crank-rocker"></span>
 <img src="_main_files/figure-html/crank-rocker-1.png" alt="Crank-rocker mechanism: input rotates, output oscillates." width="960" />
 <p class="caption">
-Figure 2.36: Crank-rocker mechanism: input rotates, output oscillates.
+Figure 2.37: Crank-rocker mechanism: input rotates, output oscillates.
 </p>
 </div>
 <hr />
@@ -10705,7 +10724,7 @@ Figure 2.36: Crank-rocker mechanism: input rotates, output oscillates.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:double-crank"></span>
 <img src="_main_files/figure-html/double-crank-1.png" alt="Double-crank mechanism: both input and output rotate continuously." width="960" />
 <p class="caption">
-Figure 2.37: Double-crank mechanism: both input and output rotate continuously.
+Figure 2.38: Double-crank mechanism: both input and output rotate continuously.
 </p>
 </div>
 <hr />
@@ -10716,7 +10735,7 @@ Figure 2.37: Double-crank mechanism: both input and output rotate continuously.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:triple-rocker"></span>
 <img src="_main_files/figure-html/triple-rocker-1.png" alt="Triple-rocker mechanism: all links oscillate, none can fully rotate." width="960" />
 <p class="caption">
-Figure 2.38: Triple-rocker mechanism: all links oscillate, none can fully rotate.
+Figure 2.39: Triple-rocker mechanism: all links oscillate, none can fully rotate.
 </p>
 </div>
 <hr />
@@ -10735,7 +10754,7 @@ Figure 2.38: Triple-rocker mechanism: all links oscillate, none can fully rotate
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:vector-loop"></span>
 <img src="_main_files/figure-html/vector-loop-1.png" alt="Vector loop closure for position analysis." width="960" />
 <p class="caption">
-Figure 2.39: Vector loop closure for position analysis.
+Figure 2.40: Vector loop closure for position analysis.
 </p>
 </div>
 </div>
@@ -10755,7 +10774,7 @@ Figure 2.39: Vector loop closure for position analysis.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:transmission-angle"></span>
 <img src="_main_files/figure-html/transmission-angle-1.png" alt="Transmission angle and its significance for linkage performance." width="960" />
 <p class="caption">
-Figure 2.40: Transmission angle and its significance for linkage performance.
+Figure 2.41: Transmission angle and its significance for linkage performance.
 </p>
 </div>
 <div id="transmission-angle-formula" class="section level4 unnumbered hasAnchor">
@@ -10808,7 +10827,7 @@ Figure 2.40: Transmission angle and its significance for linkage performance.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:coupler-curve-concept"></span>
 <img src="_main_files/figure-html/coupler-curve-concept-1.png" alt="Coupler point P traces a coupler curve as the linkage moves." width="960" />
 <p class="caption">
-Figure 2.41: Coupler point P traces a coupler curve as the linkage moves.
+Figure 2.42: Coupler point P traces a coupler curve as the linkage moves.
 </p>
 </div>
 <div id="famous-coupler-curves" class="section level4 unnumbered hasAnchor">
@@ -11419,7 +11438,7 @@ Damped motion
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:belt-drive-diagram"></span>
 <img src="_main_files/figure-html/belt-drive-diagram-1.png" alt="Basic two-pulley belt drive system showing driver and driven pulleys" width="960" />
 <p class="caption">
-Figure 2.42: Basic two-pulley belt drive system showing driver and driven pulleys
+Figure 2.43: Basic two-pulley belt drive system showing driver and driven pulleys
 </p>
 </div>
 </div>
@@ -11478,7 +11497,7 @@ Figure 2.42: Basic two-pulley belt drive system showing driver and driven pulley
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:pulley-terminology"></span>
 <img src="_main_files/figure-html/pulley-terminology-1.png" alt="V-belt pulley (sheave) cross-section with key dimensional terms" width="768" />
 <p class="caption">
-Figure 2.43: V-belt pulley (sheave) cross-section with key dimensional terms
+Figure 2.44: V-belt pulley (sheave) cross-section with key dimensional terms
 </p>
 </div>
 <div id="key-terminology-table" class="section level4 hasAnchor" number="2.5.4.1">
@@ -11557,7 +11576,7 @@ Figure 2.43: V-belt pulley (sheave) cross-section with key dimensional terms
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:v-belt-profile"></span>
 <img src="_main_files/figure-html/v-belt-profile-1.png" alt="V-belt cross-section profiles for different standard sizes" width="960" />
 <p class="caption">
-Figure 2.44: V-belt cross-section profiles for different standard sizes
+Figure 2.45: V-belt cross-section profiles for different standard sizes
 </p>
 </div>
 <p><strong>V-Belt Advantages:</strong></p>
@@ -11582,7 +11601,7 @@ Figure 2.44: V-belt cross-section profiles for different standard sizes
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:timing-belt-diagram"></span>
 <img src="_main_files/figure-html/timing-belt-diagram-1.png" alt="Timing belt tooth profile engaging with pulley grooves" width="960" />
 <p class="caption">
-Figure 2.45: Timing belt tooth profile engaging with pulley grooves
+Figure 2.46: Timing belt tooth profile engaging with pulley grooves
 </p>
 </div>
 <p><strong>Timing Belt Advantages:</strong></p>
@@ -12036,7 +12055,7 @@ Automotive accessories, appliances
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:idler-pulley-diagram"></span>
 <img src="_main_files/figure-html/idler-pulley-diagram-1.png" alt="Belt drive with backside idler tensioner" width="960" />
 <p class="caption">
-Figure 2.46: Belt drive with backside idler tensioner
+Figure 2.47: Belt drive with backside idler tensioner
 </p>
 </div>
 <hr />
@@ -12273,7 +12292,7 @@ Figure 2.46: Belt drive with backside idler tensioner
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-anatomy"></span>
 <img src="_main_files/figure-html/chain-anatomy-1.png" alt="Roller chain link construction showing key components" width="1056" />
 <p class="caption">
-Figure 2.47: Roller chain link construction showing key components
+Figure 2.48: Roller chain link construction showing key components
 </p>
 </div>
 </div>
@@ -12533,7 +12552,7 @@ Avg. Tensile (lbs)
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:sprocket-diagram"></span>
 <img src="_main_files/figure-html/sprocket-diagram-1.png" alt="Sprocket tooth geometry and engagement with roller chain" width="960" />
 <p class="caption">
-Figure 2.48: Sprocket tooth geometry and engagement with roller chain
+Figure 2.49: Sprocket tooth geometry and engagement with roller chain
 </p>
 </div>
 <div id="sprocket-terminology" class="section level4 hasAnchor" number="2.6.4.1">
@@ -12765,7 +12784,7 @@ Figure 2.48: Sprocket tooth geometry and engagement with roller chain
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-drive-layout"></span>
 <img src="_main_files/figure-html/chain-drive-layout-1.png" alt="Chain drive system showing driver and driven sprockets with chain path" width="1056" />
 <p class="caption">
-Figure 2.49: Chain drive system showing driver and driven sprockets with chain path
+Figure 2.50: Chain drive system showing driver and driven sprockets with chain path
 </p>
 </div>
 <hr />
@@ -12846,7 +12865,7 @@ Figure 2.49: Chain drive system showing driver and driven sprockets with chain p
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:chain-slack-diagram"></span>
 <img src="_main_files/figure-html/chain-slack-diagram-1.png" alt="Chain slack measurement on the slack side span" width="960" />
 <p class="caption">
-Figure 2.50: Chain slack measurement on the slack side span
+Figure 2.51: Chain slack measurement on the slack side span
 </p>
 </div>
 </div>
@@ -13349,7 +13368,7 @@ Moderate
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:misalignment-types"></span>
 <img src="_main_files/figure-html/misalignment-types-1.png" alt="Three types of shaft misalignment that couplings must accommodate" width="1152" />
 <p class="caption">
-Figure 2.51: Three types of shaft misalignment that couplings must accommodate
+Figure 2.52: Three types of shaft misalignment that couplings must accommodate
 </p>
 </div>
 <table>
@@ -13395,7 +13414,7 @@ Figure 2.51: Three types of shaft misalignment that couplings must accommodate
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:rigid-coupling-types"></span>
 <img src="_main_files/figure-html/rigid-coupling-types-1.png" alt="Common rigid coupling designs" width="1056" />
 <p class="caption">
-Figure 2.52: Common rigid coupling designs
+Figure 2.53: Common rigid coupling designs
 </p>
 </div>
 <div id="rigid-coupling-characteristics" class="section level4 hasAnchor" number="2.7.4.1">
@@ -13456,7 +13475,7 @@ Figure 2.52: Common rigid coupling designs
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:jaw-coupling"></span>
 <img src="_main_files/figure-html/jaw-coupling-1.png" alt="Jaw coupling with elastomeric spider element" width="960" />
 <p class="caption">
-Figure 2.53: Jaw coupling with elastomeric spider element
+Figure 2.54: Jaw coupling with elastomeric spider element
 </p>
 </div>
 <p><strong>Common Elastomeric Coupling Types:</strong></p>
@@ -13508,7 +13527,7 @@ Figure 2.53: Jaw coupling with elastomeric spider element
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:metallic-couplings"></span>
 <img src="_main_files/figure-html/metallic-couplings-1.png" alt="Common metallic flexible coupling designs" width="1152" />
 <p class="caption">
-Figure 2.54: Common metallic flexible coupling designs
+Figure 2.55: Common metallic flexible coupling designs
 </p>
 </div>
 </div>
@@ -13761,7 +13780,7 @@ Universal Joint
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:clutch-classification"></span>
 <img src="_main_files/figure-html/clutch-classification-1.png" alt="Classification of common clutch types" width="960" />
 <p class="caption">
-Figure 2.55: Classification of common clutch types
+Figure 2.56: Classification of common clutch types
 </p>
 </div>
 <hr />
@@ -13776,7 +13795,7 @@ Figure 2.55: Classification of common clutch types
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:disc-clutch"></span>
 <img src="_main_files/figure-html/disc-clutch-1.png" alt="Single-plate friction clutch components" width="960" />
 <p class="caption">
-Figure 2.56: Single-plate friction clutch components
+Figure 2.57: Single-plate friction clutch components
 </p>
 </div>
 </div>
@@ -13962,7 +13981,7 @@ Aircraft, F1
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:jaw-clutch"></span>
 <img src="_main_files/figure-html/jaw-clutch-1.png" alt="Jaw clutch showing interlocking teeth" width="960" />
 <p class="caption">
-Figure 2.57: Jaw clutch showing interlocking teeth
+Figure 2.58: Jaw clutch showing interlocking teeth
 </p>
 </div>
 <p><strong>Characteristics:</strong></p>
@@ -13981,7 +14000,7 @@ Figure 2.57: Jaw clutch showing interlocking teeth
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:overrunning-clutch"></span>
 <img src="_main_files/figure-html/overrunning-clutch-1.png" alt="Sprag-type overrunning clutch operation" width="1056" />
 <p class="caption">
-Figure 2.58: Sprag-type overrunning clutch operation
+Figure 2.59: Sprag-type overrunning clutch operation
 </p>
 </div>
 <div id="overrunning-clutch-applications" class="section level4 hasAnchor" number="2.7.5.11">
