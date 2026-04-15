@@ -1794,7 +1794,7 @@ ggplot(pv_data, aes(x = P, y = V, color = Material)) +
 limits_data <- tribble(
   ~Material, ~Max_P_psi, ~Max_V_ftmin, ~Max_PV, ~Max_Temp_F,
   "SAE 660 Bronze", 4000, 750, 75000, 450,
-  "Bronze", 2000, 1200, 60000, 300,
+  "Bronze", 2000, 1200, 50000, 300,
   "PTFE/Bronze Composite", 2500, 500, 25000, 500,
   "Acetal (Delrin)", 1500, 600, 10000, 180,
   "Nylon 6/6", 1000, 400, 5000, 200,
@@ -1821,7 +1821,7 @@ limits_data %>%
 
 ::: {.question}
 
-A shaft rotating at **500 RPM** is supported by a bronze bushing. The shaft diameter is **1.5 inches** and the bushing length is **2.0 inches**. The radial load on the bushing is **800 lbf**.
+A shaft rotating at **500 RPM** is supported by a SAE 660 bronze bushing. The shaft diameter is **1.5 inches** and the bushing length is **2.0 inches**. The radial load on the bushing is **800 lbf**.
 
 Determine:
 1. The bearing pressure ($P$)
