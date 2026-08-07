@@ -1,0 +1,78 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Design for Manufacturing"
+  author: "Martin Volkening and Claude Opus 4.6 (Anthropic)"
+  date: today
+  url: https://github.com/Prof-MV/Design-for-Manufacturing
+  repo-url: https://github.com/Prof-MV/Design-for-Manufacturing
+  repo-actions: [edit]
+  cover-image: images/Fanshawe.png
+  page-footer:
+    left: "Design for Manufacturing"
+    right: "Built with Quarto"
+  chapters:
+    - index.Rmd
+    - part: "Design and Drafting"
+      chapters:
+        - 01-00-Design.Rmd
+        - 01-01-Drafting.Rmd
+        - 01-02-Dimensioning.Rmd
+        - 01-03-Tolerances.Rmd
+        - 01-04-GDandT.Rmd
+        - 01-05-Imperial-Metric-Fits.Rmd
+    - part: "Machine Elements"
+      chapters:
+        - 02-00-Machine-Elements.Rmd
+        - 02-01-Bolt-Joint-Calculations.Rmd
+        - 02-02-Gears.Rmd
+        - 02-03-Bearings.Rmd
+        - 02-04-Planar-Linkages.Rmd
+        - 02-05-Four-Bar-Linkage.Rmd
+        - 02-06-Cam-Follower.Rmd
+        - 02-07-Belt-Pulley.Rmd
+        - 02-08-Chain-Drives.Rmd
+        - 02-09-Couplings-Clutches.Rmd
+        - 02-10-Automotive-Drivetrains.Rmd
+        - 02-11-Brakes.Rmd
+        - 02-12-Thermodynamics.Rmd
+    - part: "Design for Manufacturing"
+      chapters:
+        - 03-00-Design-for-Manufacturing.Rmd
+        - 03-01-Casting.Rmd
+        - 03-02-Joining.Rmd
+        - 03-03-Stamping.Rmd
+        - 03-04-Welding.Rmd
+        - 03-05-Machining.Rmd
+        - 03-06-Design-for-3D-printing.Rmd
+        - 03-07-Sintering.Rmd
+    - part: "Machine Learning for Manufacturing"
+      chapters:
+        - 04-01-Machine-Learning.Rmd
+        - 04-02-Machine-Learning-Lab.Rmd
+    - part: "Finite Element Analysis"
+      chapters:
+        - 05-01-FEA-SolidWorks.Rmd
+  page-navigation: true
+
+bibliography: [book.bib, packages.bib]
+link-citations: true
+
+format:
+  html:
+    theme: cosmo
+    css: style.css
+    number-sections: true
+  pdf:
+    documentclass: book
+    include-in-header: preamble.tex
+    latex-engine: xelatex
+    citation-package: natbib
+    keep-tex: true
+  epub:
+    cover-image: images/Fanshawe.png
+
+execute:
+  freeze: auto

@@ -1,0 +1,15 @@
+{
+  "hash": "2524012b55f3acb0cc2aa5bd7f5da972",
+  "result": {
+    "engine": "knitr",
+    "markdown": "## Dimensioning Rules {#dimensioningrules}\n\n\n\n### Learning Objectives {-}\n\nBy the end of this chapter, you will be able to:\n\n- Apply fundamental dimensioning rules according to ASME Y14.5 standards\n- Select appropriate dimension placement for clarity and manufacturability\n- Use proper extension lines, dimension lines, and leaders\n- Dimension common features including holes, arcs, and angles\n- Avoid common dimensioning errors\n\n::: {.callout-think}\n**Before You Read:** Look at any mechanical part near you. How would you\ncommunicate its exact size to someone who needs to manufacture it? What\nmeasurements would be most important?\n:::\n\n### Introduction to Dimensioning\n\nDimensioning is the process of adding size and location information to\nengineering drawings. Proper dimensioning ensures that parts can be\nmanufactured exactly as the designer intended.\n\n::: {.callout-industry}\n**Industry Connection:** In the defense industry, improper dimensioning can\nhave serious consequences. A famous example is the Mars Climate Orbiter, which\nwas lost due to a unit conversion error. Clear dimensioning standards prevent\nsuch costly mistakes.\n:::\n\n### Key Takeaways {-}\n\n- Dimensions should be placed for maximum clarity\n- Each dimension should appear only once on a drawing\n- Dimensions should relate to functional requirements\n- Standard symbols and conventions ensure universal understanding\n\n::: {.callout-check}\n**Quick Check:** What is the difference between an extension line and a\ndimension line? Why is it important not to dimension to hidden lines?\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

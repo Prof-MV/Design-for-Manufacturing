@@ -1,0 +1,16 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.positai
+.quarto/
+docs/
+*_files/
+_bookdown_files/
+site_libs/
+/*.tex
+!/preamble.tex
+.claude/
+
+/.quarto/
+**/*.quarto_ipynb

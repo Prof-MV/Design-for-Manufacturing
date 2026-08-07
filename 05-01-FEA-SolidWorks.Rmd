@@ -1,0 +1,632 @@
+
+# (PART) Finite Element Analysis {-}
+
+# Mechanical Strength Analysis Using Finite Element Analysis in SolidWorks {#chap-12-fea}
+
+```{r setup-12-a, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center"
+)
+```
+
+## How This Chapter Works {#sec:roadmap-12}
+
+This chapter runs over **three weeks**. Each week you get **two hours of theory** and **two hours of hands-on lab in SolidWorks Simulation**. The two are not separate worlds. Every idea you meet in theory is something you will *do* with your hands on the keyboard that same week, and every result you generate in the lab points straight back to a concept from theory.
+
+So that the link is impossible to miss, the chapter is organised in matched pairs. Whenever you see a green **Lab Connection** box in a theory section, it tells you exactly what you will build in the lab. Whenever you see a blue **Theory Recall** box in a lab section, it points back to the equation or figure that explains *why* SolidWorks behaves the way it does.
+
+```{r tab-schedule-12}
+library(knitr)
+library(kableExtra)
+
+schedule <- data.frame(
+  Week = c("Week 1", "Week 2", "Week 3"),
+  `Theory (2 hrs)` = c(
+    "What FEA really is: discretization, stress, von Mises, factor of safety",
+    "Mesh quality, convergence, boundary conditions, and where FEA lies to you",
+    "Verification vs. validation, design iteration, and engineering reporting"
+  ),
+  `Lab (2 hrs)` = c(
+    "First static study on a cantilever bracket: material, fixture, load, mesh, run, read",
+    "Convergence study on a plate with a hole, checked against a hand calculation",
+    "Redesign a lifting bracket to a target safety factor while removing mass, then report"
+  ),
+  check.names = FALSE
+)
+
+kable(schedule, caption = "Three-week structure pairing each theory block with its matching lab.", booktabs = TRUE) %>%
+  kable_styling(full_width = knitr::is_html_output(), bootstrap_options = c("striped", "hover")) %>%
+  column_spec(1, bold = TRUE, width = if (knitr::is_html_output()) "8%" else NULL) %>%
+  column_spec(2, width = if (knitr::is_html_output()) "46%" else NULL) %>%
+  column_spec(3, width = if (knitr::is_html_output()) "46%" else NULL)
+```
+
+## Learning Objectives {#sec:objectives-fea}
+
+By the end of this chapter, you will be able to:
+
+1. **Explain** the core idea of finite element analysis — turning one impossible-to-solve part into thousands of small, solvable elements — in plain language.
+2. **Set up** a complete static stress study in SolidWorks Simulation: assign material, apply fixtures and loads, generate a mesh, and run the solver.
+3. **Interpret** von Mises stress, displacement, and factor-of-safety plots, and decide whether a result is trustworthy.
+4. **Perform** a mesh convergence study and recognise stress singularities that will never converge.
+5. **Validate** a SolidWorks result against an analytical hand calculation and quantify the percentage difference.
+6. **Iterate** a design to meet a target factor of safety while reducing mass, and document the work to an industry-acceptable standard.
+
+::: {.callout-think}
+**Before we begin:** You have almost certainly used a part that was designed with FEA today — the seat bracket in your car, the frame of your phone, the bracket holding a machine guard in the shop. How do you think an engineer *knew* those parts were strong enough before a single one was ever built or tested?
+:::
+
+## Introduction: The Bracket That Should Not Have Failed {#sec:intro-12}
+
+Picture a Friday afternoon on an automotive sub-assembly line. A stamped-steel bracket that holds a sensor module has started cracking in the field after about six months of service. Nobody overloaded it. The drawing says the material is correct. The bolts are torqued to spec. And yet, brackets are coming back cracked at the same inside corner every single time.
+
+A technologist pulls the CAD model into SolidWorks Simulation, applies the real service load, and within twenty minutes sees a bright red stress hot-spot at exactly the corner that keeps failing. The fix — a small radius added to that corner — costs nothing in the stamping die and drops the peak stress by 40%. No prototypes destroyed, no warranty claims, no line stoppage.
+
+That is the promise of FEA: **see the stress before the part exists.** But there is a catch, and it is the reason this chapter is three weeks instead of three hours. FEA does not give you *the* answer. It gives you *an* answer — and a sloppy setup produces a confident, colourful, completely wrong picture. Our job is to make you the kind of technologist who can tell the difference.
+
+::: {.callout-industry}
+**Industry Application:** In defense manufacturing, no structural component can be released without a documented stress analysis traceable to its loads and material. In food processing, hygienic equipment frames must survive repeated high-pressure wash-down and thermal cycling. In automotive, every gram of unnecessary metal removed from a bracket — verified safe by FEA — multiplies across millions of vehicles into real fuel savings. The same workflow you learn here serves all three.
+:::
+
+---
+
+## Week 1 — What Finite Element Analysis Actually Is {#sec:week1-12}
+
+### The Big Idea: Divide and Conquer {#sec:bigidea-12}
+
+Suppose I hand you a curvy, irregular steel bracket and ask, "What is the stress everywhere inside this part when you hang 2 kN from it?" For a simple straight beam you could use a formula from your strength-of-materials course. But this bracket has holes, fillets, ribs, and varying thickness. There is no single formula. The exact mathematical solution requires solving partial differential equations over a complicated 3D shape — something nobody can do by hand.
+
+FEA sidesteps the problem with one beautifully simple trick: **stop trying to solve the whole part at once.** Instead, chop the part into thousands of tiny, simple pieces called **elements**, connected at points called **nodes**. Each element is small and simple enough that we *can* write down how it stretches and carries load. Then we stitch all the elements back together and let a computer solve the resulting (very large) system of equations.
+
+```{r fig-discretization-12, fig.cap="A continuous bar (top) is impossible to solve in one piece, but splitting it into discrete elements connected at nodes (bottom) turns it into many simple, solvable springs.", fig.width=8, fig.height=4}
+library(ggplot2)
+
+# Continuous bar
+cont <- data.frame(xmin = 0, xmax = 10, ymin = 2.4, ymax = 3.0)
+
+# Discretised bar: 5 elements
+n_elem <- 5
+edges <- seq(0, 10, length.out = n_elem + 1)
+elems <- data.frame(
+  xmin = edges[-length(edges)],
+  xmax = edges[-1],
+  ymin = 0.8,
+  ymax = 1.4,
+  elem = factor(1:n_elem)
+)
+nodes <- data.frame(x = edges, y = 1.1)
+
+ggplot() +
+  # continuous bar
+  geom_rect(data = cont, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+            fill = "grey70", color = "black") +
+  annotate("text", x = 5, y = 3.4, label = "Real part: one continuous body (no simple formula)",
+           size = 4, fontface = "italic") +
+  annotate("segment", x = 5, xend = 5, y = 2.3, yend = 1.6,
+           arrow = arrow(length = unit(0.3, "cm")), linewidth = 0.8) +
+  annotate("text", x = 6.7, y = 1.95, label = "discretize", size = 3.6) +
+  # elements
+  geom_rect(data = elems, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = elem),
+            color = "black", alpha = 0.85) +
+  geom_point(data = nodes, aes(x = x, y = y), size = 3.5, color = "black") +
+  annotate("text", x = 5, y = 0.4,
+           label = "Model: discrete elements (boxes) joined at nodes (dots)",
+           size = 4, fontface = "italic") +
+  scale_fill_brewer(palette = "Blues") +
+  coord_cartesian(ylim = c(0, 3.7)) +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+As shown in Figure \@ref(fig:fig-discretization-12), the trick is to replace one hard problem with many easy ones. Each element behaves a bit like a spring: push on it and it deflects in proportion to the force. For a single linear spring you already know the relationship — force equals stiffness times displacement, $F = ku$. FEA simply writes this for *every* element and solves them all together.
+
+When all the element "springs" are assembled into one system, the governing equation of a static FEA problem is:
+
+\begin{equation}
+[K]\{u\} = \{F\}
+(\#eq:governing-12)
+\end{equation}
+
+where $[K]$ is the **global stiffness matrix** (how stiff the whole structure is, assembled from every element), $\{u\}$ is the vector of unknown displacements at every node, and $\{F\}$ is the vector of applied loads. The solver's entire job in a static study is to rearrange Equation \@ref(eq:governing-12) and find $\{u\}$. Once it knows how far every node moved, it works backward to strain, and from strain to stress.
+
+::: {.callout-concept}
+**Key Concept: The FEA Chain**  
+Loads and fixtures → solve $[K]\{u\}=\{F\}$ for **displacement** → differentiate displacement to get **strain** → apply the material law to get **stress**. Stress is the *last* thing computed, which is exactly why it is the most sensitive to a bad mesh — a point we will hammer home in Week 2.
+:::
+
+### From Displacement to Stress: The Concepts You Must Read Correctly {#sec:stress-concepts-12}
+
+The solver hands you displacement first, but engineers care about stress, because **stress is what causes failure.** Let us connect the dots from your strength-of-materials course.
+
+For a material loaded in one direction, stress and strain are linked by **Hooke's Law**:
+
+\begin{equation}
+\sigma = E \, \varepsilon
+(\#eq:hooke-12)
+\end{equation}
+
+where $\sigma$ is stress (Pa, or more usefully MPa), $\varepsilon$ is strain (dimensionless), and $E$ is the **Young's modulus** of the material. For structural steel, $E \approx 200{,}000$ MPa.
+
+But real parts are not loaded in only one direction. At any point inside the bracket there are stresses acting in several directions at once. We need a single number that tells us "how close is this point to yielding?" That number is the **von Mises stress**, $\sigma_{vM}$:
+
+\begin{equation}
+\sigma_{vM} = \sqrt{\tfrac{1}{2}\left[(\sigma_1-\sigma_2)^2 + (\sigma_2-\sigma_3)^2 + (\sigma_3-\sigma_1)^2\right]}
+(\#eq:vonmises-12)
+\end{equation}
+
+where $\sigma_1, \sigma_2, \sigma_3$ are the three principal stresses at a point. You do not compute this by hand — SolidWorks does it for every node. What you *must* understand is its meaning: **for a ductile metal, the part begins to yield wherever the von Mises stress reaches the material's yield strength** $\sigma_y$. That is why the default stress plot in SolidWorks is von Mises, and why the red zones on that plot are the places you worry about.
+
+This leads directly to the single most important design number in the chapter, the **factor of safety (FOS)**:
+
+\begin{equation}
+FOS = \frac{\sigma_y}{\sigma_{vM}}
+(\#eq:fos-12)
+\end{equation}
+
+A factor of safety of 1.0 means the part is right at the edge of yielding — no margin at all. A FOS of 2.0 means the part can take twice the analysed load before yielding begins. Figure \@ref(fig:fig-stress-strain-12) shows where these quantities live on a real stress–strain curve.
+
+```{r fig-stress-strain-12, fig.cap="A typical ductile-steel stress-strain curve. Yield strength sets the line we must not cross; von Mises stress is where our design currently sits; the gap between them is the factor of safety.", fig.width=8, fig.height=5}
+library(ggplot2)
+
+# Build a representative steel stress-strain curve (AISI 1020, illustrative)
+E <- 200000        # MPa
+yield <- 350       # MPa
+strain_yield <- yield / E
+
+eps_elastic <- seq(0, strain_yield, length.out = 50)
+sig_elastic <- E * eps_elastic
+
+# plastic region up to UTS ~ 420 MPa then mild necking
+eps_plastic <- seq(strain_yield, 0.18, length.out = 120)
+uts <- 420
+sig_plastic <- yield + (uts - yield) * (1 - exp(-(eps_plastic - strain_yield) * 45))
+# mild drop near fracture
+sig_plastic <- sig_plastic - pmax(0, (eps_plastic - 0.14)) * 250
+
+curve <- data.frame(
+  strain = c(eps_elastic, eps_plastic),
+  stress = c(sig_elastic, sig_plastic)
+)
+
+design_stress <- 175  # where the current design sits -> FOS = 2
+
+ggplot(curve, aes(strain, stress)) +
+  geom_line(linewidth = 1.2, color = "grey20") +
+  geom_hline(yintercept = yield, linetype = "dashed", color = "firebrick", linewidth = 0.9) +
+  geom_hline(yintercept = design_stress, linetype = "dotted", color = "darkblue", linewidth = 0.9) +
+  annotate("text", x = 0.13, y = yield + 14, label = "Yield strength (sigma_y = 350 MPa)",
+           color = "firebrick", fontface = "bold", size = 3.6) +
+  annotate("text", x = 0.13, y = design_stress - 16,
+           label = "Design point (von Mises = 175 MPa)",
+           color = "darkblue", fontface = "bold", size = 3.6) +
+  annotate("segment", x = 0.05, xend = 0.05, y = design_stress, yend = yield,
+           arrow = arrow(length = unit(0.25, "cm"), ends = "both"), color = "darkgreen", linewidth = 0.9) +
+  annotate("text", x = 0.062, y = (design_stress + yield)/2,
+           label = "FOS = 350/175 = 2.0", hjust = 0, color = "darkgreen",
+           fontface = "bold", size = 3.8) +
+  labs(x = "Strain (mm/mm)", y = "Stress (MPa)") +
+  theme_minimal(base_size = 13)
+```
+
+::: {.callout-warning}
+**Common Mistake:** A factor of safety **below 1.0 does not mean the part exploded** — your model is linear, so it cannot show yielding or breaking. It simply means the predicted stress passed the yield line, which the linear-elastic math is no longer allowed to model honestly. Treat any region with FOS < 1 as "this will yield, redesign it," not as a literal stress value you can trust.
+:::
+
+::: {.question}
+A bracket made of 6061-T6 aluminium ($\sigma_y = 275$ MPa) shows a peak von Mises stress of 110 MPa under its working load. What is the factor of safety, and is it acceptable for a load-bearing part?
+:::
+
+::: {.answer}
+Using Equation \@ref(eq:fos-12), $FOS = 275 / 110 = 2.5$. Whether that is "acceptable" depends on the application: a general structural bracket often targets 1.5–2.5, so 2.5 is comfortable. A safety-critical lifting component may be required by code to have a much higher factor (4 or more). The number alone is not enough — you must know the *required* factor for that industry before you judge it.
+:::
+
+### The Five-Step Workflow You Will Repeat Forever {#sec:workflow-12}
+
+Every static study in SolidWorks Simulation — and in this chapter — follows the same five steps. Memorise this list; it is the spine of all three labs.
+
+1. **Material** — tell the model what the part is made of (this gives it $E$ and $\sigma_y$).
+2. **Fixtures** — tell the model where the part is held (where displacement is zero).
+3. **Loads** — tell the model what forces or pressures act on it.
+4. **Mesh** — chop the part into elements.
+5. **Run and interpret** — solve $[K]\{u\}=\{F\}$, then read stress, displacement, and FOS.
+
+Miss or fake any one of these and the colourful result is fiction. Notice that steps 1–3 are pure engineering judgment (what is it made of, how is it held, what pushes on it), step 4 is mostly the computer's job with your supervision, and step 5 is where your strength-of-materials brain earns its keep.
+
+::: {.callout-activity}
+**Lab Connection — Week 1 Lab:** In this week's two-hour lab you will run all five steps for the first time on a simple L-shaped cantilever bracket. You will assign AISI 1020 steel, fix the back face, apply a 2 kN downward load on the front face, mesh with the default settings, run the study, and read the von Mises stress, the displacement, and the factor of safety. **Do not change the default mesh yet** — we deliberately want you to see a "first draft" result so that next week's convergence study has something to improve on.
+:::
+
+### Week 1 Lab Guide: Your First Static Study {#sec:lab1-12}
+
+Work through these steps at your lab station. The goal is not a perfect answer — it is to build muscle memory for the five-step workflow.
+
+**Setup.** Open the provided part file `cantilever_bracket.SLDPRT`. Activate the **Simulation** add-in (Tools → Add-Ins → SOLIDWORKS Simulation). Start a **New Study → Static**.
+
+**Step 1 — Material.** Right-click the part in the Simulation tree → Apply/Edit Material → select **AISI 1020 Steel**. Note the yield strength SolidWorks lists (about 351 MPa). Write it down; you need it for the factor-of-safety plot.
+
+**Step 2 — Fixtures.** Right-click Fixtures → Fixed Geometry → select the flat back face that bolts to the wall. This sets displacement to zero on that face — the model's version of "bolted down solid."
+
+**Step 3 — Loads.** Right-click External Loads → Force → select the top front face → enter **2000 N** acting downward.
+
+**Step 4 — Mesh.** Right-click Mesh → Create Mesh → accept the default element size. Watch the part fill with tetrahedral elements.
+
+**Step 5 — Run and read.** Click **Run This Study.** When it finishes, examine the three default plots: von Mises stress, resultant displacement, and (right-click Results → Define Factor of Safety Plot) the FOS.
+
+**Record in your lab notebook:** peak von Mises stress (MPa), maximum displacement (mm), minimum factor of safety, and *where on the part* the peak stress occurs.
+
+::: {.callout-recall}
+**Theory Recall:** The reason you read von Mises stress and not some other stress is Equation \@ref(eq:vonmises-12) — it is the single number that predicts yielding in ductile metals. The reason the back face had to be fixed is that the solver cannot solve Equation \@ref(eq:governing-12) at all unless *something* holds the part in place; with no fixture, the part would simply fly off into space and $[K]$ becomes unsolvable.
+:::
+
+::: {.callout-discussion}
+**Group Discussion:** Compare your peak-stress location with a neighbour's. Did everyone's hot-spot land at the inside corner of the L? Why does stress concentrate *there* rather than spreading out evenly? Hold that thought — it is the entire subject of Week 2.
+:::
+
+---
+
+## Week 2 — Mesh, Convergence, and the Lies FEA Tells {#sec:week2-12}
+
+### Why the Mesh Decides Everything {#sec:mesh-12}
+
+Last week you accepted the default mesh. This week you learn why that mesh might have been hiding a 30% error — and how to know when you can trust a result.
+
+Recall the FEA chain: the solver finds *displacement* very accurately even on a coarse mesh, but *stress* is computed by differentiating displacement, and differentiation amplifies any roughness in the solution. Where stress changes rapidly over a short distance — at holes, fillets, and corners — a coarse mesh simply cannot capture the peak. It averages it away.
+
+```{r fig-convergence-12, fig.cap="A mesh convergence study. As the number of elements increases, peak stress climbs and then flattens to a stable value. The coarse default mesh under-predicts the true peak by a large margin.", fig.width=8, fig.height=5}
+library(ggplot2)
+
+# Simulate a convergence curve: stress approaching an asymptote
+dof <- c(1200, 3500, 8000, 18000, 40000, 85000, 160000)
+true_peak <- 188   # MPa, the converged value
+# stress rises and asymptotes
+peak <- true_peak * (1 - 0.42 * exp(-dof / 22000))
+
+conv <- data.frame(dof = dof, peak = peak)
+
+ggplot(conv, aes(dof, peak)) +
+  geom_hline(yintercept = true_peak, linetype = "dashed", color = "firebrick", linewidth = 0.9) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  geom_point(size = 3, color = "darkblue") +
+  annotate("text", x = 120000, y = true_peak + 4,
+           label = "Converged value ~188 MPa", color = "firebrick", size = 3.7) +
+  annotate("text", x = 8000, y = peak[3] - 8,
+           label = "Default coarse mesh\n(under-predicts!)", color = "grey25", size = 3.5) +
+  annotate("segment", x = 8000, xend = 3500, y = peak[3] - 14, yend = peak[2],
+           arrow = arrow(length = unit(0.2, "cm")), color = "grey40") +
+  labs(x = "Degrees of freedom (mesh refinement)", y = "Peak von Mises stress (MPa)") +
+  theme_minimal(base_size = 13)
+```
+
+Figure \@ref(fig:fig-convergence-12) is the single most important picture in this chapter. A **convergence study** means running the same study several times with progressively finer meshes and watching the peak stress. When refining the mesh further stops changing the answer meaningfully — say, less than a 5% change between two refinements — the result has **converged** and you can trust it. We measure that change with a simple percentage difference:
+
+\begin{equation}
+\%\,\text{change} = \left| \frac{\sigma_{fine} - \sigma_{coarse}}{\sigma_{fine}} \right| \times 100\%
+(\#eq:convergence-12)
+\end{equation}
+
+::: {.callout-concept}
+**Key Concept: Convergence**  
+A result is trustworthy not because it looks pretty but because **refining the mesh no longer changes it.** A single run on a default mesh is a guess. A converged study is an answer. Use Equation \@ref(eq:convergence-12) to put a number on it.
+:::
+
+### Stress Concentrations and the Singularity Trap {#sec:singularity-12}
+
+Why does stress pile up at that inside corner of your L-bracket? Because geometry that forces the load to "turn a sharp corner" concentrates the flow of stress, exactly like water speeding up where a river narrows. We quantify it with the **stress concentration factor** $K_t$:
+
+\begin{equation}
+\sigma_{max} = K_t \, \sigma_{nom}
+(\#eq:kt-12)
+\end{equation}
+
+where $\sigma_{nom}$ is the nominal (average) stress you would calculate ignoring the feature, and $K_t$ depends only on the geometry. A generous fillet radius gives a small $K_t$; a tight radius gives a large one. Figure \@ref(fig:fig-kt-12) shows the classic relationship for a stepped shaft in bending.
+
+```{r fig-kt-12, fig.cap="Stress concentration factor versus fillet radius. Larger radii dramatically reduce the peak stress, which is why adding a fillet is the cheapest design fix in engineering.", fig.width=8, fig.height=5}
+library(ggplot2)
+
+# Representative Kt curve for a filleted shoulder vs r/d ratio
+r_over_d <- seq(0.02, 0.30, length.out = 100)
+Kt <- 1 + 0.9 / (r_over_d^0.5 * 6)   # illustrative decaying curve
+kt_df <- data.frame(r_over_d, Kt)
+
+ggplot(kt_df, aes(r_over_d, Kt)) +
+  geom_line(color = "darkred", linewidth = 1.2) +
+  geom_point(data = data.frame(r_over_d = c(0.04, 0.20),
+                               Kt = 1 + 0.9 / (c(0.04, 0.20)^0.5 * 6)),
+             aes(r_over_d, Kt), size = 3.5, color = "black") +
+  annotate("text", x = 0.04, y = 1 + 0.9/(0.04^0.5*6) + 0.12,
+           label = "Sharp corner:\nhigh Kt", size = 3.4, hjust = 0.1) +
+  annotate("text", x = 0.20, y = 1 + 0.9/(0.20^0.5*6) + 0.12,
+           label = "Generous fillet:\nlow Kt", size = 3.4) +
+  labs(x = "Fillet radius / part dimension (r/d)",
+       y = expression("Stress concentration factor "*K[t])) +
+  theme_minimal(base_size = 13)
+```
+
+Now the dangerous part. A real fillet has a finite radius, so its peak stress is finite and **will converge** as you refine the mesh. But a *perfectly sharp* re-entrant corner in CAD has zero radius — mathematically, the stress there is infinite. This is a **stress singularity.** No matter how fine you make the mesh, the stress at a sharp corner keeps climbing and never settles. Figure \@ref(fig:fig-singularity-12) shows the two behaviours side by side.
+
+```{r fig-singularity-12, fig.cap="The convergence test that separates real results from numerical garbage. A filleted feature converges to a finite stress; a sharp re-entrant corner is a singularity whose stress climbs forever and must never be reported.", fig.width=8, fig.height=5}
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+dof <- c(2000, 6000, 15000, 35000, 75000, 150000)
+
+filleted <- 185 * (1 - 0.30 * exp(-dof / 20000))   # converges toward ~185
+singular <- 117.3 * log10(dof) - 247.2              # keeps rising, never settles
+
+df <- data.frame(dof, Filleted = filleted, `Sharp corner` = singular, check.names = FALSE) %>%
+  pivot_longer(-dof, names_to = "geometry", values_to = "stress")
+
+ggplot(df, aes(dof, stress, color = geometry)) +
+  geom_line(linewidth = 1.1) +
+  geom_point(size = 3) +
+  scale_color_manual(values = c("Filleted" = "darkgreen", "Sharp corner" = "firebrick")) +
+  labs(x = "Degrees of freedom (mesh refinement)",
+       y = "Peak von Mises stress (MPa)",
+       color = NULL) +
+  annotate("text", x = 95000, y = 168, label = "Converges -> trust it",
+           color = "darkgreen", size = 3.7) +
+  annotate("text", x = 70000, y = 365, label = "Never converges -> singularity, ignore",
+           color = "firebrick", size = 3.7) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+```
+
+::: {.callout-warning}
+**Common Mistake:** A student refines the mesh, sees the stress at a sharp corner jump from 300 to 600 to 1200 MPa, and panics that the part is failing. The part is fine — the *model* has a sharp corner that does not exist on the real manufactured part (which always has at least a tiny radius from the tooling). The fix is to **add the real fillet to the CAD geometry**, not to trust the runaway number.
+:::
+
+### Boundary Conditions: Garbage In, Garbage Out {#sec:bc-12}
+
+The mesh is only half the story. The other half is whether your fixtures and loads match reality. A "Fixed Geometry" fixture means *perfectly rigid, zero movement* — but a real bolted joint flexes a little. Over-constraining a model makes it look artificially stiff and can hide real stress. Likewise, dumping a force onto a single point creates an artificial singularity, just like a sharp corner.
+
+::: {.callout-discussion}
+**Group Discussion:** Your L-bracket lab model was "Fixed" on its back face. In reality it is held by two bolts. List three ways the real bolted joint behaves differently from a perfectly fixed face. Which of those differences would make the *real* part more stressed than your model predicts?
+:::
+
+::: {.callout-activity}
+**Lab Connection — Week 2 Lab:** This week you will take a flat steel plate with a central hole (`plate_with_hole.SLDPRT`) loaded in tension. First you will calculate the expected peak stress *by hand* using the nominal stress and a published $K_t$ for a hole in a plate (Equation \@ref(eq:kt-12)). Then you will run the FEA **four times** with progressively finer meshes, record the peak von Mises stress each time, and apply Equation \@ref(eq:convergence-12) to find where it converges. Finally you will compare your converged FEA peak to your hand calculation. They should agree within roughly 10% — and if they do, you have just *validated* your own simulation skills.
+:::
+
+### Week 2 Lab Guide: Convergence Study and Hand-Calc Check {#sec:lab2-12}
+
+**Hand calculation first (do this before touching the computer).** For a wide plate of width $w$, thickness $t$, with a central hole of diameter $d$, under tension force $P$:
+
+- Nominal stress on the reduced section: $\sigma_{nom} = \dfrac{P}{(w - d)\,t}$
+- A hole in a plate has a well-known concentration factor of about $K_t \approx 3$ for a small hole.
+- Predicted peak: $\sigma_{max} = K_t\,\sigma_{nom}$ from Equation \@ref(eq:kt-12).
+
+Record your predicted peak stress.
+
+**Then the convergence study.** Set up the static study (material: AISI 1020, one end fixed, tension load on the other end). Run it four times, each time reducing the global element size (or using local mesh control around the hole):
+
+```{r fig-lab2-results-12, fig.cap="Worked example of the Week 2 lab convergence table. Each refinement is compared with the previous run until the percentage change drops below 5%.", fig.width=8, fig.height=4.5}
+library(ggplot2)
+
+lab2 <- data.frame(
+  run = factor(1:4, labels = c("Coarse", "Medium", "Fine", "Very fine")),
+  elements = c(2400, 7800, 21000, 52000),
+  peak = c(142, 158, 166, 169)
+)
+# percentage change vs previous
+lab2$pct_change <- c(NA, abs(diff(lab2$peak)) / lab2$peak[-1] * 100)
+
+ggplot(lab2, aes(x = elements, y = peak)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  geom_point(size = 3.5, color = "darkblue") +
+  geom_text(aes(label = paste0(peak, " MPa")), vjust = -1, size = 3.5) +
+  geom_hline(yintercept = 170, linetype = "dashed", color = "firebrick") +
+  annotate("text", x = 45000, y = 173, label = "Hand calc ~170 MPa",
+           color = "firebrick", size = 3.6) +
+  labs(x = "Number of elements", y = "Peak von Mises stress (MPa)") +
+  ylim(135, 178) +
+  theme_minimal(base_size = 13)
+```
+
+In the worked example of Figure \@ref(fig:fig-lab2-results-12), the jump from Fine to Very-fine is $|169-166|/169 \times 100 = 1.8\%$ — below our 5% threshold, so the result has converged at about 169 MPa, agreeing nicely with the 170 MPa hand calculation. **Your numbers will differ; what matters is that you can demonstrate convergence and a sensible match.**
+
+::: {.callout-recall}
+**Theory Recall:** The reason your coarse mesh read low (142 MPa) is exactly the under-prediction shown in Figure \@ref(fig:fig-convergence-12) — a coarse mesh cannot resolve the steep stress gradient around the hole. The reason your hand calc and converged FEA agree is that both are describing the same physical stress concentration captured by $K_t$ in Equation \@ref(eq:kt-12).
+:::
+
+::: {.callout-check}
+**Quick Check:**  
+1. If two successive mesh refinements give 210 MPa and 214 MPa, what is the percentage change, and has the study converged?  
+2. Your FEA peak keeps doubling every time you refine the mesh near a corner. What does this tell you, and what should you do?
+:::
+
+---
+
+## Week 3 — Validation, Redesign, and Reporting {#sec:week3-12}
+
+### Verification Versus Validation {#sec:vandv-12}
+
+Engineers draw a careful line between two words that sound identical to everyone else.
+
+**Verification** asks: *did I solve the equations correctly?* That is what a convergence study checks — it confirms the math is clean. **Validation** asks the harder question: *did I solve the correct equations — does my model match reality?* You validate by comparing your FEA to something independent: a hand calculation, a published result, or a physical test.
+
+Last week's plate study did both. The convergence study verified the math; the hand-calc comparison validated the model. This week we validate against the analytical beam formulas you already know.
+
+For a cantilever beam of length $L$, carrying an end load $P$, with rectangular cross-section, the maximum bending stress at the wall is:
+
+\begin{equation}
+\sigma_{max} = \frac{M c}{I} = \frac{P L \, c}{I}
+(\#eq:bending-12)
+\end{equation}
+
+and the maximum deflection at the free end is:
+
+\begin{equation}
+\delta_{max} = \frac{P L^3}{3 E I}
+(\#eq:deflection-12)
+\end{equation}
+
+where $M = PL$ is the bending moment at the wall, $c$ is the distance from the neutral axis to the outer fibre, $I$ is the second moment of area of the cross-section, and $E$ is Young's modulus. These are the "true" answers we will hold the FEA up against.
+
+```{r fig-validation-12, fig.cap="Validation of FEA against the analytical cantilever solution. Across five load cases the converged FEA tracks the hand-calculated bending stress closely, building confidence in the model.", fig.width=8, fig.height=5}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+# Cantilever: L = 200 mm, b = 20 mm, h = 10 mm, E = 200 GPa
+L <- 200; b <- 20; h <- 10; E <- 200000
+I <- b * h^3 / 12
+c_dist <- h / 2
+
+loads <- c(500, 1000, 1500, 2000, 2500)   # N
+analytical <- loads * L * c_dist / I        # MPa
+
+set.seed(7)
+# FEA: close to analytical with small realistic scatter
+fea <- analytical * runif(length(loads), 0.97, 1.04)
+
+val <- data.frame(load = loads, Analytical = analytical, FEA = fea) %>%
+  pivot_longer(-load, names_to = "source", values_to = "stress")
+
+ggplot(val, aes(load, stress, color = source, shape = source)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3.5) +
+  scale_color_manual(values = c("Analytical" = "firebrick", "FEA" = "steelblue")) +
+  labs(x = "Applied end load P (N)", y = "Max bending stress (MPa)", color = NULL, shape = NULL) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+```
+
+Figure \@ref(fig:fig-validation-12) is what a healthy validation looks like: the FEA points hug the analytical line. If your FEA were wildly off, you would *not* simply trust the computer — you would hunt for the bad fixture, missing load, or unconverged mesh causing the disagreement.
+
+::: {.callout-industry}
+**Industry Application:** In defense and aerospace work, an FEA result is not accepted into a design package unless it is accompanied by exactly this kind of validation — either a hand calculation or correlation to a physical test. The phrase auditors use is "an analysis is only as good as its validation." The habit you build in this lab is the same habit that keeps you employable in regulated industries.
+:::
+
+### Design Iteration: Strong Enough, and Not a Gram More {#sec:iteration-12}
+
+In the real world, a part is rarely "done" after the first analysis. The first design is usually either too weak (FOS below the target) or too heavy (FOS far above the target, meaning wasted material and cost). Good engineering walks the design toward the sweet spot: **meet the required factor of safety while minimising mass.**
+
+This is an iterative loop: analyse → check FOS and mass → modify geometry (add a rib, remove material, change a fillet, thin a wall) → re-analyse. Figure \@ref(fig:fig-iteration-12) shows how a series of design iterations can cut mass while staying above a required FOS of 2.0.
+
+```{r fig-iteration-12, fig.cap="Design iteration history. Each version trades mass against factor of safety; the goal is the lightest design that still clears the required FOS line.", fig.width=8, fig.height=5}
+library(ggplot2)
+
+iter <- data.frame(
+  version = factor(c("v1 baseline", "v2 add fillet", "v3 lighten web",
+                     "v4 thin flange", "v5 too aggressive"),
+                   levels = c("v1 baseline", "v2 add fillet", "v3 lighten web",
+                              "v4 thin flange", "v5 too aggressive")),
+  mass = c(1.85, 1.78, 1.42, 1.20, 0.98),   # kg
+  fos  = c(1.6, 2.6, 2.3, 2.05, 1.7)
+)
+
+ggplot(iter, aes(mass, fos)) +
+  geom_hline(yintercept = 2.0, linetype = "dashed", color = "firebrick", linewidth = 0.9) +
+  geom_path(color = "grey60", linewidth = 0.8,
+            arrow = arrow(length = unit(0.18, "cm"), type = "closed")) +
+  geom_point(aes(color = fos >= 2.0), size = 5) +
+  geom_text(aes(label = version), vjust = -1.1, size = 3.3) +
+  scale_color_manual(values = c("TRUE" = "darkgreen", "FALSE" = "firebrick"),
+                     labels = c("Below target", "Meets target"), name = "FOS >= 2.0") +
+  annotate("text", x = 1.6, y = 2.07, label = "Required FOS = 2.0",
+           color = "firebrick", size = 3.6) +
+  labs(x = "Part mass (kg)", y = "Minimum factor of safety") +
+  ylim(1.4, 2.8) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+```
+
+The winning design in Figure \@ref(fig:fig-iteration-12) is **v4**: it sits just above the required FOS of 2.0 at the lowest mass that still clears the line (v5 went too far and dropped below the requirement). Notice that v1 *failed* the requirement — adding a fillet in v2 (lowering $K_t$, Equation \@ref(eq:kt-12)) was what made the rest of the lightening possible.
+
+::: {.callout-activity}
+**Lab Connection — Week 3 Lab:** You will be given a lifting bracket (`lifting_bracket.SLDPRT`) that currently fails its required factor of safety of 2.0 under a 5 kN load. Your task over the two-hour lab: (1) confirm the failing baseline with a *converged* mesh, (2) validate one stress value against a hand calculation using Equation \@ref(eq:bending-12), (3) iterate the geometry through at least three versions to reach FOS ≥ 2.0 while reducing mass, and (4) produce a one-page analysis report. This single lab uses every skill from all three weeks at once.
+:::
+
+### Week 3 Lab Guide and the Engineering Report {#sec:lab3-12}
+
+Run the redesign loop, then write it up. A professional FEA report — the deliverable for this lab — must let a reviewer reproduce and trust your work. Include, at minimum:
+
+- **Objective and requirement:** what you analysed and the target FOS.
+- **Model setup:** material, fixtures, and loads, stated explicitly with units.
+- **Mesh and convergence evidence:** a small table showing peak stress versus mesh refinement (your Week 2 skill).
+- **Validation:** the hand calculation you compared against, and the percentage difference (Equation \@ref(eq:convergence-12)).
+- **Results:** final von Mises, displacement, and FOS plots.
+- **Iteration history and conclusion:** what you changed, why, and the mass saved.
+
+```{r tab-report-12}
+library(knitr)
+library(kableExtra)
+
+report <- data.frame(
+  Section = c("Objective", "Model setup", "Convergence", "Validation", "Results", "Conclusion"),
+  `What a reviewer checks` = c(
+    "Is the requirement (target FOS, load) stated clearly?",
+    "Could someone rebuild this study from the description alone?",
+    "Is there evidence the mesh is fine enough (< 5% change)?",
+    "Does an independent calculation agree within ~10%?",
+    "Are von Mises, displacement, and FOS all reported with units?",
+    "Does the final design meet the requirement, and what did it cost in mass?"
+  ),
+  check.names = FALSE
+)
+
+kable(report, caption = "What every section of your Week 3 FEA report must demonstrate.", booktabs = TRUE) %>%
+  kable_styling(full_width = knitr::is_html_output(), bootstrap_options = c("striped", "hover")) %>%
+  column_spec(1, bold = TRUE, width = if (knitr::is_html_output()) "22%" else NULL)
+```
+
+::: {.callout-recall}
+**Theory Recall:** Every line of the report in Table \@ref(tab:tab-report-12) maps to a concept you learned: the convergence row is Figure \@ref(fig:fig-convergence-12) and Equation \@ref(eq:convergence-12); the validation row is the verification-versus-validation idea from Section \@ref(sec:vandv-12); the FOS in the results row is Equation \@ref(eq:fos-12). The report is not busywork — it is the theory, made auditable.
+:::
+
+::: {.callout-challenge}
+**Challenge Problem:** For students who finish early — your lifting bracket is sized for a *static* 5 kN load. In service it is loaded and unloaded thousands of times. Research the difference between a static factor of safety and a *fatigue* analysis. Why might a part that passes a static study at FOS = 2.0 still crack after a year of cyclic loading? (Hint: think back to the cracked sensor bracket in our opening story.)
+:::
+
+## Key Takeaways {#sec:takeaways-12}
+
+- **FEA divides one unsolvable part into many simple elements** and solves $[K]\{u\}=\{F\}$ (Equation \@ref(eq:governing-12)) for displacement, then works back to stress.
+- **Von Mises stress** (Equation \@ref(eq:vonmises-12)) predicts yielding in ductile metals; the **factor of safety** (Equation \@ref(eq:fos-12)) compares it to the material's yield strength.
+- The **five-step workflow** — material, fixtures, loads, mesh, run — is identical in every static study you will ever build.
+- **A single run on a default mesh is a guess.** Only a converged result (Equation \@ref(eq:convergence-12), Figure \@ref(fig:fig-convergence-12)) is trustworthy.
+- **Stress concentrations** (Equation \@ref(eq:kt-12)) are real and converge; **singularities** at sharp corners are numerical artifacts that never converge and must be fixed in the geometry.
+- **Verify** that you solved the math right; **validate** that you solved the right problem by comparing to a hand calculation or test.
+- Good design **meets the required FOS at minimum mass** through iteration — not on the first try.
+
+## Practice Problems {#sec:problems-12}
+
+1. **(Automotive)** A steel suspension bracket shows a converged peak von Mises stress of 240 MPa under a 4 kN load. The material yield strength is 420 MPa. Calculate the factor of safety. If your company requires FOS ≥ 2.0 for suspension parts, does this design pass? If not, by what percentage must you reduce the peak stress?
+
+2. **(General)** You run a convergence study and obtain peak stresses of 120, 145, 158, 163, and 165 MPa for increasingly fine meshes. Using Equation \@ref(eq:convergence-12), at which refinement step would you declare convergence (5% threshold)? What is your best estimate of the true peak stress?
+
+3. **(Food processing)** A 316 stainless steel mounting arm for a wash-down nozzle is modelled as a cantilever, $L = 150$ mm, rectangular section $b = 25$ mm by $h = 8$ mm, $E = 193{,}000$ MPa, carrying a 300 N end load. Using Equations \@ref(eq:bending-12) and \@ref(eq:deflection-12), hand-calculate the maximum bending stress and the end deflection. These are the values you would compare your FEA against to *validate* the model.
+
+4. **(Defense)** Your FEA of a sharp-cornered housing shows peak stress rising from 280 to 410 to 590 MPa as you refine the mesh three times. Explain, using the concept of a stress singularity, why these numbers should not appear in your final report, and describe the single geometry change that would make the result converge.
+
+5. **(Design)** A baseline bracket has FOS = 3.2 and mass 2.4 kg. Your target is FOS ≥ 1.8. Sketch a strategy: which features would you modify to remove mass, and how would you confirm at each step that you have not dropped below the required factor of safety?
+
+## Further Resources {#sec:resources-12}
+
+- **SOLIDWORKS Simulation help:** the official "Static Analysis" and "Meshing" documentation within the Simulation add-in (Help → SOLIDWORKS Simulation).
+- **Reference text:** *Roark's Formulas for Stress and Strain* — the standard source for stress concentration factors ($K_t$) you will need for hand-calc validation.
+- **Strength-of-materials review:** revisit your earlier course notes on bending stress ($Mc/I$) and beam deflection; they are the backbone of every validation in this chapter.
+
+::: {.callout-video}
+**Watch:** Before the Week 2 lab, search for the official "SOLIDWORKS Simulation — Mesh Convergence" tutorial on the SOLIDWORKS YouTube channel. (Drop the clip's video ID into the `include_youtube()` helper here once you have chosen one for your course.)
+
+**After watching:** How does the presenter decide that the mesh is fine enough? Compare their criterion to our 5% rule from Equation \@ref(eq:convergence-12).
+:::
+
+::: {.callout-summary}
+**Bringing It All Together:**
+
+- **Week 1** taught you *what* FEA computes and *how* to drive the five-step workflow — practised on the cantilever bracket.
+- **Week 2** taught you *whether to believe the number* through convergence, stress concentrations, and singularities — practised on the plate with a hole, checked by hand.
+- **Week 3** taught you to *validate, iterate, and report* — practised by redesigning the lifting bracket to a target factor of safety.
+
+If you can take a CAD part, set up a converged static study, validate it against a calculation, and redesign it to a target safety factor with a clean report — you can do the core structural job asked of a manufacturing engineering technologist in automotive, food, or defense industry today.
+:::
