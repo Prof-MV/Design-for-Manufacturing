@@ -40,6 +40,21 @@ embed_youtube <- function(video_id, title = "Watch Video") {
   }
 }
 
+#' Inject the bundled jQuery dependency for kableExtra's kePrint.js
+#'
+#' Quarto's Bootstrap 5 HTML theme dropped jQuery, but kableExtra's
+#' kable_styling() still loads kePrint.js, which calls $(...) immediately.
+#' Call this once per chapter, before any kable_styling() table, so the
+#' jquery script tag is emitted ahead of kePrint.js in the rendered <head>.
+#' knitr::is_html_output() also returns TRUE for epub (it's HTML-based
+#' internally), but Quarto's epub writer rejects raw HTML dependencies, so
+#' epub must be excluded explicitly.
+inject_jquery <- function() {
+  if (knitr::is_html_output(excludes = "epub")) {
+    htmltools::tagList(rmarkdown::html_dependency_jquery())
+  }
+}
+
 #' Create a styled info box with conditional output
 #'
 #' In HTML output, displays a colored box.

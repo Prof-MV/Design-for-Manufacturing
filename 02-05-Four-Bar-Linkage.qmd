@@ -1,8 +1,19 @@
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
 ## Four-Bar Linkages {#chap-09-linkages}
 
 ```{r setup-09, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
 source("R/helpers.R")
+inject_jquery()
 ## include the required packages to make sure the page can be built.
 source("R/required_packages.R")
 
@@ -754,6 +765,80 @@ Determine:
 ###### Solution {-}
 
 
+::: {.content-visible when-format="html"}
+*This one is live — edit the link lengths below (`a`, `b`, `c`, `g`) and re-run the cell to reclassify the mechanism.*
+
+```{webr-r}
+#| label: grashof-interactive
+## Given link lengths (mm) - edit these and re-run!
+g <- 100  ## ground
+a <- 40   ## input
+b <- 80   ## coupler
+c <- 60   ## output
+
+## Sort to find S (shortest) and L (longest)
+links <- c(a, b, c, g)
+link_names <- c("a (input)", "b (coupler)", "c (output)", "g (ground)")
+sorted_idx <- order(links)
+
+S <- links[sorted_idx[1]]
+S_name <- link_names[sorted_idx[1]]
+L <- links[sorted_idx[4]]
+L_name <- link_names[sorted_idx[4]]
+P <- links[sorted_idx[2]]
+Q <- links[sorted_idx[3]]
+
+## Grashof check
+SL <- S + L
+PQ <- P + Q
+is_grashof <- SL <= PQ
+
+## Determine mechanism type
+if (is_grashof) {
+  if (S_name == "g (ground)") {
+    mech_type <- "Double-Crank"
+  } else if (S_name == "a (input)") {
+    mech_type <- "Crank-Rocker"
+  } else if (S_name == "c (output)") {
+    mech_type <- "Rocker-Crank"
+  } else {
+    mech_type <- "Double-Rocker"
+  }
+} else {
+  mech_type <- "Triple-Rocker (Non-Grashof)"
+}
+
+## Print the results
+cat("Shortest link (S):", S, "mm -", S_name, "\n")
+cat("Longest link (L): ", L, "mm -", L_name, "\n")
+cat("S + L =", SL, "mm\n")
+cat("P + Q =", PQ, "mm\n\n")
+
+if (SL < PQ) {
+  cat("S + L < P + Q: GRASHOF\n")
+} else if (SL == PQ) {
+  cat("S + L = P + Q: CHANGE POINT\n")
+} else {
+  cat("S + L > P + Q: NON-GRASHOF\n")
+}
+cat("Mechanism type:", mech_type, "\n\n")
+
+## Interpretation
+if (is_grashof) {
+  cat("Since S + L (", SL, "mm) <= P + Q (", PQ, "mm), this is a Grashof linkage.\n")
+  cat("The shortest link is", S_name, "(", S, "mm).\n")
+  if (S_name == "a (input)") {
+    cat("Since the shortest link is the input, this is a Crank-Rocker:\n")
+    cat("the input will rotate continuously while the output oscillates.\n")
+  }
+} else {
+  cat("Since S + L (", SL, "mm) > P + Q (", PQ, "mm), this is a non-Grashof linkage.\n")
+  cat("No link can complete a full rotation - all links merely rock (Triple-Rocker).\n")
+}
+```
+:::
+
+::: {.content-visible unless-format="html"}
 ```{r grashof-example-calc, echo=FALSE, message=FALSE}
 ## Given link lengths
 g <- 100  ## ground
@@ -822,7 +907,7 @@ results %>%
 - The shortest link is the **input link (a = `r a` mm)**.
 - When the shortest link is the input (crank), the mechanism is a **Crank-Rocker**.
 - The input (link 2) will rotate continuously while the output (link 4) oscillates.
-
+:::
 :::
 
 ***
@@ -843,6 +928,66 @@ For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), ca
 ###### Solution {-}
 
 
+::: {.content-visible when-format="html"}
+*This one is live — edit the link lengths below (`a`, `b`, `c`, `g`) and re-run the cell to see the transmission-angle results and design-quality verdict update.*
+
+```{webr-r}
+#| label: trans-angle-interactive
+## Given link lengths (mm) - edit these and re-run!
+a <- 40   ## input link
+b <- 80   ## coupler
+c <- 60   ## output link
+g <- 100  ## ground link
+
+## Function to calculate transmission angle
+calc_trans_angle <- function(theta2, a, b, c, g) {
+  ## Convert to radians
+  t2 <- theta2 * pi / 180
+
+  ## Calculate diagonal (distance from O4 to A)
+  ## Using law of cosines
+  diag_sq <- a^2 + g^2 - 2*a*g*cos(t2)
+
+  ## Transmission angle using law of cosines
+  cos_mu <- (b^2 + c^2 - diag_sq) / (2*b*c)
+
+  ## Clamp to valid range
+  cos_mu <- max(-1, min(1, cos_mu))
+
+  mu <- acos(cos_mu) * 180 / pi
+  return(mu)
+}
+
+## Calculate for theta2 = 60 deg
+mu_60 <- calc_trans_angle(60, a, b, c, g)
+
+## Find min and max through full rotation
+theta2_range <- seq(0, 360, by = 1)
+mu_values <- sapply(theta2_range, calc_trans_angle, a = a, b = b, c = c, g = g)
+mu_min <- min(mu_values, na.rm = TRUE)
+mu_max <- max(mu_values, na.rm = TRUE)
+theta_at_min <- theta2_range[which.min(mu_values)]
+
+## Print the results
+cat("At theta2 = 60 deg:          mu =", round(mu_60, 1), "deg\n")
+cat("Minimum transmission angle: ", round(mu_min, 1), "deg (at theta2 =", theta_at_min, "deg)\n")
+cat("Maximum transmission angle: ", round(mu_max, 1), "deg\n\n")
+
+## Design quality verdict
+if (mu_min > 40) {
+  cat("Design Quality: GOOD\n")
+  cat("Minimum transmission angle exceeds 40 deg - acceptable design\n")
+} else if (mu_min > 30) {
+  cat("Design Quality: MARGINAL\n")
+  cat("Consider redesigning for better force transmission\n")
+} else {
+  cat("Design Quality: POOR\n")
+  cat("Redesign required - excessive joint forces at minimum transmission angle\n")
+}
+```
+:::
+
+::: {.content-visible unless-format="html"}
 ```{r trans-angle-example, echo=FALSE, message=FALSE}
 ## Given
 a <- 40
@@ -897,9 +1042,6 @@ trans_results %>%
   row_spec(2, background = ifelse(mu_min > 40, "#E8F5E9", "#FFEBEE"), bold = TRUE)
 ```
 
-:::
-
-
 ###### Quality Assessment {-}
 
 ```{r quality-assessment, echo=FALSE, message=FALSE}
@@ -921,6 +1063,8 @@ if (mu_min > 40) {
 **Design Quality:** `r quality`
 
 **Recommendation:** `r recommendation`
+:::
+:::
 
 ***
 

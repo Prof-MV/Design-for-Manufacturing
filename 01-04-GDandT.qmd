@@ -832,10 +832,10 @@ total_tolerance <- part_1$tolerance + part_2$tolerance + part_3$tolerance
 min_length <- nominal_total - total_tolerance
 max_length <- nominal_total + total_tolerance
 
-cat("Minimum total length:", min_length, "mm\\n")
-cat("Nominal total length:", nominal_total, "mm\\n")
-cat("Maximum total length:", max_length, "mm\\n")
-cat("Total tolerance stack-up: ±", total_tolerance, "mm\\n")
+cat("Minimum total length:", min_length, "mm\n")
+cat("Nominal total length:", nominal_total, "mm\n")
+cat("Maximum total length:", max_length, "mm\n")
+cat("Total tolerance stack-up: ±", total_tolerance, "mm\n")
 ```
 
 ### 10. Classroom Activity: Interactive Tolerance Design {-}
@@ -883,13 +883,13 @@ server <- function(input, output) {
     total_tolerance <- tolerance + bonus
     
     output$results <- renderPrint({
-      cat("=== GD&T Calculation Results ===\\n\\n")
-      cat("Nominal Size:", nominal, "mm\\n")
-      cat("Base Tolerance:", tolerance, "mm\\n")
-      cat("MMC Condition:", mmc, "mm\\n")
-      cat("Actual Feature Size:", actual, "mm\\n")
-      cat("Bonus Tolerance:", bonus, "mm\\n")
-      cat("Total Tolerance:", total_tolerance, "mm\\n")
+      cat("=== GD&T Calculation Results ===\n\n")
+      cat("Nominal Size:", nominal, "mm\n")
+      cat("Base Tolerance:", tolerance, "mm\n")
+      cat("MMC Condition:", mmc, "mm\n")
+      cat("Actual Feature Size:", actual, "mm\n")
+      cat("Bonus Tolerance:", bonus, "mm\n")
+      cat("Total Tolerance:", total_tolerance, "mm\n")
     })
     
     output$tolerance_plot <- renderPlot({

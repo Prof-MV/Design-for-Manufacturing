@@ -79,3 +79,7 @@ format:
 
 execute:
   freeze: auto
+
+knitr:
+  opts_chunk:
+    results: hold

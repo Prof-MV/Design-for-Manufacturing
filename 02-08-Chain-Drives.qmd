@@ -3,6 +3,7 @@
 ```{r setup-11, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
 source("R/helpers.R")
+inject_jquery()
 ## include the required packages to make sure the page can be built.
 source("R/required_packages.R")
 
