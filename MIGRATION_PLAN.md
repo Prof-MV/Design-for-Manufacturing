@@ -170,36 +170,49 @@ chunk by its label or caption text in the source.
 
 ## Context
 
-This folder (`DesignForManufacturing`) is the **live** working directory for
-the "Design for Manufacturing" bookdown textbook — it's currently tied to
-`origin` = `https://github.com/Prof-MV/DesignNotes.git` on `master`, and
-that repo's GitHub Pages (or a manually-configured Pages source pointing at
-`docs/`) is presumably what students see today. This is different from the
-sister ENGR-3027 migration, where the working folder was a throwaway copy of
-a separate source-of-truth repo — here there is no separate source of truth.
-Per the user's explicit choice, this migration converts **this folder's own
-`.git` in place** (old `.git`/history discarded locally; the `DesignNotes`
-repo on GitHub is untouched since nothing is force-pushed there).
+This folder (`DesignForManufacturing`) was originally tied to
+`origin` = `https://github.com/Prof-MV/DesignNotes.git` on `master`. Per the
+user's explicit choice, this migration converted **this folder's own `.git`
+in place** (old `.git`/history discarded locally — the `DesignNotes` repo on
+GitHub is untouched since nothing was ever pushed there this session).
 
-The goal is to:
+**Repo identity — resolved mid-Phase-1, deviates from the original plan
+below:** `index.Rmd`'s `url:`/`github-repo:` fields and `_output.yml`'s edit
+link declare `Prof-MV/Design-for-Manufacturing` as this book's real identity
+— and that repo **already exists** on GitHub (public, created 2026-01-10,
+last pushed 2026-05-29, same chapter files, clearly the actual canonical repo
+for this book — `DesignNotes` was some other/unrelated local remote
+mix-up). Confirmed with the user: that pre-existing public repo *is* the
+real one. So instead of creating a brand-new private repo, the Quarto
+scaffold was pushed as a **new branch (`quarto-migration`) on the existing
+`Prof-MV/Design-for-Manufacturing` repo**, leaving its `master` branch
+(the current live bookdown content) completely untouched. The repo stays
+**public** (not private, contrary to the original plan's assumption below —
+not revisited since the user confirmed pushing to the existing repo as-is).
+
+The original goal, before that discovery, was:
 
 1. Convert the bookdown project (30 `.Rmd` chapters + `index.Rmd`) to a
    Quarto book project.
 2. Push the converted project to a **new, private** GitHub repo named
-   **`Design-for-Manufacturing`** — this matches what `index.Rmd`'s
+   **`Design-for-Manufacturing`** — ~~this matches what `index.Rmd`'s
    `url:`/`github-repo:` fields and `_output.yml`'s edit link *already*
-   declare (both say `Prof-MV/Design-for-Manufacturing`, even though the
-   actual remote today is `DesignNotes` — apparently a stale leftover from
-   an earlier rename).
+   declare~~ — see resolution above: no new repo was created, the existing
+   one was used instead, on a new branch, and it's public not private.
 3. Host the rendered book on **GitHub Pages**, same pattern as today
-   (render → `docs/` → push to `gh-pages` branch via Actions).
+   (render → `docs/` → push to `gh-pages` branch via Actions) — **not yet
+   revisited** in light of the repo-identity discovery above; Phase 5 should
+   confirm whether `Design-for-Manufacturing`'s existing Pages setup (if any)
+   should be repointed at the new branch/workflow, or left alone until the
+   migration is merged to `master`.
 4. EC2 hosting was considered and **not** selected — GitHub Pages covers the
    "gitbook equivalent" need with zero server maintenance.
 
 Decisions already made with the user:
-- New repo: **`Design-for-Manufacturing`**, private, fresh git history,
-  created by converting this folder's own `.git` in place (not a separate
-  sibling folder).
+- Repo: pushed to the **existing** `Prof-MV/Design-for-Manufacturing` repo
+  (public) on a **new `quarto-migration` branch** — see resolution above.
+  `master` on that repo (today's live bookdown content) is untouched; no
+  merge/PR has been opened yet.
 - Keep all three output formats: HTML (Quarto book, replaces gitbook), PDF, EPUB.
 - Keep the current `NN-MM-Name` chapter numbering/file scheme (e.g.
   `01-00-Design.Rmd`, `02-07-Belt-Pulley.Rmd`).
@@ -226,20 +239,32 @@ Decisions already made with the user:
   `Posit-Software.Quarto`). `gh` was already authenticated as `Prof-MV`.
 
 **Open items — flagged, not yet resolved:**
-1. GitHub Pages sites built from a *private* repo are still publicly
-   reachable at the Pages URL by default (only the source code stays
-   private) unless the org is on GitHub Enterprise. Flag before Phase 5
-   (CI/Pages setup) if that's not the intended visibility model.
-2. The current `DesignNotes` repo's workflow pushes to a `gh-pages` branch
-   via `peaceiris/actions-gh-pages`, but `git ls-remote` showed **no
-   `gh-pages` branch** on that remote — only `master`, with `docs/`
-   committed directly there. Either the workflow never successfully ran, or
-   Pages is actually configured to serve `docs/` from `master`. This plan
-   defaults to the same `gh-pages`-branch deploy pattern as the sister
-   migration for the new repo; revisit in Phase 5 if the old Pages source
-   turns out to be configured differently.
+1. GitHub Pages visibility: **now moot as originally framed** — the repo
+   turned out to already be public (see repo-identity resolution above), so
+   the "private repo, but Pages is public anyway" caveat doesn't apply. Still
+   worth confirming in Phase 5 what (if anything) the existing repo's Pages
+   settings currently point at, before wiring up a new deploy workflow.
+2. The `DesignNotes` repo's workflow pushes to a `gh-pages` branch via
+   `peaceiris/actions-gh-pages`, but `git ls-remote` showed **no `gh-pages`
+   branch** on that remote — only `master`, with `docs/` committed directly
+   there. Moot for `DesignNotes` itself now (this folder no longer points at
+   it), but check the **actual** target repo, `Design-for-Manufacturing`,
+   for the same thing in Phase 5 before assuming a `gh-pages`-branch deploy
+   pattern is right.
 3. `SuggestedChapters.md` (chapter-roadmap note, mostly already implemented)
    was dropped per the plan's stated default — say so if you wanted it kept.
+4. **New, from the repo-identity discovery:** what should happen to the
+   `DesignNotes` repo on GitHub? It was never touched by this migration
+   (nothing was pushed there), but it's now an orphaned/unexplained remote
+   this local folder no longer references. Worth asking the user directly
+   rather than guessing — could be unrelated content, an abandoned rename
+   attempt, or something else entirely.
+5. **New:** the `quarto-migration` branch is not yet merged into
+   `Design-for-Manufacturing`'s `master` (today's live bookdown content).
+   Decide the merge strategy (PR + review vs. direct merge vs. stay on a
+   branch until the full 6-phase migration is done) before Phase 6 wraps up
+   — don't merge prematurely while chapters/crossrefs/CI are still
+   mid-conversion.
 
 ## Known cleanup items (confirmed junk, not source content) — done in Phase 1
 
@@ -268,36 +293,53 @@ Decisions already made with the user:
 
 ## Status
 
-- **Phase 1: in progress.** Junk/orphaned directories deleted (see above).
+- **Phase 1: done.** Junk/orphaned directories deleted (see above).
   `_quarto.yml` scaffold created (`book:` metadata mirrored from
   `index.Rmd`/`_output.yml`; chapters still reference the existing `.Rmd`
   files directly — renaming to `.qmd` deferred to Phase 3, same as the
   sister project). Quarto-appropriate `.gitignore` written (`_freeze/` is
-  **not** ignored — same reasoning as the sister project: kableExtra/
-  ggplot2-heavy chapters make committing the freeze cache worth it for CI
-  speed). `README.md` rewritten with real content. `quarto`/`gh` CLI
-  installed (see above). First full `quarto render` in progress to verify
-  the scaffold before `git init`/repo creation — **not yet confirmed
-  clean**; do not treat Phase 1 as done until that render finishes without
-  errors.
-- Not yet done: `git init` (this folder's existing `.git`/DesignNotes remote
-  has not been touched yet), GitHub repo creation, push, renaming chapters
-  to `.qmd`, converting `\@ref()` crossrefs, PDF/EPUB formats, CI workflow.
+  **not** ignored — kableExtra/ggplot2-heavy chapters make committing the
+  freeze cache worth it for CI speed; `site_libs/`, root-level `*.tex`
+  compile artifacts, and `.claude/` **are** ignored — added mid-phase after
+  a first `git add -A` accidentally staged them, see below). `README.md`
+  rewritten with real content. `quarto`/`gh` CLI installed (see above).
+  **Full three-format render (HTML/PDF/EPUB) verified clean** — took 11
+  rounds of fixing real content bugs the original bookdown project's
+  PDF/EPUB targets had never actually surfaced (full gotcha list at the top
+  of this file: kableExtra `full_width`/`column_spec` LaTeX issues, 7
+  mislabeled WebP-as-PNG/JPG images, 5 animated GIFs with no LaTeX
+  equivalent, a missing `rsvg-convert` dependency worked around by
+  pre-converting the one referenced SVG, backslash-style math delimiters,
+  and an unescaped `%` inside `\text{}`). Old `.git` (tied to `DesignNotes`)
+  removed and reinitialized fresh, per the user's explicit choice.
+  **Repo identity resolved** (see Context above): pushed to a new
+  `quarto-migration` branch on the **existing** `Prof-MV/
+  Design-for-Manufacturing` repo (public), not a newly-created private repo
+  as originally planned — `master` there (today's live bookdown content) is
+  untouched.
+- Not yet done: renaming chapters to `.qmd`, converting `\@ref()` crossrefs,
+  porting PDF/EPUB settings from `_bookdown.yml`/`_output.yml` into
+  `_quarto.yml` properly (Phase 4 — the current `_quarto.yml` `format:`
+  block is a first pass only), CI workflow, deciding the `DesignNotes` repo's
+  fate, deciding the `quarto-migration` → `master` merge strategy.
 - `_bookdown.yml` / `_output.yml` intentionally **left in place** for now
   (not yet superseded — PDF/EPUB settings still need porting in Phase 4);
   remove them in Phase 6 once `_quarto.yml` fully covers their content.
 
 ## Phased execution (one phase ≈ one future chat)
 
-**Phase 1 — Repo & scaffold**
+**Phase 1 — Repo & scaffold — done**
 - In this working copy: delete confirmed junk (done — see above).
 - Create `_quarto.yml` (done — see above), `output-dir: docs`.
 - Write a Quarto-appropriate `.gitignore` (done) and a real `README.md`
   (done).
-- Confirm `quarto render` succeeds clean before going further.
-- Install/authenticate `gh` CLI (done), `git init` in this folder (replacing
-  its current DesignNotes-linked `.git`), initial commit, create the private
-  `Design-for-Manufacturing` GitHub repo (`gh repo create`), push.
+- Confirm `quarto render` succeeds clean before going further (done — all
+  three formats, after fixing 11 real content bugs, see gotcha list above).
+- Install/authenticate `gh` CLI (done), `git init` in this folder replacing
+  its DesignNotes-linked `.git` (done), initial commit (done), push to a new
+  `quarto-migration` branch on the existing `Design-for-Manufacturing` repo
+  (done — see repo-identity resolution in Context above; no new repo was
+  created).
 
 **Phase 2 — Front matter**
 - Convert `index.Rmd` → `index.qmd`; move its YAML into `_quarto.yml`
