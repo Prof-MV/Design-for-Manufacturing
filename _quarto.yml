@@ -15,6 +15,7 @@ book:
   page-footer:
     left: "Design for Manufacturing"
     right: "Built with Quarto"
+  downloads: [pdf, epub]
   chapters:
     - index.qmd
     - part: "Design and Drafting"
@@ -70,7 +71,7 @@ format:
   pdf:
     documentclass: book
     include-in-header: preamble.tex
-    latex-engine: xelatex
+    pdf-engine: xelatex
     citation-package: natbib
     keep-tex: true
   epub:
