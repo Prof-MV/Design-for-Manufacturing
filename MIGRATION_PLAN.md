@@ -162,6 +162,22 @@ occurrence counts.)
     especially when run through a shell pipe with escaped regex — rerun
     with a different tool/method before concluding a pattern doesn't occur.
 
+13. **CI-specific, not PDF-specific: raw `install.packages(..., quiet =
+    TRUE)` in a setup script can fail silently on a fresh CI runner.**
+    `quiet = TRUE` suppresses compile-error output, not just download
+    progress — if a package needs a system library the bare runner doesn't
+    have (classic culprits: `textshaping`/`systemfonts`/`ragg` needing
+    `libharfbuzz-dev`/`libfribidi-dev`/`libfontconfig1-dev`), the install
+    fails with no visible error, and the *real* symptom shows up minutes
+    later and one level removed — a `library()` call failing with `there is
+    no package called 'X'` for some *downstream* package, not the one that
+    actually failed to compile. Works fine locally because dev machines
+    already have these libraries installed from unrelated past work. Fix:
+    don't hand-roll `install.packages()` in CI even if it's what the local
+    setup script uses — use `r-lib/actions/setup-r-dependencies` (pak-based,
+    auto-resolves and installs the correct system libraries via apt) for the
+    CI install step specifically.
+
 General diagnostic tip: when `quarto render --to pdf` fails, the error's
 reported line number is in the *compiled* `index.tex`, not your source
 `.qmd` — search the `.tex` file for the `\label{tab:...}` / caption text
@@ -334,7 +350,28 @@ several-chat split originally planned for). Summary:
   switching Pages to the modern Actions-deployed model (`build_type:
   workflow` via the API) instead — CI uses `actions/upload-pages-artifact`
   + `actions/deploy-pages`, no committed `docs/` needed on any branch.
-  Pushed and watched the run (see Verification below for outcome).
+  Pushed and watched the run twice: **first run failed** — the raw
+  `install.packages()` step in the R-dependency-install step failed
+  silently after ~4.5 minutes with zero diagnostic output (`quiet = TRUE`
+  suppresses compile errors too, not just download progress; the only
+  visible symptom was a downstream `there is no package called 'rmarkdown'`
+  when the setup script tried to `library()` a package that had silently
+  failed to compile — almost certainly missing a system library like
+  `libharfbuzz-dev`/`libfribidi-dev` for `textshaping`/`systemfonts` on a
+  bare `ubuntu-latest` runner). **Fixed** by swapping that step for
+  `r-lib/actions/setup-r-dependencies@v2` (pak-based; auto-resolves system
+  library dependencies via apt, standard fix for this class of failure).
+  **Second run: the `build` job passed clean** — full checkout → R deps →
+  Quarto render (all three formats) → Pages-artifact upload, all green in
+  CI, confirming the whole pipeline (not just local rendering) works from a
+  bare environment. The `deploy` job was **blocked by GitHub's own
+  `github-pages` environment protection rules** (`custom_branch_policies:
+  true`, only the default branch `master` is an allowed deployment
+  branch) — this is correct, expected behavior, not a bug: it stops this
+  still-in-review `quarto-migration` branch from prematurely going live
+  before the planned PR/merge. Deployment will happen automatically the
+  first time this workflow runs on `master`, i.e. right after the PR
+  merges — nothing further to configure.
 - **Phase 6 (QA):** done — confirmed no dropped/junk paths leaked into
   tracked files (`Design for 3D Print.md`, `cam1/`–`thermo/`,
   `MachineLearning/`, `docs/`, `.claude/`, etc. — all absent from
@@ -377,3 +414,8 @@ scripted rather than done chapter-by-chapter)
   book.
 - `quarto preview` for a visual check of navigation, TOC, and figures.
 - Final check: GitHub Actions run green + Pages URL loads the deployed site.
+  **Done, with one caveat:** the `build` job (render + artifact upload) is
+  green on `quarto-migration`; the `deploy` job is correctly blocked by
+  GitHub's environment protection rules until this merges to `master` (see
+  Phase 5 status above) — so the Pages URL won't actually serve the new
+  Quarto site until the PR merges. That's expected, not a gap to close now.
