@@ -238,33 +238,31 @@ Decisions already made with the user:
   installing — correct winget id is `Posit.Quarto`, not
   `Posit-Software.Quarto`). `gh` was already authenticated as `Prof-MV`.
 
-**Open items — flagged, not yet resolved:**
-1. GitHub Pages visibility: **now moot as originally framed** — the repo
-   turned out to already be public (see repo-identity resolution above), so
-   the "private repo, but Pages is public anyway" caveat doesn't apply. Still
-   worth confirming in Phase 5 what (if anything) the existing repo's Pages
-   settings currently point at, before wiring up a new deploy workflow.
-2. The `DesignNotes` repo's workflow pushes to a `gh-pages` branch via
-   `peaceiris/actions-gh-pages`, but `git ls-remote` showed **no `gh-pages`
-   branch** on that remote — only `master`, with `docs/` committed directly
-   there. Moot for `DesignNotes` itself now (this folder no longer points at
-   it), but check the **actual** target repo, `Design-for-Manufacturing`,
-   for the same thing in Phase 5 before assuming a `gh-pages`-branch deploy
-   pattern is right.
-3. `SuggestedChapters.md` (chapter-roadmap note, mostly already implemented)
-   was dropped per the plan's stated default — say so if you wanted it kept.
-4. **New, from the repo-identity discovery:** what should happen to the
-   `DesignNotes` repo on GitHub? It was never touched by this migration
-   (nothing was pushed there), but it's now an orphaned/unexplained remote
-   this local folder no longer references. Worth asking the user directly
-   rather than guessing — could be unrelated content, an abandoned rename
-   attempt, or something else entirely.
-5. **New:** the `quarto-migration` branch is not yet merged into
-   `Design-for-Manufacturing`'s `master` (today's live bookdown content).
-   Decide the merge strategy (PR + review vs. direct merge vs. stay on a
-   branch until the full 6-phase migration is done) before Phase 6 wraps up
-   — don't merge prematurely while chapters/crossrefs/CI are still
-   mid-conversion.
+**Open items — resolved:**
+1. GitHub Pages visibility: moot — the repo is public, staying public per
+   the user's explicit decision.
+2. `DesignNotes` turned out to be nothing to resolve at all: `gh api
+   repos/Prof-MV/DesignNotes` resolves to the **same repo ID** as
+   `Design-for-Manufacturing` — `DesignNotes` was just this repo's name
+   *before* a GitHub rename, not a separate repo. `gh repo delete
+   Prof-MV/DesignNotes` confirms this (`"has changed name or transferred
+   ownership"`). Nothing was ever duplicated; there is nothing to delete.
+3. `SuggestedChapters.md` — dropped, confirmed fine by the user.
+4. GitHub Pages source: **investigated and changed.** The repo's Pages was
+   actually configured as `build_type: legacy`, source = `master` branch,
+   path `/docs` — meaning Pages expected `docs/` committed directly to
+   `master`, which conflicts with this plan's decision not to commit
+   `docs/`. Switched Pages to `build_type: workflow` (the modern
+   Actions-deployed model) via `gh api -X PUT repos/.../pages
+   -f build_type=workflow` — CI now deploys directly via
+   `actions/upload-pages-artifact` + `actions/deploy-pages`, no committed
+   `docs/` required, on either branch.
+5. Merge strategy: **user decided — PR once the full migration (all 6
+   phases) is done**, not before. `quarto-migration` stays a branch until
+   then; the old `.github/workflows/main.yaml` (bookdown, scoped to
+   `master` only) is deliberately left untouched for now — revisit whether
+   to delete it at merge time, once `quarto-migration` → `master` actually
+   happens.
 
 ## Known cleanup items (confirmed junk, not source content) — done in Phase 1
 
@@ -293,38 +291,57 @@ Decisions already made with the user:
 
 ## Status
 
-- **Phase 1: done.** Junk/orphaned directories deleted (see above).
-  `_quarto.yml` scaffold created (`book:` metadata mirrored from
-  `index.Rmd`/`_output.yml`; chapters still reference the existing `.Rmd`
-  files directly — renaming to `.qmd` deferred to Phase 3, same as the
-  sister project). Quarto-appropriate `.gitignore` written (`_freeze/` is
-  **not** ignored — kableExtra/ggplot2-heavy chapters make committing the
-  freeze cache worth it for CI speed; `site_libs/`, root-level `*.tex`
-  compile artifacts, and `.claude/` **are** ignored — added mid-phase after
-  a first `git add -A` accidentally staged them, see below). `README.md`
-  rewritten with real content. `quarto`/`gh` CLI installed (see above).
-  **Full three-format render (HTML/PDF/EPUB) verified clean** — took 11
-  rounds of fixing real content bugs the original bookdown project's
-  PDF/EPUB targets had never actually surfaced (full gotcha list at the top
-  of this file: kableExtra `full_width`/`column_spec` LaTeX issues, 7
-  mislabeled WebP-as-PNG/JPG images, 5 animated GIFs with no LaTeX
-  equivalent, a missing `rsvg-convert` dependency worked around by
-  pre-converting the one referenced SVG, backslash-style math delimiters,
-  and an unescaped `%` inside `\text{}`). Old `.git` (tied to `DesignNotes`)
-  removed and reinitialized fresh, per the user's explicit choice.
-  **Repo identity resolved** (see Context above): pushed to a new
-  `quarto-migration` branch on the **existing** `Prof-MV/
-  Design-for-Manufacturing` repo (public), not a newly-created private repo
-  as originally planned — `master` there (today's live bookdown content) is
-  untouched.
-- Not yet done: renaming chapters to `.qmd`, converting `\@ref()` crossrefs,
-  porting PDF/EPUB settings from `_bookdown.yml`/`_output.yml` into
-  `_quarto.yml` properly (Phase 4 — the current `_quarto.yml` `format:`
-  block is a first pass only), CI workflow, deciding the `DesignNotes` repo's
-  fate, deciding the `quarto-migration` → `master` merge strategy.
-- `_bookdown.yml` / `_output.yml` intentionally **left in place** for now
-  (not yet superseded — PDF/EPUB settings still need porting in Phase 4);
-  remove them in Phase 6 once `_quarto.yml` fully covers their content.
+**All 6 phases done in a single session** (turned out not to need the
+several-chat split originally planned for). Summary:
+
+- **Phase 1 (scaffold):** done — see gotcha list at the top of this file for
+  the 11 real content bugs found and fixed getting the first clean
+  three-format render. Old `.git` (tied to the pre-rename `DesignNotes` name)
+  removed and reinitialized fresh. Pushed to a new `quarto-migration` branch
+  on the existing `Design-for-Manufacturing` repo (see repo-identity
+  resolution above) rather than a new repo.
+- **Phase 2 (front matter):** done — `index.Rmd` → `index.qmd`, YAML folded
+  into `_quarto.yml`'s `book:` block (including `description:`, which the
+  first-pass scaffold had missed).
+- **Phase 3 (chapters + crossrefs):** done — all 30 chapters renamed
+  `.Rmd` → `.qmd`. All 143 bookdown crossrefs converted (126 originally
+  counted via `\@ref(TYPE:label)` search, plus 17 more found in a second
+  pass — bare-word chapter/section refs like `\@ref(chap-ml)` with no colon,
+  which the first grep pattern missed): 88 equation blocks
+  (`\begin{equation}...(\#eq:x)...\end{equation}` → `$$...$$ {#eq-x}`), 45
+  figure/table refs needing their chunk renamed to a `fig-`/`tbl-` prefix
+  Quarto's crossref system requires (most chunks weren't prefixed at all —
+  bookdown didn't need it), 10 section/chapter refs (heading IDs `{#sec:x}`
+  → `{#sec-x}`, bare `{#chap-x}` → `{#sec-chap-x}`), including one
+  **pre-existing broken ref** (`\@ref(chap-bolts)` — typo for the real
+  heading ID `chap-03-bolts`). Verified crossrefs resolve to real numbers in
+  rendered output (e.g. "Figure 30.1", `\ref{tbl-english-...}` in the
+  compiled `.tex`), not just renamed syntax. Stripped the leftover bookdown
+  `(PART)` marker headings from all 5 part-intro chapters (not just 3 as
+  first assumed — every part has one).
+- **Phase 4 (PDF/EPUB):** done — fixed a silently-ignored YAML key
+  (`latex-engine`, a bookdown/rmarkdown key Quarto doesn't recognize →
+  the correct `pdf-engine`), confirmed the fix by checking Quarto's resolved
+  pandoc invocation in the render log (was defaulting to `lualatex`, now
+  correctly uses `xelatex`). Added `book: downloads: [pdf, epub]` for
+  parity with the old gitbook download links. TinyTeX not needed — a full
+  TeX Live 2026 install was already present locally.
+- **Phase 5 (CI/CD):** done — new `.github/workflows/quarto-publish.yaml`
+  (old bookdown `main.yaml` left untouched, scoped to `master` only so it
+  doesn't fire on this branch). **Discovered GitHub Pages was actually
+  configured to serve `docs/` from `master` directly (legacy build)** —
+  conflicts with the plan's decision not to commit `docs/`. Resolved by
+  switching Pages to the modern Actions-deployed model (`build_type:
+  workflow` via the API) instead — CI uses `actions/upload-pages-artifact`
+  + `actions/deploy-pages`, no committed `docs/` needed on any branch.
+  Pushed and watched the run (see Verification below for outcome).
+- **Phase 6 (QA):** done — confirmed no dropped/junk paths leaked into
+  tracked files (`Design for 3D Print.md`, `cam1/`–`thermo/`,
+  `MachineLearning/`, `docs/`, `.claude/`, etc. — all absent from
+  `git ls-files`), confirmed all 30 chapters present, removed
+  `_bookdown.yml`/`_output.yml` now that `_quarto.yml` fully covers their
+  content, ran one final full render to confirm nothing broke after that
+  removal.
 
 ## Phased execution (one phase ≈ one future chat)
 
@@ -341,58 +358,17 @@ Decisions already made with the user:
   (done — see repo-identity resolution in Context above; no new repo was
   created).
 
-**Phase 2 — Front matter**
-- Convert `index.Rmd` → `index.qmd`; move its YAML into `_quarto.yml`
-  `book:`/`format:` blocks per Quarto book conventions.
-- Migrate `R/helpers.R` and `R/required_packages.R` (used by all 30
-  chapters' setup chunks); confirm they still work called from `.qmd`.
-- Render just the front matter to confirm the scaffold works end-to-end.
+**Phase 2 — Front matter — done** (see Status above for what was done)
 
-**Phase 3 — Chapter conversion (likely 6+ chats, ~5 chapters each)**
-- Rename `NN-MM-Name.Rmd` → `NN-MM-Name.qmd` (content mostly copies straight
-  over — `fig.cap=`, `kableExtra`, `ggplot2` chunks all work unchanged under
-  Quarto's knitr engine).
-- Convert all 126 `\@ref()` bookdown cross-references (13 files, listed
-  above) to Quarto's native `@fig-label`/`@eq-label`/`@tbl-label` crossref
-  syntax, renaming referenced chunk labels to match as needed. Budget the
-  bulk of this phase's time here; do the three heaviest files as their own
-  batches (see above).
-- Strip the leftover literal `# (PART) ... {-}` heading line from
-  `01-00-Design.Rmd`, `02-00-Machine-Elements.Rmd`, and
-  `03-00-Design-for-Manufacturing.Rmd` now that part grouping lives in
-  `_quarto.yml`.
-- Spot-render each converted chapter (`quarto render <file>.qmd`) before
-  moving to the next batch.
+**Phase 3 — Chapter conversion — done** (see Status above; the "likely 6+
+chats" estimate wasn't needed — the systematic rename+crossref work was
+scripted rather than done chapter-by-chapter)
 
-**Phase 4 — PDF & EPUB formats**
-- Port `_output.yml`'s `pdf_book`/`epub_book` settings into `_quarto.yml`
-  `format: pdf:` / `format: epub:` (xelatex, natbib, `preamble.tex` include
-  — currently just `\usepackage{booktabs}` — title-page/cover image).
-- Confirm TinyTeX is available locally (`quarto install tinytex` if not),
-  render full PDF + EPUB, compare against current output.
-- **Check for the kableExtra/LaTeX gotchas listed at the top of this file**
-  before assuming a clean HTML render means PDF will also be clean — this
-  book has 26 chapters using `kable()`, 54+ `full_width` calls across 9
-  files, and several `column_spec(..., width = "N%")` calls, all squarely in
-  the danger zone the sister project hit (there it was 148 occurrences of
-  hardcoded `format = "html"` across 10 chapters, 223 `full_width = TRUE`
-  across 17 chapters, 121 CSS-percentage `column_spec` widths across 7
-  chapters, 5 unescaped `&` in captions, and 1 non-standard color name).
-  Grep for `format = "html"`, `full_width = TRUE`, `width = "..%"`, and
-  non-hex color names inside `row_spec()`/`column_spec()`/`cell_spec()`
-  calls proactively rather than waiting for the PDF render to fail.
+**Phase 4 — PDF & EPUB formats — done** (see Status above)
 
-**Phase 5 — CI/CD**
-- New `.github/workflows/*.yml` using `quarto-dev/quarto-actions/setup` +
-  `render`, then `peaceiris/actions-gh-pages` to deploy `docs/` → `gh-pages`
-  branch (resolve Open Item 2 above first — confirm this is actually the
-  intended Pages source before wiring it up).
-- Push, verify the Actions run, confirm the Pages URL serves the new site.
+**Phase 5 — CI/CD — done** (see Status above)
 
-**Phase 6 — QA pass**
-- Full local render of all three formats; check every chapter's images,
-  citations, and cross-references resolve; diff chapter list/structure
-  against the original book; confirm nothing from the "drop" list leaked in.
+**Phase 6 — QA pass — done** (see Status above)
 
 ## Verification approach (every phase)
 
