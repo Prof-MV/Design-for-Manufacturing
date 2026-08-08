@@ -150,12 +150,12 @@ fcf_colors <- c("lightcoral", "lightyellow", "lightblue", "lightblue", "lightblu
 for (i in 1:5) {
   grid.rect(x=fcf_x[i], y=0.5, width=0.15, height=0.3, 
             gp=gpar(fill=fcf_colors[i], col="black", lwd=2))
-  grid.text(fcf_labels[i], x=fcf_x[i], y=0.5, gp=gpar(fontsize=9, fontface="bold"))
+  grid.text(fcf_labels[i], x=fcf_x[i], y=0.5, gp=gpar(fontsize=9 * diagram_text_scale, fontface="bold"))
 }
 
 ## Add annotations
-grid.text("Feature Control Frame Components", 
-          x=0.5, y=0.95, gp=gpar(fontsize=14, fontface="bold"))
+grid.text("Feature Control Frame Components",
+          x=0.5, y=0.95, gp=gpar(fontsize=14 * diagram_text_scale, fontface="bold"))
 
 popViewport()
 ```
