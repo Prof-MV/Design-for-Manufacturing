@@ -6,14 +6,14 @@ source("R/required_packages.R")
 
 theme_drivetrain <- theme_minimal() +
   theme(
-    plot.title       = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle    = element_text(hjust = 0.5, size = 10),
-    axis.title       = element_text(size = 11, face = "bold"),
-    axis.text        = element_text(size = 9),
+    plot.title       = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle    = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    axis.title       = element_text(size = 11 * diagram_text_scale, face = "bold"),
+    axis.text        = element_text(size = 9 * diagram_text_scale),
     panel.grid.minor = element_blank(),
     legend.position  = "bottom",
-    legend.title     = element_text(size = 10, face = "bold"),
-    legend.text      = element_text(size = 9),
+    legend.title     = element_text(size = 10 * diagram_text_scale, face = "bold"),
+    legend.text      = element_text(size = 9 * diagram_text_scale),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
@@ -174,8 +174,8 @@ ggplot(drive_long, aes(x = Attribute, y = Score, fill = Configuration)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title    = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    plot.title    = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
     axis.text.x   = element_text(angle = 20, hjust = 1),
     legend.position = "bottom"
   )
@@ -237,7 +237,7 @@ ggplot(gear_df, aes(x = RPM, y = Wheel_Torque, colour = Gear)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.title      = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
     legend.position = "right"
   )
 ```
@@ -380,7 +380,7 @@ ggplot(tc_long, aes(x = Speed_Ratio, y = Value, colour = Metric)) +
   geom_line(linewidth = 1.3) +
   geom_vline(xintercept = 0.9, linetype = "dashed", colour = "grey50") +
   annotate("text", x = 0.92, y = 55, label = "Lock-up\nengages",
-           hjust = 0, size = 3.2, colour = "grey40") +
+           hjust = 0, size = 3.2 * diagram_text_scale, colour = "grey40") +
   scale_colour_manual(values = c("#E63946", "#2A9D8F")) +
   labs(
     title  = "Torque Converter Characteristics",
@@ -390,7 +390,7 @@ ggplot(tc_long, aes(x = Speed_Ratio, y = Value, colour = Metric)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.title      = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
     legend.position = "bottom"
   )
 ```
@@ -477,7 +477,7 @@ ggplot(rpm_df, aes(x = Speed, y = RPM, colour = Gear)) +
   annotate("rect", xmin = -Inf, xmax = Inf, ymin = 2000, ymax = 4500,
            fill = "lightgreen", alpha = 0.25) +
   annotate("text", x = 8, y = 4350, label = "Efficient RPM band",
-           hjust = 0, size = 3.1, colour = "darkgreen") +
+           hjust = 0, size = 3.1 * diagram_text_scale, colour = "darkgreen") +
   scale_colour_brewer(palette = "Dark2") +
   labs(
     title  = "Engine RPM vs Vehicle Speed — 6-Speed Manual",
@@ -487,7 +487,7 @@ ggplot(rpm_df, aes(x = Speed, y = RPM, colour = Gear)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.title      = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
     legend.position = "right"
   )
 ```
@@ -613,7 +613,7 @@ ggplot(eff_data, aes(x = Condition, y = Efficiency, fill = Type)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 13, face = "bold"),
+    plot.title      = element_text(hjust = 0.5, size = 13 * diagram_text_scale, face = "bold"),
     axis.text.x     = element_text(angle = 20, hjust = 1),
     legend.position = "bottom"
   )
@@ -744,8 +744,8 @@ ggplot(ev_long, aes(x = Attribute, y = Score, fill = Config)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle   = element_text(hjust = 0.5, size = 10),
+    plot.title      = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle   = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
     axis.text.x     = element_text(angle = 20, hjust = 1),
     legend.position = "bottom"
   )

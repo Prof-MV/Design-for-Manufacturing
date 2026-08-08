@@ -8,14 +8,14 @@ source("R/required_packages.R")
 
 theme_ml <- theme_minimal() +
   theme(
-    plot.title       = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle    = element_text(hjust = 0.5, size = 10),
-    axis.title       = element_text(size = 11, face = "bold"),
-    axis.text        = element_text(size = 9),
+    plot.title       = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle    = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    axis.title       = element_text(size = 11 * diagram_text_scale, face = "bold"),
+    axis.text        = element_text(size = 9 * diagram_text_scale),
     panel.grid.minor = element_blank(),
     legend.position  = "bottom",
-    legend.title     = element_text(size = 10, face = "bold"),
-    legend.text      = element_text(size = 9),
+    legend.title     = element_text(size = 10 * diagram_text_scale, face = "bold"),
+    legend.text      = element_text(size = 9 * diagram_text_scale),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
@@ -70,7 +70,7 @@ ai_scope <- data.frame(
 
 ggplot(ai_scope, aes(x = scope, y = reorder(level, scope), fill = level)) +
   geom_col(width = 0.65, colour = "white", linewidth = 0.5) +
-  geom_text(aes(label = label), x = 2, hjust = 0, size = 3, colour = "white",
+  geom_text(aes(label = label), x = 2, hjust = 0, size = 3 * diagram_text_scale, colour = "white",
             fontface = "bold") +
   scale_fill_manual(values = c("#1565c0", "#1976d2", "#42a5f5", "#90caf9")) +
   scale_x_continuous(breaks = NULL) +
@@ -78,7 +78,7 @@ ggplot(ai_scope, aes(x = scope, y = reorder(level, scope), fill = level)) +
        x = NULL, y = NULL) +
   theme_ml +
   theme(legend.position = "none",
-        axis.text.y     = element_text(size = 10, face = "bold"))
+        axis.text.y     = element_text(size = 10 * diagram_text_scale, face = "bold"))
 ```
 
 Figure @fig-ml-ai-hierarchy-01 illustrates the key insight: every LLM is deep learning, every deep learning system is machine learning, and all machine learning is AI — but the reverse is not true. There are AI systems (like the rule-based expert systems used in 1980s industrial diagnostics) that are not machine learning at all.
@@ -403,7 +403,7 @@ isa_levels <- data.frame(
 ggplot(isa_levels, aes(x = width, y = level, fill = domain)) +
   geom_col(colour = "white", linewidth = 0.6) +
   geom_text(aes(label = label), x = 0.02, hjust = 0,
-            size = 2.9, colour = "white", fontface = "bold") +
+            size = 2.9 * diagram_text_scale, colour = "white", fontface = "bold") +
   scale_fill_manual(values = c("IT" = "#2e7d32", "OT" = "#e65100"),
                     name = "Domain") +
   scale_x_continuous(breaks = NULL) +
@@ -570,10 +570,10 @@ ggplot(xbar, aes(x = day, y = mean_diam)) +
   scale_colour_manual(values = c("FALSE" = "#1976d2", "TRUE" = "#c62828"),
                       labels = c("In control", "Out of control"),
                       name   = NULL) +
-  annotate("text", x = 92, y = ucl + 0.001, label = "UCL", hjust = 0, size = 3) +
-  annotate("text", x = 92, y = lcl - 0.001, label = "LCL", hjust = 0, size = 3) +
-  annotate("text", x = 92, y = usl + 0.001, label = "USL", hjust = 0, size = 3, colour = "#b71c1c") +
-  annotate("text", x = 92, y = lsl - 0.001, label = "LSL", hjust = 0, size = 3, colour = "#b71c1c") +
+  annotate("text", x = 92, y = ucl + 0.001, label = "UCL", hjust = 0, size = 3 * diagram_text_scale) +
+  annotate("text", x = 92, y = lcl - 0.001, label = "LCL", hjust = 0, size = 3 * diagram_text_scale) +
+  annotate("text", x = 92, y = usl + 0.001, label = "USL", hjust = 0, size = 3 * diagram_text_scale, colour = "#b71c1c") +
+  annotate("text", x = 92, y = lsl - 0.001, label = "LSL", hjust = 0, size = 3 * diagram_text_scale, colour = "#b71c1c") +
   coord_cartesian(xlim = c(1, 95)) +
   labs(title   = "X-bar Control Chart — Précitech CNC Cell 3 (Simulated)",
        subtitle = "Red = specification limits (engineering tolerance) | Orange = control limits (process behaviour)",
@@ -655,13 +655,13 @@ ggplot(df_curve, aes(x, y)) +
   geom_vline(xintercept = mu, colour = "#1565c0",
              linetype = "solid", linewidth = 0.8) +
   annotate("text", x = usl + 0.005, y = max(density) * 0.9,
-           label = paste0("USL\n", usl), colour = "#c62828", size = 3, hjust = 0) +
+           label = paste0("USL\n", usl), colour = "#c62828", size = 3 * diagram_text_scale, hjust = 0) +
   annotate("text", x = lsl - 0.005, y = max(density) * 0.9,
-           label = paste0("LSL\n", lsl), colour = "#c62828", size = 3, hjust = 1) +
+           label = paste0("LSL\n", lsl), colour = "#c62828", size = 3 * diagram_text_scale, hjust = 1) +
   annotate("text", x = mu, y = max(density) * 1.03,
-           label = paste0("μ = ", mu), colour = "#1565c0", size = 3, hjust = 0.5) +
+           label = paste0("μ = ", mu), colour = "#1565c0", size = 3 * diagram_text_scale, hjust = 0.5) +
   annotate("text", x = mu + 0.025, y = max(density) * 0.5,
-           label = paste0("Cpk = ", cpk), size = 4, fontface = "bold") +
+           label = paste0("Cpk = ", cpk), size = 4 * diagram_text_scale, fontface = "bold") +
   labs(title   = "Process Capability — Précitech CNC Cell 3 (Simulated)",
        subtitle = "Red shaded area = predicted fraction of out-of-spec parts",
        x = "Diameter (mm)", y = "Probability density") +
@@ -794,7 +794,7 @@ ggplot(cost_long, aes(x = regime, y = cost_cad, fill = cost_type)) +
                "Collateral Damage" = "#ab47bc"),
     name = "Cost Category"
   ) +
-  scale_y_continuous(labels = scales::dollar_format(prefix = "CAD $"),
+  scale_y_continuous(labels = scales::dollar_format(prefix = "CAD $", big.mark = " "),
                      breaks = seq(0, 18000, by = 3000)) +
   labs(title   = "Cost Per Bearing Failure Event by Maintenance Regime",
        subtitle = "Précitech CNC lathe spindle bearing (simulated)",
@@ -843,19 +843,19 @@ ggplot(df_pf, aes(x = time, y = condition)) +
                colour = "#4caf50", linewidth = 0.8) +
   annotate("text", x = (t_P + t_F) / 2, y = -9,
            label = "P-F Interval\n(decision window)",
-           colour = "#2e7d32", size = 3.2, fontface = "bold", hjust = 0.5) +
+           colour = "#2e7d32", size = 3.2 * diagram_text_scale, fontface = "bold", hjust = 0.5) +
   annotate("text", x = t_P - 1, y = cond_P + 4,
            label = "P: First\ndetectable sign",
-           colour = "#f57f17", size = 3, hjust = 1) +
+           colour = "#f57f17", size = 3 * diagram_text_scale, hjust = 1) +
   annotate("text", x = t_F + 1, y = cond_F + 4,
            label = "F: Functional\nfailure",
-           colour = "#c62828", size = 3, hjust = 0) +
+           colour = "#c62828", size = 3 * diagram_text_scale, hjust = 0) +
   geom_point(data = sensor_labels,
              aes(x = t_detect, y = y), colour = "#7b1fa2",
              size = 3, shape = 18) +
   geom_text(data = sensor_labels,
             aes(x = t_detect, y = y + 5, label = label),
-            colour = "#7b1fa2", size = 2.5, hjust = 0.5) +
+            colour = "#7b1fa2", size = 2.5 * diagram_text_scale, hjust = 0.5) +
   scale_y_continuous(limits = c(-15, 100),
                      breaks  = seq(0, 100, 20)) +
   labs(title    = "The P-F Curve",
@@ -990,7 +990,7 @@ df_engines <- data.frame(
 
 ggplot(df_engines, aes(x = col, y = -row, fill = split)) +
   geom_tile(colour = "white", linewidth = 0.6, width = 0.85, height = 0.85) +
-  geom_text(aes(label = engine_id), size = 2.5, colour = "white", fontface = "bold") +
+  geom_text(aes(label = engine_id), size = 2.5 * diagram_text_scale, colour = "white", fontface = "bold") +
   scale_fill_manual(values = c("Training (80 engines)" = "#1565c0",
                                "Validation (20 engines)" = "#c62828"),
                     name = NULL) +
@@ -1400,11 +1400,11 @@ ggplot(df_drift, aes(x = month, y = rmse)) +
   geom_point(colour = "#1565c0", size = 2) +
   geom_vline(xintercept = 12, colour = "#e65100", linetype = "dotted", linewidth = 1) +
   annotate("text", x = 12.3, y = 42, label = "Major overhaul\n(new sensors installed)",
-           colour = "#e65100", size = 3, hjust = 0) +
+           colour = "#e65100", size = 3 * diagram_text_scale, hjust = 0) +
   annotate("text", x = 24.5, y = 20.5, label = "Launch RMSE", colour = "#2e7d32",
-           size = 3, hjust = 1) +
+           size = 3 * diagram_text_scale, hjust = 1) +
   annotate("text", x = 24.5, y = 35.5, label = "Retraining threshold", colour = "#c62828",
-           size = 3, hjust = 1) +
+           size = 3 * diagram_text_scale, hjust = 1) +
   scale_x_continuous(breaks = seq(1, 24, by = 3),
                      labels = paste0("M", seq(1, 24, by = 3))) +
   labs(title    = "Model Performance Drift in Production",

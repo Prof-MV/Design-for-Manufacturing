@@ -20,8 +20,8 @@ source("R/required_packages.R")
 ## Set a consistent theme for all plots
 theme_linkage <- theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
     axis.text = element_blank(),
     axis.title = element_blank(),
     axis.ticks = element_blank(),
@@ -112,47 +112,47 @@ ggplot() +
 
   ## Labels for links
   annotate("text", x = 5, y = 1.3, label = "Ground (Link 1) - Fixed",
-           fontface = "bold", size = 3.5, color = "gray40") +
+           fontface = "bold", size = 3.5 * diagram_text_scale, color = "gray40") +
   annotate("text", x = 2.2, y = 3.3, label = "Input Crank\n(Link 2)",
-           fontface = "bold", size = 3.5, color = "steelblue") +
+           fontface = "bold", size = 3.5 * diagram_text_scale, color = "steelblue") +
   annotate("text", x = 5.2, y = 5, label = "Coupler (Link 3)",
-           fontface = "bold", size = 3.5, color = "darkorange") +
+           fontface = "bold", size = 3.5 * diagram_text_scale, color = "darkorange") +
   annotate("text", x = 8.2, y = 3.5, label = "Output\nRocker\n(Link 4)",
-           fontface = "bold", size = 3.5, color = "forestgreen") +
+           fontface = "bold", size = 3.5 * diagram_text_scale, color = "forestgreen") +
 
   ## Labels for pivots
-  annotate("text", x = O2[1], y = O2[2] - 0.6, label = "O2", fontface = "bold", size = 4) +
-  annotate("text", x = O4[1], y = O4[2] - 0.6, label = "O4", fontface = "bold", size = 4) +
-  annotate("text", x = A[1] - 0.5, y = A[2] + 0.3, label = "A", fontface = "bold", size = 4) +
-  annotate("text", x = B[1] + 0.5, y = B[2] + 0.3, label = "B", fontface = "bold", size = 4) +
+  annotate("text", x = O2[1], y = O2[2] - 0.6, label = "O2", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = O4[1], y = O4[2] - 0.6, label = "O4", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = A[1] - 0.5, y = A[2] + 0.3, label = "A", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = B[1] + 0.5, y = B[2] + 0.3, label = "B", fontface = "bold", size = 4 * diagram_text_scale) +
 
   ## Length labels
-  annotate("text", x = 5, y = 2.4, label = "g (ground)", size = 3, fontface = "italic") +
-  annotate("text", x = 2.4, y = 2.9, label = "a", size = 3, fontface = "italic") +
-  annotate("text", x = 5.3, y = 4.1, label = "b", size = 3, fontface = "italic") +
-  annotate("text", x = 7.8, y = 3, label = "c", size = 3, fontface = "italic") +
+  annotate("text", x = 5, y = 2.4, label = "g (ground)", size = 3 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 2.4, y = 2.9, label = "a", size = 3 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 5.3, y = 4.1, label = "b", size = 3 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 7.8, y = 3, label = "c", size = 3 * diagram_text_scale, fontface = "italic") +
 
   ## Input/Output arrows
   geom_curve(aes(x = 2, xend = 2.8, y = 1.2, yend = 1.6),
              arrow = arrow(length = unit(0.15, "cm"), type = "closed"),
              curvature = 0.3, linewidth = 1, color = "red") +
-  annotate("text", x = 2.5, y = 0.9, label = "Input\nMotion", color = "red", size = 3) +
+  annotate("text", x = 2.5, y = 0.9, label = "Input\nMotion", color = "red", size = 3 * diagram_text_scale) +
 
   geom_curve(aes(x = 8.7, xend = 8.2, y = 3, yend = 3.8),
              arrow = arrow(length = unit(0.15, "cm"), type = "closed"),
              curvature = -0.3, linewidth = 1, color = "purple") +
-  annotate("text", x = 9.3, y = 3.5, label = "Output\nMotion", color = "purple", size = 3) +
+  annotate("text", x = 9.3, y = 3.5, label = "Output\nMotion", color = "purple", size = 3 * diagram_text_scale) +
 
   ## Legend box
   geom_rect(aes(xmin = 0.5, xmax = 4.5, ymin = 5.5, ymax = 7.5),
             fill = "white", color = "black") +
-  annotate("text", x = 2.5, y = 7.2, label = "LINK TERMINOLOGY", fontface = "bold", size = 3.5) +
+  annotate("text", x = 2.5, y = 7.2, label = "LINK TERMINOLOGY", fontface = "bold", size = 3.5 * diagram_text_scale) +
   geom_segment(aes(x = 0.7, xend = 1.3, y = 6.7, yend = 6.7), linewidth = 3, color = "gray40") +
-  annotate("text", x = 1.5, y = 6.7, label = "Ground (frame)", size = 2.8, hjust = 0) +
+  annotate("text", x = 1.5, y = 6.7, label = "Ground (frame)", size = 2.8 * diagram_text_scale, hjust = 0) +
   geom_segment(aes(x = 0.7, xend = 1.3, y = 6.3, yend = 6.3), linewidth = 3, color = "steelblue") +
-  annotate("text", x = 1.5, y = 6.3, label = "Input (crank/rocker)", size = 2.8, hjust = 0) +
+  annotate("text", x = 1.5, y = 6.3, label = "Input (crank/rocker)", size = 2.8 * diagram_text_scale, hjust = 0) +
   geom_segment(aes(x = 0.7, xend = 1.3, y = 5.9, yend = 5.9), linewidth = 3, color = "orange") +
-  annotate("text", x = 1.5, y = 5.9, label = "Coupler (floating link)", size = 2.8, hjust = 0) +
+  annotate("text", x = 1.5, y = 5.9, label = "Coupler (floating link)", size = 2.8 * diagram_text_scale, hjust = 0) +
 
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0.5, 8)) +
   labs(title = "Four-Bar Linkage Anatomy") +
@@ -199,8 +199,8 @@ $$S + L \leq P + Q$$
 ggplot() +
   ## Main decision box
   geom_rect(aes(xmin = 3, xmax = 9, ymin = 9, ymax = 10.5), fill = "steelblue", color = "black") +
-  annotate("text", x = 6, y = 10, label = "GRASHOF'S LAW", fontface = "bold", size = 5, color = "white") +
-  annotate("text", x = 6, y = 9.4, label = "S + L  vs  P + Q", size = 4, color = "white") +
+  annotate("text", x = 6, y = 10, label = "GRASHOF'S LAW", fontface = "bold", size = 5 * diagram_text_scale, color = "white") +
+  annotate("text", x = 6, y = 9.4, label = "S + L  vs  P + Q", size = 4 * diagram_text_scale, color = "white") +
 
   ## Connecting lines
   geom_segment(aes(x = 6, xend = 6, y = 9, yend = 8), linewidth = 1) +
@@ -210,13 +210,13 @@ ggplot() +
 
   ## Grashof condition box
   geom_rect(aes(xmin = 1, xmax = 5, ymin = 5.5, ymax = 7), fill = "lightgreen", color = "black") +
-  annotate("text", x = 3, y = 6.6, label = "GRASHOF", fontface = "bold", size = 4, color = "darkgreen") +
-  annotate("text", x = 3, y = 6, label = "S + L < P + Q", size = 3.5) +
+  annotate("text", x = 3, y = 6.6, label = "GRASHOF", fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
+  annotate("text", x = 3, y = 6, label = "S + L < P + Q", size = 3.5 * diagram_text_scale) +
 
   ## Non-Grashof condition box
   geom_rect(aes(xmin = 7, xmax = 11, ymin = 5.5, ymax = 7), fill = "lightyellow", color = "black") +
-  annotate("text", x = 9, y = 6.6, label = "NON-GRASHOF", fontface = "bold", size = 4, color = "darkorange") +
-  annotate("text", x = 9, y = 6, label = "S + L > P + Q", size = 3.5) +
+  annotate("text", x = 9, y = 6.6, label = "NON-GRASHOF", fontface = "bold", size = 4 * diagram_text_scale, color = "darkorange") +
+  annotate("text", x = 9, y = 6, label = "S + L > P + Q", size = 3.5 * diagram_text_scale) +
 
   ## Grashof sub-types
   geom_segment(aes(x = 3, xend = 3, y = 5.5, yend = 4.5), linewidth = 0.5) +
@@ -225,36 +225,36 @@ ggplot() +
 
   ## Crank-Rocker
   geom_rect(aes(xmin = -0.3, xmax = 2.3, ymin = 2, ymax = 4), fill = "palegreen", color = "black") +
-  annotate("text", x = 1, y = 3.6, label = "Crank-Rocker", fontface = "bold", size = 3) +
-  annotate("text", x = 1, y = 3.1, label = "Shortest = input", size = 2.5) +
-  annotate("text", x = 1, y = 2.6, label = "Input: full rotation", size = 2.5) +
-  annotate("text", x = 1, y = 2.2, label = "Output: oscillates", size = 2.5) +
+  annotate("text", x = 1, y = 3.6, label = "Crank-Rocker", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 1, y = 3.1, label = "Shortest = input", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 1, y = 2.6, label = "Input: full rotation", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 1, y = 2.2, label = "Output: oscillates", size = 2.5 * diagram_text_scale) +
 
   ## Double-Crank
   geom_rect(aes(xmin = 1.7, xmax = 4.3, ymin = 2, ymax = 4), fill = "palegreen", color = "black") +
-  annotate("text", x = 3, y = 3.6, label = "Double-Crank", fontface = "bold", size = 3) +
-  annotate("text", x = 3, y = 3.1, label = "Shortest = ground", size = 2.5) +
-  annotate("text", x = 3, y = 2.6, label = "Input: full rotation", size = 2.5) +
-  annotate("text", x = 3, y = 2.2, label = "Output: full rotation", size = 2.5) +
+  annotate("text", x = 3, y = 3.6, label = "Double-Crank", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 3, y = 3.1, label = "Shortest = ground", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 3, y = 2.6, label = "Input: full rotation", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 3, y = 2.2, label = "Output: full rotation", size = 2.5 * diagram_text_scale) +
 
   ## Rocker-Crank
   geom_rect(aes(xmin = 3.7, xmax = 6.3, ymin = 2, ymax = 4), fill = "palegreen", color = "black") +
-  annotate("text", x = 5, y = 3.6, label = "Rocker-Crank", fontface = "bold", size = 3) +
-  annotate("text", x = 5, y = 3.1, label = "Shortest = output", size = 2.5) +
-  annotate("text", x = 5, y = 2.6, label = "Input: oscillates", size = 2.5) +
-  annotate("text", x = 5, y = 2.2, label = "Output: full rotation", size = 2.5) +
+  annotate("text", x = 5, y = 3.6, label = "Rocker-Crank", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 5, y = 3.1, label = "Shortest = output", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 5, y = 2.6, label = "Input: oscillates", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 5, y = 2.2, label = "Output: full rotation", size = 2.5 * diagram_text_scale) +
 
   ## Triple-Rocker (Non-Grashof)
   geom_rect(aes(xmin = 7, xmax = 11, ymin = 2, ymax = 4.5), fill = "moccasin", color = "black") +
-  annotate("text", x = 9, y = 4.1, label = "Triple-Rocker", fontface = "bold", size = 3.5) +
-  annotate("text", x = 9, y = 3.5, label = "No link can fully rotate", size = 2.8) +
-  annotate("text", x = 9, y = 3, label = "All links oscillate", size = 2.8) +
-  annotate("text", x = 9, y = 2.5, label = "(Limited motion range)", size = 2.8) +
+  annotate("text", x = 9, y = 4.1, label = "Triple-Rocker", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 9, y = 3.5, label = "No link can fully rotate", size = 2.8 * diagram_text_scale) +
+  annotate("text", x = 9, y = 3, label = "All links oscillate", size = 2.8 * diagram_text_scale) +
+  annotate("text", x = 9, y = 2.5, label = "(Limited motion range)", size = 2.8 * diagram_text_scale) +
 
   ## Special case
   geom_rect(aes(xmin = 3.5, xmax = 8.5, ymin = 0.3, ymax = 1.5), fill = "lavender", color = "black") +
-  annotate("text", x = 6, y = 1.2, label = "SPECIAL CASE: S + L = P + Q", fontface = "bold", size = 3) +
-  annotate("text", x = 6, y = 0.7, label = "Change-point mechanism (passes through dead points)", size = 2.8) +
+  annotate("text", x = 6, y = 1.2, label = "SPECIAL CASE: S + L = P + Q", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 6, y = 0.7, label = "Change-point mechanism (passes through dead points)", size = 2.8 * diagram_text_scale) +
 
   coord_fixed(ratio = 1, xlim = c(-1, 12), ylim = c(0, 11)) +
   theme_void()
@@ -324,22 +324,22 @@ ggplot() +
   geom_curve(aes(x = 2, xend = 3.2, y = 0, yend = 0.3),
              arrow = arrow(length = unit(0.2, "cm"), type = "closed", ends = "both"),
              curvature = -0.5, linewidth = 1.2, color = "steelblue") +
-  annotate("text", x = 2.6, y = -0.5, label = "360 deg rotation", color = "steelblue", fontface = "bold", size = 3) +
+  annotate("text", x = 2.6, y = -0.5, label = "360 deg rotation", color = "steelblue", fontface = "bold", size = 3 * diagram_text_scale) +
 
   geom_curve(aes(x = 8.8, xend = 8.5, y = 3, yend = 4.5),
              arrow = arrow(length = unit(0.2, "cm"), type = "closed", ends = "both"),
              curvature = 0.3, linewidth = 1.2, color = "forestgreen") +
-  annotate("text", x = 9.5, y = 3.75, label = "Oscillation\n(~60-120 deg)", color = "forestgreen", fontface = "bold", size = 3) +
+  annotate("text", x = 9.5, y = 3.75, label = "Oscillation\n(~60-120 deg)", color = "forestgreen", fontface = "bold", size = 3 * diagram_text_scale) +
 
   ## Labels
-  annotate("text", x = 2, y = 5.8, label = "CRANK-ROCKER", fontface = "bold", size = 5) +
-  annotate("text", x = 1.5, y = 2.8, label = "Crank", color = "steelblue", size = 3.5) +
-  annotate("text", x = 9, y = 3.3, label = "Rocker", color = "forestgreen", size = 3.5) +
+  annotate("text", x = 2, y = 5.8, label = "CRANK-ROCKER", fontface = "bold", size = 5 * diagram_text_scale) +
+  annotate("text", x = 1.5, y = 2.8, label = "Crank", color = "steelblue", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 9, y = 3.3, label = "Rocker", color = "forestgreen", size = 3.5 * diagram_text_scale) +
 
   ## Application box
   geom_rect(aes(xmin = 5.5, xmax = 10, ymin = 5, ymax = 6.3), fill = "lightyellow", color = "black") +
-  annotate("text", x = 7.75, y = 6, label = "Applications:", fontface = "bold", size = 3) +
-  annotate("text", x = 5.7, y = 5.5, label = "Windshield wipers, sewing machines,\nreciprocating pumps", size = 2.8, hjust = 0) +
+  annotate("text", x = 7.75, y = 6, label = "Applications:", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 5.7, y = 5.5, label = "Windshield wipers, sewing machines,\nreciprocating pumps", size = 2.8 * diagram_text_scale, hjust = 0) +
 
   coord_fixed(ratio = 1, xlim = c(-0.5, 10.5), ylim = c(-1, 6.5)) +
   theme_linkage
@@ -377,27 +377,27 @@ ggplot() +
   geom_curve(aes(x = 3.2, xend = 4.5, y = 0.8, yend = 0.5),
              arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
              curvature = 0.4, linewidth = 1.2, color = "steelblue") +
-  annotate("text", x = 3.8, y = 0.2, label = "360 deg", color = "steelblue", fontface = "bold", size = 3) +
+  annotate("text", x = 3.8, y = 0.2, label = "360 deg", color = "steelblue", fontface = "bold", size = 3 * diagram_text_scale) +
 
   geom_curve(aes(x = 6.8, xend = 5.5, y = 0.8, yend = 0.5),
              arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
              curvature = -0.4, linewidth = 1.2, color = "forestgreen") +
-  annotate("text", x = 6.2, y = 0.2, label = "360 deg", color = "forestgreen", fontface = "bold", size = 3) +
+  annotate("text", x = 6.2, y = 0.2, label = "360 deg", color = "forestgreen", fontface = "bold", size = 3 * diagram_text_scale) +
 
   ## Labels
-  annotate("text", x = 5, y = 6.5, label = "DOUBLE-CRANK (DRAG-LINK)", fontface = "bold", size = 5) +
+  annotate("text", x = 5, y = 6.5, label = "DOUBLE-CRANK (DRAG-LINK)", fontface = "bold", size = 5 * diagram_text_scale) +
 
-  annotate("text", x = 5, y = 1.5, label = "Ground = shortest link", color = "gray40", fontface = "italic", size = 3.5) +
+  annotate("text", x = 5, y = 1.5, label = "Ground = shortest link", color = "gray40", fontface = "italic", size = 3.5 * diagram_text_scale) +
 
   ## Key characteristic
   geom_rect(aes(xmin = 0.5, xmax = 3.5, ymin = 5, ymax = 6.3), fill = "lightgreen", color = "black") +
-  annotate("text", x = 2, y = 6, label = "Key Feature:", fontface = "bold", size = 3) +
-  annotate("text", x = 2, y = 5.4, label = "Non-uniform output velocity\nfrom uniform input", size = 2.8) +
+  annotate("text", x = 2, y = 6, label = "Key Feature:", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 2, y = 5.4, label = "Non-uniform output velocity\nfrom uniform input", size = 2.8 * diagram_text_scale) +
 
   ## Application box
   geom_rect(aes(xmin = 7, xmax = 10.5, ymin = 4, ymax = 5.5), fill = "lightyellow", color = "black") +
-  annotate("text", x = 8.75, y = 5.2, label = "Applications:", fontface = "bold", size = 3) +
-  annotate("text", x = 7.2, y = 4.6, label = "Locomotive coupling rods,\nparallel motion linkages", size = 2.8, hjust = 0) +
+  annotate("text", x = 8.75, y = 5.2, label = "Applications:", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 7.2, y = 4.6, label = "Locomotive coupling rods,\nparallel motion linkages", size = 2.8 * diagram_text_scale, hjust = 0) +
 
   coord_fixed(ratio = 1, xlim = c(0, 11), ylim = c(-0.5, 7)) +
   theme_linkage
@@ -435,20 +435,20 @@ ggplot() +
   geom_curve(aes(x = 2.3, xend = 3.3, y = 3.5, yend = 4.2),
              arrow = arrow(length = unit(0.15, "cm"), type = "closed", ends = "both"),
              curvature = 0.3, linewidth = 1, color = "red") +
-  annotate("text", x = 1.2, y = 4, label = "Limited\nswing", color = "red", size = 3) +
+  annotate("text", x = 1.2, y = 4, label = "Limited\nswing", color = "red", size = 3 * diagram_text_scale) +
 
   geom_curve(aes(x = 7.5, xend = 6.7, y = 3.8, yend = 4.5),
              arrow = arrow(length = unit(0.15, "cm"), type = "closed", ends = "both"),
              curvature = -0.3, linewidth = 1, color = "red") +
-  annotate("text", x = 9, y = 4.2, label = "Limited\nswing", color = "red", size = 3) +
+  annotate("text", x = 9, y = 4.2, label = "Limited\nswing", color = "red", size = 3 * diagram_text_scale) +
 
   ## Labels
-  annotate("text", x = 5, y = 5.5, label = "TRIPLE-ROCKER (Non-Grashof)", fontface = "bold", size = 5) +
+  annotate("text", x = 5, y = 5.5, label = "TRIPLE-ROCKER (Non-Grashof)", fontface = "bold", size = 5 * diagram_text_scale) +
 
   ## Warning box
   geom_rect(aes(xmin = 3, xmax = 7, ymin = 0.5, ymax = 1.5), fill = "mistyrose", color = "darkred") +
-  annotate("text", x = 5, y = 1.2, label = "S + L > P + Q", fontface = "bold", size = 3.5, color = "darkred") +
-  annotate("text", x = 5, y = 0.8, label = "No continuous rotation possible", size = 3, color = "darkred") +
+  annotate("text", x = 5, y = 1.2, label = "S + L > P + Q", fontface = "bold", size = 3.5 * diagram_text_scale, color = "darkred") +
+  annotate("text", x = 5, y = 0.8, label = "No continuous rotation possible", size = 3 * diagram_text_scale, color = "darkred") +
 
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 6)) +
   theme_linkage
@@ -487,38 +487,38 @@ ggplot() +
   geom_segment(aes(x = O2[1], xend = A[1], y = O2[2], yend = A[2]),
                arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
                linewidth = 2, color = "steelblue") +
-  annotate("text", x = 2.3, y = 3.3, label = expression(vec(a)), size = 5, color = "steelblue", parse = FALSE) +
-  annotate("text", x = 2.3, y = 3, label = "a", size = 5, color = "steelblue", fontface = "bold") +
+  annotate("text", x = 2.3, y = 3.3, label = expression(vec(a)), size = 5 * diagram_text_scale, color = "steelblue", parse = FALSE) +
+  annotate("text", x = 2.3, y = 3, label = "a", size = 5 * diagram_text_scale, color = "steelblue", fontface = "bold") +
 
   ## Vector b (coupler)
   geom_segment(aes(x = A[1], xend = B[1], y = A[2], yend = B[2]),
                arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
                linewidth = 2, color = "orange") +
-  annotate("text", x = 5.2, y = 4.8, label = "b", size = 5, color = "darkorange", fontface = "bold") +
+  annotate("text", x = 5.2, y = 4.8, label = "b", size = 5 * diagram_text_scale, color = "darkorange", fontface = "bold") +
 
   ## Vector c (output)
   geom_segment(aes(x = O4[1], xend = B[1], y = O4[2], yend = B[2]),
                arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
                linewidth = 2, color = "forestgreen") +
-  annotate("text", x = 7.8, y = 3.5, label = "c", size = 5, color = "forestgreen", fontface = "bold") +
+  annotate("text", x = 7.8, y = 3.5, label = "c", size = 5 * diagram_text_scale, color = "forestgreen", fontface = "bold") +
 
   ## Vector g (ground)
   geom_segment(aes(x = O2[1], xend = O4[1], y = O2[2] - 0.3, yend = O4[2] - 0.3),
                arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
                linewidth = 2, color = "purple") +
-  annotate("text", x = 5, y = 1.4, label = "g", size = 5, color = "purple", fontface = "bold") +
+  annotate("text", x = 5, y = 1.4, label = "g", size = 5 * diagram_text_scale, color = "purple", fontface = "bold") +
 
   ## Angle theta2
   geom_curve(aes(x = 3, xend = 2.8, y = 2, yend = 2.5), curvature = -0.3, color = "steelblue", linewidth = 1) +
-  annotate("text", x = 3.3, y = 2.5, label = expression(theta[2]), size = 4, color = "steelblue") +
+  annotate("text", x = 3.3, y = 2.5, label = expression(theta[2]), size = 4 * diagram_text_scale, color = "steelblue") +
 
   ## Angle theta3
   geom_curve(aes(x = 4.2, xend = 4.5, y = 4.2, yend = 4.4), curvature = 0.3, color = "darkorange", linewidth = 1) +
-  annotate("text", x = 4.7, y = 4, label = expression(theta[3]), size = 4, color = "darkorange") +
+  annotate("text", x = 4.7, y = 4, label = expression(theta[3]), size = 4 * diagram_text_scale, color = "darkorange") +
 
   ## Angle theta4
   geom_curve(aes(x = 8.5, xend = 8, y = 2, yend = 2.8), curvature = 0.3, color = "forestgreen", linewidth = 1) +
-  annotate("text", x = 8.7, y = 2.6, label = expression(theta[4]), size = 4, color = "forestgreen") +
+  annotate("text", x = 8.7, y = 2.6, label = expression(theta[4]), size = 4 * diagram_text_scale, color = "forestgreen") +
 
   ## Pivot points
   geom_point(aes(x = c(O2[1], O4[1]), y = c(O2[2], O4[2])), size = 6, color = "black") +
@@ -527,15 +527,15 @@ ggplot() +
   geom_point(aes(x = c(A[1], B[1]), y = c(A[2], B[2])), size = 2, color = "white") +
 
   ## Labels for pivots
-  annotate("text", x = O2[1] - 0.3, y = O2[2] + 0.3, label = "O2", fontface = "bold", size = 4) +
-  annotate("text", x = O4[1] + 0.3, y = O4[2] + 0.3, label = "O4", fontface = "bold", size = 4) +
-  annotate("text", x = A[1], y = A[2] + 0.4, label = "A", fontface = "bold", size = 4) +
-  annotate("text", x = B[1], y = B[2] + 0.4, label = "B", fontface = "bold", size = 4) +
+  annotate("text", x = O2[1] - 0.3, y = O2[2] + 0.3, label = "O2", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = O4[1] + 0.3, y = O4[2] + 0.3, label = "O4", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = A[1], y = A[2] + 0.4, label = "A", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = B[1], y = B[2] + 0.4, label = "B", fontface = "bold", size = 4 * diagram_text_scale) +
 
   ## Equation box
   geom_rect(aes(xmin = 0.5, xmax = 5, ymin = 5.5, ymax = 7), fill = "white", color = "black") +
-  annotate("text", x = 2.75, y = 6.7, label = "Loop Closure:", fontface = "bold", size = 3.5) +
-  annotate("text", x = 2.75, y = 6.2, label = "a + b = g + c", size = 4, fontface = "italic") +
+  annotate("text", x = 2.75, y = 6.7, label = "Loop Closure:", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 2.75, y = 6.2, label = "a + b = g + c", size = 4 * diagram_text_scale, fontface = "italic") +
 
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(1, 7.5)) +
   labs(title = "Vector Loop for Four-Bar Position Analysis") +
@@ -581,8 +581,8 @@ ggplot() +
   ## Transmission angle arc
   geom_curve(aes(x = B[1] - 0.8, xend = B[1] + 0.6, y = B[2] - 0.3, yend = B[2] + 0.5),
              curvature = -0.4, linewidth = 1.5, color = "red") +
-  annotate("text", x = B[1] + 1, y = B[2] - 0.2, label = expression(mu), size = 6, color = "red") +
-  annotate("text", x = B[1] + 1.5, y = B[2] - 0.6, label = "(Transmission\nAngle)", size = 3, color = "red") +
+  annotate("text", x = B[1] + 1, y = B[2] - 0.2, label = expression(mu), size = 6 * diagram_text_scale, color = "red") +
+  annotate("text", x = B[1] + 1.5, y = B[2] - 0.6, label = "(Transmission\nAngle)", size = 3 * diagram_text_scale, color = "red") +
 
   ## Pivots
   geom_point(aes(x = c(O2[1], O4[1]), y = c(O2[2], O4[2])), size = 7, color = "black") +
@@ -591,20 +591,20 @@ ggplot() +
   geom_point(aes(x = c(A[1], B[1]), y = c(A[2], B[2])), size = 3, color = "white") +
 
   ## Label at B
-  annotate("text", x = B[1] - 0.5, y = B[2] + 0.5, label = "B", fontface = "bold", size = 4) +
+  annotate("text", x = B[1] - 0.5, y = B[2] + 0.5, label = "B", fontface = "bold", size = 4 * diagram_text_scale) +
 
   ## Quality guidelines box
   geom_rect(aes(xmin = 0.5, xmax = 4.5, ymin = 5, ymax = 7.5), fill = "white", color = "black") +
-  annotate("text", x = 2.5, y = 7.2, label = "DESIGN GUIDELINES", fontface = "bold", size = 3.5) +
-  annotate("text", x = 0.7, y = 6.7, label = expression(paste("Ideal: ", mu, " = 90 deg")), size = 3, hjust = 0) +
-  annotate("text", x = 0.7, y = 6.2, label = expression(paste("Good: 40 deg < ", mu, " < 140 deg")), size = 3, hjust = 0) +
-  annotate("text", x = 0.7, y = 5.7, label = expression(paste("Minimum: ", mu, " > 30 deg")), size = 3, hjust = 0) +
-  annotate("text", x = 0.7, y = 5.2, label = expression(paste("Avoid: ", mu, " near 0 deg or 180 deg")), size = 3, hjust = 0, color = "red") +
+  annotate("text", x = 2.5, y = 7.2, label = "DESIGN GUIDELINES", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 0.7, y = 6.7, label = expression(paste("Ideal: ", mu, " = 90 deg")), size = 3 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 0.7, y = 6.2, label = expression(paste("Good: 40 deg < ", mu, " < 140 deg")), size = 3 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 0.7, y = 5.7, label = expression(paste("Minimum: ", mu, " > 30 deg")), size = 3 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 0.7, y = 5.2, label = expression(paste("Avoid: ", mu, " near 0 deg or 180 deg")), size = 3 * diagram_text_scale, hjust = 0, color = "red") +
 
   ## Note
   geom_rect(aes(xmin = 5.5, xmax = 10, ymin = 0.3, ymax = 1.5), fill = "lightyellow", color = "black") +
-  annotate("text", x = 7.75, y = 1.2, label = "Why it matters:", fontface = "bold", size = 3) +
-  annotate("text", x = 7.75, y = 0.7, label = "Poor transmission angle causes\nhigh joint forces and jerky motion", size = 2.8) +
+  annotate("text", x = 7.75, y = 1.2, label = "Why it matters:", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 7.75, y = 0.7, label = "Poor transmission angle causes\nhigh joint forces and jerky motion", size = 2.8 * diagram_text_scale) +
 
   coord_fixed(ratio = 1, xlim = c(0, 10.5), ylim = c(0, 8)) +
   labs(title = "Transmission Angle in Four-Bar Linkage") +
@@ -696,7 +696,7 @@ ggplot() +
   ## Coupler point P
   geom_point(aes(x = 4.5, y = 5.2), size = 8, color = "red") +
   geom_point(aes(x = 4.5, y = 5.2), size = 4, color = "white") +
-  annotate("text", x = 4.5, y = 5.7, label = "P", fontface = "bold", size = 5, color = "red") +
+  annotate("text", x = 4.5, y = 5.7, label = "P", fontface = "bold", size = 5 * diagram_text_scale, color = "red") +
 
   ## Coupler extension to P
   geom_segment(aes(x = 3.3, xend = 4.5, y = 3.8, yend = 5.2),
@@ -707,14 +707,14 @@ ggplot() +
   geom_point(aes(x = c(2, 7), y = c(2.5, 2.5)), size = 4, color = "white") +
 
   ## Labels
-  annotate("text", x = 5, y = 7.5, label = "COUPLER CURVE", fontface = "bold", size = 5) +
-  annotate("text", x = 5, y = 7, label = "Path traced by coupler point P", size = 3.5) +
+  annotate("text", x = 5, y = 7.5, label = "COUPLER CURVE", fontface = "bold", size = 5 * diagram_text_scale) +
+  annotate("text", x = 5, y = 7, label = "Path traced by coupler point P", size = 3.5 * diagram_text_scale) +
 
   ## Arrow pointing to curve
   geom_curve(aes(x = 6.5, xend = 5.5, y = 6, yend = 5.5),
              arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
              curvature = 0.3, linewidth = 1, color = "red") +
-  annotate("text", x = 7, y = 6.2, label = "Coupler\ncurve", size = 3, color = "red") +
+  annotate("text", x = 7, y = 6.2, label = "Coupler\ncurve", size = 3 * diagram_text_scale, color = "red") +
 
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(1.5, 8)) +
   theme_linkage

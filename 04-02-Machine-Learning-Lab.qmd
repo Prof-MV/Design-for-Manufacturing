@@ -968,7 +968,7 @@ If you do not know an answer, say so clearly and describe how you would find out
 
 The capstone (Weeks 3–6) is worth 40% of your course grade. Evaluation is split across five categories:
 
-#### 1. Working Predictive Model (30 points) {#sec-ml-rubric-model}
+#### Working Predictive Model (30 points) {#sec-ml-rubric-model}
 
 | Score | Criteria |
 |:------|:---------|
@@ -979,7 +979,7 @@ The capstone (Weeks 3–6) is worth 40% of your course grade. Evaluation is spli
 
 The most common reason for a score of 0–14 is using `train_test_split` from scikit-learn instead of a manual engine-wise split. The symptom is an RMSE of 5–8 cycles — suspiciously better than published results. If this happened to you, go back and fix it. It is more important that you understand and fix the mistake than that you submit a misleading score.
 
-#### 2. Code Quality (20 points) {#sec-ml-rubric-code}
+#### Code Quality (20 points) {#sec-ml-rubric-code}
 
 | Score | Criteria |
 |:------|:---------|
@@ -992,7 +992,7 @@ The most common reason for a score of 0–14 is using `train_test_split` from sc
 **LLM policy:** Using LLMs (Claude, ChatGPT, GitHub Copilot) to help write, debug, and understand code is explicitly permitted and encouraged. However: if during the Week 6 presentation you cannot explain a non-trivial code block you submitted, up to 20 points may be deducted across all categories. The policy is: you may use any tool to help you write code, but you are responsible for understanding every line you submit.
 :::
 
-#### 3. Streamlit Application (25 points) {#sec-ml-rubric-app}
+#### Streamlit Application (25 points) {#sec-ml-rubric-app}
 
 | Score | Criteria |
 |:------|:---------|
@@ -1001,7 +1001,7 @@ The most common reason for a score of 0–14 is using `train_test_split` from sc
 | 12–16 | App loads but predictions appear wrong or UI is confusing; sample data button does not work |
 | 0–11 | App does not deploy; or model fails to load; or predictions are nonsensical |
 
-#### 4. Documentation and Honest Disclosure (15 points) {#sec-ml-rubric-docs}
+#### Documentation and Honest Disclosure (15 points) {#sec-ml-rubric-docs}
 
 | Score | Criteria |
 |:------|:---------|
@@ -1010,7 +1010,7 @@ The most common reason for a score of 0–14 is using `train_test_split` from sc
 | 6–9 | Title and description present; no honest discussion of limitations |
 | 0–5 | No documentation; or overclaims accuracy or applicability |
 
-#### 5. Week 6 Presentation (10 points) {#sec-ml-rubric-presentation}
+#### Week 6 Presentation (10 points) {#sec-ml-rubric-presentation}
 
 | Score | Criteria |
 |:------|:---------|

@@ -10,8 +10,8 @@ source("R/required_packages.R")
 ## Custom theme for belt and pulley visualizations
 theme_pulley <- theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
     axis.text = element_blank(),
     axis.title = element_blank(),
     axis.ticks = element_blank(),
@@ -120,22 +120,22 @@ ggplot() +
   ## Labels
   annotate("text", x = driver_x, y = driver_y - driver_r - 1,
            label = "Driver Pulley\n(Small, Fast)",
-           size = 4, fontface = "bold", color = "darkblue") +
+           size = 4 * diagram_text_scale, fontface = "bold", color = "darkblue") +
   annotate("text", x = driven_x, y = driven_y - driven_r - 1,
            label = "Driven Pulley\n(Large, Slow)",
-           size = 4, fontface = "bold", color = "darkred") +
+           size = 4 * diagram_text_scale, fontface = "bold", color = "darkred") +
   annotate("text", x = 4, y = 2.5,
            label = "Tight Side\n(High Tension)",
-           size = 3.5, color = "black") +
+           size = 3.5 * diagram_text_scale, color = "black") +
   annotate("text", x = 4, y = -2.5,
            label = "Slack Side\n(Low Tension)",
-           size = 3.5, color = "gray40") +
+           size = 3.5 * diagram_text_scale, color = "gray40") +
   ## Center distance annotation
   annotate("segment", x = driver_x, y = -5, xend = driven_x, yend = -5,
            arrow = arrow(ends = "both", length = unit(0.2, "cm")),
            color = "darkgreen", linewidth = 1) +
   annotate("text", x = 4, y = -5.7, label = "Center Distance (C)",
-           size = 4, color = "darkgreen", fontface = "italic") +
+           size = 4 * diagram_text_scale, color = "darkgreen", fontface = "italic") +
   coord_fixed() +
   xlim(-3, 12) +
   ylim(-7, 5) +
@@ -234,27 +234,27 @@ ggplot() +
                  xend = -0.6, yend = pulley_outer_r - 0.5),
              curvature = 0.3, color = "blue", linewidth = 0.8) +
   annotate("text", x = -1.5, y = pulley_outer_r - 0.8,
-           label = "Groove\nAngle (β)", size = 3.5, color = "blue") +
+           label = "Groove\nAngle (β)", size = 3.5 * diagram_text_scale, color = "blue") +
   ## Pitch diameter
   annotate("segment", x = 2.5, y = 0, xend = 2.5, yend = pulley_outer_r - groove_depth/2,
            arrow = arrow(ends = "both", length = unit(0.15, "cm")),
            color = "darkgreen", linewidth = 0.8) +
   annotate("text", x = 3.8, y = (pulley_outer_r - groove_depth/2)/2,
-           label = "Pitch\nRadius", size = 3.5, color = "darkgreen") +
+           label = "Pitch\nRadius", size = 3.5 * diagram_text_scale, color = "darkgreen") +
   ## Groove depth
   annotate("segment", x = 1.5, y = pulley_outer_r - groove_depth, xend = 1.5, yend = pulley_outer_r,
            arrow = arrow(ends = "both", length = unit(0.15, "cm")),
            color = "purple", linewidth = 0.8) +
   annotate("text", x = 2.3, y = pulley_outer_r - groove_depth/2,
-           label = "Groove\nDepth", size = 3.5, color = "purple") +
+           label = "Groove\nDepth", size = 3.5 * diagram_text_scale, color = "purple") +
   ## Belt labels
   annotate("text", x = 0, y = pulley_outer_r + 0.8,
-           label = "V-Belt", size = 4, fontface = "bold") +
+           label = "V-Belt", size = 4 * diagram_text_scale, fontface = "bold") +
   annotate("text", x = 0, y = pulley_inner_r/2,
-           label = "Bore\n(Shaft)", size = 3.5) +
+           label = "Bore\n(Shaft)", size = 3.5 * diagram_text_scale) +
   ## Pulley label
  annotate("text", x = -2.5, y = pulley_inner_r + 0.5,
-           label = "Pulley\n(Sheave)", size = 3.5, color = "gray30") +
+           label = "Pulley\n(Sheave)", size = 3.5 * diagram_text_scale, color = "gray30") +
   coord_fixed() +
   xlim(-4.5, 5) +
   ylim(-0.5, 6) +
@@ -332,17 +332,17 @@ ggplot() +
   geom_polygon(data = belt_E, aes(x = x, y = y), fill = "gray40", color = "black") +
   ## Labels
   geom_text(data = specs, aes(x = x_pos, y = -0.3, label = label),
-            size = 6, fontface = "bold", color = "darkblue") +
+            size = 6 * diagram_text_scale, fontface = "bold", color = "darkblue") +
   ## Dimension annotations
   geom_text(data = specs, aes(x = x_pos, y = -0.55,
                               label = paste0("Top: ", top_width)),
-            size = 3, color = "gray40") +
+            size = 3 * diagram_text_scale, color = "gray40") +
   geom_text(data = specs, aes(x = x_pos, y = -0.75,
                               label = paste0("H: ", height)),
-            size = 3, color = "gray40") +
+            size = 3 * diagram_text_scale, color = "gray40") +
   geom_text(data = specs, aes(x = x_pos, y = -0.95,
                               label = paste0(hp_range, " HP")),
-            size = 3, color = "darkgreen") +
+            size = 3 * diagram_text_scale, color = "darkgreen") +
   coord_fixed() +
   xlim(-1, 9) +
   ylim(-1.2, 1.2) +
@@ -436,23 +436,23 @@ ggplot() +
            arrow = arrow(ends = "both", length = unit(0.1, "cm")),
            color = "blue", linewidth = 0.8) +
   annotate("text", x = -1.5, y = belt_thickness/2,
-           label = "Belt\nThickness", size = 3, color = "blue") +
+           label = "Belt\nThickness", size = 3 * diagram_text_scale, color = "blue") +
   annotate("segment", x = 0.4, y = 0.8, xend = 1.2, yend = 0.8,
            arrow = arrow(ends = "both", length = unit(0.1, "cm")),
            color = "darkgreen", linewidth = 0.8) +
   annotate("text", x = 0.8, y = 1.1,
-           label = "Pitch", size = 3.5, color = "darkgreen") +
+           label = "Pitch", size = 3.5 * diagram_text_scale, color = "darkgreen") +
   annotate("segment", x = num_teeth * tooth_pitch + 0.5, y = 0,
            xend = num_teeth * tooth_pitch + 0.5, yend = -tooth_height,
            arrow = arrow(ends = "both", length = unit(0.1, "cm")),
            color = "purple", linewidth = 0.8) +
   annotate("text", x = num_teeth * tooth_pitch + 1.3, y = -tooth_height/2,
-           label = "Tooth\nHeight", size = 3, color = "purple") +
+           label = "Tooth\nHeight", size = 3 * diagram_text_scale, color = "purple") +
   ## Labels
   annotate("text", x = num_teeth * tooth_pitch / 2, y = belt_thickness + 0.4,
-           label = "Timing Belt (Toothed Belt)", size = 5, fontface = "bold") +
+           label = "Timing Belt (Toothed Belt)", size = 5 * diagram_text_scale, fontface = "bold") +
   annotate("text", x = num_teeth * tooth_pitch / 2, y = pulley_y_offset - pulley_thickness - 0.3,
-           label = "Timing Pulley (Sprocket)", size = 4, fontface = "bold", color = "gray40") +
+           label = "Timing Pulley (Sprocket)", size = 4 * diagram_text_scale, fontface = "bold", color = "gray40") +
   coord_fixed() +
   xlim(-2.5, 8) +
   ylim(-2.5, 1.8) +
@@ -744,14 +744,14 @@ ggplot() +
            color = "darkgreen", linewidth = 1.5,
            arrow = arrow(length = unit(0.25, "cm"), type = "closed")) +
   annotate("text", x = idler_x, y = idler_y - idler_r - 1.6,
-           label = "Spring\nForce", size = 3.5, color = "darkgreen") +
+           label = "Spring\nForce", size = 3.5 * diagram_text_scale, color = "darkgreen") +
   ## Labels
   annotate("text", x = driver_x, y = driver_y + driver_r + 0.6,
-           label = "Driver", size = 4, fontface = "bold", color = "darkblue") +
+           label = "Driver", size = 4 * diagram_text_scale, fontface = "bold", color = "darkblue") +
   annotate("text", x = driven_x, y = driven_y + driven_r + 0.6,
-           label = "Driven", size = 4, fontface = "bold", color = "darkred") +
+           label = "Driven", size = 4 * diagram_text_scale, fontface = "bold", color = "darkred") +
   annotate("text", x = idler_x + 1.5, y = idler_y,
-           label = "Idler\n(Tensioner)", size = 3.5, fontface = "bold", color = "darkorange") +
+           label = "Idler\n(Tensioner)", size = 3.5 * diagram_text_scale, fontface = "bold", color = "darkorange") +
   coord_fixed() +
   xlim(-3, 12) +
   ylim(-5, 4) +

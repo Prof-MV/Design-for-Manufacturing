@@ -10,8 +10,8 @@ source("R/required_packages.R")
 ## Custom theme for coupling visualizations
 theme_coupling <- theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
     axis.text = element_blank(),
     axis.title = element_blank(),
     axis.ticks = element_blank(),
@@ -82,7 +82,7 @@ p1 <- ggplot() +
   ## Angle indicator
   geom_curve(aes(x = 1, y = 0, xend = 1.2, yend = 0.35),
              curvature = 0.3, color = "darkgreen", linewidth = 0.8) +
-  annotate("text", x = 1.5, y = 0.15, label = "θ", size = 5, color = "darkgreen") +
+  annotate("text", x = 1.5, y = 0.15, label = "θ", size = 5 * diagram_text_scale, color = "darkgreen") +
   ## Centerlines
   geom_segment(aes(x = -2, y = 0, xend = 0, yend = 0),
                linetype = "dashed", color = "gray40", linewidth = 0.5) +
@@ -106,7 +106,7 @@ p2 <- ggplot() +
   annotate("segment", x = 2.7, y = 0, xend = 2.7, yend = 0.5,
            arrow = arrow(ends = "both", length = unit(0.15, "cm")),
            color = "darkgreen", linewidth = 0.8) +
-  annotate("text", x = 3.2, y = 0.25, label = "Δr", size = 5, color = "darkgreen") +
+  annotate("text", x = 3.2, y = 0.25, label = "Δr", size = 5 * diagram_text_scale, color = "darkgreen") +
   ## Centerlines
   geom_segment(aes(x = -2, y = 0, xend = 3, yend = 0),
                linetype = "dashed", color = "gray40", linewidth = 0.5) +
@@ -130,7 +130,7 @@ p3 <- ggplot() +
   annotate("segment", x = -0.3, y = -0.5, xend = 0.3, yend = -0.5,
            arrow = arrow(ends = "both", length = unit(0.15, "cm")),
            color = "darkgreen", linewidth = 0.8) +
-  annotate("text", x = 0, y = -0.8, label = "Δx", size = 5, color = "darkgreen") +
+  annotate("text", x = 0, y = -0.8, label = "Δx", size = 5 * diagram_text_scale, color = "darkgreen") +
   ## Centerline
   geom_segment(aes(x = -2, y = 0, xend = 2.5, yend = 0),
                linetype = "dashed", color = "gray40", linewidth = 0.5) +
@@ -315,14 +315,14 @@ ggplot() +
   annotate("segment", x = 0, y = 1.4, xend = 0, yend = 2,
            color = "darkorange", linewidth = 0.8) +
   annotate("text", x = 0, y = 2.3,
-           label = "Elastomeric\nSpider", size = 4, color = "darkorange",
+           label = "Elastomeric\nSpider", size = 4 * diagram_text_scale, color = "darkorange",
            fontface = "bold") +
   annotate("segment", x = -1.5, y = 1.2, xend = -2.2, yend = 1.5,
            color = "darkblue", linewidth = 0.8) +
   annotate("text", x = -2.8, y = 1.5,
-           label = "Drive\nHub", size = 4, color = "darkblue") +
+           label = "Drive\nHub", size = 4 * diagram_text_scale, color = "darkblue") +
   annotate("text", x = 2.5, y = 0,
-           label = "Driven\nHub", size = 4, color = "darkred") +
+           label = "Driven\nHub", size = 4 * diagram_text_scale, color = "darkred") +
   coord_fixed() +
   xlim(-3.5, 3.5) +
   ylim(-2.5, 2.8) +
@@ -457,7 +457,7 @@ grid.arrange(p1, p2, p3, ncol = 3)
 
 Selecting the right coupling requires consideration of multiple factors:
 
-#### 1. Torque Requirements
+#### Torque Requirements
 
 The coupling must transmit the required torque with an appropriate safety factor:
 
@@ -472,7 +472,7 @@ Where the **Service Factor (SF)** accounts for load characteristics:
 | Moderate shock (machine tools) | 2.0 - 2.5 |
 | Heavy shock (crushers, mills) | 2.5 - 3.0+ |
 
-#### 2. Speed Limitations
+#### Speed Limitations
 
 Coupling maximum speed depends on:
 
@@ -480,7 +480,7 @@ Coupling maximum speed depends on:
 - Material strength (centrifugal forces)
 - Lubrication requirements (for gear couplings)
 
-#### 3. Misalignment Capacity
+#### Misalignment Capacity
 
 Select based on expected misalignment:
 
@@ -508,7 +508,7 @@ kable(misalign_df,
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
 ```
 
-#### 4. Environmental Factors
+#### Environmental Factors
 
 Consider operating conditions:
 
@@ -534,7 +534,7 @@ ggplot() +
   geom_rect(aes(xmin = 3, xmax = 7, ymin = 5, ymax = 6),
             fill = "steelblue", color = "darkblue", linewidth = 1.5) +
   annotate("text", x = 5, y = 5.5, label = "CLUTCHES",
-           size = 5, fontface = "bold", color = "white") +
+           size = 5 * diagram_text_scale, fontface = "bold", color = "white") +
   ## Connecting lines
   geom_segment(aes(x = 5, y = 5, xend = 5, yend = 4.5),
                linewidth = 1, color = "gray40") +
@@ -547,15 +547,15 @@ ggplot() +
   geom_rect(aes(xmin = 0.5, xmax = 3.5, ymin = 3, ymax = 4),
             fill = "coral", color = "darkred", linewidth = 1.2) +
   annotate("text", x = 2, y = 3.5, label = "FRICTION",
-           size = 4, fontface = "bold", color = "white") +
+           size = 4 * diagram_text_scale, fontface = "bold", color = "white") +
   geom_rect(aes(xmin = 3.7, xmax = 6.3, ymin = 3, ymax = 4),
             fill = "forestgreen", color = "darkgreen", linewidth = 1.2) +
   annotate("text", x = 5, y = 3.5, label = "POSITIVE",
-           size = 4, fontface = "bold", color = "white") +
+           size = 4 * diagram_text_scale, fontface = "bold", color = "white") +
   geom_rect(aes(xmin = 6.5, xmax = 9.5, ymin = 3, ymax = 4),
             fill = "purple", color = "purple4", linewidth = 1.2) +
   annotate("text", x = 8, y = 3.5, label = "OVERRUNNING",
-           size = 4, fontface = "bold", color = "white") +
+           size = 4 * diagram_text_scale, fontface = "bold", color = "white") +
   ## Sub-categories - Friction
   geom_segment(aes(x = 2, y = 3, xend = 2, yend = 2.5),
                linewidth = 0.8, color = "gray40") +
@@ -565,11 +565,11 @@ ggplot() +
                    xend = c(1, 2, 3), yend = rep(2.2, 3)),
                linewidth = 0.8, color = "gray40") +
   geom_label(aes(x = 1, y = 1.8, label = "Disc"),
-             fill = "lightyellow", size = 3.5) +
+             fill = "lightyellow", size = 3.5 * diagram_text_scale) +
   geom_label(aes(x = 2, y = 1.8, label = "Cone"),
-             fill = "lightyellow", size = 3.5) +
+             fill = "lightyellow", size = 3.5 * diagram_text_scale) +
   geom_label(aes(x = 3, y = 1.8, label = "Drum"),
-             fill = "lightyellow", size = 3.5) +
+             fill = "lightyellow", size = 3.5 * diagram_text_scale) +
   ## Sub-categories - Positive
   geom_segment(aes(x = 5, y = 3, xend = 5, yend = 2.5),
                linewidth = 0.8, color = "gray40") +
@@ -579,9 +579,9 @@ ggplot() +
                    xend = c(4.3, 5.7), yend = rep(2.2, 2)),
                linewidth = 0.8, color = "gray40") +
   geom_label(aes(x = 4.3, y = 1.8, label = "Jaw"),
-             fill = "lightyellow", size = 3.5) +
+             fill = "lightyellow", size = 3.5 * diagram_text_scale) +
   geom_label(aes(x = 5.7, y = 1.8, label = "Spline"),
-             fill = "lightyellow", size = 3.5) +
+             fill = "lightyellow", size = 3.5 * diagram_text_scale) +
   ## Sub-categories - Overrunning
   geom_segment(aes(x = 8, y = 3, xend = 8, yend = 2.5),
                linewidth = 0.8, color = "gray40") +
@@ -591,9 +591,9 @@ ggplot() +
                    xend = c(7.3, 8.7), yend = rep(2.2, 2)),
                linewidth = 0.8, color = "gray40") +
   geom_label(aes(x = 7.3, y = 1.8, label = "Sprag"),
-             fill = "lightyellow", size = 3.5) +
+             fill = "lightyellow", size = 3.5 * diagram_text_scale) +
   geom_label(aes(x = 8.7, y = 1.8, label = "Roller"),
-             fill = "lightyellow", size = 3.5) +
+             fill = "lightyellow", size = 3.5 * diagram_text_scale) +
   coord_fixed(ratio = 0.8) +
   xlim(0, 10) +
   ylim(1, 6.5) +
@@ -658,25 +658,25 @@ ggplot() +
   annotate("segment", x = -2.75, y = 2.5, xend = -2.75, yend = 3,
            color = "gray40", linewidth = 0.6) +
   annotate("text", x = -2.75, y = 3.3, label = "Flywheel",
-           size = 3.5, color = "gray40") +
+           size = 3.5 * diagram_text_scale, color = "gray40") +
   annotate("segment", x = -2.1, y = 1.9, xend = -2.1, yend = 2.8,
            color = "brown4", linewidth = 0.6) +
   annotate("text", x = -2.1, y = 3.1, label = "Friction\nDisc",
-           size = 3.5, color = "brown4") +
+           size = 3.5 * diagram_text_scale, color = "brown4") +
   annotate("segment", x = -1.7, y = 2.1, xend = -1.7, yend = 2.6,
            color = "darkblue", linewidth = 0.6) +
   annotate("text", x = -1.0, y = 2.8, label = "Pressure\nPlate",
-           size = 3.5, color = "darkblue") +
+           size = 3.5 * diagram_text_scale, color = "darkblue") +
   annotate("text", x = -0.5, y = 1.5, label = "Diaphragm\nSpring",
-           size = 3.5, color = "darkorange") +
+           size = 3.5 * diagram_text_scale, color = "darkorange") +
   annotate("text", x = 0.5, y = -0.8, label = "Release\nBearing",
-           size = 3.5, color = "purple4") +
+           size = 3.5 * diagram_text_scale, color = "purple4") +
   annotate("text", x = 1.2, y = 0.5, label = "Fork\nForce",
-           size = 3.5, color = "gray40") +
+           size = 3.5 * diagram_text_scale, color = "gray40") +
   annotate("segment", x = -0.8, y = -0.4, xend = -0.8, yend = -1.2,
            color = "darkred", linewidth = 0.6) +
   annotate("text", x = -0.8, y = -1.5, label = "Output\nShaft",
-           size = 3.5, color = "darkred") +
+           size = 3.5 * diagram_text_scale, color = "darkred") +
   coord_fixed() +
   xlim(-4, 2) +
   ylim(-3, 3.8) +
@@ -792,12 +792,12 @@ ggplot() +
            arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
            color = "darkgreen", linewidth = 1.5) +
   annotate("text", x = 1.2, y = 1.6, label = "Engagement",
-           size = 4, color = "darkgreen", fontface = "bold") +
+           size = 4 * diagram_text_scale, color = "darkgreen", fontface = "bold") +
   ## Labels
   annotate("text", x = -2, y = -1.8, label = "Fixed Half",
-           size = 4, color = "darkblue") +
+           size = 4 * diagram_text_scale, color = "darkblue") +
   annotate("text", x = 2, y = -1.8, label = "Sliding Half",
-           size = 4, color = "darkred") +
+           size = 4 * diagram_text_scale, color = "darkred") +
   coord_fixed() +
   xlim(-3.5, 3.5) +
   ylim(-2.2, 2) +
@@ -854,7 +854,7 @@ p1 <- ggplot() +
              arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
              curvature = -0.3, color = "darkgreen", linewidth = 1.2) +
   annotate("text", x = 0, y = 2.5, label = "ENGAGED\n(Driving)",
-           size = 4, fontface = "bold", color = "darkgreen") +
+           size = 4 * diagram_text_scale, fontface = "bold", color = "darkgreen") +
   coord_fixed() +
   xlim(-2.8, 2.8) +
   ylim(-2.8, 3) +
@@ -890,7 +890,7 @@ p2 <- ggplot() +
              arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
              curvature = -0.3, color = "red", linewidth = 1.2) +
   annotate("text", x = 0, y = 2.5, label = "FREEWHEELING\n(Overrunning)",
-           size = 4, fontface = "bold", color = "red") +
+           size = 4 * diagram_text_scale, fontface = "bold", color = "red") +
   coord_fixed() +
   xlim(-2.8, 2.8) +
   ylim(-2.8, 3) +

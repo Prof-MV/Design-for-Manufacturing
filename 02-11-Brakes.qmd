@@ -6,14 +6,14 @@ source("R/required_packages.R")
 
 theme_brake <- theme_minimal() +
   theme(
-    plot.title       = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle    = element_text(hjust = 0.5, size = 10),
-    axis.title       = element_text(size = 11, face = "bold"),
-    axis.text        = element_text(size = 9),
+    plot.title       = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle    = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    axis.title       = element_text(size = 11 * diagram_text_scale, face = "bold"),
+    axis.text        = element_text(size = 9 * diagram_text_scale),
     panel.grid.minor = element_blank(),
     legend.position  = "bottom",
-    legend.title     = element_text(size = 10, face = "bold"),
-    legend.text      = element_text(size = 9),
+    legend.title     = element_text(size = 10 * diagram_text_scale, face = "bold"),
+    legend.text      = element_text(size = 9 * diagram_text_scale),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
@@ -66,17 +66,17 @@ nodes <- data.frame(
 
 ggplot(nodes, aes(x = x, y = y)) +
   geom_tile(aes(fill = fill), width = 1.5, height = 0.9, colour = "white", linewidth = 1) +
-  geom_text(aes(label = label), size = 3, colour = "white", fontface = "bold") +
+  geom_text(aes(label = label), size = 3 * diagram_text_scale, colour = "white", fontface = "bold") +
   scale_fill_identity() +
   annotate("segment", x = 1.75, xend = 2.25, y = 4.5, yend = 4.5,
            arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
   annotate("segment", x = 3.75, xend = 4.25, y = 4.5, yend = 4.5,
            arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
   annotate("text", x = 4, y = 5.2, label = "Hydraulic circuit →\nABS module modulates",
-           hjust = 0.5, size = 2.8, colour = "grey30") +
+           hjust = 0.5, size = 2.8 * diagram_text_scale, colour = "grey30") +
   labs(title = "Vehicle Braking System — Major Sub-Systems") +
   theme_void() +
-  theme(plot.title = element_text(hjust = 0.5, size = 13, face = "bold"))
+  theme(plot.title = element_text(hjust = 0.5, size = 13 * diagram_text_scale, face = "bold"))
 ```
 
 ***
@@ -232,7 +232,7 @@ ggplot(temp_df, aes(x = Time, y = Temp, colour = Type)) +
   geom_line(linewidth = 0.9) +
   geom_hline(yintercept = 400, linetype = "dashed", colour = "#E63946", alpha = 0.6) +
   annotate("text", x = 10, y = 415, label = "Fade risk threshold (~400°C)",
-           hjust = 0, size = 3, colour = "#E63946") +
+           hjust = 0, size = 3 * diagram_text_scale, colour = "#E63946") +
   scale_colour_manual(values = c("#457B9D", "#2A9D8F")) +
   labs(
     title  = "Brake Rotor Temperature — Repeated Hard Stops",
@@ -475,7 +475,7 @@ results_long <- pivot_longer(results, -Shoe, names_to = "Metric", values_to = "V
 
 ggplot(results_long, aes(x = Shoe, y = Value, fill = Shoe)) +
   geom_col(width = 0.5) +
-  geom_text(aes(label = round(Value, 1)), vjust = -0.4, size = 4, fontface = "bold") +
+  geom_text(aes(label = round(Value, 1)), vjust = -0.4, size = 4 * diagram_text_scale, fontface = "bold") +
   scale_fill_manual(values = c("#E63946", "#457B9D")) +
   facet_wrap(~Metric, scales = "free_y") +
   labs(x = NULL, y = "Value") +
@@ -588,7 +588,7 @@ ggplot(friction_df, aes(x = Slip * 100, y = Friction_Coef, colour = Type)) +
   geom_line(linewidth = 1.2) +
   geom_vline(xintercept = 15, linetype = "dashed", colour = "#E9C46A") +
   annotate("text", x = 17, y = 0.5, label = "ABS operating\nzone (10–20% slip)",
-           hjust = 0, size = 3, colour = "#E9C46A") +
+           hjust = 0, size = 3 * diagram_text_scale, colour = "#E9C46A") +
   annotate("point", x = 15, y = max(mu_long[round(slip_ratio, 2) == 0.15]),
            colour = "#E63946", size = 4) +
   scale_colour_manual(values = c("#2A9D8F", "#457B9D")) +
@@ -769,7 +769,7 @@ ggplot(blend_df, aes(x = Decel, y = Torque_pct, fill = Source)) +
   geom_area(alpha = 0.85, position = "stack") +
   geom_vline(xintercept = 7.5, linetype = "dashed", colour = "white") +
   annotate("text", x = 7.6, y = 60, label = "ABS threshold\n(regen cut)", colour = "white",
-           size = 3, hjust = 0) +
+           size = 3 * diagram_text_scale, hjust = 0) +
   scale_fill_manual(values = c("#2A9D8F", "#E63946")) +
   scale_y_continuous(labels = function(x) paste0(x, "%")) +
   labs(

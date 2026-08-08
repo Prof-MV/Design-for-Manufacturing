@@ -191,39 +191,39 @@ library(ggplot2)
 # Create a multi-stage diagram
 ggplot() +
   # Stage 1: Foam Pattern
-  annotate("text", x = 1.5, y = 5.5, label = "1. FOAM PATTERN", fontface = "bold", size = 3.5) +
+  annotate("text", x = 1.5, y = 5.5, label = "1. FOAM PATTERN", fontface = "bold", size = 3.5 * diagram_text_scale) +
   geom_rect(aes(xmin = 0.5, xmax = 2.5, ymin = 2.5, ymax = 5), fill = "lightyellow", color = "black", linewidth = 1) +
   geom_polygon(aes(x = c(1, 1, 1.3, 1.3, 1.7, 1.7, 2, 2, 1.5),
                    y = c(3, 4.5, 4.5, 4, 4, 4.5, 4.5, 3, 2.8)),
                fill = "pink", color = "black") +
-  annotate("text", x = 1.5, y = 3.7, label = "EPS\nFoam", size = 2.5) +
-  annotate("text", x = 1.5, y = 2, label = "Polystyrene\npattern created", size = 2.5, fontface = "italic") +
+  annotate("text", x = 1.5, y = 3.7, label = "EPS\nFoam", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 1.5, y = 2, label = "Polystyrene\npattern created", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
   # Stage 2: Coated Pattern
-  annotate("text", x = 4.5, y = 5.5, label = "2. REFRACTORY COATING", fontface = "bold", size = 3.5) +
+  annotate("text", x = 4.5, y = 5.5, label = "2. REFRACTORY COATING", fontface = "bold", size = 3.5 * diagram_text_scale) +
   geom_rect(aes(xmin = 3.5, xmax = 5.5, ymin = 2.5, ymax = 5), fill = "lightyellow", color = "black", linewidth = 1) +
   geom_polygon(aes(x = c(4, 4, 4.3, 4.3, 4.7, 4.7, 5, 5, 4.5),
                    y = c(3, 4.5, 4.5, 4, 4, 4.5, 4.5, 3, 2.8)),
                fill = "pink", color = "gray40", linewidth = 2) +
-  annotate("text", x = 4.5, y = 2, label = "Ceramic coating\napplied & dried", size = 2.5, fontface = "italic") +
+  annotate("text", x = 4.5, y = 2, label = "Ceramic coating\napplied & dried", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
   # Stage 3: In Sand
-  annotate("text", x = 7.5, y = 5.5, label = "3. EMBEDDED IN SAND", fontface = "bold", size = 3.5) +
+  annotate("text", x = 7.5, y = 5.5, label = "3. EMBEDDED IN SAND", fontface = "bold", size = 3.5 * diagram_text_scale) +
   geom_rect(aes(xmin = 6.5, xmax = 8.5, ymin = 2.5, ymax = 5), fill = "tan", color = "black", linewidth = 1) +
   geom_polygon(aes(x = c(7, 7, 7.3, 7.3, 7.7, 7.7, 8, 8, 7.5),
                    y = c(3, 4.5, 4.5, 4, 4, 4.5, 4.5, 3, 2.8)),
                fill = "pink", color = "gray40", linewidth = 1) +
   geom_rect(aes(xmin = 7.4, xmax = 7.6, ymin = 4.5, ymax = 5.2), fill = "tan", color = "black") +
-  annotate("text", x = 7.5, y = 2, label = "Unbonded sand\ncompacted around", size = 2.5, fontface = "italic") +
+  annotate("text", x = 7.5, y = 2, label = "Unbonded sand\ncompacted around", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
   # Stage 4: Metal Poured
-  annotate("text", x = 10.5, y = 5.5, label = "4. METAL REPLACES FOAM", fontface = "bold", size = 3.5) +
+  annotate("text", x = 10.5, y = 5.5, label = "4. METAL REPLACES FOAM", fontface = "bold", size = 3.5 * diagram_text_scale) +
   geom_rect(aes(xmin = 9.5, xmax = 11.5, ymin = 2.5, ymax = 5), fill = "tan", color = "black", linewidth = 1) +
   geom_polygon(aes(x = c(10, 10, 10.3, 10.3, 10.7, 10.7, 11, 11, 10.5),
                    y = c(3, 4.5, 4.5, 4, 4, 4.5, 4.5, 3, 2.8)),
                fill = "darkorange", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 10.4, xmax = 10.6, ymin = 4.5, ymax = 5.2), fill = "darkorange", color = "black") +
-  annotate("text", x = 10.5, y = 2, label = "Foam vaporizes;\nmetal fills void", size = 2.5, fontface = "italic") +
+  annotate("text", x = 10.5, y = 2, label = "Foam vaporizes;\nmetal fills void", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
   # Arrows between stages
   geom_segment(aes(x = 2.7, xend = 3.3, y = 3.75, yend = 3.75),
@@ -236,7 +236,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(1.5, 6)) +
   theme_void() +
   labs(title = "Lost Foam Casting Process") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
 ```
 
 **Key Steps:**
@@ -278,14 +278,14 @@ library(ggplot2)
 
 ggplot() +
   # Stage 1: Wax Pattern
-  annotate("text", x = 1, y = 4.8, label = "1. WAX\nPATTERN", fontface = "bold", size = 3) +
+  annotate("text", x = 1, y = 4.8, label = "1. WAX\nPATTERN", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_polygon(aes(x = c(0.5, 0.5, 0.7, 0.7, 1.3, 1.3, 1.5, 1.5),
                    y = c(2, 4, 4, 3.5, 3.5, 4, 4, 2)),
                fill = "green3", color = "black") +
-  annotate("text", x = 1, y = 1.5, label = "Wax injected\ninto die", size = 2.2, fontface = "italic") +
+  annotate("text", x = 1, y = 1.5, label = "Wax injected\ninto die", size = 2.2 * diagram_text_scale, fontface = "italic") +
 
   # Stage 2: Pattern Tree
-  annotate("text", x = 3, y = 4.8, label = "2. PATTERN\nTREE", fontface = "bold", size = 3) +
+  annotate("text", x = 3, y = 4.8, label = "2. PATTERN\nTREE", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 2.9, xmax = 3.1, ymin = 2, ymax = 4.3), fill = "green3", color = "black") +
   geom_polygon(aes(x = c(2.5, 2.5, 2.7, 2.9), y = c(2.5, 3.2, 3.2, 3)),
                fill = "green3", color = "black") +
@@ -295,39 +295,39 @@ ggplot() +
                fill = "green3", color = "black") +
   geom_polygon(aes(x = c(3.5, 3.5, 3.3, 3.1), y = c(3.5, 4.2, 4.2, 4)),
                fill = "green3", color = "black") +
-  annotate("text", x = 3, y = 1.5, label = "Multiple patterns\non central sprue", size = 2.2, fontface = "italic") +
+  annotate("text", x = 3, y = 1.5, label = "Multiple patterns\non central sprue", size = 2.2 * diagram_text_scale, fontface = "italic") +
 
   # Stage 3: Ceramic Shell
-  annotate("text", x = 5, y = 4.8, label = "3. CERAMIC\nSHELL", fontface = "bold", size = 3) +
+  annotate("text", x = 5, y = 4.8, label = "3. CERAMIC\nSHELL", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 4.7, xmax = 5.3, ymin = 1.8, ymax = 4.5), fill = "tan", color = "black", linewidth = 1.5) +
   geom_rect(aes(xmin = 4.85, xmax = 5.15, ymin = 2, ymax = 4.3), fill = "green3", color = "darkgreen") +
-  annotate("text", x = 5, y = 1.5, label = "Dipped in slurry\n& stuccoed", size = 2.2, fontface = "italic") +
+  annotate("text", x = 5, y = 1.5, label = "Dipped in slurry\n& stuccoed", size = 2.2 * diagram_text_scale, fontface = "italic") +
 
   # Stage 4: Dewax
-  annotate("text", x = 7, y = 4.8, label = "4. DEWAX", fontface = "bold", size = 3) +
+  annotate("text", x = 7, y = 4.8, label = "4. DEWAX", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 6.7, xmax = 7.3, ymin = 1.8, ymax = 4.5), fill = "tan", color = "black", linewidth = 1.5) +
   geom_rect(aes(xmin = 6.85, xmax = 7.15, ymin = 2, ymax = 4.3), fill = "white", color = "gray") +
   geom_segment(aes(x = 7, xend = 7, y = 1.8, yend = 1.3),
                arrow = arrow(length = unit(0.15, "cm")), color = "green3", linewidth = 1) +
-  annotate("text", x = 7, y = 1, label = "Wax\nmelted out", size = 2, color = "green4") +
-  annotate("text", x = 7, y = 1.5, label = "Steam autoclave\nor flash fire", size = 2.2, fontface = "italic") +
+  annotate("text", x = 7, y = 1, label = "Wax\nmelted out", size = 2 * diagram_text_scale, color = "green4") +
+  annotate("text", x = 7, y = 1.5, label = "Steam autoclave\nor flash fire", size = 2.2 * diagram_text_scale, fontface = "italic") +
 
   # Stage 5: Pour
-  annotate("text", x = 9, y = 4.8, label = "5. POUR\nMETAL", fontface = "bold", size = 3) +
+  annotate("text", x = 9, y = 4.8, label = "5. POUR\nMETAL", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 8.7, xmax = 9.3, ymin = 1.8, ymax = 4.5), fill = "tan", color = "black", linewidth = 1.5) +
   geom_rect(aes(xmin = 8.85, xmax = 9.15, ymin = 2, ymax = 4.3), fill = "darkorange", color = "orange") +
   geom_polygon(aes(x = c(8.7, 9, 9.3), y = c(5.2, 4.7, 5.2)), fill = "darkorange", color = "black") +
-  annotate("text", x = 9, y = 1.5, label = "Preheated mold\nfilled with metal", size = 2.2, fontface = "italic") +
+  annotate("text", x = 9, y = 1.5, label = "Preheated mold\nfilled with metal", size = 2.2 * diagram_text_scale, fontface = "italic") +
 
   # Stage 6: Finished
-  annotate("text", x = 11, y = 4.8, label = "6. FINISHED\nCASTINGS", fontface = "bold", size = 3) +
+  annotate("text", x = 11, y = 4.8, label = "6. FINISHED\nCASTINGS", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_polygon(aes(x = c(10.5, 10.5, 10.7, 10.7, 11.3, 11.3, 11.5, 11.5),
                    y = c(2, 4, 4, 3.5, 3.5, 4, 4, 2)),
                fill = "gray50", color = "black") +
   geom_polygon(aes(x = c(10.5, 10.5, 10.7, 10.7, 11.3, 11.3, 11.5, 11.5) + 0.3,
                    y = c(2, 4, 4, 3.5, 3.5, 4, 4, 2) - 0.5),
                fill = "gray60", color = "black") +
-  annotate("text", x = 11, y = 1.5, label = "Shell broken;\nparts cut off", size = 2.2, fontface = "italic") +
+  annotate("text", x = 11, y = 1.5, label = "Shell broken;\nparts cut off", size = 2.2 * diagram_text_scale, fontface = "italic") +
 
   # Arrows
   geom_segment(aes(x = 1.7, xend = 2.3, y = 3, yend = 3),
@@ -344,7 +344,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.5, 5.5)) +
   theme_void() +
   labs(title = "Investment Casting (Lost Wax) Process") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
 ```
 
 **Key Steps:**
@@ -527,7 +527,7 @@ defects <- data.frame(
 
 ggplot(defects, aes(x = frequency, y = severity, color = category)) +
   geom_point(size = 5) +
-  geom_text(aes(label = defect), vjust = -1, size = 3.5) +
+  geom_text(aes(label = defect), vjust = -1, size = 3.5 * diagram_text_scale) +
   scale_color_manual(values = c("Gas-Related" = "steelblue",
                                  "Shrinkage-Related" = "coral",
                                  "Mold-Related" = "forestgreen",
@@ -586,10 +586,10 @@ ggplot() +
                fill = "white", color = "red", linewidth = 1.5) +
 
   # Annotations
-  annotate("text", x = 5, y = 3.3, label = "Shrinkage\nCavity", color = "red", fontface = "bold", size = 3.5) +
-  annotate("text", x = 5, y = 5.5, label = "Thick Section\n(Last to Solidify)", size = 3.5) +
-  annotate("text", x = 2.5, y = 3, label = "Thin\nSection", size = 3) +
-  annotate("text", x = 7.5, y = 3, label = "Thin\nSection", size = 3) +
+  annotate("text", x = 5, y = 3.3, label = "Shrinkage\nCavity", color = "red", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 5, y = 5.5, label = "Thick Section\n(Last to Solidify)", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 2.5, y = 3, label = "Thin\nSection", size = 3 * diagram_text_scale) +
+  annotate("text", x = 7.5, y = 3, label = "Thin\nSection", size = 3 * diagram_text_scale) +
 
   # Solidification direction arrows
   geom_segment(aes(x = 1.5, xend = 3.5, y = 3, yend = 3),
@@ -602,12 +602,12 @@ ggplot() +
                arrow = arrow(length = unit(0.2, "cm")), color = "blue", linewidth = 1) +
 
   annotate("text", x = 5, y = 0.5, label = "Blue arrows show solidification direction (outside-in)",
-           color = "blue", size = 3, fontface = "italic") +
+           color = "blue", size = 3 * diagram_text_scale, fontface = "italic") +
 
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 6)) +
   theme_void() +
   labs(title = "How Shrinkage Cavities Form") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
 ```
 
 **Design solutions for shrinkage:**

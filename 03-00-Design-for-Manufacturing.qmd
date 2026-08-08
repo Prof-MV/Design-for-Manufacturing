@@ -47,7 +47,7 @@ ggplot(dfm_data, aes(x = stage)) +
   theme(
     legend.position = "bottom",
     plot.title = element_text(hjust = 0.5, face = "bold"),
-    axis.text.x = element_text(size = 9)
+    axis.text.x = element_text(size = 9 * diagram_text_scale)
   ) +
   ylim(0, 100)
 ```
@@ -98,7 +98,7 @@ processes <- data.frame(
 
 ggplot(processes, aes(x = volume, y = complexity, color = category, label = process)) +
   geom_point(size = 5) +
-  geom_text(vjust = -1, hjust = 0.5, size = 3.5) +
+  geom_text(vjust = -1, hjust = 0.5, size = 3.5 * diagram_text_scale) +
   scale_color_manual(values = c("Casting" = "darkorange", "Forming" = "steelblue",
                                  "Subtractive" = "forestgreen", "Additive" = "purple",
                                  "Joining" = "brown")) +

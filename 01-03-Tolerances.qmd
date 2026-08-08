@@ -60,17 +60,17 @@ In limit dimensioning, the high and low limits are specified directly. The machi
 
 This method uses a basic size followed by a permissible variance. This category is further divided based on how the variance is distributed relative to the basic size.
 
-##### 1. Equal Bilateral Tolerance {-}
+##### Equal Bilateral Tolerance {-}
 The variation is permitted equally in both directions (plus and minus) from the basic size.
 
 > **Example**: $25.00 \pm 0.05$
 
-##### 2. Unequal Bilateral Tolerance {-}
+##### Unequal Bilateral Tolerance {-}
 The variation is permitted in both directions, but the amount differs.
 
 > **Example**: $25.00 \,\, {}^{+0.05}_{-0.02}$
 
-##### 3. Unilateral Tolerance {-}
+##### Unilateral Tolerance {-}
 The variation is permitted in only one direction (either positive or negative) from the basic size. The limit in the other direction is zero.
 
 > **Example**: $25.00 \,\, {}^{+0.05}_{-0.00}$

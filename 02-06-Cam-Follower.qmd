@@ -10,14 +10,14 @@ source("R/required_packages.R")
 ## Set a consistent theme for all plots in this chapter
 theme_cam <- theme_minimal() +
   theme(
-    plot.title    = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10),
-    axis.title    = element_text(size = 11, face = "bold"),
-    axis.text     = element_text(size = 9),
+    plot.title    = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    axis.title    = element_text(size = 11 * diagram_text_scale, face = "bold"),
+    axis.text     = element_text(size = 9 * diagram_text_scale),
     panel.grid.minor  = element_blank(),
     legend.position   = "bottom",
-    legend.title      = element_text(size = 10, face = "bold"),
-    legend.text       = element_text(size = 9),
+    legend.title      = element_text(size = 10 * diagram_text_scale, face = "bold"),
+    legend.text       = element_text(size = 9 * diagram_text_scale),
     plot.background   = element_rect(fill = "white", color = NA),
     panel.background  = element_rect(fill = "white", color = NA)
   )
@@ -488,10 +488,10 @@ ggplot(df_disp, aes(x = theta, y = y, colour = type, linetype = type)) +
   annotate("rect", xmin=90,  xmax=180, ymin=-0.08, ymax=-0.04, fill="#CCFFCC", colour="black", size=0.3) +
   annotate("rect", xmin=180, xmax=300, ymin=-0.08, ymax=-0.04, fill="#CCE5FF", colour="black", size=0.3) +
   annotate("rect", xmin=300, xmax=360, ymin=-0.08, ymax=-0.04, fill="#CCFFCC", colour="black", size=0.3) +
-  annotate("text", x=45,  y=-0.06, label="Rise\n(90°)",   size=3, fontface="bold") +
-  annotate("text", x=135, y=-0.06, label="Dwell\n(90°)",  size=3, fontface="bold") +
-  annotate("text", x=240, y=-0.06, label="Return\n(120°)",size=3, fontface="bold") +
-  annotate("text", x=330, y=-0.06, label="Dwell\n(60°)",  size=3, fontface="bold") +
+  annotate("text", x=45,  y=-0.06, label="Rise\n(90°)",   size = 3 * diagram_text_scale, fontface="bold") +
+  annotate("text", x=135, y=-0.06, label="Dwell\n(90°)",  size = 3 * diagram_text_scale, fontface="bold") +
+  annotate("text", x=240, y=-0.06, label="Return\n(120°)",size = 3 * diagram_text_scale, fontface="bold") +
+  annotate("text", x=330, y=-0.06, label="Dwell\n(60°)",  size = 3 * diagram_text_scale, fontface="bold") +
   scale_colour_manual(values = c("Uniform"="#E53935","Parabolic"="#8E24AA","Harmonic"="#1E88E5","Cycloidal"="#43A047"),
                       name = "Motion Type") +
   scale_linetype_manual(values = c("Uniform"="dashed","Parabolic"="dotted","Harmonic"="solid","Cycloidal"="twodash"),
@@ -662,8 +662,8 @@ colours_svaj <- c("S — Displacement" = "#E53935",
 ggplot(df_svaj, aes(x = theta, y = value, colour = curve)) +
   geom_line(linewidth = 1.3) +
   geom_vline(xintercept = c(0, 90), linetype = "dashed", colour = "gray50", linewidth = 0.8) +
-  annotate("text", x = 2, y = 1.15, label = "Start of Rise\n(from dwell)", size = 3, colour = "gray40", hjust = 0) +
-  annotate("text", x = 88, y = 1.15, label = "End of Rise\n(to dwell)", size = 3, colour = "gray40", hjust = 1) +
+  annotate("text", x = 2, y = 1.15, label = "Start of Rise\n(from dwell)", size = 3 * diagram_text_scale, colour = "gray40", hjust = 0) +
+  annotate("text", x = 88, y = 1.15, label = "End of Rise\n(to dwell)", size = 3 * diagram_text_scale, colour = "gray40", hjust = 1) +
   scale_colour_manual(values = colours_svaj, name = NULL) +
   scale_x_continuous(breaks = seq(0, 90, 15)) +
   scale_y_continuous(breaks = seq(-1, 1, 0.25)) +
@@ -673,7 +673,7 @@ ggplot(df_svaj, aes(x = theta, y = value, colour = curve)) +
        y = "Normalised Value") +
   theme_cam +
   theme(legend.position = "none",
-        strip.text = element_text(face = "bold", size = 10))
+        strip.text = element_text(face = "bold", size = 10 * diagram_text_scale))
 ```
 
 ```{r jerk-comparison, echo=FALSE, message=FALSE, fig.width=11, fig.height=6, fig.align='center', fig.cap="Jerk comparison for the four motion types over a rise segment. Uniform motion has theoretically infinite jerk at both endpoints — shown as large red spikes. Parabolic motion has infinite jerk at the midpoint (θ̄ = β/2) where acceleration reverses. Harmonic motion has a finite jerk within the segment but a step discontinuity at both ends (shown by the dashed vertical lines). Cycloidal motion has finite, smooth jerk everywhere — making it the best choice for high-speed cams."}
@@ -722,8 +722,8 @@ ggplot(df_jerk, aes(x = theta, y = jerk, colour = type, linetype = type)) +
   geom_line(linewidth = 1.1) +
   geom_vline(xintercept = c(0, 45, 90), linetype = "dotted", colour = "gray60") +
   geom_hline(yintercept = 0, linewidth = 0.5, colour = "gray40") +
-  annotate("text", x = 2, y = 11, label = "∞ jerk\n(spike)", colour = "#E53935", size = 3) +
-  annotate("text", x = 44, y = 8, label = "∞ jerk\n(parabolic\nmidpoint)", colour = "#8E24AA", size = 3) +
+  annotate("text", x = 2, y = 11, label = "∞ jerk\n(spike)", colour = "#E53935", size = 3 * diagram_text_scale) +
+  annotate("text", x = 44, y = 8, label = "∞ jerk\n(parabolic\nmidpoint)", colour = "#8E24AA", size = 3 * diagram_text_scale) +
   scale_colour_manual(values = c("Uniform"="#E53935","Parabolic"="#8E24AA","Harmonic"="#1E88E5","Cycloidal"="#43A047"),
                       name = "Motion Type") +
   scale_linetype_manual(values = c("Uniform"="dashed","Parabolic"="dotted","Harmonic"="solid","Cycloidal"="twodash"),
@@ -892,11 +892,11 @@ ggplot(data.frame(theta = theta_ex, y = y_ex), aes(x = theta, y = y)) +
   annotate("rect", xmin=210,  xmax=360, ymin=-0.05, ymax=0,  fill="#CCE5FF") +
   annotate("text", x=c(60,150,195,285), y=c(-0.025,-0.025,-0.025,-0.025),
            label=c("Dwell Low","Rise (Harmonic)","Dwell","Return (Harmonic)"),
-           size=2.8, fontface="bold") +
+           size = 2.8 * diagram_text_scale, fontface="bold") +
   geom_line(colour = "#1E88E5", linewidth = 1.4) +
   geom_point(data = pts, aes(x = theta, y = y), colour = "black", size = 4) +
   geom_label(data = pts, aes(x = theta, y = y + 0.07, label = label),
-             size = 3, fill = "white", colour = "black", label.size = 0.3) +
+             size = 3 * diagram_text_scale, fill = "white", colour = "black", label.size = 0.3) +
   scale_x_continuous(breaks = seq(0, 360, 30)) +
   scale_y_continuous(breaks = seq(0, 0.8, 0.2), limits = c(-0.07, 0.95)) +
   labs(title = "Worked Example: Harmonic Motion Displacement Diagram",

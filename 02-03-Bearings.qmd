@@ -10,8 +10,8 @@ source("R/required_packages.R")
 ## Set a consistent theme for all plots
 theme_bearing <- theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
     plot.background = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
@@ -55,7 +55,7 @@ Bearings are broadly classified into two main categories:
 ggplot() +
   ## Main header
   geom_rect(aes(xmin = 4, xmax = 8, ymin = 9, ymax = 10), fill = "steelblue", color = "black") +
-  annotate("text", x = 6, y = 9.5, label = "BEARINGS", fontface = "bold", size = 5, color = "white") +
+  annotate("text", x = 6, y = 9.5, label = "BEARINGS", fontface = "bold", size = 5 * diagram_text_scale, color = "white") +
 
   ## Connecting lines
   geom_segment(aes(x = 6, xend = 6, y = 9, yend = 8), linewidth = 1) +
@@ -65,40 +65,40 @@ ggplot() +
 
   ## Rolling Element Bearings
   geom_rect(aes(xmin = 1, xmax = 5, ymin = 6, ymax = 7), fill = "orange", color = "black") +
-  annotate("text", x = 3, y = 6.5, label = "Rolling Element\n(Anti-Friction)", fontface = "bold", size = 3.5) +
+  annotate("text", x = 3, y = 6.5, label = "Rolling Element\n(Anti-Friction)", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
   ## Plain Bearings
   geom_rect(aes(xmin = 7, xmax = 11, ymin = 6, ymax = 7), fill = "forestgreen", color = "black") +
-  annotate("text", x = 9, y = 6.5, label = "Plain Bearings\n(Sliding/Bushings)", fontface = "bold", size = 3.5, color = "white") +
+  annotate("text", x = 9, y = 6.5, label = "Plain Bearings\n(Sliding/Bushings)", fontface = "bold", size = 3.5 * diagram_text_scale, color = "white") +
 
   ## Sub-types for Rolling Element
   geom_segment(aes(x = 3, xend = 3, y = 6, yend = 5), linewidth = 0.5) +
   geom_segment(aes(x = 1.5, xend = 4.5, y = 5, yend = 5), linewidth = 0.5) +
 
   geom_rect(aes(xmin = 0.5, xmax = 2.5, ymin = 3.5, ymax = 5), fill = "lightyellow", color = "black") +
-  annotate("text", x = 1.5, y = 4.5, label = "Ball\nBearings", size = 3) +
-  annotate("text", x = 1.5, y = 3.8, label = "• Deep groove\n• Angular contact\n• Thrust", size = 2.2, hjust = 0.5) +
+  annotate("text", x = 1.5, y = 4.5, label = "Ball\nBearings", size = 3 * diagram_text_scale) +
+  annotate("text", x = 1.5, y = 3.8, label = "• Deep groove\n• Angular contact\n• Thrust", size = 2.2 * diagram_text_scale, hjust = 0.5) +
 
   geom_rect(aes(xmin = 3.5, xmax = 5.5, ymin = 3.5, ymax = 5), fill = "lightyellow", color = "black") +
-  annotate("text", x = 4.5, y = 4.5, label = "Roller\nBearings", size = 3) +
-  annotate("text", x = 4.5, y = 3.8, label = "• Cylindrical\n• Tapered\n• Spherical", size = 2.2, hjust = 0.5) +
+  annotate("text", x = 4.5, y = 4.5, label = "Roller\nBearings", size = 3 * diagram_text_scale) +
+  annotate("text", x = 4.5, y = 3.8, label = "• Cylindrical\n• Tapered\n• Spherical", size = 2.2 * diagram_text_scale, hjust = 0.5) +
 
   ## Sub-types for Plain Bearings
   geom_segment(aes(x = 9, xend = 9, y = 6, yend = 5), linewidth = 0.5) +
   geom_segment(aes(x = 7.5, xend = 10.5, y = 5, yend = 5), linewidth = 0.5) +
 
   geom_rect(aes(xmin = 6.5, xmax = 8.5, ymin = 3.5, ymax = 5), fill = "lightgreen", color = "black") +
-  annotate("text", x = 7.5, y = 4.5, label = "Journal\nBearings", size = 3) +
-  annotate("text", x = 7.5, y = 3.8, label = "• Hydrodynamic\n• Hydrostatic", size = 2.2, hjust = 0.5) +
+  annotate("text", x = 7.5, y = 4.5, label = "Journal\nBearings", size = 3 * diagram_text_scale) +
+  annotate("text", x = 7.5, y = 3.8, label = "• Hydrodynamic\n• Hydrostatic", size = 2.2 * diagram_text_scale, hjust = 0.5) +
 
   geom_rect(aes(xmin = 9.5, xmax = 11.5, ymin = 3.5, ymax = 5), fill = "lightgreen", color = "black") +
-  annotate("text", x = 10.5, y = 4.5, label = "Bushings", size = 3) +
-  annotate("text", x = 10.5, y = 3.8, label = "• Bronze\n• Polymer\n• Sintered", size = 2.2, hjust = 0.5) +
+  annotate("text", x = 10.5, y = 4.5, label = "Bushings", size = 3 * diagram_text_scale) +
+  annotate("text", x = 10.5, y = 3.8, label = "• Bronze\n• Polymer\n• Sintered", size = 2.2 * diagram_text_scale, hjust = 0.5) +
 
   ## Key difference box
   geom_rect(aes(xmin = 2.5, xmax = 9.5, ymin = 1, ymax = 2.5), fill = "lavender", color = "black") +
-  annotate("text", x = 6, y = 2.1, label = "KEY DIFFERENCE:", fontface = "bold", size = 3.5) +
-  annotate("text", x = 6, y = 1.5, label = "Rolling elements use balls/rollers to convert sliding to rolling friction\nPlain bearings rely on a lubricant film or low-friction materials", size = 2.8) +
+  annotate("text", x = 6, y = 2.1, label = "KEY DIFFERENCE:", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 6, y = 1.5, label = "Rolling elements use balls/rollers to convert sliding to rolling friction\nPlain bearings rely on a lubricant film or low-friction materials", size = 2.8 * diagram_text_scale) +
 
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.5, 10.5)) +
   theme_void()
@@ -135,26 +135,26 @@ ggplot() +
 
   ## Labels with lines
   geom_segment(aes(x = 3.7, xend = 5.5, y = 0, yend = 0.5), color = "red", linewidth = 0.8) +
-  annotate("text", x = 6.2, y = 0.5, label = "Outer Race", color = "red", size = 3.5, hjust = 0) +
+  annotate("text", x = 6.2, y = 0.5, label = "Outer Race", color = "red", size = 3.5 * diagram_text_scale, hjust = 0) +
 
   geom_segment(aes(x = 1.85, xend = 5.5, y = 0, yend = -0.5), color = "blue", linewidth = 0.8) +
-  annotate("text", x = 6.2, y = -0.5, label = "Inner Race", color = "blue", size = 3.5, hjust = 0) +
+  annotate("text", x = 6.2, y = -0.5, label = "Inner Race", color = "blue", size = 3.5 * diagram_text_scale, hjust = 0) +
 
   geom_segment(aes(x = 2.75, xend = 5.5, y = 2.75, yend = 2), color = "darkgreen", linewidth = 0.8) +
-  annotate("text", x = 6.2, y = 2, label = "Rolling Elements\n(Balls)", color = "darkgreen", size = 3.5, hjust = 0) +
+  annotate("text", x = 6.2, y = 2, label = "Rolling Elements\n(Balls)", color = "darkgreen", size = 3.5 * diagram_text_scale, hjust = 0) +
 
   geom_segment(aes(x = 0, xend = -3, y = 1.5, yend = 3), color = "purple", linewidth = 0.8) +
-  annotate("text", x = -3.5, y = 3.5, label = "Bore\n(Shaft fits here)", color = "purple", size = 3.5, hjust = 0.5) +
+  annotate("text", x = -3.5, y = 3.5, label = "Bore\n(Shaft fits here)", color = "purple", size = 3.5 * diagram_text_scale, hjust = 0.5) +
 
   ## Pitch diameter indicator
   geom_segment(aes(x = -2.75, xend = 2.75, y = -4.5, yend = -4.5),
                arrow = arrow(ends = "both", length = unit(0.15, "cm")), linewidth = 0.8) +
-  annotate("text", x = 0, y = -5, label = "Pitch Diameter (Dp)", size = 3.5) +
+  annotate("text", x = 0, y = -5, label = "Pitch Diameter (Dp)", size = 3.5 * diagram_text_scale) +
 
   coord_fixed(ratio = 1, xlim = c(-5, 9), ylim = c(-5.5, 5)) +
   labs(title = "Deep Groove Ball Bearing Cross-Section") +
   theme_void() +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
 ```
 
 **Key Components:**
@@ -233,16 +233,16 @@ ggplot(life_df, aes(x = life)) +
   geom_vline(xintercept = mean_life, color = "purple", linewidth = 1.2, linetype = "dotted") +
   ## Add labels
   annotate("text", x = L10, y = 0.018, label = paste0("L10\n(", round(L10, 0), " hrs)"),
-           color = "red", hjust = 1.1, size = 3.5, fontface = "bold") +
+           color = "red", hjust = 1.1, size = 3.5 * diagram_text_scale, fontface = "bold") +
   annotate("text", x = L50, y = 0.016, label = paste0("L50\n(", round(L50, 0), " hrs)"),
-           color = "darkgreen", hjust = -0.1, size = 3.5, fontface = "bold") +
+           color = "darkgreen", hjust = -0.1, size = 3.5 * diagram_text_scale, fontface = "bold") +
   annotate("text", x = mean_life, y = 0.014, label = paste0("Mean\n(", round(mean_life, 0), " hrs)"),
-           color = "purple", hjust = -0.1, size = 3.5, fontface = "bold") +
+           color = "purple", hjust = -0.1, size = 3.5 * diagram_text_scale, fontface = "bold") +
   ## Add shaded region for early failures (first 10%)
   annotate("rect", xmin = 0, xmax = L10, ymin = 0, ymax = 0.02,
            fill = "red", alpha = 0.2) +
   annotate("text", x = L10/2, y = 0.001, label = "10% fail\nbefore L10",
-           color = "darkred", size = 3) +
+           color = "darkred", size = 3 * diagram_text_scale) +
   labs(
     title = "Statistical Distribution of Bearing Lives",
     subtitle = "Weibull distribution (typical for rolling element bearings)",
@@ -251,8 +251,8 @@ ggplot(life_df, aes(x = life)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10),
+    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
     plot.background = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   ) +
@@ -792,10 +792,10 @@ p_calc_steps <- tribble(
 
   "Denominator", "60 × n × L",
   paste0("60 × ", n, " × ", L10h),
-  formatC(denominator, format = "d", big.mark = ","),
+  formatC(denominator, format = "d", big.mark = " "),
 
   "Division", "Num / Denom",
-  paste0(formatC(numerator, format = "e", digits = 2), " / ", formatC(denominator, format = "d", big.mark = ",")),
+  paste0(formatC(numerator, format = "e", digits = 2), " / ", formatC(denominator, format = "d", big.mark = " ")),
   formatC(numerator/denominator, format = "e", digits = 3),
 
   "Cube root", "P = ∛(result)",
@@ -992,10 +992,10 @@ life_data <- data.frame(
 ggplot(life_data, aes(x = CP_Ratio, y = Life_Millions, color = Type, linetype = Type)) +
   geom_line(linewidth = 1.2) +
   geom_vline(xintercept = 3, linetype = "dashed", alpha = 0.5) +
-  annotate("text", x = 3.2, y = 800, label = "C/P = 3\nDesign target", hjust = 0, size = 3) +
+  annotate("text", x = 3.2, y = 800, label = "C/P = 3\nDesign target", hjust = 0, size = 3 * diagram_text_scale) +
   geom_hline(yintercept = 27, linetype = "dotted", alpha = 0.5) +
-  annotate("text", x = 8, y = 35, label = "~27M rev @ C/P=3", size = 3) +
-  scale_y_log10(labels = scales::comma) +
+  annotate("text", x = 8, y = 35, label = "~27M rev @ C/P=3", size = 3 * diagram_text_scale) +
+  scale_y_log10(labels = scales::label_comma(big.mark = " ")) +
   scale_color_manual(values = c("steelblue", "darkorange")) +
   labs(
     title = "Ball Bearing Life vs. Load Ratio",
@@ -1078,9 +1078,9 @@ results <- tribble(
   "Step 3: L10 (revolutions)", paste0("L10 = (C/P)³ × 10⁶ = (", C/1000, "/", round(P/1000, 2), ")³ × 10⁶"),
   paste0(formatC(L10_rev/1e6, format = "f", digits = 1), " million rev"),
   "Step 4: L10 (hours)", paste0("L10h = L10 / (60 × n) = ", formatC(L10_rev/1e6, format = "f", digits = 1), "×10⁶ / (60 × ", n, ")"),
-  paste0(formatC(L10_hours, format = "f", digits = 0, big.mark = ","), " hours"),
+  paste0(formatC(L10_hours, format = "f", digits = 0, big.mark = " "), " hours"),
   "Step 5: L5 (95% reliability)", paste0("L5 = a₁ × L10 = 0.64 × ", formatC(L10_hours, format = "f", digits = 0)),
-  paste0(formatC(L5_hours, format = "f", digits = 0, big.mark = ","), " hours")
+  paste0(formatC(L5_hours, format = "f", digits = 0, big.mark = " "), " hours")
 )
 
 results %>%
@@ -1096,8 +1096,8 @@ results %>%
 
 ###### Interpretation {-}
 
-- The **L10 life** of `r formatC(L10_hours, format = "f", digits = 0, big.mark = ",")` hours means that 90% of these bearings will operate at least this long before fatigue failure.
-- For applications requiring **95% reliability**, use the L5 life of `r formatC(L5_hours, format = "f", digits = 0, big.mark = ",")` hours.
+- The **L10 life** of `r formatC(L10_hours, format = "f", digits = 0, big.mark = " ")` hours means that 90% of these bearings will operate at least this long before fatigue failure.
+- For applications requiring **95% reliability**, use the L5 life of `r formatC(L5_hours, format = "f", digits = 0, big.mark = " ")` hours.
 - At 24/7 operation, L10 represents approximately `r round(L10_hours / (24*365), 1)` years of service.
 
 :::
@@ -1195,24 +1195,24 @@ ggplot() +
   annotate("point", x = 6.8, y = 6.5, color = "red", size = 3) +
   annotate("segment", x = 6.8, y = 6.5, xend = 8.2, yend = 7.2, color = "red", linewidth = 0.8) +
   annotate("text", x = 8.5, y = 7.4, label = "Minimum film\nthickness (h_min)",
-           color = "red", size = 3, hjust = 0) +
+           color = "red", size = 3 * diagram_text_scale, hjust = 0) +
 
   # Maximum film thickness (opposite side)
   annotate("segment", x = 3.2, y = 3.8, xend = 1.8, yend = 3, color = "blue", linewidth = 0.8) +
   annotate("text", x = 1.5, y = 2.7, label = "Maximum film\nthickness",
-           color = "blue", size = 3, hjust = 1) +
+           color = "blue", size = 3 * diagram_text_scale, hjust = 1) +
 
   # Converging wedge zone (highlighted)
   annotate("curve", x = 7.5, y = 4.5, xend = 5.5, yend = 2.3, curvature = 0.3,
            color = "darkorange", linewidth = 2, lineend = "round") +
   annotate("text", x = 7, y = 3.2, label = "Converging\nwedge zone",
-           color = "darkorange", size = 3, fontface = "bold") +
+           color = "darkorange", size = 3 * diagram_text_scale, fontface = "bold") +
 
   # Rotation arrow on shaft
   geom_curve(aes(x = 5.3, xend = 6.2, y = 5.4, yend = 6), curvature = -0.5,
              arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
              linewidth = 1.2, color = "black") +
-  annotate("text", x = 6.5, y = 5.5, label = "ω", size = 5, fontface = "bold") +
+  annotate("text", x = 6.5, y = 5.5, label = "ω", size = 5 * diagram_text_scale, fontface = "bold") +
 
   # Oil flow arrows (dragged by shaft rotation)
   geom_curve(aes(x = 7, y = 3.5, xend = 7.3, yend = 4.5), curvature = -0.2,
@@ -1220,7 +1220,7 @@ ggplot() +
   geom_curve(aes(x = 7.4, y = 4.8, xend = 7.2, yend = 5.8), curvature = -0.2,
              arrow = arrow(length = unit(0.15, "cm")), color = "gold3", linewidth = 1) +
   annotate("text", x = 8, y = 4.2, label = "Oil dragged\ninto wedge",
-           color = "gold3", size = 2.8, fontface = "italic") +
+           color = "gold3", size = 2.8 * diagram_text_scale, fontface = "italic") +
 
   # Pressure distribution (shown as arrows pushing shaft)
   geom_segment(aes(x = 4.2, xend = 4.7, y = 2.6, yend = 3.4),
@@ -1233,31 +1233,31 @@ ggplot() +
                arrow = arrow(length = unit(0.15, "cm")), color = "purple", linewidth = 1) +
 
   annotate("text", x = 5, y = 1.8, label = "Pressure buildup\nlifts shaft",
-           color = "purple", size = 3, fontface = "bold") +
+           color = "purple", size = 3 * diagram_text_scale, fontface = "bold") +
 
   # Load arrow
   geom_segment(aes(x = 5.3, xend = 5.3, y = 8, yend = 7),
                arrow = arrow(length = unit(0.25, "cm")), color = "darkred", linewidth = 1.5) +
-  annotate("text", x = 5.3, y = 8.3, label = "W (Load)", color = "darkred", size = 3.5, fontface = "bold") +
+  annotate("text", x = 5.3, y = 8.3, label = "W (Load)", color = "darkred", size = 3.5 * diagram_text_scale, fontface = "bold") +
 
   # Center markers
   annotate("point", x = 5, y = 5, shape = 3, size = 3, stroke = 1.5, color = "gray40") +
-  annotate("text", x = 4.5, y = 5, label = "Bearing\ncenter", size = 2.5, hjust = 1) +
+  annotate("text", x = 4.5, y = 5, label = "Bearing\ncenter", size = 2.5 * diagram_text_scale, hjust = 1) +
   annotate("point", x = 5.3, y = 5.4, shape = 3, size = 3, stroke = 1.5, color = "black") +
-  annotate("text", x = 4.8, y = 5.8, label = "Shaft\ncenter", size = 2.5, hjust = 1) +
+  annotate("text", x = 4.8, y = 5.8, label = "Shaft\ncenter", size = 2.5 * diagram_text_scale, hjust = 1) +
 
   # Eccentricity line
   geom_segment(aes(x = 5, xend = 5.3, y = 5, yend = 5.4),
                linetype = "dashed", color = "gray30", linewidth = 0.8) +
-  annotate("text", x = 5.4, y = 5.15, label = "e", size = 4, fontface = "italic") +
+  annotate("text", x = 5.4, y = 5.15, label = "e", size = 4 * diagram_text_scale, fontface = "italic") +
 
   coord_fixed(xlim = c(0, 10), ylim = c(1, 9)) +
   theme_void() +
   labs(title = "Hydrodynamic Wedge Effect in Journal Bearings",
        subtitle = "Shaft rotation creates pressure that lifts the shaft off the bearing surface") +
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
-    plot.subtitle = element_text(hjust = 0.5, size = 10, color = "gray40")
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale, color = "gray40")
   )
 ```
 
@@ -1374,7 +1374,7 @@ ggplot() +
   # Pressure MAX dashed line and label
   annotate("segment", x = c_bearing[1], y = c_bearing[2], xend = -5.8, yend = -4.8,
            linetype = "dashed", color = "black") +
-  annotate("text", x = -5.2, y = -5.2, label = "MAX", fontface = "bold", size = 3.5) +
+  annotate("text", x = -5.2, y = -5.2, label = "MAX", fontface = "bold", size = 3.5 * diagram_text_scale) +
   
   # --- LAYER 2: Bearing Structure ---
   # Housing (Outer Ring)
@@ -1428,38 +1428,38 @@ ggplot() +
   ggtitle("Schematic illustration of oil circulation mechanism\nin sintered oil-impregnated bearing") +
   
   # Component Labels
-  annotate("text", x=6, y=6, label="Sintered oil-impregnated\nbearing", color=col_text, hjust=0, size=4) +
+  annotate("text", x=6, y=6, label="Sintered oil-impregnated\nbearing", color=col_text, hjust=0, size = 4 * diagram_text_scale) +
   annotate("segment", x=6, y=6, xend=4.5, yend=4.5, color=col_housing) +
   
-  annotate("text", x=7, y=4, label="Housing", color=col_text, hjust=0, size=4) +
+  annotate("text", x=7, y=4, label="Housing", color=col_text, hjust=0, size = 4 * diagram_text_scale) +
   annotate("segment", x=7, y=4, xend=5.6, yend=2.5, color=col_housing) +
   
-  annotate("text", x=0, y=0.5, label="Axis\n(shaft)", fontface="bold", size=3.5) +
+  annotate("text", x=0, y=0.5, label="Axis\n(shaft)", fontface="bold", size = 3.5 * diagram_text_scale) +
   
   # Action Labels
   annotate("text", x=-7, y=6, label="Supply of oil from top of inner surface\nof bearing by pump-like action", 
-           color=col_text, hjust=0, size=4) +
+           color=col_text, hjust=0, size = 4 * diagram_text_scale) +
   annotate("segment", x=-4, y=5.5, xend=-1, yend=4.2, color=col_housing) +
   
   annotate("text", x=7, y=-2, label="Supply of oil to\nsliding surface by\nrotation of shaft", 
-           color=col_text, hjust=0, size=4) +
+           color=col_text, hjust=0, size = 4 * diagram_text_scale) +
   annotate("segment", x=7, y=-2, xend=3.5, yend=-1, color=col_housing) +
   
   annotate("text", x=-7, y=-2, label="Pressure distribution\nof oil", 
-           color=col_text, hjust=1, size=4) +
+           color=col_text, hjust=1, size = 4 * diagram_text_scale) +
   annotate("segment", x=-7.1, y=-2, xend=-6.2, yend=-4, color=col_housing) +
   
   annotate("text", x=3, y=-6.5, label="Escape of oil from sliding surface into interior of bearing", 
-           color=col_text, hjust=0.5, size=4) +
+           color=col_text, hjust=0.5, size = 4 * diagram_text_scale) +
   annotate("segment", x=0, y=-6.2, xend=0, yend=-4.5, color=col_housing) +
   
-  annotate("text", x=4.5, y=-4.5, label="Oil film", color=col_text, hjust=0, size=4) +
+  annotate("text", x=4.5, y=-4.5, label="Oil film", color=col_text, hjust=0, size = 4 * diagram_text_scale) +
   annotate("segment", x=4.4, y=-4.5, xend=1, yend=-3.2, color=col_housing) +
   
   # Theme Cleanup
   theme_void() + # Remove axes and grids
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold", color = "white", 
+    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold", color = "white", 
                               margin=margin(b=10), debug=FALSE),
     plot.background = element_rect(fill = "white", color = NA),
     # Simulate the dark blue title header bar
@@ -1511,20 +1511,20 @@ ggplot(df, aes(x = Hersey, y = Friction)) +
   geom_vline(xintercept = c(0.15, 0.5), linetype = "dashed", color = "gray40", linewidth = 0.8) +
 
   # Zone labels at top
-  annotate("text", x = 0.075, y = 0.13, label = "BOUNDARY", fontface = "bold", size = 4, color = "darkred") +
-  annotate("text", x = 0.325, y = 0.13, label = "MIXED", fontface = "bold", size = 4, color = "darkorange4") +
-  annotate("text", x = 1.25, y = 0.13, label = "HYDRODYNAMIC", fontface = "bold", size = 4, color = "darkgreen") +
+  annotate("text", x = 0.075, y = 0.13, label = "BOUNDARY", fontface = "bold", size = 4 * diagram_text_scale, color = "darkred") +
+  annotate("text", x = 0.325, y = 0.13, label = "MIXED", fontface = "bold", size = 4 * diagram_text_scale, color = "darkorange4") +
+  annotate("text", x = 1.25, y = 0.13, label = "HYDRODYNAMIC", fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
 
   # Descriptive text in each zone
   annotate("text", x = 0.075, y = 0.08,
            label = "Metal-to-\nmetal\ncontact",
-           size = 3, color = "gray30") +
+           size = 3 * diagram_text_scale, color = "gray30") +
   annotate("text", x = 0.325, y = 0.055,
            label = "Partial\nfilm +\nasperities",
-           size = 3, color = "gray30") +
+           size = 3 * diagram_text_scale, color = "gray30") +
   annotate("text", x = 1.25, y = 0.06,
            label = "Full fluid film\n(no contact)",
-           size = 3, color = "gray30") +
+           size = 3 * diagram_text_scale, color = "gray30") +
 
   # Minimum friction point
   geom_point(aes(x = min_hersey, y = min_friction), color = "blue", size = 4) +
@@ -1532,7 +1532,7 @@ ggplot(df, aes(x = Hersey, y = Friction)) +
            color = "blue", linewidth = 0.8) +
   annotate("text", x = min_hersey + 0.25, y = min_friction + 0.025,
            label = "Optimal\noperating point",
-           color = "blue", size = 3.5, hjust = 0) +
+           color = "blue", size = 3.5 * diagram_text_scale, hjust = 0) +
 
   # Axis formatting
   scale_x_continuous(expand = c(0, 0), limits = c(0, 2.1),
@@ -1545,9 +1545,9 @@ ggplot(df, aes(x = Hersey, y = Friction)) +
 
   theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
-    plot.subtitle = element_text(hjust = 0.5, size = 10, color = "gray40"),
-    axis.title = element_text(size = 11),
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale, color = "gray40"),
+    axis.title = element_text(size = 11 * diagram_text_scale),
     panel.grid.minor = element_blank()
   )
 ```
@@ -1656,9 +1656,9 @@ ggplot(df, aes(x = Speed, y = Friction)) +
   geom_vline(xintercept = c(10, 40), linetype = "dotted", color = "black") +
 
   # Text Labels for Lubrication Zones
-  annotate("text", x = 5, y = 0.18, label = "Boundary Lubrication", angle = 90, size = 4) +
-  annotate("text", x = 25, y = 0.18, label = "Mixed Lubrication", angle = 90, size = 4) +
-  annotate("text", x = 70, y = 0.15, label = "Hydrodynamic lubrication", size = 5) +
+  annotate("text", x = 5, y = 0.18, label = "Boundary Lubrication", angle = 90, size = 4 * diagram_text_scale) +
+  annotate("text", x = 25, y = 0.18, label = "Mixed Lubrication", angle = 90, size = 4 * diagram_text_scale) +
+  annotate("text", x = 70, y = 0.15, label = "Hydrodynamic lubrication", size = 5 * diagram_text_scale) +
 
 
 
@@ -1671,7 +1671,7 @@ ggplot(df, aes(x = Speed, y = Friction)) +
     axis.line = element_line(arrow = arrow(type = "closed", length = unit(0.15, "inches"))),
     axis.text = element_blank(),
     axis.ticks = element_blank(),
-    axis.title = element_text(size = 14, face = "plain", hjust = 1),
+    axis.title = element_text(size = 14 * diagram_text_scale, face = "plain", hjust = 1),
     plot.margin = margin(20, 20, 20, 20)
   )
 ```
@@ -1750,16 +1750,16 @@ ggplot(pv_data, aes(x = P, y = V, color = Material)) +
 
   ## Add safe operating point example
   annotate("point", x = 1000, y = 30, color = "darkgreen", size = 4) +
-  annotate("text", x = 1200, y = 35, label = "Safe\noperating point", color = "darkgreen", size = 3, hjust = 0) +
+  annotate("text", x = 1200, y = 35, label = "Safe\noperating point", color = "darkgreen", size = 3 * diagram_text_scale, hjust = 0) +
 
   ## Add unsafe point example
   annotate("point", x = 2500, y = 100, color = "red", size = 4, shape = 4, stroke = 2) +
-  annotate("text", x = 2700, y = 110, label = "Exceeds Nylon\nPV limit!", color = "red", size = 3, hjust = 0) +
+  annotate("text", x = 2700, y = 110, label = "Exceeds Nylon\nPV limit!", color = "red", size = 3 * diagram_text_scale, hjust = 0) +
 
   ## Shade regions
   annotate("rect", xmin = 100, xmax = 5000, ymin = 0, ymax = 50,
            fill = "lightgreen", alpha = 0.2) +
-  annotate("text", x = 4500, y = 25, label = "Safe for all", size = 3, hjust = 1) +
+  annotate("text", x = 4500, y = 25, label = "Safe for all", size = 3 * diagram_text_scale, hjust = 1) +
 
   scale_color_manual(values = c("Bronze (PV=50,000)" = "sienna",
                                 "Sintered Bronze (PV=35,000)" = "darkorange",
@@ -1862,7 +1862,7 @@ bushing_results <- tribble(
 
   "Step 3: PV Factor", "PV = P × V",
   paste0("PV = ", round(P_bearing, 1), " × ", round(V_sliding, 1)),
-  paste0(formatC(PV_actual, format = "f", digits = 0, big.mark = ","), " psi·ft/min"),
+  paste0(formatC(PV_actual, format = "f", digits = 0, big.mark = " "), " psi·ft/min"),
 
   "Step 4: Check P Limit", "P < P_max (4,000 psi)",
   paste0(round(P_bearing, 1), " < 4,000?"),
@@ -1896,7 +1896,7 @@ bushing_results %>%
 The SAE 660 bronze bushing is **suitable** for this application:
 
 - All individual limits (P, V) are satisfied
-- The actual PV (`r formatC(PV_actual, format = "f", digits = 0, big.mark = ",")` psi·ft/min) is well below the material limit (75,000 psi·ft/min)
+- The actual PV (`r formatC(PV_actual, format = "f", digits = 0, big.mark = " ")` psi·ft/min) is well below the material limit (75,000 psi·ft/min)
 - Safety factor of `r round(SF, 2)` provides adequate margin
 
 :::
@@ -1963,16 +1963,16 @@ speed_results <- tribble(
 
   "Step 5: N from V limit", "N = 12·V / (π·d)",
   paste0("N = 12 × 800 / (π × ", d_shaft, ")"),
-  paste0(formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = ","), " RPM"),
+  paste0(formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = " "), " RPM"),
 
   "Step 6: N from PV limit", "N = 12·V / (π·d)",
   paste0("N = 12 × ", round(V_from_PVlimit, 1), " / (π × ", d_shaft, ")"),
-  paste0(formatC(N_from_PVlimit, format = "f", digits = 0, big.mark = ","), " RPM"),
+  paste0(formatC(N_from_PVlimit, format = "f", digits = 0, big.mark = " "), " RPM"),
 
   "Step 7: Governing Limit", "N_max = min(N_V, N_PV)",
-  paste0("min(", formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = ","),
-         ", ", formatC(N_from_PVlimit, format = "f", digits = 0, big.mark = ","), ")"),
-  paste0(formatC(N_max, format = "f", digits = 0, big.mark = ","), " RPM")
+  paste0("min(", formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = " "),
+         ", ", formatC(N_from_PVlimit, format = "f", digits = 0, big.mark = " "), ")"),
+  paste0(formatC(N_max, format = "f", digits = 0, big.mark = " "), " RPM")
 )
 
 speed_results %>%
@@ -1986,9 +1986,9 @@ speed_results %>%
 
 ###### Conclusion {-}
 
-The **PV limit governs** this design. Although the V limit alone would allow `r formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = ",")` RPM, the combined PV constraint limits the speed to:
+The **PV limit governs** this design. Although the V limit alone would allow `r formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = " ")` RPM, the combined PV constraint limits the speed to:
 
-$$N_{max} = \boxed{`r formatC(N_max, format = "f", digits = 0, big.mark = ",")`\ \text{RPM}}$$
+$$N_{max} = \boxed{`r formatC(N_max, format = "f", digits = 0, big.mark = " ")`\ \text{RPM}}$$
 
 ::: {.callout-think}
 **Why does the PV limit govern?** The bearing pressure (P = `r round(P_bearing, 1)` psi) is low compared to the 2,500 psi maximum, but when multiplied by velocity, it quickly approaches the PV limit. This is a common scenario with small-diameter, lightly-loaded bushings operating at high speeds.
@@ -2084,7 +2084,7 @@ length_results %>%
 Let's verify by substituting $L_{min}$ back into both constraints:
 
 - **Bearing pressure:** $P = \frac{`r F_load`}{`r d_shaft` \times `r round(L_min, 3)`} = `r round(P_actual, 1)`$ psi < 2,500 psi ✓
-- **PV factor:** $PV = `r round(P_actual, 1)` \times `r round(V_sliding, 1)` = `r formatC(PV_actual, format = "f", digits = 0, big.mark = ",")`$ psi·ft/min ≈ 35,000 psi·ft/min ✓
+- **PV factor:** $PV = `r round(P_actual, 1)` \times `r round(V_sliding, 1)` = `r formatC(PV_actual, format = "f", digits = 0, big.mark = " ")`$ psi·ft/min ≈ 35,000 psi·ft/min ✓
 
 ###### Conclusion {-}
 

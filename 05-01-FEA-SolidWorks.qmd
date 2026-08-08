@@ -108,17 +108,17 @@ ggplot() +
   geom_rect(data = cont, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
             fill = "grey70", color = "black") +
   annotate("text", x = 5, y = 3.4, label = "Real part: one continuous body (no simple formula)",
-           size = 4, fontface = "italic") +
+           size = 4 * diagram_text_scale, fontface = "italic") +
   annotate("segment", x = 5, xend = 5, y = 2.3, yend = 1.6,
            arrow = arrow(length = unit(0.3, "cm")), linewidth = 0.8) +
-  annotate("text", x = 6.7, y = 1.95, label = "discretize", size = 3.6) +
+  annotate("text", x = 6.7, y = 1.95, label = "discretize", size = 3.6 * diagram_text_scale) +
   # elements
   geom_rect(data = elems, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = elem),
             color = "black", alpha = 0.85) +
   geom_point(data = nodes, aes(x = x, y = y), size = 3.5, color = "black") +
   annotate("text", x = 5, y = 0.4,
            label = "Model: discrete elements (boxes) joined at nodes (dots)",
-           size = 4, fontface = "italic") +
+           size = 4 * diagram_text_scale, fontface = "italic") +
   scale_fill_brewer(palette = "Blues") +
   coord_cartesian(ylim = c(0, 3.7)) +
   theme_void() +
@@ -198,17 +198,17 @@ ggplot(curve, aes(strain, stress)) +
   geom_hline(yintercept = yield, linetype = "dashed", color = "firebrick", linewidth = 0.9) +
   geom_hline(yintercept = design_stress, linetype = "dotted", color = "darkblue", linewidth = 0.9) +
   annotate("text", x = 0.13, y = yield + 14, label = "Yield strength (sigma_y = 350 MPa)",
-           color = "firebrick", fontface = "bold", size = 3.6) +
+           color = "firebrick", fontface = "bold", size = 3.6 * diagram_text_scale) +
   annotate("text", x = 0.13, y = design_stress - 16,
            label = "Design point (von Mises = 175 MPa)",
-           color = "darkblue", fontface = "bold", size = 3.6) +
+           color = "darkblue", fontface = "bold", size = 3.6 * diagram_text_scale) +
   annotate("segment", x = 0.05, xend = 0.05, y = design_stress, yend = yield,
            arrow = arrow(length = unit(0.25, "cm"), ends = "both"), color = "darkgreen", linewidth = 0.9) +
   annotate("text", x = 0.062, y = (design_stress + yield)/2,
            label = "FOS = 350/175 = 2.0", hjust = 0, color = "darkgreen",
-           fontface = "bold", size = 3.8) +
+           fontface = "bold", size = 3.8 * diagram_text_scale) +
   labs(x = "Strain (mm/mm)", y = "Stress (MPa)") +
-  theme_minimal(base_size = 13)
+  theme_minimal()
 ```
 
 ::: {.callout-warning}
@@ -291,13 +291,13 @@ ggplot(conv, aes(dof, peak)) +
   geom_line(color = "steelblue", linewidth = 1) +
   geom_point(size = 3, color = "darkblue") +
   annotate("text", x = 120000, y = true_peak + 4,
-           label = "Converged value ~188 MPa", color = "firebrick", size = 3.7) +
+           label = "Converged value ~188 MPa", color = "firebrick", size = 3.7 * diagram_text_scale) +
   annotate("text", x = 8000, y = peak[3] - 8,
-           label = "Default coarse mesh\n(under-predicts!)", color = "grey25", size = 3.5) +
+           label = "Default coarse mesh\n(under-predicts!)", color = "grey25", size = 3.5 * diagram_text_scale) +
   annotate("segment", x = 8000, xend = 3500, y = peak[3] - 14, yend = peak[2],
            arrow = arrow(length = unit(0.2, "cm")), color = "grey40") +
   labs(x = "Degrees of freedom (mesh refinement)", y = "Peak von Mises stress (MPa)") +
-  theme_minimal(base_size = 13)
+  theme_minimal()
 ```
 
 Figure @fig-convergence-12 is the single most important picture in this chapter. A **convergence study** means running the same study several times with progressively finer meshes and watching the peak stress. When refining the mesh further stops changing the answer meaningfully — say, less than a 5% change between two refinements — the result has **converged** and you can trust it. We measure that change with a simple percentage difference:
@@ -335,12 +335,12 @@ ggplot(kt_df, aes(r_over_d, Kt)) +
                                Kt = 1 + 0.9 / (c(0.04, 0.20)^0.5 * 6)),
              aes(r_over_d, Kt), size = 3.5, color = "black") +
   annotate("text", x = 0.04, y = 1 + 0.9/(0.04^0.5*6) + 0.12,
-           label = "Sharp corner:\nhigh Kt", size = 3.4, hjust = 0.1) +
+           label = "Sharp corner:\nhigh Kt", size = 3.4 * diagram_text_scale, hjust = 0.1) +
   annotate("text", x = 0.20, y = 1 + 0.9/(0.20^0.5*6) + 0.12,
-           label = "Generous fillet:\nlow Kt", size = 3.4) +
+           label = "Generous fillet:\nlow Kt", size = 3.4 * diagram_text_scale) +
   labs(x = "Fillet radius / part dimension (r/d)",
        y = expression("Stress concentration factor "*K[t])) +
-  theme_minimal(base_size = 13)
+  theme_minimal()
 ```
 
 Now the dangerous part. A real fillet has a finite radius, so its peak stress is finite and **will converge** as you refine the mesh. But a *perfectly sharp* re-entrant corner in CAD has zero radius — mathematically, the stress there is infinite. This is a **stress singularity.** No matter how fine you make the mesh, the stress at a sharp corner keeps climbing and never settles. Figure @fig-singularity-12 shows the two behaviours side by side.
@@ -366,10 +366,10 @@ ggplot(df, aes(dof, stress, color = geometry)) +
        y = "Peak von Mises stress (MPa)",
        color = NULL) +
   annotate("text", x = 95000, y = 168, label = "Converges -> trust it",
-           color = "darkgreen", size = 3.7) +
+           color = "darkgreen", size = 3.7 * diagram_text_scale) +
   annotate("text", x = 70000, y = 365, label = "Never converges -> singularity, ignore",
-           color = "firebrick", size = 3.7) +
-  theme_minimal(base_size = 13) +
+           color = "firebrick", size = 3.7 * diagram_text_scale) +
+  theme_minimal() +
   theme(legend.position = "bottom")
 ```
 
@@ -415,13 +415,13 @@ lab2$pct_change <- c(NA, abs(diff(lab2$peak)) / lab2$peak[-1] * 100)
 ggplot(lab2, aes(x = elements, y = peak)) +
   geom_line(color = "steelblue", linewidth = 1) +
   geom_point(size = 3.5, color = "darkblue") +
-  geom_text(aes(label = paste0(peak, " MPa")), vjust = -1, size = 3.5) +
+  geom_text(aes(label = paste0(peak, " MPa")), vjust = -1, size = 3.5 * diagram_text_scale) +
   geom_hline(yintercept = 170, linetype = "dashed", color = "firebrick") +
   annotate("text", x = 45000, y = 173, label = "Hand calc ~170 MPa",
-           color = "firebrick", size = 3.6) +
+           color = "firebrick", size = 3.6 * diagram_text_scale) +
   labs(x = "Number of elements", y = "Peak von Mises stress (MPa)") +
   ylim(135, 178) +
-  theme_minimal(base_size = 13)
+  theme_minimal()
 ```
 
 In the worked example of Figure @fig-lab2-results-12, the jump from Fine to Very-fine is $|169-166|/169 \times 100 = 1.8\%$ — below our 5% threshold, so the result has converged at about 169 MPa, agreeing nicely with the 170 MPa hand calculation. **Your numbers will differ; what matters is that you can demonstrate convergence and a sensible match.**
@@ -487,7 +487,7 @@ ggplot(val, aes(load, stress, color = source, shape = source)) +
   geom_point(size = 3.5) +
   scale_color_manual(values = c("Analytical" = "firebrick", "FEA" = "steelblue")) +
   labs(x = "Applied end load P (N)", y = "Max bending stress (MPa)", color = NULL, shape = NULL) +
-  theme_minimal(base_size = 13) +
+  theme_minimal() +
   theme(legend.position = "bottom")
 ```
 
@@ -520,14 +520,14 @@ ggplot(iter, aes(mass, fos)) +
   geom_path(color = "grey60", linewidth = 0.8,
             arrow = arrow(length = unit(0.18, "cm"), type = "closed")) +
   geom_point(aes(color = fos >= 2.0), size = 5) +
-  geom_text(aes(label = version), vjust = -1.1, size = 3.3) +
+  geom_text(aes(label = version), vjust = -1.1, size = 3.3 * diagram_text_scale) +
   scale_color_manual(values = c("TRUE" = "darkgreen", "FALSE" = "firebrick"),
                      labels = c("Below target", "Meets target"), name = "FOS >= 2.0") +
   annotate("text", x = 1.6, y = 2.07, label = "Required FOS = 2.0",
-           color = "firebrick", size = 3.6) +
+           color = "firebrick", size = 3.6 * diagram_text_scale) +
   labs(x = "Part mass (kg)", y = "Minimum factor of safety") +
   ylim(1.4, 2.8) +
-  theme_minimal(base_size = 13) +
+  theme_minimal() +
   theme(legend.position = "bottom")
 ```
 

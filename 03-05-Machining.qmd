@@ -50,29 +50,29 @@ library(ggplot2)
 
 ggplot() +
   # BAD DESIGN (left)
-  annotate("text", x = 2, y = 4.5, label = "POOR DESIGN", color = "red", fontface = "bold", size = 4) +
+  annotate("text", x = 2, y = 4.5, label = "POOR DESIGN", color = "red", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 0.5, xmax = 3.5, ymin = 1, ymax = 4), fill = "gray70", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 1.5, xmax = 3.5, ymin = 2, ymax = 3), fill = "white", color = "black", linewidth = 1) +
-  annotate("text", x = 2.5, y = 2.5, label = "Sharp\nCorner", color = "red", size = 3) +
+  annotate("text", x = 2.5, y = 2.5, label = "Sharp\nCorner", color = "red", size = 3 * diagram_text_scale) +
   geom_point(aes(x = 1.5, y = 2), color = "red", size = 3) +
   geom_point(aes(x = 1.5, y = 3), color = "red", size = 3) +
 
   # GOOD DESIGN (right)
-  annotate("text", x = 7, y = 4.5, label = "GOOD DESIGN", color = "forestgreen", fontface = "bold", size = 4) +
+  annotate("text", x = 7, y = 4.5, label = "GOOD DESIGN", color = "forestgreen", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 5.5, xmax = 8.5, ymin = 1, ymax = 4), fill = "gray70", color = "black", linewidth = 1) +
   # Pocket with rounded corners (approximated)
   geom_polygon(aes(x = c(6.5, 6.7, 8.5, 8.5, 6.7, 6.5),
                    y = c(2.2, 2, 2, 3, 3, 2.8)),
                fill = "white", color = "black", linewidth = 1) +
-  annotate("text", x = 7.5, y = 2.5, label = "Filleted\nCorner", color = "forestgreen", size = 3) +
+  annotate("text", x = 7.5, y = 2.5, label = "Filleted\nCorner", color = "forestgreen", size = 3 * diagram_text_scale) +
 
   # Tool illustration
-  annotate("text", x = 5, y = 2.5, label = "R = Tool\nRadius", size = 3) +
+  annotate("text", x = 5, y = 2.5, label = "R = Tool\nRadius", size = 3 * diagram_text_scale) +
 
   coord_fixed(ratio = 1, xlim = c(0, 9), ylim = c(0.5, 5)) +
   theme_void() +
   labs(title = "Internal Corners Must Have Fillet Radii") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
 ```
 
 **Guideline:** Internal fillet radius should be at least **1.5× the tool radius** to allow the tool to move smoothly without dwelling in corners.
@@ -289,7 +289,7 @@ tolerance_data <- data.frame(
 ggplot(tolerance_data, aes(x = tolerance_mm, y = relative_cost)) +
   geom_line(color = "steelblue", linewidth = 1.5) +
   geom_point(color = "coral", size = 4) +
-  geom_text(aes(label = process), vjust = -1, size = 3) +
+  geom_text(aes(label = process), vjust = -1, size = 3 * diagram_text_scale) +
   scale_x_reverse(trans = "log10") +
   labs(
     title = "Tolerance vs. Machining Cost",

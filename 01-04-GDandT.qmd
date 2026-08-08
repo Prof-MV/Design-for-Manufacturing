@@ -25,7 +25,7 @@ tolerance zone. Why might a circular tolerance zone be more appropriate for
 locating a hole? Think about how a bolt fits into a hole.
 :::
 
-### 1. Introduction to GD&T
+### Introduction to GD&T
 
 Geometric Dimensioning and Tolerancing (GD&T) is a standardized method of specifying and communicating engineering tolerances. Unlike traditional plus-minus dimensioning, GD&T uses a symbolic language that provides a clear, concise description of part geometry and allowable variations.
 
@@ -65,13 +65,13 @@ p1 <- ggplot() +
 
            fill="white", color="black", linewidth=1) +
 
-  annotate("text", x=2, y=2.5, label="Feature", fontface="bold", size=5) +
+  annotate("text", x=2, y=2.5, label="Feature", fontface="bold", size = 5 * diagram_text_scale) +
 
-  annotate("text", x=2, y=1.5, label="25.0 ± 0.5 mm", size=4) +
+  annotate("text", x=2, y=1.5, label="25.0 ± 0.5 mm", size = 4 * diagram_text_scale) +
 
   annotate("text", x=2, y=0.5, label="Traditional: Square Tolerance Zone", 
 
-           fontface="italic", size=3) +
+           fontface="italic", size = 3 * diagram_text_scale) +
 
   xlim(-0.5, 4.5) + ylim(-0.5, 3) +
 
@@ -91,13 +91,13 @@ p2 <- ggplot() +
 
            fill="lightblue", color="red", linewidth=1.5) +
 
-  annotate("text", x=2, y=2.5, label="Feature", fontface="bold", size=5) +
+  annotate("text", x=2, y=2.5, label="Feature", fontface="bold", size = 5 * diagram_text_scale) +
 
-  annotate("text", x=2, y=1.5, label="Ø0.5 mm", size=4) +
+  annotate("text", x=2, y=1.5, label="Ø0.5 mm", size = 4 * diagram_text_scale) +
 
   annotate("text", x=2, y=0.2, label="GD&T: Circular Tolerance Zone", 
 
-           fontface="italic", size=3) +
+           fontface="italic", size = 3 * diagram_text_scale) +
 
   xlim(-0.5, 4.5) + ylim(-0.5, 3) +
 
@@ -108,9 +108,9 @@ p2 <- ggplot() +
 grid.arrange(p1, p2, ncol=2)
 ```
 
-### 2. Fundamental Principles
+### Fundamental Principles
 
-#### 2.1 The Rule of Interchangeability
+#### The Rule of Interchangeability
 
 GD&T is built on the principle that parts must be interchangeable while satisfying functional requirements. This means:
 
@@ -118,7 +118,7 @@ GD&T is built on the principle that parts must be interchangeable while satisfyi
 - Tolerance zones maximize functional space
 - Manufacturing processes can operate at economical levels
 
-#### 2.2 Key Definitions
+#### Key Definitions
 
 **Datum**: A theoretically exact geometric reference (plane, line, or point) from which other geometric characteristics are measured.
 
@@ -130,7 +130,7 @@ GD&T is built on the principle that parts must be interchangeable while satisfyi
 
 **Least Material Condition (LMC)**: The condition where a feature contains the minimum amount of material (largest hole, smallest shaft).
 
-### 3. The Feature Control Frame
+### The Feature Control Frame
 
 The Feature Control Frame (FCF) is the foundation of GD&T notation. It's a rectangular box divided into compartments that specify the geometric characteristic and its requirements.
 ```{r fcf-diagram, echo=FALSE, fig.cap="Feature Control Frame Structure"}
@@ -160,7 +160,7 @@ grid.text("Feature Control Frame Components",
 popViewport()
 ```
 
-#### 3.1 Component Breakdown
+#### Component Breakdown
 
 | Position | Component | Content | Example |
 |----------|-----------|---------|---------|
@@ -170,7 +170,7 @@ popViewport()
 | 4 | Datum B | Secondary datum reference | B |
 | 5 | Datum C | Tertiary datum reference | C |
 
-#### 3.2 Modifier Symbols
+#### Modifier Symbols
 
 Modifiers are used after the tolerance value and datum references to specify material condition constraints:
 
@@ -195,11 +195,11 @@ modifiers_df <- data.frame(
 kable(modifiers_df, caption=if (knitr::is_latex_output()) "Common GD\\&T Modifiers and Symbols" else "Common GD&T Modifiers and Symbols", booktabs=TRUE)
 ```
 
-### 4. The 14 Geometric Characteristics
+### The 14 Geometric Characteristics
 
 GD&T defines 14 geometric characteristics organized into four categories:
 
-#### 4.1 Form Controls (No Datum Required)
+#### Form Controls (No Datum Required)
 
 These controls constrain the shape of individual features.
 ```{r form-controls, echo=FALSE, fig.cap="Form Control Characteristics"}
@@ -259,7 +259,7 @@ ggplot(data, aes(x=x, y=y, color=type, linewidth=type)) +
   theme(legend.position="bottom")
 ```
 
-#### 4.2 Orientation Controls (Datum Required)
+#### Orientation Controls (Datum Required)
 
 These controls define how features are oriented relative to a datum.
 ```{r orientation-controls, echo=FALSE}
@@ -281,7 +281,7 @@ orientation_controls <- data.frame(
 kable(orientation_controls, caption="Orientation Control Characteristics", booktabs=TRUE)
 ```
 
-#### 4.3 Location Controls (Datum Required)
+#### Location Controls (Datum Required)
 
 These controls define where features are positioned.
 ```{r location-controls, echo=FALSE}
@@ -380,7 +380,7 @@ ggplot() +
   theme(legend.position="top")
 ```
 
-### 4.4 Runout Controls (Datum Required)
+### Runout Controls (Datum Required)
 
 These controls define circular or total runout of features about a datum axis.
 ```{r runout-controls, echo=FALSE}
@@ -400,11 +400,11 @@ runout_controls <- data.frame(
 kable(runout_controls, caption="Runout Control Characteristics", booktabs=TRUE)
 ```
 
-### 5. Datum Systems {#sec-datum-systems}
+### Datum Systems {#sec-datum-systems}
 
 Datums are the foundation of GD&T. They establish the reference framework from which all tolerances are applied.
 
-#### 5.1 Datum Selection Hierarchy {-}
+#### Datum Selection Hierarchy {-}
 
 The datum system typically follows a three-plane reference:
 ```{r datum-system, echo=FALSE, fig.cap="Three-Plane Datum System"}
@@ -450,7 +450,7 @@ p3 <- ggplot() +
 grid.arrange(p1, p2, p3, ncol=3)
 ```
 
-#### 5.2 Datum Reference Frame {-}
+#### Datum Reference Frame {-}
 
 The Datum Reference Frame (DRF) is a coordinate system established by the datums:
 ```{r datum-ref-frame, echo=FALSE}
@@ -465,9 +465,9 @@ drf_table <- data.frame(
 kable(drf_table, caption="Datum Reference Frame Structure", booktabs=TRUE)
 ```
 
-### 6. Material Conditions and Bonus Tolerances {#sec-material-conditions}
+### Material Conditions and Bonus Tolerances {#sec-material-conditions}
 
-#### 6.1 Maximum Material Condition (MMC) {-}
+#### Maximum Material Condition (MMC) {-}
 
 MMC is the condition where a feature contains the maximum amount of material:
 - Smallest hole diameter
@@ -498,7 +498,7 @@ ggplot(hole_data, aes(x=reorder(condition, diameter), y=diameter, fill=condition
   theme(legend.position="none")
 ```
 
-#### 6.2 Bonus Tolerance {-}
+#### Bonus Tolerance {-}
 
 When using MMC modifier, a **bonus tolerance** is granted as the feature departs from MMC. This maximizes functional tolerance while ensuring assembly.
 ```{r bonus-tolerance, echo=FALSE, fig.cap="Bonus Tolerance Calculation"}
@@ -531,9 +531,9 @@ ggplot(bonus_df, aes(x=actual_size, y=positional_tolerance)) +
   ylim(0.2, 0.7)
 ```
 
-### 7. Common GD&T Applications {#sec-gdt-applications}
+### Common GD&T Applications {#sec-gdt-applications}
 
-#### 7.1 Bolt Hole Pattern {-}
+#### Bolt Hole Pattern {-}
 
 **Problem**: Ensure bolt holes align for assembly.
 
@@ -610,7 +610,7 @@ ggplot() +
   labs(title="Bolt Hole Pattern with Positional Tolerance")
 ```
 
-#### 7.2 Shaft Runout Control {-}
+#### Shaft Runout Control {-}
 
 **Problem**: Ensure rotating shaft doesn't wobble excessively.
 
@@ -686,9 +686,9 @@ ggplot(data, aes(x=x, y=y, color=type, linewidth=type)) +
   theme(legend.position="bottom")
 ```
 
-### 8. Tolerance Stack-Up Analysis {#sec-stack-up}
+### Tolerance Stack-Up Analysis {#sec-stack-up}
 
-#### 8.1 Worst-Case Analysis {-}
+#### Worst-Case Analysis {-}
 ```{r stack-up-worst, echo=FALSE, fig.cap="Worst-Case Tolerance Stack-Up"}
 library(ggplot2)
 
@@ -729,7 +729,7 @@ ggplot(results_df, aes(x=reorder(Condition, Total_Length), y=Total_Length, fill=
   theme(legend.position="none")
 ```
 
-#### 8.2 Statistical Stack-Up (Optional Advanced Topic) {-}
+#### Statistical Stack-Up (Optional Advanced Topic) {-}
 
 Statistical stack-up uses probability to reduce required tolerances:
 ```{r stack-up-statistical, echo=FALSE, fig.cap="Statistical vs. Worst-Case Stack-Up"}
@@ -767,7 +767,7 @@ ggplot(data, aes(x=size, y=probability, fill=method)) +
   theme(legend.position="top")
 ```
 
-### 9. Practical Exercises {-}
+### Practical Exercises {-}
 
 #### Exercise 1: Interpreting a Feature Control Frame {-}
 
@@ -838,7 +838,7 @@ cat("Maximum total length:", max_length, "mm\n")
 cat("Total tolerance stack-up: ±", total_tolerance, "mm\n")
 ```
 
-### 10. Classroom Activity: Interactive Tolerance Design {-}
+### Classroom Activity: Interactive Tolerance Design {-}
 ```{r shiny-gdt-tool, echo=FALSE, eval=FALSE}
 ## Save this as app.R in your Shiny app directory
 ## This creates an interactive GD&T tool for classroom use
@@ -920,7 +920,7 @@ server <- function(input, output) {
 shinyApp(ui, server)
 ```
 
-### 11. Summary and Key Takeaways {-}
+### Summary and Key Takeaways {-}
 
 - **GD&T provides unambiguous communication** of engineering design intent
 - **Datum systems establish reference frameworks** that organize tolerance zones
@@ -928,7 +928,7 @@ shinyApp(ui, server)
 - **The 14 geometric characteristics** address form, orientation, location, and runout
 - **Proper application** improves manufacturability, reduces cost, and ensures assembly
 
-### 12. Additional Resources {-}
+### Additional Resources {-}
 
 - ASME Y14.5-2018: Dimensioning and Tolerancing
 - ISO 1101: Geometrical Product Specifications

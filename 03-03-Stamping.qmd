@@ -9,8 +9,8 @@ source("R/required_packages.R")
 ## Set a consistent theme for all plots
 theme_stamping <- theme_minimal() +
 theme(
- plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
- plot.subtitle = element_text(hjust = 0.5, size = 10),
+ plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+ plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
  axis.text = element_blank(),
  axis.title = element_blank(),
  axis.ticks = element_blank(),
@@ -63,38 +63,38 @@ Every stamping operation requires several basic elements working in harmony:
 ggplot() +
  ## Press ram (top)
  geom_rect(aes(xmin = 2, xmax = 8, ymin = 8, ymax = 9), fill = "gray40", color = "black", linewidth = 1) +
- annotate("text", x = 5, y = 8.5, label = "Press Ram", color = "white", fontface = "bold", size = 4) +
+ annotate("text", x = 5, y = 8.5, label = "Press Ram", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Punch
  geom_rect(aes(xmin = 4, xmax = 6, ymin = 5.5, ymax = 8), fill = "steelblue", color = "black", linewidth = 1) +
- annotate("text", x = 5, y = 6.75, label = "Punch", color = "white", fontface = "bold", size = 4) +
+ annotate("text", x = 5, y = 6.75, label = "Punch", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Sheet metal (workpiece)
  geom_rect(aes(xmin = 1, xmax = 9, ymin = 5, ymax = 5.5), fill = "orange", color = "black", linewidth = 1) +
- annotate("text", x = 1.8, y = 5.25, label = "Sheet Metal", color = "black", fontface = "bold", size = 3) +
+ annotate("text", x = 1.8, y = 5.25, label = "Sheet Metal", color = "black", fontface = "bold", size = 3 * diagram_text_scale) +
 
  ## Die (with cavity)
  geom_rect(aes(xmin = 1, xmax = 3.8, ymin = 3, ymax = 5), fill = "gray60", color = "black", linewidth = 1) +
  geom_rect(aes(xmin = 6.2, xmax = 9, ymin = 3, ymax = 5), fill = "gray60", color = "black", linewidth = 1) +
  geom_rect(aes(xmin = 3.8, xmax = 6.2, ymin = 2, ymax = 5), fill = "white", color = "black", linewidth = 1) +
- annotate("text", x = 2.4, y = 4, label = "Die", color = "white", fontface = "bold", size = 4) +
- annotate("text", x = 5, y = 3.5, label = "Die\nCavity", color = "gray40", fontface = "bold", size = 3) +
+ annotate("text", x = 2.4, y = 4, label = "Die", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
+ annotate("text", x = 5, y = 3.5, label = "Die\nCavity", color = "gray40", fontface = "bold", size = 3 * diagram_text_scale) +
 
  ## Press bed (bottom)
  geom_rect(aes(xmin = 0, xmax = 10, ymin = 1, ymax = 2), fill = "gray40", color = "black", linewidth = 1) +
- annotate("text", x = 5, y = 1.5, label = "Press Bed", color = "white", fontface = "bold", size = 4) +
+ annotate("text", x = 5, y = 1.5, label = "Press Bed", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Force arrow
  geom_segment(aes(x = 5, xend = 5, y = 10, yend = 9.2),
              arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
              linewidth = 1.5, color = "red") +
- annotate("text", x = 5, y = 10.3, label = "Force (F)", color = "red", fontface = "bold", size = 4) +
+ annotate("text", x = 5, y = 10.3, label = "Force (F)", color = "red", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Clearance annotation
  geom_segment(aes(x = 6, xend = 6.2, y = 5.25, yend = 5.25), linewidth = 0.5) +
  geom_segment(aes(x = 6, xend = 6, y = 5.1, yend = 5.4), linewidth = 0.5) +
  geom_segment(aes(x = 6.2, xend = 6.2, y = 5.1, yend = 5.4), linewidth = 0.5) +
- annotate("text", x = 6.7, y = 5.25, label = "Clearance", size = 3) +
+ annotate("text", x = 6.7, y = 5.25, label = "Clearance", size = 3 * diagram_text_scale) +
 
  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 11)) +
  labs(title = "Basic Stamping Setup") +
@@ -130,13 +130,13 @@ ggplot() +
  geom_rect(aes(xmin = 0.5, xmax = 4.5, ymin = 0.5, ymax = 3.5),
            fill = "gray70", color = "black", linewidth = 1) +
  geom_polygon(data = blanking_circle, aes(x = x, y = y), fill = "white", color = "black", linewidth = 1) +
- annotate("text", x = 2.5, y = 4.2, label = "BLANKING", fontface = "bold", size = 5) +
- annotate("text", x = 1.2, y = 3.2, label = "Scrap", color = "gray40", size = 3.5) +
+ annotate("text", x = 2.5, y = 4.2, label = "BLANKING", fontface = "bold", size = 5 * diagram_text_scale) +
+ annotate("text", x = 1.2, y = 3.2, label = "Scrap", color = "gray40", size = 3.5 * diagram_text_scale) +
 
  ## Blank (product) - shown below
  geom_polygon(data = circle_pts(2.5, -1, 1), aes(x = x, y = y),
              fill = "forestgreen", color = "black", linewidth = 1) +
- annotate("text", x = 2.5, y = -1, label = "Product\n(Blank)", color = "white", fontface = "bold", size = 3.5) +
+ annotate("text", x = 2.5, y = -1, label = "Product\n(Blank)", color = "white", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
  ## Arrow
  geom_segment(aes(x = 2.5, xend = 2.5, y = 0.3, yend = 0.1),
@@ -147,13 +147,13 @@ ggplot() +
  geom_rect(aes(xmin = 5.5, xmax = 9.5, ymin = 0.5, ymax = 3.5),
            fill = "forestgreen", color = "black", linewidth = 1) +
  geom_polygon(data = punching_circle, aes(x = x, y = y), fill = "white", color = "black", linewidth = 1) +
- annotate("text", x = 7.5, y = 4.2, label = "PUNCHING", fontface = "bold", size = 5) +
- annotate("text", x = 6.2, y = 3.2, label = "Product", color = "white", fontface = "bold", size = 3.5) +
+ annotate("text", x = 7.5, y = 4.2, label = "PUNCHING", fontface = "bold", size = 5 * diagram_text_scale) +
+ annotate("text", x = 6.2, y = 3.2, label = "Product", color = "white", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
  ## Slug (scrap) - shown below
  geom_polygon(data = circle_pts(7.5, -1, 1), aes(x = x, y = y),
              fill = "gray70", color = "black", linewidth = 1) +
- annotate("text", x = 7.5, y = -1, label = "Scrap\n(Slug)", color = "gray40", size = 3.5) +
+ annotate("text", x = 7.5, y = -1, label = "Scrap\n(Slug)", color = "gray40", size = 3.5 * diagram_text_scale) +
 
  ## Arrow
  geom_segment(aes(x = 7.5, xend = 7.5, y = 0.3, yend = 0.1),
@@ -188,38 +188,38 @@ ggplot() +
  geom_polygon(aes(x = c(0, 3, 5, 7, 10, 10, 0),
                   y = c(3, 3, 0.5, 3, 3, 0, 0)),
              fill = "gray60", color = "black", linewidth = 1) +
- annotate("text", x = 1.5, y = 1.5, label = "Die", color = "white", fontface = "bold", size = 4) +
+ annotate("text", x = 1.5, y = 1.5, label = "Die", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## V-Punch (top)
  geom_polygon(aes(x = c(3, 5, 7, 7, 3),
                   y = c(7, 4, 7, 8, 8)),
              fill = "steelblue", color = "black", linewidth = 1) +
- annotate("text", x = 5, y = 7.2, label = "Punch", color = "white", fontface = "bold", size = 4) +
+ annotate("text", x = 5, y = 7.2, label = "Punch", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Bent sheet metal
  geom_polygon(aes(x = c(1.5, 5, 8.5, 8.3, 5, 1.7),
                   y = c(4.2, 2, 4.2, 4.5, 2.3, 4.5)),
              fill = "orange", color = "black", linewidth = 1) +
- annotate("text", x = 7.5, y = 5, label = "Workpiece", color = "darkorange", fontface = "bold", size = 3.5) +
+ annotate("text", x = 7.5, y = 5, label = "Workpiece", color = "darkorange", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
  ## Bend angle annotation
  geom_curve(aes(x = 5, y = 3.5, xend = 6.5, yend = 4.2),
            curvature = -0.3, linewidth = 0.5, color = "red") +
- annotate("text", x = 6.8, y = 3.5, label = "Bend\nAngle", color = "red", size = 3) +
+ annotate("text", x = 6.8, y = 3.5, label = "Bend\nAngle", color = "red", size = 3 * diagram_text_scale) +
 
  ## Bend radius annotation
  geom_point(aes(x = 5, y = 2.15), size = 2, color = "red") +
- annotate("text", x = 5, y = 1.3, label = "Bend Radius (R)", color = "red", size = 3) +
+ annotate("text", x = 5, y = 1.3, label = "Bend Radius (R)", color = "red", size = 3 * diagram_text_scale) +
 
  ## Tension/Compression labels
- annotate("text", x = 3, y = 3.8, label = "Tension\n(outside)", color = "blue", size = 2.5, fontface = "italic") +
- annotate("text", x = 3.2, y = 2.8, label = "Compression\n(inside)", color = "purple", size = 2.5, fontface = "italic") +
+ annotate("text", x = 3, y = 3.8, label = "Tension\n(outside)", color = "blue", size = 2.5 * diagram_text_scale, fontface = "italic") +
+ annotate("text", x = 3.2, y = 2.8, label = "Compression\n(inside)", color = "purple", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
  ## Force arrow
  geom_segment(aes(x = 5, xend = 5, y = 9, yend = 8.2),
              arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
              linewidth = 1.5, color = "red") +
- annotate("text", x = 5, y = 9.3, label = "F", color = "red", fontface = "bold", size = 5) +
+ annotate("text", x = 5, y = 9.3, label = "F", color = "red", fontface = "bold", size = 5 * diagram_text_scale) +
 
  coord_fixed(ratio = 1, xlim = c(-0.5, 10.5), ylim = c(-0.5, 10)) +
  labs(title = "V-Bending Operation") +
@@ -250,7 +250,7 @@ ggplot() +
  ## Blank holder top
  geom_rect(aes(xmin = 0.3, xmax = 1.5, ymin = 3, ymax = 3.5), fill = "gray50", color = "black") +
  geom_rect(aes(xmin = 3.5, xmax = 4.7, ymin = 3, ymax = 3.5), fill = "gray50", color = "black") +
- annotate("text", x = 0.9, y = 3.8, label = "Blank\nHolder", size = 2.5) +
+ annotate("text", x = 0.9, y = 3.8, label = "Blank\nHolder", size = 2.5 * diagram_text_scale) +
 
  ## Flat blank
  geom_rect(aes(xmin = 0.3, xmax = 4.7, ymin = 2.7, ymax = 3), fill = "orange", color = "black", linewidth = 1) +
@@ -258,15 +258,15 @@ ggplot() +
  ## Die
  geom_rect(aes(xmin = 0, xmax = 1.5, ymin = 0, ymax = 2.7), fill = "gray60", color = "black") +
  geom_rect(aes(xmin = 3.5, xmax = 5, ymin = 0, ymax = 2.7), fill = "gray60", color = "black") +
- annotate("text", x = 0.75, y = 1.3, label = "Die", color = "white", fontface = "bold", size = 4) +
+ annotate("text", x = 0.75, y = 1.3, label = "Die", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Punch (above)
  geom_rect(aes(xmin = 1.7, xmax = 3.3, ymin = 3.5, ymax = 5), fill = "steelblue", color = "black") +
- annotate("text", x = 2.5, y = 4.25, label = "Punch", color = "white", fontface = "bold", size = 3.5) +
+ annotate("text", x = 2.5, y = 4.25, label = "Punch", color = "white", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
  ## Labels
- annotate("text", x = 2.5, y = 5.8, label = "BEFORE", fontface = "bold", size = 5) +
- annotate("text", x = 2.5, y = 2.3, label = expression(D[b]), size = 4) +
+ annotate("text", x = 2.5, y = 5.8, label = "BEFORE", fontface = "bold", size = 5 * diagram_text_scale) +
+ annotate("text", x = 2.5, y = 2.3, label = expression(D[b]), size = 4 * diagram_text_scale) +
  geom_segment(aes(x = 0.3, xend = 4.7, y = 2.4, yend = 2.4),
              arrow = arrow(length = unit(0.15, "cm"), ends = "both"), linewidth = 0.5) +
 
@@ -291,11 +291,11 @@ ggplot() +
 
  ## Punch (lowered)
  geom_rect(aes(xmin = 8.7, xmax = 10.3, ymin = 0.5, ymax = 5), fill = "steelblue", color = "black") +
- annotate("text", x = 9.5, y = 4, label = "Punch", color = "white", fontface = "bold", size = 3.5) +
+ annotate("text", x = 9.5, y = 4, label = "Punch", color = "white", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
  ## Labels
- annotate("text", x = 9.5, y = 5.8, label = "AFTER", fontface = "bold", size = 5) +
- annotate("text", x = 9.5, y = -0.3, label = expression(D[p]), size = 4) +
+ annotate("text", x = 9.5, y = 5.8, label = "AFTER", fontface = "bold", size = 5 * diagram_text_scale) +
+ annotate("text", x = 9.5, y = -0.3, label = expression(D[p]), size = 4 * diagram_text_scale) +
  geom_segment(aes(x = 8.7, xend = 10.3, y = -0.1, yend = -0.1),
              arrow = arrow(length = unit(0.15, "cm"), ends = "both"), linewidth = 0.5) +
 
@@ -339,7 +339,7 @@ The maximum blank diameter for a single draw operation is **132 mm**. Any larger
 ```{r embossing-coining, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Comparison of embossing (left) and coining (right) operations."}
 ggplot() +
  ## EMBOSSING (left)
- annotate("text", x = 2.5, y = 5.5, label = "EMBOSSING", fontface = "bold", size = 5) +
+ annotate("text", x = 2.5, y = 5.5, label = "EMBOSSING", fontface = "bold", size = 5 * diagram_text_scale) +
 
  ## Embossing punch
  geom_polygon(aes(x = c(0.5, 0.5, 2, 2.5, 3, 4.5, 4.5),
@@ -357,12 +357,12 @@ ggplot() +
              fill = "gray60", color = "black", linewidth = 1) +
 
  ## Thickness annotation
- annotate("text", x = 0.8, y = 2.85, label = "t", size = 3, color = "red") +
- annotate("text", x = 2.5, y = 2.35, label = "≈ t", size = 3, color = "red") +
- annotate("text", x = 2.5, y = 0.8, label = "Thickness\nnearly constant", size = 3, fontface = "italic") +
+ annotate("text", x = 0.8, y = 2.85, label = "t", size = 3 * diagram_text_scale, color = "red") +
+ annotate("text", x = 2.5, y = 2.35, label = "≈ t", size = 3 * diagram_text_scale, color = "red") +
+ annotate("text", x = 2.5, y = 0.8, label = "Thickness\nnearly constant", size = 3 * diagram_text_scale, fontface = "italic") +
 
  ## COINING (right)
- annotate("text", x = 8.5, y = 5.5, label = "COINING", fontface = "bold", size = 5) +
+ annotate("text", x = 8.5, y = 5.5, label = "COINING", fontface = "bold", size = 5 * diagram_text_scale) +
 
  ## Coining punch (flat with detail)
  geom_rect(aes(xmin = 6.5, xmax = 10.5, ymin = 3.2, ymax = 4.5), fill = "steelblue", color = "black", linewidth = 1) +
@@ -382,15 +382,15 @@ ggplot() +
  geom_rect(aes(xmin = 6, xmax = 11, ymin = 0, ymax = 2.7), fill = "gray60", color = "black", linewidth = 1) +
 
  ## Thickness annotation
- annotate("text", x = 6.7, y = 2.95, label = "t", size = 3, color = "red") +
- annotate("text", x = 8.65, y = 2.8, label = "< t", size = 3, color = "red") +
- annotate("text", x = 8.5, y = 0.8, label = "Metal flows;\nthickness changes", size = 3, fontface = "italic") +
+ annotate("text", x = 6.7, y = 2.95, label = "t", size = 3 * diagram_text_scale, color = "red") +
+ annotate("text", x = 8.65, y = 2.8, label = "< t", size = 3 * diagram_text_scale, color = "red") +
+ annotate("text", x = 8.5, y = 0.8, label = "Metal flows;\nthickness changes", size = 3 * diagram_text_scale, fontface = "italic") +
 
  ## High pressure arrows
  geom_segment(aes(x = 8.5, xend = 8.5, y = 5.2, yend = 4.7),
              arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
              linewidth = 1.2, color = "red") +
- annotate("text", x = 8.5, y = 5.4, label = "High F", color = "red", size = 3) +
+ annotate("text", x = 8.5, y = 5.4, label = "High F", color = "red", size = 3 * diagram_text_scale) +
 
  ## Dividing line
  geom_vline(xintercept = 5.5, linetype = "dashed", color = "gray50") +
@@ -428,12 +428,12 @@ ggplot() +
 
  ## Station 1: Pilot holes + blanking
  geom_rect(aes(xmin = 0.5, xmax = 1.5, ymin = 3.5, ymax = 4.5), fill = "steelblue", color = "black") +
- annotate("text", x = 1, y = 5, label = "Station 1\nPilot Holes", size = 3, fontface = "bold") +
+ annotate("text", x = 1, y = 5, label = "Station 1\nPilot Holes", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Station 2: Piercing
  geom_rect(aes(xmin = 3, xmax = 4, ymin = 3.5, ymax = 4.5), fill = "steelblue", color = "black") +
  geom_point(aes(x = 3.5, y = 2.4), size = 5, color = "white") +
- annotate("text", x = 3.5, y = 5, label = "Station 2\nPiercing", size = 3, fontface = "bold") +
+ annotate("text", x = 3.5, y = 5, label = "Station 2\nPiercing", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Station 3: Forming/Bending
  geom_polygon(aes(x = c(5.5, 5.5, 6, 6.5, 6.5), y = c(4.5, 3.5, 3.2, 3.5, 4.5)),
@@ -441,35 +441,35 @@ ggplot() +
  ## Show bent tab
  geom_polygon(aes(x = c(5.7, 6, 6.3, 6.3, 6, 5.7), y = c(2.8, 2.5, 2.8, 2.6, 2.3, 2.6)),
              fill = "darkorange", color = "black") +
- annotate("text", x = 6, y = 5, label = "Station 3\nForming", size = 3, fontface = "bold") +
+ annotate("text", x = 6, y = 5, label = "Station 3\nForming", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Station 4: Additional forming
  geom_rect(aes(xmin = 8, xmax = 9, ymin = 3.5, ymax = 4.5), fill = "steelblue", color = "black") +
- annotate("text", x = 8.5, y = 5, label = "Station 4\nCoining", size = 3, fontface = "bold") +
+ annotate("text", x = 8.5, y = 5, label = "Station 4\nCoining", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Station 5: Cutoff
  geom_polygon(aes(x = c(10.3, 10.5, 11.5, 11.7, 11.7, 10.3),
                   y = c(4.5, 3.5, 3.5, 4.5, 4.5, 4.5)), fill = "steelblue", color = "black") +
- annotate("text", x = 11, y = 5, label = "Station 5\nCutoff", size = 3, fontface = "bold") +
+ annotate("text", x = 11, y = 5, label = "Station 5\nCutoff", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Finished part (falling)
  geom_polygon(aes(x = c(11.5, 12.5, 12.8, 12.8, 11.2, 11.2),
                   y = c(0.8, 0.8, 1, 1.5, 1.5, 1)),
              fill = "forestgreen", color = "black", linewidth = 1) +
- annotate("text", x = 12, y = 0.3, label = "Finished\nPart", size = 3, color = "darkgreen", fontface = "bold") +
+ annotate("text", x = 12, y = 0.3, label = "Finished\nPart", size = 3 * diagram_text_scale, color = "darkgreen", fontface = "bold") +
 
  ## Feed direction arrow
  geom_segment(aes(x = 0.5, xend = 3, y = 1.3, yend = 1.3),
              arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
              linewidth = 1.5, color = "darkgreen") +
- annotate("text", x = 1.75, y = 0.8, label = "Feed Direction", size = 3.5, fontface = "bold") +
+ annotate("text", x = 1.75, y = 0.8, label = "Feed Direction", size = 3.5 * diagram_text_scale, fontface = "bold") +
 
  ## Die block (bottom)
  geom_rect(aes(xmin = 0, xmax = 14, ymin = -0.2, ymax = 2), fill = "gray60", color = "black") +
- annotate("text", x = 7, y = 0.9, label = "DIE BLOCK", color = "white", fontface = "bold", size = 5) +
+ annotate("text", x = 7, y = 0.9, label = "DIE BLOCK", color = "white", fontface = "bold", size = 5 * diagram_text_scale) +
 
  ## Scrap label
- annotate("text", x = 13.2, y = 2.4, label = "Scrap\n(carrier)", size = 2.5, color = "gray40") +
+ annotate("text", x = 13.2, y = 2.4, label = "Scrap\n(carrier)", size = 2.5 * diagram_text_scale, color = "gray40") +
 
  coord_fixed(ratio = 1, xlim = c(-0.5, 14.5), ylim = c(-0.5, 5.5)) +
  labs(title = "Progressive Die Stamping - Multiple Stations") +
@@ -551,21 +551,21 @@ ggplot() +
 
  ## Zone labels
  annotate("text", x = 0, y = 0.65, label = "FAILURE\nZONE", color = "darkred",
-         fontface = "bold", size = 5) +
+         fontface = "bold", size = 5 * diagram_text_scale) +
  annotate("text", x = 0, y = 0.15, label = "SAFE\nZONE", color = "darkgreen",
-         fontface = "bold", size = 5) +
+         fontface = "bold", size = 5 * diagram_text_scale) +
  annotate("text", x = 0.25, y = 0.42, label = "Forming Limit\nCurve (FLC)",
-         color = "darkred", size = 3.5, fontface = "italic") +
+         color = "darkred", size = 3.5 * diagram_text_scale, fontface = "italic") +
 
  ## Strain state examples
  geom_point(aes(x = -0.15, y = 0.25), size = 4, color = "blue") +
- annotate("text", x = -0.15, y = 0.20, label = "Drawing", color = "blue", size = 3) +
+ annotate("text", x = -0.15, y = 0.20, label = "Drawing", color = "blue", size = 3 * diagram_text_scale) +
 
  geom_point(aes(x = 0, y = 0.30), size = 4, color = "purple") +
- annotate("text", x = 0.08, y = 0.28, label = "Plane\nStrain", color = "purple", size = 3) +
+ annotate("text", x = 0.08, y = 0.28, label = "Plane\nStrain", color = "purple", size = 3 * diagram_text_scale) +
 
  geom_point(aes(x = 0.15, y = 0.25), size = 4, color = "darkorange") +
- annotate("text", x = 0.15, y = 0.20, label = "Stretching", color = "darkorange", size = 3) +
+ annotate("text", x = 0.15, y = 0.20, label = "Stretching", color = "darkorange", size = 3 * diagram_text_scale) +
 
  ## Axes
  geom_hline(yintercept = 0, linewidth = 0.5) +
@@ -581,8 +581,8 @@ ggplot() +
      y = "Major Strain (ε₁)") +
  theme_minimal() +
  theme(
-   plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-   axis.title = element_text(size = 11),
+   plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+   axis.title = element_text(size = 11 * diagram_text_scale),
    panel.grid.minor = element_blank()
  ) +
  coord_cartesian(xlim = c(-0.35, 0.45), ylim = c(-0.05, 0.75))
@@ -647,13 +647,13 @@ ggplot() +
  geom_segment(aes(x = 0.3, xend = 0.3, y = 1.5, yend = 2.5), linewidth = 0.5) +
  geom_segment(aes(x = 0.2, xend = 0.4, y = 1.5, yend = 1.5), linewidth = 0.5) +
  geom_segment(aes(x = 0.2, xend = 0.4, y = 2.5, yend = 2.5), linewidth = 0.5) +
- annotate("text", x = 0.3, y = 2, label = "t", size = 4, fontface = "bold") +
+ annotate("text", x = 0.3, y = 2, label = "t", size = 4 * diagram_text_scale, fontface = "bold") +
  ## Hole dimension
  geom_segment(aes(x = 1.7, xend = 2.3, y = 2.8, yend = 2.8),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 2, y = 3.1, label = "d < t", size = 4, color = "red") +
+ annotate("text", x = 2, y = 3.1, label = "d < t", size = 4 * diagram_text_scale, color = "red") +
  ## Bad label
- annotate("text", x = 2, y = 0.8, label = "TOO SMALL", color = "red", fontface = "bold", size = 4) +
+ annotate("text", x = 2, y = 0.8, label = "TOO SMALL", color = "red", fontface = "bold", size = 4 * diagram_text_scale) +
  geom_point(aes(x = 2, y = 1.1), shape = 4, size = 8, color = "red", stroke = 2) +
 
  ## Sheet cross-section (right - good)
@@ -664,13 +664,13 @@ ggplot() +
  geom_segment(aes(x = 4.8, xend = 4.8, y = 1.5, yend = 2.5), linewidth = 0.5) +
  geom_segment(aes(x = 4.7, xend = 4.9, y = 1.5, yend = 1.5), linewidth = 0.5) +
  geom_segment(aes(x = 4.7, xend = 4.9, y = 2.5, yend = 2.5), linewidth = 0.5) +
- annotate("text", x = 4.8, y = 2, label = "t", size = 4, fontface = "bold") +
+ annotate("text", x = 4.8, y = 2, label = "t", size = 4 * diagram_text_scale, fontface = "bold") +
  ## Hole dimension
  geom_segment(aes(x = 5.8, xend = 7.2, y = 2.8, yend = 2.8),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 6.5, y = 3.1, label = "d ≥ t", size = 4, color = "darkgreen") +
+ annotate("text", x = 6.5, y = 3.1, label = "d ≥ t", size = 4 * diagram_text_scale, color = "darkgreen") +
  ## Good label
- annotate("text", x = 6.5, y = 0.8, label = "ACCEPTABLE", color = "darkgreen", fontface = "bold", size = 4) +
+ annotate("text", x = 6.5, y = 0.8, label = "ACCEPTABLE", color = "darkgreen", fontface = "bold", size = 4 * diagram_text_scale) +
  geom_point(aes(x = 6.5, y = 1.1), shape = 10, size = 8, color = "darkgreen", stroke = 2) +
 
  coord_fixed(ratio = 1, xlim = c(0, 8.5), ylim = c(0.3, 3.5)) +
@@ -711,32 +711,32 @@ ggplot() +
  geom_segment(aes(x = 3, xend = 4.5, y = 3, yend = 3),
              arrow = arrow(length = unit(0.15, "cm"), ends = "both"),
              linewidth = 0.8, color = "blue") +
- annotate("text", x = 3.75, y = 3.5, label = "≥ 2t", color = "blue", fontface = "bold", size = 4) +
- annotate("text", x = 3.75, y = 2.5, label = "(hole-to-hole)", color = "blue", size = 3) +
+ annotate("text", x = 3.75, y = 3.5, label = "≥ 2t", color = "blue", fontface = "bold", size = 4 * diagram_text_scale) +
+ annotate("text", x = 3.75, y = 2.5, label = "(hole-to-hole)", color = "blue", size = 3 * diagram_text_scale) +
 
  ## Hole-to-edge spacing (left hole to edge)
  geom_segment(aes(x = 0.5, xend = 2, y = 3, yend = 3),
              arrow = arrow(length = unit(0.15, "cm"), ends = "both"),
              linewidth = 0.8, color = "red") +
- annotate("text", x = 1.25, y = 3.5, label = "≥ t", color = "red", fontface = "bold", size = 4) +
- annotate("text", x = 1.25, y = 2.5, label = "(edge)", color = "red", size = 3) +
+ annotate("text", x = 1.25, y = 3.5, label = "≥ t", color = "red", fontface = "bold", size = 4 * diagram_text_scale) +
+ annotate("text", x = 1.25, y = 2.5, label = "(edge)", color = "red", size = 3 * diagram_text_scale) +
 
  ## Hole-to-edge spacing (right hole to edge)
  geom_segment(aes(x = 8, xend = 9.5, y = 3, yend = 3),
              arrow = arrow(length = unit(0.15, "cm"), ends = "both"),
              linewidth = 0.8, color = "red") +
- annotate("text", x = 8.75, y = 3.5, label = "≥ t", color = "red", fontface = "bold", size = 4) +
+ annotate("text", x = 8.75, y = 3.5, label = "≥ t", color = "red", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Hole-to-edge spacing (top)
  geom_segment(aes(x = 5, xend = 5, y = 3.5, yend = 5),
              arrow = arrow(length = unit(0.15, "cm"), ends = "both"),
              linewidth = 0.8, color = "red") +
- annotate("text", x = 5.5, y = 4.25, label = "≥ t", color = "red", fontface = "bold", size = 4) +
+ annotate("text", x = 5.5, y = 4.25, label = "≥ t", color = "red", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Legend box
  geom_rect(aes(xmin = 0.6, xmax = 3.8, ymin = 5.3, ymax = 6.3), fill = "white", color = "black") +
- annotate("text", x = 2.2, y = 6, label = "t = material thickness", size = 3.5) +
- annotate("text", x = 2.2, y = 5.6, label = "d = hole diameter", size = 3.5) +
+ annotate("text", x = 2.2, y = 6, label = "t = material thickness", size = 3.5 * diagram_text_scale) +
+ annotate("text", x = 2.2, y = 5.6, label = "d = hole diameter", size = 3.5 * diagram_text_scale) +
 
  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0.5, 6.5)) +
  labs(title = "Hole Spacing Requirements") +
@@ -777,7 +777,7 @@ The minimum inside bend radius depends on material type, thickness, and grain di
 ggplot() +
  ## LEFT: Good bend (large radius)
  annotate("text", x = 2.5, y = 5.5, label = "GOOD: Adequate Bend Radius",
-         fontface = "bold", size = 4, color = "darkgreen") +
+         fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
 
  ## Bent sheet - good
  geom_polygon(aes(x = c(0.5, 0.5, 2, 2.5, 2.5, 2.3, 2, 0.8),
@@ -787,18 +787,18 @@ ggplot() +
  ## Radius arc indicator
  geom_curve(aes(x = 1.5, y = 3, xend = 2.3, yend = 4), curvature = -0.5,
            linewidth = 0.5, linetype = "dashed", color = "blue") +
- annotate("text", x = 1.2, y = 3.8, label = "R ≥ t", color = "blue", size = 4, fontface = "bold") +
+ annotate("text", x = 1.2, y = 3.8, label = "R ≥ t", color = "blue", size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## Smooth surface indication
  annotate("text", x = 3.5, y = 4.5, label = "Smooth\nouter surface",
-         color = "darkgreen", size = 3, fontface = "italic") +
+         color = "darkgreen", size = 3 * diagram_text_scale, fontface = "italic") +
 
  ## Check mark
  geom_point(aes(x = 2.5, y = 1.5), shape = 10, size = 10, color = "darkgreen", stroke = 2) +
 
  ## RIGHT: Bad bend (small radius)
  annotate("text", x = 8, y = 5.5, label = "BAD: Radius Too Small",
-         fontface = "bold", size = 4, color = "red") +
+         fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
 
  ## Bent sheet - bad (sharp corner)
  geom_polygon(aes(x = c(6, 6, 7.5, 7.5, 7.8, 7.8, 7.2, 6.3),
@@ -812,11 +812,11 @@ ggplot() +
  geom_segment(aes(x = 7.58, xend = 7.78, y = 3.9, yend = 4.2), color = "red", linewidth = 1) +
 
  ## Sharp radius indicator
- annotate("text", x = 6.5, y = 3.5, label = "R ≈ 0", color = "red", size = 4, fontface = "bold") +
+ annotate("text", x = 6.5, y = 3.5, label = "R ≈ 0", color = "red", size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## Crack annotation
  annotate("text", x = 9, y = 3.8, label = "CRACKS\non outer\nsurface!",
-         color = "red", size = 3, fontface = "bold") +
+         color = "red", size = 3 * diagram_text_scale, fontface = "bold") +
  geom_curve(aes(x = 8.5, xend = 7.8, y = 3.8, yend = 3.7),
            arrow = arrow(length = unit(0.15, "cm")), curvature = 0.3, color = "red") +
 
@@ -843,7 +843,7 @@ All materials exhibit **springback**—the tendency to partially return to their
 ```{r springback, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Springback phenomenon: the part opens up slightly after the bending force is removed."}
 ggplot() +
  ## DURING BENDING (left)
- annotate("text", x = 2.5, y = 5.5, label = "During Bending", fontface = "bold", size = 4) +
+ annotate("text", x = 2.5, y = 5.5, label = "During Bending", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Punch
  geom_polygon(aes(x = c(1.5, 2.5, 3.5, 3.5, 1.5),
@@ -863,21 +863,21 @@ ggplot() +
  ## Angle annotation
  geom_curve(aes(x = 2.5, y = 3, xend = 3.8, yend = 3.8), curvature = -0.3,
            linewidth = 0.5, color = "blue") +
- annotate("text", x = 3.5, y = 3, label = "θ₁", color = "blue", size = 4, fontface = "bold") +
+ annotate("text", x = 3.5, y = 3, label = "θ₁", color = "blue", size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## Force arrow
  geom_segment(aes(x = 2.5, xend = 2.5, y = 5.8, yend = 5.2),
              arrow = arrow(length = unit(0.2, "cm")), linewidth = 1.2, color = "red") +
- annotate("text", x = 2.5, y = 6, label = "F", color = "red", fontface = "bold", size = 4) +
+ annotate("text", x = 2.5, y = 6, label = "F", color = "red", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Arrow to next state
  geom_segment(aes(x = 5.3, xend = 6.2, y = 3, yend = 3),
              arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
              linewidth = 1.5, color = "darkgreen") +
- annotate("text", x = 5.75, y = 3.5, label = "Release\nforce", size = 3) +
+ annotate("text", x = 5.75, y = 3.5, label = "Release\nforce", size = 3 * diagram_text_scale) +
 
  ## AFTER RELEASE (right)
- annotate("text", x = 8.5, y = 5.5, label = "After Release (Springback)", fontface = "bold", size = 4) +
+ annotate("text", x = 8.5, y = 5.5, label = "After Release (Springback)", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Part with springback (more open angle)
  geom_polygon(aes(x = c(6.3, 8.5, 10.7, 10.5, 8.5, 6.5),
@@ -893,17 +893,17 @@ ggplot() +
  ## Springback angle
  geom_curve(aes(x = 8.5, y = 3.2, xend = 10, yend = 4.1), curvature = -0.3,
            linewidth = 0.5, color = "red") +
- annotate("text", x = 9.8, y = 3.5, label = "θ₂", color = "red", size = 4, fontface = "bold") +
+ annotate("text", x = 9.8, y = 3.5, label = "θ₂", color = "red", size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## Springback annotation
  geom_curve(aes(x = 10, y = 3.8, xend = 10.4, yend = 4.1), curvature = 0.5,
            linewidth = 1, color = "red",
            arrow = arrow(length = unit(0.15, "cm"), ends = "both")) +
- annotate("text", x = 11, y = 4, label = "Δθ\n(springback)", color = "red", size = 3) +
+ annotate("text", x = 11, y = 4, label = "Δθ\n(springback)", color = "red", size = 3 * diagram_text_scale) +
 
  ## Formula
- annotate("text", x = 8.5, y = 0.8, label = "θ₂ = θ₁ + Δθ", size = 4, fontface = "bold") +
- annotate("text", x = 8.5, y = 0.3, label = "(final angle > die angle)", size = 3, fontface = "italic") +
+ annotate("text", x = 8.5, y = 0.8, label = "θ₂ = θ₁ + Δθ", size = 4 * diagram_text_scale, fontface = "bold") +
+ annotate("text", x = 8.5, y = 0.3, label = "(final angle > die angle)", size = 3 * diagram_text_scale, fontface = "italic") +
 
  coord_fixed(ratio = 1, xlim = c(-0.5, 12), ylim = c(-0.2, 6.2)) +
  theme_stamping
@@ -929,7 +929,7 @@ When a bend line intersects or comes close to an edge, **bend relief** cuts or n
 ```{r bend-relief, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Bend relief prevents tearing at the intersection of bends and edges."}
 ggplot() +
  ## WITHOUT BEND RELIEF (left) - Bad
- annotate("text", x = 2, y = 5.5, label = "WITHOUT Bend Relief", fontface = "bold", size = 4, color = "red") +
+ annotate("text", x = 2, y = 5.5, label = "WITHOUT Bend Relief", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
 
  ## Flat pattern
  geom_polygon(aes(x = c(0.5, 0.5, 2.5, 3.5, 3.5, 2.5, 2.5, 0.5),
@@ -939,18 +939,18 @@ ggplot() +
  ## Bend line
  geom_segment(aes(x = 0.5, xend = 3.5, y = 3, yend = 3),
              linetype = "dashed", color = "blue", linewidth = 1) +
- annotate("text", x = 0.2, y = 3, label = "Bend\nLine", size = 2.5, color = "blue") +
+ annotate("text", x = 0.2, y = 3, label = "Bend\nLine", size = 2.5 * diagram_text_scale, color = "blue") +
 
  ## Tear indication
  geom_segment(aes(x = 2.5, xend = 2.7, y = 3, yend = 3.3), color = "red", linewidth = 1.5) +
  geom_segment(aes(x = 2.5, xend = 2.3, y = 3, yend = 2.7), color = "red", linewidth = 1.5) +
- annotate("text", x = 3.2, y = 2.5, label = "TEAR!", color = "red", fontface = "bold", size = 4) +
+ annotate("text", x = 3.2, y = 2.5, label = "TEAR!", color = "red", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## X mark
  geom_point(aes(x = 2, y = 0.5), shape = 4, size = 8, color = "red", stroke = 2) +
 
  ## WITH BEND RELIEF (right) - Good
- annotate("text", x = 7.5, y = 5.5, label = "WITH Bend Relief", fontface = "bold", size = 4, color = "darkgreen") +
+ annotate("text", x = 7.5, y = 5.5, label = "WITH Bend Relief", fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
 
  ## Flat pattern with relief
  geom_polygon(aes(x = c(5.5, 5.5, 7.5, 7.5, 7.8, 8.5, 8.5, 7.8, 7.5, 7.5, 5.5),
@@ -964,16 +964,16 @@ ggplot() +
  ## Relief dimensions
  geom_segment(aes(x = 7.5, xend = 7.8, y = 3.5, yend = 3.5),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 7.65, y = 3.7, label = "≥ t", size = 3) +
+ annotate("text", x = 7.65, y = 3.7, label = "≥ t", size = 3 * diagram_text_scale) +
 
  geom_segment(aes(x = 8.7, xend = 8.7, y = 2.7, yend = 3.3),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 9.2, y = 3, label = "≥ t + R", size = 3) +
+ annotate("text", x = 9.2, y = 3, label = "≥ t + R", size = 3 * diagram_text_scale) +
 
  ## Relief label
  geom_curve(aes(x = 9, xend = 8, y = 2.2, yend = 2.9),
            arrow = arrow(length = unit(0.15, "cm")), curvature = -0.3, color = "darkgreen") +
- annotate("text", x = 9.2, y = 2, label = "Bend\nRelief", color = "darkgreen", fontface = "bold", size = 3) +
+ annotate("text", x = 9.2, y = 2, label = "Bend\nRelief", color = "darkgreen", fontface = "bold", size = 3 * diagram_text_scale) +
 
  ## Check mark
  geom_point(aes(x = 7.5, y = 0.5), shape = 10, size = 8, color = "darkgreen", stroke = 2) +
@@ -1004,8 +1004,8 @@ The maximum depth of a single draw operation is limited by the drawing ratio. Ex
 ```{r draw-depth-limit, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Draw ratio limits for single-stage drawing operations."}
 ggplot() +
  ## ACCEPTABLE (left)
- annotate("text", x = 2.5, y = 5.8, label = "ACCEPTABLE", fontface = "bold", size = 4, color = "darkgreen") +
- annotate("text", x = 2.5, y = 5.4, label = "Draw Ratio ≤ 2.0", size = 3.5) +
+ annotate("text", x = 2.5, y = 5.8, label = "ACCEPTABLE", fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
+ annotate("text", x = 2.5, y = 5.4, label = "Draw Ratio ≤ 2.0", size = 3.5 * diagram_text_scale) +
 
  ## Cup shape - good
  geom_polygon(aes(x = c(1, 1, 1.3, 1.3, 3.7, 3.7, 4, 4, 3.7, 1.3, 1),
@@ -1015,19 +1015,19 @@ ggplot() +
  ## Depth dimension
  geom_segment(aes(x = 0.5, xend = 0.5, y = 1.5, yend = 4),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 0.2, y = 2.75, label = "h", size = 4, fontface = "bold") +
+ annotate("text", x = 0.2, y = 2.75, label = "h", size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## Diameter dimension
  geom_segment(aes(x = 1.3, xend = 3.7, y = 1.2, yend = 1.2),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 2.5, y = 0.9, label = expression(D[p]), size = 4, fontface = "bold") +
+ annotate("text", x = 2.5, y = 0.9, label = expression(D[p]), size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## Check mark
  geom_point(aes(x = 2.5, y = 0.3), shape = 10, size = 8, color = "darkgreen", stroke = 2) +
 
  ## TOO DEEP (right)
- annotate("text", x = 8, y = 5.8, label = "TOO DEEP", fontface = "bold", size = 4, color = "red") +
- annotate("text", x = 8, y = 5.4, label = "Draw Ratio > 2.0", size = 3.5) +
+ annotate("text", x = 8, y = 5.8, label = "TOO DEEP", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
+ annotate("text", x = 8, y = 5.4, label = "Draw Ratio > 2.0", size = 3.5 * diagram_text_scale) +
 
  ## Cup shape - bad (with defects)
  geom_polygon(aes(x = c(6.5, 6.5, 6.8, 6.8, 9.2, 9.2, 9.5, 9.5, 9.2, 6.8, 6.5),
@@ -1037,17 +1037,17 @@ ggplot() +
  ## Tearing indication at bottom corner
  geom_segment(aes(x = 6.8, xend = 6.5, y = 0.7, yend = 0.4), color = "red", linewidth = 1.2) +
  geom_segment(aes(x = 6.8, xend = 6.6, y = 0.9, yend = 0.5), color = "red", linewidth = 1.2) +
- annotate("text", x = 5.8, y = 0.6, label = "Tear!", color = "red", size = 3, fontface = "bold") +
+ annotate("text", x = 5.8, y = 0.6, label = "Tear!", color = "red", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Wrinkling indication at top
  geom_curve(aes(x = 6.6, xend = 6.7, y = 3.8, yend = 3.5), curvature = 0.5, color = "red", linewidth = 0.8) +
  geom_curve(aes(x = 6.65, xend = 6.75, y = 3.5, yend = 3.2), curvature = -0.5, color = "red", linewidth = 0.8) +
- annotate("text", x = 5.7, y = 3.5, label = "Wrinkle!", color = "red", size = 3, fontface = "bold") +
+ annotate("text", x = 5.7, y = 3.5, label = "Wrinkle!", color = "red", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Depth dimension
  geom_segment(aes(x = 6, xend = 6, y = 0.5, yend = 4.5),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 5.7, y = 2.5, label = "h", size = 4, fontface = "bold") +
+ annotate("text", x = 5.7, y = 2.5, label = "h", size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## X mark
  geom_point(aes(x = 8, y = 0.3), shape = 4, size = 8, color = "red", stroke = 2) +
@@ -1085,7 +1085,7 @@ ggplot() +
  geom_curve(aes(x = 2.5, xend = 2.8, y = 4.5, yend = 4.2), curvature = 0.4,
            linewidth = 1.5, color = "blue") +
  annotate("text", x = 1.5, y = 4.7, label = expression(R[die] >= 4*t),
-         color = "blue", size = 3.5, fontface = "bold") +
+         color = "blue", size = 3.5 * diagram_text_scale, fontface = "bold") +
  geom_segment(aes(x = 1.8, xend = 2.4, y = 4.5, yend = 4.4),
              arrow = arrow(length = unit(0.15, "cm")), color = "blue") +
 
@@ -1093,7 +1093,7 @@ ggplot() +
  geom_curve(aes(x = 3, xend = 3.3, y = 1.3, yend = 1), curvature = -0.5,
            linewidth = 1.5, color = "red") +
  annotate("text", x = 4, y = 0.5, label = expression(R[bottom] >= 4*t),
-         color = "red", size = 3.5, fontface = "bold") +
+         color = "red", size = 3.5 * diagram_text_scale, fontface = "bold") +
  geom_segment(aes(x = 3.8, xend = 3.2, y = 0.7, yend = 1.1),
              arrow = arrow(length = unit(0.15, "cm")), color = "red") +
 
@@ -1101,26 +1101,26 @@ ggplot() +
  geom_polygon(aes(x = c(3.2, 3.2, 3.5, 3.5, 5.5, 5.5, 5.8, 5.8),
                   y = c(7, 1.5, 1.2, 1, 1, 1.2, 1.5, 7)),
              fill = "steelblue", color = "black", linewidth = 1) +
- annotate("text", x = 4.5, y = 6, label = "Punch", color = "white", fontface = "bold", size = 4) +
+ annotate("text", x = 4.5, y = 6, label = "Punch", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
 
  ## Punch radius annotation
  geom_curve(aes(x = 3.2, xend = 3.5, y = 1.5, yend = 1.2), curvature = 0.4,
            linewidth = 1.5, color = "purple") +
  annotate("text", x = 2, y = 1.8, label = expression(R[punch] >= 4*t),
-         color = "purple", size = 3.5, fontface = "bold") +
+         color = "purple", size = 3.5 * diagram_text_scale, fontface = "bold") +
  geom_segment(aes(x = 2.3, xend = 3.1, y = 1.6, yend = 1.4),
              arrow = arrow(length = unit(0.15, "cm")), color = "purple") +
 
  ## Material thickness annotation
  geom_segment(aes(x = 6.5, xend = 6.3, y = 3, yend = 3),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 6.8, y = 3, label = "t", size = 4, fontface = "bold") +
+ annotate("text", x = 6.8, y = 3, label = "t", size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## Legend
  geom_rect(aes(xmin = 6.8, xmax = 9.2, ymin = 5.5, ymax = 7), fill = "white", color = "black") +
- annotate("text", x = 8, y = 6.7, label = "t = thickness", size = 3) +
- annotate("text", x = 8, y = 6.3, label = expression(R[die]*" = die entry"), size = 3) +
- annotate("text", x = 8, y = 5.9, label = expression(R[punch]*" = punch"), size = 3) +
+ annotate("text", x = 8, y = 6.7, label = "t = thickness", size = 3 * diagram_text_scale) +
+ annotate("text", x = 8, y = 6.3, label = expression(R[die]*" = die entry"), size = 3 * diagram_text_scale) +
+ annotate("text", x = 8, y = 5.9, label = expression(R[punch]*" = punch"), size = 3 * diagram_text_scale) +
 
  coord_fixed(ratio = 1, xlim = c(-0.5, 9.5), ylim = c(-0.5, 7.5)) +
  labs(title = "Critical Radii in Deep Drawing") +
@@ -1185,20 +1185,20 @@ good_circles <- rbind(
 
 ggplot() +
  ## POOR NESTING (left)
- annotate("text", x = 2, y = 4.3, label = "POOR NESTING", fontface = "bold", size = 4, color = "red") +
+ annotate("text", x = 2, y = 4.3, label = "POOR NESTING", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
  geom_rect(aes(xmin = 0.3, xmax = 3.7, ymin = 0.3, ymax = 3.7),
            fill = "lightyellow", color = "black", linewidth = 1) +
  geom_polygon(data = poor_circles, aes(x = x, y = y, group = id),
              fill = "orange", color = "black") +
- annotate("text", x = 2, y = -0.2, label = "9 parts\n~64% utilization", size = 3) +
+ annotate("text", x = 2, y = -0.2, label = "9 parts\n~64% utilization", size = 3 * diagram_text_scale) +
 
  ## GOOD NESTING (right)
- annotate("text", x = 7.3, y = 4.3, label = "GOOD NESTING", fontface = "bold", size = 4, color = "darkgreen") +
+ annotate("text", x = 7.3, y = 4.3, label = "GOOD NESTING", fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
  geom_rect(aes(xmin = 5.5, xmax = 9.1, ymin = 0.3, ymax = 3.7),
            fill = "lightyellow", color = "black", linewidth = 1) +
  geom_polygon(data = good_circles, aes(x = x, y = y, group = id),
              fill = "orange", color = "black") +
- annotate("text", x = 7.3, y = -0.2, label = "14 parts\n~78% utilization", size = 3) +
+ annotate("text", x = 7.3, y = -0.2, label = "14 parts\n~78% utilization", size = 3 * diagram_text_scale) +
 
  ## Arrow between
  geom_segment(aes(x = 4.2, xend = 5, y = 2, yend = 2),
@@ -1238,7 +1238,7 @@ Understanding potential defects helps designers avoid them through proper design
 ```{r stamping-defects, echo=FALSE, fig.width=12, fig.height=4, fig.align='center', fig.cap="Common stamping defects: wrinkling in flanges, tearing at corners, and burrs on cut edges."}
 ggplot() +
  ## WRINKLING
- annotate("text", x = 2, y = 3.8, label = "WRINKLING", fontface = "bold", size = 4, color = "red") +
+ annotate("text", x = 2, y = 3.8, label = "WRINKLING", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
 
  ## Cup with wrinkled flange
  geom_polygon(aes(x = c(0.5, 0.5, 1, 1, 3, 3, 3.5, 3.5),
@@ -1250,10 +1250,10 @@ ggplot() +
  geom_curve(aes(x = 3.5, xend = 3.2, y = 3.15, yend = 3.3), curvature = 0.5, color = "darkorange", linewidth = 1.5) +
  geom_curve(aes(x = 3.2, xend = 2.9, y = 3.3, yend = 3.15), curvature = 0.5, color = "darkorange", linewidth = 1.5) +
 
- annotate("text", x = 2, y = 0.4, label = "Wavy flange", size = 3, fontface = "italic") +
+ annotate("text", x = 2, y = 0.4, label = "Wavy flange", size = 3 * diagram_text_scale, fontface = "italic") +
 
  ## TEARING
- annotate("text", x = 6.5, y = 3.8, label = "TEARING", fontface = "bold", size = 4, color = "red") +
+ annotate("text", x = 6.5, y = 3.8, label = "TEARING", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
 
  ## Cup with tear
  geom_polygon(aes(x = c(5, 5, 5.5, 5.5, 7.5, 7.5, 8, 8),
@@ -1264,10 +1264,10 @@ ggplot() +
  geom_segment(aes(x = 5.3, xend = 5.1, y = 0.8, yend = 0.5), color = "red", linewidth = 2) +
  geom_segment(aes(x = 5.5, xend = 5.7, y = 1.2, yend = 1.5), color = "red", linewidth = 1.5) +
 
- annotate("text", x = 6.5, y = 0.4, label = "Crack at corner", size = 3, fontface = "italic") +
+ annotate("text", x = 6.5, y = 0.4, label = "Crack at corner", size = 3 * diagram_text_scale, fontface = "italic") +
 
  ## BURRS
- annotate("text", x = 11, y = 3.8, label = "BURRS", fontface = "bold", size = 4, color = "red") +
+ annotate("text", x = 11, y = 3.8, label = "BURRS", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
 
  ## Sheet with punched hole and burrs
  geom_rect(aes(xmin = 9.5, xmax = 12.5, ymin = 1.5, ymax = 2.5),
@@ -1283,7 +1283,7 @@ ggplot() +
  geom_segment(aes(x = 11.3, xend = 11.32, y = 1.5, yend = 1.35), color = "darkorange", linewidth = 1) +
  geom_segment(aes(x = 11.5, xend = 11.55, y = 1.5, yend = 1.32), color = "darkorange", linewidth = 1) +
 
- annotate("text", x = 11, y = 1, label = "Rough edge", size = 3, fontface = "italic") +
+ annotate("text", x = 11, y = 1, label = "Rough edge", size = 3 * diagram_text_scale, fontface = "italic") +
  geom_curve(aes(x = 11, xend = 11, y = 1.15, yend = 1.4),
            arrow = arrow(length = unit(0.1, "cm")), curvature = 0, color = "red") +
 
@@ -1367,12 +1367,12 @@ ggplot() +
  ## Left flange (shown as extension)
  geom_rect(aes(xmin = 1, xmax = 2.5, ymin = 4, ymax = 6),
            fill = "lightyellow", color = "black", linewidth = 1, linetype = "dashed") +
- annotate("text", x = 1.75, y = 5, label = "Flange\n(bent 90°)", size = 3) +
+ annotate("text", x = 1.75, y = 5, label = "Flange\n(bent 90°)", size = 3 * diagram_text_scale) +
 
  ## Right flange
  geom_rect(aes(xmin = 7.5, xmax = 9, ymin = 4, ymax = 6),
            fill = "lightyellow", color = "black", linewidth = 1, linetype = "dashed") +
- annotate("text", x = 8.25, y = 5, label = "Flange\n(bent 90°)", size = 3) +
+ annotate("text", x = 8.25, y = 5, label = "Flange\n(bent 90°)", size = 3 * diagram_text_scale) +
 
  ## Bend lines
  geom_segment(aes(x = 1, xend = 2.5, y = 4, yend = 4),
@@ -1392,7 +1392,7 @@ ggplot() +
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"),
              color = "red", linewidth = 1) +
  annotate("text", x = 2.8, y = 3.75, label = "Too close!\n(< 4mm)",
-         color = "red", size = 3, fontface = "bold") +
+         color = "red", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Problem 2: No bend relief
  geom_rect(aes(xmin = 0.8, xmax = 1.2, ymin = 3.8, ymax = 4.2),
@@ -1400,7 +1400,7 @@ ggplot() +
  geom_segment(aes(x = 0.5, xend = 0.9, y = 4.5, yend = 4.1),
              arrow = arrow(length = unit(0.15, "cm")), color = "red") +
  annotate("text", x = 0.3, y = 4.8, label = "No bend\nrelief!",
-         color = "red", size = 3, fontface = "bold") +
+         color = "red", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Problem 3: Sharp corner
  geom_rect(aes(xmin = 8.8, xmax = 9.2, ymin = 1.8, ymax = 2.2),
@@ -1408,25 +1408,25 @@ ggplot() +
  geom_segment(aes(x = 9.5, xend = 9.1, y = 1.5, yend = 1.9),
              arrow = arrow(length = unit(0.15, "cm")), color = "red") +
  annotate("text", x = 9.7, y = 1.2, label = "Sharp\ncorner!",
-         color = "red", size = 3, fontface = "bold") +
+         color = "red", size = 3 * diagram_text_scale, fontface = "bold") +
 
  ## Dimensions
  geom_segment(aes(x = 1, xend = 9, y = 1.5, yend = 1.5),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 5, y = 1.2, label = "80 mm", size = 3) +
+ annotate("text", x = 5, y = 1.2, label = "80 mm", size = 3 * diagram_text_scale) +
 
  geom_segment(aes(x = 0.5, xend = 0.5, y = 2, yend = 4),
              arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
- annotate("text", x = 0.2, y = 3, label = "50 mm", size = 3, angle = 90) +
+ annotate("text", x = 0.2, y = 3, label = "50 mm", size = 3 * diagram_text_scale, angle = 90) +
 
  ## Material spec
  annotate("text", x = 5, y = 6.5, label = "Material: Low Carbon Steel, t = 2.0 mm",
-         size = 4, fontface = "bold") +
+         size = 4 * diagram_text_scale, fontface = "bold") +
 
  ## Legend
  geom_rect(aes(xmin = 3.5, xmax = 6.5, ymin = 0.2, ymax = 0.8), fill = "white", color = "black") +
  annotate("text", x = 5, y = 0.5, label = "Red = Design Issues to Address",
-         color = "red", size = 3) +
+         color = "red", size = 3 * diagram_text_scale) +
 
  coord_fixed(ratio = 1, xlim = c(-0.5, 10.5), ylim = c(0, 7)) +
  labs(title = "Automotive Bracket - Initial Design Review") +

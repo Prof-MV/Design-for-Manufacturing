@@ -6,14 +6,14 @@ source("R/required_packages.R")
 
 theme_thermo <- theme_minimal() +
   theme(
-    plot.title       = element_text(hjust = 0.5, size = 14, face = "bold"),
-    plot.subtitle    = element_text(hjust = 0.5, size = 10),
-    axis.title       = element_text(size = 11, face = "bold"),
-    axis.text        = element_text(size = 9),
+    plot.title       = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle    = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    axis.title       = element_text(size = 11 * diagram_text_scale, face = "bold"),
+    axis.text        = element_text(size = 9 * diagram_text_scale),
     panel.grid.minor = element_blank(),
     legend.position  = "bottom",
-    legend.title     = element_text(size = 10, face = "bold"),
-    legend.text      = element_text(size = 9),
+    legend.title     = element_text(size = 10 * diagram_text_scale, face = "bold"),
+    legend.text      = element_text(size = 9 * diagram_text_scale),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
@@ -196,19 +196,19 @@ df_all <- rbind(df_sub, df_fus, df_vap)
 ggplot(df_all, aes(x = T, y = P, colour = curve)) +
   geom_line(linewidth = 1.2) +
   # Region labels
-  annotate("text", x = -0.55, y = 0.6,  label = "SOLID",  size = 5, fontface = "bold", colour = "#264653") +
-  annotate("text", x =  0.55, y = 0.65, label = "LIQUID", size = 5, fontface = "bold", colour = "#2A9D8F") +
-  annotate("text", x =  0.55, y = 0.08, label = "VAPOR",  size = 5, fontface = "bold", colour = "#E76F51") +
+  annotate("text", x = -0.55, y = 0.6,  label = "SOLID",  size = 5 * diagram_text_scale, fontface = "bold", colour = "#264653") +
+  annotate("text", x =  0.55, y = 0.65, label = "LIQUID", size = 5 * diagram_text_scale, fontface = "bold", colour = "#2A9D8F") +
+  annotate("text", x =  0.55, y = 0.08, label = "VAPOR",  size = 5 * diagram_text_scale, fontface = "bold", colour = "#E76F51") +
   # Triple point
   annotate("point", x = tp_T, y = tp_P, size = 4, colour = "black") +
   annotate("text",  x = tp_T + 0.08, y = tp_P + 0.04,
-           label = "Triple\nPoint", size = 3.2, hjust = 0, colour = "black") +
+           label = "Triple\nPoint", size = 3.2 * diagram_text_scale, hjust = 0, colour = "black") +
   # Critical point
   annotate("point", x = cp_T, y = cp_P, size = 4, colour = "#E63946") +
   annotate("text",  x = cp_T - 0.08, y = cp_P + 0.06,
-           label = "Critical\nPoint", size = 3.2, hjust = 1, colour = "#E63946") +
+           label = "Critical\nPoint", size = 3.2 * diagram_text_scale, hjust = 1, colour = "#E63946") +
   # Supercritical region label
-  annotate("text", x = 1.15, y = 0.7, label = "SUPER-\nCRITICAL", size = 3.5,
+  annotate("text", x = 1.15, y = 0.7, label = "SUPER-\nCRITICAL", size = 3.5 * diagram_text_scale,
            fontface = "italic", colour = "grey40") +
   scale_colour_manual(values = c("Sublimation" = "#E76F51",
                                   "Fusion (Melting)" = "#264653",
@@ -342,7 +342,7 @@ df_all <- rbind(df_iso, df_ibar, df_adia, df_ivol)
 ggplot(df_all, aes(x = V, y = P, colour = process)) +
   geom_line(linewidth = 1.3) +
   geom_point(aes(x = V1, y = P1), colour = "black", size = 3.5) +
-  annotate("text", x = V1 - 0.08, y = P1 + 4, label = "State 1", size = 3.5,
+  annotate("text", x = V1 - 0.08, y = P1 + 4, label = "State 1", size = 3.5 * diagram_text_scale,
            fontface = "bold", hjust = 1) +
   scale_colour_manual(values = c(
     "Isothermal (T = const)"  = "#2A9D8F",
@@ -618,27 +618,27 @@ ggplot() +
   geom_path(data = df_carnot, aes(x = s, y = T), colour = "#264653", linewidth = 1.4) +
   # Process labels
   annotate("text", x = (s1+s2)/2, y = T_H + 20, label = "① Isothermal Expansion (Q_H in)",
-           hjust = 0.5, size = 3.2, colour = "#264653") +
+           hjust = 0.5, size = 3.2 * diagram_text_scale, colour = "#264653") +
   annotate("text", x = s2 + 0.08, y = (T_H+T_L)/2, label = "② Adiabatic\nExpansion",
-           hjust = 0, size = 3.0, colour = "#264653") +
+           hjust = 0, size = 3.0 * diagram_text_scale, colour = "#264653") +
   annotate("text", x = (s1+s2)/2, y = T_L - 20, label = "③ Isothermal Compression (Q_L out)",
-           hjust = 0.5, size = 3.2, colour = "#264653") +
+           hjust = 0.5, size = 3.2 * diagram_text_scale, colour = "#264653") +
   annotate("text", x = s1 - 0.08, y = (T_H+T_L)/2, label = "④ Adiabatic\nCompression",
-           hjust = 1, size = 3.0, colour = "#264653") +
+           hjust = 1, size = 3.0 * diagram_text_scale, colour = "#264653") +
   # State points
   annotate("point", x = c(s1, s2, s2, s1), y = c(T_H, T_H, T_L, T_L),
            size = 3, colour = "#E63946") +
   annotate("text",  x = c(s1-0.05, s2+0.05, s2+0.05, s1-0.05),
                     y = c(T_H+15, T_H+15, T_L-15, T_L-15),
-           label = c("1","2","3","4"), size = 3.5, colour = "#E63946", fontface = "bold") +
+           label = c("1","2","3","4"), size = 3.5 * diagram_text_scale, colour = "#E63946", fontface = "bold") +
   # Reference lines
   geom_hline(yintercept = T_H, linetype = "dashed", colour = "#E9C46A", linewidth = 0.7) +
   geom_hline(yintercept = T_L, linetype = "dashed", colour = "#E9C46A", linewidth = 0.7) +
-  annotate("text", x = 3.4, y = T_H, label = paste("T_H =", T_H, "K"), hjust = 0, size = 3) +
-  annotate("text", x = 3.4, y = T_L, label = paste("T_L =", T_L, "K"), hjust = 0, size = 3) +
+  annotate("text", x = 3.4, y = T_H, label = paste("T_H =", T_H, "K"), hjust = 0, size = 3 * diagram_text_scale) +
+  annotate("text", x = 3.4, y = T_L, label = paste("T_L =", T_L, "K"), hjust = 0, size = 3 * diagram_text_scale) +
   # W_net annotation
   annotate("text", x = (s1+s2)/2, y = (T_H+T_L)/2,
-           label = "W_net\n(enclosed area)", hjust = 0.5, size = 3.5,
+           label = "W_net\n(enclosed area)", hjust = 0.5, size = 3.5 * diagram_text_scale,
            colour = "#2A9D8F", fontface = "italic") +
   scale_x_continuous(limits = c(0.5, 4.0)) +
   scale_y_continuous(limits = c(200, 900)) +
@@ -774,22 +774,22 @@ ggplot() +
   # State points
   geom_point(data = data.frame(s = c(s1,s2,s3,s4), T = c(T1,T2,T3,T4)),
              aes(x = s, y = T), size = 3.5, colour = "#E63946") +
-  annotate("text", x = s1-0.2, y = T1,    label = "1\nCondenser out", hjust=1, size=3.0) +
-  annotate("text", x = s2-0.2, y = T2+15, label = "2\nPump out",      hjust=1, size=3.0) +
-  annotate("text", x = s3+0.1, y = T3,    label = "3\nTurbine in",    hjust=0, size=3.0) +
-  annotate("text", x = s4+0.1, y = T4+15, label = "4\nTurbine out",   hjust=0, size=3.0) +
+  annotate("text", x = s1-0.2, y = T1,    label = "1\nCondenser out", hjust=1, size = 3.0 * diagram_text_scale) +
+  annotate("text", x = s2-0.2, y = T2+15, label = "2\nPump out",      hjust=1, size = 3.0 * diagram_text_scale) +
+  annotate("text", x = s3+0.1, y = T3,    label = "3\nTurbine in",    hjust=0, size = 3.0 * diagram_text_scale) +
+  annotate("text", x = s4+0.1, y = T4+15, label = "4\nTurbine out",   hjust=0, size = 3.0 * diagram_text_scale) +
   # Process annotations
-  annotate("text", x = 3.7,  y = 420, label = "Boiler (2→3)", size = 3.2,
+  annotate("text", x = 3.7,  y = 420, label = "Boiler (2→3)", size = 3.2 * diagram_text_scale,
            colour = "#2A9D8F", fontface = "italic") +
-  annotate("text", x = 6.9,  y = 270, label = "Turbine\n(3→4)", size = 3.2,
+  annotate("text", x = 6.9,  y = 270, label = "Turbine\n(3→4)", size = 3.2 * diagram_text_scale,
            colour = "#2A9D8F", fontface = "italic") +
-  annotate("text", x = 3.7,  y = 30,  label = "Condenser (4→1)", size = 3.2,
+  annotate("text", x = 3.7,  y = 30,  label = "Condenser (4→1)", size = 3.2 * diagram_text_scale,
            colour = "#2A9D8F", fontface = "italic") +
-  annotate("text", x = 0.55, y = 200, label = "Pump\n(1→2)", size = 3.0,
+  annotate("text", x = 0.55, y = 200, label = "Pump\n(1→2)", size = 3.0 * diagram_text_scale,
            colour = "#2A9D8F", fontface = "italic") +
   # Critical point marker
   annotate("point", x = 1.3,  y = 374, size = 4, colour = "#E63946") +
-  annotate("text",  x = 1.5,  y = 374, label = "Critical\nPoint", hjust = 0, size = 3.0) +
+  annotate("text",  x = 1.5,  y = 374, label = "Critical\nPoint", hjust = 0, size = 3.0 * diagram_text_scale) +
   scale_x_continuous(limits = c(-0.2, 9.0)) +
   scale_y_continuous(limits = c(-10, 550)) +
   labs(
@@ -873,19 +873,19 @@ ggplot() +
   geom_point(data = data.frame(s = c(s1,s2,s3,s4), T = c(T1,T2,T3,T4)),
              aes(x = s, y = T), size = 3.5, colour = "#E63946") +
   # State labels
-  annotate("text", x = s1-0.1, y = T1-30, label = "1\n(BDC)", hjust=1, size=3.2, colour="#264653") +
-  annotate("text", x = s2-0.1, y = T2+30, label = "2\n(TDC)", hjust=1, size=3.2, colour="#264653") +
-  annotate("text", x = s3+0.1, y = T3,    label = "3\n(TDC\nPost-combustion)", hjust=0, size=3.0, colour="#264653") +
-  annotate("text", x = s4+0.1, y = T4,    label = "4\n(BDC\nPost-expansion)", hjust=0, size=3.0, colour="#264653") +
+  annotate("text", x = s1-0.1, y = T1-30, label = "1\n(BDC)", hjust=1, size = 3.2 * diagram_text_scale, colour="#264653") +
+  annotate("text", x = s2-0.1, y = T2+30, label = "2\n(TDC)", hjust=1, size = 3.2 * diagram_text_scale, colour="#264653") +
+  annotate("text", x = s3+0.1, y = T3,    label = "3\n(TDC\nPost-combustion)", hjust=0, size = 3.0 * diagram_text_scale, colour="#264653") +
+  annotate("text", x = s4+0.1, y = T4,    label = "4\n(BDC\nPost-expansion)", hjust=0, size = 3.0 * diagram_text_scale, colour="#264653") +
   # Process annotations
   annotate("text", x = (s1+s2)/2, y = (T1+T2)/2 + 60,
-           label = "1→2\nIsentropic\nCompression", hjust=0.5, size=2.8, colour="#457B9D") +
+           label = "1→2\nIsentropic\nCompression", hjust=0.5, size = 2.8 * diagram_text_scale, colour="#457B9D") +
   annotate("text", x = (s2+s3)/2 - 0.1, y = (T2+T3)/2 + 100,
-           label = "2→3\nConst. Vol.\nHeat Addition", hjust=1, size=2.8, colour="#E63946") +
+           label = "2→3\nConst. Vol.\nHeat Addition", hjust=1, size = 2.8 * diagram_text_scale, colour="#E63946") +
   annotate("text", x = (s3+s4)/2, y = (T3+T4)/2 - 60,
-           label = "3→4\nIsentropic\nExpansion", hjust=0.5, size=2.8, colour="#457B9D") +
+           label = "3→4\nIsentropic\nExpansion", hjust=0.5, size = 2.8 * diagram_text_scale, colour="#457B9D") +
   annotate("text", x = (s4+s1)/2 + 0.1, y = (T4+T1)/2 - 100,
-           label = "4→1\nConst. Vol.\nHeat Rejection", hjust=0, size=2.8, colour="#2A9D8F") +
+           label = "4→1\nConst. Vol.\nHeat Rejection", hjust=0, size = 2.8 * diagram_text_scale, colour="#2A9D8F") +
   scale_x_continuous(limits = c(0.3, 4.2)) +
   scale_y_continuous(limits = c(150, 2800)) +
   labs(
@@ -1017,7 +1017,7 @@ cols <- c("Theoretical Limit"    = "#E63946",
 
 ggplot(cycles, aes(x = cycle, y = efficiency, fill = type)) +
   geom_col(width = 0.6, colour = "white") +
-  geom_text(aes(label = paste0(efficiency, "%")), vjust = -0.4, size = 4, fontface = "bold") +
+  geom_text(aes(label = paste0(efficiency, "%")), vjust = -0.4, size = 4 * diagram_text_scale, fontface = "bold") +
   scale_fill_manual(values = cols) +
   scale_y_continuous(limits = c(0, 80), breaks = seq(0, 80, 10)) +
   labs(
@@ -1052,7 +1052,7 @@ ggplot(df_cop, aes(x = delta_T, y = COP, colour = Device)) +
   geom_line(linewidth = 1.4) +
   geom_hline(yintercept = 1, linetype = "dashed", colour = "grey50") +
   annotate("text", x = 75, y = 1.15, label = "COP = 1.0\n(electric resistance heater baseline)",
-           hjust = 1, size = 3.0, colour = "grey40") +
+           hjust = 1, size = 3.0 * diagram_text_scale, colour = "grey40") +
   scale_colour_manual(values = c("Refrigerator (COP_R)" = "#2A9D8F",
                                   "Heat Pump (COP_HP)"   = "#E63946")) +
   scale_x_continuous(breaks = seq(10, 90, 10)) +
