@@ -58,6 +58,24 @@ book:
     - part: "Finite Element Analysis"
       chapters:
         - 05-01-FEA-SolidWorks.qmd
+    - part: "Engineering Design Challenges in Electromechanical Systems"
+      chapters:
+        - 06-00-Electromechanical-Design-Challenges.qmd
+        - 06-01-Robot-Cell-Design.qmd
+        - 06-02-Machine-Safety-Circuits.qmd
+        - 06-03-Control-Panel-Design.qmd
+        - 06-04-Wire-Cable-Circuit-Protection.qmd
+        - 06-05-Bonding-Grounding-EMC.qmd
+        - 06-06-Motor-Drive-Gearbox-Sizing.qmd
+        - 06-07-Pneumatic-System-Design.qmd
+        - 06-08-Linear-Motion-Design.qmd
+        - 06-09-Shaft-Coupling-Power-Transmission.qmd
+        - 06-10-Conveyor-Design.qmd
+        - 06-11-Frame-Structural-Design.qmd
+        - 06-12-Thermal-Management-Electronics.qmd
+        - 06-13-Power-Supply-UPS-Battery-Sizing.qmd
+        - 06-14-Sensor-Selection-IO-Architecture.qmd
+        - 06-15-Capstone-Pick-and-Place-Cell.qmd
   page-navigation: true
 
 bibliography: [book.bib, packages.bib]

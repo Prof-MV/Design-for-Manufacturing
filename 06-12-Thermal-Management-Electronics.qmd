@@ -1,0 +1,744 @@
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
+# Thermal Management of Electronics
+
+```{r setup-06-12, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+# jQuery is needed by kableExtra's kePrint.js (tooltips/popovers) but Quarto's
+# Bootstrap 5 theme doesn't ship it by default.
+inject_jquery()
+library(tidyr)
+```
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+1. **Calculate** junction temperature rise using the series thermal resistance chain (junction-case-sink-ambient) and **verify** it against a power semiconductor's rated maximum junction temperature.
+2. **Determine** the heatsink thermal resistance required for a given heat load and temperature budget, and **select** an appropriately sized heatsink from representative catalog data.
+3. **Calculate** the airflow, in CFM and m³/h, required to hold an enclosure within an allowable temperature rise for a given internal heat load, and **size** a cooling fan accordingly.
+4. **Evaluate** whether natural convection is sufficient for an enclosure's heat load or whether forced-air cooling is required, using a heat-flux-based decision framework.
+5. **Apply** a linear derating curve to determine whether a drive or power supply's continuous current rating must be reduced for an elevated-ambient installation.
+6. **Explain** how component-level thermal design connects to the enclosure-level cooling decision made when specifying a control panel.
+
+## Introduction
+
+Drive past almost any automotive stamping or paint-shop building in southern Ontario and you'll notice the mezzanine level tucked above the production floor — a steel catwalk deck crowded with control panels, one per zone, each one feeding VFDs and servo drives down to the machines below. It's a sensible place to put electrical gear: it keeps cabling runs short and keeps electricians off the shop floor during changeovers. It's also, thermally speaking, one of the worst places in the plant to put anything that generates heat. Heat rises. The mezzanine sits directly above the hottest processes in the building — ovens, presses, welders — and the roof deck above it often has little insulation. A panel that would run comfortably at 25°C ambient in a climate-controlled office cools far worse forty feet above a paint-cure oven on a July afternoon shift.
+
+This is where a decision made one level up — in the [Control Panel Design](06-03-Control-Panel-Design.qmd) chapter's heat dissipation design task — comes back to matter in detail. That chapter asked, at the *enclosure* level, whether a panel needs natural convection, a forced-air fan and filter, or a sealed air conditioner to hold its internal temperature within bounds. This chapter takes that same physics and pushes it one level further down: given that enclosure-level cooling decision, does the specific power semiconductor bolted to a heatsink inside that panel actually survive at its rated junction temperature? Is the heatsink itself big enough? Is the fan, once you've decided you need one, actually sized to move enough air? And does the drive's own current rating need to be derated because the ambient it's sitting in is hotter than the number on its nameplate assumes?
+
+A defense-sector electronics manufacturer thinks about this problem the same way, for a different reason. A shipboard or vehicle-mounted power distribution unit doesn't get the luxury of an air-conditioned mezzanine — it might sit in an unconditioned equipment bay that sees genuinely extreme ambient temperatures — and a program audit years after the unit ships can ask to see the documented thermal margin for any individual component on the board, not just a pass/fail test result from first article inspection. "It passed a burn-in test once" is not an acceptable answer in that environment; "here is the calculated junction temperature, the assumptions behind it, and the margin to the rated maximum" is.
+
+This chapter builds the toolkit both of those engineers need, in five design tasks: the junction-to-ambient thermal resistance chain that tells you whether a specific device survives (Design Task 1); sizing the heatsink that chain depends on (Design Task 2); sizing the fan that moves air across that heatsink and through the enclosure (Design Task 3); deciding, in the first place, whether you need that fan at all or whether natural convection is enough (Design Task 4); and checking whether a drive's continuous rating survives being installed somewhere hotter than its catalog rating assumes (Design Task 5). All five tasks share the same automotive mezzanine VFD panel as a running example, so that by the end of the chapter you can see how the component-level check, the heatsink, the fan, the enclosure decision, and the derating check all fit together into one coherent design.
+
+## Design Task 1: The Thermal Resistance Chain (Junction-Case-Sink-Ambient)
+
+### Scenario
+
+A Tier-1 automotive stamping supplier has a 40 hp VFD driving a scrap-conveyor motor, mounted in a control panel on the mezzanine above the press line. The panel builder measured worst-case internal air temperature near the drive's heatsink at 50°C during a July heat-soak test — hot mezzanine air, plus the drive's own accumulated internal heat, plus a run of adjacent panels all radiating warmth into a shared electrical room. The drive's output stage uses an IGBT power module dissipating 78 W of combined conduction and switching losses at its rated full-load output current. The panel builder's quality engineer needs to know, in writing, whether that IGBT's junction temperature stays within its rated limits under this specific installation's worst-case conditions — not "the drive is rated for the application" as a general statement, but an actual number with margin attached.
+
+```{r fig-06-12-thermal-chain, echo=FALSE, fig.cap="The junction-to-ambient thermal resistance chain: heat generated at the semiconductor die flows through three series thermal resistances to reach ambient air, exactly like current flowing through three series electrical resistors.", fig.align='center', fig.width=11, fig.height=5}
+library(ggplot2)
+
+nodes_df <- data.frame(
+  x = c(0.5, 3, 5.5, 8.5),
+  label = c("T_J\n(Junction)", "T_C\n(Case)", "T_S\n(Sink)", "T_A\n(Ambient)"),
+  color = c("#E74C3C", "#F39C12", "#3498DB", "#2ECC71")
+)
+
+resistors_df <- data.frame(
+  x_start = c(0.9, 3.4, 5.9),
+  x_end   = c(2.6, 5.1, 8.1),
+  label = c("R[theta*JC]", "R[theta*CS]", "R[theta*SA]"),
+  sub = c("Device package", "Thermal interface\nmaterial", "Heatsink")
+)
+
+ggplot() +
+  annotate("segment", x = resistors_df$x_start, xend = resistors_df$x_end,
+           y = 1, yend = 1, linewidth = 1.4, color = "grey30") +
+  annotate("rect", xmin = resistors_df$x_start + 0.35, xmax = resistors_df$x_end - 0.35,
+            ymin = 0.82, ymax = 1.18, fill = "white", color = "grey30", linewidth = 1) +
+  annotate("text", x = (resistors_df$x_start + resistors_df$x_end) / 2, y = 1,
+           label = resistors_df$label, parse = TRUE, size = 4 * diagram_text_scale) +
+  annotate("text", x = (resistors_df$x_start + resistors_df$x_end) / 2, y = 0.55,
+           label = resistors_df$sub, size = 2.9 * diagram_text_scale, color = "grey40") +
+  annotate("point", x = nodes_df$x, y = 1, size = 6, color = nodes_df$color) +
+  annotate("text", x = nodes_df$x, y = 1.42, label = nodes_df$label,
+           size = 3.6 * diagram_text_scale, fontface = "bold") +
+  annotate("segment", x = 0.5, xend = 9.6, y = -0.35, yend = -0.35,
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), linewidth = 1) +
+  annotate("text", x = 5, y = -0.65, label = "Direction of heat flow (analogous to current I)",
+           size = 3.1 * diagram_text_scale) +
+  coord_fixed(ratio = 0.9) +
+  xlim(0, 10) + ylim(-1, 1.9) +
+  theme_void() +
+  labs(title = "Junction-to-Ambient Thermal Resistance Chain",
+       subtitle = "Power dissipation P_D plays the role of current; temperature difference plays the role of voltage") +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * diagram_text_scale))
+```
+
+### Design Guidelines and Rules of Thumb
+
+Steady-state heat flow through a power semiconductor and its mounting stack behaves exactly like a DC electrical circuit, and it's genuinely useful to think of it that way: power dissipation $P_D$ plays the role of current, temperature difference plays the role of voltage, and each stage of the heat path — die-to-package, package-to-heatsink, heatsink-to-air — has its own thermal resistance $R_\theta$, in series, exactly like resistors along a single current path. The datasheet values for $R_{\theta JC}$ (junction-to-case) come from a standardized test method, most commonly the **JEDEC JESD51** family of thermal measurement standards (JESD51-1 and JESD51-14 in particular), so that different manufacturers' numbers are at least measured the same way — worth knowing when you're comparing two vendors' datasheets rather than trusting a number in isolation.
+
+The three links in the chain behave very differently in practice. $R_{\theta JC}$ is fixed by the device package and die size — you can't change it once you've picked the part. $R_{\theta CS}$ is the one most under the panel builder's control: it depends entirely on the quality of the mechanical mounting and the thermal interface material (grease, pad, or phase-change material) between the device baseplate and the heatsink, and a poorly torqued mounting screw or a skipped thermal pad can multiply this term several times over with no visible symptom until the device fails. $R_{\theta SA}$ is the heatsink's own resistance to ambient air, developed fully in Design Task 2.
+
+**Rule of thumb:** design continuous operation to a working junction temperature ceiling roughly 20-25°C below the device's absolute rated $T_{J,max}$ (commonly 150°C for silicon IGBTs and diodes), not right up against the datasheet limit. This breaks down in two directions: it's unnecessarily conservative for a device that only sees its calculated worst-case $T_J$ briefly and rarely (a genuinely intermittent overload, well below the device's thermal time constant), and it's not conservative enough for an application with a demanding number of thermal power cycles over its service life (frequent full-load/no-load transitions), where bond-wire and solder-joint fatigue from repeated thermal expansion and contraction becomes the limiting factor well before any single steady-state $T_J$ calculation would suggest trouble — for that case, consult the manufacturer's power-cycling life curves, not just a static margin check.
+
+<details>
+<summary>Industry connection: documented thermal margin as an audit artifact in defense manufacturing</summary>
+
+A defense contractor building power distribution units for a vehicle electronics retrofit program keeps a signed thermal margin calculation — junction temperature versus rated maximum, with the reference ambient, the device datasheet revision, and the derating basis all called out by reference number — in the design record for every power semiconductor on the board. That calculation isn't produced because engineers doubt the part will work; it's produced because a program quality audit, possibly years after the units have shipped, can ask to see the documented margin for any specific component, and "it passed environmental test" is not the same artifact as a traceable calculation tied to a datasheet revision. The discipline of writing the calculation down, with its assumptions visible, is the actual deliverable — not just the number at the bottom.
+
+</details>
+
+### Governing Calculation
+
+The three thermal resistances combine in series, exactly like electrical resistors on a single current path:
+
+$$R_{\theta JA} = R_{\theta JC} + R_{\theta CS} + R_{\theta SA}$$
+
+Junction temperature rises above ambient in proportion to the power dissipated and the total resistance of the path it has to flow through:
+
+$$T_J = T_A + P_D \left(R_{\theta JC} + R_{\theta CS} + R_{\theta SA}\right)$$
+
+Solving the same relationship for the maximum power the path can carry without exceeding a chosen junction temperature limit:
+
+$$P_{D,max} = \frac{T_{J,limit} - T_A}{R_{\theta JA}}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $P_D$ | Power dissipated at the device (conduction + switching losses) | W |
+| $R_{\theta JC}$ | Junction-to-case thermal resistance (device package) | °C/W |
+| $R_{\theta CS}$ | Case-to-sink thermal resistance (mounting interface) | °C/W |
+| $R_{\theta SA}$ | Sink-to-ambient thermal resistance (heatsink) | °C/W |
+| $R_{\theta JA}$ | Total junction-to-ambient thermal resistance | °C/W |
+| $T_A$ | Local ambient air temperature at the heatsink | °C |
+| $T_J$ | Semiconductor junction temperature | °C |
+| $T_{J,limit}$ | Chosen working junction temperature ceiling (rule of thumb above) | °C |
+
+### Worked Example
+
+```{r igbt-junction-check-06-12, echo=TRUE}
+# Given: automotive mezzanine VFD panel, output-stage IGBT module
+P_D <- 78              # W, conduction + switching losses at full rated output
+T_A_local <- 50         # C, worst-case measured internal air temperature at the heatsink
+
+R_JC <- 0.22            # C/W, device datasheet junction-to-case
+R_CS <- 0.10            # C/W, thermal interface pad, case-to-sink
+R_SA <- 0.28            # C/W, existing heatsink already specified by the panel builder
+
+T_J_max_absolute <- 150 # C, device absolute maximum rated junction temperature
+T_J_limit_working <- 125 # C, chosen working ceiling (25 C margin, per rule of thumb)
+
+# Series thermal resistance chain
+R_JA <- R_JC + R_CS + R_SA
+delta_T <- P_D * R_JA
+T_J <- T_A_local + delta_T
+
+# Maximum allowable dissipation at the working ceiling
+P_D_max <- (T_J_limit_working - T_A_local) / R_JA
+margin_ratio <- P_D_max / P_D
+
+cat(sprintf("Total junction-to-ambient resistance: %.3f C/W\n", R_JA))
+cat(sprintf("Temperature rise above ambient: %.1f C\n", delta_T))
+cat(sprintf("Calculated junction temperature: %.1f C\n\n", T_J))
+cat(sprintf("Working ceiling: %.0f C -> %s (%.1f C margin)\n", T_J_limit_working,
+            ifelse(T_J <= T_J_limit_working, "PASSES", "FAILS"),
+            T_J_limit_working - T_J))
+cat(sprintf("Absolute maximum: %.0f C -> %s (%.1f C margin)\n", T_J_max_absolute,
+            ifelse(T_J <= T_J_max_absolute, "PASSES", "FAILS"),
+            T_J_max_absolute - T_J))
+cat(sprintf("Maximum allowable dissipation at working ceiling: %.1f W (%.0f%% margin over actual %.0f W)\n",
+            P_D_max, (margin_ratio - 1) * 100, P_D))
+```
+
+**Sanity check:** the calculated junction temperature (96.8°C) sits comfortably below both the 125°C working ceiling and the 150°C absolute maximum, with a 60% dissipation margin at the working ceiling — a healthy, defensible result rather than a razor's-edge pass. That margin matters, because Design Task 5 later in this chapter revisits this same panel under a different condition (a drive's *current* rating, not an individual IGBT's junction temperature) and finds a case that does *not* pass this comfortably — a reminder that a comfortable result on one check is never a substitute for actually running the next one.
+
+## Design Task 2: Heatsink Selection for a Motor Drive
+
+### Scenario
+
+The panel builder from Design Task 1 is now specifying a *new* drive cabinet for a similar mezzanine installation, and this time the heatsink itself hasn't been chosen yet — it needs to be sized from scratch. The drive's power stage puts three IGBT half-bridge output devices and a brake-chopper diode module all on one shared extruded-aluminum heatsink, a standard construction for this class of drive. Combined, those four devices dissipate 210 W at full rated output. The single hottest device among them dissipates 70 W on its own. The panel builder's design ambient budget for the heatsink's local air is 50°C, matching the worst-case condition established in Design Task 1, and the same 125°C working junction ceiling applies. The question here isn't "does this heatsink work" — it's "how big does the heatsink have to be in the first place."
+
+### Design Guidelines and Rules of Thumb
+
+Work this problem backward from Design Task 1's chain: instead of being given $R_{\theta SA}$ and solving for $T_J$, you're given the target $T_J$ (the working ceiling) and solving for the *maximum allowable* $R_{\theta SA}$ that still keeps every device on the shared heatsink under its limit.
+
+Because several devices share one heatsink, the calculation has to be built around whichever single device runs hottest, not the average. Find the maximum allowable heatsink *surface* temperature by working the chain backward from that hottest device's own junction limit, then size the heatsink to hold the *entire* shared heat load ($Q_{total}$, all devices combined) below that surface temperature at the design ambient.
+
+**Rule of thumb:** when comparing catalog heatsink data, remember that $R_{\theta SA}$ falls off with diminishing returns as extrusion length increases — doubling the length of a finned heatsink does *not* halve its thermal resistance, because the fins furthest from the heat source contribute progressively less as fin efficiency drops with distance from the base. This breaks down for very short, stubby heatsinks (well under about 100 mm), where the relationship is closer to linear before fin-efficiency losses start to dominate — but for the mid-length extrusions used on most drive and power-supply heatsinks, expect real, but shrinking, returns from adding length.
+
+A second rule of thumb, this one about margin rather than length: **select a heatsink whose catalog $R_{\theta SA}$ is at least 10-15% better (lower) than the calculated requirement**, not exactly equal to it. This breaks down for a heatsink that will be periodically cleaned and well-maintained in a controlled environment (the margin can be thinner) and is *not* enough margin for a heatsink that will see dust, oil mist, or paint overspray accumulation over its service life without regular cleaning — those all act as an added, uncontrolled thermal resistance on top of the catalog number, and a dusty automotive stamping-plant mezzanine is exactly that kind of environment.
+
+```{r fig-06-12-heatsink-curve, echo=FALSE, fig.cap="Representative heatsink thermal resistance versus extrusion length, for natural convection and two forced-air conditions. Curves are illustrative, based on a typical power-law falloff, not a specific manufacturer's exact catalog data.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+
+L_mm <- seq(100, 500, by = 10)
+heatsink_curve <- data.frame(
+  L_mm = rep(L_mm, 3),
+  R_theta_SA = c(53.6 * L_mm^-0.899,
+                 0.65 * 53.6 * L_mm^-0.899,
+                 0.45 * 53.6 * L_mm^-0.899),
+  condition = rep(c("Natural convection", "Forced air, ~2 m/s", "Forced air, ~4 m/s"),
+                   each = length(L_mm))
+)
+heatsink_curve$condition <- factor(heatsink_curve$condition,
+  levels = c("Natural convection", "Forced air, ~2 m/s", "Forced air, ~4 m/s"))
+
+target_R <- 0.257
+
+ggplot(heatsink_curve, aes(x = L_mm, y = R_theta_SA, color = condition)) +
+  geom_line(linewidth = 1.2) +
+  annotate("segment", x = 100, xend = 500, y = target_R, yend = target_R,
+           linetype = "dashed", color = "grey30", linewidth = 0.9) +
+  annotate("point", x = 450, y = 53.6 * 450^-0.899, size = 3.5, color = "black", shape = 17) +
+  annotate("point", x = 300, y = 0.65 * 53.6 * 300^-0.899, size = 3.5, color = "black", shape = 15) +
+  annotate("text", x = 320, y = 0.86, label = "Required R_theta-SA = 0.257 C/W (dashed line)",
+           size = 2.9 * diagram_text_scale, color = "grey30", hjust = 0) +
+  annotate("text", x = 320, y = 0.78, label = "▲ Selected: 450 mm, natural convection",
+           size = 2.9 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 320, y = 0.70, label = "■ Selected: 300 mm, forced air ~2 m/s",
+           size = 2.9 * diagram_text_scale, hjust = 0) +
+  scale_color_manual(values = c("Natural convection" = "#3498DB",
+                                 "Forced air, ~2 m/s" = "#F39C12",
+                                 "Forced air, ~4 m/s" = "#E74C3C")) +
+  labs(title = "Heatsink Thermal Resistance vs. Extrusion Length",
+       subtitle = "Representative extruded-aluminum finned heatsink; dashed line is this design's required R_theta-SA",
+       x = "Heatsink length (mm)", y = "R_theta-SA (C/W)", color = NULL) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+        legend.position = "bottom",
+        axis.title = element_text(size = 11 * diagram_text_scale),
+        axis.text = element_text(size = 10 * diagram_text_scale),
+        legend.text = element_text(size = 9.5 * diagram_text_scale))
+```
+
+### Governing Calculation
+
+First, find the maximum allowable heatsink surface temperature from the hottest single device's own junction chain:
+
+$$T_{S,allow} = T_{J,limit} - P_{D,hottest}\left(R_{\theta JC} + R_{\theta CS}\right)$$
+
+Then size the heatsink's required thermal resistance from the *total* heat load it must carry to hold that surface temperature at the design ambient:
+
+$$R_{\theta SA,required} = \frac{T_{S,allow} - T_A}{Q_{total}}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $P_{D,hottest}$ | Dissipation of the single hottest device on the shared heatsink | W |
+| $T_{S,allow}$ | Maximum allowable heatsink surface temperature | °C |
+| $Q_{total}$ | Combined heat load of all devices on the shared heatsink | W |
+| $R_{\theta SA,required}$ | Maximum allowable heatsink thermal resistance | °C/W |
+
+### Worked Example
+
+Live cell — try a different total heat load, hottest-device dissipation, or design ambient, and see how the required heatsink rating and selected length respond.
+
+```{webr-r}
+#| label: heatsink-selection-06-12
+## Given
+Q_total <- 210          # W, combined dissipation of all devices on the shared heatsink
+P_hottest <- 70          # W, dissipation of the single hottest device
+R_JC <- 0.20             # C/W, hottest device's junction-to-case
+R_CS <- 0.10             # C/W, case-to-sink interface (thermal pad)
+T_A <- 50                 # C, design ambient at the heatsink
+T_J_limit <- 125          # C, working junction ceiling (Design Task 1)
+
+## Step 1: maximum allowable heatsink surface temperature
+T_S_allow <- T_J_limit - P_hottest * (R_JC + R_CS)
+
+## Step 2: required heatsink thermal resistance
+R_SA_required <- (T_S_allow - T_A) / Q_total
+
+cat(sprintf("Maximum allowable heatsink surface temperature: %.1f C\n", T_S_allow))
+cat(sprintf("Required heatsink thermal resistance: %.3f C/W\n\n", R_SA_required))
+
+## Representative catalog heatsink data (illustrative, not a specific vendor's table)
+catalog <- data.frame(
+  length_mm = c(200, 250, 300, 350, 400, 450, 500),
+  R_natural = c(0.458, 0.374, 0.318, 0.277, 0.245, 0.220, 0.200),
+  R_forced_2ms = c(0.298, 0.243, 0.207, 0.180, 0.159, 0.143, 0.130)
+)
+catalog$margin_pct_natural <- (R_SA_required - catalog$R_natural) / R_SA_required * 100
+catalog$passes_natural <- catalog$R_natural <= R_SA_required * 0.90  # 10% margin rule of thumb
+
+cat("Natural-convection catalog options:\n")
+for (i in seq_len(nrow(catalog))) {
+  cat(sprintf("  %d mm: R_theta-SA = %.3f C/W -> %s\n",
+              catalog$length_mm[i], catalog$R_natural[i],
+              ifelse(catalog$passes_natural[i], "PASSES (with margin)", "insufficient margin or fails")))
+}
+
+selected_natural <- catalog$length_mm[which(catalog$passes_natural)[1]]
+selected_forced <- catalog$length_mm[which(catalog$R_forced_2ms <= R_SA_required * 0.90)[1]]
+
+cat(sprintf("\n-> Natural convection: select %d mm heatsink\n", selected_natural))
+cat(sprintf("-> With forced air (~2 m/s): select %d mm heatsink instead\n", selected_forced))
+```
+
+**Sanity check:** the required $R_{\theta SA}$ (0.257°C/W) demands a 450 mm natural-convection heatsink to clear the 10% margin rule of thumb comfortably, but only a 300 mm heatsink under moderate forced air — a 150 mm reduction in a physically large, expensive extrusion, in exchange for adding a fan. That trade-off (bigger passive heatsink and no fan, versus smaller heatsink plus a fan that can fail or clog with dust) is exactly the kind of decision Design Task 4 formalizes at the enclosure level, and it recurs constantly in real panel design: a fan is not free — it is a maintenance item and a failure mode — so the smaller-heatsink-plus-fan option is not automatically the better one, even though it looks cheaper on the heatsink alone.
+
+## Design Task 3: Sizing Cooling Fan Airflow
+
+### Scenario
+
+The same automotive mezzanine panel from Design Tasks 1 and 2 has a total internal heat load — from the drive's power devices, its control electronics, a control transformer, contactors, and a small 24 VDC supply — of 350 W. The panel already uses forced-air cooling (louvered inlet with a filter, exhaust fan, and outlet louver) rather than a sealed enclosure; Design Task 4 develops the framework for *why* that choice was made, but for now, the panel builder needs to size the fan itself. The mezzanine's average room air temperature — the air the fan actually draws in through the inlet filter, distinct from the hotter local air measured right at the heatsink in Design Tasks 1 and 2 — runs 35°C on a summer day shift. The panel spec calls for the internal air, immediately downstream of the fan, to rise no more than 10°C above that incoming air, keeping the bulk of the panel's internal components comfortably under their rated ambient limits with margin.
+
+### Design Guidelines and Rules of Thumb
+
+It's worth being precise about *which* temperature is which, because this chapter uses two different ones for two different purposes. The **local ambient at a specific heatsink** (used in Design Tasks 1 and 2) is the worst-case air temperature right where a hot component sits, after the panel's own internal heat has already raised it above room conditions. The **incoming room or plant-floor ambient** (used here) is what the fan actually pulls in from outside the enclosure. A fan calculation always uses the incoming air temperature, because that's the coolant the fan is supplying — the temperature rise it produces, added to that incoming temperature, is what determines the resulting internal air temperature everywhere the fan's airflow reaches.
+
+The airflow calculation itself is the same energy balance used for any convective air-cooling problem: the heat picked up by a moving mass of air equals its mass flow rate times its specific heat times its temperature rise. Air's volumetric heat capacity (density × specific heat) is a genuinely useful constant to remember directly: at typical room conditions, $\rho c_p \approx 1200\ \text{J/(m}^3\text{·K)}$ for dry air.
+
+**Rule of thumb:** size the fan for 1.5-2x the calculated free-air CFM, not the bare calculated value. This accounts for the static-pressure drop across a real inlet filter and louvered outlet (which reduces a fan's actual delivered airflow well below its unrestricted "free air" rating), plus gradual filter loading with dust and lint between service intervals, plus some margin for altitude if the installation is at any meaningful elevation. This breaks down for an application with a filter that gets cleaned or replaced on a tight, disciplined schedule and very low static resistance ductwork (lean toward the lower end of that range) — and is *not* enough margin for a dirty, poorly maintained plant-floor environment with infrequent filter service, where derating the fan's rated free-air CFM by half or more before even applying this margin is a more realistic starting assumption.
+
+### Governing Calculation
+
+$$\dot{V} = \frac{P_D}{\rho c_p\,\Delta T}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $P_D$ | Total internal heat load to be removed by the airflow | W |
+| $\rho c_p$ | Volumetric heat capacity of air ($\approx 1200$ at room conditions) | J/(m³·K) |
+| $\Delta T$ | Allowable internal temperature rise above incoming air | °C (K) |
+| $\dot{V}$ | Required volumetric airflow rate | m³/s |
+
+Converting to the units fans are actually cataloged in: $1\ \text{m}^3/\text{s} = 2118.9\ \text{CFM}$, and $1\ \text{m}^3/\text{s} = 3600\ \text{m}^3/\text{h}$.
+
+### Worked Example
+
+Live cell — try a different heat load, allowable temperature rise, or incoming ambient, and see how the required airflow and fan selection respond.
+
+```{webr-r}
+#| label: fan-sizing-06-12
+## Given
+P_total <- 350        # W, total internal panel heat load
+delta_T <- 10           # C, allowable internal rise above incoming air
+rho_cp <- 1200           # J/(m^3.K), volumetric heat capacity of air
+
+## Required volumetric flow rate
+V_dot_m3s <- P_total / (rho_cp * delta_T)
+V_dot_CFM <- V_dot_m3s * 2118.9
+V_dot_m3h <- V_dot_m3s * 3600
+
+## Apply the sizing margin rule of thumb (filter/louvre pressure drop, dust loading)
+margin_low <- 1.5
+margin_high <- 2.0
+CFM_select_low <- V_dot_CFM * margin_low
+CFM_select_high <- V_dot_CFM * margin_high
+
+cat(sprintf("Total panel heat load: %.0f W\n", P_total))
+cat(sprintf("Allowable temperature rise: %.0f C\n\n", delta_T))
+cat(sprintf("Required free-air flow rate: %.4f m^3/s\n", V_dot_m3s))
+cat(sprintf("                           = %.1f CFM\n", V_dot_CFM))
+cat(sprintf("                           = %.1f m^3/h\n\n", V_dot_m3h))
+cat(sprintf("Fan sizing margin (1.5x - 2.0x for filter/louvre losses and dust loading):\n"))
+cat(sprintf("  Select a fan rated %.0f - %.0f CFM free air\n", CFM_select_low, CFM_select_high))
+
+## Representative catalog fan options (illustrative panel/tube-axial fans)
+fan_catalog <- data.frame(
+  model_mm = c(92, 119, 150, 172),
+  free_air_CFM = c(45, 105, 150, 245)
+)
+selected_fan <- fan_catalog$model_mm[which(fan_catalog$free_air_CFM >= CFM_select_high)[1]]
+cat(sprintf("\n-> From the representative catalog, select the %d mm frame fan (rated %.0f CFM free air)\n",
+            selected_fan, fan_catalog$free_air_CFM[fan_catalog$model_mm == selected_fan]))
+```
+
+**Sanity check:** the bare calculated airflow (62 CFM) looks modest for a panel this size, but the margin rule of thumb roughly doubles that to a 93-124 CFM target — and sizing to the high end of that range, per the rule of thumb's guidance for a dusty, infrequently serviced plant-floor filter, calls for the representative 150 mm catalog fan (150 CFM free air) rather than the smaller 119 mm unit that would just barely clear the low end. That gap between a fan's "free air" rating and its actually-delivered airflow through a real filter and louver is the single most common fan undersizing mistake on a plant floor: a fan spec sheet's headline CFM number is measured with nothing attached to the inlet or outlet, and a filtered, louvered enclosure is never that condition.
+
+## Design Task 4: Natural Convection vs. Forced Air — A Decision Framework
+
+### Scenario
+
+Before any fan gets specified, somebody has to decide whether one is needed at all. A food and beverage plant is speccing two panels of identical physical size — 800 mm tall, 600 mm wide, 300 mm deep, wall-mounted with the back against a wall (so only the front, top, and two sides are effective cooling surfaces). One panel houses a small PLC and I/O rack for a case-sealing machine, dissipating 45 W. The other is the automotive-style VFD panel from Design Tasks 1-3, dissipating 350 W. Both panels sit in a 35°C ambient with the same 10°C allowable internal rise. Do either of them, or both, need a fan?
+
+### Design Guidelines and Rules of Thumb
+
+An enclosure sheds heat to its surroundings two ways without any moving parts: natural (buoyancy-driven) convection off its external surfaces, and radiation from those same surfaces to cooler surroundings. Combined, these are commonly approximated with a single overall heat transfer coefficient for a matte-painted steel enclosure in still indoor air, away from direct sunlight — a representative, order-of-magnitude value used widely in enclosure cooling guidance is roughly $U \approx 5.5\ \text{W/(m}^2\text{·°C)}$. Only the enclosure's *effective* surface area counts: exclude the bottom (blocked by the mounting stand or floor) and any face mounted flush against a wall or another panel, since those surfaces can't exchange heat with moving room air.
+
+Work through the decision in three gates, in order:
+
+**Gate 1 — Is natural convection enough?** Compute the enclosure's natural-convection capacity at the allowable temperature rise budget, and compare it to the actual heat load, with margin (don't design right at 100% of the computed capacity). If the heat load clears this gate, a sealed enclosure is not just acceptable but *preferable* — no vent penetrations means the enclosure can hold a higher ingress protection rating with no added hardware, which matters enormously for washdown-duty food-plant equipment.
+
+**Gate 2 — If not, is there enough ambient margin for forced air to work?** Forced air (a filtered fan and vent) dramatically increases the effective airflow over the natural-convection case — that's the entire point of Design Task 3's fan sizing — but it can only cool the enclosure interior down toward the *incoming* air temperature, never below it. If the incoming plant-floor air is itself uncomfortably close to the equipment's maximum rated ambient, forced air of that same air buys very little usable margin no matter how big the fan is.
+
+**Gate 3 — If forced air isn't viable, or if the environment doesn't permit vent penetrations at all** (washdown-duty food processing equipment needing IP66/IP69K-style protection, or a corrosive, dusty, or hazardous-classified area), the enclosure needs active, sealed cooling — an air conditioner or an air-to-air or air-to-water heat exchanger, which rejects heat without any direct air exchange between inside and outside. This is precisely the enclosure-level cooling decision made in the [Control Panel Design](06-03-Control-Panel-Design.qmd) chapter; from this chapter's perspective, an AC unit or heat exchanger is simply a much larger, mechanically active version of the same series thermal-resistance idea, with its own manufacturer-rated capacity in watts per degree.
+
+**Rule of thumb:** treat roughly 8-10x the natural-convection capacity as a rough ceiling for what a well-designed filtered fan-and-vent system can realistically achieve in the same enclosure footprint before running into diffuser, filter, and duct losses that make adding still more airflow increasingly unproductive. This breaks down for a lightly loaded enclosure where a small, quiet, low-CFM fan can comfortably do the job with a huge margin to that ceiling — and it breaks down in the other direction for an enclosure with poor internal air routing (a fan blowing directly at a wall of the cabinet rather than across the actual heat-generating components), where even nominally adequate CFM on paper doesn't translate into effective cooling in practice.
+
+```{r fig-06-12-convection-decision, echo=FALSE, fig.cap="Cooling method selection chart: heat load versus allowable temperature rise, with natural-convection and forced-air capacity boundaries for the 800 x 600 x 300 mm enclosure used in this chapter's worked examples.", fig.align='center', fig.width=10, fig.height=6.5}
+library(ggplot2)
+
+A_eff <- 1.14   # m^2, effective cooling area (front + top + 2 sides, wall-mounted)
+U_natural <- 5.5 # W/(m^2.C)
+
+dT_seq <- seq(2, 20, by = 0.5)
+zone_df <- data.frame(
+  dT = dT_seq,
+  Q_natural_limit = U_natural * A_eff * dT_seq,
+  Q_forced_limit  = 8 * U_natural * A_eff * dT_seq
+)
+
+points_df <- data.frame(
+  dT = c(10, 10),
+  Q = c(45, 350),
+  label = c("Case-sealer\nPLC panel (45 W)", "Automotive VFD\npanel (350 W)")
+)
+
+ggplot() +
+  geom_ribbon(data = zone_df, aes(x = dT, ymin = 0, ymax = Q_natural_limit),
+              fill = "#2ECC71", alpha = 0.25) +
+  geom_ribbon(data = zone_df, aes(x = dT, ymin = Q_natural_limit, ymax = Q_forced_limit),
+              fill = "#F39C12", alpha = 0.25) +
+  geom_ribbon(data = zone_df, aes(x = dT, ymin = Q_forced_limit, ymax = 500),
+              fill = "#E74C3C", alpha = 0.20) +
+  geom_line(data = zone_df, aes(x = dT, y = Q_natural_limit), color = "#27AE60", linewidth = 1.1) +
+  geom_line(data = zone_df, aes(x = dT, y = Q_forced_limit), color = "#D35400", linewidth = 1.1) +
+  annotate("point", x = points_df$dT, y = points_df$Q, size = 4, color = "black") +
+  annotate("text", x = points_df$dT + 0.6, y = points_df$Q, label = points_df$label,
+           size = 3 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 4, y = 20, label = "Natural\nconvection OK", size = 3 * diagram_text_scale, color = "#1E8449", hjust = 0) +
+  annotate("text", x = 4, y = 200, label = "Forced air\nrequired", size = 3 * diagram_text_scale, color = "#B9770E", hjust = 0) +
+  annotate("text", x = 4, y = 480, label = "Active cooling (AC / heat\nexchanger) required",
+           size = 3 * diagram_text_scale, color = "#943126", hjust = 0) +
+  scale_y_continuous(labels = scales::label_comma(big.mark = " ")) +
+  coord_cartesian(ylim = c(0, 500)) +
+  labs(title = "Cooling Method Selection: Heat Load vs. Allowable Temperature Rise",
+       subtitle = "800 x 600 x 300 mm wall-mounted enclosure, A_eff = 1.14 m^2, U_natural = 5.5 W/(m^2*C)",
+       x = "Allowable internal temperature rise, delta-T (C)", y = "Total internal heat load (W)") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+        axis.title = element_text(size = 11 * diagram_text_scale),
+        axis.text = element_text(size = 10 * diagram_text_scale))
+```
+
+### Governing Calculation
+
+$$Q_{max,natural} = U_{natural}\,A_{eff}\,\Delta T_{budget}$$
+
+Compare the actual heat load against this capacity with a design margin (don't run right at 100%):
+
+$$Q_{total} \leq 0.8\,Q_{max,natural} \quad \Rightarrow \quad \text{natural convection is sufficient}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $U_{natural}$ | Combined natural-convection + radiation heat transfer coefficient | W/(m²·°C) |
+| $A_{eff}$ | Effective external surface area (excluding bottom and wall-mounted faces) | m² |
+| $\Delta T_{budget}$ | Allowable internal-to-ambient temperature rise | °C |
+| $Q_{max,natural}$ | Maximum heat load natural convection can carry at that budget | W |
+| $Q_{total}$ | Actual total internal heat load | W |
+
+### Worked Example
+
+Live cell — try a different enclosure size, temperature budget, or heat load, and see which zone each scenario lands in.
+
+```{webr-r}
+#| label: convection-decision-06-12
+## Given: enclosure geometry (wall-mounted, back against wall, bottom not effective)
+H <- 0.8; W <- 0.6; D <- 0.3   # m
+A_front <- H * W
+A_top   <- W * D
+A_sides <- 2 * (H * D)
+A_eff <- A_front + A_top + A_sides
+
+U_natural <- 5.5   # W/(m^2.C), representative for painted steel, still indoor air
+dT_budget <- 10     # C
+
+Q_max_natural <- U_natural * A_eff * dT_budget
+Q_max_natural_design <- 0.8 * Q_max_natural   # 80% design margin, not run at the raw limit
+
+cat(sprintf("Effective cooling area: %.2f m^2 (front %.2f + top %.2f + sides %.2f)\n",
+            A_eff, A_front, A_top, A_sides))
+cat(sprintf("Natural convection capacity at %.0f C rise: %.1f W (raw), %.1f W (with 80%% design margin)\n\n",
+            dT_budget, Q_max_natural, Q_max_natural_design))
+
+## Two scenarios sharing this enclosure
+scenarios <- data.frame(
+  name = c("Case-sealer PLC panel", "Automotive VFD panel"),
+  Q = c(45, 350)
+)
+
+for (i in seq_len(nrow(scenarios))) {
+  Q <- scenarios$Q[i]
+  utilization <- Q / Q_max_natural_design * 100
+  verdict <- ifelse(Q <= Q_max_natural_design, "NATURAL CONVECTION OK",
+                     ifelse(Q <= 8 * Q_max_natural_design, "FORCED AIR REQUIRED", "ACTIVE COOLING REQUIRED"))
+  cat(sprintf("%-24s: %.0f W (%.0f%% of natural-convection design capacity) -> %s\n",
+              scenarios$name[i], Q, utilization, verdict))
+}
+```
+
+**Sanity check:** the small PLC panel lands right at about 90% of the *already-margined* natural-convection budget — a genuine pass, but not a comfortable one, and a useful reminder that the 80% design-margin factor is meant to be the real ceiling, not a number to design right up against; a slightly larger enclosure or a lower internal load would give this panel more breathing room. Even so, it can stay fully sealed, which is exactly what a food-plant washdown environment wants, since a sealed cabinet can carry an IP66 or IP69K rating (per NEMA 250 or the equivalent IEC 60529 IP classification) with no added vent hardware to compromise. The automotive VFD panel, in the identical enclosure, needs roughly seven times that same budget — nowhere close to what natural convection can deliver, confirming the forced-air design already assumed in Design Task 3. Note what this comparison does *not* show: it doesn't mean the VFD panel's forced-air fix is automatically fine everywhere — Gate 2's ambient-margin check still applies, and if this same drive were relocated to an unconditioned equipment bay where incoming air already ran close to the drive's maximum rated ambient, forced air alone would stop being a viable answer regardless of fan size, and the design would move to Gate 3.
+
+## Design Task 5: Derating Electronics at Elevated Ambient
+
+### Scenario
+
+The mezzanine panel from Design Tasks 1-3 has been running in service for two years. A recent line-speed improvement project increased the scrap conveyor's load, and the motor now draws 90 A continuously at full load — up from its original 78 A design point. The drive was originally selected as a 100 A continuous-rated frame at the manufacturer's standard 40°C reference ambient, which looked like a comfortable 22 A margin over the *original* 78 A load. Nobody re-checked the drive's rating against the panel's actual installed ambient when the load increased. The same worst-case 50°C internal ambient measured in Design Task 1 still applies. Does this drive still meet the application, or does it need derating?
+
+### Design Guidelines and Rules of Thumb
+
+A drive or power supply's continuous current or power rating on its nameplate is only valid at the reference ambient temperature the manufacturer tested it at — commonly 40°C for industrial VFDs, though this varies by product line and must always be confirmed against the specific datasheet. Above that reference ambient, the internal semiconductors and passive components run hotter for the same output current, so the manufacturer publishes a **derating curve**: full rated output up to the reference ambient, then a linear reduction in allowable continuous current or power as ambient climbs further, down to some documented maximum operating ambient beyond which the drive simply cannot run at all.
+
+**Rule of thumb:** as an illustrative, representative figure — not any specific manufacturer's published curve — expect roughly 1-2% of rated continuous current lost per °C of ambient above the reference point, typically extending to a maximum rated ambient somewhere around 55-60°C. This breaks down badly if applied to a specific real installation without checking the actual manufacturer's derating table for the specific model: derating rates vary meaningfully between product families (a compact, densely packed drive derates faster than a larger frame with more thermal mass and surface area for the same power class), and using a generic assumed rate in place of the real datasheet curve for a documented design calculation is exactly the kind of shortcut that a defense-program thermal margin audit, referenced earlier in this chapter, would flag.
+
+Ambient derating and altitude derating are separate, additive effects and are easy to conflate: altitude derating (reduced convective cooling effectiveness in thinner air, typically starting above 1000 m) applies even at a moderate, non-elevated ambient temperature, while ambient derating applies at sea level if the surrounding air is simply hot. A high-altitude installation in a hot ambient needs both derating factors checked, not just one.
+
+### Governing Calculation
+
+$$I_{allow} = \begin{cases} I_{rated} & T_A \leq T_{ref} \\ I_{rated}\left[1 - k_{derate}\left(T_A - T_{ref}\right)\right] & T_A > T_{ref} \end{cases}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $I_{rated}$ | Nameplate continuous current rating at the reference ambient | A |
+| $T_{ref}$ | Reference ambient the nameplate rating is valid at | °C |
+| $T_A$ | Actual installed ambient | °C |
+| $k_{derate}$ | Derating rate above the reference ambient | fraction per °C |
+| $I_{allow}$ | Allowable continuous current at the actual installed ambient | A |
+
+### Worked Example
+
+Live cell — try a different measured ambient, derating rate, or required load current, and see whether the drive still passes.
+
+```{webr-r}
+#| label: derating-check-06-12
+## Given
+I_rated <- 100          # A, nameplate continuous rating at reference ambient
+T_ref <- 40               # C, reference ambient for the nameplate rating
+T_A_installed <- 50       # C, worst-case measured installed ambient (Design Task 1)
+k_derate <- 0.015         # fraction per C, representative derating rate above T_ref
+
+I_required <- 90          # A, actual continuous load current after the line-speed increase
+
+## Allowable current at the installed ambient
+delta_T_above_ref <- max(0, T_A_installed - T_ref)
+I_allow <- I_rated * (1 - k_derate * delta_T_above_ref)
+
+margin_A <- I_allow - I_required
+margin_pct <- margin_A / I_required * 100
+
+cat(sprintf("Nameplate rating: %.0f A at %.0f C reference ambient\n", I_rated, T_ref))
+cat(sprintf("Installed ambient: %.0f C (%.0f C above reference)\n", T_A_installed, delta_T_above_ref))
+cat(sprintf("Derating: %.1f%% per C -> allowable continuous current = %.1f A\n\n", k_derate * 100, I_allow))
+cat(sprintf("Required load current: %.0f A\n", I_required))
+cat(sprintf("Margin: %.1f A (%.1f%%) -> %s\n", margin_A, margin_pct,
+            ifelse(margin_A >= 0, "PASSES", "FAILS - drive is undersized at this installed ambient")))
+
+if (margin_A < 0) {
+  ## Check remedies: (a) upsize the frame, (b) reduce installed ambient toward T_ref
+  I_rated_next_frame <- 125
+  I_allow_next_frame <- I_rated_next_frame * (1 - k_derate * delta_T_above_ref)
+  T_A_needed_for_original_frame <- T_ref + (1 - I_required / I_rated) / k_derate
+
+  cat(sprintf("\nRemedy A - upsize to a %.0f A frame: allowable current becomes %.1f A (%s)\n",
+              I_rated_next_frame, I_allow_next_frame,
+              ifelse(I_allow_next_frame >= I_required, "PASSES", "still fails")))
+  cat(sprintf("Remedy B - keep the 100 A frame, but reduce installed ambient to <= %.1f C\n",
+              T_A_needed_for_original_frame))
+}
+```
+
+**Sanity check:** at the panel's 40°C reference ambient, the original 100 A frame looked like it had a comfortable margin over the 90 A requirement. At the actual 50°C installed ambient, the representative 1.5%/°C derating rate knocks the allowable current down to 85 A — below the 90 A the conveyor now actually draws. This is exactly the kind of quiet, easy-to-miss failure this chapter's introduction described: nothing about the drive changed, and nothing failed a startup test, but a documented ambient temperature the original sizing calculation never accounted for turned a comfortable-looking margin into a real shortfall. The two remedies the calculation checks — upsizing to a 125 A frame, or bringing the installed ambient down closer to the 40°C reference through the forced-air or enclosure-cooling methods developed in Design Tasks 3 and 4 — are the same two levers a plant engineer actually has in the field: buy a bigger drive, or fix the environment it's sitting in. Which one makes sense is a cost and schedule question as much as an engineering one, but the derating check is what tells you the decision needs to be made at all.
+
+## Summary
+
+```{r tbl-06-12-summary, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+summary_df <- data.frame(
+  `Design Task` = c(
+    "1. Thermal resistance chain",
+    "2. Heatsink selection",
+    "3. Fan airflow sizing",
+    "4. Natural vs. forced air",
+    "5. Derating at elevated ambient"
+  ),
+  `Governing Equation` = c(
+    "$T_J = T_A + P_D(R_{\\theta JC}+R_{\\theta CS}+R_{\\theta SA})$",
+    "$R_{\\theta SA,req} = (T_{S,allow}-T_A)/Q_{total}$",
+    "$\\dot{V} = P_D/(\\rho c_p \\, \\Delta T)$",
+    "$Q_{max,natural} = U_{natural}A_{eff}\\Delta T_{budget}$",
+    "$I_{allow} = I_{rated}[1-k_{derate}(T_A-T_{ref})]$"
+  ),
+  `Key Rule of Thumb` = c(
+    "Design continuous $T_J$ to ~20-25 C below absolute $T_{J,max}$",
+    "Select a catalog $R_{\\theta SA}$ at least 10-15% better than required",
+    "Size the fan for 1.5-2x the calculated free-air CFM",
+    "Forced air realistically extends capacity to ~8-10x natural convection",
+    "Expect roughly 1-2% derating per C above the reference ambient"
+  ),
+  check.names = FALSE
+)
+summary_df[] <- lapply(summary_df, tex_safe)
+
+kable(summary_df, caption = "Summary of thermal management design tasks: governing equations and key rules of thumb", escape = FALSE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = knitr::is_html_output()) %>%
+  row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+- The thermal resistance chain treats heat flow exactly like a DC circuit: power dissipation is current, temperature difference is voltage, and $R_{\theta JC}$, $R_{\theta CS}$, and $R_{\theta SA}$ are three series resistances between the junction and ambient air.
+- A heatsink's required rating comes from working that same chain backward from the hottest device's junction limit, then dividing the *total* shared heat load by the resulting allowable temperature budget.
+- Fan sizing is a straightforward energy balance ($\dot{V} = P_D/(\rho c_p \Delta T)$), but the calculated free-air CFM must be multiplied by a real-world margin to account for filter and louver pressure losses.
+- Whether an enclosure needs a fan at all — or can stay sealed, or needs active cooling instead — is a heat-flux-density decision, not a fixed rule: compute the enclosure's natural-convection capacity and compare it, with margin, to the actual heat load.
+- A drive or power supply's nameplate rating is only valid at its reference ambient; installing it somewhere hotter, without re-checking the derating curve, can silently erode a margin that looked comfortable on paper.
+- All five of these design tasks are the same physics as the enclosure-level cooling decision in the [Control Panel Design](06-03-Control-Panel-Design.qmd) chapter, applied one level down, to the individual component and heatsink.
+
+## Practice Problems
+
+<details>
+<summary>Design Task 1, Problem 1 (plug-in): a hotter mezzanine day</summary>
+
+Using the same IGBT module from the worked example ($R_{\theta JC}=0.22$, $R_{\theta CS}=0.10$, $R_{\theta SA}=0.28$ °C/W, $P_D=78$ W), find the junction temperature if the panel's worst-case measured ambient climbs to 58°C on an especially hot summer day. Does it still pass the 125°C working ceiling?
+
+**Solution:**
+
+$$R_{\theta JA} = 0.22+0.10+0.28 = 0.60\ \text{°C/W}$$
+$$T_J = 58 + 78(0.60) = 58 + 46.8 = 104.8\ \text{°C}$$
+
+104.8°C is still below the 125°C working ceiling (20.2°C margin), so the device still passes — even at 8°C higher ambient than the original worked example, the healthy margin found there absorbs the change.
+
+</details>
+
+<details>
+<summary>Design Task 1, Problem 2 (design decision): a cheaper thermal pad</summary>
+
+A purchasing agent proposes switching to a cheaper thermal interface pad rated $R_{\theta CS}=0.22$°C/W (versus the 0.10°C/W pad used in the worked example) to save a few dollars per panel across a large production order. Using the same IGBT ($R_{\theta JC}=0.22$, $R_{\theta SA}=0.28$, $P_D=78$ W, $T_A=50$°C), would you approve the change?
+
+**Answer:** Recompute: $R_{\theta JA}=0.22+0.22+0.28=0.72$°C/W, so $T_J = 50+78(0.72)=106.2$°C. That still passes the 125°C ceiling (18.8°C margin) — so on this single check alone, the cheaper pad is technically acceptable. But approving it purely on that basis misses the point of Design Task 1's rule of thumb about margin: the original 0.10°C/W pad gave 28.2°C of margin specifically to absorb exactly this kind of downstream change (a hotter day, a busier duty cycle, pad degradation over years of service). Cutting that margin roughly in half to save a few dollars on the interface material, on a part that's expensive and disruptive to replace if it fails, is a poor trade unless the pad change is paired with re-verifying the margin is still adequate for the application's full service life — which, for this case, it narrowly still is, but with much less room for anything else to go wrong at the same time.
+
+</details>
+
+<details>
+<summary>Design Task 2, Problem 1 (plug-in): a lighter-loaded heatsink</summary>
+
+A smaller drive shares one heatsink between two IGBT devices, combined dissipation $Q_{total}=90$ W, hottest device $P_{hottest}=48$ W, $R_{\theta JC}=0.25$, $R_{\theta CS}=0.12$ °C/W, $T_A=45$°C, $T_{J,limit}=125$°C. Find the required $R_{\theta SA}$.
+
+**Solution:**
+
+$$T_{S,allow} = 125 - 48(0.25+0.12) = 125 - 17.76 = 107.2\ \text{°C}$$
+$$R_{\theta SA,required} = \frac{107.2-45}{90} = \frac{62.2}{90} = 0.691\ \text{°C/W}$$
+
+A much less demanding requirement than the chapter's main worked example (0.257°C/W), consistent with the lower total heat load — a shorter, smaller heatsink would satisfy this design.
+
+</details>
+
+<details>
+<summary>Design Task 2, Problem 2 (design decision): natural-convection heatsink vs. forced-air heatsink plus fan</summary>
+
+For the chapter's main worked example (required $R_{\theta SA}=0.257$°C/W), the natural-convection option needs a 450 mm heatsink; the forced-air option needs only a 300 mm heatsink plus a fan. The 450 mm extrusion costs more in raw aluminum and takes up more panel depth; the fan adds its own purchase cost, a wiring point, and a future failure/maintenance item. Which would you specify for the automotive mezzanine panel in this chapter, and why?
+
+**Answer:** For this specific application, lean toward the natural-convection option despite the higher material cost, and the reasoning connects directly to Design Task 4's decision framework: this panel already has forced-air ventilation for the *whole enclosure* (Design Task 3), so a heatsink fan would be a second, independent fan inside an already-forced-air enclosure — redundant airflow paths add cost and complexity without a clear benefit, since the enclosure's main fan is already moving air across the heatsink to some degree. If this were instead a compact, sealed washdown-duty enclosure where adding any fan at all was off the table (Design Task 4's Gate 3), the natural-convection heatsink would be the *only* viable option regardless of size or cost, because there's no forced air available to rely on. The dedicated forced-air heatsink genuinely earns its place in a different scenario: a very compact, space-constrained panel where the 150 mm of saved heatsink length matters more than the added fan, and where that specific fan can be monitored (e.g., a fan-fail alarm) rather than silently relied upon.
+
+</details>
+
+<details>
+<summary>Design Task 3, Problem 1 (plug-in): a smaller food-plant panel</summary>
+
+A food-plant control panel has a 60 W internal heat load, 38°C incoming ambient, and an 8°C allowable temperature rise budget. Find the required airflow in CFM and m³/h, and the fan-sizing target after applying the 1.5-2x margin.
+
+**Solution:**
+
+$$\dot{V} = \frac{60}{1200 \times 8} = 0.00625\ \text{m}^3/\text{s} = 13.25\ \text{CFM} = 22.5\ \text{m}^3/\text{h}$$
+
+Applying the 1.5-2x margin: select a fan rated **20-26.5 CFM** free air — a small, quiet, low-power fan, consistent with this being a much smaller heat load than the automotive VFD panel.
+
+</details>
+
+<details>
+<summary>Design Task 3, Problem 2 (design decision): two small fans vs. one larger fan</summary>
+
+For a panel needing about 100 CFM of delivered airflow, a supplier offers either one larger 172 mm fan rated 245 CFM free air, or two smaller 119 mm fans rated 105 CFM free air each (210 CFM combined) mounted at opposite ends of the enclosure. Which would you choose, and why might the "combined CFM" comparison alone be misleading?
+
+**Answer:** The two-fan option is often the better choice for airflow *distribution*, not just total capacity: a single fan tends to create one strong, localized airflow path straight through the enclosure, which can leave hot pockets in corners the airflow doesn't reach, while two smaller fans at opposite ends can be positioned to sweep across specific hot components (the heatsink, the transformer) rather than just moving bulk air past whatever happens to be near the main flow path. The "combined CFM" comparison is misleading because two fans don't simply add their free-air ratings when installed in the same enclosure — they interact with each other's pressure field, and the actual combined delivered airflow is usually somewhat less than the arithmetic sum, especially if they're both pulling from or pushing into a shared, restricted volume. The two-fan option also has a reliability advantage worth weighing: losing one fan out of two leaves partial cooling and more time to react, versus losing the only fan in a single-fan design, which drops the enclosure to natural convection alone with no warning beyond whatever fan-fail monitoring is in place.
+
+</details>
+
+<details>
+<summary>Design Task 4, Problem 1 (plug-in): a larger free-standing enclosure</summary>
+
+A free-standing floor-mount enclosure (not wall-mounted, so front, back, top, and both sides all count, but not the bottom) measures 2000 mm tall, 800 mm wide, 500 mm deep. Using $U_{natural}=5.5$ W/(m²·°C) and a 12°C allowable rise, find the raw natural-convection capacity.
+
+**Solution:**
+
+$$A_{eff} = 2(2.0 \times 0.8) + 2(2.0 \times 0.5) + (0.8 \times 0.5) = 3.2 + 2.0 + 0.4 = 5.6\ \text{m}^2$$
+$$Q_{max,natural} = 5.5 \times 5.6 \times 12 = 369.6\ \text{W}$$
+
+A free-standing enclosure this size has roughly six times the effective cooling area of the chapter's wall-mounted example, so it can carry a substantially larger heat load on natural convection alone — a useful reminder that enclosure *size and mounting*, not just heat load, drive this decision.
+
+</details>
+
+<details>
+<summary>Design Task 4, Problem 2 (design decision): the ambient-margin trap</summary>
+
+A panel's calculated forced-air capacity comfortably covers its 500 W heat load — Gate 1 fails (too much heat for natural convection) but Gate 2 (forced air) looks fine on paper. Then the plant tells you the installation is inside a sealed, unconditioned equipment room that itself regularly reaches 48°C, and the drives inside are rated for a maximum ambient of 50°C. Would you still specify forced air alone? What would you check next?
+
+**Answer:** No — this is exactly the ambient-margin trap Gate 2 warns about. The forced-air calculation shows the fan can move enough *air*, but it can only bring the enclosure's internal temperature down toward the incoming 48°C air, not below it. With the drives' maximum rated ambient at 50°C, a fan pulling in 48°C air leaves almost no headroom at all for the enclosure's own internal heat rise on top of that — the "forced air is sufficient" conclusion from Gate 2's raw capacity number is only valid if the *incoming* air is meaningfully cooler than the equipment's rating, which it isn't here. What to check next: whether the equipment room itself can be cooled (moving the ambient-margin problem one level up, likely outside this panel's scope), or whether Gate 3 applies and the panel needs its own sealed air-to-air or air-to-water heat exchanger, or a small dedicated AC unit, so the panel's internal air is no longer tied to that already-hot room air at all.
+
+</details>
+
+<details>
+<summary>Design Task 5, Problem 1 (plug-in): a different derating rate</summary>
+
+Using the same drive (100 A rated at 40°C reference, installed at 50°C ambient) but a steeper representative derating rate of 2.2%/°C instead of 1.5%/°C, find the allowable continuous current. Does it still cover a 90 A load?
+
+**Solution:**
+
+$$I_{allow} = 100\left[1-0.022(50-40)\right] = 100(1-0.22) = 78\ \text{A}$$
+
+78 A is below the 90 A required load — this drive now fails by an even larger margin than in the worked example, reinforcing that the actual manufacturer-published derating rate for the specific model matters a great deal; using a generic assumed rate in place of it, especially near a pass/fail boundary, is not a substitute for checking the real datasheet.
+
+</details>
+
+<details>
+<summary>Design Task 5, Problem 2 (design decision): upsize the drive or fix the environment</summary>
+
+For the worked example's failing case (85 A allowable vs. 90 A required at 50°C ambient), the plant has two live options on the table: upsize to a 125 A drive frame (higher purchase cost, same footprint issue, done at the next scheduled downtime), or add a dedicated heat exchanger to the panel to bring the local ambient down to 40°C or below (ongoing maintenance item, but keeps the existing drive). Which would you recommend, and what additional information would change your answer?
+
+**Answer:** There's a genuine trade-off here, and the "right" answer depends on information this chapter's numbers alone don't give you. Upsizing the drive is the lower-risk, more predictable fix — it directly restores margin (106.25 A allowable versus 90 A required, an 18% margin) and doesn't add an ongoing-maintenance mechanical cooling system to the panel, but it costs more upfront and may require a schedule window to install. Fixing the environment (a heat exchanger) is attractive if the *same root cause* — a hot mezzanine — is affecting other equipment in the same electrical room, since one properly sized cooling fix could resolve several panels' margin problems at once rather than upsizing each drive individually; but it adds a component that itself needs periodic maintenance and can fail, and if it's undersized or neglected, every panel relying on it inherits the same risk. What would tip the answer: if this is an isolated single panel, upsize the drive — it's the simpler, more contained fix. If the same 50°C worst-case ambient shows up across many panels in the same electrical room, treat it as a room-level problem and fix the room, the same enclosure-level decision the [Control Panel Design](06-03-Control-Panel-Design.qmd) chapter addresses, rather than solving the same symptom five separate times.
+
+</details>
+
+## Open-Ended Design Scenario
+
+<details>
+<summary>Capstone: retrofitting a defense-sector power distribution unit for a hot, unconditioned equipment bay</summary>
+
+A defense manufacturer is qualifying a power distribution unit (PDU) for installation in an unconditioned vehicle equipment bay. Program documentation requires a traceable thermal margin calculation for every power semiconductor in the design record, consistent with this chapter's introduction — "it passed a test" is not an acceptable substitute for the calculation itself.
+
+The PDU's specifications:
+
+- A single power MOSFET switching module dissipates 34 W at full rated load, with datasheet values $R_{\theta JC}=0.45$°C/W and a working junction ceiling of 110°C (chosen more conservatively than this chapter's 125°C default, per the program's own design margin policy for long-service-life, hard-to-access equipment).
+- The module mounts to a dedicated heatsink inside a sealed, IP67-rated enclosure (no vent penetrations are permitted — the equipment bay is exposed to dust and occasional water spray) measuring 400 mm x 300 mm x 150 mm, wall-mounted with one face against the vehicle structure.
+- Total internal heat load, including the MOSFET module and supporting control electronics, is 58 W.
+- The equipment bay's specified worst-case ambient is 55°C, with no active climate control available.
+- The PDU's continuous output current is rated 40 A at a 45°C reference ambient, with a program-supplied representative derating rate of 1.8%/°C above that reference, and the vehicle's actual continuous load draw is 32 A.
+
+Using the methods developed in this chapter:
+
+1. Apply Design Task 1's chain to find the MOSFET's junction temperature at a reasonable assumed case-to-sink and sink-to-ambient resistance (you'll need to select representative values, as the interface hardware hasn't been chosen yet), and check it against the 110°C working ceiling at the 55°C bay ambient.
+2. Apply Design Task 2's method to find the required $R_{\theta SA}$ for the heatsink, working backward from your Design Task 1 assumptions.
+3. Apply Design Task 4's decision framework to the sealed 400 x 300 x 150 mm enclosure: with no vents permitted at all, is natural convection alone realistically going to carry this heat load at 55°C ambient, or does the design need active (sealed) cooling despite the enclosure restriction?
+4. Apply Design Task 5's derating check to the PDU's continuous current rating at 55°C ambient, and determine whether the 32 A actual load has adequate margin.
+5. Write a one-paragraph thermal margin summary, in the style this chapter's defense industry connection describes, that a program auditor could read without needing to re-derive any of the underlying calculations.
+
+There's no single correct numeric answer — reasonable assumptions about the interface hardware and heatsink construction will vary — but the exercise should produce a complete, documented, and internally consistent thermal case: every number traceable to an assumption, and every assumption defensible on its own.
+
+</details>

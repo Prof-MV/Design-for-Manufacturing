@@ -113,10 +113,8 @@ ggplot(processes, aes(x = volume, y = complexity, color = category, label = proc
     plot.title = element_text(hjust = 0.5, face = "bold"),
     legend.position = "right"
   ) +
-  xlim(0, 11) +
-  ylim(0, 12) +
-  scale_x_continuous(breaks = c(2, 5, 8), labels = c("Low", "Medium", "High")) +
-  scale_y_continuous(breaks = c(3, 6, 9), labels = c("Low", "Medium", "High"))
+  scale_x_continuous(limits = c(0, 11), breaks = c(2, 5, 8), labels = c("Low", "Medium", "High")) +
+  scale_y_continuous(limits = c(0, 12), breaks = c(3, 6, 9), labels = c("Low", "Medium", "High"))
 ```
 
 ## General DFM Guidelines

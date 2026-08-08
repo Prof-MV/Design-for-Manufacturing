@@ -1,0 +1,798 @@
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
+# Shaft, Coupling, and Power Transmission Design
+
+```{r setup-06-09, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+# jQuery is needed by kableExtra's kePrint.js (tooltips/popovers) but Quarto's
+# Bootstrap 5 theme doesn't ship it by default.
+inject_jquery()
+```
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+1. **Calculate** the minimum shaft diameter required to transmit a given torque, from an allowable shear stress and a design factor.
+2. **Determine** the diameter increase a keyway forces on an otherwise-adequate shaft, using a torsional stress concentration factor, and **explain** why the alternative — a higher design factor instead of a bigger shaft — is sometimes the better call.
+3. **Select** an appropriate flexible coupling type (jaw, beam, disc, or grid) for a given torque, misalignment, and shock-tolerance requirement, and **justify** the choice against the alternatives.
+4. **Size** a V-belt drive's cross-section and belt quantity from transmitted power, running speed, a service factor, and a wrap-angle correction factor.
+5. **Explain** correct belt tensioning practice and **evaluate** the consequences of over- and under-tensioning on belt life and bearing life.
+6. **Compare** chain and belt drives on torque capacity, slip, contamination, and hygiene compatibility, and **select** the correct one for a stated application and environment.
+7. **Identify** the lubrication/hygiene conflict a chain drive introduces in a washdown or direct-food-contact zone, and **propose** a mitigation.
+
+## Introduction
+
+The [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd) chapter finished with a servo motor and a 20:1 planetary gearbox selected for an automotive Tier-1 supplier's rotary index table. That gearbox has an output shaft sticking out of its housing, rated for roughly 40 N·m of continuous output torque. Sizing the motor and gearbox answers "how much torque and speed does this job need," but it does not answer the next question a mechanical designer actually has to solve on the shop floor: **how does that torque physically get from the gearbox's output shaft into the machine it's driving, without the shaft twisting off, the coupling walking apart, or a belt slipping under load?**
+
+This chapter picks up exactly where that question starts. The same Tier-1 plant, standardizing on a small number of catalog gearmotors to keep its spares crib manageable, uses that identical 40 N·m / 20:1 gearbox on a second machine a few bays over: a short accumulation conveyor feeding parts into the next cell, running at a steady 45 rpm on its head pulley shaft. Between the gearbox's output flange and the conveyor's head pulley sits a length of shaft, a flexible coupling, and — on other machines in the same plant — belt and chain drives doing the same fundamental job under different constraints. Five design tasks build that connection from the shaft outward: sizing the shaft itself against torsional shear, accounting for the strength penalty a keyway introduces, choosing the right coupling architecture, and then stepping outside this specific machine to size belt and chain drives more generally, including when to reach for one over the other.
+
+A note on scope: this chapter is about *sizing the connection hardware* — shaft, coupling, belt, chain — once a torque and speed are already known at both ends. It does not re-derive motor/gearbox sizing (that's [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd)) or full CEMA-style conveyor belt tension across a belt's whole length (that's the [Conveyor Design](06-10-Conveyor-Design.qmd) chapter later in this part). It also isn't a repeat of the general mechanical-elements coverage of belts, chains, and couplings found earlier in this book — this chapter is narrower and more applied: given a real torque and speed at a real gearbox output flange, what specific shaft, coupling, belt, or chain actually goes in this machine, and why.
+
+## Design Task 1: Shaft Diameter from Torsional Shear Stress
+
+### Scenario
+
+The mechanical designer on the accumulation-conveyor project has the gearbox's nameplate data in hand: 40 N·m continuous output torque, 45 rpm output speed, delivered through a keyed output shaft stub. Between that stub and the conveyor's head pulley shaft, a short length of intermediate shaft (sometimes called a stub shaft or line shaft) needs to be specified — either a separate machined shaft coupling the two, or, in this case, simply confirming the gearbox's own output shaft stub is adequate to carry a jaw coupling hub without yielding. Either way, the underlying question is the same: **what is the minimum shaft diameter that safely carries 40 N·m, continuously, all shift long?**
+
+```{r fig-06-09-drivetrain, echo=FALSE, fig.cap="Drivetrain layout between the gearbox output flange and the conveyor head pulley: output shaft, flexible coupling, and head pulley shaft.", fig.align='center', fig.width=12, fig.height=5.5}
+library(ggplot2)
+library(ggforce)
+
+pulley_df <- data.frame(x0 = 750, y0 = 0, r = 90, label = "Head pulley")
+product_df <- data.frame(x = c(430, 560, 700), y = rep(90, 3))
+
+ggplot() +
+  # gearbox housing
+  annotate("rect", xmin = -80, xmax = 150, ymin = -110, ymax = 110,
+           fill = "#E74C3C", color = "black", linewidth = 1) +
+  annotate("text", x = 35, y = 0, label = "Gearbox\n20:1 planetary\nT = 40 N·m\nn = 45 rpm",
+           size = 3.2 * diagram_text_scale, color = "white", fontface = "bold") +
+  # output shaft stub
+  annotate("segment", x = 150, xend = 260, y = 0, yend = 0, linewidth = 3, color = "grey30") +
+  annotate("text", x = 205, y = 40, label = "Output\nshaft", size = 2.8 * diagram_text_scale) +
+  # coupling (two facing jaw hubs with a gap)
+  annotate("rect", xmin = 260, xmax = 310, ymin = -55, ymax = 55, fill = "#F39C12", color = "black") +
+  annotate("rect", xmin = 330, xmax = 380, ymin = -55, ymax = 55, fill = "#F39C12", color = "black") +
+  annotate("text", x = 320, y = -90, label = "Flexible coupling\n(Design Task 3)",
+           size = 2.8 * diagram_text_scale) +
+  # pulley shaft
+  annotate("segment", x = 380, xend = 660, y = 0, yend = 0, linewidth = 3, color = "grey30") +
+  annotate("text", x = 520, y = 40, label = "Pulley shaft", size = 2.8 * diagram_text_scale) +
+  # head pulley (real 1-row geom_circle, per the geom_circle/annotate pitfall note)
+  geom_circle(data = pulley_df, aes(x0 = x0, y0 = y0, r = r), fill = "#3498DB", color = "black", linewidth = 1) +
+  annotate("text", x = 750, y = 0, label = "Head\npulley", size = 2.8 * diagram_text_scale, color = "white") +
+  # belt loop over the pulley
+  annotate("segment", x = 750, xend = 950, y = 90, yend = 90, linewidth = 1.3, color = "grey20") +
+  annotate("segment", x = 750, xend = 950, y = -90, yend = -90, linewidth = 1.3, color = "grey20") +
+  annotate("segment", x = 840, xend = 890, y = 90, yend = 90,
+           arrow = arrow(length = unit(0.22, "cm"), type = "closed"), color = "#2ECC71", linewidth = 1.5) +
+  # a few conveyed parts (real per-row layer: 3 rows of positions from product_df)
+  geom_rect(data = product_df, aes(xmin = x - 25, xmax = x + 25, ymin = y, ymax = y + 45),
+            fill = "#95A5A6", color = "black") +
+  coord_fixed() + xlim(-120, 1080) + ylim(-160, 200) +
+  theme_void() +
+  labs(title = "Accumulation Conveyor Drivetrain",
+       subtitle = "Same catalog gearbox as the index table (06-06), standardized for plant spares commonality") +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * diagram_text_scale))
+```
+
+### Design Guidelines and Rules of Thumb
+
+A round shaft transmitting pure torque fails by twisting — the outer fibre of the shaft sees the highest shear stress, and that stress has to stay below a safe fraction of the material's shear strength. "Safe fraction" is where the design factor comes in: it absorbs the gap between the idealized calculation and everything the calculation doesn't capture — minor bending nobody accounted for, an occasional torque spike above the nameplate rating, a slightly understrength batch of bar stock, wear over the shaft's service life.
+
+Most shafting is a readily available, inexpensive carbon steel — cold-drawn 1018 or 1045 are common choices — selected for machinability and adequate strength rather than exotic alloy content; a shaft is rarely the highest-stressed component in a drivetrain, and over-specifying its material is a common way to add cost without adding value. Shear yield strength isn't usually published directly for a given steel; the standard estimate, from distortion-energy (von Mises) theory, is $S_{sy} \approx 0.577\,S_y$, using the material's tensile yield strength $S_y$, which *is* readily available on a mill certificate or material handbook.
+
+**Rule of thumb:** for a first-pass shaft design with reasonably well-characterized, steady loads, use a design factor $n_d$ in the range 2.5-4 applied to shear yield strength. This breaks down in both directions: for loads measured directly and reliably (e.g., torque feedback from a servo drive's current loop, logged over months of production), a lower $n_d$ around 1.5-2 can be justified with confidence; for poorly-characterized, cyclic, or shock-heavy loads (a shaft that sees genuine impact loading, or millions of reversing cycles over its service life), a static shear-yield calculation like this one isn't the right tool at all — it ignores fatigue entirely, and a proper endurance-limit-based fatigue analysis (Goodman or Soderberg criteria) should replace it.
+
+### Governing Calculation
+
+For a solid circular shaft in pure torsion, the maximum shear stress occurs at the outer surface:
+
+$$\tau_{max} = \frac{16\,T}{\pi\,d^3}$$
+
+Setting the allowable shear stress from material shear yield and design factor, and solving for the minimum diameter:
+
+$$\tau_{allow} = \frac{S_{sy}}{n_d} = \frac{0.577\,S_y}{n_d} \qquad\Rightarrow\qquad d_{min} = \left(\frac{16\,T\,n_d}{\pi\,S_{sy}}\right)^{1/3}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $T$ | Transmitted torque | N·m |
+| $d$ | Shaft diameter | m |
+| $S_y$ | Material tensile yield strength | Pa |
+| $S_{sy}$ | Material shear yield strength ($\approx 0.577\,S_y$) | Pa |
+| $n_d$ | Design factor | dimensionless |
+| $\tau_{max}$, $\tau_{allow}$ | Actual and allowable shear stress | Pa |
+| $d_{min}$ | Minimum required shaft diameter | m |
+
+### Worked Example
+
+```{r shaft-diameter-06-09, echo=TRUE}
+## Given: gearbox output torque (from 06-06), and a candidate shafting material
+T <- 40           # N.m, continuous gearbox output torque
+n_d <- 3.0         # design factor, moderate confidence in load/material
+Sy <- 370e6        # Pa, cold-drawn 1018 steel tensile yield strength
+Ssy <- 0.577 * Sy  # Pa, shear yield estimate (distortion-energy theory)
+
+d_min <- (16 * T * n_d / (pi * Ssy))^(1/3)
+d_min_mm <- d_min * 1000
+
+## Round up to the next standard stock shaft diameter
+d_stock_mm <- 16   # mm, next available metric shafting stock size
+tau_actual <- 16 * T / (pi * (d_stock_mm / 1000)^3)
+n_actual <- Ssy / tau_actual
+
+cat(sprintf("Shear yield strength (0.577 x Sy): %.1f MPa\n", Ssy / 1e6))
+cat(sprintf("Minimum calculated shaft diameter: %.2f mm\n", d_min_mm))
+cat(sprintf("Selected stock diameter (next size up): %.0f mm\n", d_stock_mm))
+cat(sprintf("Actual shear stress at %d mm: %.1f MPa\n", d_stock_mm, tau_actual / 1e6))
+cat(sprintf("Actual design factor achieved: %.2f (target was %.1f)\n", n_actual, n_d))
+```
+
+**Sanity check:** the calculated minimum diameter (14.2 mm) sits comfortably below the 16 mm stock size actually selected, which is exactly what rounding up to a standard size should do — it always adds a little extra margin over the target design factor, here landing at 4.3 rather than the targeted 3.0. That margin isn't wasted: it's about to get spent in Design Task 2, where cutting a keyway into this same 16 mm shaft removes some of it back out again.
+
+## Design Task 2: Keyway Sizing and the Stress Concentration Penalty
+
+### Scenario
+
+A plain 16 mm shaft doesn't connect to anything — torque has to transfer into and out of it somehow, and the shop-standard way to do that on a shaft this size is a keyway: a straight, rectangular slot machined along the shaft, matched by a slot in the coupling hub's bore, with a rectangular key dropped into both to carry the torque as a shear/bearing load rather than relying on an interference fit alone. The designer's problem: that slot is also a stress raiser. The 16 mm shaft sized in Design Task 1 assumed a smooth, notch-free cylinder — cutting a keyway into it means the actual safety factor at the keyway is lower than the 4.3 just calculated, and possibly lower than the 3.0 target.
+
+### Design Guidelines and Rules of Thumb
+
+Standard key sizing is proportional to shaft diameter, not a fixed size: a small instrumentation shaft gets a small key, a large gearbox output shaft gets a proportionally larger one, so that the key's own shear and bearing capacity roughly tracks the shaft's torque capacity as diameter grows. As a rough conceptual guide, square keys in the small-to-medium shaft range commonly run somewhere around one-quarter of the shaft diameter in both width and height, stepping toward a flatter rectangular (wider-than-tall) proportion as shafts get larger. The actual numbers are not a smooth formula — they're published as a stepped table of standard sizes in **ANSI/ASME B17.1** (Keys and Keyseats, inch series) or the metric equivalent **DIN 6885 / ISO 773**, and a real design pulls the key size for a given shaft diameter directly from that table rather than computing it. There is no separate Canadian standard for key and keyseat dimensions; ANSI/ASME B17.1 and the ISO/DIN metric series are used directly in Canadian mechanical design practice, matched to whichever unit system the rest of the machine uses.
+
+Cutting that slot into an otherwise round shaft does two things structurally: it removes cross-sectional material (a small effect for a shallow keyway), and — the dominant effect — it creates two sharp internal corners at the base of the slot where stress concentrates sharply, well above the nominal stress the plain-shaft formula predicts. That concentration is captured by a stress concentration factor $K_t$, applied directly to the nominal torsional stress.
+
+**Rule of thumb:** for a first-pass, pure-torque shaft sizing, assume $K_t \approx 1.6-2.0$ for a standard profiled keyway (values commonly tabulated in stress-concentration references such as Peterson's *Stress Concentration Factors*, based on the fillet radius at the base of the slot — a more generous fillet lowers $K_t$ toward the low end of that range, a sharp-cornered keyway pushes it toward the high end). This breaks down once the same shaft also carries meaningful **bending** — an overhung pulley or sprocket load, for instance, which Design Task 4's belt drive introduces directly onto a shaft. A keyway concentrates bending stress by a similar factor to torsional stress, and a shaft under combined bending and torsion needs a combined-stress equation (not the pure-torsion formula used here) with the stress concentration applied to *both* the bending and torsion terms — treating only the torsional component, as this design task does for a coupling-only connection with negligible bending, would under-predict the required diameter on a shaft that also carries a side load.
+
+There are two legitimate ways to recover the lost margin: increase the shaft diameter locally at the keyway (the more common shop practice, since it only affects one section of the shaft), or accept the full-length diameter increase and skip a local step, or — less commonly — simply carry a higher design factor everywhere and accept the keyway's stress concentration as already priced in. This chapter works the diameter-increase approach, since it's the one a machinist can act on directly from a drawing.
+
+```{r fig-06-09-keyway-section, echo=FALSE, fig.cap="Shaft cross-section with a standard keyway. The two sharp corners at the base of the slot are where the stress concentration factor applies.", fig.align='center', fig.width=9, fig.height=7}
+library(ggplot2)
+library(ggforce)
+
+shaft_df <- data.frame(x0 = 0, y0 = 0, r = 9)   # 18 mm shaft, per the worked example below
+
+ggplot() +
+  geom_circle(data = shaft_df, aes(x0 = x0, y0 = y0, r = r),
+              fill = "grey75", color = "black", linewidth = 1.1) +
+  # keyway notch cut into the top of the shaft (single fixed shape -> annotate)
+  # ymax only slightly above the shaft OD (r = 9) so the notch reads as flush
+  # with the surface rather than a tab sticking out above the circle
+  annotate("rect", xmin = -2.25, xmax = 2.25, ymin = 6.7, ymax = 9.4,
+           fill = "white", color = "black", linewidth = 1.1) +
+  # stress concentration highlight at the two keyway root fillets
+  annotate("point", x = -2.25, y = 6.7, color = "#E74C3C", size = 4) +
+  annotate("point", x = 2.25, y = 6.7, color = "#E74C3C", size = 4) +
+  annotate("text", x = 4.6, y = 5.3, label = "Stress concentrates\nat these fillets\nKt ≈ 1.6 - 2.0",
+           size = 3 * diagram_text_scale, color = "#E74C3C", hjust = 0) +
+  # key width dimension
+  annotate("segment", x = -2.25, xend = 2.25, y = 11, yend = 11,
+           arrow = arrow(length = unit(0.15, "cm"), ends = "both"), linewidth = 0.8) +
+  annotate("text", x = 0, y = 12, label = "key width w ≈ d / 4", size = 2.9 * diagram_text_scale) +
+  # shaft diameter dimension
+  annotate("segment", x = -9, xend = 9, y = -12, yend = -12,
+           arrow = arrow(length = unit(0.15, "cm"), ends = "both"), linewidth = 0.8) +
+  annotate("text", x = 0, y = -13.5, label = "shaft diameter d", size = 2.9 * diagram_text_scale) +
+  coord_fixed() + xlim(-11, 12) + ylim(-16, 16) +
+  theme_void() +
+  labs(title = "Keyway Cross-Section and Stress Concentration") +
+  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"))
+```
+
+### Governing Calculation
+
+The stress concentration factor multiplies the nominal torsional stress directly:
+
+$$\tau_{max} = K_t\,\frac{16\,T}{\pi\,d^3} \le \frac{S_{sy}}{n_d}$$
+
+Solving for the diameter required to restore the original target design factor with the keyway in place:
+
+$$d_{keyway} = \left(\frac{16\,T\,n_d\,K_t}{\pi\,S_{sy}}\right)^{1/3} = d_{plain}\times K_t^{1/3}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $K_t$ | Torsional stress concentration factor for the keyway | dimensionless |
+| $d_{plain}$ | Minimum diameter without a keyway (Design Task 1) | m |
+| $d_{keyway}$ | Minimum diameter required with the keyway, at the same $n_d$ | m |
+
+### Worked Example
+
+Live cell — try a sharper or more generous keyway fillet (changing $K_t$) and see how much diameter it costs.
+
+```{webr-r}
+#| label: keyway-upsize-06-09
+## Given (recomputed locally so this cell is self-contained)
+T <- 40; n_d <- 3.0
+Sy <- 370e6; Ssy <- 0.577 * Sy
+d_plain <- (16 * T * n_d / (pi * Ssy))^(1/3)   # m, Design Task 1 result
+
+Kt <- 1.6   # typical profiled keyway, moderate fillet radius
+
+d_keyway_min <- d_plain * Kt^(1/3)
+d_keyway_min_mm <- d_keyway_min * 1000
+
+## Check: does staying at the original 16 mm stock size (no upsize) still meet n_d?
+d_no_upsize_mm <- 16
+tau_16_with_key <- Kt * 16 * T / (pi * (d_no_upsize_mm / 1000)^3)
+n_16_with_key <- Ssy / tau_16_with_key
+
+## Select the next standard stock size that actually clears d_keyway_min
+d_upsized_mm <- 18
+tau_18_with_key <- Kt * 16 * T / (pi * (d_upsized_mm / 1000)^3)
+n_18_with_key <- Ssy / tau_18_with_key
+
+cat(sprintf("Stress concentration factor Kt: %.2f\n", Kt))
+cat(sprintf("Minimum diameter WITH keyway, same n_d: %.2f mm\n", d_keyway_min_mm))
+cat(sprintf("If left at 16 mm (no upsize): achieved n_d = %.2f -> %s\n",
+            n_16_with_key, ifelse(n_16_with_key >= n_d, "still OK", "BELOW TARGET")))
+cat(sprintf("Upsized to %d mm stock: achieved n_d = %.2f -> %s\n",
+            d_upsized_mm, n_18_with_key, ifelse(n_18_with_key >= n_d, "OK", "BELOW TARGET")))
+```
+
+**Sanity check:** leaving the shaft at 16 mm once the keyway is cut drops the achieved design factor to about 2.7 — below the 3.0 target, even though 16 mm looked comfortable (4.3) before the keyway existed. Stepping up one standard size to 18 mm restores it to about 3.8, with margin to spare. That two-millimetre step is the entire point of this design task: a keyway is not a detail to add after sizing a shaft, it has to be accounted for in the sizing itself, and the fix is usually a small, cheap diameter increase rather than a redesign.
+
+<details>
+<summary>Industry connection: keyway sizing and traceable stock selection</summary>
+
+In an automotive Tier-1 plant running three shifts, a shaft snapped at a keyway root is exactly the kind of failure a maintenance planner wants to prevent with a documented calculation on file, not discover the hard way during a changeover — a two-millimetre stock upsize is a trivial line-item cost against a shift of downtime waiting on a machined replacement shaft.
+
+</details>
+
+## Design Task 3: Coupling Selection — Jaw, Beam, Disc, and Grid
+
+### Scenario
+
+The 18 mm shaft is sized. Now it has to actually connect the gearbox's output flange to the conveyor's head pulley shaft, and the two shaft ends will never line up perfectly — a few tenths of a millimetre of parallel offset and a fraction of a degree of angular misalignment are realistic even with careful field alignment using a straightedge and feeler gauges (laser shaft alignment, common on large rotating equipment, is rarely justified for a drive this small). A rigid connection between the two shafts would try to force that misalignment out through bending stress in both shafts and radial load on both sets of bearings, shortening bearing life and risking a fatigue failure. A flexible coupling exists specifically to absorb that misalignment instead of fighting it — but "flexible coupling" covers several genuinely different designs, and picking the wrong one either under-protects the machine or spends money on capability this application doesn't need.
+
+### Design Guidelines and Rules of Thumb
+
+Four coupling families cover the large majority of general industrial drives:
+
+- **Jaw couplings** use two metal hubs with interlocking jaws, driving through a soft elastomeric spider trapped between them. The elastomer absorbs shock and modest misalignment, and different spider durometers (hardness) trade off torsional stiffness against vibration damping.
+- **Beam couplings** are a single piece of metal (or occasionally two) with a helical or straight slot pattern machined through it, making the whole coupling flex like a spring. They're inherently zero-backlash but have no separate wear part to absorb shock — the beam itself takes the strain.
+- **Disc couplings** transmit torque through a stack of thin, contoured metal discs bolted alternately to each hub, flexing elastically to absorb misalignment with no elastomer and no working clearance anywhere in the load path.
+- **Grid couplings** use a spring-steel grid that weaves through slots in two facing hubs, covered by a lubricated housing — mechanically similar in spirit to a jaw coupling's shock-absorbing role, but built for much higher torque and a harsher duty.
+
+```{r tbl-06-09-coupling-selection, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+coupling_df <- data.frame(
+  Type = c("Jaw (elastomeric spider)", "Beam", "Disc (metal disc pack)", "Grid"),
+  `Torque Capacity` = c("Low - moderate (small drives up to a few hundred N·m)",
+                         "Low (light-duty, precision motion control)",
+                         "Moderate - high (up to several thousand N·m in larger sizes)",
+                         "High - very high (large industrial equipment)"),
+  `Misalignment (Ang. / Par. / Axial)` = c("~1° / moderate / some float",
+                                            "~0.5-1° / small / some float",
+                                            "~0.5-1° / limited (needs a spacer) / good with spacer",
+                                            "~0.5-1° / moderate / good float"),
+  Backlash = c("Low - zero (preloaded spider)", "Zero (monolithic flexure)",
+               "Zero (all-metal flexure)", "Some (working clearance in the grid)"),
+  `Shock Tolerance` = c("Good (elastomer absorbs shock)",
+                         "Poor (no separate wear part; beam itself can fatigue/fracture)",
+                         "Moderate - good", "Excellent (purpose-built for shock/vibration)"),
+  `Typical Use` = c("General-purpose motor/gearbox drives, pumps, conveyors",
+                     "Encoders, steppers, precision servo feedback, instrumentation",
+                     "Precision high-torque servo/spindle drives needing zero backlash",
+                     "Heavy industrial rotating equipment: large pumps, fans, compressors"),
+  check.names = FALSE
+)
+
+kable(coupling_df, caption = "Flexible coupling selection guide (representative, illustrative values)") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = knitr::is_html_output()) %>%
+  row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+```{r fig-06-09-coupling-compare, echo=FALSE, fig.cap="Illustrative comparison of the four coupling families across four selection criteria. Higher is better in each case.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+library(tidyr)
+
+compare_df <- data.frame(
+  Criterion = c("Torque\nCapacity", "Misalignment\nTolerance", "Shock\nTolerance", "Low Cost /\nLow Maintenance"),
+  Jaw = c(2, 4, 5, 5),
+  Beam = c(1, 3, 2, 4),
+  Disc = c(4, 3, 4, 2),
+  Grid = c(5, 4, 5, 2)
+)
+compare_long <- pivot_longer(compare_df, cols = c(Jaw, Beam, Disc, Grid),
+                              names_to = "Coupling", values_to = "Score")
+compare_long$Criterion <- factor(compare_long$Criterion, levels = compare_df$Criterion)
+compare_long$Coupling <- factor(compare_long$Coupling, levels = c("Jaw", "Beam", "Disc", "Grid"))
+
+ggplot(compare_long, aes(x = Criterion, y = Score, fill = Coupling)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("Jaw" = "#3498DB", "Beam" = "#9B59B6",
+                                "Disc" = "#F39C12", "Grid" = "#2ECC71")) +
+  labs(title = "Coupling Family Comparison — Illustrative Scores",
+       subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — actual capability varies by manufacturer and size",
+       x = NULL, y = "Relative rating (1-5)") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+        legend.position = "bottom",
+        axis.text = element_text(size = 10 * diagram_text_scale),
+        axis.title = element_text(size = 11 * diagram_text_scale))
+```
+
+**Rule of thumb:** default to the simplest, cheapest coupling family that meets the drive's torque, misalignment, and shock requirements with reasonable margin — for the large majority of general industrial drives below a few hundred N·m, that's a jaw coupling. This breaks down for precision motion control (encoder feedback couplings, small stepper/servo shafts) where a beam coupling's zero backlash and low added inertia matter more than shock tolerance, and for large, continuously running, shock-loaded industrial equipment (big pumps, fans, compressors) where a grid coupling's shock tolerance and torque capacity justify its extra cost and the periodic lubrication its housing needs.
+
+Bore and keyway dimensions on catalog couplings are themselves standardized — **AGMA 9002** (Bores and Keyways for Flexible Couplings) is the relevant North American reference, ensuring a given catalog coupling bore actually matches the shaft and key sized in Design Tasks 1 and 2 without a custom bore. There is no separate Canadian standard for coupling bore/keyway sizing; AGMA 9002 is used directly.
+
+### Governing Calculation
+
+There's no single closed-form equation here — coupling selection is a judgment call across several qualitative and quantitative criteria at once — but a **weighted decision matrix** turns that judgment call into a documented, repeatable process, the same tool used for the servo-vs-induction-motor decision in [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd):
+
+$$Score_{option} = \sum_i w_i \times s_{i,option}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $w_i$ | Weight assigned to criterion $i$ (weights sum to 1.0) | dimensionless |
+| $s_{i,option}$ | Score of a given coupling family against criterion $i$ (1-5 scale) | dimensionless |
+| $Score_{option}$ | Total weighted score for that coupling family | dimensionless |
+
+### Worked Example
+
+Live cell — try different weights (what matters most on *your* drive?) and see whether the recommendation changes.
+
+```{webr-r}
+#| label: coupling-decision-06-09
+## Given: weights reflecting the accumulation conveyor's priorities
+weights <- c(torque_margin = 0.20, misalignment = 0.25, shock = 0.30, cost_maintenance = 0.25)
+
+jaw_scores  <- c(torque_margin = 4, misalignment = 4, shock = 5, cost_maintenance = 5)
+beam_scores <- c(torque_margin = 3, misalignment = 3, shock = 2, cost_maintenance = 4)
+disc_scores <- c(torque_margin = 5, misalignment = 3, shock = 4, cost_maintenance = 2)
+grid_scores <- c(torque_margin = 5, misalignment = 4, shock = 5, cost_maintenance = 2)
+
+scores_list <- list(Jaw = jaw_scores, Beam = beam_scores, Disc = disc_scores, Grid = grid_scores)
+totals <- sapply(scores_list, function(s) sum(weights * s))
+
+cat("Weighted decision matrix (1 = poor fit, 5 = excellent fit):\n\n")
+for (nm in names(weights)) cat(sprintf("  %-18s weight = %.0f%%\n", nm, weights[nm] * 100))
+cat("\n")
+for (nm in names(totals)) cat(sprintf("  %-6s weighted score = %.2f\n", nm, totals[nm]))
+cat(sprintf("\n-> Recommendation: %s coupling\n", names(totals)[which.max(totals)]))
+```
+
+**Sanity check:** the jaw coupling wins (4.55) ahead of the grid coupling (4.00), even though the comparison chart shows grid scoring at least as well on every individual criterion except cost/maintenance. That's the point of the exercise — at this torque level (a few tens of N·m), a grid coupling's extra torque and shock capacity is capability this drive will never use, while its lubricated housing adds a maintenance task the jaw coupling simply doesn't have. Try raising the shock weight further, toward a jam-prone, high-impact application: the recommendation shifts back toward grid, exactly the crossover a real selection decision has to navigate.
+
+## Design Task 4: Belt Drive Design
+
+### Scenario
+
+A different machine in the same plant — a scrap-chip conveyor pulling steel turnings away from a CNC line — uses a V-belt drive instead of a direct-coupled shaft: a 5 hp (3.7 kW), 1750 rpm motor drives the conveyor's head shaft down to 350 rpm through a pair of V-belt sheaves, a 5:1 speed reduction. V-belts are a common choice for exactly this kind of drive — a meaningful speed reduction, moderate power, some tolerance for shaft misalignment and installation imprecision that a direct coupling wouldn't forgive, and the shock-absorbing/overload-slipping behaviour of a friction drive as a bonus safety margin against a jam. The designer's job: how many belts, of what cross-section, does this drive actually need?
+
+### Design Guidelines and Rules of Thumb
+
+A V-belt's rated power capacity, published in the belt manufacturer's power-rating tables, is a function of the belt's cross-section (a wider, deeper belt carries more power), the *small* sheave's diameter (a belt bent around a smaller radius sees more internal flexing stress, which lowers its rated power at a given speed), and the belt's running speed. Those tables are proprietary to each manufacturer and are not reproduced here — an actual design pulls the rated power for the specific belt section, sheave diameter, and speed directly from the manufacturer's current catalog — but the table below gives representative, illustrative magnitudes so the scale of the numbers involved is clear.
+
+```{r tbl-06-09-belt-ratings, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+belt_df <- data.frame(
+  Section = c("Z / 3V (narrow)", "A / SPA", "B / SPB", "C / SPC"),
+  `Approx. Top Width` = c("~10 mm", "~13 mm", "~17 mm", "~22 mm"),
+  `Typical Power Range per Belt` = c("0.4 - 2 kW", "1 - 4 kW", "2 - 7 kW", "5 - 15 kW"),
+  `Typical Application` = c("Small fractional-hp drives, fans, small pumps",
+                             "General-purpose light industrial drives",
+                             "Medium industrial drives, compressors, conveyors",
+                             "Heavy industrial drives, large fans/compressors"),
+  check.names = FALSE
+)
+
+kable(belt_df, caption = "Illustrative V-belt cross-section power ranges (representative magnitudes, not a manufacturer catalog)") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = knitr::is_html_output()) %>%
+  row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+The catalog rated power assumes a full, or near-full, 180° wrap around the *small* sheave — which only happens when both sheaves are nearly the same diameter. A speed-reducing drive like this one, with a large ratio between sheaves and a relatively short center distance, wraps distinctly less than 180° around the small sheave, and the belt's actual usable capacity drops accordingly. Manufacturers publish a wrap-angle (arc of contact) correction factor for exactly this reason, applied as a simple multiplier on the rated power.
+
+```{r tbl-06-09-wrap-correction, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+wrap_df <- data.frame(
+  `Wrap Angle (deg)` = c(180, 160, 140, 120, 100, 90),
+  `Correction Factor C_theta` = c(1.00, 0.95, 0.89, 0.82, 0.74, 0.69),
+  check.names = FALSE
+)
+
+kable(wrap_df, caption = "Illustrative wrap-angle correction factor (representative values, not a manufacturer catalog)") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = knitr::is_html_output()) %>%
+  row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+There is no separate Canadian standard governing V-belt drive design; the relevant engineering practice is published by **ARPM** (Association for Rubber Products Manufacturers, formerly the Rubber Manufacturers Association, RMA) in North America, cross-referenced internationally against **ISO 5292** for belt drive capacity ratings — both used directly in Canadian mechanical design practice.
+
+**Rule of thumb:** size belt drives from the manufacturer's rated power table *and* the wrap-angle correction together — never rated power alone. A high-ratio, short-center-distance drive like this one can lose 15-30% of a belt's nominal capacity to wrap angle alone, and skipping that correction is a common way to end up with an undersized belt drive that looks adequate on paper. This breaks down for near-1:1 ratio drives (both sheaves close in diameter, wrap angle on each close to 180°), where the correction factor is close enough to 1.0 that a first-pass estimate can reasonably skip it.
+
+Because exposed belts and sheaves are a serious pinch-point and entanglement hazard, any belt drive accessible to a worker during normal operation needs a fixed guard — required in Ontario under the **Occupational Health and Safety Act** and **O. Reg. 851** (Industrial Establishments), with **CSA Z432** (Safeguarding of Machinery) as the relevant design standard; the international/US equivalent is OSHA's machine guarding requirements under **29 CFR 1910.219**.
+
+```{r fig-06-09-belt-sheave-geometry, echo=FALSE, fig.cap="Belt drive geometry for the 5:1 scrap-conveyor drive: a 100 mm driver sheave and a 500 mm driven sheave, 600 mm center distance. The driver sheave's wrap angle (highlighted) is noticeably less than 180 degrees.", fig.align='center', fig.width=11, fig.height=6}
+library(ggplot2)
+library(ggforce)
+
+r1 <- 50; r2 <- 250; C <- 600   # mm: driver radius, driven radius, center distance
+alpha_deg <- asin((r2 - r1) / C) * 180 / pi
+phi_u <- 90 + alpha_deg
+phi_l <- -(90 + alpha_deg)
+
+pulleys_df <- data.frame(x0 = c(0, C), y0 = c(0, 0), r = c(r1, r2))
+
+phi_u_rad <- phi_u * pi / 180
+phi_l_rad <- phi_l * pi / 180
+P1u <- c(r1 * cos(phi_u_rad), r1 * sin(phi_u_rad))
+P2u <- c(C + r2 * cos(phi_u_rad), r2 * sin(phi_u_rad))
+P1l <- c(r1 * cos(phi_l_rad), r1 * sin(phi_l_rad))
+P2l <- c(C + r2 * cos(phi_l_rad), r2 * sin(phi_l_rad))
+
+tangent_df <- data.frame(x = c(P1u[1], P1l[1]), y = c(P1u[2], P1l[2]),
+                          xend = c(P2u[1], P2l[1]), yend = c(P2u[2], P2l[2]))
+
+arc_theta_deg <- seq(phi_u, phi_l, length.out = 100)
+arc_theta_rad <- arc_theta_deg * pi / 180
+arc_df <- data.frame(x = r1 * cos(arc_theta_rad), y = r1 * sin(arc_theta_rad))
+
+ggplot() +
+  geom_circle(data = pulleys_df, aes(x0 = x0, y0 = y0, r = r),
+              fill = "grey85", color = "black", linewidth = 1) +
+  geom_segment(data = tangent_df, aes(x = x, y = y, xend = xend, yend = yend),
+               color = "black", linewidth = 1.4) +
+  geom_path(data = arc_df, aes(x = x, y = y), color = "#E74C3C", linewidth = 3.5) +
+  annotate("text", x = -230, y = 0, label = sprintf("Wrap angle\n≈ %.0f°", 180 - 2 * alpha_deg),
+           size = 3.3 * diagram_text_scale, color = "#E74C3C") +
+  annotate("text", x = -90, y = 0, label = "Driver\nD = 100 mm", size = 2.9 * diagram_text_scale) +
+  annotate("text", x = C, y = 305, label = "Driven\nD = 500 mm", size = 2.9 * diagram_text_scale) +
+  annotate("segment", x = 0, xend = C, y = -290, yend = -290,
+           arrow = arrow(length = unit(0.15, "cm"), ends = "both"), linewidth = 0.8) +
+  annotate("text", x = C / 2, y = -320, label = "Center distance C = 600 mm", size = 2.9 * diagram_text_scale) +
+  coord_fixed() + xlim(-280, 900) + ylim(-350, 345) +
+  theme_void() +
+  labs(title = "V-Belt Drive Geometry and Wrap Angle") +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"))
+```
+
+Once a belt drive is installed, correct **tensioning** matters as much as correct sizing: a belt that's too loose slips under load (wasting power as heat and wearing the belt's sidewalls prematurely) and whips, while a belt that's too tight overloads both shafts' bearings with unnecessary radial force, shortening bearing life without adding any transmittable power once the belt is no longer slipping.
+
+**Rule of thumb:** tension a V-belt so that it deflects a small, specified amount (often quoted as roughly 1/64 inch of deflection per inch of belt span) under a specified force, checked at the midpoint of the span, per the belt manufacturer's deflection-force chart for that belt's cross-section — not by feel, and not by "as tight as it'll go." This breaks down for synchronous (toothed) belts, which transmit power through tooth engagement rather than friction and are tensioned to a much lower, specified static tension; over-tightening a toothed belt buys no power-transmission benefit and only stresses the belt and bearings.
+
+### Governing Calculation
+
+Sheave ratio, from either diameter or speed:
+
+$$i = \frac{D_{driven}}{D_{driver}} = \frac{n_{driver}}{n_{driven}}$$
+
+Wrap angle at the small (driver) sheave, from sheave diameters and center distance $C$:
+
+$$\theta_{wrap} = 180° - 2\sin^{-1}\left(\frac{D_{driven} - D_{driver}}{2\,C}\right)$$
+
+Design power, applying a service factor for shock/duty, and the number of belts required:
+
+$$P_{design} = P_{transmitted} \times SF \qquad N_{belts} = \left\lceil \frac{P_{design}}{P_{rated}\times C_\theta} \right\rceil$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $D_{driver}$, $D_{driven}$ | Driver (small) and driven (large) sheave pitch diameters | mm |
+| $C$ | Center distance between sheave shafts | mm |
+| $\theta_{wrap}$ | Wrap (arc of contact) angle at the driver sheave | degrees |
+| $P_{transmitted}$ | Power to be transmitted | kW |
+| $SF$ | Service factor (shock, duty cycle) | dimensionless |
+| $P_{rated}$ | Manufacturer's rated power per belt, at this section/diameter/speed | kW |
+| $C_\theta$ | Wrap-angle correction factor | dimensionless |
+| $N_{belts}$ | Number of belts required (rounded up) | dimensionless |
+
+### Worked Example
+
+Live cell — try a different motor size, sheave ratio, or center distance and see how the belt count responds.
+
+```{webr-r}
+#| label: belt-sizing-06-09
+## Given
+P_motor_hp <- 5
+P_transmitted <- P_motor_hp * 0.746   # kW
+n_motor <- 1750                        # rpm
+D_driver <- 100; D_driven <- 500       # mm
+C <- 600                                # mm, center distance
+SF <- 1.4                               # moderate shock: chip conveyor, occasional jams
+
+ratio <- D_driven / D_driver
+n_driven <- n_motor / ratio
+
+theta_wrap <- 180 - 2 * asin((D_driven - D_driver) / (2 * C)) * 180 / pi
+
+## Representative wrap-angle correction table, interpolated
+wrap_tab <- data.frame(theta = c(90, 100, 110, 120, 130, 140, 150, 160, 170, 180),
+                        C_theta = c(0.69, 0.74, 0.78, 0.82, 0.86, 0.89, 0.92, 0.95, 0.97, 1.00))
+C_theta <- approx(wrap_tab$theta, wrap_tab$C_theta, xout = theta_wrap)$y
+
+P_design <- P_transmitted * SF
+P_rated_per_belt <- 3.0   # kW, representative B-section rating at this diameter/speed
+
+N_belts_exact <- P_design / (P_rated_per_belt * C_theta)
+N_belts <- ceiling(N_belts_exact)
+
+cat(sprintf("Sheave ratio: %.1f:1 -> driven-shaft speed: %.0f rpm\n", ratio, n_driven))
+cat(sprintf("Transmitted power: %.2f kW, design power (SF = %.1f): %.2f kW\n",
+            P_transmitted, SF, P_design))
+cat(sprintf("Wrap angle at driver sheave: %.1f deg -> C_theta = %.2f\n", theta_wrap, C_theta))
+cat(sprintf("Belts required (exact): %.2f -> select %d belts\n", N_belts_exact, N_belts))
+```
+
+**Sanity check:** the exact belt count (1.94) rounds up to 2 — a single belt would be running at 97% of its wrap-angle-corrected capacity with zero margin for the jam shock the service factor was supposed to cover, so rounding down would defeat the purpose of applying a service factor in the first place. Note the wrap-angle correction alone knocked more than 10% off the belt's nominal rating (C_theta = 0.89) before the service factor was even applied — exactly the effect the rule of thumb above warns not to skip on a high-ratio drive like this one.
+
+## Design Task 5: Chain Drive Basics and Chain vs. Belt Selection
+
+### Scenario
+
+A food processing plant runs a dough-handling line: an auger conveyor moves proofed dough from a mixer into a divider at low speed and high, occasionally shock-loaded torque — dough is dense, and an auger jam is a real, regular event, not a rare edge case. Two bays downstream, past the oven, a second conveyor moves already-baked, individually wrapped product toward a case packer at a modest, steady torque with far less shock. Both conveyors need a positive, reliable drive between a gearmotor and a driven shaft — but the auger conveyor sits in the plant's primary, direct-product-contact washdown zone (CFIA-regulated, hosed down with hot water and sanitizer between shifts), while the case-packer conveyor, handling already-wrapped product, is in a lower-hygiene-risk secondary zone. Should either of these use a chain drive instead of a belt — and does the answer change between the two zones?
+
+### Design Guidelines and Rules of Thumb
+
+A chain drive transmits torque through positive mechanical engagement — hardened steel rollers seated in the teeth of a sprocket — rather than friction, which gives it two properties a belt fundamentally cannot match: **zero slip** (the driven shaft's speed is locked to the driver's by the chain's pitch and the sprocket tooth count, with no creep over time the way a friction belt very slightly stretches and slips under load) and substantially higher torque capacity for a given size, because it isn't relying on friction against a smooth surface to transmit load. That makes chain the natural choice for high-torque, low-speed, positive-drive applications — augers, positive-displacement pumps, indexing conveyors that need to stay in exact mechanical sync over long runs — exactly the auger conveyor's profile.
+
+The relevant standard is **ANSI/ASA B29.1** (Precision Power Transmission Roller Chains, Attachments, and Sprockets) in North America, cross-referenced internationally against **ISO 606** (short-pitch transmission precision roller chains and chain wheels); there is no separate Canadian chain-drive design standard, and both are used directly in Canadian practice.
+
+Chain's real cost is what belts don't need at all: **lubrication.** Every pin-and-bushing joint in a roller chain needs oil (or grease, for slower/heavier chains) to control wear between the pin and bushing as the chain articulates around the sprockets; run a standard chain dry and it wears rapidly, stretches, and eventually skips teeth or fails outright. That's a direct conflict with a washdown, direct-product-contact food zone: an open, oil-lubricated chain is both a contamination risk (lubricant migrating onto product or the surrounding surfaces) and something that gets aggressively hosed clean of its own lubricant every shift, right when it needs that lubricant to survive. A well-sealed, lubrication-free belt has no equivalent problem — nothing on it needs periodic oiling, and washdown water and sanitizer don't strip away anything the drive depends on.
+
+```{r tbl-06-09-chain-belt, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+cb_df <- data.frame(
+  Criterion = c("Torque capacity (given size)", "Slip / speed precision",
+                "Contamination risk", "Washdown / hygiene compatibility",
+                "Maintenance", "Typical cost"),
+  `Chain Drive` = c("High", "None (positive engagement)",
+                     "Lubricant can migrate onto product/surfaces",
+                     "Poor unless self-lubricating/enclosed washdown chain used",
+                     "Periodic lubrication and wear inspection required",
+                     "Often lower for the torque delivered"),
+  `Belt Drive` = c("Low - moderate (friction-limited)",
+                    "Slight creep under load (V-belt); near-zero for synchronous belts",
+                    "Minimal (no lubricant needed)",
+                    "Good — sealed, wash-down-rated belts are common",
+                    "Periodic tension check; no lubrication",
+                    "Often higher for equivalent torque capacity"),
+  check.names = FALSE
+)
+
+kable(cb_df, caption = "Chain vs. belt drive comparison for a food-processing washdown context") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = knitr::is_html_output()) %>%
+  row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+```{r fig-06-09-chain-belt-compare, echo=FALSE, fig.cap="Illustrative comparison of chain and belt drives across five decision criteria for a food-processing context. Higher is better in each case.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+library(tidyr)
+
+cb_compare <- data.frame(
+  Criterion = c("Torque\nCapacity", "No-Slip\nPrecision", "Hygiene /\nWashdown", "Low\nMaintenance", "Low\nCost"),
+  Chain = c(5, 5, 1, 2, 4),
+  Belt = c(3, 4, 5, 5, 3)
+)
+cb_long <- pivot_longer(cb_compare, cols = c(Chain, Belt), names_to = "Drive", values_to = "Score")
+cb_long$Criterion <- factor(cb_long$Criterion, levels = cb_compare$Criterion)
+
+ggplot(cb_long, aes(x = Criterion, y = Score, fill = Drive)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("Chain" = "#E67E22", "Belt" = "#3498DB")) +
+  labs(title = "Chain vs. Belt Drive — Illustrative Comparison",
+       subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — a standard (non-washdown, non-self-lubricating) chain assumed",
+       x = NULL, y = "Relative rating (1-5)") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9 * diagram_text_scale),
+        legend.position = "bottom",
+        axis.text = element_text(size = 10 * diagram_text_scale),
+        axis.title = element_text(size = 11 * diagram_text_scale))
+```
+
+**Rule of thumb:** chain generally beats belt whenever a drive needs high torque at low speed with zero slip and no long-term ratio drift — augers, positive-displacement pumps, and exactly-synchronized indexing conveyors are the classic cases. This breaks down hard in a washdown or direct-food-contact zone: chain's own lubrication requirement can erase the advantage entirely unless a **self-lubricating** (oil-impregnated bushing) or **dry-film-lubricated stainless washdown chain** is specified, fully enclosed in a lubricant-tight guard to keep both wash water out and any residual lubricant in — and even then, periodic inspection and re-lubrication remain a real maintenance burden a sealed, lubrication-free belt simply doesn't carry. Don't default to chain on torque capacity alone without checking whether the environment can actually support what chain needs to survive in it.
+
+### Governing Calculation
+
+Like the coupling decision in Design Task 3, chain-vs-belt is a multi-criteria judgment call rather than a single formula — the same weighted decision matrix applies, scored against criteria that matter for the specific zone in question:
+
+$$Score_{option} = \sum_i w_i \times s_{i,option}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $w_i$ | Weight assigned to criterion $i$ for this zone (weights sum to 1.0) | dimensionless |
+| $s_{i,option}$ | Score of chain or belt against criterion $i$ (1-5 scale) | dimensionless |
+| $Score_{option}$ | Total weighted score for that drive type | dimensionless |
+
+### Worked Example
+
+Live cell — try re-weighting the criteria for your own plant's zone classification and see whether the recommendation flips.
+
+```{webr-r}
+#| label: chain-belt-decision-06-09
+## Scores (1 = poor fit, 5 = excellent fit), standard (non-washdown) chain assumed
+chain_scores <- c(torque = 5, no_slip = 5, hygiene = 1, maintenance = 2, cost = 4)
+belt_scores  <- c(torque = 3, no_slip = 4, hygiene = 5, maintenance = 5, cost = 3)
+
+## Zone A: primary, direct-product-contact washdown zone (auger conveyor)
+weights_A <- c(torque = 0.15, no_slip = 0.15, hygiene = 0.40, maintenance = 0.20, cost = 0.10)
+## Zone B: secondary, packaged-product zone, high torque matters more (case conveyor)
+weights_B <- c(torque = 0.30, no_slip = 0.20, hygiene = 0.10, maintenance = 0.15, cost = 0.25)
+
+score_zone <- function(weights) {
+  c(Chain = sum(weights * chain_scores), Belt = sum(weights * belt_scores))
+}
+
+zoneA <- score_zone(weights_A)
+zoneB <- score_zone(weights_B)
+
+cat("Zone A - primary washdown, direct product contact (auger conveyor):\n")
+cat(sprintf("  Chain weighted score: %.2f\n", zoneA["Chain"]))
+cat(sprintf("  Belt weighted score:  %.2f\n", zoneA["Belt"]))
+cat(sprintf("  -> Recommendation: %s\n\n", names(zoneA)[which.max(zoneA)]))
+
+cat("Zone B - secondary, packaged-product zone (case conveyor):\n")
+cat(sprintf("  Chain weighted score: %.2f\n", zoneB["Chain"]))
+cat(sprintf("  Belt weighted score:  %.2f\n", zoneB["Belt"]))
+cat(sprintf("  -> Recommendation: %s\n", names(zoneB)[which.max(zoneB)]))
+```
+
+**Sanity check:** the recommendation flips between the two zones (belt wins Zone A 4.35 to 2.70; chain wins Zone B 3.90 to 3.70), which is the whole point of scoring the *same* two drive types against *different* zone priorities rather than picking one winner for the whole plant. Zone B's result is close — a 0.20-point margin — which correctly signals a genuine trade-off rather than an obvious call; specifying a self-lubricating washdown chain there (raising its hygiene score from 1 toward 3) would likely tip it further toward chain, while a shock-loaded, hygiene-critical zone like the auger conveyor isn't close at all.
+
+<details>
+<summary>Industry connection: the lubrication nuance in a CFIA-regulated plant</summary>
+
+A standard oil-lubricated chain on the auger conveyor would fail a CFIA (Canadian Food Inspection Agency) sanitary design review outright — lubricant in a direct-product-contact zone is exactly the kind of finding that stops a plant audit cold. The fix isn't automatically "use a belt everywhere"; it's recognizing that chain's torque and no-slip advantages sometimes still win once a self-lubricating or dry-film-lubricated stainless washdown chain, fully guarded, is priced against a belt's own limitations at that torque level — the decision matrix above is how that trade-off gets documented, not guessed at.
+
+</details>
+
+## Summary
+
+```{r tbl-06-09-summary, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+summary_df <- data.frame(
+  `Design Task` = c("1. Shaft diameter (torsion)", "2. Keyway stress concentration",
+                     "3. Coupling selection", "4. Belt drive sizing", "5. Chain vs. belt"),
+  `Governing Equation` = c("$d_{min} = \\left(\\dfrac{16Tn_d}{\\pi S_{sy}}\\right)^{1/3}$",
+                            "$d_{keyway} = d_{plain}\\times K_t^{1/3}$",
+                            "$Score = \\sum_i w_i s_{i,option}$",
+                            "$N_{belts} = \\lceil P_{design}/(P_{rated}C_\\theta)\\rceil$",
+                            "$Score = \\sum_i w_i s_{i,option}$"),
+  `Key Rule of Thumb` = c("Design factor $n_d \\approx 2.5-4$ for well-characterized static loads",
+                           "$K_t \\approx 1.6-2.0$ for a standard keyway in torsion",
+                           "Default to jaw couplings unless precision or heavy shock demands otherwise",
+                           "Always apply the wrap-angle correction on high-ratio drives, not rated power alone",
+                           "Chain wins on torque/no-slip; its lubrication need can lose that in a washdown zone"),
+  check.names = FALSE
+)
+summary_df[] <- lapply(summary_df, tex_safe)
+
+kable(summary_df, caption = "Design task summary: governing equations and key rules of thumb", escape = FALSE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = knitr::is_html_output()) %>%
+  row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+## Practice Problems
+
+<details>
+<summary>Design Task 1 (plug-in): shaft diameter for a different torque</summary>
+
+A gearmotor delivers 65 N·m continuous torque. Using the same 1018 CD steel ($S_y = 370$ MPa) and a design factor of $n_d = 3.0$, what is the minimum shaft diameter?
+
+**Answer:** $d_{min} = \left(\dfrac{16 \times 65 \times 3.0}{\pi \times 213.5\times10^6}\right)^{1/3} = 0.01669\ \text{m} \approx 16.7\ \text{mm}$. Round up to the next standard stock size, 18 mm.
+
+</details>
+
+<details>
+<summary>Design Task 1 (design decision): raising the design factor vs. changing material</summary>
+
+A vendor quotes two options for a shaft that must carry 40 N·m: (a) 16 mm diameter in 1018 CD steel ($S_y = 370$ MPa), or (b) 14 mm diameter in a higher-strength alloy steel ($S_y = 700$ MPa), both claiming the same design factor. Which would you choose, and what would make you hesitate about option (b)?
+
+**Answer:** Option (b) checks out on paper — $S_{sy}$ scales with $S_y$, so a smaller diameter can hit the same $n_d$ against shear yield. The hesitation: a smaller-diameter shaft is *more* sensitive to the same absolute keyway depth (the keyway removes a larger fraction of a smaller shaft's cross-section and the stress concentration factor is applied to a smaller base stress capacity margin), it's stiffer to source and machine as a special order versus common 1018 stock, and alloy steel buys strength this application doesn't obviously need — a shaft is rarely the limiting component in a drivetrain, so paying for exotic material to shrink it further is often solving a problem (space) that doesn't exist here. Choose (a) unless there's a genuine space constraint driving the decision.
+
+</details>
+
+<details>
+<summary>Design Task 2 (plug-in): required diameter with a sharper keyway fillet</summary>
+
+Using the 40 N·m / $n_d = 3.0$ / 1018 steel shaft from this chapter's worked example, what minimum diameter is required if the keyway is cut with a sharp corner ($K_t = 2.0$) instead of the standard rounded fillet ($K_t = 1.6$)?
+
+**Answer:** $d_{plain} = 14.2$ mm (Design Task 1 result). $d_{keyway} = 14.2 \times 2.0^{1/3} = 14.2 \times 1.260 \approx 17.9$ mm — round up to 18 mm, the same stock size as the $K_t = 1.6$ case, but with noticeably less margin. Below 18 mm, the sharp-cornered keyway would fail the target design factor where the rounded one still passed.
+
+</details>
+
+<details>
+<summary>Design Task 2 (design decision): local upsize vs. full-length upsize</summary>
+
+A shaft needs to be 18 mm at the keyway but only 16 mm everywhere else it's supported by bearings sized for 16 mm bore. Would you machine a local step up to 18 mm just at the keyway, or make the whole shaft 18 mm and re-select the bearings?
+
+**Answer:** A local step (a short 18 mm section at the keyway, stepping back down to 16 mm at the bearing journals) is almost always the better call for an existing bearing selection — it solves the actual stress concentration exactly where it occurs, adds one extra machining operation (a shoulder), and doesn't force a bearing re-selection or a wider housing bore. Making the whole shaft 18 mm only makes sense if the bearings weren't selected yet, or if a single constant diameter meaningfully simplifies stocking spare shafts — worth it in a plant that stocks a lot of spares, not worth it as a default.
+
+</details>
+
+<details>
+<summary>Design Task 3 (plug-in): scoring a beam coupling against a precision servo application</summary>
+
+For an encoder-feedback coupling on a servo motor (low torque, needs zero backlash, minimal shock expected), score a beam coupling and a jaw coupling using weights: misalignment = 0.20, shock = 0.10, cost/maintenance = 0.20, and a new criterion, backlash = 0.50 (beam = 5, jaw = 3 on backlash; reuse this chapter's other scores for the remaining criteria). Which wins?
+
+**Answer:** Beam: $0.20(3) + 0.10(2) + 0.20(4) + 0.50(5) = 0.6+0.2+0.8+2.5 = 4.1$. Jaw: $0.20(4)+0.10(5)+0.20(5)+0.50(3) = 0.8+0.5+1.0+1.5 = 3.8$. Beam wins (4.1 vs 3.8) once backlash is weighted this heavily — exactly the precision-motion-control case where the chapter's rule of thumb says beam couplings earn their place despite scoring poorly on shock tolerance.
+
+</details>
+
+<details>
+<summary>Design Task 3 (design decision): coupling choice for a reversing, jam-prone auger</summary>
+
+The dough auger from Design Task 5 occasionally jams hard enough to stall the motor, and the drive needs to survive that event repeatedly without a coupling failure. Which coupling family from this chapter's table would you specify, and why would you rule out a beam coupling specifically?
+
+**Answer:** A grid coupling — its spring-steel grid is purpose-built for exactly this kind of repeated shock/overload event, and its higher torque capacity gives margin against a hard stall. A beam coupling is specifically the wrong choice here: it has no separate wear part to absorb shock, so a hard stall transmits directly into the beam's flexure geometry, risking a fatigue crack or outright fracture at the slots — a beam coupling is built for smooth, low-shock precision motion, the opposite of this application's duty.
+
+</details>
+
+<details>
+<summary>Design Task 4 (plug-in): belt count for a smaller motor</summary>
+
+A 2 hp (1.49 kW) motor drives the same 5:1, 600 mm center-distance sheave arrangement as this chapter's worked example, with the same SF = 1.4 and the same B-section belt rated at 3.0 kW. How many belts are required?
+
+**Answer:** $P_{design} = 1.49 \times 1.4 = 2.09$ kW. Wrap angle and $C_\theta$ are unchanged (same geometry): $C_\theta \approx 0.89$. $N_{belts} = \lceil 2.09/(3.0 \times 0.89) \rceil = \lceil 0.78 \rceil = 1$ belt.
+
+</details>
+
+<details>
+<summary>Design Task 4 (design decision): one wide belt vs. two narrow belts</summary>
+
+For the chapter's worked example (2 belts required, B-section), a vendor offers an alternative: a single, wider C-section belt rated at 6.0 kW that alone covers the design power. Which would you choose, and what operational risk does each option carry that the other doesn't?
+
+**Answer:** Either can work; the trade-off is redundancy versus simplicity. Two B-section belts (a "matched set," always replaced together) keep running — at reduced capacity — if one belt is damaged, buying time to schedule a planned changeout rather than an unplanned stoppage; a single C-section belt is simpler to stock and align but a single failure stops the conveyor outright. For a line where unplanned downtime is expensive (this chip conveyor feeding a CNC cell), the two-belt option's partial-failure tolerance is usually worth the extra sheave groove and belt-matching discipline.
+
+</details>
+
+<details>
+<summary>Design Task 5 (plug-in): re-scoring for a fully enclosed, self-lubricating washdown chain</summary>
+
+Re-run the Zone A (primary washdown) weighted matrix from this chapter's worked example, but raise the chain's hygiene score from 1 to 3 (reflecting a self-lubricating, fully guarded washdown chain) and keep every other score and weight the same. Does the recommendation change?
+
+**Answer:** Chain's new Zone A score: $0.15(5)+0.15(5)+0.40(3)+0.20(2)+0.10(4) = 0.75+0.75+1.2+0.4+0.4 = 3.50$. Belt's score is unchanged at 4.35. Belt still wins, but the gap narrows substantially (4.35 vs. 3.50, down from 4.35 vs. 2.70) — a self-lubricating chain closes most of the gap but doesn't fully erase belt's advantage in the highest-hygiene zone.
+
+</details>
+
+<details>
+<summary>Design Task 5 (design decision): auger conveyor gets a chain after all</summary>
+
+Despite Design Task 5's recommendation, the plant's maintenance manager insists on a chain drive for the auger conveyor because of its torque margin and because the plant already stocks that chain pitch for other equipment. What would you require before accepting that decision?
+
+**Answer:** At minimum: a self-lubricating (oil-impregnated bushing) or dry-film-lubricated stainless chain rated for washdown service, not standard carbon-steel chain; a fully enclosed, lubricant-tight guard that also keeps wash water and sanitizer off the chain during cleaning; and a documented relubrication/inspection interval added to the plant's PM schedule. Without all three, the decision trades a hygiene risk for a parts-commonality convenience — acceptable only if it's made explicitly and documented for the next CFIA review, not assumed away.
+
+</details>
+
+<details>
+<summary>Open-Ended Design Scenario: a new secondary conveyor drive</summary>
+
+A food plant is adding a new conveyor in its secondary (packaged-product, non-direct-contact) zone, moving cased product from a case packer to a palletizer. The selected gearmotor delivers 80 N·m continuous torque at 20 rpm on its output shaft, with occasional jam-related torque spikes estimated at up to 1.5x the continuous rating. Using this chapter's methods:
+
+1. Size the connecting shaft (assume 1018 CD steel, $n_d = 3.0$) between the gearmotor and the head pulley.
+2. Determine the diameter increase needed to accommodate a standard keyway ($K_t = 1.6$) at the same design factor.
+3. Select a coupling family, with reasoning, given the jam-related shock potential.
+4. Decide — with reasoning, not just a lookup — whether this drive should use a belt or a chain, given its zone (secondary, not primary washdown) and its torque/speed profile (high torque, low speed).
+
+There's a specific, defensible answer to each part using only this chapter's tools and the numbers given — work through all four before checking your reasoning against a classmate's.
+
+</details>

@@ -256,7 +256,7 @@ ggplot(life_df, aes(x = life)) +
     plot.background = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   ) +
-  scale_x_continuous(limits = c(0, 250), expand = c(0, 0))
+  coord_cartesian(xlim = c(0, 250), expand = FALSE)
 ```
 
 #### L10 vs. L50: Which Life Do We Use? {-}
@@ -1184,12 +1184,12 @@ library(ggforce)
 # Create hydrodynamic wedge illustration
 ggplot() +
   # Bearing bore (outer circle)
-  geom_circle(aes(x0 = 5, y0 = 5, r = 3.5), color = "gray40", fill = "tan", size = 1.5) +
-  geom_circle(aes(x0 = 5, y0 = 5, r = 3), color = "gray40", fill = "white", size = 1) +
+  geom_circle(aes(x0 = 5, y0 = 5, r = 3.5), color = "gray40", fill = "tan", linewidth = 1.5) +
+  geom_circle(aes(x0 = 5, y0 = 5, r = 3), color = "gray40", fill = "white", linewidth = 1) +
 
   # Shaft (offset - the key to hydrodynamic action)
   # At rest: shaft sits at bottom. Running: shaft climbs up and to the side
-  geom_circle(aes(x0 = 5.3, y0 = 5.4, r = 2.7), color = "black", fill = "gray50", size = 1) +
+  geom_circle(aes(x0 = 5.3, y0 = 5.4, r = 2.7), color = "black", fill = "gray50", linewidth = 1) +
 
   # Minimum film thickness point
   annotate("point", x = 6.8, y = 6.5, color = "red", size = 3) +
@@ -1379,22 +1379,22 @@ ggplot() +
   # --- LAYER 2: Bearing Structure ---
   # Housing (Outer Ring)
   geom_circle(aes(x0 = c_bearing[1], y0 = c_bearing[2], r = r_housing), 
-              fill = NA, color = col_housing, size = 2) +
+              fill = NA, color = col_housing, linewidth = 2) +
   
   # Sintered Porous Bearing (Middle Ring)
   # We draw the outer boundary, then fill the center with white to create the "donut"
   geom_circle(aes(x0 = c_bearing[1], y0 = c_bearing[2], r = r_bearing_out), 
-              fill = col_porous, color = col_porous_outline, alpha = 0.4, size = 0.8) +
+              fill = col_porous, color = col_porous_outline, alpha = 0.4, linewidth = 0.8) +
   # The "hole" in the bearing (white to obscure the pressure blob behind the shaft area)
   geom_circle(aes(x0 = c_bearing[1], y0 = c_bearing[2], r = r_bearing_in), 
-              fill = "white", color = col_porous_outline, size = 0.8) +
+              fill = "white", color = col_porous_outline, linewidth = 0.8) +
   
   # --- LAYER 3: The Shaft and Oil Film ---
   # The thick Oil Film (Crescent right under the shaft)
   annotate("curve", 
            x = c_shaft[1] - r_shaft*0.5, y = c_shaft[2] - r_shaft*0.85,
            xend = c_shaft[1] + r_shaft*0.7, yend = c_shaft[2] - r_shaft*0.7,
-           curvature = 0.3, color = col_oil_film, size = 4, lineend = "round") +
+           curvature = 0.3, color = col_oil_film, linewidth = 4, lineend = "round") +
   
   # The Shaft itself (Orange circle, offset center)
   geom_circle(aes(x0 = c_shaft[1], y0 = c_shaft[2], r = r_shaft), 
@@ -1409,19 +1409,19 @@ ggplot() +
   annotate("curve", x = c_shaft[1]+1.8, y = c_shaft[2]+0.5, 
            xend = c_shaft[1]+1.8, yend = c_shaft[2]-1.2,
            curvature = -0.5, arrow = arrow(length = unit(0.4, "cm"), type="closed"), 
-           size = 1.2, color = col_arrow) +
+           linewidth = 1.2, color = col_arrow) +
   
   # 2. Oil Supply (Inward pump action at top)
   annotate("curve", x = -0.5, y = 4.5, xend = 0.5, yend = 3.3,
-           curvature = -0.2, arrow = arrow(length = unit(0.2, "cm"), type="closed"), size=0.8) +
+           curvature = -0.2, arrow = arrow(length = unit(0.2, "cm"), type="closed"), linewidth=0.8) +
   annotate("curve", x = -2.5, y = 3.8, xend = -1.5, yend = 2.8,
-           curvature = -0.2, arrow = arrow(length = unit(0.2, "cm"), type="closed"), size=0.8) +
+           curvature = -0.2, arrow = arrow(length = unit(0.2, "cm"), type="closed"), linewidth=0.8) +
   
   # 3. Oil Escape (Outward into bearing at high pressure zone)
   annotate("segment", x = -1, y = -3.3, xend = -1.8, yend = -4.2,
-           arrow = arrow(length = unit(0.2, "cm"), type="closed"), size=0.8) +
+           arrow = arrow(length = unit(0.2, "cm"), type="closed"), linewidth=0.8) +
   annotate("segment", x = 1, y = -3.3, xend = 1.8, yend = -4.2,
-           arrow = arrow(length = unit(0.2, "cm"), type="closed"), size=0.8) +
+           arrow = arrow(length = unit(0.2, "cm"), type="closed"), linewidth=0.8) +
   
   # --- Text Labels ---
   # Main Title
@@ -1527,7 +1527,7 @@ ggplot(df, aes(x = Hersey, y = Friction)) +
            size = 3 * diagram_text_scale, color = "gray30") +
 
   # Minimum friction point
-  geom_point(aes(x = min_hersey, y = min_friction), color = "blue", size = 4) +
+  annotate("point", x = min_hersey, y = min_friction, color = "blue", size = 4) +
   annotate("segment", x = min_hersey, xend = min_hersey + 0.2, y = min_friction, yend = min_friction + 0.02,
            color = "blue", linewidth = 0.8) +
   annotate("text", x = min_hersey + 0.25, y = min_friction + 0.025,
@@ -1650,7 +1650,7 @@ df <- data.frame(Speed = speed, Friction = friction)
 # 2. Build the plot
 ggplot(df, aes(x = Speed, y = Friction)) +
   # The main Stribeck curve (Red line)
-  geom_line(color = "#D93025", size = 1.2) +
+  geom_line(color = "#D93025", linewidth = 1.2) +
 
   # Vertical dashed boundary lines
   geom_vline(xintercept = c(10, 40), linetype = "dotted", color = "black") +

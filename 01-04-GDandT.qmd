@@ -331,7 +331,7 @@ ggplot() +
 
   geom_hline(yintercept=50, color="red", linetype="dashed", alpha=0.5) +
 
-  annotate("text", x=51.5, y=50.5, label="Datum Intersection", fontsize=3, color="red") +
+  annotate("text", x=51.5, y=50.5, label="Datum Intersection", size=3 * diagram_text_scale, color="red") +
 
   
 
@@ -343,7 +343,7 @@ ggplot() +
 
   annotate("text", x=50, y=49.3, label="Ø0.7 mm\\nTolerance Zone", 
 
-           fontsize=3, color="blue", fontface="bold") +
+           size=3 * diagram_text_scale, color="blue", fontface="bold") +
 
   
 
@@ -416,7 +416,7 @@ p1 <- ggplot() +
   geom_rect(aes(xmin=0, xmax=10, ymin=0, ymax=7), 
             fill="lightcoral", color="black", linewidth=1) +
   annotate("text", x=5, y=3.5, label="PRIMARY DATUM (A)\\nLargest, most stable surface", 
-           fontsize=4, fontface="bold") +
+           size=4 * diagram_text_scale, fontface="bold") +
   xlim(-1, 11) + ylim(-1, 8) +
   theme_void() +
   ggtitle("Step 1: Primary")
@@ -428,7 +428,7 @@ p2 <- ggplot() +
   geom_rect(aes(xmin=8, xmax=10, ymin=0, ymax=7), 
             fill="lightblue", color="black", linewidth=1) +
   annotate("text", x=9, y=3.5, label="SECONDARY\\nDATUM (B)", 
-           fontsize=3, fontface="bold") +
+           size=3 * diagram_text_scale, fontface="bold") +
   xlim(-1, 11) + ylim(-1, 8) +
   theme_void() +
   ggtitle("Step 2: Secondary (perpendicular to A)")
@@ -442,7 +442,7 @@ p3 <- ggplot() +
   geom_rect(aes(xmin=0, xmax=10, ymin=6.5, ymax=7), 
             fill="lightgreen", color="black", linewidth=1) +
   annotate("text", x=5, y=6.75, label="TERTIARY DATUM (C)", 
-           fontsize=3, fontface="bold") +
+           size=3 * diagram_text_scale, fontface="bold") +
   xlim(-1, 11) + ylim(-1, 8) +
   theme_void() +
   ggtitle("Step 3: Tertiary (perpendicular to A & B)")
@@ -485,9 +485,9 @@ hole_data <- data.frame(
 
 ggplot(hole_data, aes(x=reorder(condition, diameter), y=diameter, fill=condition)) +
   geom_col(width=0.6) +
-  geom_text(aes(label=diameter), vjust=-0.5, fontsize=5, fontface="bold") +
+  geom_text(aes(label=diameter), vjust=-0.5, size=5 * diagram_text_scale, fontface="bold") +
   scale_fill_manual(values=c("MMC"="darkgreen", "Nominal"="gray", "LMC"="darkred")) +
-  ylim(9.5, 10.5) +
+  coord_cartesian(ylim = c(9.5, 10.5)) +
   theme_minimal() +
   labs(
     title="Hole Diameter: MMC vs. LMC",
@@ -518,8 +518,8 @@ ggplot(bonus_df, aes(x=actual_size, y=positional_tolerance)) +
   geom_line(linewidth=1.5, color="blue") +
   geom_point(size=4, color="blue") +
   geom_ribbon(aes(ymin=0.4, ymax=positional_tolerance), alpha=0.2, fill="blue") +
-  annotate("text", x=9.9, y=0.35, label="Base Tolerance = 0.4 mm", fontsize=4) +
-  annotate("text", x=10.1, y=0.65, label="Bonus Tolerance = Actual - MMC", fontsize=3, angle=45) +
+  annotate("text", x=9.9, y=0.35, label="Base Tolerance = 0.4 mm", size=4 * diagram_text_scale) +
+  annotate("text", x=10.1, y=0.65, label="Bonus Tolerance = Actual - MMC", size=3 * diagram_text_scale, angle=45) +
   theme_minimal() +
   labs(
     title="Bonus Tolerance Example",
@@ -527,8 +527,7 @@ ggplot(bonus_df, aes(x=actual_size, y=positional_tolerance)) +
     x="Actual Hole Size (mm)",
     y="Positional Tolerance (mm)"
   ) +
-  xlim(9.7, 10.3) +
-  ylim(0.2, 0.7)
+  coord_cartesian(xlim = c(9.7, 10.3), ylim = c(0.2, 0.85))
 ```
 
 ### Common GD&T Applications {#sec-gdt-applications}
@@ -587,9 +586,9 @@ ggplot() +
 
   ## Dimensions
 
-  annotate("text", x=5, y=10, label="10", fontsize=3) +
+  annotate("text", x=5, y=10, label="10", size=3 * diagram_text_scale) +
 
-  annotate("text", x=25, y=5, label="25", fontsize=3, color="red", fontface="bold") +
+  annotate("text", x=25, y=5, label="25", size=3 * diagram_text_scale, color="red", fontface="bold") +
 
   
 
@@ -597,7 +596,7 @@ ggplot() +
 
   annotate("text", x=25, y=50, label="Position: Ø1.5 @ MMC | A | B", 
 
-           fontsize=4, fontface="bold", bbox=list(boxstyle="round", fill="yellow", alpha=0.7)) +
+           size=4 * diagram_text_scale, fontface="bold") +
 
   
 
@@ -665,7 +664,7 @@ ggplot(data, aes(x=x, y=y, color=type, linewidth=type)) +
 
   geom_hline(yintercept=0, color="blue", linetype="dashed", alpha=0.5) +
 
-  annotate("text", x=0.5, y=6, label="Datum A\\n(Shaft Axis)", fontsize=3, color="blue") +
+  annotate("text", x=0.5, y=6, label="Datum A\\n(Shaft Axis)", size=3 * diagram_text_scale, color="blue") +
 
   coord_fixed() +
 
@@ -716,9 +715,9 @@ results_df <- data.frame(
 
 ggplot(results_df, aes(x=reorder(Condition, Total_Length), y=Total_Length, fill=Condition)) +
   geom_col(width=0.6) +
-  geom_text(aes(label=paste(Total_Length, "mm")), vjust=-0.5, fontsize=5, fontface="bold") +
+  geom_text(aes(label=paste(Total_Length, "mm")), vjust=-0.5, size=5 * diagram_text_scale, fontface="bold") +
   scale_fill_manual(values=c("Minimum"="blue", "Nominal"="gray", "Maximum"="red")) +
-  ylim(32, 35) +
+  coord_cartesian(ylim = c(32, 35)) +
   theme_minimal() +
   labs(
     title="Tolerance Stack-Up: Worst-Case",

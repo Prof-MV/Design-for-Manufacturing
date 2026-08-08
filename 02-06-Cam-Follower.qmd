@@ -484,10 +484,10 @@ df_disp$type <- factor(df_disp$type, levels = c("Uniform","Parabolic","Harmonic"
 ggplot(df_disp, aes(x = theta, y = y, colour = type, linetype = type)) +
   geom_line(linewidth = 1.1) +
   ## Segment labels
-  annotate("rect", xmin=0,   xmax=90,  ymin=-0.08, ymax=-0.04, fill="#FFCCCC", colour="black", size=0.3) +
-  annotate("rect", xmin=90,  xmax=180, ymin=-0.08, ymax=-0.04, fill="#CCFFCC", colour="black", size=0.3) +
-  annotate("rect", xmin=180, xmax=300, ymin=-0.08, ymax=-0.04, fill="#CCE5FF", colour="black", size=0.3) +
-  annotate("rect", xmin=300, xmax=360, ymin=-0.08, ymax=-0.04, fill="#CCFFCC", colour="black", size=0.3) +
+  annotate("rect", xmin=0,   xmax=90,  ymin=-0.08, ymax=-0.04, fill="#FFCCCC", colour="black", linewidth=0.3) +
+  annotate("rect", xmin=90,  xmax=180, ymin=-0.08, ymax=-0.04, fill="#CCFFCC", colour="black", linewidth=0.3) +
+  annotate("rect", xmin=180, xmax=300, ymin=-0.08, ymax=-0.04, fill="#CCE5FF", colour="black", linewidth=0.3) +
+  annotate("rect", xmin=300, xmax=360, ymin=-0.08, ymax=-0.04, fill="#CCFFCC", colour="black", linewidth=0.3) +
   annotate("text", x=45,  y=-0.06, label="Rise\n(90°)",   size = 3 * diagram_text_scale, fontface="bold") +
   annotate("text", x=135, y=-0.06, label="Dwell\n(90°)",  size = 3 * diagram_text_scale, fontface="bold") +
   annotate("text", x=240, y=-0.06, label="Return\n(120°)",size = 3 * diagram_text_scale, fontface="bold") +
@@ -896,7 +896,7 @@ ggplot(data.frame(theta = theta_ex, y = y_ex), aes(x = theta, y = y)) +
   geom_line(colour = "#1E88E5", linewidth = 1.4) +
   geom_point(data = pts, aes(x = theta, y = y), colour = "black", size = 4) +
   geom_label(data = pts, aes(x = theta, y = y + 0.07, label = label),
-             size = 3 * diagram_text_scale, fill = "white", colour = "black", label.size = 0.3) +
+             size = 3 * diagram_text_scale, fill = "white", colour = "black", linewidth = 0.3) +
   scale_x_continuous(breaks = seq(0, 360, 30)) +
   scale_y_continuous(breaks = seq(0, 0.8, 0.2), limits = c(-0.07, 0.95)) +
   labs(title = "Worked Example: Harmonic Motion Displacement Diagram",

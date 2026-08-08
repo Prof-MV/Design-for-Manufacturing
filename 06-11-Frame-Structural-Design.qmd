@@ -1,0 +1,944 @@
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
+# Frame and Structural Design
+
+```{r setup-06-11, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+# jQuery is needed by kableExtra's kePrint.js (tooltips/popovers) but Quarto's
+# Bootstrap 5 theme doesn't ship it by default.
+inject_jquery()
+library(tidyr)
+```
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+1. **Calculate** the deflection of a machine base or gantry beam under a linear-axis carriage load, using standard beam deflection formulas.
+2. **Explain** why machine frames are typically stiffness-limited rather than strength-limited, and **derive** an application-specific deflection budget from a positioning tolerance, rather than defaulting to a generic architectural deflection limit.
+3. **Evaluate** the trade-offs between aluminum T-slot extrusion and welded steel construction for a machine frame, using a documented decision framework.
+4. **Calculate** the clamp force required for a bolted frame joint to resist a shear load through friction, and **select** an appropriate bolt grade.
+5. **Determine** whether a machine needs floor anchoring or can rely on leveling feet alone, using a stability (overturning) check.
+6. **Calculate** the natural frequency of a simplified frame/mass system and **verify** adequate separation from a linear axis's move-profile excitation frequency.
+
+## Introduction
+
+A Tier 1 automotive supplier is bringing up a new adhesive dispensing cell at a battery-pack assembly plant near Windsor, Ontario. A single-axis linear rail rides along the top of a horizontal gantry beam spanning across the fixture, carrying a servo-driven dispensing head that lays a continuous bead of structural urethane along the perimeter flange of an EV battery tray before the cover goes on. The linear axis itself — its rail, carriage, bearings, and motor — is the subject of the [Linear Motion Design](06-08-Linear-Motion-Design.qmd) chapter. This chapter asks the question that comes right after the axis is selected: **what does the axis actually sit on, and is that structure good enough?**
+
+It's tempting to treat the frame as an afterthought — weld up something that looks stout, bolt it to the floor, move on to the "real" engineering in the drive and controls. That instinct gets machine designers into trouble more often than almost anything else in this book, because a frame problem doesn't usually show up as a broken part. It shows up as a dispensing bead that wanders off the flange edge by a few hundredths of a millimeter, or a pick-and-place axis that "hunts" and never quite settles at the end of a move, or a precision fixture that measures differently depending on whether the overhead crane happens to be running nearby. None of those symptoms point directly at the frame. All of them can be caused entirely by the frame.
+
+This chapter works through six design tasks that a mechanical designer walks through when specifying the structure underneath a precision electromechanical axis: how much a beam actually deflects under the load it's asked to carry; how to decide *how much* deflection is actually acceptable, given the axis's job (not just a generic rule of thumb); whether to build the frame from aluminum T-slot extrusion or welded steel; how a bolted joint holds a frame together without relying on the bolt shank taking shear; when a machine needs to be bolted to the floor instead of just leveled; and how to check that the frame itself won't quietly turn into a spring that fights the axis's own move profile. The gantry beam from the battery-tray dispensing cell above threads through most of these tasks as a running example, alongside automotive, food-processing, and defense-sector scenarios where the same structural logic applies.
+
+## Design Task 1: Beam Bending and Deflection for a Gantry Beam
+
+### Scenario
+
+The gantry beam for the battery-tray dispensing cell spans 2.4 m between two welded steel support columns, one on each side of the fixture. A single-axis linear rail is bolted to the top of the beam, and the dispensing head — the linear axis carriage, its servo motor, the adhesive metering pump manifold, and a short hose-management arm — rides back and forth along it. The mechanical designer has selected a steel rectangular hollow structural section (HSS) for the beam and now has to check whether it deflects too much under the carriage's weight as it travels across the span.
+
+The moving assembly (carriage, motor, dispensing head, and hose arm) has a combined mass of 48 kg — a plausible figure for this class of servo-driven dispensing axis, consistent with the carriage sizing covered in the Linear Motion Design chapter. Because the axis accelerates and decelerates as it moves along the beam, the beam sees more than just the carriage's static weight at any given instant.
+
+```{r fig-06-11-gantry-schematic, echo=FALSE, fig.cap="Gantry beam schematic: a steel HSS beam simply supported between two columns, carrying the linear-axis carriage as a point load at midspan (the worst-case position). Deflected shape shown exaggerated for visibility.", fig.align='center', fig.width=11, fig.height=6.5}
+library(ggplot2)
+
+L_fig <- 2.4  # m, drawn to the same span as the worked example
+
+defl_shape <- function(x, L) {
+  ifelse(x <= L / 2,
+         x * (3 * L^2 - 4 * x^2),
+         (L - x) * (3 * L^2 - 4 * (L - x)^2))
+}
+x_seq <- seq(0, L_fig, length.out = 200)
+raw <- defl_shape(x_seq, L_fig)
+raw_norm <- raw / max(raw)
+beam_y <- 0.075
+exagg_amplitude <- 0.32
+defl_df <- data.frame(x = x_seq, y = beam_y - raw_norm * exagg_amplitude)
+
+ggplot() +
+  annotate("rect", xmin = -0.12, xmax = 0.12, ymin = -1.0, ymax = 0, fill = "#7F8C8D", color = "black") +
+  annotate("rect", xmin = L_fig - 0.12, xmax = L_fig + 0.12, ymin = -1.0, ymax = 0, fill = "#7F8C8D", color = "black") +
+  annotate("rect", xmin = 0, xmax = L_fig, ymin = 0, ymax = 0.15, fill = "#3498DB", color = "black") +
+  geom_line(data = defl_df, aes(x = x, y = y), linetype = "dashed", color = "#E74C3C", linewidth = 1) +
+  annotate("rect", xmin = L_fig / 2 - 0.15, xmax = L_fig / 2 + 0.15, ymin = 0.15, ymax = 0.42,
+           fill = "#F39C12", color = "black") +
+  annotate("text", x = L_fig / 2, y = 0.28, label = "Carriage", size = 2.7 * diagram_text_scale, fontface = "bold") +
+  annotate("segment", x = L_fig / 2, xend = L_fig / 2, y = 0.9, yend = 0.44,
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1.1) +
+  annotate("text", x = L_fig / 2, y = 1.02, label = "P = 659 N\n(carriage + dynamic factor)",
+           size = 3 * diagram_text_scale, color = "#E74C3C") +
+  annotate("segment", x = 0, xend = L_fig, y = -1.25, yend = -1.25,
+           arrow = arrow(ends = "both", length = unit(0.2, "cm")), linewidth = 0.8) +
+  annotate("text", x = L_fig / 2, y = -1.42, label = "L = 2.4 m", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = L_fig / 2, y = -0.16, label = "Exaggerated deflected shape (not to scale)",
+           size = 2.5 * diagram_text_scale, color = "#E74C3C") +
+  coord_fixed() +
+  xlim(-0.5, L_fig + 0.5) + ylim(-1.6, 1.15) +
+  theme_void() +
+  labs(title = "Gantry Beam — Simply Supported, Midspan Carriage Load",
+       subtitle = "Steel HSS 152x102x6.4 beam spanning between two support columns") +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * diagram_text_scale))
+```
+
+### Design Guidelines and Rules of Thumb
+
+Model the moving carriage as a point load on the beam, and check the deflection with the carriage at the position that produces the *worst* deflection, not wherever it happens to sit at the moment someone thinks to check. For a simply supported beam carrying a single point load, the maximum deflection anywhere along the span is largest when the load itself sits at midspan — so that's the position to design against, even though the carriage spends most of its time somewhere else along the travel.
+
+A carriage's nameplate or estimated mass gives its *static* weight, but a servo-driven axis doesn't apply a purely static load — it accelerates and decelerates as it moves, and the beam has to react those inertial forces too, not just gravity.
+
+**Rule of thumb:** apply a dynamic load factor of roughly 1.3-1.5x the carriage's static weight when checking beam deflection and stress, to account for acceleration/deceleration effects at typical servo-axis rates. This breaks down for very slow-moving axes (a heavy but gently-indexed load barely needs any margin above static weight) and equally breaks down for aggressive, high-acceleration pick-and-place axes, where the actual inertial load — computed properly from the carriage's mass and the axis's commanded acceleration — can exceed even a 1.5x static allowance and should be calculated directly rather than assumed away by a blanket factor.
+
+Two other standard loading cases show up often enough in machine frame work to keep on hand alongside the point-load-at-midspan case used here:
+
+| Loading case | Maximum deflection | Typical use |
+| :--- | :--- | :--- |
+| Simply supported, point load at midspan | $\delta_{max} = \dfrac{PL^3}{48EI}$ | A carriage or fixed fixture load at one point along a span |
+| Simply supported, uniformly distributed load | $\delta_{max} = \dfrac{5wL^4}{384EI}$ | The beam's own self-weight, or a long, evenly loaded rail |
+| Cantilever, point load at the free end | $\delta_{max} = \dfrac{PL^3}{3EI}$ | An overhung fixture arm or bracket with no far-end support |
+
+Notice the cantilever case deflects **16 times** more than the same span, load, and section simply supported at both ends ($L^3/3$ vs. $L^3/48$) — a good reason to avoid a cantilevered structural member wherever a design can reasonably support both ends instead.
+
+### Governing Calculation
+
+For a simply supported beam of span $L$ carrying a point load $P$ at midspan:
+
+$$\delta_{max} = \frac{PL^3}{48EI}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $P$ | Design load (carriage weight x dynamic factor) | N |
+| $L$ | Span between supports | mm |
+| $E$ | Modulus of elasticity of the beam material | N/mm² (MPa) |
+| $I$ | Second moment of area of the beam cross-section, about the bending axis | mm⁴ |
+| $\delta_{max}$ | Maximum deflection, at midspan | mm |
+
+The companion check is bending stress against yield strength, using the section modulus $S = I/c$ (where $c$ is the distance from the neutral axis to the extreme fiber):
+
+$$\sigma_{max} = \frac{M_{max}}{S} = \frac{PL/4}{S}$$
+
+Steel hollow structural sections used in Canadian fabrication are typically specified to **CSA G40.20/G40.21** (general requirements and structural quality steel, respectively — grade 350W, with a nominal 350 MPa yield strength, is a common choice for welded machine frames); the equivalent US material specification is **ASTM A500**.
+
+### Worked Example
+
+```{r beam-deflection-06-11, echo=TRUE}
+## Given: gantry beam and carriage load
+L <- 2400          # mm, span between support columns
+m_carriage <- 48   # kg, carriage + motor + dispensing head + hose arm
+g <- 9.81           # m/s^2
+dyn_factor <- 1.4   # dynamic load factor for a servo-driven carriage
+
+W_carriage <- m_carriage * g       # N, static weight
+P <- W_carriage * dyn_factor       # N, design load
+
+## Selected section: steel HSS 152 x 102 x 6.4 mm (CSA G40.20/G40.21 350W)
+E_steel <- 200000   # N/mm^2 (200 GPa)
+I_beam <- 9.80e6    # mm^4, second moment of area about the strong (152 mm) axis
+S_beam <- 128960     # mm^3, section modulus about the same axis
+Fy <- 350            # MPa, yield strength (350W grade)
+
+## Deflection
+delta_max <- P * L^3 / (48 * E_steel * I_beam)
+
+## Bending stress
+M_max <- P * L / 4
+sigma_max <- M_max / S_beam
+
+## L/240 general architectural/structural deflection reference
+L240 <- L / 240
+
+cat(sprintf("Carriage static weight: %.1f N\n", W_carriage))
+cat(sprintf("Design load (with %.1fx dynamic factor): %.1f N\n\n", dyn_factor, P))
+cat(sprintf("Maximum deflection: %.4f mm\n", delta_max))
+cat(sprintf("L/240 reference limit: %.2f mm -> %s\n\n",
+            L240, ifelse(delta_max <= L240, "PASSES (large margin)", "FAILS")))
+cat(sprintf("Maximum bending moment: %s N.mm\n", format(round(M_max), big.mark = " ")))
+cat(sprintf("Maximum bending stress: %.2f MPa (%.1f%% of %d MPa yield)\n",
+            sigma_max, sigma_max / Fy * 100, Fy))
+```
+
+**Sanity check:** the calculated deflection (about 0.097 mm) clears the general L/240 structural reference limit (10.0 mm) with room to spare — nearly a 100x margin — and the bending stress (3.1 MPa) sits at under 1% of the material's yield strength. Both checks say this beam is comfortably adequate. Before accepting that conclusion, though, notice how differently those two numbers behave: the beam is nowhere close to yielding, but is it actually *stiff enough* for what this axis needs to do? That question — and why "passes L/240 easily" and "stiff enough for this application" are not the same statement — is exactly what Design Task 2 addresses next.
+
+## Design Task 2: Stiffness-Driven Design and Deflection Limits
+
+### Scenario
+
+The beam from Design Task 1 passed every check the designer ran — deflection well under L/240, stress under 1% of yield. A process engineer reviewing the dispensing cell's qualification package isn't satisfied, though, and asks a pointed question: what does 0.097 mm of beam sag actually do to the adhesive bead's position on the flange? The dispensing process has a total positioning tolerance of 0.10 mm (100 microns) for the bead to land correctly relative to the flange edge — and that 0.10 mm has to cover *everything*: linear rail straightness, bearing preload variation, encoder resolution, servo following error, thermal growth of the beam and rail over a shift, and the beam's own static deflection. The plant's engineering standard allocates no single contributor more than 20% of the total tolerance budget, so the beam's deflection is only allowed to consume 20% of that 0.10 mm — not all of it.
+
+### Design Guidelines and Rules of Thumb
+
+Almost every machine frame in industrial practice is **stiffness-limited, not strength-limited**: the frame reaches an unacceptable amount of deflection — enough to ruin positioning accuracy or shake loose enough energy to excite vibration — long, long before the material anywhere in the structure gets anywhere near its yield stress. Design Task 1's own numbers make the point directly: 0.9% of yield stress against nearly a 100x margin on the general L/240 deflection check. A frame designed only to avoid breaking would be dramatically undersized for a precision axis; the governing question for a machine frame is almost always "is it stiff enough," not "will it hold."
+
+That raises the obvious follow-up: stiff enough compared to *what*? The L/240 ratio used in Design Task 1 is a genuinely useful first-pass sanity check, but it did not originate in machine design at all — it's a general structural and architectural serviceability convention (the kind of limit found in building codes, for things like floor joists and roof beams, where the concern is visible sag, cracking of finishes, and occupant comfort, not micron-level positioning). Applying it uncritically to a precision machine axis treats "doesn't look saggy to a person standing nearby" as if it were the same requirement as "positions a dispensing head to within a tenth of a millimeter" — and those are not remotely the same bar.
+
+**Rule of thumb:** treat L/240 as a *starting reference point and a first-pass sanity check*, never as the design target for a precision machine axis. Many precision applications need something far tighter — sometimes expressed as a stricter span ratio (L/1000 is a commonly cited tighter benchmark for machine-tool-adjacent structures), and sometimes, as in this design task, as an absolute deflection budget in microns or thousandths of an inch, derived directly from the application's positioning tolerance rather than from the beam's span at all. This breaks down in the opposite direction too: a structural member that carries no positioning-critical load at all (a guard panel frame, a cable tray support, an access platform) genuinely doesn't need a tighter-than-L/240 check, and over-applying a precision-axis-grade deflection budget everywhere on a machine wastes material and cost on structure that was never the limiting factor.
+
+The right general practice is an **error budget**: decide what fraction of the total positioning tolerance any one contributor — frame deflection, rail straightness, servo error, thermal drift — is allowed to consume, and design that contributor to its own sub-budget rather than to the whole tolerance. The specific procedure for testing and specifying a finished axis's actual positioning accuracy and repeatability against numbers like these is covered by **ISO 230-2** (determination of accuracy and repeatability of positioning of numerically controlled axes), the standard a plant's metrology or quality group would reference to verify the finished machine, once built, actually achieves what this chapter's structural calculation only predicts on paper.
+
+```{r fig-06-11-deflection-budget, echo=FALSE, fig.cap="Three very different deflection references for the same 2.4 m beam: the general L/240 structural limit, the beam's actual calculated deflection, and the tight absolute budget this precision dispensing axis actually needs. Log scale.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+
+budget_df <- data.frame(
+  category = factor(c("L/240 general limit", "Actual beam deflection", "Precision-axis budget"),
+                     levels = c("L/240 general limit", "Actual beam deflection", "Precision-axis budget")),
+  deflection_mm = c(10.0, 0.0969, 0.0200)
+)
+
+ggplot(budget_df, aes(x = category, y = deflection_mm, color = category)) +
+  geom_segment(aes(xend = category, y = 0.01, yend = deflection_mm), linewidth = 1.4) +
+  geom_point(size = 6) +
+  geom_text(aes(label = sprintf("%.4f mm", deflection_mm)), vjust = -1.1, size = 3.2 * diagram_text_scale) +
+  scale_color_manual(values = c("L/240 general limit" = "#95A5A6",
+                                 "Actual beam deflection" = "#3498DB",
+                                 "Precision-axis budget" = "#E74C3C")) +
+  scale_y_log10(labels = scales::label_comma(big.mark = " "), limits = c(0.01, 30)) +
+  labs(title = "Deflection Limit vs. Actual Deflection vs. Precision Budget",
+       subtitle = "The beam clears L/240 by ~100x, yet still exceeds a precision-axis deflection budget derived from its actual job",
+       x = NULL, y = "Deflection (mm, log scale)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+        axis.text = element_text(size = 10 * diagram_text_scale),
+        axis.title = element_text(size = 11 * diagram_text_scale))
+```
+
+### Governing Calculation
+
+$$\delta_{allow} = f_{frame} \times T_{total}$$
+
+Compare $\delta_{allow}$ against the beam's actual deflection $\delta_{max}$ from Design Task 1. If it fails, solve the same governing beam equation backward for the required second moment of area:
+
+$$I_{required} = \frac{PL^3}{48\,E\,\delta_{allow}}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $T_{total}$ | Total positioning tolerance budget for the axis | mm |
+| $f_{frame}$ | Fraction of the total budget allocated to frame deflection | dimensionless |
+| $\delta_{allow}$ | Allowable frame deflection | mm |
+| $I_{required}$ | Minimum second moment of area needed to meet $\delta_{allow}$ | mm⁴ |
+
+### Worked Example
+
+Live cell — try a different total tolerance, allocation fraction, or beam load and see whether the beam passes or fails.
+
+```{webr-r}
+#| label: deflection-budget-06-11
+## Given: dispensing process tolerance budget
+T_total <- 0.10        # mm, total positioning tolerance for the dispensing axis
+f_frame <- 0.20         # fraction of the total budget allocated to frame deflection
+
+delta_allow <- T_total * f_frame
+
+## Re-derive the actual beam deflection locally (Design Task 1 values)
+L <- 2400; m_carriage <- 48; g <- 9.81; dyn_factor <- 1.4
+P <- m_carriage * g * dyn_factor
+E_steel <- 200000
+I_beam <- 9.80e6
+delta_max <- P * L^3 / (48 * E_steel * I_beam)
+
+L240 <- L / 240
+ratio_equiv <- L / delta_allow
+
+cat(sprintf("Allowable frame deflection budget: %.4f mm (%.1f micron)\n", delta_allow, delta_allow * 1000))
+cat(sprintf("Actual beam deflection: %.4f mm (%.1f micron)\n", delta_max, delta_max * 1000))
+cat(sprintf("Status: %s\n\n", ifelse(delta_max <= delta_allow, "PASSES", "FAILS")))
+cat(sprintf("For reference: L/240 general limit = %.2f mm (beam clears this easily)\n", L240))
+cat(sprintf("The precision budget is equivalent to roughly L/%s -- far tighter than L/240,\n",
+            format(round(ratio_equiv), big.mark = " ")))
+cat("and tighter even than the commonly cited L/1000 machine-structure benchmark.\n\n")
+
+## If it fails, solve for the required I
+if (delta_max > delta_allow) {
+  I_required <- P * L^3 / (48 * E_steel * delta_allow)
+  cat(sprintf("Required I to meet the budget: %.3e mm^4 (%.2fx the current %.3e mm^4)\n",
+              I_required, I_required / I_beam, I_beam))
+
+  ## Alternative fix: add an intermediate support, halving the effective span
+  delta_half_span <- P * (L / 2)^3 / (48 * E_steel * I_beam)
+  cat(sprintf("\nAlternative: add a midspan support column (halves the effective span)\n"))
+  cat(sprintf("New deflection with the same beam, half the span: %.4f mm (%.1f micron) -> %s\n",
+              delta_half_span, delta_half_span * 1000,
+              ifelse(delta_half_span <= delta_allow, "PASSES", "FAILS")))
+}
+```
+
+**Sanity check:** the beam that passed the general L/240 check by a nearly 100x margin **fails** the precision-axis budget by roughly 5x (0.097 mm actual against a 0.020 mm allowance) — the exact scenario this design task warned about. Two fixes both work: increase the beam's stiffness directly (roughly 4.8x more $I$ is needed, a substantially larger section), or add an intermediate support column at midspan, which — because deflection scales with the *cube* of the span — cuts the deflection to about an eighth of its original value with no change to the beam section at all, and comfortably clears the budget. Adding a support is often the cheaper fix in practice, provided the fixture layout has room for a column at midspan without blocking the process; that's a genuine design trade-off, not a purely numeric one. Whichever fix is chosen, keep it in mind going into Design Task 6 — stiffening the beam to meet this deflection budget has a second effect that hasn't been checked yet.
+
+<details>
+<summary>Industry connection: precision dispensing on an EV battery line</summary>
+
+Structural adhesive bead placement on an EV battery tray isn't cosmetic — the bead has to fully wet both mating flange surfaces to achieve the pack's rated seal and crash-structure bonding performance, so a bead that drifts off-target by even a few tenths of a millimeter over a shift's worth of thermal drift and frame sag is a real quality escape risk, not just an aesthetic one. This is exactly the kind of application where the L/240-vs-precision-budget distinction in this design task has real consequences on an Ontario EV manufacturing line.
+
+</details>
+
+## Design Task 3: Aluminum Extrusion vs. Welded Steel Frame Construction
+
+### Scenario
+
+A systems integrator is quoting two different automotive machine frames in the same proposal. The first is a compact benchtop pick-and-place cell that moves 1.5 kg camera-module sub-assemblies at high speed for a small-parts packaging line — light loads, frequent changeover as the line gets reconfigured for new part variants, and a washdown-adjacent area near a parts-cleaning station. The second is a heavy-duty press-to-press transfer system base, supporting a robot arm that handles 25 kg stamped body panels at high transfer forces between two stamping presses — large loads, a fixed layout that won't change once installed, and a demanding stiffness requirement so the transfer robot's repeatability doesn't degrade under load. The integrator has to recommend a frame construction method for each, and "always use the same thing" is not a defensible answer for either one.
+
+### Design Guidelines and Rules of Thumb
+
+Aluminum T-slot extrusion (familiar brands include Bosch Rexroth, item, and 80/20) and welded steel are the two dominant machine-frame construction methods in industrial automation, and the right choice depends on several criteria pulling in different directions at once — this is a genuine multi-criteria trade-off, the same kind of weighted decision this book has used for other construction and technology choices.
+
+- **Stiffness-to-weight.** Somewhat counterintuitively, aluminum and steel have nearly identical **specific stiffness** (modulus of elasticity divided by density): roughly 25-26 GPa per Mg/m³ for both materials, since aluminum's roughly one-third modulus is offset almost exactly by its roughly one-third density. Extrusion's practical stiffness advantage doesn't come from a magic material property — it comes from the fact that a lighter material lets a designer use a physically larger, deeper cross-section for the same total frame weight, and stiffness scales strongly with section depth (recall $I \propto d^3$ for a rectangular-ish section).
+- **Modularity and reconfigurability.** T-slot extrusion connects with reusable bolted brackets and T-nuts — a frame can be extended, reconfigured, or torn down and rebuilt elsewhere without cutting or welding anything. A welded steel frame is fixed geometry the moment the welds cool; changing it means grinding out welds and re-fabricating.
+- **Cost.** At small-to-moderate frame sizes and light-to-moderate loads, extrusion is usually cheaper — no welding labor, no fixturing, catalog components, fast lead time. At large sizes or heavy structural loads, achieving the needed stiffness in extrusion can require large, expensive profiles and dense bracing, at which point welded steel plate and structural shapes often become the more economical way to get the same stiffness.
+- **Corrosion resistance.** Aluminum's natural oxide layer gives extrusion frames good corrosion resistance out of the box — a real advantage in washdown or humid environments. Bare steel needs a coating (paint, powder coat, or plating) to avoid rusting, and that coating is a maintenance item that degrades over time, especially anywhere it gets chipped or abraded.
+- **Ease of modification and repair.** Drilling, tapping, or bolting a new bracket onto an extrusion frame is routine shop work. Doing the same on a welded steel frame means either welding (skilled labor, potential distortion of precision-machined reference surfaces) or drilling and tapping the solid steel section directly, which works but is slower and less forgiving of a mistake.
+- **Absolute stiffness and load capacity.** For genuinely heavy, high-force applications, welded steel wins outright — a continuous weld transfers load without the joint compliance inherent to a bolted T-slot connection, and steel structural shapes are available in far larger, stiffer sections than most extrusion catalogs offer.
+
+**Rule of thumb:** default to aluminum T-slot extrusion for lighter-duty automation — benchtop and small-cell work, frequent reconfiguration, washdown-adjacent environments, moderate spans (roughly under 1.5-2 m without heavy bracing) — and default to welded steel for heavy-duty machine bases: large static and dynamic loads, long spans, high-force presses and transfer systems, or anywhere the frame is genuinely part of the machine's load path rather than just a support structure. This breaks down at the margins in both directions: heavily gusseted, closely-supported extrusion gantries can be pushed well past what a single unbraced span would suggest, and small welded steel sub-frames still show up in high-volume production purely because a customer's engineering standard mandates welded construction for a given machine class regardless of load — treat the load/duty criteria as the starting heuristic, not a hard rule.
+
+Welded steel fabrication quality in Canadian practice is governed by **CSA W47.1** (certification of companies for fusion welding of steel) and **CSA W59** (welded steel construction), with **AWS D1.1** as the US structural welding equivalent. Structural design of the aluminum members themselves (where a frame is being engineered rather than assembled from a manufacturer's pre-rated catalog components) follows **CSA S157** (strength design in aluminum) in Canada, with the **Aluminum Association's Aluminum Design Manual (ADM)** as the US equivalent — though in practice, most machine-frame extrusion work is specified directly from the extrusion manufacturer's published engineering data rather than a first-principles structural design to S157/ADM.
+
+```{r fig-06-11-frame-material-compare, echo=FALSE, fig.cap="Illustrative comparison of aluminum T-slot extrusion vs. welded steel across five decision criteria. Higher is better for that criterion.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+library(tidyr)
+
+compare_df <- data.frame(
+  Criterion = c("Absolute\nStiffness", "Modularity /\nReconfigurability", "Cost\n(small-moderate scale)",
+                "Corrosion\nResistance", "Ease of\nModification"),
+  Extrusion = c(2, 5, 4, 5, 5),
+  `Welded Steel` = c(5, 1, 3, 2, 2),
+  check.names = FALSE
+)
+compare_long <- pivot_longer(compare_df, cols = c(Extrusion, `Welded Steel`),
+                              names_to = "Construction", values_to = "Score")
+compare_long$Criterion <- factor(compare_long$Criterion, levels = compare_df$Criterion)
+
+ggplot(compare_long, aes(x = Criterion, y = Score, fill = Construction)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("Extrusion" = "#3498DB", "Welded Steel" = "#7F8C8D")) +
+  labs(title = "Aluminum Extrusion vs. Welded Steel — Illustrative Criterion Scores",
+       subtitle = "1 (poor fit) to 5 (excellent fit); actual scores depend on the specific application and scale",
+       x = NULL, y = "Relative rating (1-5)") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+        legend.position = "bottom",
+        axis.text = element_text(size = 9.5 * diagram_text_scale),
+        axis.title = element_text(size = 11 * diagram_text_scale))
+```
+
+### Governing Calculation
+
+As with other construction and technology trade-offs in this book, there's no single formula — this is a documented judgment call, made repeatable with a **weighted decision matrix**:
+
+$$Score_{option} = \sum_i w_i \times s_{i,option}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $w_i$ | Weight assigned to criterion $i$ (weights sum to 1.0) | dimensionless |
+| $s_{i,option}$ | Score of a given construction option against criterion $i$ (1-5 scale) | dimensionless |
+| $Score_{option}$ | Total weighted score for that construction option | dimensionless |
+
+### Worked Example
+
+Live cell — try different weight profiles (what matters most for *your* machine?) and see whether the recommendation flips.
+
+```{webr-r}
+#| label: material-decision-06-11
+## Given: fixed criterion scores (1 = poor fit, 5 = excellent fit)
+extrusion_scores <- c(stiffness = 2, modularity = 5, cost = 4, corrosion = 5, ease_mod = 5)
+steel_scores     <- c(stiffness = 5, modularity = 1, cost = 3, corrosion = 2, ease_mod = 2)
+
+## Weight profile A: light-duty pick-and-place cell (frequent reconfiguration, washdown-adjacent)
+weights_A <- c(stiffness = 0.15, modularity = 0.30, cost = 0.25, corrosion = 0.15, ease_mod = 0.15)
+
+## Weight profile B: heavy-duty press-to-press transfer base (large static/dynamic loads, fixed layout)
+weights_B <- c(stiffness = 0.50, modularity = 0.05, cost = 0.15, corrosion = 0.10, ease_mod = 0.20)
+
+score_extrusion_A <- sum(weights_A * extrusion_scores)
+score_steel_A <- sum(weights_A * steel_scores)
+score_extrusion_B <- sum(weights_B * extrusion_scores)
+score_steel_B <- sum(weights_B * steel_scores)
+
+cat("Scenario A -- light-duty pick-and-place cell:\n")
+cat(sprintf("  Extrusion weighted score: %.2f\n", score_extrusion_A))
+cat(sprintf("  Welded steel weighted score: %.2f\n", score_steel_A))
+cat(sprintf("  -> Recommendation: %s\n\n",
+            ifelse(score_extrusion_A > score_steel_A, "ALUMINUM EXTRUSION", "WELDED STEEL")))
+
+cat("Scenario B -- heavy-duty press-to-press transfer base:\n")
+cat(sprintf("  Extrusion weighted score: %.2f\n", score_extrusion_B))
+cat(sprintf("  Welded steel weighted score: %.2f\n", score_steel_B))
+cat(sprintf("  -> Recommendation: %s\n",
+            ifelse(score_extrusion_B > score_steel_B, "ALUMINUM EXTRUSION", "WELDED STEEL")))
+```
+
+**Sanity check:** the same five criterion scores produce opposite recommendations once the weights reflect what each application actually needs — extrusion wins clearly for the pick-and-place cell (4.30 vs. 2.40), while welded steel wins, more narrowly, for the heavy-duty transfer base (3.60 vs. 3.35). The narrower margin in Scenario B is worth noticing: it's not a landslide, which is realistic — a heavily gusseted, closely-supported extrusion frame really could compete with welded steel for a transfer base at the margin, and a specific quote should still run the actual stiffness numbers (Design Tasks 1 and 2) for both options before finalizing, rather than stopping at the decision matrix alone.
+
+## Design Task 4: Bolted Joint Basics for Frame Assembly
+
+### Scenario
+
+Back at the battery-tray dispensing cell, the gantry beam bolts to the top of each support column through a flange joint — four bolts through a plate welded to the column top, matching four clearance holes in the beam's end plate. Every time the linear axis carriage accelerates or decelerates, that motion produces a reaction force that has to pass through this joint into the column. The mechanical designer needs to size the joint's clamp force so the beam-to-column connection doesn't slip under that shear load.
+
+### Design Guidelines and Rules of Thumb
+
+A properly designed bolted structural joint resists shear primarily through **friction**, not through the bolt shank bearing against the sides of the clearance holes. Tightening the bolt stretches it like a stiff spring, and that tension clamps the two flange faces together; as long as the clamp force is high enough, friction between the clamped faces resists the shear load entirely, and the bolt shank never actually touches the sides of its hole. This matters because bearing/shear-through-the-shank is a much less forgiving failure mode — it depends on a tight-tolerance fit and loads the bolt in a way it's not primarily designed for — while a friction-grip (slip-critical) joint fails gracefully: if it's ever overloaded past the friction limit, the joint slips a small amount rather than shearing a bolt outright.
+
+This chapter's treatment here is intentionally light — it's the friction-grip concept applied specifically to a frame assembly joint. For the full mechanics of bolt preload, torque-tension relationships, and joint stiffness (including what actually happens inside the joint as the applied load increases toward separation), see the [Bolted Joint Calculations](02-01-Bolt-Joint-Calculations.qmd) chapter.
+
+**Rule of thumb:** use a coefficient of friction of about 0.3 for clean, dry, as-fabricated steel-to-steel or steel-to-aluminum faying surfaces (unpainted, not specially prepared) when estimating clamp force for a general machine-frame joint. This is conservative relative to specially prepared slip-critical surfaces (e.g., blasted or galvanized faying surfaces used in structural steel connections per CSA S16/AISC 360 and the RCSC slip-critical bolting specification, referenced directly in Canadian practice much like AGMA is for gearing), which can exceed 0.4-0.5 — but it breaks down badly in the other direction for painted, oily, or otherwise contaminated faying surfaces, where the effective friction coefficient can drop well below 0.3 and should be verified, not assumed, for any joint carrying meaningful shear.
+
+Bolt grade selection determines how much clamp force a given bolt size can safely deliver. Metric machine bolts are graded by **ISO 898-1** property class (8.8, 10.9, 12.9, in increasing strength), with **SAE J429** grades (Grade 5, Grade 8) as the equivalent imperial classification.
+
+**Rule of thumb:** property class 8.8 (or SAE Grade 5) is adequate for the great majority of light-to-moderate machine-frame bolting. Reserve 10.9/12.9 (SAE Grade 8) for genuinely high-load or heavily vibration-loaded joints. This breaks down if it's read as "bigger number is always better" — over-torquing a high-grade bolt into a thin extrusion T-slot channel or a soft aluminum tapped hole can strip the threads or crush the channel long before the bolt itself is stressed anywhere near its rating, so the *weaker* member in the joint, not just the bolt grade, sets the real torque ceiling.
+
+```{r fig-06-11-bolted-joint, echo=FALSE, fig.cap="Friction-grip bolted joint: bolt preload clamps the two flange faces together, and friction between the faces resists the applied shear load — the bolt shank does not bear against the hole under normal, non-overloaded operation.", fig.align='center', fig.width=11, fig.height=6}
+library(ggplot2)
+
+ggplot() +
+  annotate("rect", xmin = -1.2, xmax = 1.2, ymin = 0, ymax = 0.4, fill = "#BDC3C7", color = "black") +
+  annotate("rect", xmin = -1.2, xmax = 1.2, ymin = -0.4, ymax = 0, fill = "#95A5A6", color = "black") +
+  annotate("rect", xmin = -0.08, xmax = 0.08, ymin = -0.65, ymax = 0.65, fill = "#F39C12", color = "black") +
+  annotate("rect", xmin = -0.22, xmax = 0.22, ymin = 0.65, ymax = 0.78, fill = "#F39C12", color = "black") +
+  annotate("rect", xmin = -0.22, xmax = 0.22, ymin = -0.78, ymax = -0.65, fill = "#F39C12", color = "black") +
+  annotate("segment", x = -0.6, xend = -0.6, y = 0.95, yend = 0.42,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1) +
+  annotate("segment", x = -0.6, xend = -0.6, y = -0.95, yend = -0.42,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1) +
+  annotate("text", x = -0.6, y = 1.12, label = "Clamp force\n(bolt preload)",
+           size = 2.8 * diagram_text_scale, color = "#E74C3C") +
+  annotate("segment", x = 0.5, xend = 1.7, y = 0.18, yend = 0.18,
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#2ECC71", linewidth = 1.2) +
+  annotate("text", x = 1.1, y = 0.36, label = "Applied shear\n(axis accel. reaction)",
+           size = 2.8 * diagram_text_scale, color = "#2ECC71") +
+  annotate("segment", x = 1.7, xend = 0.85, y = -0.18, yend = -0.18,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "#3498DB", linewidth = 1.2) +
+  annotate("text", x = 1.2, y = -0.36, label = "Friction resistance\n(clamp force x mu)",
+           size = 2.8 * diagram_text_scale, color = "#3498DB") +
+  coord_fixed() +
+  xlim(-1.6, 2.2) + ylim(-1.3, 1.35) +
+  theme_void() +
+  labs(title = "Friction-Grip Bolted Frame Joint",
+       subtitle = "Shear is resisted by friction between the clamped flange faces, not by the bolt shank bearing in the hole") +
+  theme(plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * diagram_text_scale))
+```
+
+### Governing Calculation
+
+$$F_{clamp} = \frac{SF \times F_{shear}}{\mu}$$
+
+For a joint using $n$ bolts sharing the load evenly:
+
+$$F_{clamp,per\ bolt} = \frac{F_{clamp}}{n}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $F_{shear}$ | Applied shear (in-plane) load on the joint | N |
+| $\mu$ | Coefficient of friction between the clamped faces | dimensionless |
+| $SF$ | Safety factor | dimensionless |
+| $F_{clamp}$ | Total required clamp (preload) force across the joint | N |
+| $n$ | Number of bolts sharing the joint | count |
+
+### Worked Example
+
+Live cell — try a different shear load, friction coefficient, safety factor, or bolt count.
+
+```{webr-r}
+#| label: bolted-joint-clamp-06-11
+## Given: gantry beam-to-column flange joint
+m_carriage <- 48       # kg
+a_axis <- 5              # m/s^2, typical peak acceleration for this dispensing axis
+F_shear <- m_carriage * a_axis   # N, reaction shear force at the joint
+
+mu <- 0.3                # coefficient of friction, clean as-fabricated steel faces
+SF <- 1.5                 # safety factor
+n_bolts <- 4               # bolts in the flange joint
+
+F_clamp_total <- SF * F_shear / mu
+F_clamp_per_bolt <- F_clamp_total / n_bolts
+
+## Compare to a typical M8 property class 8.8 bolt's usable preload capacity
+At_M8 <- 36.6             # mm^2, tensile stress area of an M8 bolt
+proof_stress_88 <- 580     # MPa, ISO 898-1 property class 8.8 proof strength
+F_proof_M8 <- At_M8 * proof_stress_88
+F_target_preload <- 0.75 * F_proof_M8   # typical target: ~75% of proof load
+
+cat(sprintf("Applied shear load: %.1f N\n", F_shear))
+cat(sprintf("Required total clamp force (SF = %.1f, mu = %.2f): %.1f N\n", SF, mu, F_clamp_total))
+cat(sprintf("Required clamp force per bolt (n = %d): %.1f N\n\n", n_bolts, F_clamp_per_bolt))
+cat(sprintf("M8, property class 8.8 proof load: %.0f N\n", F_proof_M8))
+cat(sprintf("Typical target preload (75%% of proof load): %.0f N\n", F_target_preload))
+cat(sprintf("Margin: target preload is %.0fx the required per-bolt clamp force\n",
+            F_target_preload / F_clamp_per_bolt))
+```
+
+**Sanity check:** even a modest M8 property class 8.8 bolt, torqued to its typical target preload, delivers roughly 50x the clamp force this joint actually needs to resist the shear load through friction. That large margin is the normal, expected result for most machine-frame bolting — this joint was never going to be shear-capacity-limited. The real risk on a joint like this isn't insufficient bolt strength; it's **under-torquing or self-loosening** in service (vibration backing a bolt off its target preload over time), which is exactly why correct torque application and, where vibration is significant, a thread-locking method matter regardless of how generous the raw capacity margin looks on paper.
+
+<details>
+<summary>Industry connection: fastener selection in a washdown food-processing environment</summary>
+
+A food-plant machine frame operating in a washdown area typically specifies 18-8 or 316 stainless steel fasteners for corrosion resistance, consistent with CFIA sanitary design expectations for food-contact-adjacent equipment — but stainless fasteners have meaningfully lower strength than alloy steel grades (commonly comparable only to ISO 898-1 class A2-70, well below an 8.8 alloy-steel bolt), so a washdown-rated frame's bolted joints may need a larger bolt diameter or more fasteners per joint to hit the same clamp-force target that a smaller alloy-steel bolt would achieve — the corrosion-resistance decision has a direct, calculable structural sizing consequence, not just a material substitution.
+
+</details>
+
+## Design Task 5: Leveling Feet and Floor Anchoring
+
+### Scenario
+
+A defense contractor is installing a tall precision optical inspection fixture — a coordinate-style measurement gantry used to verify machined component geometry — on a shop floor it shares with CNC machining centers and periodic forklift traffic. The fixture stands 1.8 m tall, with its upper optical head raising the assembly's overall center of gravity well above the base. Total mass is 450 kg, and the base footprint measures 0.9 m across in the direction of concern. The installation team has to decide whether adjustable leveling feet alone are sufficient, or whether the fixture needs to be bolted down to the concrete floor slab.
+
+### Design Guidelines and Rules of Thumb
+
+Leveling feet do two jobs well: they let the machine be precisely leveled on an imperfect floor, and — resting under the machine's own weight — they provide friction-based resistance to *sliding*. What leveling feet do **not** provide is meaningful resistance to **overturning (tip-over)**, because they have essentially no tension capacity; a foot can push down on the floor, but it can't pull the machine back down if a disturbance is trying to rotate the machine up off its base on the opposite side.
+
+**Rule of thumb:** as a first-pass screening check for whether a machine needs anchoring, apply a lateral static-equivalent disturbance force equal to 25-50% of the machine's weight, acting at its center of gravity — a simplified stand-in for dynamic loading (floor-transmitted vibration, an accidental bump or impact, or seismic input) used for preliminary equipment-anchorage screening. This is explicitly a simplified screening method, not a substitute for a full analysis: a genuinely tall, heavy, seismic-zone, or safety-critical installation should follow the applicable National Building Code of Canada (NBCC) Part 4 provisions for anchorage of non-structural components (or **ASCE 7** Chapter 13 as the US equivalent) rather than stopping at this screening ratio. This breaks down for machines with a low center of gravity and a wide, stable base — for those, the screening check below will almost always show a comfortable margin, and a full seismic anchorage analysis is rarely warranted regardless.
+
+Once the lateral disturbance force is estimated, compare the **overturning moment** it creates against the **restoring moment** from the machine's own weight acting through its base:
+
+**Rule of thumb:** require a stability ratio of at least 1.5 (restoring moment at least 1.5x the overturning moment) for leveling feet alone to be considered adequate. Below that ratio, the machine needs to be anchored — floor anchors add tension capacity at the trailing edge of the base that leveling feet cannot provide, restoring the missing margin. This threshold is itself a rule of thumb, not a code-mandated number; a specific facility's engineering standard, insurance requirement, or the fixture manufacturer's own installation instructions may call for a different (often higher) minimum ratio, and should take precedence when specified.
+
+```{r fig-06-11-stability-check, echo=FALSE, fig.cap="Overturning stability check: a lateral disturbance force acting at the center of gravity creates an overturning moment about the leading (downhill) edge, resisted by the machine's own weight acting through its base width — and, where that isn't enough, by anchor bolt tension at the trailing edge.", fig.align='center', fig.width=9, fig.height=7}
+library(ggplot2)
+library(ggforce)
+
+cg_df <- data.frame(x0 = 0, y0 = 1.35, r = 0.09)
+
+ggplot() +
+  annotate("rect", xmin = -0.45, xmax = 0.45, ymin = 0, ymax = 1.8, fill = "#95A5A6", color = "black") +
+  annotate("segment", x = -1.1, xend = 1.1, y = 0, yend = 0, color = "black", linewidth = 1.4) +
+  geom_circle(data = cg_df, aes(x0 = x0, y0 = y0, r = r), fill = "#E74C3C", color = "black") +
+  annotate("text", x = 0, y = 1.35, label = "CG", size = 2.6 * diagram_text_scale, color = "white", fontface = "bold") +
+  annotate("point", x = 0.45, y = 0, size = 4, color = "black", shape = 17) +
+  annotate("text", x = 0.45, y = -0.16, label = "Pivot\n(leading edge)", size = 2.6 * diagram_text_scale) +
+  annotate("segment", x = -0.15, xend = 0.55, y = 1.35, yend = 1.35,
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1.2) +
+  annotate("text", x = 0.1, y = 1.58, label = "F_lateral at h_cg = 1.35 m",
+           size = 2.8 * diagram_text_scale, color = "#E74C3C") +
+  annotate("segment", x = -0.45, xend = -0.45, y = 0, yend = -0.32, linewidth = 2.5, color = "#F39C12") +
+  annotate("text", x = -0.45, y = -0.5, label = "Anchor\nbolt(s)", size = 2.6 * diagram_text_scale, color = "#F39C12") +
+  annotate("segment", x = -0.45, xend = 0.45, y = -0.75, yend = -0.75,
+           arrow = arrow(ends = "both", length = unit(0.2, "cm")), linewidth = 0.8) +
+  annotate("text", x = 0, y = -0.92, label = "W = 0.9 m", size = 2.8 * diagram_text_scale) +
+  coord_fixed() +
+  xlim(-1.3, 1.3) + ylim(-1.1, 1.85) +
+  theme_void() +
+  labs(title = "Overturning Stability Check — Precision Inspection Fixture",
+       subtitle = "Tall, high-CG fixture: lateral disturbance vs. restoring moment about the leading edge") +
+  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * diagram_text_scale))
+```
+
+### Governing Calculation
+
+$$F_{lateral} = f_{lat} \times M\,g \qquad M_{ot} = F_{lateral} \times h_{cg} \qquad M_r = M\,g \times \frac{W}{2}$$
+
+$$SR = \frac{M_r}{M_{ot}}$$
+
+If $SR$ falls short of the required minimum, size the anchors needed to make up the difference, taking moments about the leading (pivot) edge with the anchor bolts acting at the trailing edge, moment arm $\approx W$:
+
+$$F_{anchor} = \frac{SF \times M_{ot} - M_r}{W}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $M$ | Machine mass | kg |
+| $W$ | Base footprint width, in the direction of concern | m |
+| $h_{cg}$ | Height of the center of gravity above the base | m |
+| $f_{lat}$ | Screening lateral force fraction (25-50% of weight) | dimensionless |
+| $F_{lateral}$ | Lateral static-equivalent disturbance force | N |
+| $M_{ot}$ | Overturning moment about the leading edge | N·m |
+| $M_r$ | Restoring moment from the machine's own weight | N·m |
+| $SR$ | Stability ratio | dimensionless |
+| $F_{anchor}$ | Required total anchor uplift (tension) force at the trailing edge | N |
+
+### Worked Example
+
+Live cell — try a different machine mass, base width, CG height, or lateral force fraction.
+
+```{webr-r}
+#| label: stability-anchor-06-11
+## Given: precision inspection fixture
+M_mass <- 450     # kg
+g <- 9.81
+W <- 0.9            # m, base footprint width
+h_cg <- 1.35        # m, height of the center of gravity above the base
+f_lat <- 0.30         # screening lateral force fraction
+
+F_lat <- f_lat * M_mass * g
+M_ot <- F_lat * h_cg
+M_r <- M_mass * g * (W / 2)
+SR <- M_r / M_ot
+SR_min <- 1.5
+
+cat(sprintf("Lateral static-equivalent force: %.1f N\n", F_lat))
+cat(sprintf("Overturning moment: %.1f N.m\n", M_ot))
+cat(sprintf("Restoring moment (gravity only, feet alone): %.1f N.m\n", M_r))
+cat(sprintf("Stability ratio SR = %.2f (need >= %.1f) -> %s\n\n",
+            SR, SR_min, ifelse(SR >= SR_min, "LEVELING FEET ALONE OK", "ANCHORING REQUIRED")))
+
+if (SR < SR_min) {
+  M_r_required <- SR_min * M_ot
+  n_anchors <- 2
+  F_anchor_total <- (M_r_required - M_r) / W
+  F_anchor_each <- F_anchor_total / n_anchors
+
+  cat(sprintf("Required restoring moment at SR = %.1f: %.1f N.m\n", SR_min, M_r_required))
+  cat(sprintf("Deficit moment to be covered by anchors: %.1f N.m\n", M_r_required - M_r))
+  cat(sprintf("Required anchor uplift force (arm = %.1f m): %.1f N total\n", W, F_anchor_total))
+  cat(sprintf("Per anchor (n = %d): %.1f N\n", n_anchors, F_anchor_each))
+}
+```
+
+**Sanity check:** this fixture's stability ratio (about 1.11) falls short of the 1.5 minimum — its height-to-base proportions put it in genuinely tippy territory before any anchoring is added, which is exactly the kind of installation where "it feels solid enough" is not a reliable judgment. The anchor tension force needed to close the gap (roughly 386 N per anchor, using two anchors) is modest compared to the pull-out and shear capacity of a typical concrete wedge or epoxy anchor of ordinary size — the calculation isn't demanding on the anchor hardware itself, but it does establish that anchoring is required at all, which is the decision that actually matters here. A real installation still needs the specific anchor selected and embedded per the manufacturer's published capacity tables for the floor slab's actual concrete strength and thickness — governed in Canada by **CSA A23.3** (design of concrete structures, including anchorage design in its Annex D), with **ACI 318 Appendix D** and **ACI 355** as the US equivalents.
+
+<details>
+<summary>Industry connection: audit-ready anchoring records in defense manufacturing</summary>
+
+For a defense-sector precision inspection fixture operating under a Controlled Goods Program registration, the stability calculation and the resulting anchor specification aren't just good practice — they become part of the documented installation qualification record an auditor can request, tying the fixture's measured performance back to a defensible engineering basis rather than "it was installed the way the last one was."
+
+</details>
+
+Installing or substantially modifying equipment anchoring on an existing production floor in Ontario is also a reasonable trigger to ask whether the change requires a **Pre-Start Health and Safety Review (PSR)** under **O. Reg. 851** — particularly if the anchoring is being added specifically because an earlier stability or vibration assessment identified a hazard, which is precisely the kind of finding a PSR review is meant to catch before the machine goes back into service.
+
+## Design Task 6: Vibration Awareness and Natural Frequency Separation
+
+### Scenario
+
+The mechanical designer implemented the fix from Design Task 2 for the battery-tray dispensing gantry — a stiffer beam section, chosen to clear the precision deflection budget. Before signing off on the design, the controls engineer asks one more question: does the *stiffer* beam also behave well dynamically, or did fixing the static deflection problem leave a structure that resonates with the axis's own move profile? A frame can pass every static deflection and stress check and still ruin positioning performance if its natural frequency sits too close to the frequency content the axis itself generates every time it accelerates, decelerates, and settles.
+
+### Design Guidelines and Rules of Thumb
+
+Every structure has one or more **natural frequencies** — frequencies at which it will freely oscillate if disturbed, and at which it responds with dramatically amplified motion if something keeps pushing it at (or near) that same frequency. A servo axis accelerating and decelerating along a beam isn't a smooth, gentle disturbance — the sharp changes in velocity at the start and end of each acceleration ramp contain real frequency content, roughly characterized by the inverse of the ramp time. If the frame's natural frequency sits too close to that excitation content, every move excites a lightly-damped structural oscillation that has to die out before the axis can settle to its final position — directly lengthening settle time, and in the worst case, never fully damping out before the next move begins.
+
+**Rule of thumb:** keep the frame's natural frequency at least 3x the highest significant excitation frequency the axis's move profile generates, and prefer 5x or more where precision settling time matters. Below about 3x separation, resonant amplification becomes a real risk; between 3x and 5x, the structure will generally behave but with less margin than a precision application deserves. This breaks down for heavily damped structures (a frame with substantial internal or added damping tolerates closer frequency separation than a lightly-damped welded steel or extrusion structure with almost no inherent damping) and for move profiles dominated by very low accelerations (a slow, gentle profile generates little high-frequency content in the first place, loosening the requirement).
+
+Vibration severity, once a machine is built and running, is evaluated in practice against **ISO 10816** (mechanical vibration — evaluation of machine vibration by measurements on non-rotating parts), used directly in Canadian practice with no separate CSA equivalent — the same way AGMA gear-rating standards are used directly, as noted elsewhere in this book. That standard is a *measurement and acceptance* tool for a finished machine; the natural-frequency separation check in this design task is the *design-stage* prediction that a well-designed frame shouldn't need much correction once ISO 10816 measurements are taken in the field.
+
+A simplified beam-and-mass model treats the beam as a spring, using the same stiffness relationship as the static deflection calculation ($k = P/\delta$, giving $k = 48EI/L^3$ for the point-load-at-midspan case), combined with an effective mass at the point of interest. That effective mass isn't just the carriage — the beam itself has mass, and some of it participates in the vibration.
+
+**Rule of thumb:** for a simply supported beam vibrating with a concentrated mass at midspan, include about 50% of the beam's own mass in the effective mass, in addition to the concentrated mass itself (a standard approximation from beam vibration theory, close to the exact Rayleigh-method coefficient of roughly 0.49 for this configuration). This breaks down for beams where the attached mass is small relative to the beam's own mass — for a lightly-loaded, long-span beam, the beam's own distributed mass and higher vibration modes dominate the behavior, and a full modal analysis (well beyond this simplified check) becomes worth doing.
+
+```{r fig-06-11-frequency-separation, echo=FALSE, fig.cap="Frame natural frequency vs. the axis's characteristic excitation frequency. The baseline beam clears the 3x minimum separation narrowly; the stiffened beam from Design Task 2's fix clears the stricter 5x guideline comfortably.", fig.align='center', fig.width=10, fig.height=6}
+library(ggplot2)
+
+freq_df <- data.frame(
+  case = factor(c("Axis excitation\n(1 / t_accel)", "Natural frequency\n(baseline beam)",
+                  "Natural frequency\n(stiffened beam)"),
+                levels = c("Axis excitation\n(1 / t_accel)", "Natural frequency\n(baseline beam)",
+                           "Natural frequency\n(stiffened beam)")),
+  freq_hz = c(12.0, 47.3, 104.1)
+)
+
+ggplot(freq_df, aes(x = case, y = freq_hz, fill = case)) +
+  annotate("rect", xmin = 0.5, xmax = 3.5, ymin = 12, ymax = 36, fill = "#E74C3C", alpha = 0.15) +
+  geom_col(width = 0.55) +
+  geom_text(aes(label = sprintf("%.1f Hz", freq_hz)), vjust = -0.4, size = 3.2 * diagram_text_scale) +
+  annotate("text", x = 0.65, y = 33.5, label = "Risk zone (< 3x excitation)",
+           size = 2.6 * diagram_text_scale, color = "#E74C3C", hjust = 0) +
+  scale_fill_manual(values = c("Axis excitation\n(1 / t_accel)" = "#F39C12",
+                                "Natural frequency\n(baseline beam)" = "#3498DB",
+                                "Natural frequency\n(stiffened beam)" = "#2ECC71")) +
+  ylim(0, 120) +
+  labs(title = "Structural Natural Frequency vs. Axis Excitation Frequency",
+       subtitle = "Baseline beam separation: 3.9x (narrow). Stiffened beam separation: 8.7x (comfortable).",
+       x = NULL, y = "Frequency (Hz)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+        axis.text = element_text(size = 9.5 * diagram_text_scale),
+        axis.title = element_text(size = 11 * diagram_text_scale))
+```
+
+### Governing Calculation
+
+$$k = \frac{48EI}{L^3} \qquad m_{eff} = m_{carriage} + 0.5\,m_{beam}$$
+
+$$f_n = \frac{1}{2\pi}\sqrt{\frac{k}{m_{eff}}}$$
+
+| Symbol | Description | Unit |
+| :--- | :--- | :--- |
+| $k$ | Effective beam stiffness at the point of interest | N/m |
+| $m_{carriage}$ | Mass of the carriage/tooling assembly | kg |
+| $m_{beam}$ | Total mass of the beam | kg |
+| $m_{eff}$ | Effective vibrating mass | kg |
+| $f_n$ | Natural frequency of the simplified beam/mass system | Hz |
+
+### Worked Example
+
+Live cell — check the baseline beam's natural frequency against the axis's move-profile excitation frequency.
+
+```{webr-r}
+#| label: natural-freq-baseline-06-11
+## Given: baseline gantry beam (Design Task 1 section)
+L <- 2400; E_steel <- 200000; I_beam <- 9.80e6      # mm, N/mm^2, mm^4
+m_carriage <- 48                                       # kg
+
+k_beam_Nmm <- 48 * E_steel * I_beam / L^3               # N/mm
+k_beam_Npm <- k_beam_Nmm * 1000                          # N/m
+
+## Beam mass: HSS 152x102x6.4, area 3087 mm^2, steel density 7850 kg/m^3
+rho_steel <- 7850
+area_mm2 <- 3087
+mass_per_length <- area_mm2 * 1e-6 * rho_steel            # kg/m
+m_beam_total <- mass_per_length * (L / 1000)
+
+m_eff <- m_carriage + 0.5 * m_beam_total
+f_n <- (1 / (2 * pi)) * sqrt(k_beam_Npm / m_eff)
+
+## Axis move profile: trapezoidal, 1/3-1/3-1/3, similar to the profile used
+## for servo sizing elsewhere in this book
+t_move <- 0.25                # s, dispensing axis move time
+t_accel <- t_move / 3            # s, acceleration ramp phase
+f_excite <- 1 / t_accel            # Hz, characteristic excitation frequency
+
+sep_ratio <- f_n / f_excite
+sep_min <- 3
+
+cat(sprintf("Beam stiffness: %.0f N/m\n", k_beam_Npm))
+cat(sprintf("Beam mass: %.1f kg (mass/length %.1f kg/m)\n", m_beam_total, mass_per_length))
+cat(sprintf("Effective vibrating mass: %.1f kg\n\n", m_eff))
+cat(sprintf("Natural frequency: %.2f Hz\n", f_n))
+cat(sprintf("Axis move time: %.2f s, acceleration phase: %.4f s\n", t_move, t_accel))
+cat(sprintf("Characteristic excitation frequency: %.2f Hz\n\n", f_excite))
+cat(sprintf("Separation ratio: %.2fx (need >= %dx, prefer >= 5x) -> %s\n",
+            sep_ratio, sep_min,
+            ifelse(sep_ratio >= sep_min, "PASSES minimum, but tight for a precision axis", "FAILS")))
+```
+
+**Sanity check:** at 47.3 Hz, the baseline beam's natural frequency clears the minimum 3x separation rule of thumb (3.94x) — but only just, and it falls well short of the more comfortable 5x margin this chapter recommends for precision settling behavior. For a machine whose whole reason for existing is placing an adhesive bead within a tight positional tolerance, "technically passes" is a thin margin to accept without a second look — which is exactly what the next cell checks.
+
+Live cell — check the same natural frequency calculation using the stiffened beam section selected in Design Task 2 to meet the precision deflection budget.
+
+```{webr-r}
+#| label: natural-freq-stiffened-06-11
+## Given: stiffened beam section (Design Task 2's required I to meet the deflection budget)
+L <- 2400; E_steel <- 200000
+I_required <- 4.75e7    # mm^4, from Design Task 2
+m_carriage <- 48          # kg
+
+k_new_Nmm <- 48 * E_steel * I_required / L^3
+k_new_Npm <- k_new_Nmm * 1000
+
+## Effective mass held the same as the baseline check for a direct comparison
+## (in practice, a larger section also weighs more, which would partially
+## offset the stiffness gain -- a real design would re-check beam mass too)
+m_eff <- 77.1   # kg, from the baseline case
+
+f_n_new <- (1 / (2 * pi)) * sqrt(k_new_Npm / m_eff)
+
+t_move <- 0.25; t_accel <- t_move / 3
+f_excite <- 1 / t_accel
+sep_ratio_new <- f_n_new / f_excite
+
+cat(sprintf("Stiffened beam stiffness: %.0f N/m (vs. %.0f N/m baseline)\n", k_new_Npm, 6806230))
+cat(sprintf("Natural frequency: %.2f Hz (vs. %.2f Hz baseline)\n", f_n_new, 47.29))
+cat(sprintf("Separation ratio: %.2fx (vs. %.2fx baseline)\n", sep_ratio_new, 3.94))
+cat(sprintf("-> %s\n", ifelse(sep_ratio_new >= 5,
+            "Comfortably clears even the stricter 5x precision-axis guideline",
+            "Still tight -- consider further stiffening or added damping")))
+```
+
+**Sanity check:** the same stiffness increase that fixed Design Task 2's static deflection problem (roughly 4.8x more $I$) pushes the natural frequency from 47.3 Hz to about 104 Hz — clearing the strict 5x separation guideline (8.7x) with real margin. This is the throughline of the whole chapter: **stiffness is the single structural lever that fixes both problems at once.** A stiffer frame deflects less under load *and* resists resonance better, because both the static deflection check and the natural frequency check are driven by the same underlying quantity, $EI/L^3$. That's also why this chapter keeps circling back to stiffness rather than strength — on a well-designed precision machine frame, it is almost always the one number that actually matters.
+
+## Summary
+
+```{r tbl-06-11-summary, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+summary_df <- data.frame(
+  `Design Task` = c(
+    "1. Beam bending & deflection",
+    "2. Stiffness-driven deflection limits",
+    "3. Extrusion vs. welded steel",
+    "4. Bolted joint clamp force",
+    "5. Leveling feet vs. anchoring",
+    "6. Natural frequency separation"
+  ),
+  `Governing Relationship` = c(
+    "$\\delta_{max}=PL^3/(48EI)$",
+    "$\\delta_{allow}=f_{frame}\\times T_{total}$; $I_{req}=PL^3/(48E\\delta_{allow})$",
+    "$Score=\\sum w_i s_i$ (weighted decision matrix)",
+    "$F_{clamp}=SF\\times F_{shear}/\\mu$",
+    "$SR=M_r/M_{ot}=\\dfrac{Mg(W/2)}{f_{lat}Mgh_{cg}}$",
+    "$f_n=\\dfrac{1}{2\\pi}\\sqrt{k/m_{eff}}$, $k=48EI/L^3$"
+  ),
+  `Key Rule of Thumb` = c(
+    "Check the load position that produces worst-case deflection; apply a 1.3-1.5x dynamic factor",
+    "L/240 is a starting reference, not a precision-axis target; derive the real budget from positioning tolerance",
+    "Extrusion for lighter-duty/modular/washdown; welded steel for heavy-duty/high-load bases",
+    "$\\mu \\approx 0.3$ for clean, dry, as-fabricated steel faces; verify for painted/contaminated surfaces",
+    "Require stability ratio $\\geq$ 1.5 for leveling feet alone; anchor if it falls short",
+    "Keep $f_n \\geq$ 3x (prefer 5x+) the axis's characteristic excitation frequency"
+  ),
+  check.names = FALSE
+)
+summary_df[] <- lapply(summary_df, tex_safe)
+
+kable(summary_df, caption = "Summary: Frame and Structural Design tasks", escape = FALSE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = knitr::is_html_output()) %>%
+  row_spec(0, bold = TRUE, background = "#4a86c7", color = "white") %>%
+  column_spec(1, width = "1in")
+```
+
+## Practice Problems
+
+<details>
+<summary>Design Task 1, Problem 1 (plug-in): deflection and stress for a smaller pick-and-place gantry</summary>
+
+A pick-and-place gantry beam spans 1.2 m, carrying a 15 kg carriage assembly with a 1.4x dynamic factor. The selected aluminum extrusion beam has $I = 2.1\times10^6\ \text{mm}^4$ and $S = 42{,}000\ \text{mm}^3$ about the bending axis, $E = 69{,}000\ \text{N/mm}^2$, and yield strength 255 MPa (6061-T6). Find the deflection, the bending stress, and check against L/240.
+
+**Solution:**
+
+$$P = 15 \times 9.81 \times 1.4 = 206.0\ \text{N}$$
+$$\delta_{max} = \frac{206.0 \times 1200^3}{48 \times 69000 \times 2.1\times10^6} = 0.206\ \text{mm}$$
+$$L/240 = 1200/240 = 5.0\ \text{mm} \rightarrow \textbf{PASSES}$$
+$$M_{max} = \frac{206.0 \times 1200}{4} = 61{,}800\ \text{N·mm} \qquad \sigma = \frac{61{,}800}{42{,}000} = 1.47\ \text{MPa} \approx 0.6\%\ \text{of yield}$$
+
+</details>
+
+<details>
+<summary>Design Task 1, Problem 2 (design decision): overhung fixture arm, cantilever vs. adding a second support</summary>
+
+A fixture designer wants to mount a 6 kg sensor bracket on a 400 mm arm cantilevered off the side of a machine frame, rather than route a second support back to an existing column 400 mm further along. What does the loading-case table in this design task suggest about that choice, and what would you recommend?
+
+**Answer:** The cantilever case deflects 16 times more than the same span, load, and section simply supported at both ends ($PL^3/3EI$ vs. $PL^3/48EI$) — so a cantilevered 400 mm arm carrying this load will sag dramatically more than the same arm would if its far end were tied back to the existing column. Unless there's a genuine physical obstruction preventing the second support (access, clearance for a moving part, etc.), tying the arm back to the column is almost always the better call: it turns a soft, resonance-prone cantilever into a much stiffer simply-supported (or even better, a short, fixed-both-ends) member for very little added material or cost. If a true cantilever is unavoidable, the arm's cross-section needs to be substantially deeper/stiffer than a simply-supported design would require to hit the same deflection target.
+
+</details>
+
+<details>
+<summary>Design Task 2, Problem 1 (plug-in): deflection budget for a tighter-tolerance axis</summary>
+
+An axis has a total positioning tolerance of 0.06 mm, with 15% of that budget allocated to frame deflection. The candidate beam actually deflects 0.015 mm under load. Does it pass?
+
+**Solution:**
+
+$$\delta_{allow} = 0.06 \times 0.15 = 0.009\ \text{mm}$$
+
+$$0.015\ \text{mm} > 0.009\ \text{mm} \rightarrow \textbf{FAILS}$$, even though 0.015 mm would look entirely negligible against any general L/240-style check.
+
+</details>
+
+<details>
+<summary>Design Task 2, Problem 2 (design decision): the required I comes back unreasonably large</summary>
+
+Solving for the required $I$ to meet a precision deflection budget returns a section so large it won't physically fit in the available envelope, and the next-larger standard beam size is much more expensive than the budget allows. What are your options?
+
+**Answer:** Increasing the section isn't the only lever. Adding an intermediate support (as shown in this design task's worked example) is often dramatically more effective, because deflection scales with the *cube* of the span — cutting the span in half cuts deflection to about 1/8, without changing the section at all. If a support truly can't be added (process access, part clearance), consider whether the load itself can be reduced or better distributed (e.g., splitting one heavy carriage into two lighter ones, or relocating the heaviest component off the critical span), or whether the total tolerance budget's *allocation* is unnecessarily conservative — revisiting the 15-20% frame-allocation assumption with the axis and controls engineers, if other contributors (rail straightness, servo error) have more margin to spare, is a legitimate systems-engineering move, not just "loosening the spec to make the problem go away." What's not an acceptable option is quietly accepting the deflection and hoping the process tolerates it — that's exactly the failure mode this design task exists to catch before the machine is built.
+
+</details>
+
+<details>
+<summary>Design Task 3, Problem 1 (plug-in): scoring a mid-size machine frame</summary>
+
+Using the same criterion scores as the worked example, apply weights of 25% stiffness, 20% modularity, 20% cost, 15% corrosion resistance, 20% ease of modification. Which construction wins?
+
+**Solution:**
+
+$$Score_{extrusion} = 0.25(2)+0.20(5)+0.20(4)+0.15(5)+0.20(5) = 0.5+1.0+0.8+0.75+1.0 = 4.05$$
+$$Score_{steel} = 0.25(5)+0.20(1)+0.20(3)+0.15(2)+0.20(2) = 1.25+0.2+0.6+0.3+0.4 = 2.75$$
+
+Aluminum extrusion wins under this balanced weighting (4.05 vs. 2.75).
+
+</details>
+
+<details>
+<summary>Design Task 3, Problem 2 (design decision): a food-plant washdown cart with a moderate load</summary>
+
+A food processing plant needs a mobile inspection cart, frequently moved between lines, operating in a washdown area, carrying a moderate 60 kg instrument payload — not light-duty, but not a heavy structural load either. Which construction would you lean toward, and what would change your mind?
+
+**Answer:** Lean toward aluminum extrusion: the washdown environment strongly favors extrusion's corrosion resistance (no coating to maintain or chip), the "frequently moved between lines" requirement favors light weight and the ability to easily add or relocate mounting brackets, and 60 kg is well within what a reasonably sized extrusion frame handles without needing exotic bracing. What would change the recommendation: if the cart also needs to survive being struck or dropped regularly (a genuine impact-load environment, not just a static payload), or if the 60 kg payload is concentrated in a way that creates a long unsupported span, the stiffness and toughness advantage of welded steel might outweigh extrusion's corrosion and weight benefits — in which case a welded stainless steel frame (accepting the higher cost) could be the better washdown-compatible answer instead of galvanized or painted mild steel.
+
+</details>
+
+<details>
+<summary>Design Task 4, Problem 1 (plug-in): clamp force for a heavier shear load</summary>
+
+A joint sees 500 N of shear load, with $\mu = 0.35$ (a better-prepared faying surface) and SF = 1.5, shared across 6 bolts. Find the required clamp force per bolt.
+
+**Solution:**
+
+$$F_{clamp} = \frac{1.5 \times 500}{0.35} = 2143\ \text{N} \qquad F_{clamp,per\ bolt} = \frac{2143}{6} = 357\ \text{N}$$
+
+</details>
+
+<details>
+<summary>Design Task 4, Problem 2 (design decision): a joint that sees regular impact loading</summary>
+
+A bolted frame joint on a stamping-adjacent transfer system sees occasional impact loading (a jam or mis-feed event), not just smooth servo-profile shear. Beyond simply increasing the safety factor in the clamp-force calculation, what else should the designer consider?
+
+**Answer:** A higher safety factor helps but doesn't address the real risk of impact loading: a sudden shock load can momentarily exceed the friction capacity and cause the joint to slip, and repeated slip-and-reseat cycles gradually relax bolt preload even if each individual event looks survivable on paper. For a joint genuinely exposed to impact or shock, consider a higher bolt grade with a correspondingly higher achievable preload (more margin against any single event exceeding the friction limit), a thread-locking method or preload-verification practice (torque-and-turn, or periodic re-torque checks) to guard against gradual loosening, and — where geometry allows — a secondary positive-location feature (a dowel pin or a shoulder/step in the mating parts) that can carry shear directly if the friction joint is ever momentarily overcome, rather than relying on friction alone as the sole line of defense.
+
+</details>
+
+<details>
+<summary>Design Task 5, Problem 1 (plug-in): stability ratio for a shorter, wider machine</summary>
+
+A machine has a mass of 300 kg, a base width of 1.2 m, and a CG height of 0.8 m. Using the 30% screening force fraction, find the stability ratio.
+
+**Solution:**
+
+$$F_{lat} = 0.30 \times 300 \times 9.81 = 882.9\ \text{N} \qquad M_{ot} = 882.9 \times 0.8 = 706.3\ \text{N·m}$$
+$$M_r = 300 \times 9.81 \times (1.2/2) = 1765.8\ \text{N·m} \qquad SR = 1765.8/706.3 = 2.50$$
+
+$SR = 2.50 \geq 1.5$, so leveling feet alone are adequate for this shorter, wider machine — a useful contrast with the tall, narrow fixture in the worked example.
+
+</details>
+
+<details>
+<summary>Design Task 5, Problem 2 (design decision): a borderline stability ratio</summary>
+
+A machine's calculated stability ratio comes out to 1.6 — just above the 1.5 minimum. Would you accept leveling feet alone, or anchor anyway? What additional information would help you decide?
+
+**Answer:** A ratio just above the threshold deserves the same scrutiny this chapter gave a peak-torque margin within 5% of a motor's rating elsewhere in this book: technically passing with almost no cushion is a different risk posture than passing comfortably. Before accepting feet alone, it's worth checking how sensitive the result is to the assumptions that went into it — is the 30% lateral force fraction genuinely representative of this floor's actual disturbance environment (nearby press impacts, forklift traffic, an overhead crane), or was it just the default screening value? Is the machine's CG height and mass known accurately, or estimated? If any of those inputs carries real uncertainty, a ratio of 1.6 could easily be a ratio of 1.3 with slightly different (still reasonable) assumptions. Given how inexpensive anchoring usually is relative to the cost of the machine and the process it supports, anchoring anyway — rather than relying on a thin, assumption-sensitive margin — is often the more defensible choice, especially in a facility (like the defense-sector example in this design task) where the decision needs to be documented and stand up to audit.
+
+</details>
+
+<details>
+<summary>Design Task 6, Problem 1 (plug-in): natural frequency of a stiffer, lighter system</summary>
+
+A structure has an effective stiffness $k = 2\times10^6\ \text{N/m}$ and an effective mass of 25 kg. Find the natural frequency, and check separation against a 15 Hz excitation frequency using the 3x rule of thumb.
+
+**Solution:**
+
+$$f_n = \frac{1}{2\pi}\sqrt{\frac{2\times10^6}{25}} = \frac{1}{2\pi}\sqrt{80{,}000} = \frac{282.8}{2\pi} \approx 45.0\ \text{Hz}$$
+$$\text{Separation} = 45.0/15 = 3.0\text{x} \rightarrow \textbf{PASSES the minimum (right at the threshold, not comfortably clear)}$$
+
+</details>
+
+<details>
+<summary>Design Task 6, Problem 2 (design decision): natural frequency close to the excitation frequency</summary>
+
+A completed machine's frame natural frequency turns out to be only 1.5x the axis's characteristic excitation frequency — well below even the 3x minimum. The frame is already built and installed. What are the practical options, short of scrapping the frame?
+
+**Answer:** Rebuilding the frame is rarely the first move once it's already installed. Practical options, roughly in order of how disruptive they are: (1) slow down the move profile — a longer acceleration ramp reduces the excitation frequency content directly, at the cost of cycle time, and is often the fastest fix to try first; (2) add bracing or gussets to the existing structure to raise its stiffness (and therefore its natural frequency) without a full rebuild — a diagonal brace between a column and the beam can meaningfully stiffen a frame for relatively little added material; (3) add mass strategically is usually the wrong direction (it *lowers* natural frequency, per $f_n \propto \sqrt{k/m}$) unless it's specifically a tuned vibration damper designed to absorb energy at the problem frequency, which is a specialized fix, not a first resort; (4) add damping (viscoelastic pads, tuned mass dampers) to reduce the amplification at resonance even if the frequency separation itself doesn't improve much. A full rebuild to properly re-stiffen the frame is the right long-term answer if the machine is a permanent, high-value asset and none of the above adequately fixes the settling-time or quality problem the close frequency separation is causing.
+
+</details>
+
+## Open-Ended Design Scenario
+
+<details>
+<summary>Capstone: structural design package for a defense-sector optical inspection gantry</summary>
+
+A defense contractor is specifying a new gantry-style optical inspection station to verify the dimensional accuracy of precision-machined components before final acceptance. The gantry beam spans 1.8 m between two welded steel columns, carrying a vision/metrology carriage (camera, lens stack, ring light, and a short-travel focus axis) with a combined moving mass of 22 kg. The station's documented accuracy requirement is a total positioning tolerance of 0.03 mm (30 microns) for the inspection head relative to the part, and the facility's engineering standard allocates no more than 20% of that total to structural deflection. The whole station — beam, columns, and base — stands 1.5 m tall and has a mass of 280 kg on a 0.75 m square base footprint, with a CG height of 1.0 m. The axis's inspection moves use a trapezoidal profile with a 0.4 s move time. This installation is subject to Controlled Goods Program documentation requirements, meaning every calculation in the qualification package needs to be traceable and defensible on its own.
+
+Using the methods developed in this chapter:
+
+1. Select a steel HSS section for the gantry beam and apply Design Task 1's method to find its deflection and bending stress under the carriage's design load (apply an appropriate dynamic factor).
+2. Apply Design Task 2's method to determine the allowable deflection budget from the station's accuracy requirement, and check whether your selected beam meets it. If it doesn't, decide whether to upsize the section or add an intermediate support, and justify the choice.
+3. Apply Design Task 3's decision framework: given that this is a fixed-installation precision metrology station (not a reconfigurable production cell), would you recommend welded steel or aluminum extrusion for the beam and columns? Build your own weighted decision matrix and defend your weights.
+4. Apply Design Task 4's method to size the clamp force for the beam-to-column bolted flange joint, given the axis's acceleration and a chosen number of bolts.
+5. Apply Design Task 5's method to check the station's overturning stability, and determine whether anchoring is required.
+6. Apply Design Task 6's method to check the beam's natural frequency against the axis's move-profile excitation frequency, using your final (possibly stiffened) beam section from step 2.
+
+There's no single correct numeric answer — different reasonable choices of beam section, bolt count, and anchor configuration will lead to different (defensible) specifications. The goal is a complete, self-consistent structural calculation package, in the style of this chapter's worked examples, that could be handed to a customer's quality representative as part of the station's acceptance documentation.
+
+</details>

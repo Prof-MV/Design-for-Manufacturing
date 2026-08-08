@@ -838,7 +838,7 @@ ggplot(df_pf, aes(x = time, y = condition)) +
   geom_line(colour = "#1565c0", linewidth = 1.2) +
   geom_vline(xintercept = t_P, colour = "#f57f17", linetype = "dashed", linewidth = 0.9) +
   geom_vline(xintercept = t_F, colour = "#c62828", linetype = "dashed", linewidth = 0.9) +
-  geom_segment(aes(x = t_P, xend = t_F, y = -4, yend = -4),
+  annotate("segment", x = t_P, xend = t_F, y = -4, yend = -4,
                arrow = arrow(ends = "both", length = unit(0.2, "cm")),
                colour = "#4caf50", linewidth = 0.8) +
   annotate("text", x = (t_P + t_F) / 2, y = -9,

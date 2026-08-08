@@ -1,0 +1,107 @@
+# Engineering Design Challenges in Electromechanical Systems
+
+```{r setup-06-00, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+# jQuery is needed by kableExtra's kePrint.js (tooltips/popovers) but Quarto's
+# Bootstrap 5 theme doesn't ship it by default.
+inject_jquery()
+```
+
+## Why This Part Exists
+
+Every chapter so far in this book has treated a single part, joint, or process in isolation: a bolted joint, a gear mesh, a casting. Real electromechanical machinery — a robot cell, a packaging line, a conveyor system — is a system of systems. The mechanical designer who sizes a gearbox has to know what torque the drive can actually deliver. The electrical designer who sizes a wire has to know what the motor will draw at startup. The safety engineer who specifies a light curtain has to know how fast the robot can actually stop. None of these decisions can be made correctly in a vacuum.
+
+This part of the book collects fourteen design challenges that show up constantly in electromechanical machine design, from the safety perimeter around a robot cell to the fuse protecting a 24 VDC sensor. Each chapter follows the same pattern you've already seen in this book: a realistic workplace scenario, the design guidelines and rules of thumb practitioners actually use, a governing calculation with every variable defined, and a fully worked numerical example. The part closes with a capstone scenario that forces you to move between chapters the way a real project does — sizing a cylinder in the morning and checking a safety distance in the afternoon, using the same machine.
+
+## Who This Is For
+
+You are training for work in **automotive manufacturing**, **food and beverage processing**, or **defense manufacturing** — three of Ontario's largest advanced manufacturing sectors. Each imposes its own flavour on electromechanical design:
+
+- **Automotive** plants demand short cycle times, tight cost control, and machines that can be serviced by a plant electrician at 2 a.m. Panels are commonly specified to a 65 kA short-circuit current rating (SCCR) because they sit on a stiff utility feed shared with dozens of other cells, and control networks are segregated from the plant's business network for both safety and cybersecurity reasons.
+- **Food and beverage processing** plants demand washdown-rated equipment (IP69K, CFIA-compliant sanitary construction), corrosion-resistant materials, and a documented sanitary design rationale, because a machine that cannot be hosed down and dried is a bacterial growth site waiting to happen.
+- **Defense manufacturing** demands traceable, auditable documentation at every step — drawings, calculations, and material certifications that can survive a customer or Controlled Goods Program audit — because the parts being made may be subject to export control and the customer's quality requirements often exceed commercial norms.
+
+You'll see all three sectors referenced throughout this part, usually with a concrete example rather than a general statement, because "food-safe" or "SCCR-rated" means nothing to a designer until it's attached to an actual specification.
+
+## How Codes and Standards Are Handled Here
+
+Machine design in Ontario is governed by a layered set of documents, and this part is consistent about the order in which it cites them:
+
+1. **Canadian and Ontario requirements first** — the Canadian Electrical Code (CEC) as adopted and amended by the Ontario Electrical Safety Code (OESC), relevant CSA standards (e.g., CSA Z434 for robot safety, CSA C22.2 electrical product standards), and Ontario's *Occupational Health and Safety Act* (OHSA) together with the Pre-Start Health and Safety Review (PSR) requirements in Ontario Regulation 851.
+2. **International or US equivalents second**, with meaningful differences noted — NEC, UL, IEC, ISO, IPC, and NEMA. You will work with American documentation constantly in this industry (most machine builders, drive manufacturers, and OEM specifications originate in the US or reference IEC), so this part treats fluency in both vocabularies as a core skill, not an afterthought.
+
+Standards are cited **by name and number only**. This book does not reproduce standard text, tables, or figures — standards are copyrighted documents, and a working designer is expected to own or have institutional access to the actual standard before applying it on a real project. Treat every citation here as a pointer to go read the source, not a substitute for it.
+
+## A Note on Rules of Thumb
+
+Experienced designers rely on rules of thumb constantly — a 25% cylinder oversize allowance, a 3% voltage drop limit, a 10:1 servo inertia ratio. They exist because they compress years of field experience into a number you can apply in five seconds, and most of the time they get you into the right neighbourhood fast. But every rule of thumb is a shortcut around a real calculation, and shortcuts have edges. This part flags every rule of thumb explicitly as a rule of thumb, and tells you where it breaks down — because the difference between a competent designer and a dangerous one is often just knowing when the shortcut stops working.
+
+## How the Chapters Fit Together
+
+```{r fig-part-06-roadmap, echo=FALSE, fig.cap="How the fourteen design challenges in this part connect to one another. Arrows show the most common flow of information between design tasks.", fig.align='center', fig.width=11, fig.height=7}
+library(ggplot2)
+
+nodes <- data.frame(
+  id = 1:14,
+  label = c("1. Robot Cell", "2. Machine Safety\nCircuits", "3. Control Panel",
+            "4. Wire & Cable\nProtection", "5. Bonding,\nGrounding, EMC",
+            "6. Motor, Drive,\nGearbox Sizing", "7. Pneumatic\nSystems",
+            "8. Linear Motion", "9. Shaft &\nCoupling", "10. Conveyor Design",
+            "11. Frame &\nStructure", "12. Thermal\nManagement",
+            "13. Power Supply,\nUPS, Battery", "14. Sensor &\nI/O Architecture"),
+  x = c(1, 2, 3, 4, 5, 2.5, 1, 2, 3, 1.5, 4, 5, 5, 4),
+  y = c(4, 4, 4, 4, 4, 2.5, 1, 1, 1, 2.5, 2.5, 2.5, 4, 1),
+  group = c("Safety & Cell", "Safety & Cell", "Electrical", "Electrical", "Electrical",
+            "Mechanical/Drive", "Mechanical/Drive", "Mechanical/Drive", "Mechanical/Drive",
+            "Mechanical/Drive", "Structural", "Electrical", "Electrical", "Sensing")
+)
+
+edges <- data.frame(
+  x = c(2, 1, 3, 4, 6, 6, 9, 10, 8, 11, 3, 13, 12),
+  y = c(4, 4, 4, 4, 2.5, 2.5, 1, 2.5, 1, 2.5, 4, 4, 4),
+  xend = c(1, 2, 4, 5, 2, 10, 6, 6, 11, 8, 12, 3, 3),
+  yend = c(4, 4, 4, 4, 2.5, 2.5, 2.5, 2.5, 2.5, 1, 2.5, 4, 4)
+)
+
+ggplot() +
+  geom_segment(data = edges, aes(x = x, y = y, xend = xend, yend = yend),
+               arrow = arrow(length = unit(0.2, "cm")), color = "grey55", linewidth = 0.6) +
+  geom_label(data = nodes, aes(x = x, y = y, label = label, fill = group),
+             size = 3.2 * diagram_text_scale, label.padding = unit(0.25, "lines")) +
+  scale_fill_manual(values = c("Safety & Cell" = "#E74C3C", "Electrical" = "#3498DB",
+                                "Mechanical/Drive" = "#2ECC71", "Structural" = "#F39C12",
+                                "Sensing" = "#9B59B6")) +
+  labs(title = "Design Dependencies Across the Fourteen Chapters", fill = "Domain") +
+  theme_void() +
+  theme(
+    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
+    legend.position = "bottom",
+    legend.text = element_text(size = 9 * diagram_text_scale),
+    legend.title = element_text(size = 10 * diagram_text_scale)
+  ) +
+  xlim(0.5, 5.5) + ylim(0.5, 4.5)
+```
+
+A few dependencies worth noting before you start:
+
+- The **stopping time** you calculate in Chapter 2 (Machine Safety Circuits) is a direct input to the **minimum safe distance** formula in Chapter 1 (Robot Cell Design). You cannot finish the Chapter 1 guarding calculation without Chapter 2.
+- The **motor and drive sizing** in Chapter 6 feeds directly into Chapter 9 (Shaft and Coupling), Chapter 10 (Conveyor Design), and the branch circuit protection sizing in Chapter 3 (Control Panel Design) and Chapter 4 (Wire and Cable Protection).
+- **Grounding and bonding** (Chapter 5) is not a standalone topic — it shows up again inside Chapter 3's panel layout, Chapter 6's VFD installation practice, and Chapter 14's analog sensor wiring.
+- **Thermal management** (Chapter 12) is Chapter 3's enclosure heat dissipation calculation applied one level down, at the component level.
+
+The part closes with a **capstone design scenario**: a complete pneumatic pick-and-place cell built around a small six-axis robot, where you'll size the cylinder and valve, select the infeed conveyor's motor and drive, size the control panel and wiring, design the bonding and grounding scheme, calculate the safety distance from the robot's stopping time, and check the frame deflection — pulling together at least six of the fourteen chapters into one design.
+
+## What You'll Need
+
+You should be comfortable with:
+
+- Basic circuit analysis (Ohm's law, series/parallel resistance, AC power basics)
+- Statics (force and moment balance, free body diagrams)
+- Algebra and simple derivatives — no integral calculus is required anywhere in this part
+
+Everywhere else, the chapters build the needed concept from first principles before using it. If a chapter needs the concept of RMS torque or a stress concentration factor, it defines it in place rather than assuming you've seen it before.
+
+Let's get started.

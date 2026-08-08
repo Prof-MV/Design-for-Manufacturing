@@ -217,7 +217,7 @@ food_data <- data.frame(complexity, cost)
 
 ggplot(food_data, aes(x = complexity, y = cost)) +
   geom_point(color = "green") +
-  geom_smooth(method = "lm", color = "darkgreen") +
+  geom_smooth(method = "lm", formula = y ~ x, color = "darkgreen") +
   theme_minimal() +
   labs(title = "Machining Cost vs Part Complexity",
        x = "Complexity Score",

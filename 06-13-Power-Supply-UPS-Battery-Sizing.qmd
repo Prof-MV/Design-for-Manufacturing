@@ -1,0 +1,940 @@
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
+# Power Supply, UPS, and Battery Sizing
+
+```{r setup-06-13, include=FALSE}
+# include the helpers.R file for pdf output of youtube on pdfs as a clickable link
+source("R/helpers.R")
+# include the required packages to make sure the page can be built.
+source("R/required_packages.R")
+# jQuery is needed by kableExtra's kePrint.js (tooltips/popovers) but Quarto's
+# Bootstrap 5 theme doesn't ship it by default.
+inject_jquery()
+library(tidyr)
+```
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+1. **Calculate** a 24VDC control panel's average and worst-case peak DC load from a mixed continuous/intermittent load list, correctly weighting intermittent loads by duty cycle.
+2. **Apply** the 70-80% loading rule of thumb to size a switch-mode power supply's nameplate rating from a calculated load, and **recognize** when short-duration peak loads don't need the same margin.
+3. **Distinguish** a power supply's continuous current rating from its peak/surge rating, and **verify** whether a specific combination of simultaneously-energized inrush loads stays within the supply's surge capability.
+4. **Calculate** the battery capacity (Ah) required to back up a 24VDC control system for a specified runtime, correctly applying depth-of-discharge and temperature derating.
+5. **Evaluate** when N+1 redundant power supply architecture with diode-OR (or smart-OR) combining is justified for a given process, using a documented cost/risk framework.
+6. **Design** a selective branch fusing scheme for a 24VDC distribution panel so a single downstream fault trips only its own branch, not the main supply or the whole bus.
+7. **Identify** the Canadian and international codes and standards that govern control power supply sizing, battery backup, and panel overcurrent protection.
+
+## Introduction
+
+A Tier 1 automotive supplier in Cambridge, Ontario is releasing a new welding cell control panel for build. The panel builder has a bill of materials full of glamorous items — servo drives, a safety PLC, a managed Ethernet switch, a stack of I/O modules — and one line item that barely gets a second look: a single 24VDC power supply, bolted to the top DIN rail, quietly feeding every one of those glamorous items. Nobody remembers the power supply when the cell is running well. Everybody remembers it the day it isn't — when a nuisance trip on the main 24VDC feed takes down the safety PLC, the network switch, and every sensor on the machine at once, and the line goes quiet in the middle of a shift because of a $200 component that was sized on a rough guess instead of a calculation.
+
+This chapter is about that $200 component, and the battery, the second supply, and the fuse terminal block sitting next to it. None of these are large or expensive relative to the machine they power, and none of them are glamorous. All of them are the difference between a fault that stops one sensor and a fault that stops the whole panel — or, worse, a power interruption that a process genuinely cannot tolerate at all. Six design questions come up, in roughly the order a panel builder actually encounters them: How much current does this panel's 24VDC bus actually need to carry, once every PLC, sensor, valve, and relay on the machine is accounted for — not just added up naively, but weighted by how much of the time each one is actually drawing current? Once that load is known, what size supply should be specified, and why does "just big enough" turn out to be the wrong answer? When the operator hits start and six solenoid valves and four contactors all pull in within the same fifty milliseconds, does the supply's surge rating actually cover that instant, even though its continuous rating comfortably would not? If this panel needs to keep running control logic through a brief loss of incoming power — a defense-sector system riding through a generator transfer, for instance — how big does the backup battery actually have to be, once you account for the fact that batteries don't deliver their full rated capacity in every situation? Is it ever worth paying for two power supplies instead of one, wired so that either can carry the whole panel and neither one fights the other? And finally, when a single sensor cable gets pinched and shorts to the machine frame, how do you make sure that fault blows a two-dollar fuse on that one branch instead of taking down the entire 24VDC bus — and with it, every other sensor, valve, and PLC input on the panel?
+
+This chapter builds a complete, checkable answer to all six, using a running example panel from that Cambridge welding cell, plus a defense-sector field-deployable system for the battery backup question and a second automotive example for the branch fusing question — the failure mode that motivates that design task is one of the most common and most avoidable causes of an automotive line stoppage.
+
+## Design Task 1: DC Power Budget with Duty-Cycle-Weighted Loads
+
+### Scenario
+
+The welding cell's electrical designer has a parts list for the panel's 24VDC bus: a safety PLC with a local I/O rack, a remote I/O drop out at the fixture, an HMI, a managed switch, a bank of photoelectric and inductive sensors, a set of pneumatic pilot solenoid valves that fire the clamps and pin-locate cylinders, a handful of interposing relays and contactors, and one clutch/brake solenoid on the cell's small index table. Before a supply can be specified, every one of these loads has to be added up correctly — and "correctly" turns out to mean something more careful than just summing every device's nameplate current.
+
+### Design Guidelines and Rules of Thumb
+
+Every 24VDC load in a control panel falls into one of two categories, and mixing them up is the single most common mistake in a first-pass load budget.
+
+**Continuous loads** draw roughly the same current the entire time the panel is powered, whether or not the machine is cycling. A PLC CPU, an I/O rack's backplane, an HMI's backlight and processor, a managed Ethernet switch, and — this one surprises people — the sensor bank. A photoelectric or inductive proximity sensor draws its supply current continuously to power its internal electronics and stay ready to switch its output; that current doesn't go away when the part it's watching for isn't present. Loop-powered analog transmitters behave the same way.
+
+**Intermittent loads** draw current only while they're actually energized: a solenoid valve's coil while the valve is shifted, a relay or contactor's coil while it's picked, a clutch/brake solenoid while it's engaged. These loads have a nameplate (full-on) current, but that current only appears on the bus for a fraction of the panel's operating time — the load's **duty cycle**, the fraction of time the coil is actually energized during a representative cycle.
+
+Adding every load's full nameplate current together, continuous and intermittent alike, produces a number that's both wrong and useless: it overstates the load the supply actually has to carry on a sustained basis (because intermittent loads are rarely all on at once, and never on continuously), while still not being the right number to check against the supply's brief peak/surge capability either — that's a separate check, covered in Design Task 3. What a load budget actually needs is two different numbers, each answering a different design question:
+
+- An **average (duty-cycle-weighted) load**, which represents the sustained current the supply has to deliver hour after hour, shift after shift — this is the number the 70-80% loading rule of thumb (Design Task 2) is checked against.
+- A **worst-case coincident peak**, which assumes every intermittent load happens to be on at the same instant — a conservative, not-necessarily-realistic snapshot, but the right one to size against a supply's continuous rating if it can plausibly persist for more than a few seconds (as opposed to a millisecond-scale inrush transient, which Design Task 3 handles separately).
+
+**Rule of thumb:** for a first-pass panel load budget, use a duty cycle estimated from the process cycle — the fraction of the cycle time a given valve, relay, or clutch is actually energized — rather than guessing a round number like 50%. This breaks down for loads whose "on" time doesn't track the process cycle at all (a door-interlock solenoid that's energized only during changeover, a heater band that cycles on its own thermostat) — those need their own duty-cycle estimate from their own controlling logic, not the machine's production cycle time.
+
+### Governing Calculation
+
+$$
+I_{avg} = \sum_{i} I_{cont,i} \;+\; \sum_{j} \left( I_{interm,j} \times DC_j \right)
+$$
+
+$$
+I_{peak} = \sum_{i} I_{cont,i} \;+\; \sum_{j} I_{interm,j}
+$$
+
+| Symbol | Definition | Units |
+|:-------|:-----------|:------|
+| $I_{cont,i}$ | Steady-state current of continuous load $i$ (PLC, I/O, HMI, switch, sensors, loop power) | A |
+| $I_{interm,j}$ | Full nameplate (energized) current of intermittent load $j$ (valve, relay, clutch/brake coil) | A |
+| $DC_j$ | Duty cycle of intermittent load $j$ — fraction of cycle time energized | dimensionless (0-1) |
+| $I_{avg}$ | Duty-cycle-weighted average DC load on the bus | A |
+| $I_{peak}$ | Worst-case coincident peak, assuming all intermittent loads energized simultaneously | A |
+
+### Worked Example
+
+```{r loadbudget-06-13, echo=TRUE}
+## Continuous loads on the welding cell's 24VDC bus (A)
+continuous_loads <- c(
+  "Safety PLC CPU + base I/O"        = 1.20,
+  "Remote I/O drop (fixture)"        = 0.85,
+  "HMI panel (10-inch)"              = 0.45,
+  "Managed Ethernet switch"          = 0.30,
+  "Safety relay module"              = 0.18,
+  "Analog loop power (8 transmitters, 24 mA each)" = 0.19,
+  "Panel door pilot lights"          = 0.10,
+  "Photoelectric/inductive sensors (32 @ 30 mA)"   = 0.96
+)
+
+## Intermittent loads: nameplate current and duty cycle from the process cycle
+valves_n   <- 14;  valves_I   <- 0.45; valves_dc <- 0.25   # pneumatic pilot valves
+relays_n   <- 6;   relays_I   <- 0.09; relays_dc <- 0.70   # interposing relays/contactors
+clutch_I   <- 1.80; clutch_dc <- 0.15                      # index table clutch/brake solenoid
+
+valve_nameplate  <- valves_n * valves_I
+valve_avg        <- valve_nameplate * valves_dc
+relay_nameplate  <- relays_n * relays_I
+relay_avg        <- relay_nameplate * relays_dc
+clutch_nameplate <- clutch_I
+clutch_avg       <- clutch_I * clutch_dc
+
+I_cont_total   <- sum(continuous_loads)
+I_interm_peak  <- valve_nameplate + relay_nameplate + clutch_nameplate
+I_interm_avg   <- valve_avg + relay_avg + clutch_avg
+
+I_avg  <- I_cont_total + I_interm_avg
+I_peak <- I_cont_total + I_interm_peak
+
+cat("Continuous load total:", round(I_cont_total, 3), "A\n\n")
+
+cat("Intermittent loads:\n")
+cat(sprintf("  Pilot valves:  %2d x %.2f A, duty %.0f%% -> nameplate %.2f A, avg %.3f A\n",
+            valves_n, valves_I, valves_dc * 100, valve_nameplate, valve_avg))
+cat(sprintf("  Relays/contactors: %d x %.2f A, duty %.0f%% -> nameplate %.2f A, avg %.3f A\n",
+            relays_n, relays_I, relays_dc * 100, relay_nameplate, relay_avg))
+cat(sprintf("  Clutch/brake:  1 x %.2f A, duty %.0f%% -> nameplate %.2f A, avg %.3f A\n\n",
+            clutch_I, clutch_dc * 100, clutch_nameplate, clutch_avg))
+
+cat("Intermittent nameplate total (all coincident):", round(I_interm_peak, 3), "A\n")
+cat("Intermittent duty-weighted total (average):    ", round(I_interm_avg, 3), "A\n\n")
+
+cat("AVERAGE (duty-weighted) bus load, I_avg  =", round(I_avg, 2), "A  (", round(I_avg * 24, 1), "W )\n")
+cat("PEAK (worst-case coincident) bus load, I_peak =", round(I_peak, 2), "A  (", round(I_peak * 24, 1), "W )\n")
+```
+
+```{r tbl-06-13-load-budget, echo=FALSE, message=FALSE}
+load_budget <- tribble(
+  ~Load, ~Type, ~Qty, ~`Unit A`, ~`Duty Cycle`, ~`Avg Contribution (A)`, ~`Peak Contribution (A)`,
+  "Safety PLC CPU + base I/O", "Continuous", 1, 1.20, "100%", 1.20, 1.20,
+  "Remote I/O drop", "Continuous", 1, 0.85, "100%", 0.85, 0.85,
+  "HMI panel", "Continuous", 1, 0.45, "100%", 0.45, 0.45,
+  "Managed switch", "Continuous", 1, 0.30, "100%", 0.30, 0.30,
+  "Safety relay module", "Continuous", 1, 0.18, "100%", 0.18, 0.18,
+  "Analog loop power (8 x 24 mA)", "Continuous", 8, 0.024, "100%", 0.19, 0.19,
+  "Door pilot lights", "Continuous", 1, 0.10, "100%", 0.10, 0.10,
+  "Sensors (32 x 30 mA)", "Continuous", 32, 0.03, "100%", 0.96, 0.96,
+  "Pilot solenoid valves", "Intermittent", 14, 0.45, "25%", 1.58, 6.30,
+  "Interposing relays/contactors", "Intermittent", 6, 0.09, "70%", 0.38, 0.54,
+  "Index table clutch/brake", "Intermittent", 1, 1.80, "15%", 0.27, 1.80
+)
+
+load_budget %>%
+  kbl(caption = "24VDC load budget for the welding cell control panel",
+      digits = 2) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, background = "#2C3E50", color = "white") %>%
+  row_spec(9:11, background = "#FDF2E3")
+```
+
+```{r fig-06-13-load-budget, echo=FALSE, fig.cap="Average (duty-weighted) versus worst-case coincident peak DC load on the panel's 24VDC bus, broken into continuous and intermittent contributions.", fig.align='center', fig.width=9, fig.height=6}
+budget_df <- data.frame(
+  Scenario  = rep(c("Average (duty-weighted)", "Peak (worst-case coincident)"), each = 2),
+  Load_Type = rep(c("Continuous", "Intermittent"), 2),
+  Current_A = c(4.23, 2.223, 4.23, 8.64)
+)
+budget_df$Scenario <- factor(budget_df$Scenario,
+                              levels = c("Average (duty-weighted)", "Peak (worst-case coincident)"))
+
+ggplot(budget_df, aes(x = Scenario, y = Current_A, fill = Load_Type)) +
+  geom_col(color = "black", width = 0.55) +
+  scale_fill_manual(values = c("Continuous" = "#3498DB", "Intermittent" = "#F39C12")) +
+  annotate("text", x = 1, y = 4.23 + 2.223 + 0.5, label = "6.45 A total", fontface = "bold",
+           size = 3.6 * diagram_text_scale) +
+  annotate("text", x = 2, y = 4.23 + 8.64 + 0.5, label = "12.87 A total", fontface = "bold",
+           size = 3.6 * diagram_text_scale) +
+  labs(title = "24VDC Bus Load: Average vs. Worst-Case Peak",
+       x = NULL, y = "Current (A)", fill = "Load type") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * diagram_text_scale),
+    axis.text = element_text(size = 10.5 * diagram_text_scale),
+    legend.position = "bottom",
+    legend.text = element_text(size = 10 * diagram_text_scale)
+  )
+```
+
+**Sanity check:** the peak (12.87 A) is exactly double the average (6.45 A), and the gap between them is entirely explained by the intermittent loads — the continuous total is identical in both bars. That's exactly the pattern this design task exists to catch: a designer who simply summed every nameplate current would specify a supply almost twice as large as the panel actually needs on a sustained basis, while a designer who only looked at the average would silently miss the fact that a startup or all-valves-fire event could briefly draw far more.
+
+## Design Task 2: Sizing the Supply — the 70-80% Loading Rule of Thumb
+
+### Scenario
+
+With the load budget from Design Task 1 in hand, the panel builder now has to pick an actual catalog power supply. A quick web search turns up 5A, 10A, 20A, and 40A models from the panel's preferred vendor, all at 24VDC. The average bus load came out to 6.45 A — so is a 5A supply enough, since the "real" load is less than that on average? This is exactly the wrong question to ask, and answering it correctly is this design task.
+
+### Design Guidelines and Rules of Thumb
+
+A switch-mode power supply's nameplate rating is a **continuous** rating — the current it can deliver indefinitely, at a stated ambient temperature, without exceeding its internal thermal limits or shortening its service life. Running a supply at 100% of that rating continuously leaves no margin for three things that are all but guaranteed to happen over a panel's service life: the supply itself aging (electrolytic capacitors and other components in the power stage degrade with heat and time, and a supply's effective capability drifts down slightly as it ages, not up); ambient temperature derating (most SMPS datasheets specify full output only up to a stated ambient, commonly 40-50°C, with output current derated above that — a panel in a hot mezzanine or next to a furnace load runs hotter than the shop floor average); and future additions (a panel that's "exactly" sized on day one has zero room for the next project's "just add one more I/O module to this panel" request, which happens on almost every machine's service life).
+
+**Rule of thumb:** size a supply's nameplate continuous rating so the panel's average (duty-weighted) load represents no more than about 70-80% of that rating. This gives margin for aging, ambient derating, and future load growth without paying for capacity that will never be used. This rule of thumb is specifically about *sustained* loading — it breaks down, and shouldn't be applied, to a load that's only present briefly and stays within the supply's separately-published peak/surge rating and duration limit (covered in Design Task 3). A supply that would fail the 70-80% rule against a five-minute continuous load might be entirely fine against a fifty-millisecond transient of the same magnitude, because the supply's thermal mass and current-limiting circuitry are built to ride through short transients that would overheat it if sustained.
+
+Because standard catalog supplies come in discrete current steps (2.5A, 5A, 10A, 20A, 40A are common), the selected size will rarely land exactly at 75% loading — it's normal, and perfectly acceptable, to land somewhat below the 70-80% band (more conservative) when the next standard size up is the only option that clears the load at all. What the rule of thumb is actually protecting against is landing *above* 80%, or worse, at or over 100% — that's the case that genuinely calls for the next size up, not a judgment call.
+
+### Governing Calculation
+
+$$
+P_{supply,nameplate} \geq \frac{P_{load,avg}}{f_{loading}} \qquad f_{loading} \in [0.70,\ 0.80]
+$$
+
+| Symbol | Definition | Units |
+|:-------|:-----------|:------|
+| $P_{load,avg}$ | Panel's average (duty-cycle-weighted) DC power draw, from Design Task 1 | W |
+| $f_{loading}$ | Target loading fraction (0.70-0.80 per the rule of thumb) | dimensionless |
+| $P_{supply,nameplate}$ | Minimum acceptable supply continuous nameplate rating | W |
+
+```{r fig-06-13-loading-gauge, echo=FALSE, fig.cap="Supply loading zones: comfortable margin, the 70-80% target band, the caution zone, and overload. The selected 10A supply lands at 64.5% loading, on the conservative side of the target band because standard catalog sizes only step in discrete increments.", fig.align='center', fig.width=10, fig.height=4}
+ggplot() +
+  annotate("rect", xmin = 0,   xmax = 70,  ymin = 0.2, ymax = 0.8, fill = "#2ECC71", alpha = 0.5) +
+  annotate("rect", xmin = 70,  xmax = 80,  ymin = 0.2, ymax = 0.8, fill = "#F1C40F", alpha = 0.6) +
+  annotate("rect", xmin = 80,  xmax = 100, ymin = 0.2, ymax = 0.8, fill = "#E67E22", alpha = 0.5) +
+  annotate("rect", xmin = 100, xmax = 125, ymin = 0.2, ymax = 0.8, fill = "#E74C3C", alpha = 0.5) +
+  annotate("text", x = 35,  y = 0.5, label = "Comfortable\nmargin", size = 3 * diagram_text_scale) +
+  annotate("text", x = 75,  y = 0.5, label = "70-80%\ntarget band", size = 3 * diagram_text_scale) +
+  annotate("text", x = 90,  y = 0.5, label = "Caution", size = 3 * diagram_text_scale) +
+  annotate("text", x = 112, y = 0.5, label = "Overload", size = 3 * diagram_text_scale, color = "white") +
+  annotate("segment", x = 64.5, xend = 64.5, y = 0, yend = 1.05, linewidth = 1.3, color = "black") +
+  annotate("point", x = 64.5, y = 1.05, size = 3.5, color = "black") +
+  annotate("text", x = 64.5, y = 1.18, label = "Selected 10A supply: 64.5%",
+           size = 3.2 * diagram_text_scale, fontface = "bold") +
+  scale_x_continuous(limits = c(0, 135), breaks = seq(0, 120, 20)) +
+  labs(x = "Loading (% of nameplate continuous rating)", y = NULL) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(size = 11 * diagram_text_scale),
+    axis.text.x = element_text(size = 10 * diagram_text_scale),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+```
+
+### Worked Example
+
+Live cell — try a different average load or a different catalog supply size and see whether it lands in the target band, below it, or over it.
+
+```{webr-r}
+#| label: supply-sizing-06-13
+## Average (duty-weighted) bus load from the Design Task 1 load budget
+P_load_avg <- 154.9   # W  (I_avg = 6.453 A at 24VDC)
+
+f_lo <- 0.70; f_hi <- 0.80
+P_required_lo <- P_load_avg / f_hi   # smallest supply that still clears the upper (80%) bound
+P_required_hi <- P_load_avg / f_lo   # supply that would sit right at the lower (70%) bound
+
+cat(sprintf("Average load: %.1f W (%.2f A at 24VDC)\n", P_load_avg, P_load_avg / 24))
+cat(sprintf("Minimum nameplate rating to stay at/under 80%% loading: %.1f W\n", P_required_lo))
+cat(sprintf("Nameplate rating that lands right at 70%% loading:      %.1f W\n\n", P_required_hi))
+
+## Standard catalog supply sizes at 24VDC (A -> W)
+catalog_A <- c(2.5, 5, 10, 20, 40)
+catalog_W <- catalog_A * 24
+
+cat("Catalog options:\n")
+for (i in seq_along(catalog_A)) {
+  loading_pct <- P_load_avg / catalog_W[i] * 100
+  verdict <- if (loading_pct > 100) {
+    "FAILS -- overloaded on average load alone"
+  } else if (loading_pct > 80) {
+    "CAUTION -- exceeds 80% target"
+  } else if (loading_pct >= 70) {
+    "PASSES -- within 70-80% target band"
+  } else {
+    "PASSES -- conservative (below target band, still acceptable)"
+  }
+  cat(sprintf("  %2.0fA (%3.0fW): loading = %5.1f%%  -> %s\n",
+              catalog_A[i], catalog_W[i], loading_pct, verdict))
+}
+
+cat("\n-> Select the 10A (240W) supply: the smallest standard size that clears\n")
+cat("   the load with margin. Its 64.5% loading sits a bit below the 70-80%\n")
+cat("   band -- conservative, not a failure -- because 5A is not enough and\n")
+cat("   standard sizes only step in 5A/10A/20A increments.\n")
+```
+
+**Sanity check:** the 5A supply fails outright (loading over 100% on the *average* load alone, before any inrush is even considered), and the 20A supply would sit at a wasteful 32% loading. The 10A supply is the only standard size that both clears the load and stays reasonably close to the target band — a good example of how the rule of thumb narrows a catalog search to essentially one right answer, rather than leaving the designer to guess.
+
+<details>
+<summary>Industry connection: why "just order a bigger one" isn't free</summary>
+
+On an automotive program with dozens of near-identical panels being built to a common bill of materials, oversizing "just to be safe" on every panel compounds: a 20A supply instead of a 10A supply on 40 panels is a real line item in a sourcing review, and it's exactly the kind of unjustified margin a cost-reduction team will flag and ask an engineer to defend — having the 70-80% loading calculation on file is the difference between defending the spec in one sentence and re-deriving it under schedule pressure.
+
+</details>
+
+## Design Task 3: Inrush and Motor/Valve Surge Allowance
+
+### Scenario
+
+The 10A supply selected in Design Task 2 comfortably clears the average load. But every shift, an operator presses the cell's start pushbutton, and the PLC's home/reset sequence energizes six of the panel's pneumatic pilot valves and four machine-run contactors within the same PLC scan — essentially simultaneously. Does the supply's continuous 10A rating even apply to that instant, and if not, is there a different rating that does?
+
+### Design Guidelines and Rules of Thumb
+
+Three families of load in a typical 24VDC panel draw meaningfully more current for a brief moment than their steady running value:
+
+- **Solenoid valve pull-in.** Many 24VDC pneumatic pilot valves use a dual pull-in/holding coil design (sometimes built into the valve, sometimes handled by driver electronics): a higher current pulls the plunger in and seats it firmly against the spring and pilot pressure in the first tens of milliseconds, after which the circuit switches to a lower holding current — enough to keep the plunger seated, but not enough to keep dissipating full pull-in power as heat for the rest of the cycle. The pull-in current on this style of valve is commonly on the order of 2-3x the holding current, for roughly 20-80 ms.
+- **Contactor and relay coil inrush.** A coil's manufacturer datasheet typically distinguishes an initial (inrush) current from a lower sealed/holding current once the armature has fully closed the magnetic circuit; depending on coil design this can be several times the sealed current, again for a brief, millisecond-scale window.
+- **Capacitive load inrush.** Any device with meaningful bulk capacitance across its 24VDC input — a card with an onboard DC-DC converter, a VFD's control power input, an HMI with a large input filter cap — draws a brief charging current spike when it's first connected or powered, well above its steady-state draw, until that capacitance charges up.
+
+None of this shows up in the continuous rating from Design Task 2. Supply manufacturers publish a **separate peak/surge rating** for exactly this reason — commonly expressed as a percentage of the continuous rating for a stated maximum duration (for example, 150% of nameplate current for up to 1 second, after which the supply current-limits or shuts down to protect itself). The correct check is not "does this instant's current stay under the continuous rating" — it almost never will, even for a well-designed panel — but "does this instant's current stay under the *surge* rating, for no longer than the surge rating's stated duration."
+
+**Rule of thumb:** when checking a start-up or reset event against a supply's surge rating, sum the *actual* subset of loads that the control program energizes simultaneously at that instant — not every intermittent load on the panel. This breaks down badly if the PLC program changes later (a new interlock, a modified reset sequence, a fault-recovery routine that re-fires everything at once) without the surge check being revisited — the worked example below shows exactly how much difference the "planned" event and a plausible "everything at once" fault condition make.
+
+### Governing Calculation
+
+$$
+I_{surge,required} = I_{run} + \sum_{k} I_{inrush,k}
+$$
+
+Compared against the supply's published surge rating, valid only for its stated duration:
+
+$$
+I_{surge,required} \leq I_{surge,rated} \qquad \text{for } t_{event} \leq t_{surge,rated}
+$$
+
+| Symbol | Definition | Units |
+|:-------|:-----------|:------|
+| $I_{run}$ | Steady continuous load already on the bus at the moment the event occurs | A |
+| $I_{inrush,k}$ | Pull-in/inrush current of simultaneously-energized load $k$ | A |
+| $I_{surge,required}$ | Total instantaneous current demand during the event | A |
+| $I_{surge,rated}$ | Supply's published peak/surge current rating | A |
+| $t_{surge,rated}$ | Maximum duration the supply can sustain $I_{surge,rated}$ | s |
+
+### Worked Example
+
+Live cell — try changing the number of valves/contactors that fire together, or the pull-in multipliers, and see when the surge check flips from pass to fail.
+
+```{webr-r}
+#| label: inrush-check-06-13
+## Continuous background load already running when the start event occurs
+I_run <- 4.23   # A (all continuous loads from Design Task 1)
+
+## Planned start event: 6 of the panel's 14 pilot valves and 4 of its 6
+## contactors fire simultaneously in the home/reset sequence
+valve_holding_A     <- 0.45
+valve_pullin_factor <- 2.5
+n_valves_start      <- 6
+
+relay_holding_A       <- 0.09
+contactor_pullin_factor <- 4
+n_contactors_start     <- 4
+
+valve_pullin_each  <- valve_holding_A * valve_pullin_factor
+valve_pullin_total <- valve_pullin_each * n_valves_start
+
+contactor_pullin_each  <- relay_holding_A * contactor_pullin_factor
+contactor_pullin_total <- contactor_pullin_each * n_contactors_start
+
+I_surge_planned <- I_run + valve_pullin_total + contactor_pullin_total
+
+## Supply's published rating (10A continuous, from Design Task 2)
+I_cont_rated  <- 10
+surge_pct     <- 150   # % of continuous, per datasheet
+t_surge_rated <- 1.0   # s
+I_surge_rated <- I_cont_rated * surge_pct / 100
+
+cat(sprintf("Background continuous load: %.2f A\n", I_run))
+cat(sprintf("Valve pull-in: %d valves x %.3f A = %.2f A\n", n_valves_start, valve_pullin_each, valve_pullin_total))
+cat(sprintf("Contactor pull-in: %d contactors x %.3f A = %.2f A\n\n", n_contactors_start, contactor_pullin_each, contactor_pullin_total))
+
+cat(sprintf("Total instantaneous demand, planned start event: %.2f A\n", I_surge_planned))
+cat(sprintf("Supply surge rating: %.0f%% of %dA = %.1f A, for up to %.1f s\n",
+            surge_pct, I_cont_rated, I_surge_rated, t_surge_rated))
+cat(sprintf("Event duration (~50 ms) is well inside the %.1f s surge window.\n\n", t_surge_rated))
+
+margin_pct <- (I_surge_rated - I_surge_planned) / I_surge_rated * 100
+if (I_surge_planned <= I_surge_rated) {
+  cat(sprintf("PASSES: %.2f A <= %.1f A surge rating (margin %.1f%%)\n\n", I_surge_planned, I_surge_rated, margin_pct))
+} else {
+  cat(sprintf("FAILS: %.2f A exceeds %.1f A surge rating\n\n", I_surge_planned, I_surge_rated))
+}
+
+## Fault scenario: a program fault re-fires all 14 valves at once instead of 6
+n_valves_fault  <- 14
+valve_pullin_fault_total <- valve_pullin_each * n_valves_fault
+I_surge_fault <- I_run + valve_pullin_fault_total + contactor_pullin_total
+
+cat("Fault scenario: all 14 valves fire simultaneously instead of 6\n")
+cat(sprintf("Total instantaneous demand: %.2f A\n", I_surge_fault))
+if (I_surge_fault <= I_surge_rated) {
+  cat("Still within the surge rating: PASSES\n")
+} else {
+  cat(sprintf("Exceeds the %.1f A surge rating by %.2f A: FAILS\n", I_surge_rated, I_surge_fault - I_surge_rated))
+  cat("Fix: sequence/stagger the PLC's fault-recovery logic so valves don't\n")
+  cat("all fire on the same scan, rather than buying a larger supply for a\n")
+  cat("fault condition the program should simply avoid creating.\n")
+}
+```
+
+```{r fig-06-13-inrush-timeline, echo=FALSE, fig.cap="Instantaneous 24VDC bus current during the planned start event (left) and an all-valves fault condition (right). The planned event clears the supply's surge rating; the fault event does not.", fig.align='center', fig.width=11, fig.height=5.5}
+t_seq <- seq(-50, 300, by = 1)
+
+I_planned <- ifelse(t_seq < 0, 4.23, ifelse(t_seq < 50, 12.42, 7.29))
+I_fault   <- ifelse(t_seq < 0, 4.23, ifelse(t_seq < 50, 21.42, 10.89))
+
+timeline_df <- rbind(
+  data.frame(t_ms = t_seq, I_A = I_planned, scenario = "Planned start (6 valves, 4 contactors)"),
+  data.frame(t_ms = t_seq, I_A = I_fault,   scenario = "Fault: all 14 valves + 4 contactors")
+)
+timeline_df$scenario <- factor(timeline_df$scenario,
+                                levels = c("Planned start (6 valves, 4 contactors)",
+                                           "Fault: all 14 valves + 4 contactors"))
+
+ggplot(timeline_df, aes(x = t_ms, y = I_A)) +
+  geom_step(color = "#3498DB", linewidth = 1.1) +
+  annotate("segment", x = -50, xend = 300, y = 10, yend = 10, linetype = "dotted", color = "grey40", linewidth = 0.8) +
+  annotate("segment", x = -50, xend = 300, y = 15, yend = 15, linetype = "dashed", color = "#E74C3C", linewidth = 0.9) +
+  facet_wrap(~scenario, nrow = 1) +
+  labs(title = "24VDC Bus Current During a Start Event",
+       subtitle = "Dotted line: 10A continuous rating. Dashed red line: 15A surge rating (150% for 1 s).",
+       x = "Time from pushbutton press (ms)", y = "Bus current (A)") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
+    plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+    strip.text = element_text(size = 10 * diagram_text_scale, face = "bold"),
+    axis.title = element_text(size = 11 * diagram_text_scale),
+    axis.text = element_text(size = 9.5 * diagram_text_scale)
+  )
+```
+
+**Sanity check:** the planned event (12.42 A) clears the 15 A surge rating with a healthy 17% margin, well inside the 1-second surge window for a transient that only lasts about 50 ms — a comfortable pass. The fault scenario (21.42 A) blows straight through the surge rating, and the figure shows why: it's not a subtle miss, it's a clear failure that would trip the supply's protection every time the fault condition occurs. Worth noting too: if all 14 valves stayed energized for more than the brief pull-in window (a stuck fault, not a transient), their *combined holding current alone* (6.3 A) added to the background load would push the sustained draw close to the supply's 10A continuous rating — a second, separate problem from the surge check, and one more reason the fix belongs in the PLC logic, not in a bigger supply.
+
+## Design Task 4: Battery Capacity Sizing for a UPS-Backed Control System
+
+### Scenario
+
+A defense contractor builds field-deployable environmental control shelters that house sensitive electronics; each shelter's 24VDC control system — the PLC, its network gear, and the actuators needed to bring the cooling system to a safe shutdown state — must keep running through a brief loss of incoming power, such as when the shelter's generator set is being swapped or the unit is transferred between vehicle and site power during a tactical relocation. The contract's technical data package specifies a minimum 30-minute backup runtime for the control system, and that requirement has to be demonstrated with a documented calculation, not just "a battery that felt about right" — this is exactly the kind of traceable, audit-ready sizing record a Controlled Goods Program deliverable is expected to include.
+
+### Design Guidelines and Rules of Thumb
+
+Sizing a backup battery starts from the same place as any other capacity calculation: how much energy does the load need, for how long. But a battery's *usable* capacity is smaller than its nameplate (rated) capacity for two independent reasons, and both have to be applied, not just one.
+
+**Depth of discharge (DoD).** Discharging a lead-acid battery (flooded, AGM, or gel) all the way to zero charge dramatically shortens its cycle life; manufacturers publish a recommended maximum DoD — commonly around 80% for a VRLA/AGM battery in a standby application — beyond which each additional discharge cycle costs disproportionately more service life. A battery sized to its full nameplate Ah, with no DoD margin, will deliver its rated runtime a few times and then fall short of it for the rest of its service life as capacity fades.
+
+**Temperature derating.** A lead-acid battery's available capacity drops at low temperature — the electrochemical reaction that delivers current simply runs slower in the cold — and this is a genuine, not a paperwork, consideration for equipment that lives somewhere other than a climate-controlled server room: an unheated plant mezzanine in an Ontario winter, or a defense shelter's equipment bay before its own environmental control has stabilized after a cold start. Battery manufacturers publish a capacity-vs-temperature curve for exactly this reason; a battery rated for a given Ah at 25°C delivers meaningfully less at 0°C, and less still below that.
+
+**Rule of thumb:** for a standby/UPS battery, use no more than about 80% DoD and derate the manufacturer's rated capacity according to the coldest ambient temperature the battery will realistically see in service — not the plant's average temperature, and not the temperature at the equipment's normal indoor location if the actual installation point (a mezzanine, an unheated enclosure, a field shelter before its HVAC stabilizes) runs colder. This breaks down for lithium-based standby batteries, which tolerate deeper discharge and hold capacity better in moderately cold conditions than lead-acid chemistries — but lithium standby batteries bring their own considerations (a battery management system, different charging profile, and typically a higher unit cost) that are outside this chapter's scope; confirm the actual DoD and temperature derating from the specific battery's datasheet regardless of chemistry, rather than assuming the lead-acid figures used here transfer directly.
+
+```{r fig-06-13-battery-derate, echo=FALSE, fig.cap="Illustrative AGM battery capacity retention versus temperature. At 0 degrees C, roughly 75% of the 25 degrees C rated capacity is available -- the derating factor used in the worked example for a shelter mezzanine in winter.", fig.align='center', fig.width=9, fig.height=5.5}
+T_seq <- seq(-20, 40, by = 1)
+retention_pct <- ifelse(T_seq < 25, 100 - 1.0 * (25 - T_seq), 100 + 0.3 * (T_seq - 25))
+derate_df <- data.frame(Temp_C = T_seq, Retention = retention_pct)
+
+ggplot(derate_df, aes(x = Temp_C, y = Retention)) +
+  geom_line(color = "#3498DB", linewidth = 1.2) +
+  annotate("point", x = 0, y = 75, color = "#E74C3C", size = 4) +
+  annotate("segment", x = 0, xend = 0, y = 0, yend = 75, linetype = "dashed", color = "#E74C3C") +
+  annotate("segment", x = -20, xend = 0, y = 75, yend = 75, linetype = "dashed", color = "#E74C3C") +
+  annotate("text", x = -2, y = 42, label = "Shelter minimum\nwinter temp: 0C\n75% capacity available",
+           color = "#E74C3C", size = 3 * diagram_text_scale, hjust = 1) +
+  labs(title = "Battery Capacity Retention vs. Temperature (Illustrative AGM Curve)",
+       x = "Temperature (degrees C)", y = "Capacity retention (% of 25C rated capacity)") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
+    axis.title = element_text(size = 11 * diagram_text_scale),
+    axis.text = element_text(size = 10 * diagram_text_scale)
+  )
+```
+
+The Canadian and international reference points for this kind of sizing exercise are the general battery-sizing practice codified in IEEE 485 (Recommended Practice for Sizing Lead-Acid Batteries for Stationary Applications, used directly in Canadian design practice — there is no separate Canadian-specific battery-sizing standard), and IEC 62040 for UPS system requirements internationally. The UPS and battery charger hardware itself needs to carry the appropriate CSA product certification (per the applicable CSA C22.2 power-conversion-equipment standard) as adopted under the Ontario Electrical Safety Code before it can be installed.
+
+### Governing Calculation
+
+$$
+C_{required} = \frac{I_{backup} \times t_{backup}}{DoD \times f_{temp}}
+$$
+
+| Symbol | Definition | Units |
+|:-------|:-----------|:------|
+| $I_{backup}$ | DC current the backup battery must supply to the essential load | A |
+| $t_{backup}$ | Required backup runtime | h |
+| $DoD$ | Maximum allowable depth of discharge (fraction of rated capacity) | dimensionless (0-1) |
+| $f_{temp}$ | Capacity derating factor at the coldest expected service temperature | dimensionless (0-1) |
+| $C_{required}$ | Minimum acceptable battery nameplate (25C rated) capacity | Ah |
+
+### Worked Example
+
+Live cell — try a different backup load, runtime requirement, or temperature derating and see whether the candidate battery pack still meets the spec.
+
+```{webr-r}
+#| label: battery-sizing-06-13
+## Backup load: the shelter's essential 24VDC control and safe-shutdown loads
+I_backup <- 18     # A -- PLC, network gear, and shutdown-sequence actuators
+t_backup <- 0.5    # h -- 30-minute contract requirement
+
+DoD        <- 0.80  # standby AGM, recommended maximum depth of discharge
+f_temp     <- 0.75  # capacity retention at 0C shelter minimum winter temperature
+
+C_required <- (I_backup * t_backup) / (DoD * f_temp)
+
+cat(sprintf("Backup load: %.0f A for %.1f h (%.1f Ah of usable energy needed)\n",
+            I_backup, t_backup, I_backup * t_backup))
+cat(sprintf("Depth-of-discharge limit: %.0f%%\n", DoD * 100))
+cat(sprintf("Temperature derating at 0C: %.0f%% of rated capacity available\n\n", f_temp * 100))
+cat(sprintf("Required nameplate (25C rated) battery capacity: %.1f Ah\n\n", C_required))
+
+## Candidate: two 12V AGM batteries in series for a 24V pack
+C_candidate <- 20   # Ah, catalog size
+
+usable_Ah    <- C_candidate * DoD * f_temp
+t_available  <- usable_Ah / I_backup
+
+cat(sprintf("Candidate pack: two 12V %.0f Ah AGM batteries in series (24V, %.0f Ah nameplate)\n",
+            C_candidate, C_candidate))
+cat(sprintf("Usable capacity at 0C and %.0f%% DoD: %.1f Ah\n", DoD * 100, usable_Ah))
+cat(sprintf("Actual available runtime: %.2f h (%.0f minutes)\n\n", t_available, t_available * 60))
+
+if (t_available * 60 >= t_backup * 60) {
+  cat(sprintf("PASSES: delivers %.0f minutes against a %.0f-minute requirement (%.0f%% margin)\n",
+              t_available * 60, t_backup * 60, (t_available * 60 / (t_backup * 60) - 1) * 100))
+} else {
+  cat(sprintf("FAILS: only %.0f minutes against a %.0f-minute requirement\n",
+              t_available * 60, t_backup * 60))
+}
+```
+
+**Sanity check:** the required nameplate capacity (15 Ah) and the selected standard catalog pack (20 Ah) aren't the same number, and that's expected — catalog batteries come in discrete sizes, so the candidate is checked directly against the runtime requirement (40 minutes delivered vs. 30 minutes required) rather than just compared to the raw Ah figure. A battery sized only against the 25°C nameplate rating, with no DoD or temperature derating applied, would have looked like it had nearly double the needed capacity (20 Ah nameplate vs. 9 Ah of raw energy needed) — and would have delivered barely half its expected runtime in service, discovered only when the generator swap took longer than 20 minutes on a cold morning.
+
+<details>
+<summary>Industry connection: why this calculation has to be on file, not just in someone's head</summary>
+
+A defense contract's technical data package typically requires the battery backup runtime to be demonstrated by calculation, tied to the specific battery part number, DoD limit, and temperature derating used — an auditor reviewing the deliverable needs to be able to trace the 30-minute requirement back to this exact worked example, not just see a battery installed and take the contractor's word that it's adequate.
+
+</details>
+
+## Design Task 5: Redundant Supply Modules and Diode-OR Combining
+
+### Scenario
+
+The welding cell's process engineer asks a fair question: what happens to this panel if the 24VDC supply itself fails? Right now, the answer is that the entire cell stops — PLC, safety relays, HMI, every sensor and valve — until an electrician diagnoses the fault and swaps the supply. For most cells on this line, that's an acceptable (if unwelcome) risk. But this particular cell feeds a paint-prep station immediately upstream of a continuous-flow oven; stopping it mid-cycle doesn't just lose the cycle, it risks scrapping parts already committed to the oven's fixed-speed conveyor. Is a second, redundant power supply worth specifying here?
+
+### Design Guidelines and Rules of Thumb
+
+**N+1 redundancy**, applied to a control power supply, means installing one more supply than the minimum needed to carry the load — most simply, two supplies (N=1 needed, +1 spare), each independently sized to carry the *entire* panel load on its own, not half each. If either supply fails, the other keeps the bus powered with no interruption at all, rather than the panel losing power and waiting for a repair.
+
+Simply wiring two supplies' outputs straight together does not work safely: whichever supply's output voltage sits even slightly higher will try to push current backward into the other supply's output stage, a condition called **backfeeding**. At best this wastes energy and unbalances the load between the two supplies in an uncontrolled way; at worst it can damage the lower-voltage supply's output circuitry or trip its own protection, defeating the redundancy it was installed to provide.
+
+The standard fix is **diode-OR combining**: a diode (or, in an ideal-diode/smart-OR controller — an active MOSFET-based circuit that behaves like a diode but with far less voltage drop and far less wasted heat than a simple silicon diode) in series with each supply's output, both feeding a common bus. Current can only flow *from* each supply *onto* the bus, never backward from the bus into a supply — so whichever supply has the higher output voltage at any instant naturally carries the load, and the other supply's diode blocks it from being backfed. If the carrying supply fails (its output voltage collapses), its diode simply stops conducting, and the second supply — which was already present on the bus the whole time — picks up the full load with no switching delay and no interruption.
+
+**Rule of thumb:** redundancy is worth its cost when the process fed by that specific power bus genuinely cannot tolerate *any* control power interruption — not just when a stoppage would be inconvenient. A cell that can absorb a 20-30 minute stoppage while an electrician swaps a supply (the majority of discrete-part cells with buffer inventory upstream and downstream) usually doesn't justify the added cost and panel space of a second supply and OR-ing circuit. This breaks down for continuous-process equipment (an oven, a coating line, a furnace) where a control power loss doesn't just pause production — it can scrap material already committed to the process, trigger a lengthy and costly restart procedure, or in some processes create a safety event on its own (loss of control on an energized process). For those, the redundancy question isn't really about probability of failure at all — it's about whether the consequence of *any* interruption is acceptable, at any probability.
+
+```{r fig-06-13-diode-or, echo=FALSE, fig.cap="N+1 redundant 24VDC supply architecture: two independently-sized supplies, each through an ideal-diode/smart-OR module, feed a common bus. Either supply can carry the full panel load; neither can backfeed the other.", fig.align='center', fig.width=10, fig.height=6.5}
+ggplot() +
+  annotate("rect", xmin = 0.5, xmax = 3.0, ymin = 5.0, ymax = 6.3, fill = "#3498DB", color = "black") +
+  annotate("text", x = 1.75, y = 5.65, label = "PSU-A (10A)\nCARRYING", color = "white",
+           size = 3.3 * diagram_text_scale, fontface = "bold") +
+  annotate("rect", xmin = 0.5, xmax = 3.0, ymin = 1.5, ymax = 2.8, fill = "#7F8C8D", color = "black") +
+  annotate("text", x = 1.75, y = 2.15, label = "PSU-B (10A)\nStandby (healthy)", color = "white",
+           size = 3.3 * diagram_text_scale) +
+  annotate("rect", xmin = 3.6, xmax = 5.1, ymin = 5.0, ymax = 6.3, fill = "#2ECC71", color = "black") +
+  annotate("text", x = 4.35, y = 5.65, label = "Ideal diode /\nsmart-OR", size = 2.8 * diagram_text_scale) +
+  annotate("rect", xmin = 3.6, xmax = 5.1, ymin = 1.5, ymax = 2.8, fill = "#2ECC71", color = "black") +
+  annotate("text", x = 4.35, y = 2.15, label = "Ideal diode /\nsmart-OR", size = 2.8 * diagram_text_scale) +
+  annotate("segment", x = 3.0, xend = 3.6, y = 5.65, yend = 5.65, arrow = arrow(length = unit(0.18, "cm"), type = "closed"), linewidth = 1) +
+  annotate("segment", x = 3.0, xend = 3.6, y = 2.15, yend = 2.15, arrow = arrow(length = unit(0.18, "cm"), type = "closed"), linewidth = 1) +
+  annotate("segment", x = 5.1, xend = 6.3, y = 5.65, yend = 4.0, arrow = arrow(length = unit(0.18, "cm"), type = "closed"), linewidth = 1.1, color = "#3498DB") +
+  annotate("segment", x = 5.1, xend = 6.3, y = 2.15, yend = 4.0, linewidth = 1.1, color = "#BDC3C7", linetype = "dashed") +
+  annotate("text", x = 5.75, y = 3.0, label = "blocked --\nno backfeed", color = "#BDC3C7",
+           size = 2.6 * diagram_text_scale) +
+  annotate("segment", x = 6.3, xend = 9.5, y = 4.0, yend = 4.0, linewidth = 2.2, color = "#2C3E50") +
+  annotate("text", x = 7.9, y = 4.4, label = "Common 24VDC bus", size = 3 * diagram_text_scale, fontface = "bold") +
+  annotate("segment", x = 7.0, xend = 7.0, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
+  annotate("rect", xmin = 6.4, xmax = 7.6, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
+  annotate("text", x = 7.0, y = 2.45, label = "PLC / I/O", size = 2.6 * diagram_text_scale) +
+  annotate("segment", x = 8.3, xend = 8.3, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
+  annotate("rect", xmin = 7.7, xmax = 8.9, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
+  annotate("text", x = 8.3, y = 2.45, label = "Valves,\nsensors", size = 2.5 * diagram_text_scale) +
+  annotate("segment", x = 9.2, xend = 9.2, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
+  annotate("rect", xmin = 8.9, xmax = 9.9, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
+  annotate("text", x = 9.4, y = 2.45, label = "HMI,\nswitch", size = 2.5 * diagram_text_scale) +
+  coord_cartesian(xlim = c(0, 10), ylim = c(1, 7)) +
+  theme_void() +
+  labs(title = "N+1 Redundant Supply with Diode-OR Combining") +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5))
+```
+
+### Governing Calculation
+
+This is a documented cost/risk decision, not a single formula — but it can be made defensible with a simple expected-cost comparison, using the supply's failure rate against the cost of an unplanned stoppage:
+
+$$
+\text{Expected annual loss (no redundancy)} = P_{fail,yr} \times t_{repair} \times C_{downtime}
+$$
+
+$$
+P_{fail,yr} = \frac{8760\ \text{h/yr}}{MTBF}
+$$
+
+| Symbol | Definition | Units |
+|:-------|:-----------|:------|
+| $MTBF$ | Supply's mean time between failures, from the manufacturer | h |
+| $P_{fail,yr}$ | Probability of a supply failure in a given year | dimensionless |
+| $t_{repair}$ | Expected time to diagnose and replace a failed supply, without redundancy | h |
+| $C_{downtime}$ | Cost of downtime on the process fed by this bus | $/h |
+| Expected annual loss | Probability-weighted annual cost of not having redundancy | $/yr |
+
+### Worked Example
+
+Live cell — try a different downtime cost, repair time, or supply MTBF and see whether the payback period still favors redundancy.
+
+```{webr-r}
+#| label: redundancy-cost-06-13
+## Single-supply reliability and downtime cost
+MTBF_hours <- 500000    # h, typical for a quality industrial SMPS
+hours_per_year <- 8760
+P_fail_year <- hours_per_year / MTBF_hours
+
+t_repair_h <- 1.5          # h, diagnose + swap + re-verify safety circuits
+C_downtime_per_h <- 8000   # $/h, this cell's line stoppage cost
+
+expected_annual_loss <- P_fail_year * t_repair_h * C_downtime_per_h
+
+cat(sprintf("Supply MTBF: %s h -> P(failure in a given year) = %.2f%%\n",
+            format(MTBF_hours, big.mark = " "), P_fail_year * 100))
+cat(sprintf("Repair/swap time without redundancy: %.1f h\n", t_repair_h))
+cat(sprintf("Downtime cost: $%s /h\n", format(C_downtime_per_h, big.mark = " ")))
+cat(sprintf("Expected annual loss (no redundancy): $%.0f /yr\n\n", expected_annual_loss))
+
+## Cost of adding redundancy: second supply + diode-OR/smart-OR module + labor
+cost_second_supply <- 450
+cost_or_module      <- 150
+cost_added_labor    <- 300
+redundancy_cost_total <- cost_second_supply + cost_or_module + cost_added_labor
+
+panel_life_yr <- 10
+annualized_redundancy_cost <- redundancy_cost_total / panel_life_yr
+payback_years <- redundancy_cost_total / expected_annual_loss
+
+cat(sprintf("Redundancy cost: $%d supply + $%d OR module + $%d labor = $%d one-time\n",
+            cost_second_supply, cost_or_module, cost_added_labor, redundancy_cost_total))
+cat(sprintf("Annualized over a %d-year panel life: $%.0f /yr\n", panel_life_yr, annualized_redundancy_cost))
+cat(sprintf("Simple payback period: %.1f years\n\n", payback_years))
+
+if (payback_years < panel_life_yr) {
+  cat("Payback occurs within the panel's service life -- redundancy is\n")
+  cat("justified on expected-value grounds alone, before even counting the\n")
+  cat("harder-to-price cost of scrapped in-process material from an\n")
+  cat("uncontrolled continuous-process interruption.\n")
+} else {
+  cat("Payback exceeds the panel's service life on expected-value grounds --\n")
+  cat("redundancy would need to be justified by a consequence this\n")
+  cat("calculation doesn't capture (e.g., a safety event, not just cost).\n")
+}
+```
+
+**Sanity check:** a bare expected-value calculation already favors redundancy here (4.3-year payback against a 10-year panel life), and that's *before* accounting for the specific reason this cell was flagged in the first place — a control power loss upstream of a continuous-flow oven risks scrapping in-process material, a cost this simple probability model doesn't even include. That's a useful general lesson about this kind of decision: pure expected-value math is a reasonable starting filter, but for a process that "cannot tolerate any interruption," the real driver of the decision is the *consequence*, not the *probability* — a rare event with an unacceptable consequence still justifies redundancy even when the expected-value math alone looks marginal.
+
+## Design Task 6: 24VDC System Protection and Selective Branch Fusing
+
+### Scenario
+
+A different automotive plant learned this design task's lesson the hard way: a single pinched sensor cable on a body-in-white geometry station shorted to the fixture frame, and because every sensor, valve, and PLC input on that panel shared one unfused 24VDC feed straight off the main supply's output terminals, the fault pulled the main supply into current limit and dropped the entire panel's 24VDC bus — PLC, safety relays, HMI, and every other sensor and valve on the machine, all at once, for a fault that should only have affected one sensor. The line was down for over twenty minutes while an electrician traced the fault by disconnecting branches one at a time, because there was no way to see which branch had actually failed. The fix being specified on every new panel since is the subject of this design task: give every output circuit its own branch fuse.
+
+### Design Guidelines and Rules of Thumb
+
+**Selective coordination**, applied to a 24VDC control bus, means each branch circuit's overcurrent protection is sized so that a fault on that branch opens *only that branch's* fuse — leaving the main supply, and every other branch, running normally. Getting this right depends on more than just picking a fuse rating smaller than the main supply's rating; it depends on the relationship between the branch fuse and the main supply's own overcurrent response.
+
+A DIN-rail fused terminal block (a common, low-cost way to implement this — each terminal position carries its own miniature fuse, individually replaceable without disturbing the other branches) lets every sensor group, valve manifold, and subsystem be broken out onto its own protected branch, fed from a single main feed off the supply.
+
+Three things drive the branch fuse rating for a given circuit:
+
+- **Normal operating current**, with margin — the fuse has to comfortably carry the branch's actual running current (continuous, plus any legitimate transient like a valve pull-in on that branch) without nuisance-tripping.
+- **The branch conductor's ampacity** — the fuse rating must not exceed what the actual wire gauge feeding that branch (commonly small-gauge stranded control wiring) is rated to carry, per the CEC (as adopted by the OESC) or the NEC's equivalent wiring tables; the fuse protects the wire, and it can't do that if it's rated above the wire's own capacity.
+- **Margin below the main supply's rating**, so that even a dead short on the branch — which will draw whatever current the wiring resistance and the supply's own current-limiting characteristic allow, not just the branch's normal running current — trips the branch fuse well before it comes anywhere close to tripping the main supply's protection or driving the supply into its own current limit.
+
+It's worth being clear about one point of code terminology here: many 24VDC PLC and sensor circuits *are* wired as CEC/NEC Class 2 power-limited circuits — a Class 2 listed power supply is inherently energy-limited (roughly on the order of 100 VA, per the applicable CEC Section 16 / NEC Article 725 table) and permits lighter wiring methods precisely because it can't deliver enough sustained energy to be a fire or shock hazard even under a dead short. A 240W (10A at 24VDC) panel supply, like the one selected in Design Task 2, is well above that Class 2 power limit — it is **not** a Class 2 source, and the branches it feeds don't get the benefit of that code exemption. That's exactly why this panel needs a deliberately engineered branch fusing scheme rather than relying on the supply's own inherent current limiting to make individual branches safe. The panel's overall short-circuit current rating (SCCR) and its branch overcurrent protection scheme both need to be documented per CSA C22.2 No. 286 (Industrial Control Panels) / UL 508A, the governing standard for how a panel's protection is specified and labeled.
+
+**Rule of thumb:** as a fast first check, keep each individual branch fuse rating at or below about 50% of the main supply's rated output current — this gives enough separation in current magnitude that the branch fuse's time-current curve almost always clears well ahead of the supply's own protection responding. This is a preliminary sizing check, not a substitute for comparing the actual published time-current curves of the branch fuse and the supply's output protection/current-limit characteristic on a circuit where the consequence of miscoordination is severe — for a critical branch, pull both curves from the manufacturer and confirm the separation directly rather than trusting the 50% rule alone.
+
+### Governing Calculation
+
+$$
+I_{fuse,branch} \geq k_{margin} \times I_{branch,running} \qquad I_{fuse,branch} \leq \min\left(0.5 \times I_{main},\ I_{ampacity,wire}\right)
+$$
+
+| Symbol | Definition | Units |
+|:-------|:-----------|:------|
+| $I_{branch,running}$ | Normal (steady, plus legitimate transient) current on the branch | A |
+| $k_{margin}$ | Margin factor above running current to avoid nuisance trips (typically 1.25-1.5x) | dimensionless |
+| $I_{main}$ | Main supply's rated continuous output current | A |
+| $I_{ampacity,wire}$ | Ampacity of the branch's conductor, per CEC/OESC or NEC wiring tables | A |
+| $I_{fuse,branch}$ | Selected branch fuse rating | A |
+
+### Worked Example
+
+Live cell — try changing a branch's running current or the main supply size and see whether the 50% coordination check still passes.
+
+```{webr-r}
+#| label: branch-fusing-06-13
+## Main supply from Design Task 2
+I_main <- 10   # A
+
+## Branch circuits off the DIN-rail fused terminal block
+branches <- data.frame(
+  branch = c("Sensor group A", "Sensor group B", "Valve manifold (reset bank)",
+             "HMI + network switch", "PLC + remote I/O", "Relay/contactor coil bank"),
+  running_A = c(0.30, 0.36, 1.00, 0.75, 2.05, 0.54),
+  fuse_type = c("Fast-blow", "Fast-blow", "Time-delay (slow-blow)",
+                "Fast-blow", "Fast-blow", "Fast-blow"),
+  fuse_A = c(0.5, 0.5, 4.0, 1.0, 3.0, 1.0),
+  stringsAsFactors = FALSE
+)
+
+cat(sprintf("Main supply rating: %.0f A\n", I_main))
+cat(sprintf("50%% coordination limit for any single branch: %.1f A\n\n", 0.5 * I_main))
+
+for (i in seq_len(nrow(branches))) {
+  b <- branches[i, ]
+  pct_of_main <- b$fuse_A / I_main * 100
+  margin_over_running <- b$fuse_A / b$running_A
+  verdict <- if (b$fuse_A > 0.5 * I_main) "FAILS 50% coordination check" else "PASSES"
+  cat(sprintf("%-28s running %.2f A -> %s %.1f A fuse (%.0f%% of main, %.1fx running) -- %s\n",
+              b$branch, b$running_A, b$fuse_type, b$fuse_A, pct_of_main, margin_over_running, verdict))
+}
+
+cat(sprintf("\nSum of branch fuse ratings: %.1f A (may exceed the main's %.0f A rating --\n", sum(branches$fuse_A), I_main))
+cat("that's normal and expected: not every branch draws its full fused\n")
+cat("capacity at the same time, which is exactly the diversity already\n")
+cat("captured by the average-vs-peak load budget in Design Task 1.)\n\n")
+
+cat("Why the valve manifold branch uses a time-delay fuse: its startup\n")
+cat("event pulls roughly 6.75 A of pull-in current for ~50 ms (Design Task 3).\n")
+cat("A 4A fast-blow fuse would nuisance-trip on that transient every single\n")
+cat("start; a 4A time-delay fuse rides through the brief pull-in surge while\n")
+cat("still opening promptly on a sustained downstream short.\n")
+```
+
+```{r fig-06-13-branch-fusing, echo=FALSE, fig.cap="Selective branch fusing on the panel's 24VDC bus: a fault on any one branch (shown highlighted) opens only that branch's fuse, leaving the main supply and every other branch powered.", fig.align='center', fig.width=11.5, fig.height=6.5}
+branch_labels <- c("Sensor A\n0.5A", "Sensor B\n0.5A", "Valve mfld\n4A (TD)",
+                    "HMI/switch\n1A", "PLC/RIO\n3A", "Relay bank\n1A")
+branch_x <- seq(1, 10, length.out = 6)
+
+branch_positions <- data.frame(x = branch_x, label = branch_labels, faulted = c(TRUE, rep(FALSE, 5)))
+
+ggplot() +
+  annotate("rect", xmin = 0, xmax = 2.2, ymin = 5.6, ymax = 6.8, fill = "#3498DB", color = "black") +
+  annotate("text", x = 1.1, y = 6.2, label = "Main supply\n10A", color = "white",
+           size = 3.2 * diagram_text_scale, fontface = "bold") +
+  annotate("rect", xmin = 2.6, xmax = 3.6, ymin = 5.75, ymax = 6.65, fill = "#2C3E50", color = "black") +
+  annotate("text", x = 3.1, y = 6.2, label = "Main\nfuse\n12A", color = "white",
+           size = 2.4 * diagram_text_scale) +
+  annotate("segment", x = 3.6, xend = 3.6, y = 6.2, yend = 5.0, linewidth = 1) +
+  annotate("segment", x = 0.5, xend = 10.5, y = 5.0, yend = 5.0, linewidth = 2.4, color = "#2C3E50") +
+  annotate("text", x = 5.5, y = 5.35, label = "24VDC DIN-rail fused terminal block (distribution bus)",
+           size = 2.9 * diagram_text_scale, fontface = "bold") +
+  geom_segment(data = branch_positions, aes(x = x, xend = x, y = 5.0, yend = 3.9),
+               linewidth = 1, color = ifelse(branch_positions$faulted, "#E74C3C", "black")) +
+  geom_rect(data = branch_positions,
+            aes(xmin = x - 0.45, xmax = x + 0.45, ymin = 2.7, ymax = 3.9,
+                fill = faulted), color = "black") +
+  scale_fill_manual(values = c(`TRUE` = "#E74C3C", `FALSE` = "#95A5A6"), guide = "none") +
+  geom_text(data = branch_positions, aes(x = x, y = 3.3, label = label),
+            size = 2.5 * diagram_text_scale, color = "white", fontface = "bold") +
+  annotate("text", x = 1, y = 2.3, label = "FAULTED --\nonly this fuse opens", color = "#E74C3C",
+           size = 2.8 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = 5.5, y = 2.3, label = "Remaining 5 branches stay powered",
+           size = 2.8 * diagram_text_scale, color = "#2ECC71") +
+  coord_cartesian(xlim = c(-0.3, 11), ylim = c(1.6, 7.2)) +
+  theme_void() +
+  labs(title = "Selective Branch Fusing on the 24VDC Distribution Bus") +
+  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5))
+```
+
+**Sanity check:** every branch fuse rating clears the 50% coordination check against the 10A main, and the valve manifold branch — the one branch with a real inrush event to accommodate — uses a time-delay fuse type specifically so its rating can be sized for the transient without either nuisance-tripping on every normal start or being oversized to the point of losing selectivity. That's the whole design task in one sentence: a fault anywhere on this bus now costs the plant one cheap, quickly-diagnosed fuse instead of twenty minutes of line-down troubleshooting.
+
+<details>
+<summary>Industry connection: the cost of getting this wrong on an automotive line</summary>
+
+On a high-volume automotive body shop running one part every 45-60 seconds, twenty minutes of line-down troubleshooting for what turns out to be a single shorted sensor cable is not a rounding error — at even a modest per-minute downtime cost, it dwarfs the few dollars a full set of branch fuses would have cost at panel build. Selective branch fusing is now a standard line item on that plant's panel design checklist for exactly this reason, not an optional nicety.
+
+</details>
+
+## Summary
+
+```{r tbl-06-13-summary, echo=FALSE, message=FALSE}
+summary_df <- tribble(
+  ~`Design Task`, ~`Governing Equation`, ~`Key Rule of Thumb`,
+  "1. DC power budget", "$I_{avg} = \\sum I_{cont} + \\sum (I_{interm} \\times DC)$",
+  "Weight intermittent loads by duty cycle estimated from the process cycle, not a guessed round number.",
+  "2. Supply sizing (70-80% rule)", "$P_{supply} \\geq P_{load,avg} / f_{loading}$",
+  "Size continuous nameplate rating so the average load is 70-80% of it; landing below the band on a standard catalog size is fine.",
+  "3. Inrush and surge allowance", "$I_{surge,req} = I_{run} + \\sum I_{inrush,k}$",
+  "Sum only the loads the control program actually energizes simultaneously; revisit the check if the program's sequencing changes.",
+  "4. Battery capacity sizing", "$C_{req} = \\dfrac{I_{backup} \\times t_{backup}}{DoD \\times f_{temp}}$",
+  "Use no more than ~80% DoD and derate for the coldest realistic service temperature, not the room's average temperature.",
+  "5. Redundant supplies / diode-OR", "Expected loss $= P_{fail,yr} \\times t_{repair} \\times C_{downtime}$",
+  "Redundancy is about consequence, not just probability -- justify it for processes that cannot tolerate any interruption.",
+  "6. Selective branch fusing", "$I_{fuse,branch} \\leq \\min(0.5\\,I_{main},\\, I_{ampacity})$",
+  "Keep each branch fuse at or below ~50% of the main supply's rating for clean coordination; use time-delay types on branches with real inrush."
+)
+
+summary_df[] <- lapply(summary_df, tex_safe)
+
+summary_df %>%
+  kbl(caption = "Chapter summary: governing equation and key rule of thumb by design task", escape = FALSE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, background = "#2C3E50", color = "white") %>%
+  column_spec(1, width = "1.2in") %>%
+  column_spec(2, width = "2.1in") %>%
+  column_spec(3, width = "3.25in")
+```
+
+## Practice Problems
+
+<details>
+<summary>Task 1 (plug-in): A panel has 3.10 A of continuous load. It also has 10 pilot valves at 0.40 A each (duty cycle 30%) and 4 relays at 0.10 A each (duty cycle 60%). What are I_avg and I_peak?</summary>
+
+Intermittent nameplate: valves = 10 x 0.40 = 4.0 A; relays = 4 x 0.10 = 0.4 A. Total nameplate = 4.4 A.
+
+Intermittent average: valves = 4.0 x 0.30 = 1.2 A; relays = 0.4 x 0.60 = 0.24 A. Total average = 1.44 A.
+
+$I_{avg}$ = 3.10 + 1.44 = **4.54 A**
+
+$I_{peak}$ = 3.10 + 4.4 = **7.50 A**
+
+</details>
+
+<details>
+<summary>Task 1 (design decision): A junior designer proposes skipping the duty-cycle weighting entirely and just sizing the supply against the full nameplate sum of every load (the "peak" number) every time, arguing it's simpler and always conservative. What's the problem with always doing that?</summary>
+
+It is conservative in the sense that it won't undersize a supply, but "always conservative" isn't the same as "always right" — it systematically pushes every panel toward a larger, more expensive supply than the sustained load actually requires, and on a program with many similar panels, that adds up to real, unjustifiable cost (as the Design Task 2 industry connection notes). It also hides useful information: the *gap* between average and peak is itself a signal — a small gap means the load is fairly steady and the peak check barely matters; a large gap (as in this chapter's worked example, nearly 2x) means the panel has a real duty-cycle-driven swing worth understanding, both for supply sizing and for the surge check in Design Task 3. Always defaulting to the peak number throws that signal away. The better practice is to calculate both numbers and use each for the check it's actually meant for: average against the 70-80% continuous rule, peak (or the real coincident subset) against the surge rating.
+
+</details>
+
+<details>
+<summary>Task 2 (plug-in): A panel's average load is 88 W. Using the 70-80% rule of thumb, what is the minimum acceptable supply nameplate rating, and which standard catalog size (60W, 120W, 240W) should be selected?</summary>
+
+Minimum nameplate at 80% loading: 88 / 0.80 = 110 W.
+
+60 W is too small outright (88 W average would be 147% loading — fails before any margin is even considered).
+
+120 W gives 88/120 = 73.3% loading — squarely inside the 70-80% target band.
+
+**Select the 120 W supply.**
+
+</details>
+
+<details>
+<summary>Task 2 (design decision): Procurement pushes back on the 10A supply selected in this chapter's worked example, asking why a 5A supply — half the cost — can't be used since the panel "never actually draws 10 amps." How would you respond?</summary>
+
+The 5A supply fails the check before the 70-80% rule is even applied: the average (duty-weighted) load alone is 6.45 A, already above a 5A supply's continuous rating with no margin left for aging, ambient derating, or future additions — and that's before considering the surge event in Design Task 3, which a 5A supply would fail even more badly. "Never actually draws 10 amps" is true but beside the point: the question isn't whether the panel occasionally spikes above 5A, it's whether 5A can carry the *sustained average* load at all, and it can't. The correct response is to show procurement the load budget table and the loading-percentage calculation directly — a five-minute conversation that turns a cost-cutting request into a clear technical answer, rather than an argument about gut feel.
+
+</details>
+
+<details>
+<summary>Task 3 (plug-in): A supply is rated 150% for 2 seconds on a 20A continuous base. A start event draws 26 A for 80 ms. Does it pass the surge check?</summary>
+
+Surge rating = 20 A x 1.50 = 30 A, for up to 2 s.
+
+26 A ≤ 30 A: current magnitude passes.
+
+80 ms is well inside the 2 s duration limit.
+
+**PASSES**, with (30 - 26)/30 = 13.3% margin.
+
+</details>
+
+<details>
+<summary>Task 3 (design decision): A controls engineer suggests fixing a failed surge check not by staggering the PLC's valve-firing sequence, but by simply telling the supply vendor to quote a larger continuous-rated supply instead. What's the trade-off, and which would you recommend for this chapter's fault scenario (21.42 A against a 15 A surge rating)?</summary>
+
+Buying a larger continuous-rated supply (say, a 20A unit with a correspondingly higher 30A surge rating) would indeed clear the fault-scenario current — but it fixes the symptom, not the cause, and it does so at real cost: a bigger supply, for a panel whose *actual* average load (6.45 A) hasn't changed at all, meaning the new supply now runs at a much lower, wasteful loading percentage the rest of the time (failing the spirit of the 70-80% rule from Design Task 2 in the opposite direction). Staggering the PLC's fault-recovery sequence — energizing the 14 valves in two or three smaller groups a few PLC scans apart instead of all at once — fixes the actual problem (a control-logic fault condition creating an unrealistic coincident-load event) at essentially zero hardware cost, and it's a change firmly within the controls engineer's own ability to make and test. The recommended fix is the sequencing change; escalating to a larger supply should be reserved for cases where the coincident load is a genuine, unavoidable operational requirement, not an artifact of how a fault-recovery routine happens to be written.
+
+</details>
+
+<details>
+<summary>Task 4 (plug-in): A backup load is 8 A, required runtime is 1 hour, DoD is 0.80, and temperature derating is 0.70. What nameplate battery capacity is required?</summary>
+
+$C_{required} = \dfrac{8 \times 1}{0.80 \times 0.70} = \dfrac{8}{0.56}$ = **14.3 Ah**
+
+</details>
+
+<details>
+<summary>Task 4 (design decision): The shelter's actual winter deployment site turns out to run colder than assumed — down to -15 degrees C instead of 0 degrees C — pushing the temperature derating factor down to roughly 0.55. The battery originally selected (20 Ah nameplate) no longer meets the 30-minute requirement. What are the options, and which would you recommend for a defense field application?</summary>
+
+Recalculating usable capacity at the colder derating: 20 Ah x 0.80 DoD x 0.55 temp = 8.8 Ah usable, giving only 8.8/18 = 0.49 h (29.3 minutes) — just under the 30-minute requirement, a near-miss rather than a large shortfall. Options include: (1) upsize the battery pack (a 24 Ah or 26 Ah catalog size would restore the margin at the colder derating with minimal cost or space impact); (2) add battery heating (a small thermostatically-controlled heater pad or heat-traced enclosure to keep the battery above its coldest-derating range, common on field-deployable equipment, at the cost of added power draw and complexity); (3) reduce the essential backup load itself (shed a non-critical actuator from the safe-shutdown sequence to lower I_backup). For a defense field application where the technical data package's 30-minute figure is a contractual commitment, the recommended approach is the battery upsize first — it's the simplest, most easily verified fix, and it directly restores margin without adding a heater subsystem that itself needs its own reliability and power budget. Battery heating is worth adding only if the deployment envelope is expected to go meaningfully colder still, where even a larger battery's derated capacity would eventually run out of headroom.
+
+</details>
+
+<details>
+<summary>Task 5 (plug-in): A supply has MTBF = 300,000 h. Repair time without redundancy is 1.0 h, and downtime costs $4,000/h. What is the expected annual loss without redundancy?</summary>
+
+$P_{fail,yr} = 8760 / 300{,}000$ = 0.0292 (2.92% chance per year)
+
+Expected annual loss = 0.0292 x 1.0 x $4,000 = **$116.8/yr**
+
+</details>
+
+<details>
+<summary>Task 5 (design decision): Two cells are both being reviewed for redundant power supplies. Cell A is a single-station manual assembly bench with 20 minutes of upstream buffer inventory. Cell B is a continuous-flow washer/dryer tunnel with no buffer capacity and parts fully committed to the process partway through. Both have identical supplies, MTBF, and repair times. Should both get redundant supplies?</summary>
+
+No — the identical reliability numbers are a distraction here; the decision hinges on consequence, not probability, exactly as the rule of thumb in this design task states. Cell A's 20-minute upstream buffer means a control power loss and a ~1.5-hour supply swap can very likely be absorbed without stopping the line at all, or with only a brief, recoverable gap — a textbook case where redundancy is a "nice to have," not a "need to have." Cell B has no such cushion: a control power loss mid-process on a continuous-flow washer/dryer risks parts stuck partway through a wash or dry cycle, potential scrap, and a restart procedure that may itself take longer than the repair. Even with identical failure probability and repair time, Cell B is the one where redundancy is justified, because the expected-value calculation understates its real risk (uncounted scrap and restart cost) in exactly the way the sanity check in this design task's worked example describes. Recommend redundancy for Cell B; Cell A can reasonably skip it.
+
+</details>
+
+<details>
+<summary>Task 6 (plug-in): A main supply is rated 15 A. A branch's normal running current is 2.4 A. Using a 1.35x margin factor and the 50% coordination rule, what branch fuse rating should be selected from standard sizes (2A, 3A, 4A, 5A)?</summary>
+
+Minimum fuse to avoid nuisance tripping: 2.4 x 1.35 = 3.24 A -> select at least 4 A (next standard size up from 3.24 A; 3A would be too close to the running current with the required margin).
+
+50% coordination ceiling: 0.5 x 15 = 7.5 A.
+
+4 A clears both the minimum-margin floor and the coordination ceiling.
+
+**Select the 4 A fuse.**
+
+</details>
+
+<details>
+<summary>Task 6 (design decision): A cost-conscious panel builder proposes combining the "Sensor group A" and "Sensor group B" branches from this chapter's worked example onto a single fused branch to save the cost of one fuse holder, since their combined running current (0.66 A) still easily clears a small fuse. What would you tell them?</summary>
+
+The combined branch would still pass a bare current-rating check (0.66 A is well under even a 1A fuse), so the objection isn't about capacity — it's about what selective coordination is actually protecting against. The whole point of Design Task 6 is that a fault on *one* sensor's cable should only affect that one sensor's circuit; combining two independent sensor groups onto one fused branch means a short on a single cable in Group A now also drops every sensor in Group B, defeating exactly the fault-isolation benefit branch fusing exists to provide, to save the cost of a single low-cost fuse holder position on a DIN-rail terminal block. The right response is to keep the branches separate: the incremental cost of one more fuse position is trivial compared to the diagnostic and downtime cost of an unnecessarily large group of sensors going dark together, which is the same lesson the automotive plant in this design task's scenario learned the hard way.
+
+</details>
+
+## Open-Ended Design Scenario
+
+<details>
+<summary>Capstone scenario: specify the 24VDC power system for a new panel</summary>
+
+You are the electrical designer releasing a new control panel for a food-processing plant's case-packing line. Pull together everything from this chapter into one design package:
+
+- **Continuous loads:** PLC + I/O rack (1.35 A), HMI (0.40 A), managed switch (0.25 A), safety relay module (0.20 A), and a sensor bank of 40 photoelectric/inductive sensors at 28 mA each.
+- **Intermittent loads:** 10 pneumatic pilot valves at 0.42 A each (duty cycle 35%, since this line's pneumatics cycle faster than the welding cell example), and 5 interposing relays at 0.10 A each (duty cycle 55%).
+- **Standard catalog supply sizes available:** 5A, 10A, 20A, all at 24VDC.
+- **Startup event:** the line's reset sequence energizes 5 of the 10 pilot valves and 3 of the 5 relays simultaneously; assume the same pull-in factors used in this chapter's worked example (valves 2.5x holding, relays/contactors 4x holding).
+- **Backup requirement:** the food safety program requires the line's PLC and traceability network gear (essential load: 4.5 A) to stay powered for at least 15 minutes on loss of incoming power, so an in-progress batch's traceability records aren't lost mid-write. The panel sits in a processing area held at a controlled 10°C — assume a temperature derating factor of 0.90 at that temperature, and use the same 80% DoD assumption as this chapter's worked example.
+- **Redundancy question:** this line feeds a single continuous cooking tunnel with no buffer capacity between case-packing and the tunnel infeed — the plant's engineering manager wants to know whether a second supply and diode-OR module are justified, using the same supply cost, MTBF, and downtime-cost assumptions as this chapter's worked example (adjust downtime cost to $5,500/h for this smaller line).
+- **Branch fusing:** the panel will distribute power to five branches — Sensors, Valve manifold, HMI/switch, PLC/RIO, and Relay bank — off a DIN-rail fused terminal block fed from the main supply you select.
+
+Work through all six design tasks in order and reach a definite conclusion for each: the load budget (average and peak), the selected supply size and its loading percentage, whether the startup event passes the selected supply's surge rating (assume 150% for 1 s, same as the chapter example), the required and selected battery capacity and pack, a redundancy recommendation with reasoning, and a complete branch fuse schedule. Then write two or three sentences connecting your conclusions: does the supply size you selected in Design Task 2 still comfortably pass the surge check in Design Task 3, or did the smaller catalog step available for this line's lighter load create less surge margin than the welding cell example had? A strong answer treats the six tasks as one connected power system design, not six independent homework problems.
+
+</details>

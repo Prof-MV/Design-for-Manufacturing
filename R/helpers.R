@@ -112,3 +112,30 @@ info_box <- function(content, type = "info") {
     cat(sprintf('\n\n**%s:** %s\n\n', icon, content))
   }
 }
+
+#' Escape LaTeX special characters in table cells without touching inline math
+#'
+#' Tables built with kable(..., escape = FALSE) (needed so genuine $...$ math
+#' in a "Governing Equation" column renders correctly) leave every other
+#' character in every other column raw too -- including plain-English rule-
+#' of-thumb text that routinely contains %, _, ~, or ^ (e.g. "125%", "N_cr",
+#' "~1 MHz"). In LaTeX, an unescaped % starts a comment that swallows the
+#' rest of the line (including the row's \\\\ terminator), which corrupts or
+#' outright breaks the table. This escapes everything in a string EXCEPT
+#' any $...$ math spans, which are left untouched, so a single cell can
+#' safely mix real LaTeX math with plain text. It's a no-op for HTML output.
+#' @param x A character vector (typically one data.frame/tibble column).
+tex_safe <- function(x) {
+  if (!knitr::is_latex_output()) return(x)
+  vapply(x, function(s) {
+    if (is.na(s)) return(NA_character_)
+    maths <- regmatches(s, gregexpr("\\$[^$]*\\$", s))[[1]]
+    if (length(maths) == 0) return(knitr:::escape_latex(s))
+    tokens <- paste0("@@MATH", seq_along(maths), "@@")
+    placeholder_s <- s
+    for (i in seq_along(maths)) placeholder_s <- sub(maths[i], tokens[i], placeholder_s, fixed = TRUE)
+    escaped <- knitr:::escape_latex(placeholder_s)
+    for (i in seq_along(maths)) escaped <- sub(tokens[i], maths[i], escaped, fixed = TRUE)
+    escaped
+  }, character(1), USE.NAMES = FALSE)
+}
