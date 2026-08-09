@@ -644,14 +644,14 @@ ggplot() +
                color = "#3498DB", linewidth = 1.3) +
   geom_point(data = star_nodes, aes(x = x, y = y), size = 5, color = "#2ECC71") +
   geom_label(data = star_nodes, aes(x = x, y = y - 0.42, label = label),
-             size = 2.5 * diagram_text_scale, label.size = 0) +
+             size = 2.5 * diagram_text_scale, linewidth = 0) +
   annotate("text", x = 2.0, y = 5.1, label = "STAR (single-point)",
            size = 3.4 * diagram_text_scale, fontface = "bold", color = "#2ECC71") +
   geom_segment(data = mesh_pairs, aes(x = x, y = y, xend = xend, yend = yend),
                color = "#E74C3C", linewidth = 1.1) +
   geom_point(data = mesh_nodes, aes(x = x, y = y), size = 5, color = "#F39C12") +
   geom_label(data = mesh_nodes, aes(x = x, y = y - 0.42, label = label),
-             size = 2.5 * diagram_text_scale, label.size = 0) +
+             size = 2.5 * diagram_text_scale, linewidth = 0) +
   annotate("text", x = 8.4, y = 4.75, label = "MESH (multi-point grid)",
            size = 3.4 * diagram_text_scale, fontface = "bold", color = "#E74C3C") +
   xlim(-0.2, 10.3) + ylim(1.3, 5.4) +
