@@ -1187,13 +1187,13 @@ ggplot(df_signal, aes(x = cycle)) +
 The most important implementation detail for any time-series feature engineering in pandas:
 
 ```python
- CORRECT: window resets at each new engine boundary
+# CORRECT: window resets at each new engine boundary
 df["sensor_11_rolling_mean"] = (
     df.groupby("unit_number")["sensor_11"]
       .transform(lambda x: x.rolling(5, min_periods=1).mean())
 )
 
- WRONG: window bleeds across engine boundaries
+# WRONG: window bleeds across engine boundaries
 df["sensor_11_rolling_mean"] = df["sensor_11"].rolling(5).mean()
 ```
 
@@ -1260,7 +1260,7 @@ For the C-MAPSS model you build in Week 4, a common pattern is that predictions 
 #### Comparing to the Naive Baseline {#ml-w4-baseline}
 
 ```python
- Naive baseline: predict the training set mean for every engine
+# Naive baseline: predict the training set mean for every engine
 y_naive = np.full_like(y_val, fill_value=y_train.mean(), dtype=float)
 naive_rmse = np.sqrt(mean_squared_error(y_val, y_naive))
 

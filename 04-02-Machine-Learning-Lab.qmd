@@ -227,7 +227,7 @@ The `spc_data.csv` dataset contains the following intentional problems. Your job
 **Rule for this task:** every change you make to the data must be recorded in a "quality log" DataFrame or markdown cell. Real ISO 9001 quality systems require that every data correction be traceable: who changed what, when, and why. **Never silently delete data.**
 
 ```python
- Pattern for quality logging — add one row per correction
+# Pattern for quality logging — add one row per correction
 quality_log = []
 quality_log.append({
     "row_index": 42,
@@ -269,41 +269,41 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
- Parse timestamp if not already done
+# Parse timestamp if not already done
 df_clean["date"] = pd.to_datetime(df_clean["timestamp"]).dt.date
 
- Step 1: Compute daily means (X-bar)
-n_per_day  = 5           subgroup size: 5 parts per day
+# Step 1: Compute daily means (X-bar)
+n_per_day  = 5           # subgroup size: 5 parts per day
 daily_mean = df_clean.groupby("date")["diameter_mm"].mean()
 
- Step 2: Compute overall statistics from the CLEAN baseline
-   Use only the in-control days (before the special cause event)
-   to estimate the process standard deviation
+# Step 2: Compute overall statistics from the CLEAN baseline
+#    Use only the in-control days (before the special cause event)
+#    to estimate the process standard deviation
 sigma_individual = df_clean["diameter_mm"].std()
 grand_mean       = daily_mean.mean()
 
- Step 3: Control limits — remember: UCL/LCL use sigma/sqrt(n),
-   NOT the standard deviation of the daily means
+# Step 3: Control limits — remember: UCL/LCL use sigma/sqrt(n),
+#    NOT the standard deviation of the daily means
 ucl = grand_mean + 3 * sigma_individual / np.sqrt(n_per_day)
 lcl = grand_mean - 3 * sigma_individual / np.sqrt(n_per_day)
 
- Step 4: Specification limits (from engineering drawing)
+# Step 4: Specification limits (from engineering drawing)
 usl = 25.050
 lsl = 24.950
 
- Step 5: Plot
+# Step 5: Plot
 fig, ax = plt.subplots(figsize=(14, 5))
 ax.plot(daily_mean.index, daily_mean.values, "b-o", markersize=4, label="Daily mean diameter")
-ax.axhline(grand_mean, colour="blue",   linestyle="-",  label=f"Grand mean = {grand_mean:.4f}")
-ax.axhline(ucl,        colour="orange", linestyle="-",  label=f"UCL = {ucl:.4f}")
-ax.axhline(lcl,        colour="orange", linestyle="-",  label=f"LCL = {lcl:.4f}")
-ax.axhline(usl,        colour="red",    linestyle="--", label=f"USL = {usl:.3f}")
-ax.axhline(lsl,        colour="red",    linestyle="--", label=f"LSL = {lsl:.3f}")
+ax.axhline(grand_mean, color="blue",   linestyle="-",  label=f"Grand mean = {grand_mean:.4f}")
+ax.axhline(ucl,        color="orange", linestyle="-",  label=f"UCL = {ucl:.4f}")
+ax.axhline(lcl,        color="orange", linestyle="-",  label=f"LCL = {lcl:.4f}")
+ax.axhline(usl,        color="red",    linestyle="--", label=f"USL = {usl:.3f}")
+ax.axhline(lsl,        color="red",    linestyle="--", label=f"LSL = {lsl:.3f}")
 
- Colour out-of-control points red
+# Colour out-of-control points red
 out_of_control = (daily_mean > ucl) | (daily_mean < lcl)
 ax.scatter(daily_mean.index[out_of_control], daily_mean.values[out_of_control],
-           colour="red", zorder=5, s=60, label="Out of control")
+           color="red", zorder=5, s=60, label="Out of control")
 
 ax.set_xlabel("Date")
 ax.set_ylabel("Mean diameter (mm)")
@@ -321,7 +321,7 @@ plt.show()
 3. Compute Cpk using Equation @eq-ml-cpk from Chapter @sec-chap-ml:
 
 ```python
- Cpk calculation
+# Cpk calculation
 mu    = df_clean["diameter_mm"].mean()
 sigma = df_clean["diameter_mm"].std()
 cpk   = min((usl - mu) / (3 * sigma), (mu - lsl) / (3 * sigma))
@@ -373,19 +373,19 @@ The C-MAPSS file has no column headers and uses space separators. The 26 columns
 import pandas as pd
 import numpy as np
 
- Define column names
+# Define column names
 columns = (
     ["unit_number", "time_in_cycles"]
     + [f"op_setting_{i}" for i in range(1, 4)]
     + [f"sensor_{i}"     for i in range(1, 22)]
 )
 
- Load the data
+# Load the data
 train = pd.read_csv(
     "train_FD001.txt",
     sep    = r"\s+",
     header = None,
-    names  = columns + ["x", "y"],    two trailing empty columns
+    names  = columns + ["x", "y"],    # two trailing empty columns
 ).drop(columns=["x", "y"])
 
 print(f"Shape: {train.shape}")
@@ -398,10 +398,10 @@ train.head()
 Now compute RUL. There is no RUL column in the data — you create it:
 
 ```python
- For each engine, find the maximum cycle (= the failure cycle)
+# For each engine, find the maximum cycle (= the failure cycle)
 max_cycles = train.groupby("unit_number")["time_in_cycles"].max()
 
- RUL at any row = max cycle for that engine minus the current cycle
+# RUL at any row = max cycle for that engine minus the current cycle
 train["RUL"] = train["unit_number"].map(max_cycles) - train["time_in_cycles"]
 
 print("RUL summary statistics:")
@@ -461,13 +461,13 @@ Sensors with near-zero standard deviation across the entire dataset carry zero p
 ```python
 sensor_cols = [f"sensor_{i}" for i in range(1, 22)]
 
- Standard deviation of each sensor across ALL engines and ALL cycles
+# Standard deviation of each sensor across ALL engines and ALL cycles
 sensor_std = train[sensor_cols].std().sort_values()
 
 print("Standard deviation of each sensor:")
 print(sensor_std.round(6).to_string())
 
- Threshold: sensors with std < 0.001 are effectively constant
+# Threshold: sensors with std < 0.001 are effectively constant
 constant_sensors = sensor_std[sensor_std < 0.001].index.tolist()
 print(f"\nConstant sensors to drop: {constant_sensors}")
 print(f"Remaining useful sensors: {len(sensor_cols) - len(constant_sensors)}")
@@ -488,7 +488,7 @@ For the sensors you have not already dropped, compute the Pearson correlation co
 ```python
 useful_sensors = [s for s in sensor_cols if s not in constant_sensors]
 
- Compute correlations
+# Compute correlations
 correlations = (
     train[useful_sensors + ["RUL"]]
     .corr()["RUL"]
@@ -499,12 +499,12 @@ correlations = (
 print("Correlation of each sensor with RUL (most negative first):")
 print(correlations.round(3).to_string())
 
- Visualize
+# Visualize
 import matplotlib.pyplot as plt
 fig, ax = plt.subplots(figsize=(8, 6))
 colours = ["#c62828" if abs(r) > 0.5 else "#90caf9" for r in correlations]
-ax.barh(correlations.index, correlations.values, colour=colours)
-ax.axvline(0, colour="black", linewidth=0.5)
+ax.barh(correlations.index, correlations.values, color=colours)
+ax.axvline(0, color="black", linewidth=0.5)
 ax.set_title("Correlation of Each Sensor with RUL\n(red = |r| > 0.5)")
 ax.set_xlabel("Pearson r")
 plt.tight_layout()
@@ -556,7 +556,7 @@ def add_rolling_features(df, sensors, window=5):
     """
     df = df.copy()
     for sensor in sensors:
-         groupby ensures the window resets at each new engine
+        # groupby ensures the window resets at each new engine
         df[f"{sensor}_rolling_mean"] = (
             df.groupby("unit_number")[sensor]
               .transform(lambda x: x.rolling(window, min_periods=1).mean())
@@ -577,7 +577,7 @@ print(f"New columns added: {train_fe.shape[1] - train.shape[1]}")
 **Verify the groupby is working:** check that the rolling features for engine #1's last cycle and engine #2's first cycle are computed independently:
 
 ```python
- Check engine boundary: last row of engine 1 and first row of engine 2
+# Check engine boundary: last row of engine 1 and first row of engine 2
 boundary_check = train_fe[train_fe["unit_number"].isin([1, 2])].head(10).tail(6)
 print(boundary_check[["unit_number", "time_in_cycles", "sensor_11", "sensor_11_rolling_mean"]])
 ```
@@ -589,16 +589,16 @@ The rolling mean for engine #2 cycle 1 should be the same as `sensor_11` raw val
 #### Task 2: Clip RUL at 125 (10 minutes) {#sec-ml-lab-w4-task2}
 
 ```python
- Clip RUL at 125: anything above 125 is "basically healthy"
+# Clip RUL at 125: anything above 125 is "basically healthy"
 train_fe["RUL_clipped"] = train_fe["RUL"].clip(upper=125)
 
- Visualize the effect
+# Visualize the effect
 import matplotlib.pyplot as plt
 fig, axes = plt.subplots(1, 2, figsize=(12, 3))
-axes[0].hist(train_fe["RUL"],         bins=50, colour="#90caf9", edgecolor="white")
+axes[0].hist(train_fe["RUL"],         bins=50, color="#90caf9", edgecolor="white")
 axes[0].set_title("Original RUL distribution")
 axes[0].set_xlabel("RUL (cycles)")
-axes[1].hist(train_fe["RUL_clipped"], bins=50, colour="#42a5f5", edgecolor="white")
+axes[1].hist(train_fe["RUL_clipped"], bins=50, color="#42a5f5", edgecolor="white")
 axes[1].set_title("Clipped RUL distribution (max = 125)")
 axes[1].set_xlabel("RUL_clipped (cycles)")
 plt.tight_layout()
@@ -617,7 +617,7 @@ Hold out 20 engines for validation. **Do not split rows randomly.** The assert a
 
 ```python
 import numpy as np
-np.random.seed(42)    reproducible split
+np.random.seed(42)    # reproducible split
 
 all_engines = train_fe["unit_number"].unique()
 val_engines  = np.random.choice(all_engines, size=20, replace=False)
@@ -631,7 +631,7 @@ val_data   = train_fe[train_fe["unit_number"].isin(val_engines)]
 print(f"\nTraining:   {len(train_data):,} rows from {train_data['unit_number'].nunique()} engines")
 print(f"Validation: {len(val_data):,} rows from {val_data['unit_number'].nunique()} engines")
 
- Sanity check — this assert MUST pass before you train
+# Sanity check — this assert MUST pass before you train
 overlap = set(train_data["unit_number"]) & set(val_data["unit_number"])
 assert len(overlap) == 0, f"DATA LEAK: engines in both splits: {overlap}"
 print("\nAssert passed — no engine appears in both training and validation.")
@@ -640,11 +640,11 @@ print("\nAssert passed — no engine appears in both training and validation.")
 **Build feature and label arrays:**
 
 ```python
- Exclude non-feature columns from the feature list
+# Exclude non-feature columns from the feature list
 exclude_cols = (
     ["unit_number", "time_in_cycles", "RUL", "RUL_clipped"]
     + constant_sensors
-    + [f"op_setting_{i}" for i in range(1, 4)]   mostly constant in FD001
+    + [f"op_setting_{i}" for i in range(1, 4)]   # mostly constant in FD001
 )
 feature_cols = [c for c in train_fe.columns if c not in exclude_cols]
 print(f"Number of features: {len(feature_cols)}")
@@ -666,8 +666,8 @@ from sklearn.ensemble import RandomForestRegressor
 model = RandomForestRegressor(
     n_estimators = 100,
     max_depth    = 10,
-    n_jobs       = -1,      use all available CPU cores
-    random_state = 42       reproducible results
+    n_jobs       = -1,      # use all available CPU cores
+    random_state = 42       # reproducible results
 )
 
 print("Training Random Forest...")
@@ -684,12 +684,12 @@ Training should take 30–90 seconds in Colab depending on available resources.
 ```python
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
- Random Forest predictions
+# Random Forest predictions
 y_pred = model.predict(X_val)
 rmse   = np.sqrt(mean_squared_error(y_val, y_pred))
 mae    = mean_absolute_error(y_val, y_pred)
 
- Naive baseline: predict the training set mean for every validation row
+# Naive baseline: predict the training set mean for every validation row
 y_naive    = np.full(len(y_val), fill_value=y_train.mean())
 naive_rmse = np.sqrt(mean_squared_error(y_val, y_naive))
 
@@ -708,7 +708,7 @@ print(f"Improvement over naive: {naive_rmse / rmse:.1f}×")
 import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots(figsize=(7, 7))
-ax.scatter(y_val, y_pred, alpha=0.2, s=8, colour="#1565c0")
+ax.scatter(y_val, y_pred, alpha=0.2, s=8, color="#1565c0")
 ax.plot([0, 125], [0, 125], "r--", linewidth=1, label="Perfect prediction (y = x)")
 ax.set_xlabel("Actual RUL (clipped, cycles)")
 ax.set_ylabel("Predicted RUL (cycles)")
@@ -736,7 +736,7 @@ importances = (
 )
 
 fig, ax = plt.subplots(figsize=(9, 6))
-importances.plot(kind="barh", ax=ax, colour="#1976d2")
+importances.plot(kind="barh", ax=ax, color="#1976d2")
 ax.set_title("Top 15 Most Important Features — Random Forest")
 ax.set_xlabel("Mean Decrease in Impurity")
 plt.tight_layout()
@@ -811,18 +811,18 @@ The template already includes:
 **Your tasks for this file:**
 
 ```python
- TODO 1 (line ~27): Add your name and course to the caption
+# TODO 1 (line ~27): Add your name and course to the caption
 st.caption("Fanshawe College ENGR-1025 | [Your Name Here]")
 
- TODO 2 (line ~80): Load the sample data CSV for the "Use sample data" button.
- Create a small CSV with 30 rows of realistic sensor data for one engine.
- Hint: take the last 30 cycles of engine #1 from train_FD001.txt
- and save them as sample_engine.csv in your repo.
+# TODO 2 (line ~80): Load the sample data CSV for the "Use sample data" button.
+# Create a small CSV with 30 rows of realistic sensor data for one engine.
+# Hint: take the last 30 cycles of engine #1 from train_FD001.txt
+# and save them as sample_engine.csv in your repo.
 
- TODO 3: In the "About this model" expander, update:
- - Your name
- - The actual RMSE you achieved (from your Week 4 notebook)
- - A specific limitation relevant to Précitech's actual machines
+# TODO 3: In the "About this model" expander, update:
+# - Your name
+# - The actual RMSE you achieved (from your Week 4 notebook)
+# - A specific limitation relevant to Précitech's actual machines
 ```
 
 **To run locally** (if Python is installed on your machine):
