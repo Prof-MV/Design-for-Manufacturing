@@ -1,3 +1,13 @@
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
 ## Strength of Bolt Joint Calculations {#sec-chap-03-bolts}
 
 ```{r setup-03, include=FALSE}
@@ -58,7 +68,42 @@ ggplot(df, aes(x = ExternalLoad, y = BoltForce)) +
   theme_minimal()
 ```
 
-As illustrated in Figure ~@fig-bolt-plot, the bolt force increases much more slowly while the joint is clamped ($C < 1$). Once the external load exceeds the separation point, the bolt must carry the entire load, significantly increasing the risk of fatigue or tensile failure. 
+As illustrated in Figure ~@fig-bolt-plot, the bolt force increases much more slowly while the joint is clamped ($C < 1$). Once the external load exceeds the separation point, the bolt must carry the entire load, significantly increasing the risk of fatigue or tensile failure.
+
+::: {.content-visible when-format="html"}
+*This one is live — edit the preload (`preload`) and joint stiffness constant (`C`) below and re-run the cell to see how the separation point and bolt force move.*
+
+```{webr-r}
+#| label: bolt-load-response-interactive
+## Edit these two values and re-run!
+preload <- 5000   ## bolt preload F_i (N)
+C       <- 0.25   ## joint stiffness constant C = k_b / (k_b + k_m)
+
+## Separation point: external load at which member clamp force reaches zero
+sep_point <- preload / (1 - C)
+
+## Bolt force at a few sample external loads
+sample_P <- c(0, 2000, 4000, 6000, 8000, 10000)
+bolt_force <- ifelse(sample_P < sep_point,
+                     preload + C * sample_P,   ## joint still clamped
+                     sample_P)                 ## joint separated - bolt carries all
+
+cat("Joint stiffness constant C =", C, "\n")
+cat("Preload F_i               =", preload, "N\n")
+cat("Joint separates at P      =", round(sep_point, 1), "N\n\n")
+
+cat(sprintf("%12s  %14s  %s\n", "Ext. load P", "Bolt force F_b", "State"))
+for (i in seq_along(sample_P)) {
+  state <- if (sample_P[i] < sep_point) "clamped" else "SEPARATED"
+  cat(sprintf("%10.0f N  %12.0f N  %s\n", sample_P[i], bolt_force[i], state))
+}
+
+cat("\nWhile clamped, each 1000 N of external load adds only",
+    round(C * 1000, 0), "N to the bolt.\n")
+cat("After separation, each 1000 N of external load adds a full 1000 N to the bolt.\n")
+```
+:::
+
 
 **Summary Checklist for Designers**
 
@@ -790,6 +835,45 @@ ggplot(plot_data, aes(x = x, y = y, color = group, linetype = group)) +
 * **The Red Arrow:** This represents the additional tension the bolt carries. Notice that it is much smaller than the total external force ($P = 15,000$). This is because the members "gave up" some of their compression to support the load.
 * **Member Safety:** As long as the yellow line (member compression) does not reach $y = 0$, the joint remains "clamped." If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.
 
+::: {.content-visible when-format="html"}
+*This one is live — edit the preload, the bolt/member stiffnesses, and the external working load below, then re-run the cell to see how the load is shared.*
+
+```{webr-r}
+#| label: joint-working-load-interactive
+## Edit these values and re-run!
+preload    <- 30000   ## bolt preload F_i (N)
+kb         <- 431027  ## bolt stiffness k_b (N/mm)
+km         <- kb * 4  ## member stiffness k_m (N/mm) - stiffer than the bolt here
+external_p <- 15000   ## external working load P on the joint (N)
+
+## Load sharing
+Phi             <- kb / (kb + km)          ## joint stiffness constant C
+bolt_increase   <- Phi * external_p        ## extra tension taken by the bolt
+member_decrease <- (1 - Phi) * external_p  ## clamp force given up by the members
+
+## Resulting forces
+Fb <- preload + bolt_increase              ## total bolt tension
+Fm <- (1 - Phi) * external_p - preload     ## member force (negative = still clamped)
+
+cat("Joint stiffness constant C = k_b / (k_b + k_m) =", round(Phi, 3), "\n\n")
+cat("External working load P        =", external_p, "N\n")
+cat("  -> carried by the bolt       =", round(bolt_increase, 0), "N  (",
+    round(100 * Phi, 1), "% of P )\n")
+cat("  -> relieved from the members =", round(member_decrease, 0), "N  (",
+    round(100 * (1 - Phi), 1), "% of P )\n\n")
+cat("Preload F_i        =", preload, "N\n")
+cat("Total bolt load F_b =", round(Fb, 0), "N\n")
+cat("Member force F_m    =", round(Fm, 0), "N\n\n")
+
+if (Fm < 0) {
+  cat("F_m < 0: the members are still in compression - joint stays CLAMPED.\n")
+  cat("Separation would occur at P =", round(preload / (1 - Phi), 0), "N\n")
+} else {
+  cat("F_m >= 0: the members have SEPARATED - the bolt now carries the full load.\n")
+}
+```
+:::
+
 
 
 ### Advanced Analysis of Bolted Joints with applicable Formulas {#sec-bolted-analysis-formulas}
@@ -950,6 +1034,77 @@ First, we need to gather the geometric properties of the hardware. Instead of gu
 
 ##### Step 2: Calculation {-}
 
+::: {.content-visible when-format="html"}
+*This one is live — every design parameter and table lookup is a variable at the top of the cell. Change the load, the plate thicknesses, the moduli, the bolt size, or the looked-up areas and re-run to recompute the stiffnesses, the joint constant, and all three safety factors.*
+
+```{webr-r}
+#| label: bolt-safety-analysis-interactive
+## ---- 1. Design parameters (edit these) --------------------------------------
+P    <- 4000     ## external tensile load on the joint (lbf)
+Eb   <- 29e6     ## modulus of elasticity, bolt - carbon steel (psi)
+E1   <- 30e6     ## modulus of elasticity, plate 1 - steel (psi)
+E2   <- 14.5e6   ## modulus of elasticity, plate 2 - cast iron (psi)
+Sp   <- 85000    ## proof strength, SAE Grade 5 (psi)
+t1   <- 1.25     ## thickness of steel plate (in)
+t2   <- 0.75     ## thickness of cast iron plate (in)
+
+## ---- 2. Values looked up from the standards tables (edit these) -------------
+At   <- 0.1419   ## tensile stress area, 1/2 in-13 UNC  (Table @tbl-english-cross-section-area-table)
+tw   <- 0.095    ## washer thickness, 1/2 N            (Table @tbl-english-washer-dimensions-table)
+d_nom <- 0.5     ## nominal bolt diameter (in)
+L_total <- 3.0   ## selected bolt length (in)
+Hex_W <- 0.75    ## hex-head width across flats for a 1/2 in bolt (in)
+clr   <- 0.0625  ## hole clearance (in)
+
+## ---- 3. Geometry ----------------------------------------------------------
+Grip <- t1 + t2 + tw                 ## total grip length l
+Lt   <- 2 * d_nom + 0.25             ## thread length (standard formula for L <= 6 in)
+l_d_total <- L_total - Lt            ## total unthreaded shank length of the bolt
+l_d  <- min(l_d_total, Grip)         ## unthreaded portion inside the grip
+l_t  <- Grip - l_d                   ## threaded portion inside the grip
+Ad   <- (pi / 4) * d_nom^2           ## unthreaded (shank) cross-section area
+
+## ---- 4. Stiffnesses -----------------------------------------------------------
+## Bolt stiffness k_b (shank + threaded portion acting as springs in series)
+kb <- (Ad * At * Eb) / (Ad * l_t + At * l_d)
+
+## Member stiffness k_m via a substitute cylinder (large-joint form)
+Dh <- d_nom + clr                                   ## effective hole diameter
+As <- (pi / 4) * ((Hex_W + 0.1 * Grip)^2 - Dh^2)    ## substitute-cylinder area
+E_avg <- (E1 * t1 + E2 * t2) / (t1 + t2)            ## thickness-weighted average modulus
+km <- (E_avg * As) / Grip
+
+## ---- 5. Joint constant and forces ------------------------------------------
+C_joint <- kb / (kb + km)            ## joint stiffness constant C
+Fi <- 0.75 * At * Sp                 ## preload at 75% of proof load
+Fb <- C_joint * P + Fi               ## total bolt load
+
+## ---- 6. Safety factors ------------------------------------------------------
+nP <- (Sp * At) / Fb                 ## yield (proof) safety factor
+nL <- (Sp * At - Fi) / (C_joint * P) ## load factor
+n0 <- Fi / (P * (1 - C_joint))       ## separation factor
+
+## ---- 7. Report -----------------------------------------------------------------
+verdict <- function(n) if (n > 1) "SAFE" else "FAIL"
+
+cat(sprintf("Grip length l           = %8.3f in\n", Grip))
+cat(sprintf("Thread length L_T       = %8.3f in\n", Lt))
+cat(sprintf("Unthreaded shank l_d    = %8.3f in  (in grip: %.3f in)\n", l_d_total, l_d))
+cat(sprintf("Shank area A_d          = %8.4f in^2\n", Ad))
+cat(sprintf("Bolt stiffness k_b      = %8.0f lbf/in\n", kb))
+cat(sprintf("Substitute area A_s     = %8.4f in^2\n", As))
+cat(sprintf("Member stiffness k_m    = %8.0f lbf/in\n", km))
+cat(sprintf("Joint constant C        = %8.4f\n", C_joint))
+cat(sprintf("Preload F_i             = %8.0f lbf\n", Fi))
+cat(sprintf("Total bolt load F_b     = %8.0f lbf\n\n", Fb))
+
+cat(sprintf("Yield safety   n_P = %6.2f  -> %s\n", nP, verdict(nP)))
+cat(sprintf("Load factor    n_L = %6.2f  -> %s\n", nL, verdict(nL)))
+cat(sprintf("Separation     n_0 = %6.2f  -> %s\n", n0, verdict(n0)))
+```
+:::
+
+::: {.content-visible unless-format="html"}
 ```{r design-data, echo=FALSE, message=FALSE}
 library(tibble)
 library(dplyr)
@@ -1079,8 +1234,9 @@ results %>%
   row_spec(which(results$Status == "SAFE"), color = "green", bold = TRUE) %>%
   row_spec(which(results$Status == "FAIL"), color = "red", bold = TRUE)
 ```
+:::
 
-Results and Conclusion 
+Results and Conclusion
 The calculation results are summarized below. The Joint Constant ($C$) indicates the fraction of the external load carried by the bolt. A lower $C$ value is generally preferred, as it means the rigid members absorb more of the load, protecting the bolt from fatigue.
 
 
@@ -1102,6 +1258,105 @@ In this example we are verifying if the bolts can hold the applied load and how 
 ```{r, echo=FALSE, out.width="100%", fig.align="center", fig.cap="2 Plate Example"}
 knitr::include_graphics("images/BoltJointExample.png")
 ```
+
+::: {.content-visible when-format="html"}
+**Live calculator for Example 2**
+
+*Every worked answer below (Questions 1--8) is reproduced in this one cell. Edit any input at the top — the bolt geometry, the plate materials and thicknesses, the total bolted-up load, the number of bolts, the friction factor `K` — and re-run to watch $k_b$, $k_m$, $C$, the forces, the stresses, the three safety factors, and the tightening torque all update. Try Question 8's scenario by setting `K <- 0.10` (lubricated) and see the bolt overstress.*
+
+```{webr-r}
+#| label: example2-interactive
+## ---- Inputs (edit these and re-run) ---------------------------------------
+d_nom  <- 0.5      ## nominal bolt diameter (in)
+L_bolt <- 1.5      ## bolt length under the head (in)
+At     <- 0.1599   ## tensile stress area, 1/2 in-20 UNF (in^2)
+Eb     <- 29e6     ## bolt modulus of elasticity (psi)
+Sp     <- 85000    ## proof strength, SAE J429 Grade 5 (psi)
+Su     <- 120000   ## min tensile strength, Grade 5 (psi)
+
+t_top  <- 0.5      ## steel top plate thickness (in)
+t_bot  <- 0.75     ## cast iron bottom plate thickness (in)
+tw     <- 0.095    ## washer thickness under the head (in)
+E_top  <- 29e6     ## steel plate modulus (psi)
+E_bot  <- 13e6     ## cast iron plate modulus (psi)
+
+Dh     <- 0.510    ## effective hole diameter (in)
+W_head <- 1.5 * d_nom   ## head width across flats ~ 1.5 d  (in)
+
+P_total <- 10000   ## total external load carried by the joint (lbf)
+n_bolts <- 4       ## number of bolts sharing the load
+K       <- 0.20    ## torque / nut factor (0.20 dry; ~0.10 lubricated)
+
+## ---- Q1: bolt stiffness k_b ---------------------------------------------------
+Lt   <- 2 * d_nom + 0.25          ## thread length, L <= 6 in
+l_d  <- L_bolt - Lt               ## unthreaded shank length
+lj   <- t_top + t_bot + tw        ## total joint (grip) length
+l_t  <- lj - l_d                  ## threaded length within the grip
+Ad   <- (pi / 4) * d_nom^2        ## major-diameter (shank) area
+kb   <- (Ad * At * Eb) / (Ad * l_t + At * l_d)
+
+cat("Q1  l_d =", round(l_d, 3), "in   l_t =", round(l_t, 3),
+    "in   A_d =", round(Ad, 4), "in^2\n")
+cat("Q1  k_b =", format(signif(kb, 3), big.mark = " "), "lbf/in\n\n")
+
+## ---- Q2: member stiffness k_m ----------------------------------------------
+As   <- (pi / 4) * ((W_head + 0.1 * lj)^2 - Dh^2)   ## substitute-cylinder area
+k_steel <- (E_top * As) / (t_top + tw)              ## steel + washer sub-cylinder
+k_iron  <- (E_bot * As) / t_bot                     ## cast iron sub-cylinder
+km   <- 1 / (1 / k_steel + 1 / k_iron)              ## springs in series
+
+cat("Q2  A_s =", round(As, 4), "in^2\n")
+cat("Q2  k_steel =", format(signif(k_steel, 3), big.mark = " "), "lbf/in",
+    "   k_iron =", format(signif(k_iron, 3), big.mark = " "), "lbf/in\n")
+cat("Q2  k_m =", format(signif(km, 3), big.mark = " "), "lbf/in\n\n")
+
+## ---- Q3: joint constant C, load share P, preload F_i ---------------------
+C   <- kb / (kb + km)
+P   <- P_total / n_bolts
+Fi  <- 0.75 * At * Sp
+
+cat("Q3  C =", round(C, 3), "   P per bolt =", round(P, 0), "lbf",
+    "   F_i =", round(Fi, 0), "lbf\n\n")
+
+## ---- Q4 / Q5: bolt force F_b and member force F_m -----------------------------
+Fb  <- C * P + Fi
+Fm  <- (1 - C) * P - Fi
+
+cat("Q4  F_b = C*P + F_i =", round(Fb, 0), "lbf\n")
+cat("Q5  F_m = (1-C)*P - F_i =", round(Fm, 0), "lbf",
+    if (Fm < 0) " (negative -> members still in compression)\n" else "\n")
+cat("\n")
+
+## ---- Q6: tensile stress in the bolt -----------------------------------------
+sigma_b <- Fb / At
+cat("Q6  sigma_b = F_b / A_t =", round(sigma_b, 0), "psi  (",
+    round(sigma_b / 1000, 1), "ksi )\n\n")
+
+## ---- Q7: safety factors ---------------------------------------------------
+nP <- (Sp * At) / (C * P + Fi)     ## proof / yield
+nL <- (Sp * At - Fi) / (C * P)     ## load factor
+nO <- Fi / (P * (1 - C))           ## separation
+
+cat("Q7  n_P =", round(nP, 2), "   n_L =", round(nL, 2),
+    "   n_O =", round(nO, 2), "\n\n")
+
+## ---- Q8: tightening torque and the effect of lubrication -----------------
+Tin <- K * d_nom * Fi             ## torque to reach F_i (in-lbf)
+cat("Q8  T =", round(Tin, 0), "in-lbf =", round(Tin / 12, 0), "ft-lbf",
+    "  (at K =", K, ")\n")
+
+## If the operator applies that same torque to a lubricated bolt (K ~ 0.10),
+## the preload that actually develops is much higher:
+K_lube <- 0.10
+Fi_lube <- Tin / (K_lube * d_nom)
+sigma_lube <- Fi_lube / At
+cat("Q8  Same torque on a lubricated bolt (K =", K_lube, "): F_i =",
+    round(Fi_lube, 0), "lbf  ->  sigma =", round(sigma_lube, 0), "psi\n")
+cat("Q8  Tensile strength S_u =", Su, "psi  ->",
+    if (sigma_lube > Su) "STRESS EXCEEDS S_u: the bolt breaks while tightening.\n"
+    else "still below S_u.\n")
+```
+:::
 
 ::: {.question}
 ###### **1)** What is the spring constant of the bolt $k_b$? {-}
