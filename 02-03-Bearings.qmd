@@ -1625,6 +1625,26 @@ The Stribeck curve has profound implications for bearing selection and design:
 **Industry Application:** Large turbine bearings in power plants use **hydrostatic jacking**—externally pressurized oil is pumped into the bearing at startup to lift the shaft before rotation begins. This eliminates the boundary lubrication phase entirely, preventing wear during the 10-15 seconds it takes to reach hydrodynamic speed.
 :::
 
+#### Watch It Happen: One Start–Stop Cycle {#sec-oil-film-cycle-video}
+
+The animation below follows a bushing through a complete start–stop cycle: at rest, startup, liftoff, full-speed running, coast-down, and touchdown. Four views update together. The bearing cross-section shows the shaft position and the oil-film pressure. The Stribeck curve marks where the bearing is operating. The zoom panel shows the asperities at $h_{min}$, and the last panel plots cumulative wear.
+
+::: {.content-visible when-format="html"}
+{{< video images/bearing-oil-film-cycle.mp4 title="Oil film formation in a plain bearing over one start-stop cycle" >}}
+:::
+
+::: {.content-visible unless-format="html"}
+![One start–stop cycle of a plain bearing, shown during full-speed running. The animated version in the online edition steps through startup, liftoff, running, and shutdown.](images/bearing-oil-film-cycle-poster.png){#fig-oil-film-cycle fig-align="center" width="100%"}
+:::
+
+Watch for three things:
+
+- **Liftoff and touchdown happen at different speeds.** Oil that has warmed up during running is thinner (lower viscosity) than the cold oil at startup. So on the way down, the bearing parameter drops below the transition value at a *higher* speed than liftoff happened on the way up. (The animation writes viscosity as η, as in the Stribeck curve figure above, and uses μ for the friction coefficient.)
+- **The shaft centre does not move straight up.** It swings off to the side of the load line as the wedge forms. That is why $h_{min}$ sits downstream of the bottom of the bore.
+- **Almost all of the wear happens in the first and last few seconds.** Once $h_{min}$ is about three times the combined surface roughness, the wear curve goes flat. A bushing's life therefore depends mostly on how many start–stop cycles it sees, not on how many hours it runs.
+
+The model behind the animation is simplified for teaching. It uses the short-bearing (Ocvirk) pressure and attitude-angle relations, a lagged film-thickness response, and Archard-type wear proportional to asperity load × sliding speed. The trends are right, but the numbers are illustrative only.
+
 For sintered self-lubricating bearings (see Chapter @sec-chap-sintering), the oil stored in the porous structure is released by heat and pumping action during operation. However, at very low speeds or oscillating motion, hydrodynamic films cannot develop—this is why **graphite-impregnated sintered bearings** are used instead for such applications, providing solid lubrication rather than relying on fluid film formation.
 
 ---
