@@ -397,6 +397,283 @@ metric_nuts %>%
   row_spec(0, background = "#D81B60", color = "white") ## Matches source pink header
 ```
 
+#### Why Use a Washer? {#sec-why-washer}
+
+A plain washer looks like the most trivial part in the assembly, yet it protects the most highly stressed region of the whole joint. To see why, follow the **force flow** (the path the preload takes) through the joint in @fig-washer-force-path. The preload is a closed loop of internal force: the bolt shank is in tension, the threads hand that tension over to the nut, the nut pushes down on the washer, the washer spreads the load into the clamped members (which are in compression), and the members push back up against the bolt head, which closes the loop into the shank again.
+
+```{r washer-geometry, include=FALSE}
+## ---- Shared cross-section geometry for the washer figures (M12-like, mm) ----
+## Not to scale in every detail -- proportions chosen for readability.
+p_thr  <- 1.75   ## thread pitch
+r_maj  <- 6.0    ## bolt major radius
+r_min  <- 5.0    ## bolt minor (root) radius
+r_hole <- 6.5    ## clearance hole radius
+r_head <- 9.0    ## head bearing radius
+r_nut  <- 9.5    ## nut half-width (across flats / 2)
+r_wash <- 12.0   ## washer outer radius
+x_mem  <- 26     ## half-width of the clamped plates
+h_nut  <- 10.5   ## nut height
+y_thr0 <- 16     ## start of the bolt thread
+y_top  <- 38     ## end of the bolt
+
+col_bolt <- "#90A4AE"; col_nut <- "#607D8B"; col_wash <- "#E0C068"
+col_mem  <- "#D7CCC8"; col_flow <- "#E65100"; col_hot <- "#C62828"
+
+## Triangular thread profile: radius as a function of height
+thread_r <- function(y) {
+  frac <- ((y - y_thr0) %% p_thr) / p_thr
+  r_min + (r_maj - r_min) * (1 - abs(2 * frac - 1))
+}
+
+## Mirror a right-hand polygon to the left side (x -> -x), tagging pieces
+mirror <- function(df, id) {
+  rbind(transform(df, id = paste0(id, "_R")),
+        transform(df, x = -x, id = paste0(id, "_L")))
+}
+
+## Bolt: head + shank + threaded end (one closed polygon)
+yy <- seq(y_thr0, y_top, by = 0.05)
+bolt_df <- data.frame(
+  x = c(-r_head, r_head, r_head, r_maj, r_maj, thread_r(yy),
+        -rev(thread_r(yy)), -r_maj, -r_maj, -r_head),
+  y = c(-8, -8, 0, 0, y_thr0, yy, rev(yy), y_thr0, 0, 0),
+  id = "bolt"
+)
+
+## Clamped members: two plates, each cut by the hole (left + right pieces)
+plate <- function(y0, y1, id) {
+  mirror(data.frame(x = c(r_hole, x_mem, x_mem, r_hole), y = c(y0, y0, y1, y1)), id)
+}
+members_df <- rbind(plate(0, 10, "lower"), plate(10, 20, "upper"))
+
+## Nut: outer flat face + internal thread that meshes with the bolt
+nut_poly <- function(y_bot) {
+  yn <- seq(y_bot, y_bot + h_nut, by = 0.05)
+  mirror(data.frame(x = c(r_nut, r_nut, rev(thread_r(yn))),
+                    y = c(y_bot, y_bot + h_nut, rev(yn))), "nut")
+}
+
+## Force-flow path (right half); the left half is its mirror image
+flow_path <- function(pts) {
+  rbind(transform(pts, side = "R"), transform(pts, x = -x, side = "L"))
+}
+
+## Red "hot spot" rings at the first engaged thread
+hot_spot <- function(xc, yc, rmax = 2.2, n = 6) {
+  do.call(rbind, lapply(seq_len(n), function(i) {
+    r <- rmax * i / n; t <- seq(0, 2 * pi, length.out = 60)
+    data.frame(x = xc + r * cos(t), y = yc + r * sin(t), ring = i)
+  }))
+}
+
+## Common drawing layers for the joint
+joint_layers <- function(nut_y, washer = TRUE) {
+  list(
+    geom_polygon(data = members_df, aes(x, y, group = id),
+                 fill = col_mem, colour = "grey30", linewidth = 0.4),
+    geom_polygon(data = bolt_df, aes(x, y, group = id),
+                 fill = col_bolt, colour = "grey25", linewidth = 0.4),
+    if (washer) geom_polygon(
+      data = mirror(data.frame(x = c(r_hole, r_wash, r_wash, r_hole),
+                               y = c(20, 20, 22.5, 22.5)), "washer"),
+      aes(x, y, group = id), fill = col_wash, colour = "grey25", linewidth = 0.4),
+    geom_polygon(data = nut_poly(nut_y), aes(x, y, group = id),
+                 fill = col_nut, colour = "grey20", linewidth = 0.4)
+  )
+}
+
+## Arrowheads placed along the force-flow path
+flow_arrows <- function(fp, every = 2) {
+  do.call(rbind, lapply(split(fp, fp$side), function(d) {
+    i <- seq(1, nrow(d) - 1, by = every)
+    data.frame(x = d$x[i], y = d$y[i],
+               xend = d$x[i] + 0.55 * (d$x[i + 1] - d$x[i]),
+               yend = d$y[i] + 0.55 * (d$y[i + 1] - d$y[i]))
+  }))
+}
+
+callout <- function(x, y, xl, yl, label, colour = "grey15") {
+  list(
+    annotate("segment", x = x, y = y, xend = xl - 0.8, yend = yl,
+             colour = "grey40", linewidth = 0.35),
+    annotate("point", x = x, y = y, size = 1.2, colour = "grey20"),
+    annotate("text", x = xl, y = yl, label = label, hjust = 0, lineheight = 0.9,
+             size = 2.9 * diagram_text_scale, colour = colour)
+  )
+}
+```
+
+```{r fig-washer-force-path, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=7.5, out.width="95%", fig.align="center", fig.cap="Force flow in a bolted joint with a washer. The preload travels as a closed loop: up the bolt shank (tension), through the first engaged threads into the nut, down through the washer, spreading through the clamped members as a compression cone, and back into the bolt head. The washer enlarges the bearing area and keeps the nut face away from the hole edge."}
+library(ggplot2)
+
+## Force path (right half): shank -> first threads -> nut -> washer -> cone -> head
+fp1 <- flow_path(data.frame(
+  x = c(2.8, 2.8, 2.8, 5.5, 7.8, 9.8, 12.5, 14.2, 12.5, 8.5, 5.5, 2.8),
+  y = c(-4,  8,  22.9, 23.6, 23.1, 21.3, 16.5, 10,  4.5,  0.4, -2.5, -4)
+))
+
+## Compression cone in the members (qualitative)
+cone1 <- mirror(data.frame(x = c(r_hole, r_wash, 16.5, r_head + 1, r_hole),
+                           y = c(20, 20, 10, 0, 0)), "cone")
+
+ggplot() +
+  joint_layers(nut_y = 22.5, washer = TRUE) +
+  geom_polygon(data = cone1, aes(x, y, group = id), fill = col_flow, alpha = 0.18) +
+  geom_polygon(data = hot_spot(5.5, 23.4, rmax = 1.8), aes(x, y, group = ring),
+               fill = col_hot, alpha = 0.12, colour = NA) +
+  geom_polygon(data = hot_spot(-5.5, 23.4, rmax = 1.8), aes(x, y, group = ring),
+               fill = col_hot, alpha = 0.12, colour = NA) +
+  geom_path(data = fp1, aes(x, y, group = side), colour = col_flow,
+            linewidth = 1.4, alpha = 0.9, lineend = "round", linejoin = "round") +
+  geom_segment(data = flow_arrows(fp1), aes(x, y, xend = xend, yend = yend),
+               colour = col_flow, linewidth = 1.4,
+               arrow = arrow(length = unit(0.22, "cm"), type = "closed")) +
+  callout(r_nut - 1, 29, 30, 31, "Nut: thread load turns\ninto bearing pressure") +
+  callout(5.6, 23.4, 30, 25.2, "First engaged threads:\npeak stress (hot spot)", col_hot) +
+  callout(11, 21.3, 30, 19.5, "Washer: hardened, flat,\nlarger bearing area,\nbridges the hole edge") +
+  callout(15, 12, 30, 12, "Clamped members:\ncompression cone") +
+  callout(2.8, 6, 30, 5, "Bolt shank: tension", col_flow) +
+  callout(r_head - 1, -5, 30, -3.5, "Bolt head") +
+  annotate("text", x = 0, y = 41, label = "Force flow (preload loop)",
+           fontface = "bold", colour = col_flow, size = 3.4 * diagram_text_scale) +
+  coord_equal(xlim = c(-x_mem, 52), ylim = c(-9, 42), expand = FALSE) +
+  theme_void()
+```
+
+Two details make this path critical. First, look at where the path is most concentrated: at the **first engaged thread** at the bottom of the nut. The threads do **not** share the load equally. The bolt is being stretched while the nut is being compressed, so the elastic mismatch is largest at the nut's bearing face and dies out towards the top of the nut. According to @shigley2020, the first engaged thread carries about **38 %** of the load, the second about **25 %**, the third about **18 %**, and the seventh thread is practically unloaded (@fig-thread-load-share). **The first three threads carry roughly 80 % of the total bolt force.** A longer nut therefore adds very little strength; it only adds more lightly loaded threads.
+
+```{r fig-thread-load-share, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.8, out.width="80%", fig.align="center", fig.cap="Share of the bolt load carried by each engaged thread of a standard nut, counted from the nut's bearing face. Threads 1-3 and 7 follow Shigley; the split of the remaining 19 % over threads 4-6 is illustrative."}
+library(ggplot2)
+
+thread_share <- data.frame(
+  thread = factor(1:7),
+  share  = c(38, 25, 18, 9, 6, 4, 0),
+  group  = c(rep("First three threads", 3), rep("Remaining threads", 4))
+)
+
+ggplot(thread_share, aes(thread, share, fill = group)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = paste0(share, " %")), vjust = -0.4,
+            size = 3.2 * diagram_text_scale) +
+  annotate("segment", x = 0.65, xend = 3.35, y = 45, yend = 45, colour = col_hot) +
+  annotate("text", x = 2, y = 48.5, label = "Threads 1-3: about 81 % of the load",
+           colour = col_hot, fontface = "bold", size = 3.2 * diagram_text_scale) +
+  scale_fill_manual(values = c("First three threads" = col_hot,
+                               "Remaining threads" = "#90A4AE")) +
+  scale_y_continuous(limits = c(0, 52), expand = expansion(mult = c(0, 0.02))) +
+  labs(x = "Engaged thread (1 = at the nut's bearing face)",
+       y = "Share of bolt load (%)", fill = NULL) +
+  theme_minimal() +
+  theme(legend.position = "top", panel.grid.major.x = element_blank())
+```
+
+Second, the **nut's bearing face sits exactly next to this hot spot**. Anything that damages the bottom face of the nut close to the bore damages the root of the most highly loaded thread. This is where the washer earns its place. Drilling or punching the clearance hole almost always leaves a **burr**, a sharp, work-hardened lip of material raised around the hole edge. Without a washer, the nut is tightened straight onto that burr (@fig-washer-missing-burr):
+
+```{r fig-washer-missing-burr, echo=FALSE, message=FALSE, warning=FALSE, fig.width=13, fig.height=7, out.width="100%", fig.align="center", fig.cap="The same joint without a washer. The nut is tightened directly onto a burr at the hole edge (burr size exaggerated). The burr acts as a knife: it cuts into the nut face right at the root of the first engaged thread, where the stress is already highest, and the notch it leaves lies perpendicular to the bolt force, the most damaging orientation for a crack. The nut also bears only on the burr ring, which flattens (embeds) over time and lets the preload drop."}
+library(ggplot2)
+library(gridExtra)
+
+nut_y2 <- 20.5   ## nut rides on the burr, lifted off the plate
+
+## Burr: a sharp raised lip at the top edge of the hole
+burr_df <- mirror(data.frame(x = c(r_hole, 8.4, r_hole + 0.15),
+                             y = c(20, 20, 21.25)), "burr")
+
+## Force path funnels through the burr ring
+fp2 <- flow_path(data.frame(
+  x = c(2.8, 2.8, 2.8, 5.4, 6.7, 7.6, 9.8, 11.5, 10.5, 8.2, 5.5, 2.8),
+  y = c(-4,  8,  20.9, 21.5, 21.0, 18.5, 14, 9,   4,    0.4, -2.5, -4)
+))
+cone2 <- mirror(data.frame(x = c(r_hole, 8.4, 13, r_head + 1, r_hole),
+                           y = c(20, 20, 10, 0, 0)), "cone")
+
+## Notch/crack started by the burr, running horizontally (perpendicular to the force)
+crack_df <- data.frame(x = c(5.45, 5.7, 6.05, 6.45, 6.75, 7.1, 7.5, 7.9),
+                       y = c(21.30, 21.18, 21.32, 21.20, 21.25, 21.35, 21.22, 21.30))
+
+base_joint <- function() {
+  list(
+    joint_layers(nut_y = nut_y2, washer = FALSE),
+    geom_polygon(data = cone2, aes(x, y, group = id), fill = col_flow, alpha = 0.18),
+    geom_polygon(data = hot_spot(5.5, nut_y2 + 0.9, rmax = 1.8), aes(x, y, group = ring),
+                 fill = col_hot, alpha = 0.14, colour = NA),
+    geom_polygon(data = hot_spot(-5.5, nut_y2 + 0.9, rmax = 1.8), aes(x, y, group = ring),
+                 fill = col_hot, alpha = 0.14, colour = NA),
+    geom_path(data = fp2, aes(x, y, group = side), colour = col_flow,
+              linewidth = 1.4, alpha = 0.9, lineend = "round", linejoin = "round"),
+    geom_polygon(data = burr_df, aes(x, y, group = id),
+                 fill = "#5D4037", colour = "black", linewidth = 0.4),
+    geom_path(data = crack_df, aes(x, y), colour = col_hot, linewidth = 1.1),
+    geom_path(data = transform(crack_df, x = -x), aes(x, y), colour = col_hot, linewidth = 1.1)
+  )
+}
+
+## ---- Left panel: whole joint ----
+p_main <- ggplot() +
+  base_joint() +
+  geom_segment(data = flow_arrows(fp2), aes(x, y, xend = xend, yend = yend),
+               colour = col_flow, linewidth = 1.4,
+               arrow = arrow(length = unit(0.22, "cm"), type = "closed")) +
+  annotate("rect", xmin = 3.2, xmax = 10.8, ymin = 18.6, ymax = 24,
+           fill = NA, colour = "black", linetype = "dashed", linewidth = 0.5) +
+  annotate("text", x = 11.3, y = 25.2, label = "Detail", hjust = 0,
+           fontface = "bold", size = 3 * diagram_text_scale) +
+  callout(7.5, 20.4, 30, 27, "Burr at the hole edge\n(no washer)", col_hot) +
+  callout(15, 12, 30, 12, "Narrow compression\ncone") +
+  callout(r_nut - 1, 28, 30, 34, "Nut") +
+  annotate("text", x = 0, y = 41, label = "No washer: nut sits on the burr",
+           fontface = "bold", colour = col_hot, size = 3.4 * diagram_text_scale) +
+  coord_equal(xlim = c(-x_mem, 50), ylim = c(-9, 42), expand = FALSE) +
+  theme_void()
+
+## ---- Right panel: magnified detail of the burr under the nut ----
+lab <- function(x, y, label, colour = "grey10", hjust = 0) {
+  annotate("label", x = x, y = y, label = label, hjust = hjust, lineheight = 0.9,
+           size = 2.7 * diagram_text_scale, colour = colour,
+           fill = "white", alpha = 0.85, label.size = 0)
+}
+p_zoom <- ggplot() +
+  base_joint() +
+  ## axial force arrow
+  annotate("segment", x = 4.1, xend = 4.1, y = 18.9, yend = 20.6, colour = col_flow,
+           linewidth = 1.5, arrow = arrow(length = unit(0.3, "cm"), type = "closed")) +
+  annotate("text", x = 4.25, y = 19.3, label = "F", hjust = 0, fontface = "bold.italic",
+           colour = col_flow, size = 4 * diagram_text_scale) +
+  ## gap between nut and plate outside the burr
+  annotate("segment", x = 10.1, xend = 10.1, y = 20, yend = nut_y2, colour = "black",
+           linewidth = 0.4, arrow = arrow(ends = "both", length = unit(0.12, "cm"))) +
+  annotate("segment", x = 8.6, y = 22.95, xend = 7.4, yend = 21.35,
+           colour = col_hot, linewidth = 0.5) +
+  annotate("segment", x = 4.6, y = 23.3, xend = 5.5, yend = 21.5,
+           colour = col_hot, linewidth = 0.5) +
+  lab(10.65, 19.0, "Gap: nut bears only on the\nburr ring, so it embeds and\npreload is lost", hjust = 1) +
+  lab(10.65, 23.3, "Burr cuts a notch into the\nnut face, perpendicular\nto the force F", col_hot, hjust = 1) +
+  lab(3.35, 23.6, "Peak stress: root of the\n1st engaged thread", col_hot) +
+  annotate("text", x = 8.6, y = 19.65, label = "Plate",
+           size = 2.6 * diagram_text_scale, colour = "grey30") +
+  annotate("text", x = 9.3, y = 21.9, label = "Nut", hjust = 1,
+           size = 2.6 * diagram_text_scale, colour = "white", fontface = "bold") +
+  coord_equal(xlim = c(3.2, 10.8), ylim = c(18.6, 24), expand = FALSE) +
+  theme_void() +
+  theme(panel.border = element_rect(fill = NA, colour = "black",
+                                    linetype = "dashed", linewidth = 0.8),
+        plot.margin = margin(5, 12, 5, 5))
+
+grid.arrange(p_main, p_zoom, ncol = 2, widths = c(1.25, 1))
+```
+
+The burr causes three problems at once:
+
+1. **It cuts the nut exactly where the stress is highest.** The burr is harder than the nut face (the edge was work-hardened by the drill or punch) and bears on a tiny area, so it digs into the nut right beside the bore, at the root of the first engaged thread that already carries about 38 % of the bolt load.
+2. **The notch lies perpendicular to the force.** The bolt force acts along the bolt axis; the groove pressed in by the burr runs across it, in the plane of the nut face. A notch at right angles to the load is the most damaging orientation: every load cycle opens it like a crack, so it becomes the starting point for fatigue cracks in the nut thread and the bolt thread next to it.
+3. **The preload leaks away.** Because the nut rests only on the narrow burr ring, the local contact pressure far exceeds what the material can take. The burr flattens (**embedding**) during the first hours of service, the bolt stretch is lost, and the preload drops, which makes separation and self-loosening much more likely (see @sec-bolted-joints).
+
+A hardened flat washer solves all three: it bridges the hole edge so the burr cannot reach the nut, it gives the nut a smooth, hard, flat bearing face, and its larger outer diameter spreads the bearing pressure into a wider compression cone in the members. For the same reason, holes in critical joints should be **deburred or chamfered**. Many standards require a hardened washer under the part that is turned (usually the nut), and also require one against soft materials such as aluminium or plastics, where the bearing pressure alone would cause embedding.
+
+::: {.callout-think}
+**Check your understanding:** Why does making a nut twice as tall barely increase the strength of the thread engagement? And why is a burr at the hole edge more damaging under the nut than a scratch on the outer edge of the nut's bearing face?
+:::
+
 #### Washer Dimensions
 
 ```{r tbl-english-washer-dimensions-table, echo=FALSE, message=FALSE, warning=FALSE}
