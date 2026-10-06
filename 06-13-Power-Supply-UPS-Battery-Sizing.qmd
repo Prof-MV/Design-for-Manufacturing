@@ -239,46 +239,70 @@ ggplot() +
 
 ### Worked Example
 
-Live cell — try a different average load or a different catalog supply size and see whether it lands in the target band, below it, or over it.
+Live cell — drag the average load and see which catalog supply size lands in the target band, below it, or over it.
+
+```{r calc-supply-sizing-06-13, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "supply-sizing-06-13",
+  title = "24 VDC Power Supply Sizing Calculator",
+  icon = "plug",
+  inputs = list(
+    qwebr_calc_input("f_lo", "Target loading band, lower bound", value = 0.7, min = 0.3, max = 0.9, step = 0.05),
+    qwebr_calc_input("f_hi", "Target loading band, upper bound", value = 0.8, min = 0.5, max = 1, step = 0.05),
+    qwebr_calc_input("P_load_avg", "Average bus load (W)", value = 154.9, min = 10, max = 900, step = 0.1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: supply-sizing-06-13
 ## Average (duty-weighted) bus load from the Design Task 1 load budget
 P_load_avg <- 154.9   # W  (I_avg = 6.453 A at 24VDC)
 
-f_lo <- 0.70; f_hi <- 0.80
+f_lo <- 0.70
+f_hi <- 0.80
 P_required_lo <- P_load_avg / f_hi   # smallest supply that still clears the upper (80%) bound
 P_required_hi <- P_load_avg / f_lo   # supply that would sit right at the lower (70%) bound
-
-cat(sprintf("Average load: %.1f W (%.2f A at 24VDC)\n", P_load_avg, P_load_avg / 24))
-cat(sprintf("Minimum nameplate rating to stay at/under 80%% loading: %.1f W\n", P_required_lo))
-cat(sprintf("Nameplate rating that lands right at 70%% loading:      %.1f W\n\n", P_required_hi))
 
 ## Standard catalog supply sizes at 24VDC (A -> W)
 catalog_A <- c(2.5, 5, 10, 20, 40)
 catalog_W <- catalog_A * 24
+loading_pct <- P_load_avg / catalog_W * 100
 
-cat("Catalog options:\n")
-for (i in seq_along(catalog_A)) {
-  loading_pct <- P_load_avg / catalog_W[i] * 100
-  verdict <- if (loading_pct > 100) {
-    "FAILS -- overloaded on average load alone"
-  } else if (loading_pct > 80) {
-    "CAUTION -- exceeds 80% target"
-  } else if (loading_pct >= 70) {
-    "PASSES -- within 70-80% target band"
-  } else {
-    "PASSES -- conservative (below target band, still acceptable)"
-  }
-  cat(sprintf("  %2.0fA (%3.0fW): loading = %5.1f%%  -> %s\n",
-              catalog_A[i], catalog_W[i], loading_pct, verdict))
+## Select the smallest standard size that clears the load with margin. Landing
+## a bit below the target band is conservative, not a failure -- standard
+## sizes only step in 5A/10A/20A increments.
+fits <- which(loading_pct <= f_hi * 100)
+if (length(fits) > 0) {
+  cat(sprintf("Select the %g A (%g W) supply - %.1f%% loaded\n",
+              catalog_A[fits[1]], catalog_W[fits[1]], loading_pct[fits[1]]))
+} else {
+  cat("!!No listed catalog supply is large enough!!\n")
 }
+cat(sprintf("  Average load                               %.1f W (%.2f A at 24VDC)\n", P_load_avg, P_load_avg / 24))
+cat(sprintf("  Minimum rating to stay at/under %.0f%% loading  %.1f W\n", f_hi * 100, P_required_lo))
+cat(sprintf("  Rating that lands right at %.0f%% loading       %.1f W\n", f_lo * 100, P_required_hi))
 
-cat("\n-> Select the 10A (240W) supply: the smallest standard size that clears\n")
-cat("   the load with margin. Its 64.5% loading sits a bit below the 70-80%\n")
-cat("   band -- conservative, not a failure -- because 5A is not enough and\n")
-cat("   standard sizes only step in 5A/10A/20A increments.\n")
+for (i in seq_along(catalog_A)) {
+  verdict <- if (loading_pct[i] > 100) {
+    "!!FAILS!! - overloaded on average load alone"
+  } else if (loading_pct[i] > f_hi * 100) {
+    "CAUTION - exceeds the target band"
+  } else if (loading_pct[i] >= f_lo * 100) {
+    "PASSES - within the target band"
+  } else {
+    "PASSES - conservative (below target band, still acceptable)"
+  }
+  cat(sprintf("  %g A (%g W) supply  %.1f%% loaded - %s\n",
+              catalog_A[i], catalog_W[i], loading_pct[i], verdict))
+}
 ```
+
+</details>
 
 **Sanity check:** the 5A supply fails outright (loading over 100% on the *average* load alone, before any inrush is even considered), and the 20A supply would sit at a wasteful 32% loading. The 10A supply is the only standard size that both clears the load and stays reasonably close to the target band — a good example of how the rule of thumb narrows a catalog search to essentially one right answer, rather than leaving the designer to guess.
 
@@ -329,7 +353,28 @@ $$
 
 ### Worked Example
 
-Live cell — try changing the number of valves/contactors that fire together, or the pull-in multipliers, and see when the surge check flips from pass to fail.
+Live cell — drag the number of valves that fire together, or change the contactor count, the pull-in multipliers, or the supply rating, and see when the surge check flips from pass to fail.
+
+```{r calc-inrush-check-06-13, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "inrush-check-06-13",
+  title = "Inrush / Surge Current Check",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("I_run", "Background continuous load", value = 4.23, min = 0, max = 40, step = 0.01, suffix = "A"),
+    qwebr_calc_input("valve_pullin_factor", "Valve pull-in multiplier", value = 2.5, min = 1, max = 8, step = 0.1, suffix = "x"),
+    qwebr_calc_input("n_contactors_start", "Contactors firing together", value = 4, min = 0, max = 6, step = 1),
+    qwebr_calc_input("contactor_pullin_factor", "Contactor pull-in multiplier", value = 4, min = 1, max = 10, step = 0.5, suffix = "x"),
+    qwebr_calc_input("I_cont_rated", "Supply continuous rating", value = 10, min = 2.5, max = 40, step = 2.5, suffix = "A"),
+    qwebr_calc_input("surge_pct", "Supply surge rating (% of continuous)", value = 150, min = 100, max = 300, step = 5, suffix = "%"),
+    qwebr_calc_input("n_valves_start", "Valves firing together", value = 6, min = 0, max = 14, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: inrush-check-06-13
@@ -357,41 +402,40 @@ I_surge_planned <- I_run + valve_pullin_total + contactor_pullin_total
 ## Supply's published rating (10A continuous, from Design Task 2)
 I_cont_rated  <- 10
 surge_pct     <- 150   # % of continuous, per datasheet
-t_surge_rated <- 1.0   # s
+t_surge_rated <- 1.0   # s -- the ~50 ms event duration is well inside this window
 I_surge_rated <- I_cont_rated * surge_pct / 100
 
-cat(sprintf("Background continuous load: %.2f A\n", I_run))
-cat(sprintf("Valve pull-in: %d valves x %.3f A = %.2f A\n", n_valves_start, valve_pullin_each, valve_pullin_total))
-cat(sprintf("Contactor pull-in: %d contactors x %.3f A = %.2f A\n\n", n_contactors_start, contactor_pullin_each, contactor_pullin_total))
-
-cat(sprintf("Total instantaneous demand, planned start event: %.2f A\n", I_surge_planned))
-cat(sprintf("Supply surge rating: %.0f%% of %dA = %.1f A, for up to %.1f s\n",
-            surge_pct, I_cont_rated, I_surge_rated, t_surge_rated))
-cat(sprintf("Event duration (~50 ms) is well inside the %.1f s surge window.\n\n", t_surge_rated))
-
 margin_pct <- (I_surge_rated - I_surge_planned) / I_surge_rated * 100
-if (I_surge_planned <= I_surge_rated) {
-  cat(sprintf("PASSES: %.2f A <= %.1f A surge rating (margin %.1f%%)\n\n", I_surge_planned, I_surge_rated, margin_pct))
-} else {
-  cat(sprintf("FAILS: %.2f A exceeds %.1f A surge rating\n\n", I_surge_planned, I_surge_rated))
-}
 
-## Fault scenario: a program fault re-fires all 14 valves at once instead of 6
+## Fault scenario: a program fault re-fires all 14 valves at once
 n_valves_fault  <- 14
 valve_pullin_fault_total <- valve_pullin_each * n_valves_fault
 I_surge_fault <- I_run + valve_pullin_fault_total + contactor_pullin_total
 
-cat("Fault scenario: all 14 valves fire simultaneously instead of 6\n")
-cat(sprintf("Total instantaneous demand: %.2f A\n", I_surge_fault))
-if (I_surge_fault <= I_surge_rated) {
-  cat("Still within the surge rating: PASSES\n")
+if (I_surge_planned <= I_surge_rated) {
+  cat(sprintf("Planned start event: %.2f A - PASSES (margin %.1f%%)\n", I_surge_planned, margin_pct))
 } else {
-  cat(sprintf("Exceeds the %.1f A surge rating by %.2f A: FAILS\n", I_surge_rated, I_surge_fault - I_surge_rated))
-  cat("Fix: sequence/stagger the PLC's fault-recovery logic so valves don't\n")
-  cat("all fire on the same scan, rather than buying a larger supply for a\n")
-  cat("fault condition the program should simply avoid creating.\n")
+  cat(sprintf("Planned start event: %.2f A - !!FAILS!!\n", I_surge_planned))
+}
+cat(sprintf("  Supply surge rating                    %.1f A (%g%% of %g A, for up to %.1f s)\n",
+            I_surge_rated, surge_pct, I_cont_rated, t_surge_rated))
+cat(sprintf("  Background continuous load             %.2f A\n", I_run))
+cat(sprintf("  Valve pull-in (%g x %.3f A)             %.2f A\n", n_valves_start, valve_pullin_each, valve_pullin_total))
+cat(sprintf("  Contactor pull-in (%g x %.3f A)         %.2f A\n", n_contactors_start, contactor_pullin_each, contactor_pullin_total))
+
+## If the fault scenario fails, the fix is to sequence/stagger the PLC's
+## fault-recovery logic so valves don't all fire on the same scan, rather
+## than buying a larger supply for a fault condition the program should
+## simply avoid creating.
+if (I_surge_fault <= I_surge_rated) {
+  cat(sprintf("  Fault scenario: all %d valves fire      %.2f A - PASSES\n", n_valves_fault, I_surge_fault))
+} else {
+  cat(sprintf("  Fault scenario: all %d valves fire      %.2f A - !!FAILS!! (exceeds the rating by %.2f A)\n",
+              n_valves_fault, I_surge_fault, I_surge_fault - I_surge_rated))
 }
 ```
+
+</details>
 
 ```{r fig-06-13-inrush-timeline, echo=FALSE, fig.cap="Instantaneous 24VDC bus current during the planned start event (left) and an all-valves fault condition (right). The planned event clears the supply's surge rating; the fault event does not.", fig.align='center', fig.width=11, fig.height=5.5}
 t_seq <- seq(-50, 300, by = 1)
@@ -483,7 +527,26 @@ $$
 
 ### Worked Example
 
-Live cell — try a different backup load, runtime requirement, or temperature derating and see whether the candidate battery pack still meets the spec.
+Live cell — drag the candidate battery size, or change the backup load, runtime requirement, or temperature derating, and see whether the pack still meets the spec.
+
+```{r calc-battery-sizing-06-13, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "battery-sizing-06-13",
+  title = "Backup Battery Sizing Calculator",
+  icon = "battery-half",
+  inputs = list(
+    qwebr_calc_input("I_backup", "Backup load", value = 18, min = 1, max = 100, step = 0.5, suffix = "A"),
+    qwebr_calc_input("t_backup", "Required runtime", value = 0.5, min = 0.1, max = 8, step = 0.1, suffix = "h"),
+    qwebr_calc_input("DoD", "Depth-of-discharge limit", value = 0.8, min = 0.3, max = 1, step = 0.05),
+    qwebr_calc_input("f_temp", "Capacity retention at temperature", value = 0.75, min = 0.4, max = 1, step = 0.05),
+    qwebr_calc_input("C_candidate", "Candidate battery capacity (Ah)", value = 20, min = 5, max = 200, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: battery-sizing-06-13
@@ -496,31 +559,27 @@ f_temp     <- 0.75  # capacity retention at 0C shelter minimum winter temperatur
 
 C_required <- (I_backup * t_backup) / (DoD * f_temp)
 
-cat(sprintf("Backup load: %.0f A for %.1f h (%.1f Ah of usable energy needed)\n",
-            I_backup, t_backup, I_backup * t_backup))
-cat(sprintf("Depth-of-discharge limit: %.0f%%\n", DoD * 100))
-cat(sprintf("Temperature derating at 0C: %.0f%% of rated capacity available\n\n", f_temp * 100))
-cat(sprintf("Required nameplate (25C rated) battery capacity: %.1f Ah\n\n", C_required))
-
 ## Candidate: two 12V AGM batteries in series for a 24V pack
 C_candidate <- 20   # Ah, catalog size
 
 usable_Ah    <- C_candidate * DoD * f_temp
 t_available  <- usable_Ah / I_backup
 
-cat(sprintf("Candidate pack: two 12V %.0f Ah AGM batteries in series (24V, %.0f Ah nameplate)\n",
-            C_candidate, C_candidate))
-cat(sprintf("Usable capacity at 0C and %.0f%% DoD: %.1f Ah\n", DoD * 100, usable_Ah))
-cat(sprintf("Actual available runtime: %.2f h (%.0f minutes)\n\n", t_available, t_available * 60))
-
 if (t_available * 60 >= t_backup * 60) {
-  cat(sprintf("PASSES: delivers %.0f minutes against a %.0f-minute requirement (%.0f%% margin)\n",
-              t_available * 60, t_backup * 60, (t_available * 60 / (t_backup * 60) - 1) * 100))
+  cat(sprintf("Available runtime: %.0f minutes - PASSES (%.0f%% margin)\n",
+              t_available * 60, (t_available * 60 / (t_backup * 60) - 1) * 100))
 } else {
-  cat(sprintf("FAILS: only %.0f minutes against a %.0f-minute requirement\n",
-              t_available * 60, t_backup * 60))
+  cat(sprintf("Available runtime: %.0f minutes - !!FAILS!!\n", t_available * 60))
 }
+cat(sprintf("  Runtime requirement                    %.0f minutes\n", t_backup * 60))
+cat(sprintf("  Usable energy needed                   %.1f Ah (%g A for %g h)\n", I_backup * t_backup, I_backup, t_backup))
+cat(sprintf("  Required nameplate (25C) capacity      %.1f Ah\n", C_required))
+cat(sprintf("  Candidate pack (two 12V in series)     %g Ah nameplate\n", C_candidate))
+cat(sprintf("  Candidate usable capacity              %.1f Ah (%.0f%% DoD, %.0f%% temperature retention)\n",
+            usable_Ah, DoD * 100, f_temp * 100))
 ```
+
+</details>
 
 **Sanity check:** the required nameplate capacity (15 Ah) and the selected standard catalog pack (20 Ah) aren't the same number, and that's expected — catalog batteries come in discrete sizes, so the candidate is checked directly against the runtime requirement (40 minutes delivered vs. 30 minutes required) rather than just compared to the raw Ah figure. A battery sized only against the 25°C nameplate rating, with no DoD or temperature derating applied, would have looked like it had nearly double the needed capacity (20 Ah nameplate vs. 9 Ah of raw energy needed) — and would have delivered barely half its expected runtime in service, discovered only when the generator swap took longer than 20 minutes on a cold morning.
 
@@ -604,7 +663,26 @@ $$
 
 ### Worked Example
 
-Live cell — try a different downtime cost, repair time, or supply MTBF and see whether the payback period still favors redundancy.
+Live cell — drag the downtime cost, or change the repair time, supply MTBF, or redundancy cost, and see whether the payback period still favors redundancy.
+
+```{r calc-redundancy-cost-06-13, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "redundancy-cost-06-13",
+  title = "Power Supply Redundancy Payback Calculator",
+  icon = "dollar-sign",
+  inputs = list(
+    qwebr_calc_input("MTBF_hours", "Supply MTBF", value = 500000, min = 50000, max = 2000000, step = 10000, suffix = "h"),
+    qwebr_calc_input("t_repair_h", "Repair / swap time", value = 1.5, min = 0.25, max = 24, step = 0.25, suffix = "h"),
+    qwebr_calc_input("cost_second_supply", "Second supply cost", value = 450, min = 50, max = 5000, step = 10, prefix = "$"),
+    qwebr_calc_input("panel_life_yr", "Panel service life", value = 10, min = 1, max = 30, step = 1, suffix = "yr"),
+    qwebr_calc_input("C_downtime_per_h", "Downtime cost ($/h)", value = 8000, min = 500, max = 50000, step = 500, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: redundancy-cost-06-13
@@ -618,12 +696,6 @@ C_downtime_per_h <- 8000   # $/h, this cell's line stoppage cost
 
 expected_annual_loss <- P_fail_year * t_repair_h * C_downtime_per_h
 
-cat(sprintf("Supply MTBF: %s h -> P(failure in a given year) = %.2f%%\n",
-            format(MTBF_hours, big.mark = " "), P_fail_year * 100))
-cat(sprintf("Repair/swap time without redundancy: %.1f h\n", t_repair_h))
-cat(sprintf("Downtime cost: $%s /h\n", format(C_downtime_per_h, big.mark = " ")))
-cat(sprintf("Expected annual loss (no redundancy): $%.0f /yr\n\n", expected_annual_loss))
-
 ## Cost of adding redundancy: second supply + diode-OR/smart-OR module + labor
 cost_second_supply <- 450
 cost_or_module      <- 150
@@ -634,22 +706,25 @@ panel_life_yr <- 10
 annualized_redundancy_cost <- redundancy_cost_total / panel_life_yr
 payback_years <- redundancy_cost_total / expected_annual_loss
 
-cat(sprintf("Redundancy cost: $%d supply + $%d OR module + $%d labor = $%d one-time\n",
-            cost_second_supply, cost_or_module, cost_added_labor, redundancy_cost_total))
-cat(sprintf("Annualized over a %d-year panel life: $%.0f /yr\n", panel_life_yr, annualized_redundancy_cost))
-cat(sprintf("Simple payback period: %.1f years\n\n", payback_years))
+fmt <- function(x) format(round(x), big.mark = " ", scientific = FALSE)
 
 if (payback_years < panel_life_yr) {
-  cat("Payback occurs within the panel's service life -- redundancy is\n")
-  cat("justified on expected-value grounds alone, before even counting the\n")
-  cat("harder-to-price cost of scrapped in-process material from an\n")
-  cat("uncontrolled continuous-process interruption.\n")
+  ## Redundancy is justified on expected-value grounds alone, before even
+  ## counting the harder-to-price cost of scrapped in-process material from
+  ## an uncontrolled continuous-process interruption.
+  cat(sprintf("Simple payback: %.1f years - within the panel's service life\n", payback_years))
 } else {
-  cat("Payback exceeds the panel's service life on expected-value grounds --\n")
-  cat("redundancy would need to be justified by a consequence this\n")
-  cat("calculation doesn't capture (e.g., a safety event, not just cost).\n")
+  ## Redundancy would need to be justified by a consequence this calculation
+  ## doesn't capture (e.g., a safety event, not just cost).
+  cat(sprintf("Simple payback: %.1f years - longer than the panel's service life\n", payback_years))
 }
+cat(sprintf("  P(supply failure in a given year)      %.2f%% (MTBF %s h)\n", P_fail_year * 100, fmt(MTBF_hours)))
+cat(sprintf("  Expected annual loss, no redundancy    $%s /yr\n", fmt(expected_annual_loss)))
+cat(sprintf("  Redundancy cost (supply + OR module + labor)  $%s one-time\n", fmt(redundancy_cost_total)))
+cat(sprintf("  Annualized over a %g-year panel life   $%s /yr\n", panel_life_yr, fmt(annualized_redundancy_cost)))
 ```
+
+</details>
 
 **Sanity check:** a bare expected-value calculation already favors redundancy here (4.3-year payback against a 10-year panel life), and that's *before* accounting for the specific reason this cell was flagged in the first place — a control power loss upstream of a continuous-flow oven risks scrapping in-process material, a cost this simple probability model doesn't even include. That's a useful general lesson about this kind of decision: pure expected-value math is a reasonable starting filter, but for a process that "cannot tolerate any interruption," the real driver of the decision is the *consequence*, not the *probability* — a rare event with an unacceptable consequence still justifies redundancy even when the expected-value math alone looks marginal.
 
@@ -691,7 +766,22 @@ $$
 
 ### Worked Example
 
-Live cell — try changing a branch's running current or the main supply size and see whether the 50% coordination check still passes.
+Live cell — change the main supply size and see whether the 50% coordination check still passes (the branch table can be edited in the code underneath).
+
+```{r calc-branch-fusing-06-13, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "branch-fusing-06-13",
+  title = "Branch Fuse Coordination Check",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("I_main", "Main supply rating (A)", value = 10, min = 2.5, max = 40, step = 2.5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: branch-fusing-06-13
@@ -709,29 +799,39 @@ branches <- data.frame(
   stringsAsFactors = FALSE
 )
 
-cat(sprintf("Main supply rating: %.0f A\n", I_main))
-cat(sprintf("50%% coordination limit for any single branch: %.1f A\n\n", 0.5 * I_main))
+fails <- branches$fuse_A > 0.5 * I_main
+
+if (!any(fails)) {
+  cat("All branch fuses pass the 50% coordination check\n")
+} else {
+  cat(sprintf("!!%d branch fuse(s) fail the 50%% coordination check!!\n", sum(fails)))
+}
+cat(sprintf("  50%% coordination limit for any single branch  %.2f A\n", 0.5 * I_main))
 
 for (i in seq_len(nrow(branches))) {
   b <- branches[i, ]
   pct_of_main <- b$fuse_A / I_main * 100
   margin_over_running <- b$fuse_A / b$running_A
-  verdict <- if (b$fuse_A > 0.5 * I_main) "FAILS 50% coordination check" else "PASSES"
-  cat(sprintf("%-28s running %.2f A -> %s %.1f A fuse (%.0f%% of main, %.1fx running) -- %s\n",
-              b$branch, b$running_A, b$fuse_type, b$fuse_A, pct_of_main, margin_over_running, verdict))
+  cat(sprintf("  %s (running %.2f A)  %.1f A %s fuse, %.0f%% of main, %.1fx running - %s\n",
+              b$branch, b$running_A, b$fuse_A, b$fuse_type, pct_of_main, margin_over_running,
+              ifelse(fails[i], "!!FAILS!!", "PASSES")))
 }
 
-cat(sprintf("\nSum of branch fuse ratings: %.1f A (may exceed the main's %.0f A rating --\n", sum(branches$fuse_A), I_main))
-cat("that's normal and expected: not every branch draws its full fused\n")
-cat("capacity at the same time, which is exactly the diversity already\n")
-cat("captured by the average-vs-peak load budget in Design Task 1.)\n\n")
+## The sum of branch fuse ratings may exceed the main's rating -- that's
+## normal and expected: not every branch draws its full fused capacity at
+## the same time, which is exactly the diversity already captured by the
+## average-vs-peak load budget in Design Task 1.
+cat(sprintf("  Sum of branch fuse ratings                    %.1f A (may exceed the main's rating)\n",
+            sum(branches$fuse_A)))
 
-cat("Why the valve manifold branch uses a time-delay fuse: its startup\n")
-cat("event pulls roughly 6.75 A of pull-in current for ~50 ms (Design Task 3).\n")
-cat("A 4A fast-blow fuse would nuisance-trip on that transient every single\n")
-cat("start; a 4A time-delay fuse rides through the brief pull-in surge while\n")
-cat("still opening promptly on a sustained downstream short.\n")
+## Why the valve manifold branch uses a time-delay fuse: its startup event
+## pulls roughly 6.75 A of pull-in current for ~50 ms (Design Task 3). A 4A
+## fast-blow fuse would nuisance-trip on that transient every single start;
+## a 4A time-delay fuse rides through the brief pull-in surge while still
+## opening promptly on a sustained downstream short.
 ```
+
+</details>
 
 ```{r fig-06-13-branch-fusing, echo=FALSE, fig.cap="Selective branch fusing on the panel's 24VDC bus: a fault on any one branch (shown highlighted) opens only that branch's fuse, leaving the main supply and every other branch powered.", fig.align='center', fig.width=11.5, fig.height=6.5}
 branch_labels <- c("Sensor A\n0.5A", "Sensor B\n0.5A", "Valve mfld\n4A (TD)",

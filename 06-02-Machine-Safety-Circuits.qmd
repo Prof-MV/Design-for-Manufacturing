@@ -206,7 +206,24 @@ ggplot() +
 
 ### Worked Example
 
-Live cell — try raising or lowering `Fr` or `Pr` and re-run to see whether the estimated SIL still agrees with PLr = d from Design Task 1.
+Live cell — raise or lower the frequency or avoidance score to see whether the estimated SIL still agrees with PLr = d from Design Task 1.
+
+```{r calc-plr-sil-06-02, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "plr-sil-06-02",
+  title = "IEC 62061 Class Score / SIL Estimator",
+  icon = "shield-halved",
+  inputs = list(
+    qwebr_calc_input("Se", "Severity score Se (1-4)", value = 4, min = 1, max = 4, step = 1),
+    qwebr_calc_input("Fr", "Frequency / duration score Fr (1-4)", value = 3, min = 1, max = 4, step = 1),
+    qwebr_calc_input("Pr", "Avoidance score Pr (1-4)", value = 2, min = 1, max = 4, step = 1)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: plr-sil-06-02
@@ -222,11 +239,6 @@ Pr <- 2   # avoidance possible for an attentive, trained operator (scale 1-4)
 
 Cl <- Se + Fr + Pr
 
-cat("Severity score, Se =", Se, "\n")
-cat("Frequency/duration score, Fr =", Fr, "\n")
-cat("Avoidance score, Pr =", Pr, "\n")
-cat("Class score, Cl = Se + Fr + Pr =", Cl, "\n\n")
-
 ## Illustrative Cl -> SIL banding (teaching simplification; consult
 ## IEC 62061 for the actual class/SIL matrix)
 sil_from_class <- function(cl) {
@@ -236,22 +248,28 @@ sil_from_class <- function(cl) {
 }
 
 sil_required <- sil_from_class(Cl)
-cat("Estimated required SIL =", sil_required, "\n\n")
 
 ## Cross-check against PLr = d from Design Task 1, via the commonly cited
 ## general correspondence (PL d <-> SIL 2)
 plr_from_task1 <- "d"
-cat("Required PL from Design Task 1: PLr =", plr_from_task1, "\n")
-cat("Commonly cited correspondence for PLr =", plr_from_task1, "is approximately SIL 2\n")
 
 if (sil_required == "SIL 2") {
-  cat("\nThe two independent frameworks agree: SIL 2 corresponds to PL d.\n")
-  cat("Hardware verified against either framework will satisfy the other.\n")
+  cat("Estimated required SIL:", sil_required, "- agrees with PLr =", plr_from_task1, "\n")
 } else {
-  cat("\nThe two frameworks disagree -- re-examine the risk parameter\n")
-  cat("assignments in both frameworks before proceeding.\n")
+  cat("Estimated required SIL:", sil_required, "- !!disagrees with PLr =", plr_from_task1, "!!\n")
+}
+cat(sprintf("  Class score Cl = Se + Fr + Pr          %g\n", Cl))
+cat(sprintf("  Required PL from Design Task 1         PLr = %s\n", plr_from_task1))
+cat(sprintf("  Commonly cited correspondence          PL %s ~ SIL 2\n", plr_from_task1))
+
+if (sil_required == "SIL 2") {
+  cat("The two independent frameworks agree: hardware verified against either one will satisfy the other.\n")
+} else {
+  cat("Re-examine the risk parameter assignments in both frameworks before proceeding.\n")
 }
 ```
+
+</details>
 
 **Sanity check:** the two independent frameworks landing on the same answer (SIL 2 corresponding to PL d) is the expected outcome when the same underlying hazard is assessed honestly in both — it doesn't prove either calculation is correct on its own, but a disagreement between them is a strong signal that one of the two risk assessments used inconsistent assumptions about the same hazard.
 
@@ -466,7 +484,27 @@ ggplot(cost_df, aes(x = n, y = cost, color = option)) +
 
 ### Worked Example
 
-Live cell — try changing the count of e-stops, light curtains, or gate interlocks and re-run to see when the recommendation flips.
+Live cell — change the count of e-stops, light curtains, or gate interlocks to see when the recommendation flips.
+
+```{r calc-relay-plc-06-02, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "relay-plc-06-02",
+  title = "Safety Relay vs. Safety PLC Cost Calculator",
+  icon = "dollar-sign",
+  inputs = list(
+    qwebr_calc_input("n_estops", "E-stops", value = 14, min = 0, max = 60, step = 1),
+    qwebr_calc_input("n_curtains", "Light curtains", value = 6, min = 0, max = 60, step = 1),
+    qwebr_calc_input("n_gates", "Gate interlocks", value = 22, min = 0, max = 60, step = 1),
+    qwebr_calc_input("cost_per_function_relay", "Relay cost per safety function", value = 650, min = 400, max = 2000, step = 10, prefix = "$"),
+    qwebr_calc_input("base_cost_plc", "Safety PLC base cost", value = 9500, min = 1000, max = 40000, step = 100, prefix = "$"),
+    qwebr_calc_input("cost_per_point_plc", "Safety PLC cost per I/O point", value = 310, min = 50, max = 390, step = 10, prefix = "$")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: relay-plc-06-02
@@ -474,29 +512,35 @@ cost_per_function_relay <- 650   # $ installed, per independent safety function
 base_cost_plc <- 9500            # $ safety PLC CPU + software + base engineering
 cost_per_point_plc <- 310        # $ installed, per network-connected safety I/O point
 
-n_functions <- 14 + 6 + 22  # e-stops + light curtains + gate interlocks on this line
+## Independent safety functions on this line
+n_estops   <- 14
+n_curtains <- 6
+n_gates    <- 22
+n_functions <- n_estops + n_curtains + n_gates
 
 cost_relay <- n_functions * cost_per_function_relay
 cost_plc <- base_cost_plc + n_functions * cost_per_point_plc
 breakeven_n <- base_cost_plc / (cost_per_function_relay - cost_per_point_plc)
 
-cat("Independent safety functions on this line:", n_functions, "\n")
-cat("Hardwired relay solution, total installed cost: $", format(cost_relay, big.mark = " "), "\n")
-cat("Safety PLC solution, total installed cost: $", format(cost_plc, big.mark = " "), "\n")
-cat("Breakeven point: approximately", round(breakeven_n), "functions\n\n")
+fmt <- function(x) format(round(x), big.mark = " ")
 
 if (n_functions > breakeven_n) {
-  savings <- cost_relay - cost_plc
-  cat("This line has more functions than the breakeven point.\n")
-  cat("Safety PLC is the lower-cost option, saving approximately $",
-      format(round(savings), big.mark = " "), "\n")
-  cat("It also centralizes diagnostics to the plant SCADA network, which a\n")
-  cat("stack of independent relay modules cannot do.\n")
+  ## More functions than the breakeven point. A safety PLC also centralizes
+  ## diagnostics to the plant SCADA network, which a stack of independent
+  ## relay modules cannot do.
+  cat(sprintf("Lower-cost option: Safety PLC (saves about $%s)\n", fmt(cost_relay - cost_plc)))
 } else {
-  cat("This line has fewer functions than the breakeven point.\n")
-  cat("Hardwired safety relays remain the lower-cost, simpler-to-validate option.\n")
+  ## Fewer functions than the breakeven point: hardwired safety relays remain
+  ## the lower-cost, simpler-to-validate option.
+  cat(sprintf("Lower-cost option: Hardwired safety relays (saves about $%s)\n", fmt(cost_plc - cost_relay)))
 }
+cat(sprintf("  Independent safety functions     %g\n", n_functions))
+cat(sprintf("  Hardwired relay installed cost   $%s\n", fmt(cost_relay)))
+cat(sprintf("  Safety PLC installed cost        $%s\n", fmt(cost_plc)))
+cat(sprintf("  Breakeven point                  about %s functions\n", fmt(breakeven_n)))
 ```
+
+</details>
 
 **Sanity check:** 42 independent safety functions is well past the roughly 28-function breakeven point, and the cost gap (safety PLC saving nearly \$4,800) only grows as the line adds more functions in future phases — combined with the plant's stated need for centralized diagnostics, this is a comfortable, not a marginal, decision in favor of the safety PLC.
 
@@ -810,7 +854,25 @@ $$
 
 ### Worked Example
 
-Live cell — try changing any of the four time components and re-run to see how much the total (and the coast-down share) moves.
+Live cell — change any of the four time components to see how much the total (and the coast-down share) moves.
+
+```{r calc-stopping-time-06-02, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "stopping-time-06-02",
+  title = "Overall Stopping Time Calculator",
+  icon = "stopwatch",
+  inputs = list(
+    qwebr_calc_input("T_device", "Safety device response time", value = 0.03, min = 0, max = 0.5, step = 0.005, suffix = "s"),
+    qwebr_calc_input("T_logic", "Logic (safety relay) time", value = 0.02, min = 0, max = 0.5, step = 0.005, suffix = "s"),
+    qwebr_calc_input("T_fce", "Final control element time", value = 0.05, min = 0, max = 0.5, step = 0.005, suffix = "s"),
+    qwebr_calc_input("T_coast", "Coast-down / braking time (s)", value = 0.55, min = 0, max = 2, step = 0.01, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: stopping-time-06-02
@@ -820,21 +882,19 @@ T_fce    <- 0.050   # s, redundant contactors K1/K2 coil de-energize + contact o
 T_coast  <- 0.550   # s, servo brake engagement + mechanical coast to full stop (Category 1)
 
 T_total <- T_device + T_logic + T_fce + T_coast
-
-cat("Safety device response time, T_device =", T_device, "s\n")
-cat("Logic (safety relay) processing time, T_logic =", T_logic, "s\n")
-cat("Final control element response time, T_fce =", T_fce, "s\n")
-cat("Mechanical coast-down/braking time, T_coast =", T_coast, "s\n")
-cat("Overall stopping time, T = T_device + T_logic + T_fce + T_coast =",
-    round(T_total, 3), "s\n\n")
-
 coast_share_pct <- T_coast / T_total * 100
-cat("Coast-down accounts for", round(coast_share_pct, 1),
-    "% of the total -- exactly where the rule of thumb above says to look first.\n\n")
 
-cat("This T is the input that goes into S = K x T + C in the Robot Cell Design\n")
-cat("chapter's ISO 13855 minimum safe distance calculation for this same cell.\n")
+## This T is the input that goes into S = K x T + C in the Robot Cell Design
+## chapter's ISO 13855 minimum safe distance calculation for this same cell.
+cat(sprintf("Overall stopping time T: %.3f s\n", T_total))
+cat(sprintf("  Safety device response, T_device   %.3f s\n", T_device))
+cat(sprintf("  Logic processing, T_logic          %.3f s\n", T_logic))
+cat(sprintf("  Final control element, T_fce       %.3f s\n", T_fce))
+cat(sprintf("  Coast-down / braking, T_coast      %.3f s\n", T_coast))
+cat(sprintf("  Coast-down share of the total      %.1f%%\n", coast_share_pct))
 ```
+
+</details>
 
 **Sanity check:** this decomposition sums to 0.65 s — exactly the $T_{robot}$ value the Robot Cell Design chapter's Design Task 4 worked example took as a given input to its $S = K \times T + C$ calculation. That 0.65 s was never an arbitrary number; it's the sum of exactly these four components for this cell's actual hardware, and this chapter is where it comes from. Coast-down alone makes up roughly 85% of the total, which is also a useful order-of-magnitude check: a stopping time dominated by device or logic processing time on a cell with any significant moving mass would be a sign that a term was left out or badly underestimated.
 

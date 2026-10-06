@@ -139,3 +139,116 @@ tex_safe <- function(x) {
     escaped
   }, character(1), USE.NAMES = FALSE)
 }
+
+#' One input field/slider for qwebr_calc_card()
+#'
+#' @param var The R variable name this input controls. Must match a
+#'   `var <- value` (or `var = value`) assignment somewhere near the top of
+#'   the paired `{webr-r}` cell's source — the calculator substitutes the
+#'   input's current value into that exact line every time it re-runs the
+#'   cell, so the card and the "show the code" panel never drift apart.
+#' @param label Reader-facing label for the row.
+#' @param value Default numeric value (should match the cell's own default).
+#' @param min,max,step Passed straight through to the HTML `<input>`.
+#' @param type `"number"` (a plain numeric field, optionally with a
+#'   `prefix`/`suffix`) or `"slider"` (a `<input type="range">` with a live
+#'   readout next to the label — use this for the one variable that's the
+#'   "main" thing being explored, typically a volume/quantity/count).
+#' @param prefix,suffix Optional short strings shown beside a `"number"`
+#'   input, e.g. `prefix = "$"`, `suffix = "kg"`.
+qwebr_calc_input <- function(var, label, value, min = NULL, max = NULL, step = NULL,
+                              type = c("number", "slider"), prefix = "", suffix = "") {
+  type <- match.arg(type)
+  list(var = var, label = label, value = value, min = min, max = max, step = step,
+       type = type, prefix = prefix, suffix = suffix)
+}
+
+#' Render an interactive "calculator" card in front of a {webr-r} cell
+#'
+#' Emits a styled card (see `style.css`, `.qwebr-calc-*` rules) with one row
+#' per `input`, a results area, and a chart area. The card is wired up
+#' entirely client-side by `js/qwebr-calculator.js`, which finds the
+#' `{webr-r}` cell carrying `label` (via quarto-webr's own `qwebrCellDetails`
+#' registry), substitutes the card's current input values into that cell's
+#' *actual source*, and re-runs it headlessly through the page's existing
+#' webR engine on every input change.
+#'
+#' Call this immediately before the `{webr-r}` cell it drives, then wrap that
+#' cell in `<details class="qwebr-calc-source">` so curious students can
+#' still open it, read it, edit it, and run it directly (see
+#' 02-01-Bolt-Joint-Calculations.qmd, "bolt-load-response-interactive",
+#' for the full reference pattern — card, then collapsed source).
+#'
+#' Only produces output for HTML (webR doesn't run in PDF/EPUB); the
+#' `{webr-r}` cell underneath already degrades to a plain static code block
+#' there on its own, so nothing further is needed for those formats.
+#'
+#' @param label Must exactly match the `#| label:` of the `{webr-r}` cell
+#'   this card drives.
+#' @param title Card heading.
+#' @param icon A Font Awesome solid-icon name, no prefix (e.g. `"gears"`,
+#'   `"flask"`, `"bolt"`) — Font Awesome is already loaded on every page by
+#'   quarto-webr itself.
+#' @param inputs A list of `qwebr_calc_input()` calls, top to bottom.
+#' @param fig_width,fig_height Pixel size for the captured plot (if the cell
+#'   produces one); scales to fit the card via CSS either way.
+qwebr_calc_card <- function(label, title, icon = "gears", inputs,
+                             fig_width = 1200, fig_height = 700) {
+  if (!knitr::is_html_output(excludes = "epub")) return(invisible(NULL))
+
+  sanitize <- function(x) gsub("[^a-zA-Z0-9]+", "-", x)
+  card_id <- paste0("qcalc-", sanitize(label))
+
+  render_input <- function(inp) {
+    input_id <- paste0(card_id, "-", sanitize(inp$var))
+    attrs <- sprintf(
+      'id="%s" data-var="%s" value="%s"%s%s%s',
+      input_id, inp$var, inp$value,
+      if (!is.null(inp$min)) sprintf(' min="%s"', inp$min) else "",
+      if (!is.null(inp$max)) sprintf(' max="%s"', inp$max) else "",
+      if (!is.null(inp$step)) sprintf(' step="%s"', inp$step) else ""
+    )
+
+    if (inp$type == "slider") {
+      readout_id <- paste0(input_id, "-readout")
+      sprintf('
+    <div class="qwebr-calc-row qwebr-calc-row-slider">
+      <label for="%s">%s <span class="qwebr-calc-slider-readout" data-readout-for="%s" id="%s">%s</span></label>
+      <input type="range" class="qwebr-calc-slider" %s>
+    </div>',
+        input_id, inp$label, input_id, readout_id,
+        format(inp$value, big.mark = " ", scientific = FALSE), attrs)
+    } else {
+      sprintf('
+    <div class="qwebr-calc-row">
+      <label for="%s">%s</label>
+      <div class="qwebr-calc-field">
+        %s<input type="number" %s>%s
+      </div>
+    </div>',
+        input_id, inp$label,
+        if (nzchar(inp$prefix)) sprintf('<span class="qwebr-calc-prefix">%s</span>\n        ', inp$prefix) else "",
+        attrs,
+        if (nzchar(inp$suffix)) sprintf('\n        <span class="qwebr-calc-suffix">%s</span>', inp$suffix) else "")
+    }
+  }
+
+  input_rows <- paste(vapply(inputs, render_input, character(1)), collapse = "\n")
+
+  cat(sprintf('
+```{=html}
+<script src="js/qwebr-calculator.js"></script>
+
+<div class="qwebr-calc-card" data-qwebr-label="%s" data-fig-width="%d" data-fig-height="%d">
+  <div class="qwebr-calc-header">
+    <i class="fa-solid fa-%s qwebr-calc-icon"></i>
+    <h4>%s</h4>
+  </div>
+  <div class="qwebr-calc-inputs">%s
+  </div>
+  <div class="qwebr-calc-results"></div>
+  <div class="qwebr-calc-graph"></div>
+</div>
+```
+', label, fig_width, fig_height, icon, title, input_rows))
+}

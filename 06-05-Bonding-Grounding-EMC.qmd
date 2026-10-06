@@ -371,6 +371,23 @@ ggplot() +
 
 Live cell — try a different cable length, shield resistance, or ground potential difference and see how the circulating current responds.
 
+```{r calc-ground-loop-current-06-05, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "ground-loop-current-06-05",
+  title = "Ground Loop Current Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("shield_R_per_m", "Shield resistance per metre", value = 0.03, min = 0.005, max = 0.2, step = 0.005, suffix = "Ω/m"),
+    qwebr_calc_input("delta_V_ground", "Ground potential difference", value = 1.2, min = 0.1, max = 10, step = 0.1, suffix = "V"),
+    qwebr_calc_input("cable_length_m", "Cable length (m)", value = 85, min = 5, max = 500, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
+
 ```{webr-r}
 #| label: ground-loop-current-06-05
 ## Ground loop scenario: 4-20 mA level transmitter loop, beverage plant,
@@ -391,21 +408,38 @@ I_loop_both_ends <- delta_V_ground / shield_R_total
 ## no closed path exists, so no circulating current is possible
 I_loop_one_end <- 0
 
-cat(sprintf("Shield resistance over %.0f m: %.2f ohm\n", cable_length_m, shield_R_total))
-cat(sprintf("Transient ground potential difference: %.1f V\n\n", delta_V_ground))
-cat(sprintf("Shield grounded at BOTH ends: I_loop = %.1f V / %.2f ohm = %.0f mA circulating\n",
-            delta_V_ground, shield_R_total, I_loop_both_ends * 1000))
-cat(sprintf("Shield grounded at ONE end only: I_loop = %.0f mA (no closed path exists)\n",
-            I_loop_one_end * 1000))
-cat(sprintf("\nThat %.0f mA doesn't touch the signal conductors directly, but it flows\n", I_loop_both_ends * 1000))
-cat("the full length of the shield and couples into the twisted pair through\n")
-cat("imperfect shield-to-conductor coupling -- exactly the noise mechanism\n")
-cat("the single-end rule exists to prevent.\n")
+## The circulating current doesn't touch the signal conductors directly, but
+## it flows the full length of the shield and couples into the twisted pair
+## through imperfect shield-to-conductor coupling -- exactly the noise
+## mechanism the single-end rule exists to prevent.
+cat(sprintf("Shield grounded at BOTH ends: %.0f mA circulating\n", I_loop_both_ends * 1000))
+cat(sprintf("  Shield resistance over %g m              %.2f ohm\n", cable_length_m, shield_R_total))
+cat(sprintf("  Transient ground potential difference    %.1f V\n", delta_V_ground))
+cat(sprintf("  Shield grounded at ONE end only          %.0f mA (no closed path exists)\n", I_loop_one_end * 1000))
 ```
+
+</details>
 
 **Sanity check:** a 1.2 V transient during a nearby motor start sounds tiny next to a 347 V or 600 V distribution system, and it is — but the 4-20 mA signal it's corrupting only spans 16 mA end to end, so even a modest circulating current, imperfectly coupled onto the signal pair, is large relative to the signal itself. Grounding the shield at one end doesn't reduce that 1.2 V potential difference — it makes the potential difference irrelevant, because there's no longer a closed path for it to drive current through.
 
 Now the VFD cable, where the opposite fix applies. Live cell — try a different pigtail length or edge rise time and see how the reactance comparison changes.
+
+```{r calc-pigtail-reactance-06-05, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "pigtail-reactance-06-05",
+  title = "Shield Termination Reactance Calculator",
+  icon = "wave-square",
+  inputs = list(
+    qwebr_calc_input("L_clamp_nH", "360° clamp residual inductance", value = 2, min = 0.5, max = 20, step = 0.5, suffix = "nH"),
+    qwebr_calc_input("t_rise_ns", "VFD edge rise time", value = 50, min = 5, max = 500, step = 5, suffix = "ns"),
+    qwebr_calc_input("L_pigtail_mm", "Pigtail length (mm)", value = 120, min = 5, max = 500, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: pigtail-reactance-06-05
@@ -414,35 +448,36 @@ Now the VFD cable, where the opposite fix applies. Live cell — try a different
 L_pigtail_mm <- 120                  # mm, typical drain-wire pigtail length
 L_pigtail_H  <- L_pigtail_mm * 1e-9  # ~1 nH/mm rule of thumb -> H
 
-L_clamp_H <- 2e-9   # H, residual inductance of a proper 360-degree gland/backshell
+L_clamp_nH <- 2                      # nH, residual inductance of a proper 360-degree gland/backshell
+L_clamp_H  <- L_clamp_nH * 1e-9
 
 ## Representative frequencies: 60 Hz power/instrumentation frequency, and a
 ## VFD switching-edge "knee frequency" (rule of thumb: f_knee = 0.35 / t_rise)
-f_60hz   <- 60
-t_rise_s <- 50e-9         # s, representative IGBT output edge rise time
-f_knee   <- 0.35 / t_rise_s
+f_60hz    <- 60
+t_rise_ns <- 50                      # ns, representative IGBT output edge rise time
+t_rise_s  <- t_rise_ns * 1e-9
+f_knee    <- 0.35 / t_rise_s
 
 X_pigtail_60hz <- 2 * pi * f_60hz * L_pigtail_H
 X_clamp_60hz   <- 2 * pi * f_60hz * L_clamp_H
 X_pigtail_knee <- 2 * pi * f_knee * L_pigtail_H
 X_clamp_knee   <- 2 * pi * f_knee * L_clamp_H
 
-cat(sprintf("Pigtail lead inductance (%.0f mm @ ~1 nH/mm): %.0f nH\n", L_pigtail_mm, L_pigtail_H * 1e9))
-cat(sprintf("360-degree clamp residual inductance: %.1f nH\n\n", L_clamp_H * 1e9))
-cat(sprintf("VFD switching edge rise time: %.0f ns -> knee frequency ~ %.1f MHz\n\n",
-            t_rise_s * 1e9, f_knee / 1e6))
-
-cat("At 60 Hz (power/instrumentation frequency):\n")
-cat(sprintf("  Pigtail reactance: %.6f ohm\n", X_pigtail_60hz))
-cat(sprintf("  360-degree clamp reactance: %.6f ohm\n", X_clamp_60hz))
-cat("  -> both utterly negligible; either termination style works fine\n\n")
-
-cat(sprintf("At the %.1f MHz switching-edge knee frequency:\n", f_knee / 1e6))
-cat(sprintf("  Pigtail reactance: %.2f ohm\n", X_pigtail_knee))
-cat(sprintf("  360-degree clamp reactance: %.3f ohm\n", X_clamp_knee))
-cat("  -> pigtail is now a real obstruction to the high-frequency common-mode\n")
-cat("     current; the clamp stays comfortably low\n")
+## At 60 Hz both reactances are utterly negligible -- either termination
+## style works fine. At the switching-edge knee frequency the pigtail becomes
+## a real obstruction to the high-frequency common-mode current, while the
+## clamp stays comfortably low.
+cat(sprintf("Pigtail reactance at the %.1f MHz knee: %.2f ohm (%.0fx the clamp)\n",
+            f_knee / 1e6, X_pigtail_knee, X_pigtail_knee / X_clamp_knee))
+cat(sprintf("  Pigtail lead inductance (~1 nH/mm)       %.0f nH\n", L_pigtail_H * 1e9))
+cat(sprintf("  360-degree clamp residual inductance     %.1f nH\n", L_clamp_H * 1e9))
+cat(sprintf("  Knee frequency (0.35 / rise time)        %.1f MHz\n", f_knee / 1e6))
+cat(sprintf("  Clamp reactance at the knee frequency    %.3f ohm\n", X_clamp_knee))
+cat(sprintf("  Pigtail reactance at 60 Hz               %.6f ohm\n", X_pigtail_60hz))
+cat(sprintf("  Clamp reactance at 60 Hz                 %.6f ohm\n", X_clamp_60hz))
 ```
+
+</details>
 
 **Sanity check:** the pigtail's inductance never changes — it's the same 120 nH lead at both frequencies. What changes is the frequency multiplying it. At 60 Hz, that inductance is such a small contributor to impedance that it's irrelevant, which is exactly why the one-end low-frequency rule can be satisfied with an ordinary drain wire. At the VFD's MHz-range switching content, the identical pigtail's reactance climbs into several ohms — no longer negligible next to the sub-ohm impedance a high-frequency bond actually needs to achieve — which is why VFD cable needs the 360° clamp, not a pigtail, and needs it at both ends.
 
@@ -525,6 +560,24 @@ ggplot() +
 
 Live cell — try a different line voltage, BVR, or choke reduction percentage and see how the bearing voltage estimate responds.
 
+```{r calc-bearing-voltage-06-05, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bearing-voltage-06-05",
+  title = "VFD Bearing Voltage Estimator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("V_line_rms", "Line voltage (line-to-line)", value = 600, min = 208, max = 690, step = 1, suffix = "V"),
+    qwebr_calc_input("BVR", "Bearing voltage ratio (BVR)", value = 0.04, min = 0.01, max = 0.1, step = 0.005),
+    qwebr_calc_input("V_film_breakdown", "Film breakdown voltage", value = 10, min = 2, max = 30, step = 1, suffix = "V"),
+    qwebr_calc_input("choke_reduction_pct", "Common-mode choke reduction (%)", value = 50, min = 0, max = 95, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
+
 ```{webr-r}
 #| label: bearing-voltage-06-05
 ## VFD common-mode voltage and bearing voltage estimate
@@ -544,25 +597,23 @@ V_bearing <- BVR * V_cm_peak
 ## thin bearing grease/oil film
 V_film_breakdown <- 10   # V
 
-cat(sprintf("DC bus voltage: %.0f V\n", V_dc_bus))
-cat(sprintf("Representative peak common-mode voltage: %.0f V\n", V_cm_peak))
-cat(sprintf("Bearing voltage ratio (unmitigated): %.0f%%\n", BVR * 100))
-cat(sprintf("Estimated bearing voltage: %.1f V\n\n", V_bearing))
-cat(sprintf("Representative film breakdown voltage: ~%.0f V\n", V_film_breakdown))
-cat(sprintf("-> %s: estimated bearing voltage %s the film's breakdown threshold\n\n",
-            ifelse(V_bearing > V_film_breakdown, "AT RISK", "LIKELY OK"),
-            ifelse(V_bearing > V_film_breakdown, "exceeds", "stays below")))
-
 ## Mitigation: common-mode choke on the drive output
 choke_reduction_pct <- 50
 V_cm_mitigated       <- V_cm_peak * (1 - choke_reduction_pct / 100)
 V_bearing_mitigated  <- BVR * V_cm_mitigated
 
-cat(sprintf("With a common-mode choke reducing peak CM voltage by %.0f%%:\n", choke_reduction_pct))
-cat(sprintf("  Mitigated peak CM voltage: %.0f V\n", V_cm_mitigated))
-cat(sprintf("  Mitigated bearing voltage: %.1f V -> %s\n", V_bearing_mitigated,
-            ifelse(V_bearing_mitigated > V_film_breakdown, "still AT RISK", "now LIKELY OK")))
+cat(sprintf("Estimated bearing voltage (unmitigated): %.1f V - %s\n", V_bearing,
+            ifelse(V_bearing > V_film_breakdown, "!!AT RISK!!", "LIKELY OK")))
+cat(sprintf("  DC bus voltage                         %.0f V\n", V_dc_bus))
+cat(sprintf("  Peak common-mode voltage               %.0f V\n", V_cm_peak))
+cat(sprintf("  Bearing voltage ratio (unmitigated)    %.1f%%\n", BVR * 100))
+cat(sprintf("  Film breakdown voltage                 ~%g V\n", V_film_breakdown))
+cat(sprintf("  Peak CM voltage with choke (-%g%%)      %.0f V\n", choke_reduction_pct, V_cm_mitigated))
+cat(sprintf("  Bearing voltage with choke             %.1f V - %s\n", V_bearing_mitigated,
+            ifelse(V_bearing_mitigated > V_film_breakdown, "!!still AT RISK!!", "LIKELY OK")))
 ```
+
+</details>
 
 **Sanity check:** an unmitigated bearing voltage of roughly 16 V comfortably exceeds a representative few-volt-to-low-tens-of-volts film breakdown threshold, which is consistent with the fluting damage the reliability engineer is actually seeing in the field — the model reproduces the observed failure mode, which is a reasonable order-of-magnitude confidence check. Cutting the common-mode voltage in half (a realistic result of a properly selected common-mode choke) drops the estimated bearing voltage below the breakdown threshold — but note this is only one of several viable mitigations, and a plant with a dozen already-installed VFDs showing this problem will often find it faster and cheaper to retrofit shaft grounding rings on the affected motors than to replace cabling or add chokes to every drive.
 
@@ -661,16 +712,40 @@ ggplot() +
 
 ### Worked Example
 
-Live cell — try different weights or scores (what matters most for *your* installation?) and see whether the recommendation flips.
+Live cell — try different weights (what matters most for *your* installation?) and see whether the recommendation flips. The weights are rescaled to total 100%; the scores can be edited in the code underneath.
+
+```{r calc-star-mesh-decision-06-05, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "star-mesh-decision-06-05",
+  title = "Star vs. Mesh Grounding Decision Matrix",
+  icon = "scale-balanced",
+  inputs = list(
+    qwebr_calc_input("w_panel_count", "Weight: panel count", value = 0.25, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_hf_noise_content", "Weight: high-frequency noise content", value = 0.3, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_sensitive_analog", "Weight: sensitive analog signals", value = 0.2, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_maintenance_ease", "Weight: maintenance ease", value = 0.25, min = 0, max = 1, step = 0.05)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: star-mesh-decision-06-05
 ## Star vs. mesh grounding topology -- weighted decision matrix
 ## Scenario: automotive body-shop line, 14 interconnected panels sharing a
 ## common tray, several VFD-driven robots and conveyors
-weights <- c(panel_count = 0.25, hf_noise_content = 0.30,
-             sensitive_analog = 0.20, maintenance_ease = 0.25)
+w_panel_count      <- 0.25
+w_hf_noise_content <- 0.30
+w_sensitive_analog <- 0.20
+w_maintenance_ease <- 0.25
+weights <- c(panel_count = w_panel_count, hf_noise_content = w_hf_noise_content,
+             sensitive_analog = w_sensitive_analog, maintenance_ease = w_maintenance_ease)
+weights <- weights / sum(weights)   # rescale so the weights always total 100%
 
+## Scores: 1 = poor fit, 5 = excellent fit
 star_scores <- c(panel_count = 2, hf_noise_content = 2,
                   sensitive_analog = 5, maintenance_ease = 3)
 mesh_scores <- c(panel_count = 5, hf_noise_content = 5,
@@ -679,13 +754,14 @@ mesh_scores <- c(panel_count = 5, hf_noise_content = 5,
 star_total <- sum(weights * star_scores)
 mesh_total <- sum(weights * mesh_scores)
 
-cat("Weighted decision matrix (1 = poor fit, 5 = excellent fit):\n\n")
-for (nm in names(weights)) cat(sprintf("  %-18s weight = %.0f%%\n", nm, weights[nm] * 100))
-cat(sprintf("\nStar (single-point) weighted score: %.2f\n", star_total))
-cat(sprintf("Mesh (multi-point grid) weighted score: %.2f\n", mesh_total))
-cat(sprintf("\n-> Recommendation: %s\n",
+cat(sprintf("Recommendation: %s\n",
             ifelse(mesh_total > star_total, "MESH / MULTI-POINT GRID", "STAR / SINGLE-POINT")))
+cat(sprintf("  Star (single-point) weighted score       %.2f\n", star_total))
+cat(sprintf("  Mesh (multi-point grid) weighted score   %.2f\n", mesh_total))
+for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm] * 100))
 ```
+
+</details>
 
 **Sanity check:** with 14 interconnected panels and multiple VFDs driving the weighting toward panel count and high-frequency noise content, mesh wins clearly — matching the practitioner default from the guidelines above. Try re-running this with weights shifted heavily toward `sensitive_analog` and `panel_count` dropped to reflect the single-panel food-plant scenario instead (one panel, three simple analog instruments, no VFD): the recommendation flips to star, which is exactly the small-installation default this design task's guidance predicts.
 
@@ -717,6 +793,25 @@ $$V_{touch} \approx I_{fault} \times R_{frame\text{-}to\text{-}earth}$$
 
 Live cell — try a different system voltage, breaker rating, or rod resistance and see how the fault current and touch voltage respond.
 
+```{r calc-touch-voltage-06-05, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "touch-voltage-06-05",
+  title = "Touch Voltage: Bonded vs. Ground Rod Only",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("V_phase", "Phase-to-ground voltage", value = 347, min = 100, max = 600, step = 1, suffix = "V"),
+    qwebr_calc_input("OCPD_rating", "Branch breaker rating", value = 20, min = 5, max = 100, step = 5, suffix = "A"),
+    qwebr_calc_input("Z_loop_bonded", "Bonded fault loop impedance", value = 0.35, min = 0.05, max = 5, step = 0.05, suffix = "Ω"),
+    qwebr_calc_input("R_rod_equipment", "Equipment ground rod resistance", value = 25, min = 1, max = 100, step = 1, suffix = "Ω"),
+    qwebr_calc_input("R_electrode_source", "Source electrode resistance", value = 25, min = 1, max = 100, step = 1, suffix = "Ω")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
+
 ```{webr-r}
 #| label: touch-voltage-06-05
 ## Touch voltage comparison: properly bonded equipment vs. earth-rod-only
@@ -739,24 +834,21 @@ V_touch_rod  <- I_fault_rod * R_rod_equipment
 R_body    <- 1000
 I_body_mA <- V_touch_rod / R_body * 1000
 
-cat("Case A -- Properly bonded equipment:\n")
-cat(sprintf("  Fault loop impedance: %.2f ohm\n", Z_loop_bonded))
-cat(sprintf("  Fault current: %.0f A\n", I_fault_bonded))
-cat(sprintf("  20 A breaker instantaneous trip region: ~%.0f A\n", trip_threshold_A))
-cat(sprintf("  -> %s: breaker clears the fault in a few cycles (well under 0.1 s)\n\n",
-            ifelse(I_fault_bonded > trip_threshold_A, "TRIPS FAST", "DOES NOT TRIP FAST")))
-
-cat("Case B -- Earth/driven ground rod only (no bonding conductor):\n")
-cat(sprintf("  Fault loop impedance: %.0f ohm\n", Z_loop_rod))
-cat(sprintf("  Fault current: %.2f A\n", I_fault_rod))
-cat(sprintf("  -> %s: %.2f A never reaches the 20 A breaker's trip threshold\n",
-            ifelse(I_fault_rod < OCPD_rating, "NEVER TRIPS", "TRIPS"), I_fault_rod))
-cat(sprintf("  Sustained touch voltage on the equipment frame: %.0f V\n", V_touch_rod))
-cat(sprintf("  Estimated body current if touched (dry skin, %.0f ohm): %.0f mA\n\n",
-            R_body, I_body_mA))
-cat("  -> well above commonly cited let-go/fibrillation risk thresholds (30-50 mA),\n")
-cat("     and it stays energized indefinitely -- not for a fraction of a second\n")
+## A body current well above the commonly cited let-go/fibrillation risk
+## thresholds (30-50 mA) is dangerous -- and with rods only the frame stays
+## energized indefinitely, not for a fraction of a second.
+cat(sprintf("Ground rods only: %.0f V sustained touch voltage - %s\n", V_touch_rod,
+            ifelse(I_fault_rod < OCPD_rating, "!!breaker NEVER TRIPS!!", "breaker trips")))
+cat(sprintf("  Case A (bonded): fault loop impedance      %.2f ohm\n", Z_loop_bonded))
+cat(sprintf("  Case A (bonded): fault current             %.0f A\n", I_fault_bonded))
+cat(sprintf("  Case A (bonded): instantaneous trip region  ~%.0f A - %s\n", trip_threshold_A,
+            ifelse(I_fault_bonded > trip_threshold_A, "TRIPS FAST (well under 0.1 s)", "!!DOES NOT TRIP FAST!!")))
+cat(sprintf("  Case B (rods only): fault loop impedance   %.0f ohm\n", Z_loop_rod))
+cat(sprintf("  Case B (rods only): fault current          %.2f A vs. %g A breaker\n", I_fault_rod, OCPD_rating))
+cat(sprintf("  Case B (rods only): body current if touched  %.0f mA (dry skin, %g ohm)\n", I_body_mA, R_body))
 ```
+
+</details>
 
 ```{r fig-06-05-touch-voltage-compare, echo=FALSE, fig.cap="Fault current for a properly bonded circuit versus one relying only on driven ground rods, against the 20 A breaker's rating and its instantaneous trip threshold. The bonded case clears in a few cycles; the rod-only case never trips at all.", fig.align='center', fig.width=10, fig.height=6}
 fault_cases <- data.frame(

@@ -251,7 +251,26 @@ This $T_{pulley}$ and $\omega_{pulley}$ (or the equivalent pulley rpm) pair is e
 
 ### Worked Example
 
-Live cell — try a different belt speed, pulley diameter, or drive efficiency and see how power and torque respond.
+Live cell — drag the belt speed, or change the pulley diameter or drive efficiency, and see how power and torque respond.
+
+```{r calc-drive-power-torque-06-10, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "drive-power-torque-06-10",
+  title = "Conveyor Drive Power and Torque Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("T_e_design", "Design effective tension", value = 1866.85, min = 50, max = 20000, step = 0.05, suffix = "N"),
+    qwebr_calc_input("eta_drive", "Drive efficiency", value = 0.9, min = 0.4, max = 1, step = 0.01),
+    qwebr_calc_input("D_pulley", "Head pulley diameter", value = 0.254, min = 0.05, max = 1, step = 0.002, suffix = "m"),
+    qwebr_calc_input("motor_rpm", "Motor speed", value = 1750, min = 600, max = 3600, step = 10, suffix = "rpm"),
+    qwebr_calc_input("v_belt", "Belt speed (m/s)", value = 0.5, min = 0.05, max = 3, step = 0.05, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: drive-power-torque-06-10
@@ -269,22 +288,24 @@ T_pulley <- T_e_design * r_pulley
 omega_pulley <- v_belt / r_pulley
 rpm_pulley <- omega_pulley * 60 / (2 * pi)
 
-cat(sprintf("Mechanical power at the belt: %.1f W\n", P_mech))
-cat(sprintf("Required motor power (%.0f%% drive efficiency): %.1f W (%.3f kW, %.2f hp)\n",
-            eta_drive * 100, P_motor, P_motor / 1000, P_motor / 745.7))
-cat(sprintf("\nHead pulley diameter: %.0f mm\n", D_pulley * 1000))
-cat(sprintf("Required torque at pulley shaft: %.1f N.m\n", T_pulley))
-cat(sprintf("Pulley shaft speed: %.3f rad/s (%.1f rpm)\n", omega_pulley, rpm_pulley))
-
 ## Cross-check: power from torque and speed should match the direct calculation
 P_check <- T_pulley * omega_pulley
-cat(sprintf("\nCross-check (P = T x omega): %.1f W\n", P_check))
 
 ## Illustrative gear ratio if paired with a standard 4-pole induction motor
 motor_rpm <- 1750
 N_ratio <- motor_rpm / rpm_pulley
-cat(sprintf("Approximate gear ratio for a %d rpm 4-pole motor: %.1f:1\n", motor_rpm, N_ratio))
+
+cat(sprintf("Required motor power: %.1f W (%.3f kW, %.2f hp)\n", P_motor, P_motor / 1000, P_motor / 745.7))
+cat(sprintf("  Mechanical power at the belt          %.1f W\n", P_mech))
+cat(sprintf("  Drive efficiency                      %.0f%%\n", eta_drive * 100))
+cat(sprintf("  Head pulley diameter                  %.0f mm\n", D_pulley * 1000))
+cat(sprintf("  Required torque at pulley shaft       %.1f N.m\n", T_pulley))
+cat(sprintf("  Pulley shaft speed                    %.3f rad/s (%.1f rpm)\n", omega_pulley, rpm_pulley))
+cat(sprintf("  Cross-check (P = T x omega)           %.1f W\n", P_check))
+cat(sprintf("  Gear ratio for a %g rpm motor       about %.1f:1\n", motor_rpm, N_ratio))
 ```
+
+</details>
 
 ```{r fig-06-10-power-speed, echo=FALSE, fig.cap="Required motor power scales linearly with belt speed for a fixed effective tension. The design point (0.5 m/s) is marked.", fig.align='center', fig.width=9, fig.height=5.5}
 library(ggplot2)
@@ -354,7 +375,25 @@ $$
 
 ### Worked Example
 
-Live cell — try a different required throughput, tote spacing, or surge margin and see how the required belt speed responds.
+Live cell — drag the required throughput, or change the tote length, gap, or surge margin, and see how the required belt speed responds.
+
+```{r calc-speed-throughput-06-10, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "speed-throughput-06-10",
+  title = "Belt Speed from Throughput Calculator",
+  icon = "gauge-high",
+  inputs = list(
+    qwebr_calc_input("tote_len", "Tote length", value = 0.4, min = 0.1, max = 1.5, step = 0.05, suffix = "m"),
+    qwebr_calc_input("min_gap", "Minimum gap between totes", value = 0.1, min = 0, max = 1, step = 0.01, suffix = "m"),
+    qwebr_calc_input("margin", "Surge margin (fraction)", value = 0.3, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("R_totes_per_min", "Required throughput (totes/min)", value = 45, min = 5, max = 150, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: speed-throughput-06-10
@@ -371,13 +410,15 @@ v_min <- R_totes_per_s * s_min
 margin <- 0.30
 v_design <- v_min * (1 + margin)
 
-cat(sprintf("Required throughput: %.0f totes/min (%.3f totes/s)\n", R_totes_per_min, R_totes_per_s))
-cat(sprintf("Minimum safe spacing: %.2f m (%.0f mm tote + %.0f mm gap)\n",
+cat(sprintf("Design belt speed: %.4f m/s (+%.0f%% surge margin)\n", v_design, margin * 100))
+cat(sprintf("  Required throughput                %g totes/min (%.3f totes/s)\n", R_totes_per_min, R_totes_per_s))
+cat(sprintf("  Minimum safe spacing               %.2f m (%.0f mm tote + %.0f mm gap)\n",
             s_min, tote_len * 1000, min_gap * 1000))
-cat(sprintf("Minimum belt speed: %.4f m/s\n", v_min))
-cat(sprintf("Design belt speed (+%.0f%% surge margin): %.4f m/s\n", margin * 100, v_design))
-cat(sprintf("\nCompare to the 0.5 m/s speed used in Design Tasks 1-2: difference = %.4f m/s\n", 0.5 - v_design))
+cat(sprintf("  Minimum belt speed                 %.4f m/s\n", v_min))
+cat(sprintf("  0.5 m/s used in Design Tasks 1-2   differs by %.4f m/s\n", 0.5 - v_design))
 ```
+
+</details>
 
 ```{r fig-06-10-speed-throughput, echo=FALSE, fig.cap="Minimum belt speed required to meet a given throughput, for three minimum spacing assumptions. The chapter's design case (45 totes/min at 0.5 m spacing) is marked, along with the specified 0.5 m/s running speed.", fig.align='center', fig.width=9.5, fig.height=6}
 library(ggplot2)
@@ -469,12 +510,38 @@ $$Score_{option} = \sum_i w_i \times s_{i,option}$$
 
 ### Worked Example
 
-Live cell — try different weights (what matters most for *your* application?) and see whether the recommendation changes.
+Live cell — try different weights (what matters most for *your* application?) and see whether the recommendation changes. The weights are rescaled to total 100%; the scores can be edited in the code underneath.
+
+```{r calc-conveyor-selection-matrix-06-10, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "conveyor-selection-matrix-06-10",
+  title = "Conveyor Type Decision Matrix",
+  icon = "scale-balanced",
+  inputs = list(
+    qwebr_calc_input("w_sanitation", "Weight: sanitation", value = 0.3, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_accumulation", "Weight: accumulation", value = 0.25, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_turns", "Weight: turns", value = 0.2, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_cost", "Weight: cost", value = 0.15, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_incline", "Weight: incline capability", value = 0.1, min = 0, max = 1, step = 0.05)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: conveyor-selection-matrix-06-10
 ## Given: weights reflecting the case-packing transfer's priorities
-weights <- c(sanitation = 0.30, accumulation = 0.25, turns = 0.20, cost = 0.15, incline = 0.10)
+w_sanitation   <- 0.30
+w_accumulation <- 0.25
+w_turns        <- 0.20
+w_cost         <- 0.15
+w_incline      <- 0.10
+weights <- c(sanitation = w_sanitation, accumulation = w_accumulation, turns = w_turns,
+             cost = w_cost, incline = w_incline)
+weights <- weights / sum(weights)   # rescale so the weights always total 100%
 
 ## Scores, 1 (poor fit) to 5 (excellent fit), for this specific application
 roller   <- c(sanitation = 3, accumulation = 5, turns = 2, cost = 3, incline = 2)
@@ -485,16 +552,16 @@ score_roller   <- sum(weights * roller)
 score_belt     <- sum(weights * belt)
 score_tabletop <- sum(weights * tabletop)
 
-cat("Weighted decision matrix (1 = poor fit, 5 = excellent fit):\n\n")
-for (nm in names(weights)) cat(sprintf("  %-13s weight = %.0f%%\n", nm, weights[nm] * 100))
-
-cat(sprintf("\nRoller weighted score:          %.2f\n", score_roller))
-cat(sprintf("Belt weighted score:            %.2f\n", score_belt))
-cat(sprintf("Tabletop chain weighted score:   %.2f\n", score_tabletop))
-
 best <- names(which.max(c(Roller = score_roller, Belt = score_belt, `Tabletop Chain` = score_tabletop)))
-cat(sprintf("\n-> Recommendation: %s\n", best))
+
+cat(sprintf("Recommendation: %s\n", best))
+cat(sprintf("  Roller weighted score           %.2f\n", score_roller))
+cat(sprintf("  Belt weighted score             %.2f\n", score_belt))
+cat(sprintf("  Tabletop chain weighted score   %.2f\n", score_tabletop))
+for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm] * 100))
 ```
+
+</details>
 
 ```{r fig-06-10-selection, echo=FALSE, fig.cap="Illustrative comparison of roller, belt, and tabletop chain conveyor across the five decision criteria for the case-packing transfer scenario.", fig.align='center', fig.width=10, fig.height=6}
 library(ggplot2)

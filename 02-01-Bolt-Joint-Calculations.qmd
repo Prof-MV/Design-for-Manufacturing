@@ -71,37 +71,64 @@ ggplot(df, aes(x = ExternalLoad, y = BoltForce)) +
 As illustrated in Figure ~@fig-bolt-plot, the bolt force increases much more slowly while the joint is clamped ($C < 1$). Once the external load exceeds the separation point, the bolt must carry the entire load, significantly increasing the risk of fatigue or tensile failure.
 
 ::: {.content-visible when-format="html"}
-*This one is live — edit the preload (`preload`) and joint stiffness constant (`C`) below and re-run the cell to see how the separation point and bolt force move.*
+*This one is live — change the preload or the joint stiffness constant, or drag the external-load slider, and the chart and results update immediately.*
+
+```{r calc-bolt-load-response-interactive, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bolt-load-response-interactive",
+  title = "Bolt Load Response Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("preload", "Bolt preload F<sub>i</sub>", value = 5000, min = 500, max = 30000, step = 500, suffix = "N"),
+    qwebr_calc_input("C", "Joint stiffness constant C", value = 0.25, min = 0.05, max = 0.95, step = 0.05),
+    qwebr_calc_input("P_ext", "External load P (N)", value = 4000, min = 0, max = 20000, step = 250, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: bolt-load-response-interactive
-## Edit these two values and re-run!
+## Edit these values and re-run!
 preload <- 5000   ## bolt preload F_i (N)
 C       <- 0.25   ## joint stiffness constant C = k_b / (k_b + k_m)
+P_ext   <- 4000   ## external load P applied to the joint (N)
 
 ## Separation point: external load at which member clamp force reaches zero
 sep_point <- preload / (1 - C)
 
-## Bolt force at a few sample external loads
-sample_P <- c(0, 2000, 4000, 6000, 8000, 10000)
-bolt_force <- ifelse(sample_P < sep_point,
-                     preload + C * sample_P,   ## joint still clamped
-                     sample_P)                 ## joint separated - bolt carries all
+## Bolt force at a given external load
+bolt_force_at <- function(P) ifelse(P < sep_point,
+                                    preload + C * P,   ## joint still clamped
+                                    P)                 ## joint separated - bolt carries all
+bolt_force  <- bolt_force_at(P_ext)
+clamp_force <- max(0, preload - (1 - C) * P_ext)       ## compression left in the members
 
-cat("Joint stiffness constant C =", C, "\n")
-cat("Preload F_i               =", preload, "N\n")
-cat("Joint separates at P      =", round(sep_point, 1), "N\n\n")
+## Bolt force over a range of external loads, with the selected load marked
+P_range <- seq(0, max(2 * sep_point, 1.2 * P_ext), length.out = 200)
+par(mar = c(5, 5, 3, 1), cex.main = 1.3, cex.lab = 1.2, cex.axis = 1.1)
+plot(P_range, bolt_force_at(P_range), type = "l", lwd = 4, col = "#2c3e50",
+     xlab = "External load P (N)", ylab = "Bolt force F_b (N)",
+     main = "Bolt Force vs. External Load")
+abline(v = sep_point, lty = 2, col = "#bdc3c7")
+points(P_ext, bolt_force, pch = 19, cex = 2.2, col = "#e74c3c")
 
-cat(sprintf("%12s  %14s  %s\n", "Ext. load P", "Bolt force F_b", "State"))
-for (i in seq_along(sample_P)) {
-  state <- if (sample_P[i] < sep_point) "clamped" else "SEPARATED"
-  cat(sprintf("%10.0f N  %12.0f N  %s\n", sample_P[i], bolt_force[i], state))
+fmt <- function(x) format(round(x), big.mark = " ", scientific = FALSE)
+
+if (P_ext < sep_point) {
+  cat(sprintf("Bolt force: %s N - joint clamped\n", fmt(bolt_force)))
+} else {
+  cat(sprintf("Bolt force: %s N - !!joint SEPARATED!!\n", fmt(bolt_force)))
 }
-
-cat("\nWhile clamped, each 1000 N of external load adds only",
-    round(C * 1000, 0), "N to the bolt.\n")
-cat("After separation, each 1000 N of external load adds a full 1000 N to the bolt.\n")
+cat(sprintf("  Joint separates at P               %s N\n", fmt(sep_point)))
+cat(sprintf("  Remaining member clamp force       %s N\n", fmt(clamp_force)))
+cat(sprintf("  Added to the bolt per 1000 N of P  %s N (while clamped)\n", fmt(C * 1000)))
 ```
+
+</details>
 :::
 
 
@@ -1113,15 +1140,33 @@ ggplot(plot_data, aes(x = x, y = y, color = group, linetype = group)) +
 * **Member Safety:** As long as the yellow line (member compression) does not reach $y = 0$, the joint remains "clamped." If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.
 
 ::: {.content-visible when-format="html"}
-*This one is live — edit the preload, the bolt/member stiffnesses, and the external working load below, then re-run the cell to see how the load is shared.*
+*This one is live — change the preload or the bolt/member stiffnesses, or drag the external working load, and the load sharing updates immediately.*
+
+```{r calc-joint-working-load-interactive, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "joint-working-load-interactive",
+  title = "Joint Load-Sharing Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("preload", "Bolt preload F<sub>i</sub>", value = 30000, min = 1000, max = 100000, step = 1000, suffix = "N"),
+    qwebr_calc_input("kb", "Bolt stiffness k<sub>b</sub>", value = 431027, min = 50000, max = 3000000, step = 1000, suffix = "N/mm"),
+    qwebr_calc_input("km", "Member stiffness k<sub>m</sub>", value = 1724108, min = 50000, max = 10000000, step = 1000, suffix = "N/mm"),
+    qwebr_calc_input("external_p", "External working load P (N)", value = 15000, min = 0, max = 60000, step = 500, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: joint-working-load-interactive
 ## Edit these values and re-run!
-preload    <- 30000   ## bolt preload F_i (N)
-kb         <- 431027  ## bolt stiffness k_b (N/mm)
-km         <- kb * 4  ## member stiffness k_m (N/mm) - stiffer than the bolt here
-external_p <- 15000   ## external working load P on the joint (N)
+preload    <- 30000    ## bolt preload F_i (N)
+kb         <- 431027   ## bolt stiffness k_b (N/mm)
+km         <- 1724108  ## member stiffness k_m (N/mm) - four times stiffer than the bolt here
+external_p <- 15000    ## external working load P on the joint (N)
 
 ## Load sharing
 Phi             <- kb / (kb + km)          ## joint stiffness constant C
@@ -1132,23 +1177,23 @@ member_decrease <- (1 - Phi) * external_p  ## clamp force given up by the member
 Fb <- preload + bolt_increase              ## total bolt tension
 Fm <- (1 - Phi) * external_p - preload     ## member force (negative = still clamped)
 
-cat("Joint stiffness constant C = k_b / (k_b + k_m) =", round(Phi, 3), "\n\n")
-cat("External working load P        =", external_p, "N\n")
-cat("  -> carried by the bolt       =", round(bolt_increase, 0), "N  (",
-    round(100 * Phi, 1), "% of P )\n")
-cat("  -> relieved from the members =", round(member_decrease, 0), "N  (",
-    round(100 * (1 - Phi), 1), "% of P )\n\n")
-cat("Preload F_i        =", preload, "N\n")
-cat("Total bolt load F_b =", round(Fb, 0), "N\n")
-cat("Member force F_m    =", round(Fm, 0), "N\n\n")
+fmt <- function(x) format(round(x), big.mark = " ", scientific = FALSE)
 
 if (Fm < 0) {
-  cat("F_m < 0: the members are still in compression - joint stays CLAMPED.\n")
-  cat("Separation would occur at P =", round(preload / (1 - Phi), 0), "N\n")
+  ## F_m < 0: the members are still in compression - joint stays clamped
+  cat(sprintf("Total bolt load F_b: %s N - joint clamped\n", fmt(Fb)))
 } else {
-  cat("F_m >= 0: the members have SEPARATED - the bolt now carries the full load.\n")
+  ## F_m >= 0: the members have separated - the bolt now carries the full load
+  cat(sprintf("Members !!SEPARATED!! - bolt carries the full %s N\n", fmt(external_p)))
 }
+cat(sprintf("  Joint stiffness constant C     %.3f\n", Phi))
+cat(sprintf("  Carried by the bolt            %s N (%.1f%% of P)\n", fmt(bolt_increase), 100 * Phi))
+cat(sprintf("  Relieved from the members      %s N (%.1f%% of P)\n", fmt(member_decrease), 100 * (1 - Phi)))
+cat(sprintf("  Member force F_m               %s N\n", fmt(Fm)))
+cat(sprintf("  Separation would occur at P    %s N\n", fmt(preload / (1 - Phi))))
 ```
+
+</details>
 :::
 
 
@@ -1312,7 +1357,26 @@ First, we need to gather the geometric properties of the hardware. Instead of gu
 ##### Step 2: Calculation {-}
 
 ::: {.content-visible when-format="html"}
-*This one is live — every design parameter and table lookup is a variable at the top of the cell. Change the load, the plate thicknesses, the moduli, the bolt size, or the looked-up areas and re-run to recompute the stiffnesses, the joint constant, and all three safety factors.*
+*This one is live — drag the load or change the plate thicknesses, proof strength, or bolt length and the stiffnesses, the joint constant, and all three safety factors update immediately. Every other design parameter and table lookup (moduli, bolt size, looked-up areas) is a variable at the top of the code underneath.*
+
+```{r calc-bolt-safety-analysis-interactive, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bolt-safety-analysis-interactive",
+  title = "Bolted Joint Safety Factor Calculator",
+  icon = "shield-halved",
+  inputs = list(
+    qwebr_calc_input("Sp", "Proof strength S<sub>p</sub>", value = 85000, min = 30000, max = 150000, step = 1000, suffix = "psi"),
+    qwebr_calc_input("t1", "Steel plate thickness", value = 1.25, min = 0.25, max = 3, step = 0.05, suffix = "in"),
+    qwebr_calc_input("t2", "Cast iron plate thickness", value = 0.75, min = 0.25, max = 3, step = 0.05, suffix = "in"),
+    qwebr_calc_input("L_total", "Bolt length", value = 3, min = 2.5, max = 6, step = 0.25, suffix = "in"),
+    qwebr_calc_input("P", "External tensile load P (lbf)", value = 4000, min = 500, max = 20000, step = 250, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: bolt-safety-analysis-interactive
@@ -1362,23 +1426,27 @@ nL <- (Sp * At - Fi) / (C_joint * P) ## load factor
 n0 <- Fi / (P * (1 - C_joint))       ## separation factor
 
 ## ---- 7. Report -----------------------------------------------------------------
-verdict <- function(n) if (n > 1) "SAFE" else "FAIL"
+verdict <- function(n) if (n > 1) "SAFE" else "!!FAIL!!"
+fmt <- function(x) format(round(x), big.mark = " ", scientific = FALSE)
+n_min <- min(nP, nL, n0)
 
-cat(sprintf("Grip length l           = %8.3f in\n", Grip))
-cat(sprintf("Thread length L_T       = %8.3f in\n", Lt))
-cat(sprintf("Unthreaded shank l_d    = %8.3f in  (in grip: %.3f in)\n", l_d_total, l_d))
-cat(sprintf("Shank area A_d          = %8.4f in^2\n", Ad))
-cat(sprintf("Bolt stiffness k_b      = %8.0f lbf/in\n", kb))
-cat(sprintf("Substitute area A_s     = %8.4f in^2\n", As))
-cat(sprintf("Member stiffness k_m    = %8.0f lbf/in\n", km))
-cat(sprintf("Joint constant C        = %8.4f\n", C_joint))
-cat(sprintf("Preload F_i             = %8.0f lbf\n", Fi))
-cat(sprintf("Total bolt load F_b     = %8.0f lbf\n\n", Fb))
-
-cat(sprintf("Yield safety   n_P = %6.2f  -> %s\n", nP, verdict(nP)))
-cat(sprintf("Load factor    n_L = %6.2f  -> %s\n", nL, verdict(nL)))
-cat(sprintf("Separation     n_0 = %6.2f  -> %s\n", n0, verdict(n0)))
+cat(sprintf("Lowest safety factor: %.2f - %s\n", n_min, verdict(n_min)))
+cat(sprintf("  Yield safety n_P          %.2f - %s\n", nP, verdict(nP)))
+cat(sprintf("  Load factor n_L           %.2f - %s\n", nL, verdict(nL)))
+cat(sprintf("  Separation n_0            %.2f - %s\n", n0, verdict(n0)))
+cat(sprintf("  Grip length l             %.3f in\n", Grip))
+cat(sprintf("  Thread length L_T         %.3f in\n", Lt))
+cat(sprintf("  Unthreaded shank l_d      %.3f in (in grip: %.3f in)\n", l_d_total, l_d))
+cat(sprintf("  Shank area A_d            %.4f in^2\n", Ad))
+cat(sprintf("  Bolt stiffness k_b        %s lbf/in\n", fmt(kb)))
+cat(sprintf("  Substitute area A_s       %.4f in^2\n", As))
+cat(sprintf("  Member stiffness k_m      %s lbf/in\n", fmt(km)))
+cat(sprintf("  Joint constant C          %.4f\n", C_joint))
+cat(sprintf("  Preload F_i               %s lbf\n", fmt(Fi)))
+cat(sprintf("  Total bolt load F_b       %s lbf\n", fmt(Fb)))
 ```
+
+</details>
 :::
 
 ::: {.content-visible unless-format="html"}
@@ -1539,7 +1607,27 @@ knitr::include_graphics("images/BoltJointExample.png")
 ::: {.content-visible when-format="html"}
 **Live calculator for Example 2**
 
-*Every worked answer below (Questions 1--8) is reproduced in this one cell. Edit any input at the top — the bolt geometry, the plate materials and thicknesses, the total bolted-up load, the number of bolts, the friction factor `K` — and re-run to watch $k_b$, $k_m$, $C$, the forces, the stresses, the three safety factors, and the tightening torque all update. Try Question 8's scenario by setting `K <- 0.10` (lubricated) and see the bolt overstress.*
+*Every worked answer below (Questions 1--8) is reproduced by this one calculator. Change the total bolted-up load, the number of bolts, the plate thicknesses, the proof strength, or the friction factor $K$ and watch $k_b$, $k_m$, $C$, the forces, the stresses, the three safety factors, and the tightening torque all update. The bolt geometry and plate materials are variables at the top of the code underneath. Question 8's scenario (the same torque applied to a lubricated bolt, $K = 0.10$) is always shown in the last rows.*
+
+```{r calc-example2-interactive, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "example2-interactive",
+  title = "Example 2 Calculator (Questions 1-8)",
+  icon = "calculator",
+  inputs = list(
+    qwebr_calc_input("n_bolts", "Number of bolts", value = 4, min = 1, max = 12, step = 1),
+    qwebr_calc_input("t_top", "Steel top plate thickness", value = 0.5, min = 0.25, max = 2, step = 0.05, suffix = "in"),
+    qwebr_calc_input("t_bot", "Cast iron bottom plate thickness", value = 0.75, min = 0.25, max = 2, step = 0.05, suffix = "in"),
+    qwebr_calc_input("Sp", "Proof strength S<sub>p</sub>", value = 85000, min = 30000, max = 150000, step = 1000, suffix = "psi"),
+    qwebr_calc_input("K", "Torque / nut factor K", value = 0.2, min = 0.05, max = 0.4, step = 0.01),
+    qwebr_calc_input("P_total", "Total external load on the joint (lbf)", value = 10000, min = 1000, max = 60000, step = 500, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: example2-interactive
@@ -1572,67 +1660,66 @@ l_t  <- lj - l_d                  ## threaded length within the grip
 Ad   <- (pi / 4) * d_nom^2        ## major-diameter (shank) area
 kb   <- (Ad * At * Eb) / (Ad * l_t + At * l_d)
 
-cat("Q1  l_d =", round(l_d, 3), "in   l_t =", round(l_t, 3),
-    "in   A_d =", round(Ad, 4), "in^2\n")
-cat("Q1  k_b =", format(signif(kb, 3), big.mark = " "), "lbf/in\n\n")
-
 ## ---- Q2: member stiffness k_m ----------------------------------------------
 As   <- (pi / 4) * ((W_head + 0.1 * lj)^2 - Dh^2)   ## substitute-cylinder area
 k_steel <- (E_top * As) / (t_top + tw)              ## steel + washer sub-cylinder
 k_iron  <- (E_bot * As) / t_bot                     ## cast iron sub-cylinder
 km   <- 1 / (1 / k_steel + 1 / k_iron)              ## springs in series
 
-cat("Q2  A_s =", round(As, 4), "in^2\n")
-cat("Q2  k_steel =", format(signif(k_steel, 3), big.mark = " "), "lbf/in",
-    "   k_iron =", format(signif(k_iron, 3), big.mark = " "), "lbf/in\n")
-cat("Q2  k_m =", format(signif(km, 3), big.mark = " "), "lbf/in\n\n")
-
 ## ---- Q3: joint constant C, load share P, preload F_i ---------------------
 C   <- kb / (kb + km)
 P   <- P_total / n_bolts
 Fi  <- 0.75 * At * Sp
 
-cat("Q3  C =", round(C, 3), "   P per bolt =", round(P, 0), "lbf",
-    "   F_i =", round(Fi, 0), "lbf\n\n")
-
 ## ---- Q4 / Q5: bolt force F_b and member force F_m -----------------------------
 Fb  <- C * P + Fi
 Fm  <- (1 - C) * P - Fi
 
-cat("Q4  F_b = C*P + F_i =", round(Fb, 0), "lbf\n")
-cat("Q5  F_m = (1-C)*P - F_i =", round(Fm, 0), "lbf",
-    if (Fm < 0) " (negative -> members still in compression)\n" else "\n")
-cat("\n")
-
 ## ---- Q6: tensile stress in the bolt -----------------------------------------
 sigma_b <- Fb / At
-cat("Q6  sigma_b = F_b / A_t =", round(sigma_b, 0), "psi  (",
-    round(sigma_b / 1000, 1), "ksi )\n\n")
 
 ## ---- Q7: safety factors ---------------------------------------------------
 nP <- (Sp * At) / (C * P + Fi)     ## proof / yield
 nL <- (Sp * At - Fi) / (C * P)     ## load factor
 nO <- Fi / (P * (1 - C))           ## separation
 
-cat("Q7  n_P =", round(nP, 2), "   n_L =", round(nL, 2),
-    "   n_O =", round(nO, 2), "\n\n")
-
 ## ---- Q8: tightening torque and the effect of lubrication -----------------
 Tin <- K * d_nom * Fi             ## torque to reach F_i (in-lbf)
-cat("Q8  T =", round(Tin, 0), "in-lbf =", round(Tin / 12, 0), "ft-lbf",
-    "  (at K =", K, ")\n")
 
 ## If the operator applies that same torque to a lubricated bolt (K ~ 0.10),
 ## the preload that actually develops is much higher:
 K_lube <- 0.10
 Fi_lube <- Tin / (K_lube * d_nom)
 sigma_lube <- Fi_lube / At
-cat("Q8  Same torque on a lubricated bolt (K =", K_lube, "): F_i =",
-    round(Fi_lube, 0), "lbf  ->  sigma =", round(sigma_lube, 0), "psi\n")
-cat("Q8  Tensile strength S_u =", Su, "psi  ->",
-    if (sigma_lube > Su) "STRESS EXCEEDS S_u: the bolt breaks while tightening.\n"
-    else "still below S_u.\n")
+
+## ---- Report ---------------------------------------------------------------
+fmt  <- function(x) format(round(x), big.mark = " ", scientific = FALSE)
+fmt3 <- function(x) format(signif(x, 3), big.mark = " ", scientific = FALSE)
+
+cat(sprintf("Q4  Bolt force F_b = C*P + F_i: %s lbf per bolt\n", fmt(Fb)))
+cat(sprintf("  Q1 Shank / thread length in grip    l_d = %.3f in, l_t = %.3f in\n", l_d, l_t))
+cat(sprintf("  Q1 Shank area A_d                   %.4f in^2\n", Ad))
+cat(sprintf("  Q1 Bolt stiffness k_b               %s lbf/in\n", fmt3(kb)))
+cat(sprintf("  Q2 Substitute area A_s              %.4f in^2\n", As))
+cat(sprintf("  Q2 k_steel / k_iron                 %s / %s lbf/in\n", fmt3(k_steel), fmt3(k_iron)))
+cat(sprintf("  Q2 Member stiffness k_m             %s lbf/in\n", fmt3(km)))
+cat(sprintf("  Q3 Joint constant C                 %.3f\n", C))
+cat(sprintf("  Q3 Load per bolt P                  %s lbf\n", fmt(P)))
+cat(sprintf("  Q3 Preload F_i                      %s lbf\n", fmt(Fi)))
+cat(sprintf("  Q5 Member force F_m = (1-C)*P - F_i  %s lbf - %s\n", fmt(Fm),
+            if (Fm < 0) "members still in compression" else "!!members separated!!"))
+cat(sprintf("  Q6 Bolt stress sigma_b = F_b / A_t  %s psi (%.1f ksi)\n", fmt(sigma_b), sigma_b / 1000))
+cat(sprintf("  Q7 Proof / yield factor n_P         %.2f\n", nP))
+cat(sprintf("  Q7 Load factor n_L                  %.2f\n", nL))
+cat(sprintf("  Q7 Separation factor n_O            %.2f\n", nO))
+cat(sprintf("  Q8 Tightening torque T              %s in-lbf = %s ft-lbf (at K = %.2f)\n", fmt(Tin), fmt(Tin / 12), K))
+cat(sprintf("  Q8 Same torque, lubricated bolt     F_i = %s lbf (K = %.2f)\n", fmt(Fi_lube), K_lube))
+cat(sprintf("  Q8 Lubricated bolt stress           %s psi - %s\n", fmt(sigma_lube),
+            if (sigma_lube > Su) sprintf("!!exceeds S_u = %s psi: the bolt breaks while tightening!!", fmt(Su))
+            else sprintf("still below S_u = %s psi", fmt(Su))))
 ```
+
+</details>
 :::
 
 ::: {.question}

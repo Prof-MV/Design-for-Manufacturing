@@ -364,7 +364,28 @@ ggplot(heat_components, aes(x = component, y = loss_w)) +
 
 ### Worked Example
 
-Live cell — try changing the enclosure dimensions or `k`, and re-run to see how the passive/fan/AC decision changes.
+Live cell — change the VFD count, the enclosure dimensions, the heat-transfer coefficient, or the site ambient to see how the passive/forced-air decision changes.
+
+```{r calc-heat-load-06-03, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "heat-load-06-03",
+  title = "Enclosure Heat Load and Cooling Calculator",
+  icon = "temperature-half",
+  inputs = list(
+    qwebr_calc_input("vfd_count", "Number of VFDs", value = 3, min = 0, max = 12, step = 1),
+    qwebr_calc_input("vfd_rated_kw", "VFD rated output (each)", value = 7.5, min = 0.5, max = 75, step = 0.5, suffix = "kW"),
+    qwebr_calc_input("W", "Enclosure width", value = 0.8, min = 0.3, max = 2.5, step = 0.05, suffix = "m"),
+    qwebr_calc_input("H", "Enclosure height", value = 1, min = 0.3, max = 2.5, step = 0.05, suffix = "m"),
+    qwebr_calc_input("D", "Enclosure depth", value = 0.3, min = 0.15, max = 1, step = 0.05, suffix = "m"),
+    qwebr_calc_input("k", "Heat-transfer coefficient k", value = 5.5, min = 2, max = 12, step = 0.5, suffix = "W/(m²·°C)"),
+    qwebr_calc_input("ambient_C", "Site ambient", value = 35, min = 0, max = 45, step = 1, suffix = "°C")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: heat-load-06-03
@@ -382,13 +403,6 @@ misc_loss <- 20          # W
 
 Q_total <- vfd_loss_total + transformer_loss + contactor_loss + plc_supply_loss + misc_loss
 
-cat("VFD loss (3 x", vfd_loss_each, "W ) =", vfd_loss_total, "W\n")
-cat("Transformer loss =", transformer_loss, "W\n")
-cat("Contactor coil loss =", contactor_loss, "W\n")
-cat("PLC power supply loss =", plc_supply_loss, "W\n")
-cat("Misc./terminal loss =", misc_loss, "W\n")
-cat("Total heat load, Q_total =", Q_total, "W\n\n")
-
 ## Enclosure: free-standing painted mild steel, W x H x D
 W <- 0.8  # m
 H <- 1.0  # m
@@ -399,23 +413,25 @@ k <- 5.5  # W/(m^2.C), representative for painted mild steel, natural convection
 
 delta_T <- Q_total / (k * A_eff)
 
-cat("Effective dissipating surface area, A_eff =", round(A_eff, 2), "m^2\n")
-cat("Heat-transfer coefficient, k =", k, "W/(m^2.C)\n")
-cat("Calculated passive temperature rise, delta_T =", round(delta_T, 1), "C\n\n")
-
 ambient_C <- 35
 max_internal_C <- 50
 delta_T_allow <- max_internal_C - ambient_C
 
-cat("Site ambient =", ambient_C, "C, max. allowable internal ambient =", max_internal_C, "C\n")
-cat("Allowable temperature rise, delta_T_allow =", delta_T_allow, "C\n\n")
-
 if (delta_T <= delta_T_allow) {
-  cat("Passive (natural convection) cooling: PASS -- no fan or AC required.\n")
+  cat(sprintf("Passive temperature rise: %.1f C - PASS, no fan or AC required\n", delta_T))
 } else {
-  cat("Passive cooling FAILS (", round(delta_T, 1), "C >", delta_T_allow, "C allowed ) --\n")
-  cat("evaluating forced-air ventilation next.\n\n")
+  cat(sprintf("Passive temperature rise: %.1f C - !!FAILS!!\n", delta_T))
+}
+cat(sprintf("  VFD loss (%g x %g W)            %g W\n", vfd_count, vfd_loss_each, vfd_loss_total))
+cat(sprintf("  Transformer + contactor coils   %g W\n", transformer_loss + contactor_loss))
+cat(sprintf("  PLC supply + misc./terminals    %g W\n", plc_supply_loss + misc_loss))
+cat(sprintf("  Total heat load Q_total         %g W\n", Q_total))
+cat(sprintf("  Effective surface area A_eff    %.2f m^2\n", A_eff))
+cat(sprintf("  Allowable temperature rise      %g C (%g C ambient, %g C max. internal)\n",
+            delta_T_allow, ambient_C, max_internal_C))
 
+if (delta_T > delta_T_allow) {
+  ## Passive cooling fails -- evaluate forced-air ventilation next
   rho <- 1.2     # kg/m^3, air density
   cp <- 1005     # J/(kg.K), specific heat of air
 
@@ -423,25 +439,25 @@ if (delta_T <= delta_T_allow) {
   V_flow_m3h <- V_flow_m3s * 3600
   V_flow_cfm <- V_flow_m3h / 1.699
 
-  cat("Required forced-air flow to hold delta_T_allow =", round(V_flow_m3h, 0),
-      "m^3/h (", round(V_flow_cfm, 0), "CFM )\n")
-
   ## Rule of thumb: oversize the fan selection to cover filter loading and
   ## elevation derating over the equipment's service life
   fan_oversize_factor <- 1.25
   V_flow_selected <- V_flow_m3h * fan_oversize_factor
-  cat("With a 25% oversize allowance for filter loading/derating:",
-      round(V_flow_selected, 0), "m^3/h required from the selected fan\n\n")
 
-  cat("Decision: this is a general-area panel (NEMA 12/IP54, not washdown-rated),\n")
-  cat("so a filtered intake/exhaust fan pair is a viable option -- select a\n")
-  cat("standard fan module rated at or above the oversized airflow figure.\n")
-  cat("(Note: if this were the dairy-line IP69K panel from the previous design\n")
-  cat("task, a filter fan would breach the enclosure seal and would not be an\n")
-  cat("option -- a sealed air-to-air heat exchanger or air conditioner would be\n")
-  cat("required instead, regardless of how modest the airflow number is.)\n")
+  cat(sprintf("  Required forced-air flow        %.0f m^3/h (%.0f CFM)\n", V_flow_m3h, V_flow_cfm))
+  cat(sprintf("  With 25%% oversize allowance     %.0f m^3/h from the selected fan\n", V_flow_selected))
+
+  ## Decision: this is a general-area panel (NEMA 12/IP54, not washdown-rated),
+  ## so a filtered intake/exhaust fan pair is a viable option -- select a
+  ## standard fan module rated at or above the oversized airflow figure.
+  ## (If this were the dairy-line IP69K panel from the previous design task,
+  ## a filter fan would breach the enclosure seal and would not be an option --
+  ## a sealed air-to-air heat exchanger or air conditioner would be required
+  ## instead, regardless of how modest the airflow number is.)
 }
 ```
+
+</details>
 
 **Sanity check:** a calculated 60°C passive rise against a 15°C allowance is a large, unambiguous fail — a useful reminder that a VFD-heavy panel almost never survives on natural convection alone, matching the rule of thumb above. The required forced-air flow (roughly 160-200 m³/h once oversized) is well within the range of an off-the-shelf filtered fan module, so the fix here is a straightforward part selection, not a redesign — but that fix only works because this particular panel doesn't need a sealed enclosure; a washdown-rated version of the same panel would need a fundamentally different (and more expensive) cooling approach for the exact same heat load.
 
@@ -528,7 +544,26 @@ ggplot(curve_df, aes(x = mult, y = t, color = curve)) +
 
 ### Worked Example
 
-Live cell — try changing `FLA`, `service_factor`, or `m_fuse` and re-run to see the conductor and fuse selection update.
+Live cell — change the motor FLA, the service factor, or the fuse multiplier to see the conductor check, overload setting, and fuse selection update.
+
+```{r calc-branch-protection-06-03, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "branch-protection-06-03",
+  title = "Motor Branch Circuit Protection Calculator",
+  icon = "plug",
+  inputs = list(
+    qwebr_calc_input("FLA", "Motor full-load amps (FLA)", value = 32, min = 1, max = 50, step = 0.5, suffix = "A"),
+    qwebr_calc_input("conductor_ampacity_actual", "Selected conductor ampacity", value = 44, min = 10, max = 150, step = 1, suffix = "A"),
+    qwebr_calc_input("service_factor", "Motor service factor", value = 1.15, min = 1, max = 1.25, step = 0.05),
+    qwebr_calc_input("m_fuse", "Time-delay fuse multiplier", value = 1.75, min = 1.25, max = 2.25, step = 0.05, suffix = "x FLA"),
+    qwebr_calc_input("LRA_multiplier", "Locked-rotor multiplier", value = 6.5, min = 4, max = 9, step = 0.5, suffix = "x FLA")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: branch-protection-06-03
@@ -539,21 +574,15 @@ FLA <- 32  # A
 
 ## Step 1: branch-circuit conductor ampacity (125% continuous-duty rule)
 conductor_ampacity_required <- 1.25 * FLA
-cat("Motor FLA =", FLA, "A\n")
-cat("Required conductor ampacity (1.25 x FLA) =", conductor_ampacity_required, "A\n")
 
-conductor_selected <- "8 AWG copper, 90C insulation"
+## Selected conductor: 8 AWG copper, 90C insulation
 conductor_ampacity_actual <- 44  # A, representative ampacity for this conductor/insulation
-cat("Selected conductor:", conductor_selected, "-- ampacity =", conductor_ampacity_actual, "A")
-if (conductor_ampacity_actual >= conductor_ampacity_required) cat("  -- PASS\n") else cat("  -- FAILS\n")
 
 ## Step 2: overload relay setting (protects the motor, separate from the
 ## branch OCPD below)
 service_factor <- 1.15
 m_OL <- ifelse(service_factor >= 1.15, 1.25, 1.15)
 I_OL <- m_OL * FLA
-cat("\nOverload relay multiplier (service factor =", service_factor, ") =", m_OL, "\n")
-cat("Overload relay setting =", round(I_OL, 1), "A\n")
 
 ## Step 3: time-delay fuse sizing (protects conductors/equipment; rides
 ## through starting inrush)
@@ -562,25 +591,24 @@ I_OCPD_calc <- m_fuse * FLA
 standard_fuse_sizes <- c(15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 110, 125)
 I_OCPD <- min(standard_fuse_sizes[standard_fuse_sizes >= I_OCPD_calc])
 
-cat("\nCalculated max. time-delay fuse rating (", m_fuse, "x FLA ) =",
-    round(I_OCPD_calc, 1), "A\n")
-cat("Selected standard fuse size =", I_OCPD, "A (",
-    round(I_OCPD / FLA * 100, 0), "% of FLA )\n\n")
-
 ## Check against a locked-rotor current estimate to confirm the fuse rides
 ## through a normal start
 LRA_multiplier <- 6.5  # typical for a NEMA Design B motor, rule of thumb
 LRA <- LRA_multiplier * FLA
-cat("Estimated locked-rotor current (", LRA_multiplier, "x FLA ) =", round(LRA, 0), "A\n")
-cat("Fuse rating as a multiple of estimated LRA =",
-    sprintf("%.2f", I_OCPD / LRA), "x -- a time-delay fuse tolerates a brief",
-    "multi-second overload well above its own rating, so this is expected\n")
 
-cat("\n--- Branch circuit summary ---\n")
-cat("Conductor:", conductor_selected, "(", conductor_ampacity_actual, "A ) -- PASS\n")
-cat("Overload relay setting:", round(I_OL, 1), "A\n")
-cat("Time-delay fuse:", I_OCPD, "A\n")
+cat(sprintf("Time-delay fuse: %g A (%.0f%% of FLA)\n", I_OCPD, I_OCPD / FLA * 100))
+cat(sprintf("  Required conductor ampacity (1.25 x FLA)   %.1f A\n", conductor_ampacity_required))
+cat(sprintf("  Selected conductor ampacity                %g A - %s\n", conductor_ampacity_actual,
+            ifelse(conductor_ampacity_actual >= conductor_ampacity_required, "PASS", "!!FAILS!!")))
+cat(sprintf("  Overload relay setting (%.2f x FLA)         %.1f A\n", m_OL, I_OL))
+cat(sprintf("  Calculated max. fuse rating (%.2f x FLA)    %.1f A\n", m_fuse, I_OCPD_calc))
+cat(sprintf("  Estimated locked-rotor current             %.0f A\n", LRA))
+## A time-delay fuse tolerates a brief multi-second overload well above its
+## own rating, so a fuse rating far below the LRA is expected
+cat(sprintf("  Fuse rating as a multiple of LRA           %.2fx\n", I_OCPD / LRA))
 ```
+
+</details>
 
 **Sanity check:** the selected fuse (60 A) sits at roughly 1.9x FLA, comfortably inside the range this chapter's rule of thumb predicts, and the overload relay (40 A) sits between FLA (32 A) and the conductor's ampacity (44 A) exactly where it should — protecting the motor from sustained overload well before the conductor itself is threatened, while the fuse stands by purely for short-circuit and ground-fault events. If the fuse rating had landed close to or above the conductor's ampacity, that would be a red flag worth double-checking, since it would mean the "short-circuit protection" device was no longer meaningfully protecting the conductor it shares a circuit with.
 

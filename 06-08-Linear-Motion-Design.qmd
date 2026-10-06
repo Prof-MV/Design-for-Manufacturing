@@ -289,7 +289,27 @@ $$
 
 ### Worked Example
 
-Live cell — try changing `mass_carriage`, `accel`, or `L_buck` and re-run to see the safety factor update.
+Live cell — drag the loaded span, or change the carriage mass, acceleration, or root diameter, to see the safety factor update.
+
+```{r calc-buckling-06-08, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "buckling-06-08",
+  title = "Ball Screw Buckling Safety Factor",
+  icon = "ruler",
+  inputs = list(
+    qwebr_calc_input("d_r", "Screw root diameter", value = 0.0274, min = 0.008, max = 0.08, step = 0.0002, suffix = "m"),
+    qwebr_calc_input("mass_carriage", "Carriage mass", value = 42, min = 1, max = 500, step = 1, suffix = "kg"),
+    qwebr_calc_input("accel", "Commanded acceleration", value = 4.5, min = 0.5, max = 30, step = 0.5, suffix = "m/s²"),
+    qwebr_calc_input("F_friction", "Friction / preload drag", value = 180, min = 0, max = 2000, step = 10, suffix = "N"),
+    qwebr_calc_input("F_process", "Process reaction force", value = 50, min = 0, max = 5000, step = 10, suffix = "N"),
+    qwebr_calc_input("L_buck", "Loaded (buckling) span (m)", value = 1.15, min = 0.2, max = 4, step = 0.05, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: buckling-06-08
@@ -321,25 +341,25 @@ Fa <- Fa_raw * pad
 
 SF <- Pcr / Fa
 
-cat("Second moment of area I =", format(I, scientific = TRUE), "m^4\n")
-cat("Euler critical buckling load P_cr =", format(round(Pcr, 0), big.mark = " "), "N\n\n")
-cat("Acceleration force =", F_accel, "N\n")
-cat("Friction/preload drag =", F_friction, "N\n")
-cat("Process reaction force =", F_process, "N\n")
-cat("Raw axial thrust =", Fa_raw, "N ; padded axial thrust F_a =", round(Fa, 1), "N\n\n")
-cat("Safety factor SF = P_cr / F_a =", round(SF, 1), "\n\n")
-
-if (SF >= 3) {
-  cat("SF >= 3: PASSES the buckling rule of thumb, with large margin\n\n")
-} else {
-  cat("SF < 3: FAILS -- shorten the loaded span, increase root diameter, or reduce thrust\n\n")
-}
-
 ## How much longer could this span get before SF erodes to the minimum of 3?
 Pcr_target <- 3 * Fa
 L_at_SF3 <- sqrt(pi^2 * E * I / Pcr_target) / Ke
-cat("Loaded span at which SF would fall to 3:", round(L_at_SF3, 2), "m\n")
+
+if (SF >= 3) {
+  cat(sprintf("Buckling safety factor SF = P_cr / F_a: %.1f - PASSES\n", SF))
+} else {
+  ## Shorten the loaded span, increase root diameter, or reduce thrust
+  cat(sprintf("Buckling safety factor SF = P_cr / F_a: %.1f - !!FAILS!! (need >= 3)\n", SF))
+}
+cat(sprintf("  Second moment of area I              %s m^4\n", format(I, scientific = TRUE, digits = 4)))
+cat(sprintf("  Euler critical buckling load P_cr    %s N\n", format(round(Pcr), big.mark = " ")))
+cat(sprintf("  Acceleration force                   %.1f N\n", F_accel))
+cat(sprintf("  Raw axial thrust                     %.1f N\n", Fa_raw))
+cat(sprintf("  Padded axial thrust F_a (x %.2f)     %.1f N\n", pad, Fa))
+cat(sprintf("  Span at which SF would fall to 3     %.2f m\n", L_at_SF3))
 ```
+
+</details>
 
 **Sanity check:** a safety factor around 180 is not a rounding artifact — it is the honest result of a stocky, short-span screw carrying a modest thrust load. Buckling essentially never governs this axis; the length at which the safety factor would erode to the 3x minimum is nearly 9 metres, and long before a single-span ball screw ever reaches that length, critical speed and cost (Design Tasks 1 and 5) have already ruled it out. The lesson is not "skip the buckling check" — it is that buckling only becomes the *controlling* failure mode on long, slender, or heavily thrust-loaded screws, such as a tall vertical Z-axis or a screw carrying a pressing/clamping force, and the only way to know which situation you're in is to run the check.
 
@@ -428,7 +448,27 @@ duty_cycle %>%
 
 ### Worked Example
 
-Live cell — try changing `Ca`, the segment loads, or the production rate and re-run to see the life estimate update.
+Live cell — change the dynamic capacity, the segment loads, or the production rate to see the life estimate update.
+
+```{r calc-ballscrew-life-06-08, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "ballscrew-life-06-08",
+  title = "Ball Screw L10 Life Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("Ca", "Dynamic axial load capacity C<sub>a</sub>", value = 24500, min = 2000, max = 100000, step = 500, suffix = "N"),
+    qwebr_calc_input("lead", "Screw lead", value = 10, min = 2, max = 50, step = 1, suffix = "mm/rev"),
+    qwebr_calc_input("F1", "Forward (loaded) pass load", value = 850, min = 50, max = 20000, step = 50, suffix = "N"),
+    qwebr_calc_input("F2", "Return pass load", value = 400, min = 50, max = 20000, step = 50, suffix = "N"),
+    qwebr_calc_input("jph", "Production rate", value = 40, min = 1, max = 200, step = 1, suffix = "jobs/h"),
+    qwebr_calc_input("target_km", "Target L10 life", value = 25000, min = 1000, max = 500000, step = 1000, suffix = "km")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: ballscrew-life-06-08
@@ -437,8 +477,10 @@ Ca <- 24500   # N
 lead <- 10    # mm/rev
 
 ## Duty cycle: forward (loaded) pass and return (unloaded) pass
-F1 <- 850; d1 <- 900   # N, mm - forward dispense pass
-F2 <- 400; d2 <- 900   # N, mm - return pass
+F1 <- 850     # N - forward dispense pass
+d1 <- 900     # mm
+F2 <- 400     # N - return pass
+d2 <- 900     # mm
 
 ## Distance-weighted cubic mean load
 Fm <- ((F1^3 * d1 + F2^3 * d2) / (d1 + d2))^(1/3)
@@ -447,10 +489,6 @@ Fm <- ((F1^3 * d1 + F2^3 * d2) / (d1 + d2))^(1/3)
 L10_rev <- (Ca / Fm)^3 * 1e6
 L10_mm <- L10_rev * lead
 L10_km <- L10_mm / 1e6
-
-cat("Cubic mean axial load F_m =", round(Fm, 1), "N\n")
-cat("L10 life =", format(L10_rev, scientific = TRUE, digits = 4), "revolutions\n")
-cat("L10 life =", format(round(L10_km, 0), big.mark = " "), "km of travel\n\n")
 
 ## Production rate and annual travel distance
 jph <- 40          # jobs/hour
@@ -461,24 +499,27 @@ cycles_yr <- jph * hrs_day * days_wk * wks_yr
 dist_per_cycle_mm <- d1 + d2
 annual_km <- cycles_yr * dist_per_cycle_mm / 1e6
 
-cat("Cycles per year:", format(cycles_yr, big.mark = " "), "\n")
-cat("Annual travel distance:", annual_km, "km/year\n\n")
-
 target_km <- 25000
 ratio <- L10_km / target_km
-cat("Target L10 life:", format(target_km, big.mark = " "), "km\n")
-cat("Calculated L10 / target ratio:", round(ratio, 1), "x\n")
+implied_years <- L10_km / annual_km
+
+fmt <- function(x) format(round(x), big.mark = " ", scientific = FALSE)
 
 if (L10_km >= target_km) {
-  cat("Calculated L10 life meets the target: PASSES\n\n")
+  cat(sprintf("L10 life: %s km of travel - PASSES\n", fmt(L10_km)))
 } else {
-  cat("Calculated L10 life falls short of the target: FAILS\n\n")
+  cat(sprintf("L10 life: %s km of travel - !!FAILS!!\n", fmt(L10_km)))
 }
-
-implied_years <- L10_km / annual_km
-cat("At this duty cycle, L10 life corresponds to about", round(implied_years, 0),
-    "years of continuous operation\n")
+cat(sprintf("  Cubic mean axial load F_m         %.1f N\n", Fm))
+cat(sprintf("  L10 life in revolutions           %s\n", format(L10_rev, scientific = TRUE, digits = 4)))
+cat(sprintf("  Target L10 life                   %s km\n", fmt(target_km)))
+cat(sprintf("  Calculated L10 / target ratio     %.1fx\n", ratio))
+cat(sprintf("  Cycles per year                   %s\n", fmt(cycles_yr)))
+cat(sprintf("  Annual travel distance            %g km/year\n", annual_km))
+cat(sprintf("  L10 life at this duty cycle       about %s years\n", fmt(implied_years)))
 ```
+
+</details>
 
 **Sanity check:** the calculated life clears the 25,000 km target by more than 17x, and translated into years at the plant's actual duty cycle, it works out to roughly 1,500 years. That number is not a mistake — it is the direct, honest consequence of a cube-law life formula applied to a screw whose rated capacity (24.5 kN) is more than 30 times the mean applied load (about 700 N). No one is designing this screw to actually run for 1,500 years; the number's real value is confirming that classical ball fatigue is definitively *not* the constraint on this axis's service life. The plant's actual preventive maintenance plan for this screw should be built around inspection intervals for backlash growth, preload loss, and seal/wiper condition — not around a calculated fatigue date that will never be reached.
 
@@ -585,7 +626,27 @@ ggplot() +
 
 ### Worked Example
 
-Live cell — try changing `C_candidate`, the moment values, or `fw` and re-run to see the life result update.
+Live cell — drag the guide's dynamic capacity, or change the moving mass, the moment values, or the service factor, to see the life result update.
+
+```{r calc-guide-life-06-08, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "guide-life-06-08",
+  title = "Linear Guide Life Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("mass_total", "Total moving mass", value = 15, min = 1, max = 500, step = 1, suffix = "kg"),
+    qwebr_calc_input("M_pitch", "Pitch moment", value = 22, min = 0, max = 500, step = 1, suffix = "N·m"),
+    qwebr_calc_input("M_roll", "Roll moment", value = 9, min = 0, max = 500, step = 1, suffix = "N·m"),
+    qwebr_calc_input("M_yaw", "Yaw moment", value = 4, min = 0, max = 500, step = 1, suffix = "N·m"),
+    qwebr_calc_input("fw", "Service factor f<sub>w</sub>", value = 1.2, min = 1, max = 3, step = 0.05),
+    qwebr_calc_input("C_candidate", "Guide dynamic capacity C (N)", value = 1450, min = 500, max = 6000, step = 50, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: guide-life-06-08
@@ -615,14 +676,6 @@ fw <- 1.2
 P_eq <- fw * F_eq
 P_naive <- fw * F_direct   # what a direct-load-only (wrong) check would use
 
-cat("Direct load share per block:", round(F_direct, 2), "N\n")
-cat("Pitch contribution:", round(d_pitch, 2), "N\n")
-cat("Roll contribution:", round(d_roll, 2), "N\n")
-cat("Yaw contribution:", round(d_yaw, 2), "N\n")
-cat("Equivalent load on worst-loaded block, F_eq =", round(F_eq, 1), "N\n")
-cat("(", round(F_eq / F_direct, 2), "x the direct load alone)\n\n")
-cat("With service factor f_w =", fw, ": P =", round(P_eq, 1), "N\n\n")
-
 ## First-pass candidate guide block
 C_candidate <- 1450  # N, rated dynamic load capacity
 L10_km <- (C_candidate / P_eq)^3 * 50
@@ -630,27 +683,31 @@ L10_naive_km <- (C_candidate / P_naive)^3 * 50
 
 target_km <- 250000
 
-cat("Candidate guide dynamic capacity C =", C_candidate, "N\n")
-cat("Naive (direct-load-only) L10 =", format(round(L10_naive_km, 0), big.mark = " "), "km",
-    "-- looks like it clears the target\n")
-cat("Real L10 (moments included) =", format(round(L10_km, 0), big.mark = " "), "km\n")
-cat("Target L10 life =", format(target_km, big.mark = " "), "km\n\n")
+fmt <- function(x) format(round(x), big.mark = " ", scientific = FALSE)
 
 if (L10_km >= target_km) {
-  cat("Real L10 meets the target: PASSES\n")
+  cat(sprintf("Real L10 (moments included): %s km - PASSES\n", fmt(L10_km)))
 } else {
-  cat("Real L10 falls short of the target: FAILS -- even though the naive check looked fine\n\n")
+  cat(sprintf("Real L10 (moments included): %s km - !!FAILS!!\n", fmt(L10_km)))
+}
+cat(sprintf("  Target L10 life                      %s km\n", fmt(target_km)))
+cat(sprintf("  Naive (direct-load-only) L10         %s km - %s\n", fmt(L10_naive_km),
+            ifelse(L10_naive_km >= target_km, "looks like it clears the target", "also short of the target")))
+cat(sprintf("  Direct load share per block          %.2f N\n", F_direct))
+cat(sprintf("  Pitch / roll / yaw contributions     %.2f / %.2f / %.2f N\n", d_pitch, d_roll, d_yaw))
+cat(sprintf("  Worst-loaded block F_eq              %.1f N (%.2fx the direct load alone)\n", F_eq, F_eq / F_direct))
+cat(sprintf("  Design load P (f_w = %.2f)           %.1f N\n", fw, P_eq))
 
+if (L10_km < target_km) {
   ## Corrective action: upsize to the next guide block size
   C_upsized <- 2600  # N
   L10_upsized_km <- (C_upsized / P_eq)^3 * 50
-  cat("Corrective action: upsize to a", C_upsized, "N-rated guide block\n")
-  cat("New L10 =", format(round(L10_upsized_km, 0), big.mark = " "), "km\n")
-  if (L10_upsized_km >= target_km) {
-    cat("New L10 meets the target: PASSES\n")
-  }
+  cat(sprintf("  Upsized to a %g N-rated block       %s km - %s\n", C_upsized, fmt(L10_upsized_km),
+              ifelse(L10_upsized_km >= target_km, "PASSES", "!!still FAILS!!")))
 }
 ```
+
+</details>
 
 **Sanity check:** the moment contributions more than double the equivalent load on the worst-loaded block (from about 37 N direct to about 81 N once pitch, roll, and yaw are included) — and that difference is exactly what separates a first-pass candidate that looks like it clears the target by 7x (the naive check) from one that actually falls short by a third (the real check). This is precisely the same trap as the robot end-effector CG-offset payload check: the nameplate/direct-load number understates the true demand, and the moment loading is what closes the gap. Upsizing to the next guide block size restores a comfortable margin above the 250,000 km target.
 
@@ -726,7 +783,24 @@ Self-locking occurs when $\mu \geq \tan\lambda$ (equivalently, when $\eta < 50\%
 
 ### Worked Example
 
-Live cell — try changing `L_lead`, `d_mean`, or `mu` and re-run to see whether the thread stays self-locking.
+Live cell — drag the friction coefficient, or change the lead or mean diameter, to see whether the thread stays self-locking.
+
+```{r calc-selflock-06-08, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "selflock-06-08",
+  title = "Lead Screw Self-Locking Check",
+  icon = "screwdriver-wrench",
+  inputs = list(
+    qwebr_calc_input("L_lead", "Lead", value = 5, min = 1, max = 40, step = 0.5, suffix = "mm"),
+    qwebr_calc_input("d_mean", "Mean (pitch) diameter", value = 19, min = 5, max = 80, step = 0.5, suffix = "mm"),
+    qwebr_calc_input("mu", "Coefficient of friction (mu)", value = 0.15, min = 0.02, max = 0.4, step = 0.01, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: selflock-06-08
@@ -742,21 +816,22 @@ tan_lambda <- tan(lambda_rad)
 phi_rad <- atan(mu)
 eta <- tan_lambda / tan(lambda_rad + phi_rad)
 
-cat("Lead angle, lambda =", round(lambda_deg, 2), "degrees (tan =", round(tan_lambda, 4), ")\n")
-cat("Coefficient of friction, mu =", mu, "\n")
-cat("Efficiency, eta =", round(eta * 100, 1), "%\n\n")
-
 if (mu >= tan_lambda) {
   cat("mu >= tan(lambda): thread is SELF-LOCKING\n")
 } else {
-  cat("mu < tan(lambda): thread is NOT self-locking -- will back-drive under axial load\n")
+  cat("mu < tan(lambda): thread is !!NOT self-locking!! - will back-drive under axial load\n")
 }
+cat(sprintf("  Lead angle, lambda               %.2f degrees (tan = %.4f)\n", lambda_deg, tan_lambda))
+cat(sprintf("  Coefficient of friction, mu      %.2f\n", mu))
+cat(sprintf("  Efficiency, eta                  %.1f%%\n", eta * 100))
 
 ## Ball screw comparison (typical rolling-contact efficiency, not derived)
 eta_ballscrew <- 0.90
-cat("\nFor comparison, a preloaded ball screw typically runs at about",
-    eta_ballscrew * 100, "% efficiency -- far too efficient to be self-locking.\n")
+cat(sprintf("  Preloaded ball screw, for comparison  about %g%% - far too efficient to be self-locking\n",
+            eta_ballscrew * 100))
 ```
+
+</details>
 
 **Sanity check:** at a 5 mm lead on a 19 mm mean diameter, the thread's lead angle is under 5 degrees, well inside the friction angle for a lightly lubricated Acme thread (efficiency comes out to about 35%, comfortably under the 50% self-locking rule-of-thumb threshold). The ball screw's ~90% efficiency, by contrast, isn't a design flaw — it's the entire reason ball screws dominate wherever speed and precision matter — but it means a ball screw can never provide fail-safe holding on its own.
 

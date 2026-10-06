@@ -170,7 +170,25 @@ The 32 mm/12 mm cylinder is the right selection here — a genuinely smaller bor
 
 With the cylinder fixed, the directional valve has to fill that cylinder's extend chamber fast enough to keep the 5.0 s cycle on schedule. The process engineer has budgeted **0.12 s** for the extend stroke to complete, over a short **60 mm** stroke length — a burst flow requirement, not the cycle-averaged consumption a naive sizing approach might reach for first.
 
-Live cell — try a different fill time, stroke length, or valve pressure drop and see how the required Cv responds.
+Live cell — drag the fill time, or change the stroke length, bore, or valve pressure drop, and see how the required Cv responds.
+
+```{r calc-valve-cv-06-15, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "valve-cv-06-15",
+  title = "Gripper Valve Cv Sizing Calculator",
+  icon = "wind",
+  inputs = list(
+    qwebr_calc_input("bore", "Bore diameter", value = 32, min = 8, max = 200, step = 1, suffix = "mm"),
+    qwebr_calc_input("stroke_mm", "Stroke length", value = 60, min = 10, max = 1000, step = 5, suffix = "mm"),
+    qwebr_calc_input("dP_psi", "Valve pressure drop", value = 15, min = 2, max = 50, step = 1, suffix = "psi"),
+    qwebr_calc_input("t_fill_s", "Extend-stroke fill time (s)", value = 0.12, min = 0.03, max = 1, step = 0.01, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: valve-cv-06-15
@@ -197,18 +215,43 @@ SG <- 1.0                   # air
 
 Cv_required <- Q_burst_SCFM / 22.48 * sqrt(SG * T_R / (dP_psi * P2_psia))
 
-cat(sprintf("Free-air volume to fill (extend stroke): %.4f L = %.5f ft^3\n", V_free_L, V_free_ft3))
-cat(sprintf("Required burst flow for %.2f s fill: %.2f SCFM\n\n", t_fill_s, Q_burst_SCFM))
-cat(sprintf("P1 = %.1f psia, P2 = %.1f psia, dP = %.1f psi\n", P1_psia, P2_psia, dP_psi))
 cat(sprintf("Required Cv: %.3f\n", Cv_required))
-cat(sprintf("-> Select a catalog valve rated Cv >= %.2f (round up for margin)\n", ceiling(Cv_required * 10) / 10))
+cat(sprintf("  Free-air volume to fill (extend stroke)   %.4f L = %.5f ft^3\n", V_free_L, V_free_ft3))
+cat(sprintf("  Required burst flow for %.2f s fill        %.2f SCFM\n", t_fill_s, Q_burst_SCFM))
+cat(sprintf("  Valve pressures                           P1 = %.1f psia, P2 = %.1f psia\n", P1_psia, P2_psia))
+cat(sprintf("  Select a catalog valve rated              Cv >= %.2f (round up for margin)\n", ceiling(Cv_required * 10) / 10))
 ```
+
+</details>
 
 **Sanity check:** a required Cv of about 0.17 is small even by small-cylinder standards — well under the 0.55 Cv the Pneumatic System Design chapter's own worked example needed for its larger 50 mm cylinder — which makes physical sense given both a smaller bore and a shorter stroke here. Essentially any compact wrist-mounted or gripper-integrated solenoid valve in a major manufacturer's catalog clears this requirement with room to spare; the real constraint on this valve's selection is more likely to be its physical size and mass (it rides on the robot's wrist, adding to the payload the robot itself has to carry) than its flow capacity.
 
 ## 3. Infeed Conveyor Motor and Drive Sizing
 
 The infeed conveyor is short and level — no incline, unlike the case-pick mezzanine conveyor in the [Conveyor Design](06-10-Conveyor-Design.qmd) chapter — but the same CEMA-style effective-tension method applies directly, it just has a zero gravity term. The conveyor spans **2.5 m**, carrying brackets (1.8 kg average) queued at roughly **0.2 m** center-to-center spacing near the robot's pick point, on a belt-and-idler system with an equivalent moving mass of **10 kg per linear meter** (a light-duty conveyor, appropriate for a small-parts infeed rather than the heavier tote conveyor from that chapter).
+
+Live cell — try a different part mass, queue spacing, throughput, belt speed, or drive efficiency and see how the tension, power, and gear ratio respond.
+
+```{r calc-conveyor-drive-06-15, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "conveyor-drive-06-15",
+  title = "Infeed Conveyor Drive Sizing Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("L", "Belt-path length", value = 2.5, min = 0.5, max = 30, step = 0.1, suffix = "m"),
+    qwebr_calc_input("w_b", "Belt + idler mass per metre", value = 10, min = 1, max = 60, step = 0.5, suffix = "kg/m"),
+    qwebr_calc_input("part_mass", "Part mass", value = 1.8, min = 0.1, max = 50, step = 0.1, suffix = "kg"),
+    qwebr_calc_input("s_spacing", "Queue spacing (center-to-center)", value = 0.2, min = 0.05, max = 2, step = 0.05, suffix = "m"),
+    qwebr_calc_input("rate_per_hr", "Throughput", value = 720, min = 60, max = 6000, step = 20, suffix = "parts/h"),
+    qwebr_calc_input("v_belt", "Selected belt speed", value = 0.09, min = 0.02, max = 2, step = 0.01, suffix = "m/s"),
+    qwebr_calc_input("eta_drive", "Drive efficiency", value = 0.85, min = 0.4, max = 1, step = 0.01)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: conveyor-drive-06-15
@@ -237,41 +280,25 @@ T_e <- T_x + T_y + T_z
 contingency <- 0.10
 T_e_design <- T_e * (1 + contingency)
 
-cat(sprintf("Belt + idler weight (W_belt): %.1f N\n", W_belt))
-cat(sprintf("Load on belt at design queuing (W_load): %.1f N\n\n", W_load))
-cat(sprintf("T_x (belt/idler friction): %.2f N\n", T_x))
-cat(sprintf("T_y (load friction):       %.2f N\n", T_y))
-cat(sprintf("T_z (gravity/elevation):   %.2f N (zero -- level conveyor)\n", T_z))
-cat(sprintf("T_e (effective tension):   %.2f N\n", T_e))
-cat(sprintf("T_e,design (+%.0f%% contingency): %.2f N\n\n", contingency * 100, T_e_design))
-
-## Minimum belt speed from throughput: 720 parts/hour, minimum 0.35 m
-## spacing for reliable vision-guided picking
+## Minimum belt speed from throughput, at a minimum 0.35 m spacing for
+## reliable vision-guided picking
 rate_per_hr <- 720
 rate_per_s <- rate_per_hr / 3600
 s_min <- 0.35
 v_min <- rate_per_s * s_min
 v_design <- v_min * 1.25   # 25% surge margin, per the Conveyor Design chapter's Design Task 3
 
-cat(sprintf("Minimum belt speed for 720 parts/hr at 0.35 m spacing: %.4f m/s\n", v_min))
-cat(sprintf("Design belt speed (+25%% surge margin): %.4f m/s -> select 0.09 m/s\n\n", v_design))
-
 v_belt <- 0.09     # m/s, selected design speed
 eta_drive <- 0.85   # combined gearbox + coupling efficiency
 
 P_mech <- T_e_design * v_belt
 P_motor <- P_mech / eta_drive
-cat(sprintf("Mechanical power at the belt: %.2f W\n", P_mech))
-cat(sprintf("Required motor power (%.0f%% drive efficiency): %.2f W\n\n", eta_drive * 100, P_motor))
 
 D_pulley <- 0.08    # m, 80 mm head pulley -- small standard size for a light-duty conveyor
 r_pulley <- D_pulley / 2
 T_pulley <- T_e_design * r_pulley
 omega_pulley <- v_belt / r_pulley
 rpm_pulley <- omega_pulley * 60 / (2 * pi)
-
-cat(sprintf("Required torque at pulley shaft: %.3f N.m\n", T_pulley))
-cat(sprintf("Pulley shaft speed: %.2f rpm\n\n", rpm_pulley))
 
 ## Reflect to a standard 4-pole motor per the Motor, Drive, and Gearbox
 ## Sizing chapter's method: omega_motor = N * omega_load, T_motor = T_load / (N * eta_gb)
@@ -280,39 +307,102 @@ N_ratio <- motor_rpm / rpm_pulley
 eta_gb <- 0.75   # worm gearbox, appropriate for this large a ratio
 T_motor <- T_pulley / (N_ratio * eta_gb)
 
-cat(sprintf("Gear ratio for a %d rpm 4-pole motor: %.1f:1 (worm gearbox)\n", motor_rpm, N_ratio))
-cat(sprintf("Reflected motor-shaft torque: %.5f N.m\n", T_motor))
+cat(sprintf("Required motor power: %.2f W (%.0f%% drive efficiency)\n", P_motor, eta_drive * 100))
+cat(sprintf("  Belt + idler weight (W_belt)             %.1f N\n", W_belt))
+cat(sprintf("  Load on belt at design queuing (W_load)  %.1f N\n", W_load))
+cat(sprintf("  T_x (belt/idler friction)                %.2f N\n", T_x))
+cat(sprintf("  T_y (load friction)                      %.2f N\n", T_y))
+cat(sprintf("  T_z (gravity/elevation)                  %.2f N (zero - level conveyor)\n", T_z))
+cat(sprintf("  T_e (effective tension)                  %.2f N\n", T_e))
+cat(sprintf("  T_e,design (+%.0f%% contingency)           %.2f N\n", contingency * 100, T_e_design))
+cat(sprintf("  Minimum belt speed (%g parts/hr at %.2f m spacing)  %.4f m/s\n", rate_per_hr, s_min, v_min))
+cat(sprintf("  Design belt speed (+25%% surge margin)    %.4f m/s - selected %g m/s %s\n", v_design, v_belt,
+            ifelse(v_belt >= v_design, "is enough", "is !!too slow!!")))
+cat(sprintf("  Mechanical power at the belt             %.2f W\n", P_mech))
+cat(sprintf("  Required torque at pulley shaft          %.3f N.m\n", T_pulley))
+cat(sprintf("  Pulley shaft speed                       %.2f rpm\n", rpm_pulley))
+cat(sprintf("  Gear ratio for a %g rpm 4-pole motor   %.1f:1 (worm gearbox)\n", motor_rpm, N_ratio))
+cat(sprintf("  Reflected motor-shaft torque             %.5f N.m\n", T_motor))
 ```
+
+</details>
 
 **Sanity check:** the calculated motor power (under 2 W) and reflected torque (a few thousandths of a N·m) are, on paper, almost nothing — and that's a genuine, useful finding, not an error. At this scale, the governing constraint on motor selection isn't the calculated running load at all; it's the smallest standard gearmotor frame a manufacturer actually catalogs, combined with the [Conveyor Design](06-10-Conveyor-Design.qmd) chapter's own rule of thumb of sizing starting torque at roughly 150% of running torque to cover breakaway friction. In practice, this conveyor gets specified with the smallest available fractional-horsepower gearmotor frame in the supplier's line — a real design outcome, not a rounding artifact, and worth flagging explicitly: on a small enough machine, "big enough to exist as a catalog part" replaces "big enough for the calculated load" as the actual sizing constraint. The large gear ratio (roughly 80:1) driving toward a worm gearbox is consistent with that: slow, light conveyors like this one routinely end up on worm-reduction gearmotors precisely because the load itself demands so little.
 
 That leaves one open question the [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd) chapter's Design Task 5 framework answers directly: servo or induction motor + VFD? This conveyor runs continuously at a fixed speed feeding parts to a robot that does its own vision-guided picking — it never needs to index to a stop-and-settle position the way the index table in that chapter's running example did.
 
-Live cell — try different weights and see whether the recommendation flips.
+Live cell — try different weights and see whether the recommendation flips. The weights are rescaled to total 100%; the scores can be edited in the code underneath.
+
+```{r calc-servo-vfd-decision-06-15, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "servo-vfd-decision-06-15",
+  title = "Servo vs. Induction + VFD Decision Matrix (Conveyor)",
+  icon = "scale-balanced",
+  inputs = list(
+    qwebr_calc_input("w_accuracy", "Weight: accuracy", value = 0.1, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_dynamic_response", "Weight: dynamic response", value = 0.1, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_cost", "Weight: cost", value = 0.4, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_complexity", "Weight: complexity", value = 0.4, min = 0, max = 1, step = 0.05)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: servo-vfd-decision-06-15
 ## Weighted decision matrix, weights reflecting this conveyor's actual job:
 ## running at a controlled speed, not point-to-point positioning
-weights <- c(accuracy = 0.10, dynamic_response = 0.10, cost = 0.40, complexity = 0.40)
+w_accuracy         <- 0.10
+w_dynamic_response <- 0.10
+w_cost             <- 0.40
+w_complexity       <- 0.40
+weights <- c(accuracy = w_accuracy, dynamic_response = w_dynamic_response,
+             cost = w_cost, complexity = w_complexity)
+weights <- weights / sum(weights)   # rescale so the weights always total 100%
+
+## Scores: 1 = poor fit, 5 = excellent fit
 servo_scores <- c(accuracy = 5, dynamic_response = 5, cost = 2, complexity = 2)
 induction_scores <- c(accuracy = 2, dynamic_response = 2, cost = 5, complexity = 5)
 
 servo_total <- sum(weights * servo_scores)
 induction_total <- sum(weights * induction_scores)
 
-cat("Weighted decision matrix (1 = poor fit, 5 = excellent fit):\n\n")
-for (nm in names(weights)) cat(sprintf("  %-18s weight = %.0f%%\n", nm, weights[nm] * 100))
-cat(sprintf("\nServo weighted score:          %.2f\n", servo_total))
-cat(sprintf("Induction + VFD weighted score: %.2f\n", induction_total))
-cat(sprintf("\n-> Recommendation: %s\n", ifelse(servo_total > induction_total, "SERVO", "INDUCTION MOTOR + VFD")))
+cat(sprintf("Recommendation: %s\n", ifelse(servo_total > induction_total, "SERVO", "INDUCTION MOTOR + VFD")))
+cat(sprintf("  Servo weighted score             %.2f\n", servo_total))
+cat(sprintf("  Induction + VFD weighted score   %.2f\n", induction_total))
+for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm] * 100))
 ```
+
+</details>
 
 **Sanity check:** weighting cost and complexity heavily (this conveyor never positions anything, it just runs) flips the recommendation decisively toward induction + VFD, the mirror image of the index-table result in the Motor, Drive, and Gearbox Sizing chapter's own worked example. A general-purpose VFD, sized to the selected gearmotor's nameplate FLA rather than the tiny calculated running load, is the right drive for this branch — and that nameplate FLA is exactly the number Section 4 needs next for branch-circuit protection.
 
 ## 4. Panel, Protection, and Wiring
 
 The panel has to protect three genuinely different loads: the conveyor gearmotor sized in Section 3, the six-axis robot's own controller (which carries its servo drives internally and is supplied as a single branch per the manufacturer's documented supply-circuit data — consistent with how the CEC treats industrial machinery under Section 42, and the NEC under Article 670, rather than recalculating it with the single-motor formula in CEC Section 28/NEC Article 430), and the gripper valve's 24VDC control power supply.
+
+Live cell — try a different conveyor motor FLA, fuse multiplier, robot nameplate current, or required SCCR and see how the branch sizing and the weakest-link check respond.
+
+```{r calc-branch-protection-sccr-06-15, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "branch-protection-sccr-06-15",
+  title = "Panel Branch Protection and SCCR Check",
+  icon = "plug",
+  inputs = list(
+    qwebr_calc_input("FLA", "Conveyor motor FLA", value = 0.8, min = 0.2, max = 8, step = 0.1, suffix = "A"),
+    qwebr_calc_input("m_fuse", "Time-delay fuse multiplier", value = 1.75, min = 1.25, max = 2.25, step = 0.05, suffix = "x FLA"),
+    qwebr_calc_input("I_robot", "Robot controller nameplate current", value = 3.4, min = 0.5, max = 30, step = 0.1, suffix = "A"),
+    qwebr_calc_input("required_sccr", "Required panel SCCR (kA)", value = 25, min = 5, max = 100, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: branch-protection-sccr-06-15
@@ -330,27 +420,15 @@ I_OCPD_calc <- m_fuse * FLA
 standard_fuse_sizes <- c(1, 1.25, 1.6, 2, 2.5, 3, 3.5, 4, 5, 6, 8, 10, 15, 20)
 I_OCPD_conveyor <- min(standard_fuse_sizes[standard_fuse_sizes >= I_OCPD_calc])
 
-cat("--- Conveyor motor branch ---\n")
-cat(sprintf("FLA = %.1f A -> required conductor ampacity (1.25x) = %.2f A\n", FLA, conductor_ampacity_required))
-cat(sprintf("Overload relay setting: %.2f A\n", I_OL))
-cat(sprintf("Time-delay fuse: %.1f A (calc %.2f A, next standard size up)\n\n", I_OCPD_conveyor, I_OCPD_calc))
-
 ## --- Robot controller branch (manufacturer-specified supply data,
 ## general continuous-load conductor sizing applies) ---
 I_robot <- 3.4    # A, manufacturer-published nameplate current, 600 V three-phase
 I_robot_required <- 1.25 * I_robot
 I_robot_breaker <- 15   # A, manufacturer-recommended branch breaker rating
 
-cat("--- Robot controller branch (manufacturer-specified) ---\n")
-cat(sprintf("Nameplate current = %.1f A -> required conductor ampacity (1.25x) = %.2f A\n", I_robot, I_robot_required))
-cat(sprintf("Branch breaker: %.0f A (manufacturer-specified, per CEC Section 42 / NEC Article 670)\n\n", I_robot_breaker))
-
 ## --- Gripper valve 24VDC control power supply branch ---
 I_ps_primary <- 1.2   # A, 120V primary current for a small 24VDC/5A supply
 I_ps_breaker <- 2      # A
-
-cat("--- 24VDC control power supply branch ---\n")
-cat(sprintf("Primary current ~= %.1f A -> breaker: %.0f A\n\n", I_ps_primary, I_ps_breaker))
 
 ## --- Panel SCCR: weakest-link check ---
 required_sccr <- 25   # kA, this Tier-2 supplier's plant electrical specification
@@ -365,22 +443,48 @@ components$effective_kA <- ifelse(is.na(components$combo_kA), components$standal
 panel_sccr <- min(components$effective_kA)
 panel_sccr_standalone_only <- min(components$standalone_kA)
 
-cat("--- Panel SCCR (weakest-link check) ---\n")
+cat(sprintf("Panel SCCR with CL-fuse combinations: %g kA - %s\n",
+            panel_sccr, ifelse(panel_sccr >= required_sccr, "PASS", "!!FAILS!!")))
+cat(sprintf("  Panel SCCR without CL-fuse combinations      %g kA - %s\n",
+            panel_sccr_standalone_only, ifelse(panel_sccr_standalone_only >= required_sccr, "PASS", "!!FAILS!!")))
 for (i in seq_len(nrow(components))) {
-  cat(sprintf("%-30s standalone %2.0f kA -> effective %2.0f kA\n",
+  cat(sprintf("  %s  standalone %g kA, effective %g kA\n",
               components$component[i], components$standalone_kA[i], components$effective_kA[i]))
 }
-cat(sprintf("\nPanel SCCR without current-limiting combinations: %.0f kA -- %s\n",
-            panel_sccr_standalone_only, ifelse(panel_sccr_standalone_only >= required_sccr, "PASS", "FAILS")))
-cat(sprintf("Panel SCCR with documented CL-fuse combinations applied: %.0f kA -- %s\n",
-            panel_sccr, ifelse(panel_sccr >= required_sccr, "PASS", "FAILS")))
+cat(sprintf("  Conveyor motor: conductor ampacity (1.25x)   %.2f A\n", conductor_ampacity_required))
+cat(sprintf("  Conveyor motor: overload relay setting       %.2f A\n", I_OL))
+cat(sprintf("  Conveyor motor: time-delay fuse              %g A (calc %.2f A, next standard size up)\n",
+            I_OCPD_conveyor, I_OCPD_calc))
+cat(sprintf("  Robot controller: conductor ampacity (1.25x)  %.2f A\n", I_robot_required))
+cat(sprintf("  Robot controller: branch breaker             %g A (manufacturer-specified)\n", I_robot_breaker))
+cat(sprintf("  24VDC supply: primary current / breaker      ~%.1f A / %g A\n", I_ps_primary, I_ps_breaker))
 ```
+
+</details>
 
 **Sanity check:** the conveyor motor's own FLA is so small that its branch protection is set by the smallest available standard fuse size, not by a percentage-of-FLA calculation — the same "governed by the smallest available standard part, not the calculated load" pattern Section 3 already found for the gearmotor itself. The panel's real electrical mass is the robot controller branch, and its real SCCR risk is the weakest link among the three low-rated branch devices — exactly the trap the Control Panel Design chapter's weakest-link principle warns about: a 25 kA main breaker feeding a 5 kA contactor does not produce a 25 kA panel without a documented current-limiting fuse combination in every branch that needs one.
 
 With the branches sized, one conductor run gets a voltage-drop check: the 24VDC feed to the gripper's solenoid valve, which travels out through the robot's own trailing cable (dress-pack) and back to the panel — a genuinely long run for a low-voltage circuit, **45 m** one-way.
 
-Live cell — try a different cable length, gauge, or solenoid current and see how the delivered voltage responds.
+Live cell — drag the cable length, or change the solenoid current or supply voltage, and see how the delivered voltage responds for each gauge.
+
+```{r calc-voltage-drop-06-15, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "voltage-drop-06-15",
+  title = "Gripper Solenoid Voltage Drop Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("V_supply", "Supply voltage", value = 24, min = 5, max = 48, step = 1, suffix = "VDC"),
+    qwebr_calc_input("I_load", "Solenoid current", value = 0.4, min = 0.05, max = 10, step = 0.05, suffix = "A"),
+    qwebr_calc_input("min_operating_V", "Minimum operating voltage", value = 20.4, min = 4, max = 48, step = 0.1, suffix = "V"),
+    qwebr_calc_input("L_one_way_m", "One-way cable run (m)", value = 45, min = 5, max = 300, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: voltage-drop-06-15
@@ -400,17 +504,26 @@ calc_drop <- function(R_ohm_km, L_m, I) {
 
 min_operating_V <- 20.4   # V, representative -15% tolerance floor for a 24VDC solenoid
 
-for (nm in c("R_18awg", "R_14awg")) {
-  R <- get(nm)
-  Vd <- calc_drop(R, L_one_way_m, I_load)
-  pct <- Vd / V_supply * 100
-  delivered <- V_supply - Vd
-  cat(sprintf("%s (%.2f ohm/km): drop = %.3f V (%.2f%%), delivered = %.2f V -> %s (3%% rule), %s (functional floor)\n",
-              nm, R, Vd, pct, delivered,
-              ifelse(pct <= 3, "PASS", "FAIL"),
-              ifelse(delivered >= min_operating_V, "PASS", "FAIL")))
+gauges <- c("18 AWG" = R_18awg, "14 AWG" = R_14awg)
+Vd <- calc_drop(gauges, L_one_way_m, I_load)
+pct <- Vd / V_supply * 100
+delivered <- V_supply - Vd
+passes_both <- pct <= 3 & delivered >= min_operating_V
+
+if (any(passes_both)) {
+  cat("Smallest listed gauge passing both checks:", names(gauges)[which(passes_both)[1]], "\n")
+} else {
+  cat("!!Neither listed gauge passes both checks!!\n")
+}
+for (i in seq_along(gauges)) {
+  cat(sprintf("  %s (%.2f ohm/km)  %.3f V drop (%.2f%%), %.2f V delivered - %s (3%% rule), %s (functional floor)\n",
+              names(gauges)[i], gauges[i], Vd[i], pct[i], delivered[i],
+              ifelse(pct[i] <= 3, "PASS", "!!FAIL!!"),
+              ifelse(delivered[i] >= min_operating_V, "PASS", "!!FAIL!!")))
 }
 ```
+
+</details>
 
 **Sanity check:** 18 AWG, the common default for this kind of dress-pack wiring, fails the 3% rule of thumb (about 3.9%) over this unusually long 45 m run, but the delivered voltage (23.1 V) still clears the solenoid's functional floor comfortably — the same "too loose vs. too tight" distinction the Wire, Cable, and Circuit Protection chapter's own worked example makes. For this on/off solenoid, 18 AWG is functionally acceptable; stepping up to 14 AWG (1.5% drop) is the safer specification if this cable is ever repurposed to carry an analog signal alongside the solenoid feed, since an analog device's tolerance for drop is much tighter than a solenoid's.
 
@@ -418,7 +531,27 @@ for (nm in c("R_18awg", "R_14awg")) {
 
 Three separate bonding and grounding questions apply to this cell, each using the terminology and method from the [Bonding, Grounding, and EMC](06-05-Bonding-Grounding-EMC.qmd) chapter.
 
-Live cell — try different OCPD ratings, line voltage, or ground potential difference and see how each result responds.
+Live cell — try different OCPD ratings, line voltage, bearing voltage ratio, or ground potential difference and see how each result responds.
+
+```{r calc-bonding-grounding-06-15, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bonding-grounding-06-15",
+  title = "Cell Bonding and Grounding Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("ocpd_conveyor", "Conveyor branch OCPD rating", value = 1.6, min = 1, max = 1200, step = 0.1, suffix = "A"),
+    qwebr_calc_input("ocpd_robot", "Robot branch OCPD rating", value = 15, min = 1, max = 1200, step = 1, suffix = "A"),
+    qwebr_calc_input("V_line_rms", "Line voltage (line-to-line)", value = 600, min = 208, max = 690, step = 1, suffix = "V"),
+    qwebr_calc_input("BVR", "Bearing voltage ratio (BVR)", value = 0.04, min = 0.01, max = 0.1, step = 0.005),
+    qwebr_calc_input("cable_length_m", "Transducer cable length", value = 12, min = 1, max = 300, step = 1, suffix = "m"),
+    qwebr_calc_input("delta_V_ground", "Ground potential difference", value = 0.9, min = 0.1, max = 10, step = 0.1, suffix = "V")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: bonding-grounding-06-15
@@ -435,14 +568,9 @@ lookup_bonding_size <- function(ocpd_rating) {
 ocpd_conveyor <- 1.6   # A, from Section 4's selected time-delay fuse
 ocpd_robot <- 15        # A, robot controller branch breaker
 
-cat("--- (a) Equipment bonding conductor sizing ---\n")
-cat(sprintf("Conveyor motor branch (%.1f A OCPD) -> bonding conductor: %s\n",
-            ocpd_conveyor, lookup_bonding_size(ocpd_conveyor)))
-cat(sprintf("Robot controller branch (%.0f A OCPD) -> bonding conductor: %s\n",
-            ocpd_robot, lookup_bonding_size(ocpd_robot)))
-cat("Both branches land on the table's smallest listed size -- a genuinely\n")
-cat("small cell still needs a real bonding conductor, never skipped just\n")
-cat("because the connected load is light.\n\n")
+## Both default branches land on the table's smallest listed size -- a
+## genuinely small cell still needs a real bonding conductor, never skipped
+## just because the connected load is light.
 
 ## --- (b) VFD/motor bonding: bearing voltage estimate for the
 ## VFD-driven conveyor motor ---
@@ -453,13 +581,10 @@ BVR <- 0.04                         # unmitigated bearing voltage ratio, represe
 V_bearing <- BVR * V_cm_peak
 V_film_breakdown <- 10              # V, representative order-of-magnitude film breakdown
 
-cat("--- (b) VFD/motor bonding: bearing voltage check ---\n")
-cat(sprintf("DC bus voltage: %.0f V -> peak common-mode voltage: %.0f V\n", V_dc_bus, V_cm_peak))
-cat(sprintf("Estimated bearing voltage (BVR = %.0f%%): %.1f V\n", BVR * 100, V_bearing))
-cat(sprintf("-> %s film breakdown (~%.0f V): use symmetrical shielded VFD cable with a\n",
-            ifelse(V_bearing > V_film_breakdown, "EXCEEDS", "stays below"), V_film_breakdown))
-cat("   360-degree bond at both drive and motor ends, even on this small conveyor motor --\n")
-cat("   the risk comes from the drive's switching voltage, not the motor's frame size.\n\n")
+## If the estimate exceeds film breakdown: use symmetrical shielded VFD cable
+## with a 360-degree bond at both drive and motor ends, even on this small
+## conveyor motor -- the risk comes from the drive's switching voltage, not
+## the motor's frame size.
 
 ## --- (c) Shield grounding: analog pressure transducer on the FRL,
 ## one-end rule at signal frequency ---
@@ -471,13 +596,21 @@ delta_V_ground <- 0.9         # V, transient during the conveyor VFD's motor sta
 I_loop_both_ends <- delta_V_ground / shield_R_total
 I_loop_one_end <- 0
 
-cat("--- (c) Shield grounding: 4-20 mA line-pressure transducer ---\n")
-cat(sprintf("Shield resistance over %.0f m: %.3f ohm\n", cable_length_m, shield_R_total))
-cat(sprintf("Shield grounded at BOTH ends: %.0f mA circulating (a mis-wired installation)\n",
+cat(sprintf("(b) Estimated bearing voltage: %.1f V - %s film breakdown (~%g V)\n", V_bearing,
+            ifelse(V_bearing > V_film_breakdown, "!!EXCEEDS!!", "stays below"), V_film_breakdown))
+cat(sprintf("  (a) Conveyor branch bonding conductor (%g A OCPD)  %s\n",
+            ocpd_conveyor, lookup_bonding_size(ocpd_conveyor)))
+cat(sprintf("  (a) Robot branch bonding conductor (%g A OCPD)     %s\n",
+            ocpd_robot, lookup_bonding_size(ocpd_robot)))
+cat(sprintf("  (b) DC bus / peak common-mode voltage             %.0f V / %.0f V\n", V_dc_bus, V_cm_peak))
+cat(sprintf("  (c) Shield resistance over %g m                   %.3f ohm\n", cable_length_m, shield_R_total))
+cat(sprintf("  (c) Shield grounded at BOTH ends                  %.0f mA circulating (a mis-wired installation)\n",
             I_loop_both_ends * 1000))
-cat(sprintf("Shield grounded at ONE end only: %.0f mA (correct low-frequency practice)\n",
+cat(sprintf("  (c) Shield grounded at ONE end only               %.0f mA (correct low-frequency practice)\n",
             I_loop_one_end * 1000))
 ```
+
+</details>
 
 **Sanity check:** all three results connect directly back to earlier sections. The bonding conductors in (a) are sized off the OCPD ratings Section 4 selected, not off the FLA values Section 3 calculated — a direct application of the Bonding, Grounding, and EMC chapter's central point that bonding conductor size tracks the breaker, not the load. The bearing-voltage estimate in (b) comes out identical in structure to that chapter's own worked example, because the physics depends on the drive's DC bus voltage, not the motor's horsepower — a small VFD-fed motor is exposed to essentially the same bearing-current risk as a large one, which is why the mitigation (shielded cable, 360° bonding) applies here even though this conveyor motor is a fraction of a horsepower. And (c) shows why a properly-terminated one-end shield ground matters even on a short 12 m run: the shield's own resistance is so low that even a modest 0.9 V transient during the conveyor's VFD motor start would drive 2.5 A of circulating current through a mistakenly both-ends-grounded shield — current that would couple straight into the 4-20 mA signal it's supposed to protect.
 
@@ -517,7 +650,27 @@ ggplot(t_components, aes(x = component, y = seconds, fill = component)) +
   )
 ```
 
-Live cell — try changing any of the four time components, the intrusion allowance, or the planned mounting distance.
+Live cell — try changing any of the four time components or the intrusion allowance, or drag the planned mounting distance.
+
+```{r calc-stopping-distance-06-15, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "stopping-distance-06-15",
+  title = "Cell Stopping Time and Separation Distance",
+  icon = "shield-halved",
+  inputs = list(
+    qwebr_calc_input("T_device", "Safety device response time", value = 0.025, min = 0, max = 0.5, step = 0.005, suffix = "s"),
+    qwebr_calc_input("T_logic", "Logic (safety relay) time", value = 0.015, min = 0, max = 0.5, step = 0.005, suffix = "s"),
+    qwebr_calc_input("T_fce", "Final control element time", value = 0.04, min = 0, max = 0.5, step = 0.005, suffix = "s"),
+    qwebr_calc_input("T_coast", "Coast-down time", value = 0.45, min = 0, max = 2, step = 0.01, suffix = "s"),
+    qwebr_calc_input("C", "Intrusion allowance C", value = 750, min = 0, max = 1200, step = 10, suffix = "mm"),
+    qwebr_calc_input("planned_distance", "Planned mounting distance (mm)", value = 1500, min = 500, max = 4000, step = 10, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: stopping-distance-06-15
@@ -530,8 +683,6 @@ T_fce    <- 0.040    # s, contactor coil de-energize + contact opening
 T_coast  <- 0.450    # s, mechanical coast-down for this smaller robot
 
 T_total <- T_device + T_logic + T_fce + T_coast
-cat(sprintf("Overall stopping time T = %.3f + %.3f + %.3f + %.3f = %.3f s\n\n",
-            T_device, T_logic, T_fce, T_coast, T_total))
 
 ## ISO 13855 minimum safe distance, per the Robot Cell Design chapter's
 ## S = K x T + C
@@ -539,30 +690,59 @@ K <- 1600   # mm/s, ISO 13855 approach speed constant
 C <- 750     # mm, intrusion-depth allowance for the selected light curtain resolution
 
 S_required <- K * T_total + C
-cat(sprintf("K = %d mm/s, C = %d mm\n", K, C))
-cat(sprintf("Required minimum separation, S = K x T + C = %.0f mm\n\n", S_required))
 
 planned_distance <- 1500   # mm, distance the cell layout currently plans
 
 if (planned_distance >= S_required) {
-  cat(sprintf("Planned mounting distance (%d mm) >= S: PASS\n", planned_distance))
+  cat(sprintf("Required separation S = K x T + C: %.0f mm - PASS\n", S_required))
 } else {
+  cat(sprintf("Required separation S = K x T + C: %.0f mm - !!FAILS!!\n", S_required))
+}
+cat(sprintf("  Overall stopping time T          %.3f s (= %.3f + %.3f + %.3f + %.3f)\n",
+            T_total, T_device, T_logic, T_fce, T_coast))
+cat(sprintf("  Approach speed K                 %g mm/s\n", K))
+cat(sprintf("  Intrusion allowance C            %g mm\n", C))
+cat(sprintf("  Planned mounting distance        %g mm\n", planned_distance))
+
+if (planned_distance < S_required) {
   shortfall <- S_required - planned_distance
-  cat(sprintf("Planned mounting distance (%d mm) < S: FAILS by %.0f mm\n\n", planned_distance, shortfall))
+  cat(sprintf("  Shortfall                        %.0f mm\n", shortfall))
 
   C_fine <- 600   # mm, finer-resolution light curtain
   S_fine <- K * T_total + C_fine
-  cat(sprintf("Option -- use a finer-resolution light curtain (C = %d mm): new S = %.0f mm\n",
-              C_fine, S_fine))
-  if (planned_distance >= S_fine) cat("  Planned distance now passes without moving the curtain.\n")
+  cat(sprintf("  Option - finer-resolution curtain (C = %g mm)  new S = %.0f mm - %s\n", C_fine, S_fine,
+              ifelse(planned_distance >= S_fine, "passes without moving the curtain", "still fails")))
 }
 ```
+
+</details>
 
 **Sanity check:** at 0.53 s, this cell's overall stopping time is meaningfully faster than the 0.65 s the Machine Safety Circuit Design chapter's own door-panel welding cell needed — consistent with a smaller, lower-inertia robot, and coast-down is still the dominant term at roughly 85% of the total, so the same "attack $T_{coast}$ first" rule of thumb applies here too. The resulting 1.60 m minimum separation sits right at the low end of the 1.5-3 m band the Robot Cell Design chapter's own rule of thumb predicts for a sub-second stopping time — a useful check that nothing was mistyped, and a direct illustration of why the faster stop matters: it buys back just enough distance that a tighter, more realistic floor-space allocation (1.5 m planned) comes up 98 mm short rather than badly short. A finer-resolution light curtain closes that gap without moving the curtain at all, exactly the kind of trade the Robot Cell Design chapter's guidance recommends reaching for before arguing down $K$.
 
 ## 7. Frame Deflection Check
 
 The robot's pedestal sits on a fabricated steel beam bridging a **900 mm** floor trench used to route the cell's cable and hose runs beneath the robot rather than across the walkway beside it — a common layout choice that turns the pedestal's own support into a genuine beam-deflection problem rather than a simple slab-mounted footing. The robot, complete with its base and wrist tooling, has a combined mass of **185 kg**; acceleration reactions transmitted to the base during fast moves are represented with a modest dynamic load factor, following the same logic (if a smaller magnitude, appropriate to a pedestal reaction rather than a travelling carriage) as the [Frame and Structural Design](06-11-Frame-Structural-Design.qmd) chapter's own dynamic-load guidance.
+
+Live cell — try a different span, robot mass, dynamic factor, or beam section and see whether the deflection and stress checks still hold.
+
+```{r calc-beam-deflection-06-15, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "beam-deflection-06-15",
+  title = "Robot Pedestal Beam Deflection Check",
+  icon = "ruler",
+  inputs = list(
+    qwebr_calc_input("L", "Beam span", value = 900, min = 300, max = 4000, step = 50, suffix = "mm"),
+    qwebr_calc_input("m_robot", "Robot + base + tooling mass", value = 185, min = 20, max = 3000, step = 5, suffix = "kg"),
+    qwebr_calc_input("dyn_factor", "Dynamic load factor", value = 1.2, min = 1, max = 3, step = 0.05),
+    qwebr_calc_input("I_beam", "Second moment of area I", value = 2850000, min = 100000, max = 100000000, step = 50000, suffix = "mm⁴"),
+    qwebr_calc_input("S_beam", "Section modulus S", value = 55900, min = 5000, max = 1000000, step = 100, suffix = "mm³")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: beam-deflection-06-15
@@ -587,15 +767,16 @@ M_max <- P * L / 4
 sigma_max <- M_max / S_beam
 L240 <- L / 240
 
-cat(sprintf("Robot static weight: %.1f N\n", W_robot))
-cat(sprintf("Design load (with %.1fx dynamic factor): %.1f N\n\n", dyn_factor, P))
-cat(sprintf("Maximum deflection: %.4f mm\n", delta_max))
-cat(sprintf("L/240 reference limit: %.2f mm -> %s\n\n",
-            L240, ifelse(delta_max <= L240, "PASSES (large margin)", "FAILS")))
-cat(sprintf("Maximum bending moment: %s N.mm\n", format(round(M_max), big.mark = " ")))
-cat(sprintf("Maximum bending stress: %.2f MPa (%.1f%% of %d MPa yield)\n",
+cat(sprintf("Maximum deflection: %.4f mm - %s (L/240 limit = %.2f mm)\n", delta_max,
+            ifelse(delta_max <= L240, "PASSES", "!!FAILS!!"), L240))
+cat(sprintf("  Robot static weight                    %.1f N\n", W_robot))
+cat(sprintf("  Design load (with %.2fx dynamic factor)  %.1f N\n", dyn_factor, P))
+cat(sprintf("  Maximum bending moment                 %s N.mm\n", format(round(M_max), big.mark = " ")))
+cat(sprintf("  Maximum bending stress                 %.2f MPa (%.1f%% of %g MPa yield)\n",
             sigma_max, sigma_max / Fy * 100, Fy))
 ```
+
+</details>
 
 **Sanity check:** the calculated deflection (about 0.058 mm) clears the general L/240 reference (3.75 mm) with roughly a 65-fold margin, and the bending stress sits at under 3% of yield — the same "stiffness passes easily, strength isn't even close to the limiting factor" signature the Frame and Structural Design chapter's own gantry-beam example found. If this cell's pick-and-place task ever tightened into a genuinely vision-critical placement tolerance rather than a fixture-tray drop, the next step would be to check that 0.058 mm figure against a real positioning error budget the way that chapter's Design Task 2 does — not against L/240, which was never meant to answer a micron-level question — but for a fixture-tray placement with generous mechanical lead-in, L/240 is the right bar here, and this beam clears it comfortably.
 

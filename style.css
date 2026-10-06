@@ -85,3 +85,189 @@ pre code {
 .answer .math.display {
   color: #1a531b;
 }
+
+/*--- Interactive webR "calculator" cards -------------------------------------
+   Wraps a worked example as a labelled-input card (sliders/number fields +
+   live computed results + chart) instead of a bare code chunk. The webR code
+   that actually drives the numbers stays available underneath, collapsed
+   inside a <details class="qwebr-calc-source"> so curious students can open
+   it, read it, and re-run/edit it directly. See 02-01-Bolt-Joint-Calculations.qmd
+   ("bolt-load-response-interactive") for the reference markup. */
+.qwebr-calc-card {
+  margin: 1.5em 0 0.75em;
+  padding: 1.25em 1.5em 1.5em;
+  border: 1px solid #d7dde3;
+  border-radius: 10px;
+  background-color: #f8fafb;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+
+.qwebr-calc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding-bottom: 0.6em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid #2c3e50;
+}
+
+.qwebr-calc-header .qwebr-calc-icon {
+  color: #2c3e50;
+  font-size: 1.3em;
+}
+
+.qwebr-calc-header h4 {
+  margin: 0;
+  font-size: 1.05em;
+  color: #2c3e50;
+}
+
+.qwebr-calc-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65em;
+}
+
+.qwebr-calc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+.qwebr-calc-row > label {
+  font-size: 0.92em;
+  color: #34495e;
+  flex: 1 1 auto;
+}
+
+.qwebr-calc-field {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  background-color: #fff;
+  border: 1px solid #c7ced4;
+  border-radius: 6px;
+  padding: 0.25em 0.6em;
+}
+
+.qwebr-calc-field input[type="number"] {
+  width: 6.5em;
+  border: none;
+  text-align: right;
+  font-size: 0.95em;
+  color: #2c3e50;
+  background: transparent;
+}
+
+.qwebr-calc-field input[type="number"]:focus {
+  outline: none;
+}
+
+.qwebr-calc-prefix,
+.qwebr-calc-suffix {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+.qwebr-calc-row-slider {
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 0.4em;
+}
+
+.qwebr-calc-row-slider label {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.qwebr-calc-slider-readout {
+  color: #2980b9;
+  font-weight: 700;
+}
+
+input[type="range"].qwebr-calc-slider {
+  width: 100%;
+  accent-color: #2980b9;
+  margin-top: 0.4em;
+}
+
+.qwebr-calc-results {
+  margin-top: 1.1em;
+  padding-top: 1em;
+  border-top: 1px dashed #c7ced4;
+  text-align: center;
+}
+
+.qwebr-calc-headline {
+  font-size: 1.6em;
+  font-weight: 700;
+  color: #16a085;
+}
+
+/* A headline/row wraps its verdict in !!...!! (see qwebr-calc-card() /
+   js/qwebr-calculator.js) to flag a failing result — e.g. "Exceeded",
+   "Not capable", "Inadequate". Marked text renders red instead of the
+   default green (headline) or navy (breakdown row); everything else
+   (a passing verdict, or a plain number with no verdict at all) is
+   unaffected. */
+.qwebr-calc-headline.qwebr-calc-bad {
+  color: #c0392b;
+}
+
+.qwebr-calc-breakdown {
+  list-style: none;
+  margin: 0.75em auto 0;
+  padding: 0;
+  max-width: 460px;
+  font-size: 0.9em;
+}
+
+.qwebr-calc-breakdown li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.25em;
+  padding: 0.25em 0;
+  border-bottom: 1px solid #eceff1;
+  color: #34495e;
+}
+
+.qwebr-calc-breakdown li .qwebr-calc-value {
+  font-weight: 600;
+  text-align: right;
+  color: #2c3e50;
+}
+
+.qwebr-calc-breakdown li .qwebr-calc-value.qwebr-calc-bad,
+.qwebr-calc-breakdown li.qwebr-calc-bad {
+  color: #c0392b;
+}
+
+.qwebr-calc-graph {
+  margin-top: 1em;
+  text-align: center;
+  min-height: 2em;
+}
+
+.qwebr-calc-graph canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+details.qwebr-calc-source {
+  margin: 0.5em 0 1.5em;
+  font-size: 0.92em;
+  color: #5d6d7e;
+}
+
+details.qwebr-calc-source > summary {
+  cursor: pointer;
+  color: #2980b9;
+  font-weight: 600;
+}
+
+details.qwebr-calc-source > summary:hover {
+  text-decoration: underline;
+}

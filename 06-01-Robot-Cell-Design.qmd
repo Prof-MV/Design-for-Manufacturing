@@ -273,7 +273,26 @@ ggplot(curve_df, aes(x = L, y = payload)) +
 
 ### Worked Example
 
-Live cell — try changing `gripper_mass`, `case_mass`, or `L_offset` and re-run to see when the check flips from fail to pass.
+Live cell — change the gripper mass, the case mass, or drag the CG offset slider to see when the check flips from fail to pass.
+
+```{r calc-payload-check-06-01, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "payload-check-06-01",
+  title = "Payload vs. CG Offset Calculator",
+  icon = "robot",
+  inputs = list(
+    qwebr_calc_input("W_max0", "Rated payload at near-zero offset", value = 130, min = 10, max = 500, step = 5, suffix = "kg"),
+    qwebr_calc_input("L0", "Flat-region boundary offset", value = 60, min = 10, max = 300, step = 5, suffix = "mm"),
+    qwebr_calc_input("gripper_mass", "Gripper mass", value = 28, min = 1, max = 150, step = 1, suffix = "kg"),
+    qwebr_calc_input("case_mass", "Case (workpiece) mass", value = 16, min = 1, max = 150, step = 1, suffix = "kg"),
+    qwebr_calc_input("L_offset", "CG offset from flange (mm)", value = 210, min = 0, max = 600, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: payload-check-06-01
@@ -294,25 +313,29 @@ L_offset <- 210
 
 payload_max <- if (L_offset <= L0) W_max0 else M_cap / L_offset
 
-cat("Total carried mass:", total_mass, "kg\n")
-cat("CG offset from flange:", L_offset, "mm\n")
-cat("Allowable mass-moment, M_cap =", W_max0, "kg x", L0, "mm =", M_cap, "kg-mm\n")
-cat("Allowable payload at this offset =", round(payload_max, 1), "kg\n\n")
-
+## Note: a total mass well under the flange rating can still fail this check --
+## in that case the failure is entirely due to CG offset.
 if (total_mass <= payload_max) {
-  cat("Total mass <= allowable payload: PASS\n")
+  cat(sprintf("Allowable payload at this offset: %.1f kg - PASS\n", payload_max))
 } else {
-  cat("Total mass exceeds allowable payload at this offset: FAILS\n")
-  cat("(Note: 44 kg is well under the", W_max0, "kg flange rating --\n")
-  cat(" the failure is entirely due to CG offset.)\n\n")
+  cat(sprintf("Allowable payload at this offset: %.1f kg - !!FAILS!!\n", payload_max))
+}
+cat(sprintf("  Total carried mass              %g kg\n", total_mass))
+cat(sprintf("  CG offset from flange           %g mm\n", L_offset))
+cat(sprintf("  Allowable mass-moment M_cap     %s kg-mm\n", format(M_cap, big.mark = " ")))
 
+if (total_mass > W_max0) {
+  cat("  Flange rating                   !!exceeded at any offset!!\n")
+} else if (total_mass > payload_max) {
   max_allowable_offset <- M_cap / total_mass
   reduction_needed <- L_offset - max_allowable_offset
-  cat("Maximum allowable offset at", total_mass, "kg =", round(max_allowable_offset, 1), "mm\n")
-  cat("Offset must be reduced by at least", round(reduction_needed, 1), "mm (",
-      round(reduction_needed / L_offset * 100, 1), "% )\n")
+  cat(sprintf("  Maximum allowable offset        %.1f mm\n", max_allowable_offset))
+  cat(sprintf("  Offset must be reduced by       %.1f mm (%.1f%%)\n",
+              reduction_needed, reduction_needed / L_offset * 100))
 }
 ```
+
+</details>
 
 **Sanity check:** 44 kg is barely a third of the robot's 130 kg nameplate rating, which is exactly why this failure is easy to miss on a first pass — the fix isn't a bigger robot, it's a more compact gripper, a counterweight to pull the combined CG back toward the flange, or a robot family with a flatter payload-vs-offset curve.
 
@@ -403,7 +426,26 @@ ggplot(profile_df, aes(x = t, y = v)) +
 
 ### Worked Example
 
-Live cell — try changing `v_max`, `a`, or the `distances` vector and re-run to see the cycle time and margin update.
+Live cell — change the commanded speed, acceleration, dwell, or allotment to see the cycle time and margin update (the `distances` vector can be edited in the code underneath).
+
+```{r calc-cycle-time-calc-06-01, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "cycle-time-calc-06-01",
+  title = "Robot Cycle Time Calculator",
+  icon = "stopwatch",
+  inputs = list(
+    qwebr_calc_input("v_max", "Commanded TCP speed", value = 1500, min = 100, max = 4000, step = 50, suffix = "mm/s"),
+    qwebr_calc_input("a", "Acceleration / deceleration", value = 5000, min = 500, max = 20000, step = 250, suffix = "mm/s²"),
+    qwebr_calc_input("weld_dwell_each", "Weld dwell per point", value = 0.35, min = 0, max = 2, step = 0.05, suffix = "s"),
+    qwebr_calc_input("handshake_time", "PLC handshake time", value = 0.3, min = 0, max = 2, step = 0.05, suffix = "s"),
+    qwebr_calc_input("allotment", "Cycle time allotment", value = 9.5, min = 2, max = 30, step = 0.1, suffix = "s")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: cycle-time-calc-06-01
@@ -438,24 +480,25 @@ handshake_time <- 0.30    # s, I/O handshake with the cell PLC
 
 total_cycle <- total_move_time + total_dwell + handshake_time
 
-cat("Move times (s):", paste(round(move_times, 3), collapse = ", "), "\n")
-cat("Total move time:", round(total_move_time, 2), "s\n")
-cat("Total weld dwell:", round(total_dwell, 2), "s (", n_welds, "welds x", weld_dwell_each, "s )\n")
-cat("PLC handshake time:", handshake_time, "s\n")
-cat("Total cycle time:", round(total_cycle, 2), "s\n\n")
-
 allotment <- 9.5  # s, this robot's share of the multi-robot station's 60 JPH target
 margin_s <- allotment - total_cycle
 margin_pct <- margin_s / allotment * 100
 
-cat("Cycle time allotment:", allotment, "s\n")
-cat("Margin:", round(margin_s, 2), "s (", round(margin_pct, 1), "% )\n")
 if (total_cycle <= allotment) {
-  cat("Cycle time fits within the allotment: PASS\n")
+  cat(sprintf("Total cycle time: %.2f s - PASS\n", total_cycle))
 } else {
-  cat("Cycle time exceeds the allotment: FAILS -- rebalance the station or raise speed/accel\n")
+  ## Rebalance the station or raise speed/accel
+  cat(sprintf("Total cycle time: %.2f s - !!FAILS!!\n", total_cycle))
 }
+cat(sprintf("  Total move time        %.2f s\n", total_move_time))
+cat(sprintf("  Total weld dwell       %.2f s (%d welds x %.2f s)\n", total_dwell, n_welds, weld_dwell_each))
+cat(sprintf("  PLC handshake time     %.2f s\n", handshake_time))
+cat(sprintf("  Cycle time allotment   %.2f s\n", allotment))
+cat(sprintf("  Margin                 %.2f s (%.1f%%)\n", margin_s, margin_pct))
+cat("Move times (s):", paste(round(move_times, 3), collapse = ", "), "\n")
 ```
+
+</details>
 
 **Sanity check:** roughly 6.2 seconds of robot motion and dwell time against a 9.5 second allotment leaves a healthy margin — comfortable enough to absorb the 10-15% real-world pad from the rule of thumb above without threatening the line rate.
 
@@ -523,7 +566,25 @@ ggplot() +
 
 ### Worked Example
 
-Live cell — try changing `T_robot`, `C`, or `planned_distance` and re-run to see whether the design passes.
+Live cell — change the stopping time or intrusion allowance, or drag the planned mounting distance, to see whether the design passes.
+
+```{r calc-separation-distance-06-01, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "separation-distance-06-01",
+  title = "ISO 13855 Minimum Separation Distance Calculator",
+  icon = "shield-halved",
+  inputs = list(
+    qwebr_calc_input("T_robot", "Robot stopping time", value = 0.65, min = 0.05, max = 2, step = 0.01, suffix = "s"),
+    qwebr_calc_input("T_device", "Light curtain response time", value = 0.04, min = 0, max = 0.5, step = 0.005, suffix = "s"),
+    qwebr_calc_input("C", "Intrusion allowance C", value = 850, min = 0, max = 1200, step = 10, suffix = "mm"),
+    qwebr_calc_input("planned_distance", "Planned mounting distance (mm)", value = 1800, min = 500, max = 4000, step = 10, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: separation-distance-06-01
@@ -544,36 +605,36 @@ C <- 850   # mm
 
 S_required <- K * T_total + C
 
-cat("Robot stopping time, T_robot =", T_robot, "s\n")
-cat("Light curtain response time, T_device =", T_device, "s\n")
-cat("Total stopping time, T =", T_total, "s\n")
-cat("Approach speed, K =", K, "mm/s\n")
-cat("Intrusion allowance, C =", C, "mm\n")
-cat("Required minimum separation, S = K x T + C =",
-    format(round(S_required, 0), big.mark = " "), "mm\n\n")
-
 planned_distance <- 1800  # mm, distance the layout currently plans to mount the curtain
 
-if (planned_distance >= S_required) {
-  cat("Planned mounting distance (", planned_distance, "mm ) >= S: PASS\n")
-} else {
-  shortfall <- S_required - planned_distance
-  cat("Planned mounting distance (", planned_distance, "mm ) < S: FAILS by",
-      round(shortfall, 0), "mm\n\n")
+fmt <- function(x) format(round(x), big.mark = " ")
 
-  cat("Option A -- move the light curtain out to at least",
-      format(ceiling(S_required / 50) * 50, big.mark = " "), "mm\n\n")
+if (planned_distance >= S_required) {
+  cat(sprintf("Required separation S = K x T + C: %s mm - PASS\n", fmt(S_required)))
+} else {
+  cat(sprintf("Required separation S = K x T + C: %s mm - !!FAILS!!\n", fmt(S_required)))
+}
+cat(sprintf("  Total stopping time T          %.3f s\n", T_total))
+cat(sprintf("  Approach speed K               %s mm/s\n", fmt(K)))
+cat(sprintf("  Intrusion allowance C          %s mm\n", fmt(C)))
+cat(sprintf("  Planned mounting distance      %s mm\n", fmt(planned_distance)))
+
+if (planned_distance < S_required) {
+  shortfall <- S_required - planned_distance
+  cat(sprintf("  Shortfall                      %s mm\n", fmt(shortfall)))
+
+  ## Option A: move the light curtain out
+  cat(sprintf("  Option A - move the curtain out to at least  %s mm\n", fmt(ceiling(S_required / 50) * 50)))
 
   ## Option B: switch to a finer-resolution light curtain with a smaller C
   C_fine <- 650  # mm, illustrative value for a finer-resolution device
   S_fine <- K * T_total + C_fine
-  cat("Option B -- use a finer-resolution light curtain (C =", C_fine, "mm ):\n")
-  cat("  New required S =", format(round(S_fine, 0), big.mark = " "), "mm\n")
-  if (planned_distance >= S_fine) {
-    cat("  Planned distance now passes without moving the curtain.\n")
-  }
+  cat(sprintf("  Option B - finer-resolution curtain (C = %d mm)  new S = %s mm - %s\n", C_fine, fmt(S_fine),
+              ifelse(planned_distance >= S_fine, "passes without moving the curtain", "still fails")))
 }
 ```
+
+</details>
 
 **Sanity check:** the required distance (about 1.95 m) falls squarely in the 1.5-3 m range the rule of thumb above predicts for a sub-second stopping time — a useful check that no units got mixed up. The planned 1.8 m mounting distance falls just short, by less than 10%, which is exactly the kind of near-miss that a rushed layout review can wave through if the calculation isn't done explicitly.
 

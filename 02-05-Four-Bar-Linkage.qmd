@@ -766,7 +766,25 @@ Determine:
 
 
 ::: {.content-visible when-format="html"}
-*This one is live — edit the link lengths below (`a`, `b`, `c`, `g`) and re-run the cell to reclassify the mechanism.*
+*This one is live — change any of the four link lengths below and the mechanism is reclassified immediately.*
+
+```{r calc-grashof-interactive, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "grashof-interactive",
+  title = "Grashof Condition Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("g", "Ground link g", value = 100, min = 10, max = 300, step = 1, suffix = "mm"),
+    qwebr_calc_input("a", "Input link a", value = 40, min = 10, max = 300, step = 1, suffix = "mm"),
+    qwebr_calc_input("b", "Coupler link b", value = 80, min = 10, max = 300, step = 1, suffix = "mm"),
+    qwebr_calc_input("c", "Output link c", value = 60, min = 10, max = 300, step = 1, suffix = "mm")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: grashof-interactive
@@ -808,34 +826,39 @@ if (is_grashof) {
   mech_type <- "Triple-Rocker (Non-Grashof)"
 }
 
-## Print the results
-cat("Shortest link (S):", S, "mm -", S_name, "\n")
-cat("Longest link (L): ", L, "mm -", L_name, "\n")
-cat("S + L =", SL, "mm\n")
-cat("P + Q =", PQ, "mm\n\n")
-
 if (SL < PQ) {
-  cat("S + L < P + Q: GRASHOF\n")
+  grashof_class <- "S + L < P + Q: GRASHOF"
 } else if (SL == PQ) {
-  cat("S + L = P + Q: CHANGE POINT\n")
+  grashof_class <- "S + L = P + Q: CHANGE POINT"
 } else {
-  cat("S + L > P + Q: NON-GRASHOF\n")
+  grashof_class <- "S + L > P + Q: NON-GRASHOF"
 }
-cat("Mechanism type:", mech_type, "\n\n")
+
+## Print the results
+cat("Mechanism type:", mech_type, "\n")
+cat(sprintf("  Shortest link (S)    %g mm - %s\n", S, S_name))
+cat(sprintf("  Longest link (L)     %g mm - %s\n", L, L_name))
+cat(sprintf("  S + L                %g mm\n", SL))
+cat(sprintf("  P + Q                %g mm\n", PQ))
+cat(sprintf("  Grashof condition    %s\n", grashof_class))
 
 ## Interpretation
 if (is_grashof) {
-  cat("Since S + L (", SL, "mm) <= P + Q (", PQ, "mm), this is a Grashof linkage.\n")
-  cat("The shortest link is", S_name, "(", S, "mm).\n")
   if (S_name == "a (input)") {
-    cat("Since the shortest link is the input, this is a Crank-Rocker:\n")
-    cat("the input will rotate continuously while the output oscillates.\n")
+    cat("The shortest link is the input: it rotates continuously while the output oscillates.\n")
+  } else if (S_name == "g (ground)") {
+    cat("The shortest link is the ground: both the input and the output rotate continuously.\n")
+  } else if (S_name == "c (output)") {
+    cat("The shortest link is the output: it rotates continuously while the input oscillates.\n")
+  } else {
+    cat("The shortest link is the coupler: both the input and the output only oscillate.\n")
   }
 } else {
-  cat("Since S + L (", SL, "mm) > P + Q (", PQ, "mm), this is a non-Grashof linkage.\n")
-  cat("No link can complete a full rotation - all links merely rock (Triple-Rocker).\n")
+  cat("No link can complete a full rotation - all links merely rock.\n")
 }
 ```
+
+</details>
 :::
 
 ::: {.content-visible unless-format="html"}
@@ -929,7 +952,25 @@ For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), ca
 
 
 ::: {.content-visible when-format="html"}
-*This one is live — edit the link lengths below (`a`, `b`, `c`, `g`) and re-run the cell to see the transmission-angle results and design-quality verdict update.*
+*This one is live — change any of the four link lengths below and the transmission-angle curve, the results, and the design-quality verdict update immediately.*
+
+```{r calc-trans-angle-interactive, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "trans-angle-interactive",
+  title = "Transmission Angle Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("a", "Input link a", value = 40, min = 10, max = 300, step = 1, suffix = "mm"),
+    qwebr_calc_input("b", "Coupler link b", value = 80, min = 10, max = 300, step = 1, suffix = "mm"),
+    qwebr_calc_input("c", "Output link c", value = 60, min = 10, max = 300, step = 1, suffix = "mm"),
+    qwebr_calc_input("g", "Ground link g", value = 100, min = 10, max = 300, step = 1, suffix = "mm")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: trans-angle-interactive
@@ -968,23 +1009,35 @@ mu_min <- min(mu_values, na.rm = TRUE)
 mu_max <- max(mu_values, na.rm = TRUE)
 theta_at_min <- theta2_range[which.min(mu_values)]
 
-## Print the results
-cat("At theta2 = 60 deg:          mu =", round(mu_60, 1), "deg\n")
-cat("Minimum transmission angle: ", round(mu_min, 1), "deg (at theta2 =", theta_at_min, "deg)\n")
-cat("Maximum transmission angle: ", round(mu_max, 1), "deg\n\n")
+## Transmission angle over one full input rotation, minimum marked
+par(mar = c(5, 5, 3, 1), cex.main = 1.3, cex.lab = 1.2, cex.axis = 1.1)
+plot(theta2_range, mu_values, type = "l", lwd = 4, col = "#2c3e50", ylim = c(0, 180),
+     xlab = "Input angle theta2 (deg)", ylab = "Transmission angle mu (deg)",
+     main = "Transmission Angle over One Input Rotation", las = 1, xaxt = "n")
+axis(1, at = seq(0, 360, by = 90))
+abline(h = 40, lty = 2, col = "#bdc3c7")
+points(theta_at_min, mu_min, pch = 19, cex = 2.2, col = "#e74c3c")
 
 ## Design quality verdict
 if (mu_min > 40) {
   cat("Design Quality: GOOD\n")
-  cat("Minimum transmission angle exceeds 40 deg - acceptable design\n")
+  advice <- "Minimum transmission angle exceeds 40 deg - acceptable design"
 } else if (mu_min > 30) {
   cat("Design Quality: MARGINAL\n")
-  cat("Consider redesigning for better force transmission\n")
+  advice <- "Consider redesigning for better force transmission"
 } else {
-  cat("Design Quality: POOR\n")
-  cat("Redesign required - excessive joint forces at minimum transmission angle\n")
+  cat("Design Quality: !!POOR!!\n")
+  advice <- "Redesign required - excessive joint forces at minimum transmission angle"
 }
+
+## Print the results
+cat(sprintf("  Transmission angle at theta2 = 60 deg  %.1f deg\n", mu_60))
+cat(sprintf("  Minimum transmission angle             %.1f deg (at theta2 = %g deg)\n", mu_min, theta_at_min))
+cat(sprintf("  Maximum transmission angle             %.1f deg\n", mu_max))
+cat(advice, "\n")
 ```
+
+</details>
 :::
 
 ::: {.content-visible unless-format="html"}

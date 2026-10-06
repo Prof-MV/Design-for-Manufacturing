@@ -246,7 +246,27 @@ $$R_{\theta SA,required} = \frac{T_{S,allow} - T_A}{Q_{total}}$$
 
 ### Worked Example
 
-Live cell — try a different total heat load, hottest-device dissipation, or design ambient, and see how the required heatsink rating and selected length respond.
+Live cell — drag the design ambient, or change the total heat load or hottest-device dissipation, and see how the required heatsink rating and selected length respond.
+
+```{r calc-heatsink-selection-06-12, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "heatsink-selection-06-12",
+  title = "Heatsink Selection Calculator",
+  icon = "temperature-half",
+  inputs = list(
+    qwebr_calc_input("Q_total", "Total heat load on the heatsink", value = 210, min = 20, max = 1000, step = 5, suffix = "W"),
+    qwebr_calc_input("P_hottest", "Hottest device dissipation", value = 70, min = 5, max = 300, step = 1, suffix = "W"),
+    qwebr_calc_input("R_JC", "Junction-to-case resistance", value = 0.2, min = 0.02, max = 2, step = 0.01, suffix = "°C/W"),
+    qwebr_calc_input("R_CS", "Case-to-sink resistance", value = 0.1, min = 0.01, max = 1, step = 0.01, suffix = "°C/W"),
+    qwebr_calc_input("T_J_limit", "Junction temperature ceiling", value = 125, min = 80, max = 175, step = 1, suffix = "°C"),
+    qwebr_calc_input("T_A", "Design ambient (°C)", value = 50, min = 20, max = 70, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: heatsink-selection-06-12
@@ -264,9 +284,6 @@ T_S_allow <- T_J_limit - P_hottest * (R_JC + R_CS)
 ## Step 2: required heatsink thermal resistance
 R_SA_required <- (T_S_allow - T_A) / Q_total
 
-cat(sprintf("Maximum allowable heatsink surface temperature: %.1f C\n", T_S_allow))
-cat(sprintf("Required heatsink thermal resistance: %.3f C/W\n\n", R_SA_required))
-
 ## Representative catalog heatsink data (illustrative, not a specific vendor's table)
 catalog <- data.frame(
   length_mm = c(200, 250, 300, 350, 400, 450, 500),
@@ -276,19 +293,22 @@ catalog <- data.frame(
 catalog$margin_pct_natural <- (R_SA_required - catalog$R_natural) / R_SA_required * 100
 catalog$passes_natural <- catalog$R_natural <= R_SA_required * 0.90  # 10% margin rule of thumb
 
-cat("Natural-convection catalog options:\n")
-for (i in seq_len(nrow(catalog))) {
-  cat(sprintf("  %d mm: R_theta-SA = %.3f C/W -> %s\n",
-              catalog$length_mm[i], catalog$R_natural[i],
-              ifelse(catalog$passes_natural[i], "PASSES (with margin)", "insufficient margin or fails")))
-}
-
 selected_natural <- catalog$length_mm[which(catalog$passes_natural)[1]]
 selected_forced <- catalog$length_mm[which(catalog$R_forced_2ms <= R_SA_required * 0.90)[1]]
+pick <- function(len) if (is.na(len)) "!!no catalog length passes!!" else sprintf("select the %g mm heatsink", len)
 
-cat(sprintf("\n-> Natural convection: select %d mm heatsink\n", selected_natural))
-cat(sprintf("-> With forced air (~2 m/s): select %d mm heatsink instead\n", selected_forced))
+cat(sprintf("Required heatsink thermal resistance: %.3f C/W\n", R_SA_required))
+cat(sprintf("  Max. allowable heatsink surface temperature   %.1f C\n", T_S_allow))
+cat(sprintf("  Natural convection                            %s\n", pick(selected_natural)))
+cat(sprintf("  With forced air (~2 m/s)                      %s\n", pick(selected_forced)))
+for (i in seq_len(nrow(catalog))) {
+  cat(sprintf("  %g mm, natural convection  %.3f C/W - %s\n",
+              catalog$length_mm[i], catalog$R_natural[i],
+              ifelse(catalog$passes_natural[i], "passes (with margin)", "insufficient margin or fails")))
+}
 ```
+
+</details>
 
 **Sanity check:** the required $R_{\theta SA}$ (0.257°C/W) demands a 450 mm natural-convection heatsink to clear the 10% margin rule of thumb comfortably, but only a 300 mm heatsink under moderate forced air — a 150 mm reduction in a physically large, expensive extrusion, in exchange for adding a fan. That trade-off (bigger passive heatsink and no fan, versus smaller heatsink plus a fan that can fail or clog with dust) is exactly the kind of decision Design Task 4 formalizes at the enclosure level, and it recurs constantly in real panel design: a fan is not free — it is a maintenance item and a failure mode — so the smaller-heatsink-plus-fan option is not automatically the better one, even though it looks cheaper on the heatsink alone.
 
@@ -321,7 +341,25 @@ Converting to the units fans are actually cataloged in: $1\ \text{m}^3/\text{s} 
 
 ### Worked Example
 
-Live cell — try a different heat load, allowable temperature rise, or incoming ambient, and see how the required airflow and fan selection respond.
+Live cell — drag the heat load, or change the allowable temperature rise or sizing margins, and see how the required airflow and fan selection respond.
+
+```{r calc-fan-sizing-06-12, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "fan-sizing-06-12",
+  title = "Panel Fan Sizing Calculator",
+  icon = "fan",
+  inputs = list(
+    qwebr_calc_input("delta_T", "Allowable temperature rise", value = 10, min = 2, max = 30, step = 1, suffix = "°C"),
+    qwebr_calc_input("margin_low", "Sizing margin (low)", value = 1.5, min = 1, max = 3, step = 0.1, suffix = "x"),
+    qwebr_calc_input("margin_high", "Sizing margin (high)", value = 2, min = 1, max = 3, step = 0.1, suffix = "x"),
+    qwebr_calc_input("P_total", "Total panel heat load (W)", value = 350, min = 20, max = 1500, step = 10, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: fan-sizing-06-12
@@ -341,23 +379,28 @@ margin_high <- 2.0
 CFM_select_low <- V_dot_CFM * margin_low
 CFM_select_high <- V_dot_CFM * margin_high
 
-cat(sprintf("Total panel heat load: %.0f W\n", P_total))
-cat(sprintf("Allowable temperature rise: %.0f C\n\n", delta_T))
-cat(sprintf("Required free-air flow rate: %.4f m^3/s\n", V_dot_m3s))
-cat(sprintf("                           = %.1f CFM\n", V_dot_CFM))
-cat(sprintf("                           = %.1f m^3/h\n\n", V_dot_m3h))
-cat(sprintf("Fan sizing margin (1.5x - 2.0x for filter/louvre losses and dust loading):\n"))
-cat(sprintf("  Select a fan rated %.0f - %.0f CFM free air\n", CFM_select_low, CFM_select_high))
-
 ## Representative catalog fan options (illustrative panel/tube-axial fans)
 fan_catalog <- data.frame(
   model_mm = c(92, 119, 150, 172),
   free_air_CFM = c(45, 105, 150, 245)
 )
 selected_fan <- fan_catalog$model_mm[which(fan_catalog$free_air_CFM >= CFM_select_high)[1]]
-cat(sprintf("\n-> From the representative catalog, select the %d mm frame fan (rated %.0f CFM free air)\n",
-            selected_fan, fan_catalog$free_air_CFM[fan_catalog$model_mm == selected_fan]))
+
+cat(sprintf("Required free-air flow rate: %.1f CFM (%.1f m^3/h)\n", V_dot_CFM, V_dot_m3h))
+cat(sprintf("  Total panel heat load             %g W\n", P_total))
+cat(sprintf("  Allowable temperature rise        %g C\n", delta_T))
+cat(sprintf("  Required flow rate                %.4f m^3/s\n", V_dot_m3s))
+cat(sprintf("  Fan rating with %.1fx - %.1fx margin  %.0f - %.0f CFM free air\n",
+            margin_low, margin_high, CFM_select_low, CFM_select_high))
+if (is.na(selected_fan)) {
+  cat("  From the representative catalog   !!no listed fan is large enough!!\n")
+} else {
+  cat(sprintf("  From the representative catalog   %g mm frame fan (rated %g CFM free air)\n",
+              selected_fan, fan_catalog$free_air_CFM[fan_catalog$model_mm == selected_fan]))
+}
 ```
+
+</details>
 
 **Sanity check:** the bare calculated airflow (62 CFM) looks modest for a panel this size, but the margin rule of thumb roughly doubles that to a 93-124 CFM target — and sizing to the high end of that range, per the rule of thumb's guidance for a dusty, infrequently serviced plant-floor filter, calls for the representative 150 mm catalog fan (150 CFM free air) rather than the smaller 119 mm unit that would just barely clear the low end. That gap between a fan's "free air" rating and its actually-delivered airflow through a real filter and louver is the single most common fan undersizing mistake on a plant floor: a fan spec sheet's headline CFM number is measured with nothing attached to the inlet or outlet, and a filtered, louvered enclosure is never that condition.
 
@@ -446,12 +489,33 @@ $$Q_{total} \leq 0.8\,Q_{max,natural} \quad \Rightarrow \quad \text{natural conv
 
 ### Worked Example
 
-Live cell — try a different enclosure size, temperature budget, or heat load, and see which zone each scenario lands in.
+Live cell — try a different enclosure size or temperature budget and see which zone each scenario lands in (the scenario heat loads can be edited in the code underneath).
+
+```{r calc-convection-decision-06-12, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "convection-decision-06-12",
+  title = "Natural Convection Capacity Calculator",
+  icon = "temperature-half",
+  inputs = list(
+    qwebr_calc_input("H", "Enclosure height", value = 0.8, min = 0.2, max = 2.5, step = 0.05, suffix = "m"),
+    qwebr_calc_input("W", "Enclosure width", value = 0.6, min = 0.2, max = 2.5, step = 0.05, suffix = "m"),
+    qwebr_calc_input("D", "Enclosure depth", value = 0.3, min = 0.1, max = 1, step = 0.05, suffix = "m"),
+    qwebr_calc_input("U_natural", "Natural convection coefficient U", value = 5.5, min = 2, max = 12, step = 0.5, suffix = "W/(m²·°C)"),
+    qwebr_calc_input("dT_budget", "Temperature rise budget (°C)", value = 10, min = 2, max = 30, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: convection-decision-06-12
 ## Given: enclosure geometry (wall-mounted, back against wall, bottom not effective)
-H <- 0.8; W <- 0.6; D <- 0.3   # m
+H <- 0.8   # m
+W <- 0.6   # m
+D <- 0.3   # m
 A_front <- H * W
 A_top   <- W * D
 A_sides <- 2 * (H * D)
@@ -463,10 +527,10 @@ dT_budget <- 10     # C
 Q_max_natural <- U_natural * A_eff * dT_budget
 Q_max_natural_design <- 0.8 * Q_max_natural   # 80% design margin, not run at the raw limit
 
-cat(sprintf("Effective cooling area: %.2f m^2 (front %.2f + top %.2f + sides %.2f)\n",
+cat(sprintf("Natural convection design capacity at %g C rise: %.1f W\n", dT_budget, Q_max_natural_design))
+cat(sprintf("  Effective cooling area          %.2f m^2 (front %.2f + top %.2f + sides %.2f)\n",
             A_eff, A_front, A_top, A_sides))
-cat(sprintf("Natural convection capacity at %.0f C rise: %.1f W (raw), %.1f W (with 80%% design margin)\n\n",
-            dT_budget, Q_max_natural, Q_max_natural_design))
+cat(sprintf("  Raw capacity (before the 80%% design margin)  %.1f W\n", Q_max_natural))
 
 ## Two scenarios sharing this enclosure
 scenarios <- data.frame(
@@ -479,10 +543,12 @@ for (i in seq_len(nrow(scenarios))) {
   utilization <- Q / Q_max_natural_design * 100
   verdict <- ifelse(Q <= Q_max_natural_design, "NATURAL CONVECTION OK",
                      ifelse(Q <= 8 * Q_max_natural_design, "FORCED AIR REQUIRED", "ACTIVE COOLING REQUIRED"))
-  cat(sprintf("%-24s: %.0f W (%.0f%% of natural-convection design capacity) -> %s\n",
+  cat(sprintf("  %s (%g W)  %.0f%% of design capacity - %s\n",
               scenarios$name[i], Q, utilization, verdict))
 }
 ```
+
+</details>
 
 **Sanity check:** the small PLC panel lands right at about 90% of the *already-margined* natural-convection budget — a genuine pass, but not a comfortable one, and a useful reminder that the 80% design-margin factor is meant to be the real ceiling, not a number to design right up against; a slightly larger enclosure or a lower internal load would give this panel more breathing room. Even so, it can stay fully sealed, which is exactly what a food-plant washdown environment wants, since a sealed cabinet can carry an IP66 or IP69K rating (per NEMA 250 or the equivalent IEC 60529 IP classification) with no added vent hardware to compromise. The automotive VFD panel, in the identical enclosure, needs roughly seven times that same budget — nowhere close to what natural convection can deliver, confirming the forced-air design already assumed in Design Task 3. Note what this comparison does *not* show: it doesn't mean the VFD panel's forced-air fix is automatically fine everywhere — Gate 2's ambient-margin check still applies, and if this same drive were relocated to an unconditioned equipment bay where incoming air already ran close to the drive's maximum rated ambient, forced air alone would stop being a viable answer regardless of fan size, and the design would move to Gate 3.
 
@@ -514,7 +580,26 @@ $$I_{allow} = \begin{cases} I_{rated} & T_A \leq T_{ref} \\ I_{rated}\left[1 - k
 
 ### Worked Example
 
-Live cell — try a different measured ambient, derating rate, or required load current, and see whether the drive still passes.
+Live cell — drag the installed ambient, or change the derating rate or required load current, and see whether the drive still passes.
+
+```{r calc-derating-check-06-12, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "derating-check-06-12",
+  title = "Drive Ambient Derating Check",
+  icon = "temperature-half",
+  inputs = list(
+    qwebr_calc_input("I_rated", "Nameplate continuous rating", value = 100, min = 5, max = 500, step = 5, suffix = "A"),
+    qwebr_calc_input("T_ref", "Reference ambient", value = 40, min = 25, max = 50, step = 1, suffix = "°C"),
+    qwebr_calc_input("k_derate", "Derating rate (fraction per °C)", value = 0.015, min = 0.005, max = 0.04, step = 0.001),
+    qwebr_calc_input("I_required", "Required load current", value = 90, min = 1, max = 500, step = 1, suffix = "A"),
+    qwebr_calc_input("T_A_installed", "Installed ambient (°C)", value = 50, min = 20, max = 70, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: derating-check-06-12
@@ -533,26 +618,29 @@ I_allow <- I_rated * (1 - k_derate * delta_T_above_ref)
 margin_A <- I_allow - I_required
 margin_pct <- margin_A / I_required * 100
 
-cat(sprintf("Nameplate rating: %.0f A at %.0f C reference ambient\n", I_rated, T_ref))
-cat(sprintf("Installed ambient: %.0f C (%.0f C above reference)\n", T_A_installed, delta_T_above_ref))
-cat(sprintf("Derating: %.1f%% per C -> allowable continuous current = %.1f A\n\n", k_derate * 100, I_allow))
-cat(sprintf("Required load current: %.0f A\n", I_required))
-cat(sprintf("Margin: %.1f A (%.1f%%) -> %s\n", margin_A, margin_pct,
-            ifelse(margin_A >= 0, "PASSES", "FAILS - drive is undersized at this installed ambient")))
+cat(sprintf("Allowable continuous current: %.1f A - %s\n", I_allow,
+            ifelse(margin_A >= 0, "PASSES", "!!FAILS!! - drive is undersized at this installed ambient")))
+cat(sprintf("  Nameplate rating                 %g A at %g C reference ambient\n", I_rated, T_ref))
+cat(sprintf("  Installed ambient                %g C (%g C above reference)\n", T_A_installed, delta_T_above_ref))
+cat(sprintf("  Derating rate                    %.1f%% per C\n", k_derate * 100))
+cat(sprintf("  Required load current            %g A\n", I_required))
+cat(sprintf("  Margin                           %.1f A (%.1f%%)\n", margin_A, margin_pct))
 
 if (margin_A < 0) {
   ## Check remedies: (a) upsize the frame, (b) reduce installed ambient toward T_ref
-  I_rated_next_frame <- 125
+  I_rated_next_frame <- 1.25 * I_rated
   I_allow_next_frame <- I_rated_next_frame * (1 - k_derate * delta_T_above_ref)
   T_A_needed_for_original_frame <- T_ref + (1 - I_required / I_rated) / k_derate
 
-  cat(sprintf("\nRemedy A - upsize to a %.0f A frame: allowable current becomes %.1f A (%s)\n",
+  cat(sprintf("  Remedy A - upsize to a %g A frame  %.1f A allowable - %s\n",
               I_rated_next_frame, I_allow_next_frame,
-              ifelse(I_allow_next_frame >= I_required, "PASSES", "still fails")))
-  cat(sprintf("Remedy B - keep the 100 A frame, but reduce installed ambient to <= %.1f C\n",
-              T_A_needed_for_original_frame))
+              ifelse(I_allow_next_frame >= I_required, "PASSES", "!!still fails!!")))
+  cat(sprintf("  Remedy B - keep the %g A frame     reduce installed ambient to <= %.1f C\n",
+              I_rated, T_A_needed_for_original_frame))
 }
 ```
+
+</details>
 
 **Sanity check:** at the panel's 40°C reference ambient, the original 100 A frame looked like it had a comfortable margin over the 90 A requirement. At the actual 50°C installed ambient, the representative 1.5%/°C derating rate knocks the allowable current down to 85 A — below the 90 A the conveyor now actually draws. This is exactly the kind of quiet, easy-to-miss failure this chapter's introduction described: nothing about the drive changed, and nothing failed a startup test, but a documented ambient temperature the original sizing calculation never accounted for turned a comfortable-looking margin into a real shortfall. The two remedies the calculation checks — upsizing to a 125 A frame, or bringing the installed ambient down closer to the 40°C reference through the forced-air or enclosure-cooling methods developed in Design Tasks 3 and 4 — are the same two levers a plant engineer actually has in the field: buy a bigger drive, or fix the environment it's sitting in. Which one makes sense is a cost and schedule question as much as an engineering one, but the derating check is what tells you the decision needs to be made at all.
 

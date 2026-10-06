@@ -219,7 +219,25 @@ ggplot(df_inertia, aes(x = N, y = J_reflected_kgcm2)) +
 
 ### Worked Example
 
-Live cell — try a different gear ratio N, or different motor candidate inertias, and see which frame passes.
+Live cell — drag the gear ratio N, or change the motor candidate inertias, and see which frame passes.
+
+```{r calc-reflected-inertia-06-06, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "reflected-inertia-06-06",
+  title = "Reflected Inertia Ratio Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("J_load", "Load inertia at the table shaft", value = 1.6, min = 0.05, max = 20, step = 0.05, suffix = "kg·m²"),
+    qwebr_calc_input("J_motor_A_kgcm2", "Candidate A rotor inertia", value = 1.2, min = 0.1, max = 50, step = 0.1, suffix = "kg·cm²"),
+    qwebr_calc_input("J_motor_B_kgcm2", "Candidate B rotor inertia", value = 4.5, min = 0.1, max = 50, step = 0.1, suffix = "kg·cm²"),
+    qwebr_calc_input("N", "Gear ratio N", value = 20, min = 1, max = 100, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: reflected-inertia-06-06
@@ -237,12 +255,14 @@ J_motor_B_kgcm2 <- 4.5   # medium-inertia frame
 ratio_A <- J_reflected_kgcm2 / J_motor_A_kgcm2
 ratio_B <- J_reflected_kgcm2 / J_motor_B_kgcm2
 
-cat(sprintf("Reflected load inertia: %.5f kg.m^2 (%.1f kg.cm^2)\n", J_reflected, J_reflected_kgcm2))
-cat(sprintf("Candidate A (low-inertia, J = %.1f kg.cm^2): ratio = %.1f:1 -> %s\n",
-            J_motor_A_kgcm2, ratio_A, ifelse(ratio_A <= 10, "PASSES", "FAILS")))
-cat(sprintf("Candidate B (medium-inertia, J = %.1f kg.cm^2): ratio = %.1f:1 -> %s\n",
-            J_motor_B_kgcm2, ratio_B, ifelse(ratio_B <= 10, "PASSES", "FAILS")))
+cat(sprintf("Reflected load inertia: %.1f kg.cm^2 (%.5f kg.m^2)\n", J_reflected_kgcm2, J_reflected))
+cat(sprintf("  Candidate A (J = %.1f kg.cm^2) inertia ratio  %.1f:1 - %s\n",
+            J_motor_A_kgcm2, ratio_A, ifelse(ratio_A <= 10, "PASSES", "!!FAILS!!")))
+cat(sprintf("  Candidate B (J = %.1f kg.cm^2) inertia ratio  %.1f:1 - %s\n",
+            J_motor_B_kgcm2, ratio_B, ifelse(ratio_B <= 10, "PASSES", "!!FAILS!!")))
 ```
+
+</details>
 
 **Sanity check:** the low-inertia frame fails badly (33:1, more than three times the rule-of-thumb limit) despite having ample torque capacity — a reminder that torque and inertia match are two separate checks, and a motor can pass one while failing the other. The medium-inertia frame passes with a sensible margin (8.9:1), so it becomes the selected motor going into Design Task 3, where its rotor inertia gets folded into the full-cycle torque calculation.
 
@@ -302,16 +322,41 @@ ggplot(segments_df) +
 
 ### Worked Example
 
-Live cell — try a different dwell time, friction torque, or holding torque and watch how the RMS value responds.
+Live cell — drag the dwell time, or change the friction torque, holding torque, or motor ratings, and watch how the RMS value responds.
+
+```{r calc-rms-torque-06-06, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "rms-torque-06-06",
+  title = "RMS Torque Calculator",
+  icon = "gauge-high",
+  inputs = list(
+    qwebr_calc_input("T_friction_table", "Table friction torque", value = 4, min = 0, max = 30, step = 0.5, suffix = "N·m"),
+    qwebr_calc_input("T_dwell_hold", "Dwell holding torque", value = 0.3, min = 0, max = 3, step = 0.05, suffix = "N·m"),
+    qwebr_calc_input("t_move", "Move time", value = 0.5, min = 0.1, max = 3, step = 0.05, suffix = "s"),
+    qwebr_calc_input("T_rated_continuous", "Motor continuous rating", value = 2.4, min = 0.2, max = 20, step = 0.1, suffix = "N·m"),
+    qwebr_calc_input("T_peak_rated", "Motor peak rating", value = 7.2, min = 0.5, max = 60, step = 0.1, suffix = "N·m"),
+    qwebr_calc_input("t_dwell", "Dwell time (s)", value = 2.5, min = 0, max = 10, step = 0.1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: rms-torque-06-06
 ## Given
-J_load <- 1.6; N <- 20; eta_gb <- 0.95
+J_load <- 1.6
+N <- 20
+eta_gb <- 0.95
 J_motor <- 0.45e-3      # kg.m^2, selected medium-inertia frame (Design Task 2)
 T_friction_table <- 4   # N.m
 
-theta_total <- 45 * pi / 180; t_move <- 0.5; t_dwell <- 2.5; t_cycle <- t_move + t_dwell
+theta_total <- 45 * pi / 180
+t_move <- 0.5
+t_dwell <- 2.5
+t_cycle <- t_move + t_dwell
 omega_peak_table <- 1.5 * theta_total / t_move
 alpha_table <- 3 * omega_peak_table / t_move
 alpha_motor <- N * alpha_table
@@ -332,15 +377,18 @@ T_rms <- sqrt((T_accel^2 * t_seg + T_run^2 * t_seg + T_decel^2 * t_seg + T_dwell
 T_rated_continuous <- 2.4   # N.m, selected motor's continuous rating
 T_peak_rated <- 7.2         # N.m, selected motor's peak (3x continuous) rating
 
-cat(sprintf("Accelerate: %.3f N.m for %.3f s\n", T_accel, t_seg))
-cat(sprintf("Constant velocity: %.3f N.m for %.3f s\n", T_run, t_seg))
-cat(sprintf("Decelerate: %.3f N.m for %.3f s\n", T_decel, t_seg))
-cat(sprintf("Dwell (holding): %.3f N.m for %.3f s\n\n", T_dwell_hold, t_dwell))
-cat(sprintf("RMS torque over the full %.1f s cycle: %.3f N.m\n", t_cycle, T_rms))
-cat(sprintf("Motor continuous rating: %.1f N.m -> margin = %.1fx\n", T_rated_continuous, T_rated_continuous / T_rms))
-cat(sprintf("Peak torque required: %.3f N.m vs. motor peak rating %.1f N.m -> %s\n",
-            T_accel, T_peak_rated, ifelse(T_accel <= T_peak_rated, "PASSES", "FAILS")))
+cat(sprintf("RMS torque over the full %.1f s cycle: %.3f N.m - %s\n", t_cycle, T_rms,
+            ifelse(T_rms <= T_rated_continuous, "within the continuous rating", "!!exceeds the continuous rating!!")))
+cat(sprintf("  Accelerate                 %.3f N.m for %.3f s\n", T_accel, t_seg))
+cat(sprintf("  Constant velocity          %.3f N.m for %.3f s\n", T_run, t_seg))
+cat(sprintf("  Decelerate                 %.3f N.m for %.3f s\n", T_decel, t_seg))
+cat(sprintf("  Dwell (holding)            %.3f N.m for %.3f s\n", T_dwell_hold, t_dwell))
+cat(sprintf("  Motor continuous rating    %.1f N.m (margin %.1fx)\n", T_rated_continuous, T_rated_continuous / T_rms))
+cat(sprintf("  Peak torque required       %.3f N.m vs. %.1f N.m peak rating - %s\n",
+            T_accel, T_peak_rated, ifelse(T_accel <= T_peak_rated, "PASSES", "!!FAILS!!")))
 ```
+
+</details>
 
 **Sanity check:** the RMS torque (0.51 N·m) is well under the motor's continuous rating (2.4 N·m) — nearly a 5x margin. That's not over-design; it's the direct consequence of the inertia-ratio rule from Design Task 2 forcing the selection of a bigger-rotor frame than torque alone would have required. This is a common and important pattern in gear-reduced servo applications: **the reflected-inertia check, not the torque check, is often what actually sizes the motor.** A design that only checked RMS torque would have picked the smaller, low-inertia frame from Design Task 2 — and built a machine that was impossible to tune well.
 
@@ -402,13 +450,35 @@ $$T_{gearbox,required} = SF \times T_{peak}$$
 
 ### Worked Example
 
-Live cell — try a different peak torque or duty classification and see how the required gearbox rating changes.
+Live cell — try a different service factor (duty classification), move profile, or load and see how the required gearbox rating changes.
+
+```{r calc-gearbox-service-factor-06-06, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "gearbox-service-factor-06-06",
+  title = "Gearbox Service Factor Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("J_load", "Load inertia at the table shaft", value = 1.6, min = 0.05, max = 20, step = 0.05, suffix = "kg·m²"),
+    qwebr_calc_input("T_friction_table", "Table friction torque", value = 4, min = 0, max = 30, step = 0.5, suffix = "N·m"),
+    qwebr_calc_input("t_move", "Move time", value = 0.5, min = 0.1, max = 3, step = 0.05, suffix = "s"),
+    qwebr_calc_input("t_dwell", "Dwell time", value = 2.5, min = 0, max = 10, step = 0.1, suffix = "s"),
+    qwebr_calc_input("SF", "Service factor SF", value = 1.5, min = 1, max = 3, step = 0.05, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: gearbox-service-factor-06-06
 ## Given
 J_load <- 1.6
-theta_total <- 45 * pi / 180; t_move <- 0.5; t_dwell <- 2.5; t_cycle <- t_move + t_dwell
+theta_total <- 45 * pi / 180
+t_move <- 0.5
+t_dwell <- 2.5
+t_cycle <- t_move + t_dwell
 alpha_table <- 3 * (1.5 * theta_total / t_move) / t_move
 T_friction_table <- 4
 
@@ -418,13 +488,15 @@ starts_per_hour <- 3600 / t_cycle
 SF <- 1.5   # selected from the shock/starts classification above
 T_gearbox_required <- SF * T_table_peak
 
-cat(sprintf("Peak table-side torque: %.2f N.m\n", T_table_peak))
-cat(sprintf("Starts per hour: %.0f\n", starts_per_hour))
-cat(sprintf("Selected service factor: %.1f\n", SF))
 cat(sprintf("Minimum gearbox nominal output torque rating: %.1f N.m\n", T_gearbox_required))
-cat(sprintf("-> Select a catalog gearbox rated >= %.0f N.m nominal output torque at a 20:1 ratio\n",
+cat(sprintf("  Peak table-side torque       %.2f N.m\n", T_table_peak))
+cat(sprintf("  Starts per hour              %.0f\n", starts_per_hour))
+cat(sprintf("  Selected service factor      %.2f\n", SF))
+cat(sprintf("  Select a catalog gearbox rated  >= %.0f N.m nominal output torque (20:1 ratio)\n",
             ceiling(T_gearbox_required / 5) * 5))
 ```
+
+</details>
 
 **Sanity check:** 1200 starts/hour (20 per minute) is at the extreme high end of the starts/hour scale, which is exactly why the upper end of the moderate-shock service factor band was chosen despite the load itself being a smooth servo-generated profile with no impacts. The resulting requirement (about 40 N·m nominal) corresponds to a compact, roughly 60-90 mm flange-size single-stage planetary gearbox in most manufacturers' catalogs — physically consistent with a table this size, which is a useful cross-check that nothing upstream in the calculation has gone wrong by an order of magnitude.
 
@@ -488,24 +560,51 @@ $$Score_{option} = \sum_i w_i \times s_{i,option}$$
 
 ### Worked Example
 
-Live cell — try different weights (what matters most for *your* application?) and see whether the recommendation flips.
+Live cell — try different weights (what matters most for *your* application?) and see whether the recommendation flips. The weights are rescaled to total 100%; the scores can be edited in the code underneath.
+
+```{r calc-servo-vs-vfd-decision-06-06, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "servo-vs-vfd-decision-06-06",
+  title = "Servo vs. Induction + VFD Decision Matrix",
+  icon = "scale-balanced",
+  inputs = list(
+    qwebr_calc_input("w_accuracy", "Weight: accuracy", value = 0.3, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_dynamic_response", "Weight: dynamic response", value = 0.25, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_cost", "Weight: cost", value = 0.25, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_complexity", "Weight: complexity", value = 0.2, min = 0, max = 1, step = 0.05)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: servo-vs-vfd-decision-06-06
 ## Given: weights reflecting the index table's priorities (accuracy and speed of settle matter most)
-weights <- c(accuracy = 0.30, dynamic_response = 0.25, cost = 0.25, complexity = 0.20)
+w_accuracy         <- 0.30
+w_dynamic_response <- 0.25
+w_cost             <- 0.25
+w_complexity       <- 0.20
+weights <- c(accuracy = w_accuracy, dynamic_response = w_dynamic_response,
+             cost = w_cost, complexity = w_complexity)
+weights <- weights / sum(weights)   # rescale so the weights always total 100%
+
+## Scores: 1 = poor fit, 5 = excellent fit
 servo_scores <- c(accuracy = 5, dynamic_response = 5, cost = 2, complexity = 2)
 induction_scores <- c(accuracy = 2, dynamic_response = 2, cost = 5, complexity = 5)
 
 servo_total <- sum(weights * servo_scores)
 induction_total <- sum(weights * induction_scores)
 
-cat("Weighted decision matrix (1 = poor fit, 5 = excellent fit):\n\n")
-for (nm in names(weights)) cat(sprintf("  %-18s weight = %.0f%%\n", nm, weights[nm] * 100))
-cat(sprintf("\nServo weighted score:          %.2f\n", servo_total))
-cat(sprintf("Induction + VFD weighted score: %.2f\n", induction_total))
-cat(sprintf("\n-> Recommendation: %s\n", ifelse(servo_total > induction_total, "SERVO", "INDUCTION + VFD")))
+cat(sprintf("Recommendation: %s\n", ifelse(servo_total > induction_total, "SERVO", "INDUCTION + VFD")))
+cat(sprintf("  Servo weighted score             %.2f\n", servo_total))
+cat(sprintf("  Induction + VFD weighted score   %.2f\n", induction_total))
+for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm] * 100))
 ```
+
+</details>
 
 **Sanity check:** with accuracy and dynamic response weighted most heavily — the right call for an index table that must settle to a repeatable station position within a fraction of a second — the servo wins, matching the architecture already chosen in Design Tasks 1-4. Try dropping the accuracy and dynamic-response weights and raising cost and complexity instead (closer to what a simple conveyor actually needs): the recommendation flips to induction + VFD, which is exactly the drive architecture Design Task 6 uses for the decline conveyor.
 
@@ -608,7 +707,28 @@ ggplot(df_duty, aes(x = t, y = power, color = system)) +
 
 ### Worked Example
 
-Live cell — try a different belt speed, incline angle, carton mass, or throughput rate and see how the force balance and VFD sizing respond.
+Live cell — drag the incline angle, or change the belt speed, carton mass, throughput rate, or motor/VFD ratings, and see how the force balance and VFD sizing respond.
+
+```{r calc-conveyor-vfd-sizing-06-06, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "conveyor-vfd-sizing-06-06",
+  title = "Decline Conveyor Force Balance and VFD Sizing",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("v_belt", "Belt speed", value = 1, min = 0.1, max = 3, step = 0.05, suffix = "m/s"),
+    qwebr_calc_input("carton_mass", "Carton mass", value = 20, min = 1, max = 60, step = 1, suffix = "kg"),
+    qwebr_calc_input("rate_per_hr", "Throughput", value = 1200, min = 100, max = 4000, step = 50, suffix = "cartons/h"),
+    qwebr_calc_input("mu_eff", "Rolling-resistance factor", value = 0.04, min = 0.01, max = 0.3, step = 0.005),
+    qwebr_calc_input("motor_FLA_460V", "Motor nameplate FLA", value = 2.8, min = 0.5, max = 30, step = 0.1, suffix = "A"),
+    qwebr_calc_input("VFD_continuous_A", "VFD continuous rating", value = 3, min = 0.5, max = 40, step = 0.1, suffix = "A"),
+    qwebr_calc_input("theta_deg", "Decline angle (deg)", value = 15, min = 0, max = 30, step = 0.5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: conveyor-vfd-sizing-06-06
@@ -639,29 +759,51 @@ VFD_continuous_A <- 3.0    # A, selected drive's continuous output rating
 VFD_overload_pct <- 150    # %, 60 s overload rating ("Heavy Duty" rating)
 VFD_overload_A <- VFD_continuous_A * VFD_overload_pct / 100
 
-cat(sprintf("Total moving mass on the incline: %.0f kg\n", m_total))
-cat(sprintf("Gravity component (down-slope): %.1f N\n", F_gravity))
-cat(sprintf("Friction resistance (up-slope): %.1f N\n", F_friction))
-cat(sprintf("Net force: %.1f N (%s)\n", F_net,
-            ifelse(F_net > 0, "OVERHAULING - motor must brake, even fully loaded", "self-braking - motor must drive")))
-cat(sprintf("Mechanical braking power at full load: %.0f W\n\n", P_brake_mech))
-
-cat(sprintf("Motor nameplate FLA (460 V, 3-phase): %.1f A\n", motor_FLA_460V))
-cat(sprintf("VFD continuous output rating: %.1f A (%.0f%% margin over FLA)\n",
-            VFD_continuous_A, (VFD_continuous_A / motor_FLA_460V - 1) * 100))
-cat(sprintf("VFD overload rating (%d%% for 60 s): %.1f A\n", VFD_overload_pct, VFD_overload_A))
-cat(sprintf("-> %s: VFD continuous rating exceeds nameplate FLA with margin\n",
-            ifelse(VFD_continuous_A >= motor_FLA_460V, "OK", "UNDERSIZED")))
+cat(sprintf("Net force: %.1f N - %s\n", F_net,
+            ifelse(F_net > 0, "OVERHAULING, motor must brake even fully loaded", "self-braking, motor must drive")))
+cat(sprintf("  Total moving mass on the incline        %.0f kg\n", m_total))
+cat(sprintf("  Gravity component (down-slope)          %.1f N\n", F_gravity))
+cat(sprintf("  Friction resistance (up-slope)          %.1f N\n", F_friction))
+cat(sprintf("  Mechanical braking power at full load   %.0f W\n", P_brake_mech))
+cat(sprintf("  Motor nameplate FLA (460 V, 3-phase)    %.1f A\n", motor_FLA_460V))
+cat(sprintf("  VFD continuous output rating            %.1f A (%.0f%% margin over FLA) - %s\n",
+            VFD_continuous_A, (VFD_continuous_A / motor_FLA_460V - 1) * 100,
+            ifelse(VFD_continuous_A >= motor_FLA_460V, "OK", "!!UNDERSIZED!!")))
+cat(sprintf("  VFD overload rating (%g%% for 60 s)     %.1f A\n", VFD_overload_pct, VFD_overload_A))
 ```
+
+</details>
 
 **Sanity check:** even with the belt fully loaded, the net force is positive (down-slope) — and in fact this conveyor overhauls even *empty* (belt + idler weight alone, at 15° against a 0.04 friction factor, already produces a net down-slope force), which means the drive spends essentially 100% of its running time in braking mode, never really "driving" the belt except perhaps a brief breakaway torque at zero speed. That single fact is what makes this problem fundamentally about sizing the braking resistor, not the motor's driving capability — which the second half of this worked example addresses directly.
 
-Live cell — this is the braking resistor sizing that follows directly from the force balance above. Try a different belt speed, incline angle, or product mass and see how the resistor requirement changes.
+Live cell — this is the braking resistor sizing that follows directly from the force balance above. Drag the resistor value, or change the belt speed, decline angle, or chopper limits, and see how the resistor requirement changes.
+
+```{r calc-braking-resistor-06-06, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "braking-resistor-06-06",
+  title = "Braking Resistor Sizing Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("v_belt", "Belt speed", value = 1, min = 0.1, max = 3, step = 0.05, suffix = "m/s"),
+    qwebr_calc_input("theta_deg", "Decline angle", value = 15, min = 3, max = 30, step = 0.5, suffix = "deg"),
+    qwebr_calc_input("V_dc_trip", "Brake-chopper turn-on voltage", value = 780, min = 350, max = 1200, step = 10, suffix = "V"),
+    qwebr_calc_input("I_chopper_max", "Chopper current limit", value = 8, min = 1, max = 50, step = 0.5, suffix = "A"),
+    qwebr_calc_input("R_choice", "Selected resistor (ohm)", value = 120, min = 20, max = 300, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: braking-resistor-06-06
 ## Given (re-derive the force balance locally so this cell is self-contained)
-v_belt <- 1.0; theta <- 15 * pi / 180; L <- 18
+v_belt <- 1.0
+theta_deg <- 15
+theta <- theta_deg * pi / 180
+L <- 18
 carton_mass <- 20; rate_per_hr <- 1200; m_belt <- 180; mu_eff <- 0.04; g <- 9.81
 
 mass_flow <- carton_mass * rate_per_hr / 3600
@@ -683,15 +825,17 @@ P_continuous_required <- P_brake_mech * margin_factor
 ED_target <- 0.10
 P_cataloged_10pctED <- P_continuous_required / ED_target
 
-cat(sprintf("Mechanical braking power: %.0f W\n", P_brake_mech))
-cat(sprintf("Minimum resistance (chopper current limit): %.1f ohm\n", R_min))
-cat(sprintf("Selected resistor: %d ohm -> chopper current %.2f A (limit %.0f A) -> %s\n",
-            R_choice, I_at_trip, I_chopper_max, ifelse(I_at_trip <= I_chopper_max, "OK", "EXCEEDS LIMIT")))
-cat(sprintf("Required continuous (100%% ED) power rating: >= %s W\n",
-            format(round(P_continuous_required), big.mark = " ")))
-cat(sprintf("Equivalent catalog rating if the resistor is sold at 10%% ED: ~%s W\n",
-            format(round(P_cataloged_10pctED), big.mark = " ")))
+fmt <- function(x) format(round(x), big.mark = " ")
+
+cat(sprintf("Required continuous (100%% ED) resistor rating: >= %s W\n", fmt(P_continuous_required)))
+cat(sprintf("  Mechanical braking power                   %.0f W\n", P_brake_mech))
+cat(sprintf("  Minimum resistance (chopper current limit)  %.1f ohm\n", R_min))
+cat(sprintf("  Chopper current with %g ohm selected      %.2f A (limit %g A) - %s\n",
+            R_choice, I_at_trip, I_chopper_max, ifelse(I_at_trip <= I_chopper_max, "OK", "!!EXCEEDS LIMIT!!")))
+cat(sprintf("  Equivalent catalog rating at 10%% ED        ~%s W\n", fmt(P_cataloged_10pctED)))
 ```
+
+</details>
 
 **Sanity check:** the chosen 120 Ω resistor draws 6.5 A at the chopper's trip voltage, comfortably under the 8 A chopper transistor limit — and because this conveyor brakes essentially continuously while running, the resistor must be specified for **100% ED (continuous duty)** at roughly 713 W, not the 71 W a 10%-ED-rated catalog part of the same nameplate wattage could actually sustain long-term. A resistor bought off a low-duty-cycle catalog listing without checking its ED rating would look adequate on the nameplate and cook itself within minutes of continuous operation — this is one of the more common and expensive VFD commissioning mistakes on a real decline-conveyor installation.
 
@@ -757,7 +901,27 @@ $$\text{Simple payback} = \frac{\text{Price premium}}{\text{Energy saved/yr} \ti
 
 ### Worked Example
 
-Live cell — try different run-hours, electricity rate, or price premium and see how payback responds. (This example uses a separate, continuously-running utility motor to illustrate the payback calculation cleanly — payback logic applies best to a motor that's genuinely *driving* a load most of the time, unlike the overhauling conveyor motor from Design Task 6.)
+Live cell — drag the run-hours, or change the electricity rate or price premium, and see how payback responds. (This example uses a separate, continuously-running utility motor to illustrate the payback calculation.)
+
+```{r calc-efficiency-payback-06-06, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "efficiency-payback-06-06",
+  title = "Motor Efficiency Payback Calculator",
+  icon = "dollar-sign",
+  inputs = list(
+    qwebr_calc_input("P_out_kW", "Shaft output power", value = 0.746, min = 0.1, max = 150, step = 0.001, suffix = "kW"),
+    qwebr_calc_input("eta_ie3", "IE3 motor efficiency", value = 0.885, min = 0.7, max = 0.97, step = 0.001),
+    qwebr_calc_input("eta_ie4", "IE4 motor efficiency", value = 0.917, min = 0.7, max = 0.98, step = 0.001),
+    qwebr_calc_input("electricity_rate", "Electricity rate", value = 0.12, min = 0.03, max = 0.5, step = 0.01, prefix = "$", suffix = "/ kWh"),
+    qwebr_calc_input("price_premium", "IE4 price premium", value = 60, min = 5, max = 5000, step = 5, prefix = "$"),
+    qwebr_calc_input("hours_per_year", "Run hours per year", value = 4800, min = 500, max = 8760, step = 20, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: efficiency-payback-06-06
@@ -775,12 +939,14 @@ energy_saved_kWh <- (P_in_ie3 - P_in_ie4) * hours_per_year
 cost_saved_per_year <- energy_saved_kWh * electricity_rate
 payback_years <- price_premium / cost_saved_per_year
 
-cat(sprintf("Input power, IE3/NEMA Premium motor: %.3f kW\n", P_in_ie3))
-cat(sprintf("Input power, IE4/Super Premium motor: %.3f kW\n", P_in_ie4))
-cat(sprintf("Energy saved: %.0f kWh/year\n", energy_saved_kWh))
-cat(sprintf("Cost saved: $%.2f/year\n", cost_saved_per_year))
 cat(sprintf("Simple payback on the $%.0f price premium: %.1f years\n", price_premium, payback_years))
+cat(sprintf("  Input power, IE3 / NEMA Premium motor    %.3f kW\n", P_in_ie3))
+cat(sprintf("  Input power, IE4 / Super Premium motor   %.3f kW\n", P_in_ie4))
+cat(sprintf("  Energy saved                             %.0f kWh/year\n", energy_saved_kWh))
+cat(sprintf("  Cost saved                               $%.2f/year\n", cost_saved_per_year))
 ```
+
+</details>
 
 **Sanity check:** roughly a 3.5-year payback on a small 1 HP motor running nearly around the clock is a plausible, if unremarkable, result — and it illustrates why NRCan's mandatory minimum sits at IE3/NEMA Premium rather than IE4: for the *average* motor and duty cycle across the whole regulated population, IE3 already captures most of the accessible savings at reasonable cost, while pushing everyone to IE4 would impose a cost premium that doesn't pay back for a large share of applications (short run-hours, standby service, intermittent duty). For a *specific* high-run-hour, high-power application, though, the IE4 upgrade math often looks a great deal better than this small-motor example — try increasing `P_out_kW` in the cell above to see the payback improve sharply as motor size grows.
 

@@ -210,12 +210,31 @@ $$d_{keyway} = \left(\frac{16\,T\,n_d\,K_t}{\pi\,S_{sy}}\right)^{1/3} = d_{plain
 
 ### Worked Example
 
-Live cell — try a sharper or more generous keyway fillet (changing $K_t$) and see how much diameter it costs.
+Live cell — drag $K_t$ (a sharper or more generous keyway fillet) and see how much diameter it costs.
+
+```{r calc-keyway-upsize-06-09, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "keyway-upsize-06-09",
+  title = "Keyway Stress Concentration Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("T", "Shaft torque", value = 40, min = 1, max = 500, step = 1, suffix = "N·m"),
+    qwebr_calc_input("n_d", "Design factor n<sub>d</sub>", value = 3, min = 1, max = 6, step = 0.1),
+    qwebr_calc_input("d_upsized_mm", "Upsized stock diameter", value = 18, min = 10, max = 60, step = 1, suffix = "mm"),
+    qwebr_calc_input("Kt", "Stress concentration factor Kt", value = 1.6, min = 1, max = 3, step = 0.05, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: keyway-upsize-06-09
 ## Given (recomputed locally so this cell is self-contained)
-T <- 40; n_d <- 3.0
+T <- 40
+n_d <- 3.0
 Sy <- 370e6; Ssy <- 0.577 * Sy
 d_plain <- (16 * T * n_d / (pi * Ssy))^(1/3)   # m, Design Task 1 result
 
@@ -234,13 +253,16 @@ d_upsized_mm <- 18
 tau_18_with_key <- Kt * 16 * T / (pi * (d_upsized_mm / 1000)^3)
 n_18_with_key <- Ssy / tau_18_with_key
 
-cat(sprintf("Stress concentration factor Kt: %.2f\n", Kt))
 cat(sprintf("Minimum diameter WITH keyway, same n_d: %.2f mm\n", d_keyway_min_mm))
-cat(sprintf("If left at 16 mm (no upsize): achieved n_d = %.2f -> %s\n",
-            n_16_with_key, ifelse(n_16_with_key >= n_d, "still OK", "BELOW TARGET")))
-cat(sprintf("Upsized to %d mm stock: achieved n_d = %.2f -> %s\n",
-            d_upsized_mm, n_18_with_key, ifelse(n_18_with_key >= n_d, "OK", "BELOW TARGET")))
+cat(sprintf("  Stress concentration factor Kt        %.2f\n", Kt))
+cat(sprintf("  Minimum diameter without keyway       %.2f mm\n", d_plain * 1000))
+cat(sprintf("  Left at %g mm (no upsize)             achieved n_d = %.2f - %s\n",
+            d_no_upsize_mm, n_16_with_key, ifelse(n_16_with_key >= n_d, "still OK", "!!BELOW TARGET!!")))
+cat(sprintf("  Upsized to %g mm stock                achieved n_d = %.2f - %s\n",
+            d_upsized_mm, n_18_with_key, ifelse(n_18_with_key >= n_d, "OK", "!!BELOW TARGET!!")))
 ```
+
+</details>
 
 **Sanity check:** leaving the shaft at 16 mm once the keyway is cut drops the achieved design factor to about 2.7 — below the 3.0 target, even though 16 mm looked comfortable (4.3) before the keyway existed. Stepping up one standard size to 18 mm restores it to about 3.8, with margin to spare. That two-millimetre step is the entire point of this design task: a keyway is not a detail to add after sizing a shaft, it has to be accounted for in the sizing itself, and the fix is usually a small, cheap diameter increase rather than a redesign.
 
@@ -347,13 +369,38 @@ $$Score_{option} = \sum_i w_i \times s_{i,option}$$
 
 ### Worked Example
 
-Live cell — try different weights (what matters most on *your* drive?) and see whether the recommendation changes.
+Live cell — try different weights (what matters most on *your* drive?) and see whether the recommendation changes. The weights are rescaled to total 100%; the scores can be edited in the code underneath.
+
+```{r calc-coupling-decision-06-09, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "coupling-decision-06-09",
+  title = "Coupling Selection Decision Matrix",
+  icon = "scale-balanced",
+  inputs = list(
+    qwebr_calc_input("w_torque_margin", "Weight: torque margin", value = 0.2, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_misalignment", "Weight: misalignment tolerance", value = 0.25, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_shock", "Weight: shock absorption", value = 0.3, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_cost_maintenance", "Weight: cost and maintenance", value = 0.25, min = 0, max = 1, step = 0.05)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: coupling-decision-06-09
 ## Given: weights reflecting the accumulation conveyor's priorities
-weights <- c(torque_margin = 0.20, misalignment = 0.25, shock = 0.30, cost_maintenance = 0.25)
+w_torque_margin    <- 0.20
+w_misalignment     <- 0.25
+w_shock            <- 0.30
+w_cost_maintenance <- 0.25
+weights <- c(torque_margin = w_torque_margin, misalignment = w_misalignment,
+             shock = w_shock, cost_maintenance = w_cost_maintenance)
+weights <- weights / sum(weights)   # rescale so the weights always total 100%
 
+## Scores: 1 = poor fit, 5 = excellent fit
 jaw_scores  <- c(torque_margin = 4, misalignment = 4, shock = 5, cost_maintenance = 5)
 beam_scores <- c(torque_margin = 3, misalignment = 3, shock = 2, cost_maintenance = 4)
 disc_scores <- c(torque_margin = 5, misalignment = 3, shock = 4, cost_maintenance = 2)
@@ -362,12 +409,12 @@ grid_scores <- c(torque_margin = 5, misalignment = 4, shock = 5, cost_maintenanc
 scores_list <- list(Jaw = jaw_scores, Beam = beam_scores, Disc = disc_scores, Grid = grid_scores)
 totals <- sapply(scores_list, function(s) sum(weights * s))
 
-cat("Weighted decision matrix (1 = poor fit, 5 = excellent fit):\n\n")
-for (nm in names(weights)) cat(sprintf("  %-18s weight = %.0f%%\n", nm, weights[nm] * 100))
-cat("\n")
-for (nm in names(totals)) cat(sprintf("  %-6s weighted score = %.2f\n", nm, totals[nm]))
-cat(sprintf("\n-> Recommendation: %s coupling\n", names(totals)[which.max(totals)]))
+cat(sprintf("Recommendation: %s coupling\n", names(totals)[which.max(totals)]))
+for (nm in names(totals)) cat(sprintf("  %s weighted score   %.2f\n", nm, totals[nm]))
+for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm] * 100))
 ```
+
+</details>
 
 **Sanity check:** the jaw coupling wins (4.55) ahead of the grid coupling (4.00), even though the comparison chart shows grid scoring at least as well on every individual criterion except cost/maintenance. That's the point of the exercise — at this torque level (a few tens of N·m), a grid coupling's extra torque and shock capacity is capability this drive will never use, while its lubricated housing adds a maintenance task the jaw coupling simply doesn't have. Try raising the shock weight further, toward a jam-prone, high-impact application: the recommendation shifts back toward grid, exactly the crossover a real selection decision has to navigate.
 
@@ -501,7 +548,28 @@ $$P_{design} = P_{transmitted} \times SF \qquad N_{belts} = \left\lceil \frac{P_
 
 ### Worked Example
 
-Live cell — try a different motor size, sheave ratio, or center distance and see how the belt count responds.
+Live cell — try a different motor size, sheave diameters, or center distance and see how the belt count responds.
+
+```{r calc-belt-sizing-06-09, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "belt-sizing-06-09",
+  title = "V-Belt Drive Sizing Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("P_motor_hp", "Motor power", value = 5, min = 0.5, max = 50, step = 0.5, suffix = "hp"),
+    qwebr_calc_input("n_motor", "Motor speed", value = 1750, min = 600, max = 3600, step = 10, suffix = "rpm"),
+    qwebr_calc_input("D_driver", "Driver sheave diameter", value = 100, min = 60, max = 400, step = 5, suffix = "mm"),
+    qwebr_calc_input("D_driven", "Driven sheave diameter", value = 500, min = 60, max = 800, step = 5, suffix = "mm"),
+    qwebr_calc_input("C", "Center distance", value = 600, min = 400, max = 2000, step = 10, suffix = "mm"),
+    qwebr_calc_input("SF", "Service factor", value = 1.4, min = 1, max = 2, step = 0.05),
+    qwebr_calc_input("P_rated_per_belt", "Rated power per belt", value = 3, min = 0.5, max = 15, step = 0.1, suffix = "kW")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: belt-sizing-06-09
@@ -509,7 +577,8 @@ Live cell — try a different motor size, sheave ratio, or center distance and s
 P_motor_hp <- 5
 P_transmitted <- P_motor_hp * 0.746   # kW
 n_motor <- 1750                        # rpm
-D_driver <- 100; D_driven <- 500       # mm
+D_driver <- 100                        # mm
+D_driven <- 500                        # mm
 C <- 600                                # mm, center distance
 SF <- 1.4                               # moderate shock: chip conveyor, occasional jams
 
@@ -519,9 +588,10 @@ n_driven <- n_motor / ratio
 theta_wrap <- 180 - 2 * asin((D_driven - D_driver) / (2 * C)) * 180 / pi
 
 ## Representative wrap-angle correction table, interpolated
+## (rule = 2 holds the end values for wrap angles outside the table)
 wrap_tab <- data.frame(theta = c(90, 100, 110, 120, 130, 140, 150, 160, 170, 180),
                         C_theta = c(0.69, 0.74, 0.78, 0.82, 0.86, 0.89, 0.92, 0.95, 0.97, 1.00))
-C_theta <- approx(wrap_tab$theta, wrap_tab$C_theta, xout = theta_wrap)$y
+C_theta <- approx(wrap_tab$theta, wrap_tab$C_theta, xout = theta_wrap, rule = 2)$y
 
 P_design <- P_transmitted * SF
 P_rated_per_belt <- 3.0   # kW, representative B-section rating at this diameter/speed
@@ -529,12 +599,15 @@ P_rated_per_belt <- 3.0   # kW, representative B-section rating at this diameter
 N_belts_exact <- P_design / (P_rated_per_belt * C_theta)
 N_belts <- ceiling(N_belts_exact)
 
-cat(sprintf("Sheave ratio: %.1f:1 -> driven-shaft speed: %.0f rpm\n", ratio, n_driven))
-cat(sprintf("Transmitted power: %.2f kW, design power (SF = %.1f): %.2f kW\n",
-            P_transmitted, SF, P_design))
-cat(sprintf("Wrap angle at driver sheave: %.1f deg -> C_theta = %.2f\n", theta_wrap, C_theta))
-cat(sprintf("Belts required (exact): %.2f -> select %d belts\n", N_belts_exact, N_belts))
+cat(sprintf("Belts required: %g (exact %.2f)\n", N_belts, N_belts_exact))
+cat(sprintf("  Sheave ratio                    %.1f:1\n", ratio))
+cat(sprintf("  Driven-shaft speed              %.0f rpm\n", n_driven))
+cat(sprintf("  Transmitted power               %.2f kW\n", P_transmitted))
+cat(sprintf("  Design power (SF = %.2f)        %.2f kW\n", SF, P_design))
+cat(sprintf("  Wrap angle at driver sheave     %.1f deg (C_theta = %.2f)\n", theta_wrap, C_theta))
 ```
+
+</details>
 
 **Sanity check:** the exact belt count (1.94) rounds up to 2 — a single belt would be running at 97% of its wrap-angle-corrected capacity with zero margin for the jam shock the service factor was supposed to cover, so rounding down would defeat the purpose of applying a service factor in the first place. Note the wrap-angle correction alone knocked more than 10% off the belt's nominal rating (C_theta = 0.89) before the service factor was even applied — exactly the effect the rule of thumb above warns not to skip on a high-ratio drive like this one.
 

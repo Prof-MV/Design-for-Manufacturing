@@ -230,7 +230,27 @@ $$I_{required} = \frac{PL^3}{48\,E\,\delta_{allow}}$$
 
 ### Worked Example
 
-Live cell — try a different total tolerance, allocation fraction, or beam load and see whether the beam passes or fails.
+Live cell — try a different total tolerance, allocation fraction, beam section, or carriage load and see whether the beam passes or fails.
+
+```{r calc-deflection-budget-06-11, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "deflection-budget-06-11",
+  title = "Frame Deflection Budget Calculator",
+  icon = "ruler",
+  inputs = list(
+    qwebr_calc_input("T_total", "Total positioning tolerance", value = 0.1, min = 0.01, max = 5, step = 0.01, suffix = "mm"),
+    qwebr_calc_input("f_frame", "Fraction allocated to the frame", value = 0.2, min = 0.05, max = 1, step = 0.05),
+    qwebr_calc_input("L", "Beam span", value = 2400, min = 300, max = 6000, step = 50, suffix = "mm"),
+    qwebr_calc_input("m_carriage", "Carriage mass", value = 48, min = 1, max = 1000, step = 1, suffix = "kg"),
+    qwebr_calc_input("dyn_factor", "Dynamic load factor", value = 1.4, min = 1, max = 3, step = 0.05),
+    qwebr_calc_input("I_beam", "Beam second moment of area I", value = 9800000, min = 500000, max = 200000000, step = 100000, suffix = "mm⁴")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: deflection-budget-06-11
@@ -241,7 +261,10 @@ f_frame <- 0.20         # fraction of the total budget allocated to frame deflec
 delta_allow <- T_total * f_frame
 
 ## Re-derive the actual beam deflection locally (Design Task 1 values)
-L <- 2400; m_carriage <- 48; g <- 9.81; dyn_factor <- 1.4
+L <- 2400
+m_carriage <- 48
+g <- 9.81
+dyn_factor <- 1.4
 P <- m_carriage * g * dyn_factor
 E_steel <- 200000
 I_beam <- 9.80e6
@@ -250,28 +273,28 @@ delta_max <- P * L^3 / (48 * E_steel * I_beam)
 L240 <- L / 240
 ratio_equiv <- L / delta_allow
 
-cat(sprintf("Allowable frame deflection budget: %.4f mm (%.1f micron)\n", delta_allow, delta_allow * 1000))
-cat(sprintf("Actual beam deflection: %.4f mm (%.1f micron)\n", delta_max, delta_max * 1000))
-cat(sprintf("Status: %s\n\n", ifelse(delta_max <= delta_allow, "PASSES", "FAILS")))
-cat(sprintf("For reference: L/240 general limit = %.2f mm (beam clears this easily)\n", L240))
-cat(sprintf("The precision budget is equivalent to roughly L/%s -- far tighter than L/240,\n",
-            format(round(ratio_equiv), big.mark = " ")))
-cat("and tighter even than the commonly cited L/1000 machine-structure benchmark.\n\n")
+cat(sprintf("Actual beam deflection: %.4f mm (%.1f micron) - %s\n", delta_max, delta_max * 1000,
+            ifelse(delta_max <= delta_allow, "PASSES", "!!FAILS!!")))
+cat(sprintf("  Allowable frame deflection budget    %.4f mm (%.1f micron)\n", delta_allow, delta_allow * 1000))
+cat(sprintf("  Budget as a span ratio               roughly L/%s\n", format(round(ratio_equiv), big.mark = " ")))
+cat(sprintf("  L/240 general limit, for reference   %.2f mm - %s\n", L240,
+            ifelse(delta_max <= L240, "beam clears this", "!!beam exceeds even this!!")))
 
 ## If it fails, solve for the required I
 if (delta_max > delta_allow) {
   I_required <- P * L^3 / (48 * E_steel * delta_allow)
-  cat(sprintf("Required I to meet the budget: %.3e mm^4 (%.2fx the current %.3e mm^4)\n",
+  cat(sprintf("  Required I to meet the budget        %.3e mm^4 (%.2fx the current %.3e mm^4)\n",
               I_required, I_required / I_beam, I_beam))
 
   ## Alternative fix: add an intermediate support, halving the effective span
   delta_half_span <- P * (L / 2)^3 / (48 * E_steel * I_beam)
-  cat(sprintf("\nAlternative: add a midspan support column (halves the effective span)\n"))
-  cat(sprintf("New deflection with the same beam, half the span: %.4f mm (%.1f micron) -> %s\n",
+  cat(sprintf("  Alternative: midspan support column  %.4f mm (%.1f micron) - %s\n",
               delta_half_span, delta_half_span * 1000,
-              ifelse(delta_half_span <= delta_allow, "PASSES", "FAILS")))
+              ifelse(delta_half_span <= delta_allow, "PASSES", "!!FAILS!!")))
 }
 ```
+
+</details>
 
 **Sanity check:** the beam that passed the general L/240 check by a nearly 100x margin **fails** the precision-axis budget by roughly 5x (0.097 mm actual against a 0.020 mm allowance) — the exact scenario this design task warned about. Two fixes both work: increase the beam's stiffness directly (roughly 4.8x more $I$ is needed, a substantially larger section), or add an intermediate support column at midspan, which — because deflection scales with the *cube* of the span — cuts the deflection to about an eighth of its original value with no change to the beam section at all, and comfortably clears the budget. Adding a support is often the cheaper fix in practice, provided the fixture layout has room for a column at midspan without blocking the process; that's a genuine design trade-off, not a purely numeric one. Whichever fix is chosen, keep it in mind going into Design Task 6 — stiffening the beam to meet this deflection budget has a second effect that hasn't been checked yet.
 
@@ -448,7 +471,26 @@ $$F_{clamp,per\ bolt} = \frac{F_{clamp}}{n}$$
 
 ### Worked Example
 
-Live cell — try a different shear load, friction coefficient, safety factor, or bolt count.
+Live cell — try a different carriage mass, acceleration, friction coefficient, safety factor, or bolt count.
+
+```{r calc-bolted-joint-clamp-06-11, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bolted-joint-clamp-06-11",
+  title = "Slip-Critical Joint Clamp Force Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("m_carriage", "Carriage mass", value = 48, min = 1, max = 1000, step = 1, suffix = "kg"),
+    qwebr_calc_input("a_axis", "Peak axis acceleration", value = 5, min = 0.5, max = 50, step = 0.5, suffix = "m/s²"),
+    qwebr_calc_input("mu", "Friction coefficient", value = 0.3, min = 0.05, max = 0.8, step = 0.01),
+    qwebr_calc_input("SF", "Safety factor", value = 1.5, min = 1, max = 5, step = 0.1),
+    qwebr_calc_input("n_bolts", "Number of bolts", value = 4, min = 1, max = 16, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: bolted-joint-clamp-06-11
@@ -470,14 +512,16 @@ proof_stress_88 <- 580     # MPa, ISO 898-1 property class 8.8 proof strength
 F_proof_M8 <- At_M8 * proof_stress_88
 F_target_preload <- 0.75 * F_proof_M8   # typical target: ~75% of proof load
 
-cat(sprintf("Applied shear load: %.1f N\n", F_shear))
-cat(sprintf("Required total clamp force (SF = %.1f, mu = %.2f): %.1f N\n", SF, mu, F_clamp_total))
-cat(sprintf("Required clamp force per bolt (n = %d): %.1f N\n\n", n_bolts, F_clamp_per_bolt))
-cat(sprintf("M8, property class 8.8 proof load: %.0f N\n", F_proof_M8))
-cat(sprintf("Typical target preload (75%% of proof load): %.0f N\n", F_target_preload))
-cat(sprintf("Margin: target preload is %.0fx the required per-bolt clamp force\n",
-            F_target_preload / F_clamp_per_bolt))
+cat(sprintf("Required clamp force per bolt: %.1f N - %s\n", F_clamp_per_bolt,
+            ifelse(F_target_preload >= F_clamp_per_bolt, "an M8 class 8.8 bolt is enough", "!!exceeds an M8 class 8.8 bolt's preload!!")))
+cat(sprintf("  Applied shear load                     %.1f N\n", F_shear))
+cat(sprintf("  Required total clamp force             %.1f N (SF = %.1f, mu = %.2f)\n", F_clamp_total, SF, mu))
+cat(sprintf("  M8, property class 8.8 proof load      %.0f N\n", F_proof_M8))
+cat(sprintf("  Target preload (75%% of proof load)     %.0f N\n", F_target_preload))
+cat(sprintf("  Target preload / required clamp force  %.1fx\n", F_target_preload / F_clamp_per_bolt))
 ```
+
+</details>
 
 **Sanity check:** even a modest M8 property class 8.8 bolt, torqued to its typical target preload, delivers roughly 50x the clamp force this joint actually needs to resist the shear load through friction. That large margin is the normal, expected result for most machine-frame bolting — this joint was never going to be shear-capacity-limited. The real risk on a joint like this isn't insufficient bolt strength; it's **under-torquing or self-loosening** in service (vibration backing a bolt off its target preload over time), which is exactly why correct torque application and, where vibration is significant, a thread-locking method matter regardless of how generous the raw capacity margin looks on paper.
 
@@ -559,7 +603,25 @@ $$F_{anchor} = \frac{SF \times M_{ot} - M_r}{W}$$
 
 ### Worked Example
 
-Live cell — try a different machine mass, base width, CG height, or lateral force fraction.
+Live cell — drag the CG height, or change the machine mass, base width, or lateral force fraction.
+
+```{r calc-stability-anchor-06-11, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "stability-anchor-06-11",
+  title = "Overturning Stability and Anchor Force Calculator",
+  icon = "scale-balanced",
+  inputs = list(
+    qwebr_calc_input("M_mass", "Machine mass", value = 450, min = 20, max = 10000, step = 10, suffix = "kg"),
+    qwebr_calc_input("W", "Base footprint width", value = 0.9, min = 0.2, max = 5, step = 0.05, suffix = "m"),
+    qwebr_calc_input("f_lat", "Lateral force fraction", value = 0.3, min = 0.05, max = 1, step = 0.05),
+    qwebr_calc_input("h_cg", "CG height above the base (m)", value = 1.35, min = 0.1, max = 4, step = 0.05, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: stability-anchor-06-11
@@ -576,11 +638,11 @@ M_r <- M_mass * g * (W / 2)
 SR <- M_r / M_ot
 SR_min <- 1.5
 
-cat(sprintf("Lateral static-equivalent force: %.1f N\n", F_lat))
-cat(sprintf("Overturning moment: %.1f N.m\n", M_ot))
-cat(sprintf("Restoring moment (gravity only, feet alone): %.1f N.m\n", M_r))
-cat(sprintf("Stability ratio SR = %.2f (need >= %.1f) -> %s\n\n",
-            SR, SR_min, ifelse(SR >= SR_min, "LEVELING FEET ALONE OK", "ANCHORING REQUIRED")))
+cat(sprintf("Stability ratio SR = %.2f (need >= %.1f) - %s\n",
+            SR, SR_min, ifelse(SR >= SR_min, "LEVELING FEET ALONE OK", "!!ANCHORING REQUIRED!!")))
+cat(sprintf("  Lateral static-equivalent force          %.1f N\n", F_lat))
+cat(sprintf("  Overturning moment                       %.1f N.m\n", M_ot))
+cat(sprintf("  Restoring moment (gravity, feet alone)   %.1f N.m\n", M_r))
 
 if (SR < SR_min) {
   M_r_required <- SR_min * M_ot
@@ -588,12 +650,14 @@ if (SR < SR_min) {
   F_anchor_total <- (M_r_required - M_r) / W
   F_anchor_each <- F_anchor_total / n_anchors
 
-  cat(sprintf("Required restoring moment at SR = %.1f: %.1f N.m\n", SR_min, M_r_required))
-  cat(sprintf("Deficit moment to be covered by anchors: %.1f N.m\n", M_r_required - M_r))
-  cat(sprintf("Required anchor uplift force (arm = %.1f m): %.1f N total\n", W, F_anchor_total))
-  cat(sprintf("Per anchor (n = %d): %.1f N\n", n_anchors, F_anchor_each))
+  cat(sprintf("  Required restoring moment at SR = %.1f    %.1f N.m\n", SR_min, M_r_required))
+  cat(sprintf("  Deficit moment covered by anchors        %.1f N.m\n", M_r_required - M_r))
+  cat(sprintf("  Required anchor uplift force             %.1f N total (arm = %.2f m)\n", F_anchor_total, W))
+  cat(sprintf("  Per anchor (n = %d)                       %.1f N\n", n_anchors, F_anchor_each))
 }
 ```
+
+</details>
 
 **Sanity check:** this fixture's stability ratio (about 1.11) falls short of the 1.5 minimum — its height-to-base proportions put it in genuinely tippy territory before any anchoring is added, which is exactly the kind of installation where "it feels solid enough" is not a reliable judgment. The anchor tension force needed to close the gap (roughly 386 N per anchor, using two anchors) is modest compared to the pull-out and shear capacity of a typical concrete wedge or epoxy anchor of ordinary size — the calculation isn't demanding on the anchor hardware itself, but it does establish that anchoring is required at all, which is the decision that actually matters here. A real installation still needs the specific anchor selected and embedded per the manufacturer's published capacity tables for the floor slab's actual concrete strength and thickness — governed in Canada by **CSA A23.3** (design of concrete structures, including anchorage design in its Annex D), with **ACI 318 Appendix D** and **ACI 355** as the US equivalents.
 
@@ -672,12 +736,32 @@ $$f_n = \frac{1}{2\pi}\sqrt{\frac{k}{m_{eff}}}$$
 
 ### Worked Example
 
-Live cell — check the baseline beam's natural frequency against the axis's move-profile excitation frequency.
+Live cell — check the baseline beam's natural frequency against the axis's move-profile excitation frequency; drag the move time or change the beam and carriage.
+
+```{r calc-natural-freq-baseline-06-11, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "natural-freq-baseline-06-11",
+  title = "Beam Natural Frequency Check (Baseline)",
+  icon = "wave-square",
+  inputs = list(
+    qwebr_calc_input("L", "Beam span", value = 2400, min = 300, max = 6000, step = 50, suffix = "mm"),
+    qwebr_calc_input("I_beam", "Beam second moment of area I", value = 9800000, min = 500000, max = 200000000, step = 100000, suffix = "mm⁴"),
+    qwebr_calc_input("m_carriage", "Carriage mass", value = 48, min = 1, max = 1000, step = 1, suffix = "kg"),
+    qwebr_calc_input("t_move", "Axis move time (s)", value = 0.25, min = 0.05, max = 2, step = 0.01, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: natural-freq-baseline-06-11
 ## Given: baseline gantry beam (Design Task 1 section)
-L <- 2400; E_steel <- 200000; I_beam <- 9.80e6      # mm, N/mm^2, mm^4
+L <- 2400                                              # mm
+E_steel <- 200000                                      # N/mm^2
+I_beam <- 9.80e6                                       # mm^4
 m_carriage <- 48                                       # kg
 
 k_beam_Nmm <- 48 * E_steel * I_beam / L^3               # N/mm
@@ -701,20 +785,38 @@ f_excite <- 1 / t_accel            # Hz, characteristic excitation frequency
 sep_ratio <- f_n / f_excite
 sep_min <- 3
 
-cat(sprintf("Beam stiffness: %.0f N/m\n", k_beam_Npm))
-cat(sprintf("Beam mass: %.1f kg (mass/length %.1f kg/m)\n", m_beam_total, mass_per_length))
-cat(sprintf("Effective vibrating mass: %.1f kg\n\n", m_eff))
-cat(sprintf("Natural frequency: %.2f Hz\n", f_n))
-cat(sprintf("Axis move time: %.2f s, acceleration phase: %.4f s\n", t_move, t_accel))
-cat(sprintf("Characteristic excitation frequency: %.2f Hz\n\n", f_excite))
-cat(sprintf("Separation ratio: %.2fx (need >= %dx, prefer >= 5x) -> %s\n",
-            sep_ratio, sep_min,
-            ifelse(sep_ratio >= sep_min, "PASSES minimum, but tight for a precision axis", "FAILS")))
+cat(sprintf("Separation ratio: %.2fx (need >= %dx, prefer >= 5x) - %s\n", sep_ratio, sep_min,
+            ifelse(sep_ratio >= 5, "PASSES comfortably",
+                   ifelse(sep_ratio >= sep_min, "PASSES minimum, but tight for a precision axis", "!!FAILS!!"))))
+cat(sprintf("  Natural frequency                      %.2f Hz\n", f_n))
+cat(sprintf("  Characteristic excitation frequency    %.2f Hz\n", f_excite))
+cat(sprintf("  Axis move time / acceleration phase    %.2f s / %.4f s\n", t_move, t_accel))
+cat(sprintf("  Beam stiffness                         %.0f N/m\n", k_beam_Npm))
+cat(sprintf("  Beam mass                              %.1f kg (%.1f kg/m)\n", m_beam_total, mass_per_length))
+cat(sprintf("  Effective vibrating mass               %.1f kg\n", m_eff))
 ```
+
+</details>
 
 **Sanity check:** at 47.3 Hz, the baseline beam's natural frequency clears the minimum 3x separation rule of thumb (3.94x) — but only just, and it falls well short of the more comfortable 5x margin this chapter recommends for precision settling behavior. For a machine whose whole reason for existing is placing an adhesive bead within a tight positional tolerance, "technically passes" is a thin margin to accept without a second look — which is exactly what the next cell checks.
 
-Live cell — check the same natural frequency calculation using the stiffened beam section selected in Design Task 2 to meet the precision deflection budget.
+Live cell — check the same natural frequency calculation using the stiffened beam section selected in Design Task 2 to meet the precision deflection budget; change the section's I or the effective mass.
+
+```{r calc-natural-freq-stiffened-06-11, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "natural-freq-stiffened-06-11",
+  title = "Beam Natural Frequency Check (Stiffened)",
+  icon = "wave-square",
+  inputs = list(
+    qwebr_calc_input("I_required", "Stiffened beam second moment of area I", value = 47500000, min = 5000000, max = 200000000, step = 500000, suffix = "mm⁴"),
+    qwebr_calc_input("m_eff", "Effective vibrating mass", value = 77.1, min = 10, max = 500, step = 0.1, suffix = "kg")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: natural-freq-stiffened-06-11
@@ -737,13 +839,16 @@ t_move <- 0.25; t_accel <- t_move / 3
 f_excite <- 1 / t_accel
 sep_ratio_new <- f_n_new / f_excite
 
-cat(sprintf("Stiffened beam stiffness: %.0f N/m (vs. %.0f N/m baseline)\n", k_new_Npm, 6806230))
-cat(sprintf("Natural frequency: %.2f Hz (vs. %.2f Hz baseline)\n", f_n_new, 47.29))
-cat(sprintf("Separation ratio: %.2fx (vs. %.2fx baseline)\n", sep_ratio_new, 3.94))
-cat(sprintf("-> %s\n", ifelse(sep_ratio_new >= 5,
-            "Comfortably clears even the stricter 5x precision-axis guideline",
-            "Still tight -- consider further stiffening or added damping")))
+cat(sprintf("Separation ratio: %.2fx - %s\n", sep_ratio_new,
+            ifelse(sep_ratio_new >= 5, "comfortably clears even the stricter 5x precision-axis guideline",
+                   ifelse(sep_ratio_new >= 3, "still tight, consider further stiffening or added damping",
+                          "!!FAILS the 3x minimum!!"))))
+cat(sprintf("  Baseline separation ratio      %.2fx\n", 3.94))
+cat(sprintf("  Natural frequency              %.2f Hz (vs. %.2f Hz baseline)\n", f_n_new, 47.29))
+cat(sprintf("  Stiffened beam stiffness       %.0f N/m (vs. %.0f N/m baseline)\n", k_new_Npm, 6805556))
 ```
+
+</details>
 
 **Sanity check:** the same stiffness increase that fixed Design Task 2's static deflection problem (roughly 4.8x more $I$) pushes the natural frequency from 47.3 Hz to about 104 Hz — clearing the strict 5x separation guideline (8.7x) with real margin. This is the throughline of the whole chapter: **stiffness is the single structural lever that fixes both problems at once.** A stiffer frame deflects less under load *and* resists resonance better, because both the static deflection check and the natural frequency check are driven by the same underlying quantity, $EI/L^3$. That's also why this chapter keeps circling back to stiffness rather than strength — on a well-designed precision machine frame, it is almost always the one number that actually matters.
 

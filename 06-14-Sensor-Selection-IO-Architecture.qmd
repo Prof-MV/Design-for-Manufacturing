@@ -228,7 +228,26 @@ $$S_{usable} = 0.8 \times S_{r,eff}$$
 | $S_{r,eff}$ | Fully-derated effective sensing distance | mm |
 | $S_{usable}$ | Usable, reliable sensing distance after the 80% margin | mm |
 
-Live cell — try a different material, target size, or mounting gap and see whether the sensor still passes.
+Live cell — drag the mounting gap, or change the material correction factor or target size, and see whether the sensor still passes.
+
+```{r calc-sensing-derate-06-14, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "sensing-derate-06-14",
+  title = "Inductive Sensor Derating Calculator",
+  icon = "ruler",
+  inputs = list(
+    qwebr_calc_input("Sn", "Rated sensing distance S<sub>n</sub>", value = 4, min = 1, max = 40, step = 0.5, suffix = "mm"),
+    qwebr_calc_input("d_reference", "Reference target side length", value = 12, min = 4, max = 60, step = 1, suffix = "mm"),
+    qwebr_calc_input("Cf_material", "Material correction factor", value = 0.7, min = 0.2, max = 1, step = 0.05),
+    qwebr_calc_input("d_target", "Actual target side length", value = 8, min = 2, max = 60, step = 1, suffix = "mm"),
+    qwebr_calc_input("mounting_gap", "Mounting gap (mm)", value = 3.5, min = 0.2, max = 10, step = 0.1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: sensing-derate-06-14
@@ -236,9 +255,8 @@ Live cell — try a different material, target size, or mounting gap and see whe
 Sn <- 4              # mm, rated sensing distance for mild steel reference target (M12 shielded)
 d_reference <- 12    # mm, reference target side length for this sensor (its nominal diameter)
 
-## Actual application
-target_material <- "Stainless steel 304"
-Cf_material <- 0.7   # from the correction factor chart above
+## Actual application: a stainless steel 304 target
+Cf_material <- 0.7   # from the correction factor chart above (stainless steel 304)
 d_target <- 8        # mm, actual target side length (smaller than the reference target)
 mounting_gap <- 3.5  # mm, actual operating gap in the fixture
 
@@ -246,21 +264,20 @@ Cf_size <- min(1, d_target / d_reference)
 Sr_eff <- Sn * Cf_material * Cf_size
 Sr_usable <- 0.8 * Sr_eff
 
-cat("Rated sensing distance, Sn (mild steel reference):", Sn, "mm\n")
-cat("Target material:", target_material, " (Cf_material =", Cf_material, ")\n")
-cat("Target size:", d_target, "x", d_target, "mm vs. reference", d_reference, "x", d_reference, "mm",
-    " (Cf_size =", round(Cf_size, 3), ")\n")
-cat("Fully-derated effective sensing distance =", round(Sr_eff, 3), "mm\n")
-cat("Usable sensing distance (80% margin) =", round(Sr_usable, 3), "mm\n\n")
-
-cat("Planned mounting gap:", mounting_gap, "mm\n")
 if (mounting_gap <= Sr_usable) {
-  cat("Mounting gap <= usable sensing distance: PASS\n")
+  cat(sprintf("Usable sensing distance (80%% margin): %.3f mm - PASS\n", Sr_usable))
 } else {
-  cat("Mounting gap > usable sensing distance: FAILS\n\n")
-  cat("Corrective options:\n")
-  max_gap_this_sensor <- Sr_usable
-  cat(" 1. Reduce the mounting gap to no more than", round(max_gap_this_sensor, 2), "mm\n")
+  cat(sprintf("Usable sensing distance (80%% margin): %.3f mm - !!FAILS!!\n", Sr_usable))
+}
+cat(sprintf("  Planned mounting gap                   %g mm\n", mounting_gap))
+cat(sprintf("  Rated sensing distance Sn              %g mm (mild steel reference)\n", Sn))
+cat(sprintf("  Material correction factor             %.2f\n", Cf_material))
+cat(sprintf("  Target size correction factor          %.3f (%g mm vs. %g mm reference)\n", Cf_size, d_target, d_reference))
+cat(sprintf("  Fully-derated effective distance       %.3f mm\n", Sr_eff))
+
+if (mounting_gap > Sr_usable) {
+  ## Corrective options
+  cat(sprintf("  Option 1 - reduce the mounting gap     to no more than %.2f mm\n", Sr_usable))
 
   ## Option: a larger sensor (bigger reference target, bigger Sn)
   Sn_larger <- 8       # mm, M18 shielded sensor
@@ -268,11 +285,12 @@ if (mounting_gap <= Sr_usable) {
   Cf_size_larger <- min(1, d_target / d_reference_larger)
   Sr_eff_larger <- Sn_larger * Cf_material * Cf_size_larger
   Sr_usable_larger <- 0.8 * Sr_eff_larger
-  cat(" 2. Step up to an M18 sensor (Sn = 8 mm): usable distance becomes",
-      round(Sr_usable_larger, 2), "mm --",
-      ifelse(mounting_gap <= Sr_usable_larger, "PASSES at the current gap", "still fails at the current gap"), "\n")
+  cat(sprintf("  Option 2 - M18 sensor (Sn = %g mm)     usable distance %.2f mm - %s\n", Sn_larger, Sr_usable_larger,
+              ifelse(mounting_gap <= Sr_usable_larger, "PASSES at the current gap", "!!still fails at the current gap!!")))
 }
 ```
+
+</details>
 
 **Sanity check:** the naive comparison an engineer might make at a glance — "4 mm rated, 3.5 mm gap, that's fine" — is wrong by a wide margin. Once the stainless steel correction (0.7) and the undersized-target correction (0.67) are both applied, the usable range collapses to under 1.5 mm, less than half the planned gap. This is a common and genuinely dangerous mistake precisely because it's invisible on the datasheet: the 4 mm number is real, it's just not the number that applies here.
 
@@ -475,14 +493,39 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Architecture)) +
 
 ### Worked Example
 
-Live cell — try changing the `weights` to reflect a smaller, standalone cell's priorities (lower diagnostics weight, higher cost weight) and see whether the recommendation changes.
+Live cell — try changing the weights to reflect a smaller, standalone cell's priorities (lower diagnostics weight, higher cost weight) and see whether the recommendation changes. The weights are rescaled to total 100%; the scores can be edited in the code underneath.
+
+```{r calc-io-architecture-decision-06-14, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "io-architecture-decision-06-14",
+  title = "I/O Architecture Decision Matrix",
+  icon = "scale-balanced",
+  inputs = list(
+    qwebr_calc_input("w_diagnostics", "Weight: diagnostics", value = 0.4, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_wiring_cost", "Weight: wiring cost", value = 0.15, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_commissioning_speed", "Weight: commissioning speed", value = 0.2, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_scalability", "Weight: scalability", value = 0.25, min = 0, max = 1, step = 0.05)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: io-architecture-decision-06-14
 ## Weighted decision matrix, weights reflecting THIS cell's priority: uptime
 ## (diagnostics) matters most, given the downstream paint-line dependency
-weights <- c(diagnostics = 0.40, wiring_cost = 0.15, commissioning_speed = 0.20, scalability = 0.25)
+w_diagnostics         <- 0.40
+w_wiring_cost         <- 0.15
+w_commissioning_speed <- 0.20
+w_scalability         <- 0.25
+weights <- c(diagnostics = w_diagnostics, wiring_cost = w_wiring_cost,
+             commissioning_speed = w_commissioning_speed, scalability = w_scalability)
+weights <- weights / sum(weights)   # rescale so the weights always total 100%
 
+## Scores: 1 = poor fit, 5 = excellent fit
 hardwired_scores <- c(diagnostics = 1, wiring_cost = 2, commissioning_speed = 3, scalability = 2)
 iolink_scores <- c(diagnostics = 4, wiring_cost = 4, commissioning_speed = 4, scalability = 3)
 fieldbus_scores <- c(diagnostics = 5, wiring_cost = 3, commissioning_speed = 3, scalability = 5)
@@ -491,16 +534,16 @@ hardwired_total <- sum(weights * hardwired_scores)
 iolink_total <- sum(weights * iolink_scores)
 fieldbus_total <- sum(weights * fieldbus_scores)
 
-cat("Weighted decision matrix (1 = poor fit, 5 = excellent fit):\n\n")
-for (nm in names(weights)) cat(sprintf("  %-20s weight = %.0f%%\n", nm, weights[nm] * 100))
-
-cat(sprintf("\nHardwired weighted score:        %.2f\n", hardwired_total))
-cat(sprintf("IO-Link weighted score:          %.2f\n", iolink_total))
-cat(sprintf("Fieldbus/Ethernet weighted score: %.2f\n", fieldbus_total))
-
 scores <- c(Hardwired = hardwired_total, `IO-Link` = iolink_total, `Fieldbus/Ethernet` = fieldbus_total)
-cat(sprintf("\n-> Recommendation: %s\n", names(scores)[which.max(scores)]))
+
+cat(sprintf("Recommendation: %s\n", names(scores)[which.max(scores)]))
+cat(sprintf("  Hardwired weighted score           %.2f\n", hardwired_total))
+cat(sprintf("  IO-Link weighted score             %.2f\n", iolink_total))
+cat(sprintf("  Fieldbus/Ethernet weighted score   %.2f\n", fieldbus_total))
+for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm] * 100))
 ```
+
+</details>
 
 **Sanity check:** with diagnostics and scalability weighted most heavily — the right call for a high-uptime, multi-station automotive cell feeding a downstream process — fieldbus/industrial Ethernet wins, matching the design guidance above. Try dropping the diagnostics weight and raising wiring cost instead (closer to a small standalone machine's priorities): the recommendation shifts, which is exactly the point of a weighted framework — it should be traceable to the specific installation's priorities, not a single "always correct" answer.
 
@@ -573,7 +616,24 @@ For the current loop, the current delivered to the receiver's burden resistor is
 
 ### Worked Example
 
-Live cell — try a different cable length or receiver input impedance and see how the voltage-signal error changes.
+Live cell — drag the cable length, or change the receiver input impedance, and see how the voltage-signal error changes.
+
+```{r calc-signal-error-06-14, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "signal-error-06-14",
+  title = "0-10 V Signal Error Calculator",
+  icon = "wave-square",
+  inputs = list(
+    qwebr_calc_input("R_in", "Effective receiver input impedance", value = 500, min = 100, max = 1000000, step = 100, suffix = "Ω"),
+    qwebr_calc_input("accuracy_spec_pct", "Required accuracy", value = 1, min = 0.05, max = 5, step = 0.05, suffix = "%"),
+    qwebr_calc_input("L", "One-way cable length (m)", value = 180, min = 5, max = 1000, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: signal-error-06-14
@@ -589,22 +649,24 @@ R_in <- 500   # ohm, effective parallel-loaded input impedance
 
 V_error_pct <- R_wire / (R_wire + R_in) * 100
 
-cat("Cable length:", L, "m (one-way), 18 AWG copper\n")
-cat("Round-trip wire resistance:", round(R_wire, 2), "ohm\n")
-cat("Effective receiver input impedance (parallel-loaded):", R_in, "ohm\n")
-cat("0-10V signal error:", round(V_error_pct, 2), "%\n\n")
-
 accuracy_spec_pct <- 1.0   # required measurement accuracy for this process
-if (V_error_pct <= accuracy_spec_pct) {
-  cat("0-10V error <=", accuracy_spec_pct, "% accuracy spec: PASS\n")
-} else {
-  cat("0-10V error exceeds the", accuracy_spec_pct, "% accuracy spec: FAILS\n\n")
-}
 
-cat("\n4-20 mA current loop over the same 180 m run:\n")
-cat("Loop current at the receiver's burden resistor = loop current, unaffected by R_wire\n")
-cat("4-20 mA signal error: 0.0 % (independent of cable length, given adequate compliance voltage)\n")
+if (V_error_pct <= accuracy_spec_pct) {
+  cat(sprintf("0-10V signal error: %.2f%% - PASS\n", V_error_pct))
+} else {
+  cat(sprintf("0-10V signal error: %.2f%% - !!FAILS!!\n", V_error_pct))
+}
+cat(sprintf("  Accuracy spec                          %g%%\n", accuracy_spec_pct))
+cat(sprintf("  Cable length (one-way, 18 AWG copper)  %g m\n", L))
+cat(sprintf("  Round-trip wire resistance             %.2f ohm\n", R_wire))
+cat(sprintf("  Effective receiver input impedance     %g ohm\n", R_in))
+
+## A 4-20 mA current loop over the same run: the loop current at the
+## receiver's burden resistor is the loop current, unaffected by R_wire
+cat("  4-20 mA loop error over the same run   0.0% (independent of cable length, given adequate compliance voltage)\n")
 ```
+
+</details>
 
 **Sanity check:** at 180 m with a de-rated (parallel-loaded) input impedance of 500 Ω, the 0-10V signal loses nearly 1.5% of its span in the wire alone — enough to fail a ±1% process accuracy requirement outright, and that's before accounting for the ground-reference offset that a shared voltage signal picks up over that same distance. The 4-20 mA loop is unaffected by any of it, which is exactly why it's the default choice for this run — and exactly the kind of error that's invisible on a bench test (a short cable in the shop) and only shows up once the real 180 m of plant floor is between the transmitter and the PLC.
 
@@ -748,7 +810,26 @@ $$N_{installed} = N_{modules} \times N_{points\ per\ module}$$
 
 ### Worked Example
 
-Live cell — try different station counts, spare margins, or module sizes and see how the required hardware changes.
+Live cell — try a different spare margin or different cell-level and analog counts and see how the required hardware changes (the per-station counts and module sizes can be edited in the code underneath).
+
+```{r calc-io-count-spare-06-14, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "io-count-spare-06-14",
+  title = "I/O Count and Spare Capacity Calculator",
+  icon = "microchip",
+  inputs = list(
+    qwebr_calc_input("cell_level_DI", "Cell-level discrete inputs", value = 5, min = 0, max = 64, step = 1),
+    qwebr_calc_input("cell_level_DO", "Cell-level discrete outputs", value = 4, min = 0, max = 64, step = 1),
+    qwebr_calc_input("AI_total", "Analog inputs", value = 14, min = 0, max = 64, step = 1),
+    qwebr_calc_input("AO_total", "Analog outputs", value = 4, min = 0, max = 64, step = 1),
+    qwebr_calc_input("spare_margin", "Spare margin (fraction)", value = 0.15, min = 0, max = 0.5, step = 0.01, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: io-count-spare-06-14
@@ -764,33 +845,30 @@ DO_total <- sum(station_DO) + cell_level_DO
 AI_total <- 14   # weld current monitors, temperature probes
 AO_total <- 4    # VFD speed references
 
-cat("Tallied I/O counts:\n")
-cat("  DI:", DI_total, "\n")
-cat("  DO:", DO_total, "\n")
-cat("  AI:", AI_total, "\n")
-cat("  AO:", AO_total, "\n\n")
-
 spare_margin <- 0.15   # 15%, within the 10-20% rule-of-thumb range
 
 size_io <- function(tallied, margin, points_per_module, label) {
   with_spare <- tallied * (1 + margin)
   modules <- ceiling(with_spare / points_per_module)
   installed <- modules * points_per_module
-  actual_spare_pct <- (installed - tallied) / tallied * 100
-  cat(sprintf("%s: tallied = %d, +%.0f%% spare = %.1f, module size = %d pts\n",
-              label, tallied, margin * 100, with_spare, points_per_module))
-  cat(sprintf("   -> %d module(s), %d points installed (actual spare = %.1f%%)\n\n",
-              modules, installed, actual_spare_pct))
-  installed
+  actual_spare_pct <- if (tallied > 0) (installed - tallied) / tallied * 100 else 0
+  list(installed = installed,
+       row = sprintf("  %s: %g tallied, %.1f with spare  %g x %g-pt module(s) = %g points (%.1f%% actual spare)\n",
+                     label, tallied, with_spare, modules, points_per_module, installed, actual_spare_pct))
 }
 
-DI_installed <- size_io(DI_total, spare_margin, 32, "DI  (32-point cards)")
-DO_installed <- size_io(DO_total, spare_margin, 16, "DO  (16-point cards)")
-AI_installed <- size_io(AI_total, spare_margin, 4, "AI  (4-channel cards)")
-AO_installed <- size_io(AO_total, spare_margin, 4, "AO  (4-channel cards)")
+DI <- size_io(DI_total, spare_margin, 32, "DI")
+DO <- size_io(DO_total, spare_margin, 16, "DO")
+AI <- size_io(AI_total, spare_margin, 4, "AI")
+AO <- size_io(AO_total, spare_margin, 4, "AO")
 
-cat("Total installed I/O capacity:", DI_installed + DO_installed + AI_installed + AO_installed, "points\n")
+cat(sprintf("Total installed I/O capacity: %g points\n", DI$installed + DO$installed + AI$installed + AO$installed))
+cat(sprintf("  Tallied I/O points (DI + DO + AI + AO)  %g\n", DI_total + DO_total + AI_total + AO_total))
+cat(sprintf("  Spare margin                            %.0f%%\n", spare_margin * 100))
+cat(DI$row); cat(DO$row); cat(AI$row); cat(AO$row)
 ```
+
+</details>
 
 ```{r fig-06-14-io-count-spare, echo=FALSE, fig.cap="Tallied I/O count vs. installed capacity after applying the spare-capacity margin and rounding to standard module sizes. Note how the small analog counts land on a much larger actual spare percentage -- module granularity, not the percentage target, dominates at low point counts.", fig.align='center', fig.width=10, fig.height=6}
 io_summary_df <- data.frame(
@@ -852,7 +930,25 @@ Loop passes if $V_{supply,worst\ case} \geq V_{required}$ at $I = 20$ mA (the ma
 
 ### Worked Example
 
-Live cell — try a different cable length, wire gauge, or burden resistor value and see whether the loop still passes.
+Live cell — drag the cable length, or change the burden resistor, transmitter compliance voltage, or supply voltage, and see whether the loop still passes.
+
+```{r calc-loop-budget-06-14, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "loop-budget-06-14",
+  title = "4-20 mA Loop Voltage Budget Calculator",
+  icon = "wave-square",
+  inputs = list(
+    qwebr_calc_input("R_burden", "Burden resistor", value = 250, min = 50, max = 1000, step = 10, suffix = "Ω"),
+    qwebr_calc_input("V_transmitter_min", "Transmitter minimum voltage", value = 12, min = 5, max = 30, step = 0.5, suffix = "V"),
+    qwebr_calc_input("V_supply_nominal", "Loop supply (nominal)", value = 24, min = 12, max = 48, step = 1, suffix = "V"),
+    qwebr_calc_input("L", "One-way cable length (m)", value = 950, min = 10, max = 3000, step = 10, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: loop-budget-06-14
@@ -873,25 +969,22 @@ V_wire_drop <- I_max * R_wire
 V_burden_drop <- I_max * R_burden
 V_required <- V_transmitter_min + V_wire_drop + V_burden_drop
 
-cat("Cable length:", L, "m (one-way), 20 AWG twisted shielded pair\n")
-cat("Round-trip wire resistance:", round(R_wire, 2), "ohm\n\n")
-
-cat("Voltage budget at I_max =", I_max * 1000, "mA:\n")
-cat("  Transmitter minimum compliance voltage:", V_transmitter_min, "V\n")
-cat("  Wire drop (I x R_wire):                ", round(V_wire_drop, 2), "V\n")
-cat("  Burden resistor drop (I x R_burden):   ", round(V_burden_drop, 2), "V\n")
-cat("  Total required voltage:                ", round(V_required, 2), "V\n\n")
-
-cat("Loop supply, nominal:                    ", V_supply_nominal, "V\n")
-cat("Loop supply, worst-case (-10%):          ", round(V_supply_worst, 2), "V\n\n")
-
 margin_V <- V_supply_worst - V_required
 if (margin_V >= 0) {
-  cat("Worst-case supply >= required voltage: PASS, margin =", round(margin_V, 2), "V\n")
+  cat(sprintf("Loop voltage margin: %.2f V - PASS\n", margin_V))
 } else {
-  cat("Worst-case supply < required voltage: FAILS by", round(-margin_V, 2), "V\n")
+  cat(sprintf("Loop voltage margin: %.2f V - !!FAILS!!\n", margin_V))
 }
+cat(sprintf("  Cable length (one-way, 20 AWG pair)       %g m\n", L))
+cat(sprintf("  Round-trip wire resistance                %.2f ohm\n", R_wire))
+cat(sprintf("  Transmitter minimum compliance voltage    %g V\n", V_transmitter_min))
+cat(sprintf("  Wire drop (I x R_wire) at %g mA           %.2f V\n", I_max * 1000, V_wire_drop))
+cat(sprintf("  Burden resistor drop (I x R_burden)       %.2f V\n", V_burden_drop))
+cat(sprintf("  Total required voltage                    %.2f V\n", V_required))
+cat(sprintf("  Loop supply, worst-case (-10%%)            %.2f V (nominal %g V)\n", V_supply_worst, V_supply_nominal))
 ```
+
+</details>
 
 **Sanity check:** the wire drop itself is small (about 1.3V over nearly a kilometer, at 20 mA) — current loops really are close to immune to run length in this sense — but the burden resistor's 5V drop and the transmitter's own 12V requirement add up to a real number, and the worst-case (derated) supply voltage clears it with only about 3.3V of margin. That margin is thin enough to be worth checking explicitly rather than assuming; a plant standard that swaps in a 500 Ω burden resistor (common where a card is configured for a wider internal voltage span) pushes the total required voltage past the worst-case supply and fails the check by about 1.7V — the corrective options at that point are the same categories used throughout this part: reduce the resistance (heavier wire gauge, per the [Wire, Cable, and Circuit Protection](06-04-Wire-Cable-Circuit-Protection.qmd) chapter), reduce the burden resistor value if the card allows it, or specify a higher-voltage loop power supply (28V loop supplies exist specifically for this reason).
 

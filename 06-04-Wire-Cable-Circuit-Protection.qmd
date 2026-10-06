@@ -185,7 +185,24 @@ ggplot(derate_df, aes(x = awg, y = derated)) +
 
 ### Worked Example
 
-Live cell — try a different ambient temperature correction factor, bundling adjustment factor, or number of conductors and see which AWG size passes.
+Live cell — try a different ambient temperature correction factor, bundling adjustment factor, or required ampacity and see which AWG size passes.
+
+```{r calc-derating-06-04, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "derating-06-04",
+  title = "Conductor Ampacity Derating Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("temp_corr", "Ambient temperature correction factor", value = 0.88, min = 0.4, max = 1.05, step = 0.01),
+    qwebr_calc_input("bundle_adj", "Bundling adjustment factor", value = 0.7, min = 0.35, max = 1, step = 0.05),
+    qwebr_calc_input("I_required", "Required ampacity", value = 72.5, min = 10, max = 150, step = 0.5, suffix = "A")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: derating-06-04
@@ -197,30 +214,38 @@ awg_candidates <- data.frame(
 )
 
 ## Ambient temperature correction factor (illustrative, 75C column) --
-## representative of the shape of CEC Table 5A / NEC Table 310.15(B)(1)
-ambient_C <- 40
-temp_corr <- 0.88   # representative factor at ~40C for 75C insulation
+## representative of the shape of CEC Table 5A / NEC Table 310.15(B)(1).
+## 0.88 is a representative factor at ~40C ambient for 75C insulation.
+temp_corr <- 0.88
 
 ## Bundling/grouping adjustment factor (illustrative) -- representative of
-## the shape of CEC Table 5C / NEC Table 310.15(C)(1)
-n_conductors <- 9
-bundle_adj <- 0.70  # representative factor for 7-9 current-carrying conductors
+## the shape of CEC Table 5C / NEC Table 310.15(C)(1).
+## 0.70 is a representative factor for 7-9 current-carrying conductors.
+bundle_adj <- 0.70
 
 I_required <- 72.5  # A, from Task 1 (58 A x 1.25 continuous load factor)
 
 awg_candidates$derated_ampacity <- awg_candidates$base_ampacity_75C * temp_corr * bundle_adj
 awg_candidates$passes <- awg_candidates$derated_ampacity >= I_required
 
-cat("Ambient:", ambient_C, "C -> correction factor =", temp_corr, "\n")
-cat("Bundled current-carrying conductors:", n_conductors, "-> adjustment factor =", bundle_adj, "\n")
-cat("Combined derating factor:", round(temp_corr * bundle_adj, 3), "\n")
-cat("Required ampacity:", I_required, "A\n\n")
-print(awg_candidates)
-
-selected <- awg_candidates[awg_candidates$passes, ][1, ]
-cat("\nSmallest conductor that still clears the requirement after derating: AWG", selected$awg,
-    "( derated ampacity =", round(selected$derated_ampacity, 1), "A )\n")
+if (any(awg_candidates$passes)) {
+  selected <- awg_candidates[awg_candidates$passes, ][1, ]
+  cat(sprintf("Smallest conductor that clears the requirement: AWG %s (%.1f A derated)\n",
+              selected$awg, selected$derated_ampacity))
+} else {
+  cat("!!None of the listed conductors clears the requirement after derating!!\n")
+}
+cat(sprintf("  Combined derating factor        %.3f\n", temp_corr * bundle_adj))
+cat(sprintf("  Required ampacity               %.1f A\n", I_required))
+for (i in seq_len(nrow(awg_candidates))) {
+  cat(sprintf("  AWG %s (base %g A)  %.1f A derated - %s\n",
+              awg_candidates$awg[i], awg_candidates$base_ampacity_75C[i],
+              awg_candidates$derated_ampacity[i],
+              ifelse(awg_candidates$passes[i], "passes", "too small")))
+}
 ```
+
+</details>
 
 **Sanity check:** the combined derating factor here is 0.88 × 0.70 ≈ 0.62 — squarely inside the 0.55-0.75 rule-of-thumb band for a busy industrial tray, a useful confirmation that nothing was mistyped. AWG 4, which comfortably passed Task 1's base-condition check with 17% margin, now derates to just 52.4 A — barely 72% of the 72.5 A requirement — and the circuit has to jump all the way to AWG 1 to pass. This is precisely the trap the rule of thumb above warns against: checking only ambient (AWG 4 at 0.88 alone gives 74.8 A, which still *looks* like a pass) or only bundling (AWG 4 at 0.70 alone gives 59.5 A, an obvious fail) each tells an incomplete story; only the combined check catches the real answer.
 
@@ -303,6 +328,24 @@ ggplot(vdrop_df, aes(x = L, y = pct, color = gauge)) +
 
 Live cell — try a different cable length, gauge, or current draw and see how the delivered voltage and percent drop respond.
 
+```{r calc-dc-voltage-drop-06-04, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "dc-voltage-drop-06-04",
+  title = "24 VDC Voltage Drop Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("V_supply", "Supply voltage", value = 24, min = 5, max = 48, step = 1, suffix = "VDC"),
+    qwebr_calc_input("I_load", "Load current", value = 0.35, min = 0.05, max = 10, step = 0.05, suffix = "A"),
+    qwebr_calc_input("min_operating_V", "Minimum operating voltage", value = 20.4, min = 4, max = 48, step = 0.1, suffix = "V"),
+    qwebr_calc_input("L_one_way_m", "One-way cable run (m)", value = 120, min = 5, max = 500, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
+
 ```{webr-r}
 #| label: dc-voltage-drop-06-04
 ## 24 VDC solenoid valve at the far end of the new conveyor system
@@ -322,24 +365,29 @@ calc_drop <- function(R_ohm_km, L_m, I) {
   2 * I * L_km * R_ohm_km   # round-trip resistive drop
 }
 
-Vd_18 <- calc_drop(R_18awg, L_one_way_m, I_load)
-Vd_14 <- calc_drop(R_14awg, L_one_way_m, I_load)
-Vd_12 <- calc_drop(R_12awg, L_one_way_m, I_load)
-
 min_operating_V <- 20.4  # V, representative -15% IEC 61131-2 tolerance floor
                           # for a nominal 24 VDC industrial I/O device
 
-for (nm in c("R_18awg", "R_14awg", "R_12awg")) {
-  R <- get(nm)
-  Vd <- calc_drop(R, L_one_way_m, I_load)
-  pct <- Vd / V_supply * 100
-  delivered <- V_supply - Vd
-  cat(sprintf("%s (%.2f ohm/km): drop = %.3f V (%.2f%%), delivered = %.2f V -> %s (3%% rule), %s (functional floor)\n",
-              nm, R, Vd, pct, delivered,
-              ifelse(pct <= 3, "PASS", "FAIL"),
-              ifelse(delivered >= min_operating_V, "PASS", "FAIL")))
+gauges <- c("18 AWG" = R_18awg, "14 AWG" = R_14awg, "12 AWG" = R_12awg)
+Vd <- calc_drop(gauges, L_one_way_m, I_load)
+pct <- Vd / V_supply * 100
+delivered <- V_supply - Vd
+passes_both <- pct <= 3 & delivered >= min_operating_V
+
+if (any(passes_both)) {
+  cat("Smallest listed gauge passing both checks:", names(gauges)[which(passes_both)[1]], "\n")
+} else {
+  cat("!!None of the listed gauges passes both checks!!\n")
+}
+for (i in seq_along(gauges)) {
+  cat(sprintf("  %s (%.2f ohm/km)  %.3f V drop (%.2f%%), %.2f V delivered - %s (3%% rule), %s (functional floor)\n",
+              names(gauges)[i], gauges[i], Vd[i], pct[i], delivered[i],
+              ifelse(pct[i] <= 3, "PASS", "!!FAIL!!"),
+              ifelse(delivered[i] >= min_operating_V, "PASS", "!!FAIL!!")))
 }
 ```
+
+</details>
 
 **Sanity check:** 18 AWG, a common default for sensor/actuator wiring, fails the 3% rule of thumb badly here (about 9%) — yet the delivered voltage (21.8 V) still clears the solenoid's functional floor (20.4 V) with room to spare, which is exactly the "too loose vs. too tight" tension the guidance above describes: a simple on/off solenoid tolerates this drop just fine, but the same 18 AWG run feeding a 0-10 V analog level sensor at the same distance would corrupt that sensor's reading well before the voltage itself became a problem. Stepping up to 14 AWG brings the drop to about 3.6% — still marginal — and 12 AWG clears the 3% line comfortably at 2.25%. For this specific solenoid, 18 AWG is functionally acceptable; for an analog instrument on the same run, 12 AWG is the safer specification.
 
@@ -371,6 +419,26 @@ ggplot(compare_df, aes(x = system, y = pct, fill = system)) +
 
 Live cell — try a different feeder length, motor FLA, power factor, or system voltage and see how the drop responds.
 
+```{r calc-motor-feeder-vdrop-06-04, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "motor-feeder-vdrop-06-04",
+  title = "Three-Phase Motor Feeder Voltage Drop Calculator",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("V_system", "System voltage", value = 600, min = 208, max = 600, step = 1, suffix = "V"),
+    qwebr_calc_input("I_FLA", "Motor full-load amps", value = 78, min = 5, max = 400, step = 1, suffix = "A"),
+    qwebr_calc_input("pf", "Power factor", value = 0.87, min = 0.5, max = 1, step = 0.01),
+    qwebr_calc_input("R_ohm_km", "Conductor resistance", value = 0.525, min = 0.05, max = 5, step = 0.005, suffix = "Ω/km"),
+    qwebr_calc_input("X_ohm_km", "Conductor reactance", value = 0.135, min = 0.05, max = 0.5, step = 0.005, suffix = "Ω/km"),
+    qwebr_calc_input("L_m", "One-way feeder length (m)", value = 70, min = 5, max = 500, step = 5, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
+
 ```{webr-r}
 #| label: motor-feeder-vdrop-06-04
 ## Pretreatment line agitator motor: 75 HP, 600 V, three-phase, fed from the
@@ -394,10 +462,6 @@ sintheta <- sqrt(1 - pf^2)
 Vdrop_3ph <- sqrt(3) * I_FLA * L_km * (R_ohm_km * costheta + X_ohm_km * sintheta)
 pct_drop <- Vdrop_3ph / V_system * 100
 
-cat(sprintf("Feeder: %.0f m, FLA = %.0f A, pf = %.2f\n", L_m, I_FLA, pf))
-cat(sprintf("Voltage drop: %.3f V (%.3f%% of %d V) -> %s (3%% rule)\n\n",
-            Vdrop_3ph, pct_drop, V_system, ifelse(pct_drop <= 3, "PASS", "FAIL")))
-
 ## Illustrative comparison: same motor power, same physical feeder, at the
 ## US 480V convention instead -- current scales up roughly in inverse
 ## proportion to voltage for the same delivered power
@@ -406,11 +470,15 @@ I_FLA_480 <- I_FLA * (V_system / V_us)
 Vdrop_480 <- sqrt(3) * I_FLA_480 * L_km * (R_ohm_km * costheta + X_ohm_km * sintheta)
 pct_drop_480 <- Vdrop_480 / V_us * 100
 
-cat(sprintf("Same motor at 480V convention: I_FLA ~= %.1f A, drop = %.3f V (%.3f%%)\n",
-            I_FLA_480, Vdrop_480, pct_drop_480))
-cat(sprintf("Drop is %.1fx larger (as a percentage) at 480V for the identical feeder run.\n",
-            pct_drop_480 / pct_drop))
+cat(sprintf("Voltage drop: %.2f V (%.2f%% of %g V) - %s (3%% rule)\n",
+            Vdrop_3ph, pct_drop, V_system, ifelse(pct_drop <= 3, "PASS", "!!FAIL!!")))
+cat(sprintf("  Feeder                         %g m, FLA = %g A, pf = %.2f\n", L_m, I_FLA, pf))
+cat(sprintf("  Same motor at 480 V: current   %.1f A\n", I_FLA_480))
+cat(sprintf("  Same motor at 480 V: drop      %.2f V (%.2f%%)\n", Vdrop_480, pct_drop_480))
+cat(sprintf("  Percentage drop at 480 V is    %.2fx the %g V figure\n", pct_drop_480 / pct_drop, V_system))
 ```
+
+</details>
 
 **Sanity check:** at well under 1% drop, the 600 V feeder passes the 3% rule of thumb with enormous margin — for a properly-derated feeder conductor at typical industrial run lengths, three-phase motor feeders rarely get anywhere near the 3% line unless the run is unusually long or the conductor unusually small, which is itself a useful sanity check on the result. The side-by-side comparison makes the voltage-class point concrete: the identical feeder, at the identical length, produces roughly 1.6 times the percent drop when the same motor is served at 480 V instead of 600 V — a real, quantifiable consequence of the Canadian convention, not just a difference in nameplate labeling.
 
@@ -650,6 +718,25 @@ $$\text{Fuse selectivity check (rule of thumb):} \quad \frac{I_{upstream}}{I_{do
 
 Live cell — try a different available fault current, or different tested SCCR values, and see which device(s) still pass.
 
+```{r calc-fuse-breaker-06-04, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "fuse-breaker-06-04",
+  title = "Fuse vs. Breaker SCCR Check",
+  icon = "shield-halved",
+  inputs = list(
+    qwebr_calc_input("fuse_tested_SCCR", "Fuse-protected tested SCCR", value = 100000, min = 5000, max = 200000, step = 1000, suffix = "A"),
+    qwebr_calc_input("breaker_tested_SCCR", "Breaker-protected tested SCCR", value = 25000, min = 5000, max = 200000, step = 1000, suffix = "A"),
+    qwebr_calc_input("I_upstream_fuse", "Upstream (main) fuse rating", value = 400, min = 15, max = 1200, step = 5, suffix = "A"),
+    qwebr_calc_input("I_downstream_fuse", "Downstream (branch) fuse rating", value = 60, min = 1, max = 600, step = 1, suffix = "A"),
+    qwebr_calc_input("I_fault_available", "Available fault current (A)", value = 42000, min = 5000, max = 120000, step = 1000, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
+
 ```{webr-r}
 #| label: fuse-breaker-06-04
 ## Available fault current at the branch panel bus, from a facility
@@ -666,28 +753,33 @@ breaker_tested_SCCR <- 25000   # A, VFD's listed SCCR with a standard
 fuse_passes <- fuse_tested_SCCR >= I_fault_available
 breaker_passes <- breaker_tested_SCCR >= I_fault_available
 
-cat(sprintf("Available fault current: %s A (%.0f kA)\n",
-            format(I_fault_available, big.mark = " ", scientific = FALSE), I_fault_available / 1000))
-cat(sprintf("Fuse-protected tested SCCR: %s A -> %s\n",
-            format(fuse_tested_SCCR, big.mark = " ", scientific = FALSE), ifelse(fuse_passes, "PASSES", "FAILS")))
-cat(sprintf("Breaker-protected tested SCCR: %s A -> %s\n\n",
-            format(breaker_tested_SCCR, big.mark = " ", scientific = FALSE), ifelse(breaker_passes, "PASSES", "FAILS")))
-
-if (fuse_passes && !breaker_passes) {
-  cat("Conclusion: only the current-limiting fuse option clears the actual\n")
-  cat("available fault current at this bus -- the standard breaker option is\n")
-  cat("not a valid choice here regardless of its lower unit cost or resettability.\n\n")
-}
-
 ## Fuse-to-fuse selectivity ratio check for the branch/main fuse pair
 I_upstream_fuse <- 400    # A, main/feeder fuse
 I_downstream_fuse <- 60   # A, VFD branch fuse
 ratio <- I_upstream_fuse / I_downstream_fuse
 selectivity_ok <- ratio >= 2
 
-cat(sprintf("Fuse ampere-rating ratio (upstream/downstream): %.2f:1 -> %s (2:1 rule of thumb)\n",
-            ratio, ifelse(selectivity_ok, "PASSES", "FAILS")))
+kA <- function(x) sprintf("%g kA", x / 1000)
+
+if (fuse_passes && breaker_passes) {
+  cat("Both protection options clear the available fault current\n")
+} else if (fuse_passes) {
+  ## The standard breaker option is not a valid choice here regardless of
+  ## its lower unit cost or resettability.
+  cat("Only the current-limiting fuse option clears the available fault current\n")
+} else if (breaker_passes) {
+  cat("Only the breaker option clears the available fault current\n")
+} else {
+  cat("!!Neither option clears the available fault current!!\n")
+}
+cat(sprintf("  Available fault current           %s\n", kA(I_fault_available)))
+cat(sprintf("  Fuse-protected tested SCCR        %s - %s\n", kA(fuse_tested_SCCR), ifelse(fuse_passes, "PASSES", "!!FAILS!!")))
+cat(sprintf("  Breaker-protected tested SCCR     %s - %s\n", kA(breaker_tested_SCCR), ifelse(breaker_passes, "PASSES", "!!FAILS!!")))
+cat(sprintf("  Fuse rating ratio (up/downstream)  %.2f:1 - %s (2:1 rule of thumb)\n",
+            ratio, ifelse(selectivity_ok, "PASSES", "!!FAILS!!")))
 ```
+
+</details>
 
 **Sanity check:** the standard breaker option fails outright here, not on a soft trade-off basis but on the hard SCCR gate — its tested rating (25 kA) is well below the panel's actual 42 kA available fault current, which makes it an unsafe choice regardless of how attractive its resettability or lower unit cost might otherwise be. This is the right order of operations for this decision: check the hard SCCR requirement first, and only weigh cost, resettability, and selectivity among the options that actually pass it.
 
@@ -765,7 +857,22 @@ $$\text{Coordinated at } I \iff t_{downstream}(I) < t_{upstream}(I), \quad \frac
 
 ### Worked Example
 
-Live cell — try a different fault current, or different curve points, and see whether each pair stays coordinated.
+Live cell — drag the fault current and see whether each pair stays coordinated (the curve points can be edited in the code underneath).
+
+```{r calc-selective-coordination-06-04, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "selective-coordination-06-04",
+  title = "Selective Coordination Check",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("I_fault", "Available fault current (A)", value = 3500, min = 500, max = 6000, step = 100, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: selective-coordination-06-04
@@ -793,21 +900,28 @@ t_brk_up    <- interp_t(brk_upstream, I_fault)
 margin_fuse <- t_fuse_up / t_fuse_down
 margin_brk  <- t_brk_up / t_brk_down
 
-cat(sprintf("At I = %s A:\n\n", format(I_fault, big.mark = " ", scientific = FALSE)))
-cat(sprintf("Fuse pair:    downstream = %.4f s, upstream = %.4f s, margin = %.1fx -> %s\n",
-            t_fuse_down, t_fuse_up, margin_fuse, ifelse(margin_fuse >= 2, "COORDINATED", "NOT COORDINATED")))
-cat(sprintf("Breaker pair: downstream = %.4f s, upstream = %.4f s, margin = %.2fx -> %s\n\n",
-            t_brk_down, t_brk_up, margin_brk, ifelse(margin_brk >= 2, "COORDINATED", "NOT COORDINATED")))
+## Once both breakers have entered their instantaneous trip region
+## (downstream pickup 800 A, upstream pickup 3200 A), their clearing times
+## converge and coordination cannot be relied upon -- a fault there could
+## trip the shared upstream breaker along with the intended downstream
+## device, blacking out every other cell fed from that main.
+not_coordinated <- c("fuse pair", "breaker pair")[c(margin_fuse, margin_brk) < 2]
+I_txt <- format(I_fault, big.mark = " ", scientific = FALSE)
 
-if (margin_brk < 2) {
-  cat("Both breakers have entered their instantaneous trip region at this fault\n")
-  cat("current (downstream pickup 800 A, upstream pickup 3200 A, both well below\n")
-  cat("3500 A), so their clearing times converge and coordination cannot be\n")
-  cat("relied upon -- a fault here could trip the shared upstream breaker along\n")
-  cat("with the intended downstream device, blacking out every other cell fed\n")
-  cat("from that main.\n")
+if (length(not_coordinated) == 0) {
+  cat(sprintf("Both device pairs stay coordinated at %s A\n", I_txt))
+} else {
+  cat(sprintf("!!Not coordinated!! at %s A: %s\n", I_txt, paste(not_coordinated, collapse = " and ")))
 }
+cat(sprintf("  Fuse pair: downstream / upstream     %.4f s / %.4f s\n", t_fuse_down, t_fuse_up))
+cat(sprintf("  Fuse pair: margin                    %.1fx - %s\n", margin_fuse,
+            ifelse(margin_fuse >= 2, "COORDINATED", "!!NOT COORDINATED!!")))
+cat(sprintf("  Breaker pair: downstream / upstream  %.4f s / %.4f s\n", t_brk_down, t_brk_up))
+cat(sprintf("  Breaker pair: margin                 %.2fx - %s\n", margin_brk,
+            ifelse(margin_brk >= 2, "COORDINATED", "!!NOT COORDINATED!!")))
 ```
+
+</details>
 
 **Sanity check:** the fuse pair's 70x margin at the fault current of interest isn't a close call in either direction — it stays coordinated with room to spare, consistent with the 2:1 selectivity ratio rule of thumb from Design Task 5 translating into an even larger margin once actual clearing times are compared. The breaker pair's 1.2x margin is the story this design task exists to teach: both devices are individually correctly rated and individually would clear this fault safely, but *together*, at this specific fault current, neither one is reliably faster than the other — exactly the failure mode a plant only discovers the hard way, during an actual fault, if it isn't checked at the design stage.
 

@@ -268,15 +268,38 @@ ggplot(force_df, aes(x = type, y = force, fill = type)) +
 
 ### Worked Example
 
-Live cell — try different friction/pressure-drop efficiency factors and see how much margin survives.
+Live cell — try different friction/pressure-drop efficiency factors, cylinder sizes, or supply pressure and see how much margin survives.
+
+```{r calc-theoretical-actual-force-06-07, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "theoretical-actual-force-06-07",
+  title = "Theoretical vs. Actual Cylinder Force",
+  icon = "wind",
+  inputs = list(
+    qwebr_calc_input("bore", "Bore diameter", value = 50, min = 8, max = 200, step = 1, suffix = "mm"),
+    qwebr_calc_input("rod", "Rod diameter", value = 20, min = 4, max = 60, step = 1, suffix = "mm"),
+    qwebr_calc_input("P_bar", "Supply pressure (gauge)", value = 6, min = 1, max = 10, step = 0.5, suffix = "bar"),
+    qwebr_calc_input("F_lower_required", "Required extend (lower) force", value = 180, min = 10, max = 5000, step = 10, suffix = "N"),
+    qwebr_calc_input("F_lift_required", "Required retract (lift) force", value = 550, min = 10, max = 5000, step = 10, suffix = "N"),
+    qwebr_calc_input("eta_friction", "Friction efficiency factor", value = 0.9, min = 0.5, max = 1, step = 0.01),
+    qwebr_calc_input("eta_pressure", "Pressure-drop efficiency factor", value = 0.9, min = 0.5, max = 1, step = 0.01)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: theoretical-actual-force-06-07
 ## Given: selected 50 mm bore / 20 mm rod cylinder (Design Task 1)
-bore <- 50; rod <- 20
+bore <- 50
+rod <- 20
 A_bore <- pi / 4 * bore^2
 A_annulus <- pi / 4 * (bore^2 - rod^2)
-P_pa <- 6e5   # 6 bar gauge
+P_bar <- 6             # bar gauge
+P_pa <- P_bar * 1e5
 
 F_lower_required <- 180
 F_lift_required <- 550
@@ -291,15 +314,20 @@ F_retract_theor <- P_pa * A_annulus * 1e-6
 F_extend_actual  <- F_extend_theor * eta_total
 F_retract_actual <- F_retract_theor * eta_total
 
-cat(sprintf("Combined efficiency factor: eta_total = %.2f x %.2f = %.3f\n\n", eta_friction, eta_pressure, eta_total))
+margin_extend  <- (F_extend_actual / F_lower_required - 1) * 100
+margin_retract <- (F_retract_actual / F_lift_required - 1) * 100
+enough <- function(margin) ifelse(margin >= 0, "OK", "!!INSUFFICIENT!!")
 
-cat(sprintf("Extend (lower): theoretical %.1f N -> actual %.1f N (required %.0f N, margin %.1f%%)\n",
-            F_extend_theor, F_extend_actual, F_lower_required,
-            (F_extend_actual / F_lower_required - 1) * 100))
-cat(sprintf("Retract (lift): theoretical %.1f N -> actual %.1f N (required %.0f N, margin %.1f%%)\n",
-            F_retract_theor, F_retract_actual, F_lift_required,
-            (F_retract_actual / F_lift_required - 1) * 100))
+cat(sprintf("Retract (lift): %.1f N actual, margin %.1f%% - %s\n",
+            F_retract_actual, margin_retract, enough(margin_retract)))
+cat(sprintf("  Combined efficiency factor    %.2f x %.2f = %.3f\n", eta_friction, eta_pressure, eta_total))
+cat(sprintf("  Retract (lift): theoretical   %.1f N (required %g N)\n", F_retract_theor, F_lift_required))
+cat(sprintf("  Extend (lower): theoretical   %.1f N (required %g N)\n", F_extend_theor, F_lower_required))
+cat(sprintf("  Extend (lower): actual        %.1f N, margin %.1f%% - %s\n",
+            F_extend_actual, margin_extend, enough(margin_extend)))
 ```
+
+</details>
 
 **Sanity check:** the extend stroke passes with enormous margin (over 400%) because its requirement was modest to begin with — no surprise there. The retract stroke is the one that actually tests the design: theoretical force (989.6 N) looked like a comfortable 79.9% oversize over the 550 N requirement, but once seal friction and dynamic pressure drop are applied, actual delivered force drops to about 801.6 N — still a passing 45.7% margin, but noticeably less than the paper number suggested. This is exactly why Design Task 1's rule of thumb exists: if the design had landed at the 40 mm/16 mm combination (only 15.2% theoretical margin), the same 0.81 efficiency factor would have pulled actual force *below* the 550 N requirement, and the cylinder would have failed in the field despite passing a naive P x A check.
 
@@ -364,12 +392,32 @@ ggplot(df_rate, aes(x = rate, y = Q_SCFM)) +
 
 ### Worked Example
 
-Live cell — try a different stroke length or cycle rate and see how consumption scales.
+Live cell — drag the cycle rate, or change the stroke length, cylinder size, or pressure, and see how consumption scales.
+
+```{r calc-air-consumption-06-07, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "air-consumption-06-07",
+  title = "Cylinder Air Consumption Calculator",
+  icon = "wind",
+  inputs = list(
+    qwebr_calc_input("bore", "Bore diameter", value = 50, min = 8, max = 200, step = 1, suffix = "mm"),
+    qwebr_calc_input("rod", "Rod diameter", value = 20, min = 4, max = 60, step = 1, suffix = "mm"),
+    qwebr_calc_input("stroke_mm", "Stroke length", value = 100, min = 10, max = 1000, step = 5, suffix = "mm"),
+    qwebr_calc_input("P_bar", "Supply pressure (gauge)", value = 6, min = 1, max = 10, step = 0.5, suffix = "bar"),
+    qwebr_calc_input("cycles_per_min", "Cycle rate (cycles/min)", value = 30, min = 1, max = 120, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: air-consumption-06-07
 ## Given
-bore <- 50; rod <- 20
+bore <- 50
+rod <- 20
 A_bore <- pi / 4 * bore^2
 A_annulus <- pi / 4 * (bore^2 - rod^2)
 stroke_mm <- 100
@@ -387,12 +435,15 @@ V_free_L <- V_compressed_L * ratio
 Q_NLmin <- V_free_L * cycles_per_min
 Q_SCFM  <- Q_NLmin / 28.317
 
-cat(sprintf("Compressed volume/cycle: extend %.4f L + retract %.4f L = %.4f L\n",
-            V_extend_L, V_retract_L, V_compressed_L))
-cat(sprintf("Compression ratio (Pabs/Patm): %.3f\n", ratio))
-cat(sprintf("Free-air volume per cycle: %.4f L\n\n", V_free_L))
-cat(sprintf("At %d cycles/min: %.2f NL/min = %.3f SCFM\n", cycles_per_min, Q_NLmin, Q_SCFM))
+cat(sprintf("Air consumption at %g cycles/min: %.2f NL/min = %.3f SCFM\n", cycles_per_min, Q_NLmin, Q_SCFM))
+cat(sprintf("  Compressed volume/cycle: extend    %.4f L\n", V_extend_L))
+cat(sprintf("  Compressed volume/cycle: retract   %.4f L\n", V_retract_L))
+cat(sprintf("  Compressed volume/cycle: total     %.4f L\n", V_compressed_L))
+cat(sprintf("  Compression ratio (Pabs/Patm)      %.3f\n", ratio))
+cat(sprintf("  Free-air volume per cycle          %.4f L\n", V_free_L))
 ```
+
+</details>
 
 **Sanity check:** roughly 1.7 SCFM per cylinder sounds small in isolation, and it is — a single small pick-and-place cylinder is not what strains a plant's compressor capacity. The reason this number matters is that it never appears alone: a plant this size might have dozens of similar stations running simultaneously, plus larger clamp cylinders, tooling cylinders, and blow-off nozzles, all drawing from the same header. Design Task 6 picks this exact number back up to show how a seemingly trivial per-cylinder inefficiency compounds into a real annual cost once it's multiplied across a plant-wide fleet.
 
@@ -468,7 +519,25 @@ ggplot(df_cv, aes(x = t_fill, y = Cv)) +
 
 ### Worked Example
 
-Live cell — try a different fill time or valve pressure drop and see how the required Cv responds.
+Live cell — drag the fill time, or change the valve pressure drop or cylinder size, and see how the required Cv responds.
+
+```{r calc-valve-cv-sizing-06-07, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "valve-cv-sizing-06-07",
+  title = "Valve Cv Sizing Calculator",
+  icon = "wind",
+  inputs = list(
+    qwebr_calc_input("bore", "Bore diameter", value = 50, min = 8, max = 200, step = 1, suffix = "mm"),
+    qwebr_calc_input("stroke_mm", "Stroke length", value = 100, min = 10, max = 1000, step = 5, suffix = "mm"),
+    qwebr_calc_input("dP_psi", "Valve pressure drop", value = 15, min = 2, max = 50, step = 1, suffix = "psi"),
+    qwebr_calc_input("t_fill_s", "Extend-stroke fill time (s)", value = 0.15, min = 0.03, max = 1, step = 0.01, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: valve-cv-sizing-06-07
@@ -495,12 +564,14 @@ SG <- 1.0                   # air
 
 Cv_required <- Q_burst_SCFM / 22.48 * sqrt(SG * T_R / (dP_psi * P2_psia))
 
-cat(sprintf("Free-air volume to fill (extend stroke): %.4f L = %.5f ft^3\n", V_free_extend_L, V_free_extend_ft3))
-cat(sprintf("Required burst flow for %.2f s fill: %.2f SCFM\n\n", t_fill_s, Q_burst_SCFM))
-cat(sprintf("P1 = %.1f psia, P2 = %.1f psia, dP = %.1f psi\n", P1_psia, P2_psia, dP_psi))
 cat(sprintf("Required Cv: %.3f\n", Cv_required))
-cat(sprintf("-> Select a catalog valve rated Cv >= %.2f (round up for margin)\n", ceiling(Cv_required*10)/10))
+cat(sprintf("  Free-air volume to fill (extend stroke)   %.4f L = %.5f ft^3\n", V_free_extend_L, V_free_extend_ft3))
+cat(sprintf("  Required burst flow for %.2f s fill        %.2f SCFM\n", t_fill_s, Q_burst_SCFM))
+cat(sprintf("  Valve pressures                           P1 = %.1f psia, P2 = %.1f psia\n", P1_psia, P2_psia))
+cat(sprintf("  Select a catalog valve rated              Cv >= %.2f (round up for margin)\n", ceiling(Cv_required*10)/10))
 ```
+
+</details>
 
 **Sanity check:** a required Cv of about 0.55 corresponds to a compact, standard 1/4" or 3/8" NPT solenoid directional valve in essentially every major manufacturer's catalog — physically consistent with a small pick-and-place cylinder, which is a useful order-of-magnitude cross-check. Note this burst-flow-derived Cv (0.55) is a very different number from what a naive average-consumption approach would suggest: the cycle-averaged flow from Design Task 3 (1.7 SCFM) is over an order of magnitude lower than the 19.2 SCFM burst flow this fill-time requirement actually demands. Sizing the valve off the average number would have produced a valve roughly a third the required capacity — a common and costly mistake.
 
@@ -565,6 +636,23 @@ $$Q_{FRL,rated} \geq \left(\sum_{i} Q_{i,average}\right) \times (1.25\ \text{to}
 
 Live cell — try a different number of cylinders on the branch, or a different oversize margin.
 
+```{r calc-frl-sizing-06-07, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "frl-sizing-06-07",
+  title = "FRL Sizing Calculator",
+  icon = "wind",
+  inputs = list(
+    qwebr_calc_input("Q_per_cylinder_SCFM", "Average demand per cylinder", value = 2.65, min = 0.1, max = 20, step = 0.05, suffix = "SCFM"),
+    qwebr_calc_input("oversize_factor", "Oversize factor", value = 1.3, min = 1, max = 2, step = 0.05),
+    qwebr_calc_input("n_cylinders", "Cylinders on the branch", value = 3, min = 1, max = 20, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
+
 ```{webr-r}
 #| label: frl-sizing-06-07
 ## Given: 3 identical portioning cylinders on one manifold branch
@@ -574,11 +662,6 @@ oversize_factor <- 1.30        # 30% margin, within the 25-50% guideline
 
 Q_branch_total <- Q_per_cylinder_SCFM * n_cylinders
 Q_FRL_required <- Q_branch_total * oversize_factor
-
-cat(sprintf("Per-cylinder average demand: %.2f SCFM\n", Q_per_cylinder_SCFM))
-cat(sprintf("Branch total (%d cylinders): %.2f SCFM\n", n_cylinders, Q_branch_total))
-cat(sprintf("Required FRL rated flow (with %.0f%% margin): %.2f SCFM\n\n",
-            (oversize_factor - 1) * 100, Q_FRL_required))
 
 ## Decision: lubrication?
 components_prelubricated <- TRUE
@@ -592,10 +675,16 @@ lube_decision <- if (environment_washdown) {
   "Lubricator needed on a dedicated isolated branch - check component datasheets"
 }
 
-cat(sprintf("Filter: 5 micron general-purpose, or coalescing filter given food-adjacent environment\n"))
-cat(sprintf("Regulator: select rated >= %.1f SCFM at <= 0.3 bar drop\n", Q_FRL_required))
-cat(sprintf("Lubrication decision: %s\n", lube_decision))
+cat(sprintf("Required FRL rated flow: %.2f SCFM (with %.0f%% margin)\n",
+            Q_FRL_required, (oversize_factor - 1) * 100))
+cat(sprintf("  Per-cylinder average demand     %.2f SCFM\n", Q_per_cylinder_SCFM))
+cat(sprintf("  Branch total (%g cylinders)      %.2f SCFM\n", n_cylinders, Q_branch_total))
+cat(sprintf("  Regulator                       rated >= %.1f SCFM at <= 0.3 bar drop\n", Q_FRL_required))
+cat("  Filter                          5 micron general-purpose, or coalescing given the food-adjacent environment\n")
+cat(sprintf("  Lubrication                     %s\n", lube_decision))
 ```
+
+</details>
 
 **Sanity check:** the required 10.3 SCFM rated flow corresponds to a common mid-size (3/8" NPT class) FRL unit in most manufacturers' catalogs — proportionate to three small cylinders on one branch, not an oversized industrial unit. The lubrication decision resolves cleanly here because both independent reasons point the same direction — pre-lubricated components *and* a washdown environment — but it's worth noting that either factor alone would already have been sufficient to rule out a lubricator; the environment alone is a hard override even for a hypothetical component that technically accepted lubricated air.
 
@@ -683,7 +772,26 @@ ggplot(cost_df, aes(x = scenario, y = cost, fill = scenario)) +
 
 ### Worked Example
 
-Live cell — try a different local electricity-driven $/1000 SCF rate, annual operating hours, or fleet size.
+Live cell — try a different $/1000 SCF rate, annual operating hours, duty, or fleet size.
+
+```{r calc-cylinder-oversize-cost-06-07, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "cylinder-oversize-cost-06-07",
+  title = "Cost of Oversizing a Cylinder",
+  icon = "dollar-sign",
+  inputs = list(
+    qwebr_calc_input("cost_per_1000scf", "Compressed air cost", value = 0.28, min = 0.1, max = 1, step = 0.01, prefix = "$", suffix = "/ 1000 SCF"),
+    qwebr_calc_input("hours_yr", "Operating hours per year", value = 4000, min = 500, max = 8760, step = 100, suffix = "h"),
+    qwebr_calc_input("stroke_mm", "Stroke length", value = 100, min = 10, max = 1000, step = 5, suffix = "mm"),
+    qwebr_calc_input("cycles_min", "Cycle rate", value = 30, min = 1, max = 120, step = 1, suffix = "/ min"),
+    qwebr_calc_input("n_units", "Fleet size (cylinders)", value = 25, min = 1, max = 200, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: cylinder-oversize-cost-06-07
@@ -692,7 +800,8 @@ cost_per_1000scf <- 0.28    # $/1000 SCF, industry rule-of-thumb range
 hours_yr <- 4000             # 16 h/day x 5 days/wk x 50 wk/yr, two-shift operation
 P_bar <- 6; P_atm_bar <- 1.013
 ratio <- (P_bar + P_atm_bar) / P_atm_bar
-stroke_mm <- 100; cycles_min <- 30
+stroke_mm <- 100
+cycles_min <- 30
 
 annual_scf <- function(bore, rod) {
   A_bore <- pi/4*bore^2
@@ -711,31 +820,53 @@ delta_per_unit <- cost_63mm - cost_50mm
 
 n_units <- 25   # similar pick-and-place stations across the plant
 
-cat(sprintf("Annual free-air use, 50 mm bore: %s SCF -> $%.2f/yr\n",
-            format(round(scf_50mm), big.mark = " "), cost_50mm))
-cat(sprintf("Annual free-air use, 63 mm bore: %s SCF -> $%.2f/yr\n",
-            format(round(scf_63mm), big.mark = " "), cost_63mm))
-cat(sprintf("Incremental cost of oversizing, per cylinder: $%.2f/yr\n\n", delta_per_unit))
-cat(sprintf("Same oversizing mistake across a %d-unit plant-wide fleet: $%s/yr\n",
-            n_units, format(round(delta_per_unit * n_units), big.mark = " ")))
+fmt <- function(x) format(round(x), big.mark = " ")
+
+cat(sprintf("Oversizing across a %g-unit fleet: $%s/yr\n", n_units, fmt(delta_per_unit * n_units)))
+cat(sprintf("  Annual free-air use, 50 mm bore       %s SCF = $%.2f/yr\n", fmt(scf_50mm), cost_50mm))
+cat(sprintf("  Annual free-air use, 63 mm bore       %s SCF = $%.2f/yr\n", fmt(scf_63mm), cost_63mm))
+cat(sprintf("  Incremental cost per cylinder         $%.2f/yr\n", delta_per_unit))
 ```
 
-Live cell — try a different leak orifice size or continuous run time.
+</details>
+
+Live cell — drag the leak flow (a bigger orifice leaks more) or change the compressed air cost.
+
+```{r calc-leak-cost-06-07, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "leak-cost-06-07",
+  title = "Compressed Air Leak Cost Calculator",
+  icon = "dollar-sign",
+  inputs = list(
+    qwebr_calc_input("cost_per_1000scf", "Compressed air cost", value = 0.28, min = 0.1, max = 1, step = 0.01, prefix = "$", suffix = "/ 1000 SCF"),
+    qwebr_calc_input("leak_scfm", "Continuous leak flow (SCFM)", value = 22, min = 1, max = 100, step = 1, type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: leak-cost-06-07
-## Given: a single unrepaired leak, common in real compressed-air audits
+## Given: a single unrepaired leak, common in real compressed-air audits.
+## A roughly 3 mm (1/8 in) orifice leaks about 22 SCFM at ~6 bar (87 psi),
+## from published compressed-air leak-rate charts.
 cost_per_1000scf <- 0.28
-leak_diameter_mm <- 3       # roughly 1/8 in
-leak_scfm <- 22              # from published compressed-air leak-rate charts at ~6 bar (87 psi)
+leak_scfm <- 22
 
 leak_scf_per_year <- leak_scfm * 60 * 24 * 365
 leak_cost_per_year <- leak_scf_per_year / 1000 * cost_per_1000scf
 
-cat(sprintf("Leak orifice: %.0f mm diameter, continuous flow %.0f SCFM\n", leak_diameter_mm, leak_scfm))
-cat(sprintf("Annual volume: %s SCF\n", format(round(leak_scf_per_year), big.mark = " ")))
-cat(sprintf("Annual cost of this single leak: $%s\n", format(round(leak_cost_per_year), big.mark = " ")))
+fmt <- function(x) format(round(x), big.mark = " ")
+
+cat(sprintf("Annual cost of this single leak: $%s\n", fmt(leak_cost_per_year)))
+cat(sprintf("  Continuous leak flow    %g SCFM\n", leak_scfm))
+cat(sprintf("  Annual volume           %s SCF\n", fmt(leak_scf_per_year)))
 ```
+
+</details>
 
 **Sanity check:** right-sizing this one cylinder type saves about $114/yr per unit — modest on its own, but $2,843/yr once multiplied across a 25-unit fleet of similar stations, which is a realistic count of pick-and-place-class cylinders across a mid-size plant. The single 3 mm leak, though, costs *more on its own* (roughly $3,238/yr) than the entire fleet's oversizing waste combined — a genuinely useful order-of-magnitude finding: a compressed-air system usually has more money leaking out through a handful of unrepaired fittings than through any one component being oversized. That's precisely why compressed air is often informally called the "fourth utility" in a plant and audited on a recurring schedule (leak surveys, typically ultrasonic, run quarterly to annually in well-managed plants) rather than being treated as a fixed, un-auditable cost of doing business — right-sizing new equipment and finding leaks in existing equipment are both worth doing, but they're not the same size of problem.
 
@@ -797,14 +928,43 @@ $$Score_{option} = \sum_i w_i \times s_{i,option}$$
 
 ### Worked Example
 
-Live cell — try different weights and see whether the recommendation flips.
+Live cell — try different weights and see whether the recommendation flips. The weights are rescaled to total 100%; the scores can be edited in the code underneath.
+
+```{r calc-electric-vs-pneumatic-decision-06-07, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "electric-vs-pneumatic-decision-06-07",
+  title = "Electric vs. Pneumatic Actuator Decision Matrix",
+  icon = "scale-balanced",
+  inputs = list(
+    qwebr_calc_input("w_precision", "Weight: precision", value = 0.3, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_multi_position", "Weight: multi-position capability", value = 0.2, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_force_consistency", "Weight: force consistency", value = 0.15, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_energy_cost", "Weight: energy cost", value = 0.1, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_purchase_cost", "Weight: purchase cost", value = 0.15, min = 0, max = 1, step = 0.05),
+    qwebr_calc_input("w_robustness", "Weight: robustness", value = 0.1, min = 0, max = 1, step = 0.05)
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: electric-vs-pneumatic-decision-06-07
 ## Given: weights reflecting the defense-sector precision placement cell's priorities
-weights <- c(precision = 0.30, multi_position = 0.20, force_consistency = 0.15,
-             energy_cost = 0.10, purchase_cost = 0.15, robustness = 0.10)
+w_precision         <- 0.30
+w_multi_position    <- 0.20
+w_force_consistency <- 0.15
+w_energy_cost       <- 0.10
+w_purchase_cost     <- 0.15
+w_robustness        <- 0.10
+weights <- c(precision = w_precision, multi_position = w_multi_position,
+             force_consistency = w_force_consistency, energy_cost = w_energy_cost,
+             purchase_cost = w_purchase_cost, robustness = w_robustness)
+weights <- weights / sum(weights)   # rescale so the weights always total 100%
 
+## Scores: 1 = poor fit, 5 = excellent fit
 electric_scores  <- c(precision = 5, multi_position = 5, force_consistency = 5,
                       energy_cost = 4, purchase_cost = 2, robustness = 3)
 pneumatic_scores <- c(precision = 2, multi_position = 1, force_consistency = 2,
@@ -813,12 +973,13 @@ pneumatic_scores <- c(precision = 2, multi_position = 1, force_consistency = 2,
 electric_total  <- sum(weights * electric_scores)
 pneumatic_total <- sum(weights * pneumatic_scores)
 
-cat("Weighted decision matrix (1 = poor fit, 5 = excellent fit):\n\n")
-for (nm in names(weights)) cat(sprintf("  %-20s weight = %.0f%%\n", nm, weights[nm] * 100))
-cat(sprintf("\nElectric weighted score:   %.2f\n", electric_total))
-cat(sprintf("Pneumatic weighted score:  %.2f\n", pneumatic_total))
-cat(sprintf("\n-> Recommendation: %s\n", ifelse(electric_total > pneumatic_total, "ELECTRIC ACTUATOR", "PNEUMATIC CYLINDER")))
+cat(sprintf("Recommendation: %s\n", ifelse(electric_total > pneumatic_total, "ELECTRIC ACTUATOR", "PNEUMATIC CYLINDER")))
+cat(sprintf("  Electric weighted score    %.2f\n", electric_total))
+cat(sprintf("  Pneumatic weighted score   %.2f\n", pneumatic_total))
+for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm] * 100))
 ```
+
+</details>
 
 **Sanity check:** with precision and multi-position flexibility weighted most heavily — the correct priority for a four-position, ±0.1 mm assembly cell — electric wins decisively (3.85 vs. 2.35). Try dropping the precision and multi-position weights and raising purchase cost and robustness instead, closer to what this chapter's own pick-and-place and portioning-station examples actually needed: the recommendation flips to pneumatic, confirming that Design Tasks 1 through 6 were solving the right problem for those applications, not defaulting to pneumatics out of habit.
 
