@@ -822,6 +822,136 @@ Belt and pulley systems provide a versatile, economical method for transmitting 
 
 ---
 
+### Try it yourself {#sec-belt-tryit}
+
+These use drives that are not in the worked example. Each exercise checks your answer and lets you try again.
+
+#### Belt length, arc of contact and belt speed {#sec-tryit-belt-grid}
+
+```{r tryit-belt-grid, echo=FALSE, results='asis'}
+bd <- data.frame(
+  `Drive` = c("Fan drive", "Pump drive", "Compact drive"),
+  `D1 (mm)` = c(90, 125, 63),
+  `D2 (mm)` = c(280, 315, 400),
+  `C (mm)` = c(450, 600, 300),
+  `n1 (rpm)` = c(1440, 1750, 960),
+  check.names = FALSE
+)
+bd[["Belt length L (mm)"]]      <- 2 * bd[["C (mm)"]] + pi / 2 * (bd[["D1 (mm)"]] + bd[["D2 (mm)"]]) +
+                                    (bd[["D2 (mm)"]] - bd[["D1 (mm)"]])^2 / (4 * bd[["C (mm)"]])
+bd[["Arc of contact (deg)"]]    <- 180 - 2 * asin((bd[["D2 (mm)"]] - bd[["D1 (mm)"]]) / (2 * bd[["C (mm)"]])) * 180 / pi
+bd[["Belt speed (m/s)"]]        <- pi * bd[["D1 (mm)"]] * bd[["n1 (rpm)"]] / 60000
+bd_n_fail <- sum(bd[["Arc of contact (deg)"]] < 120)
+
+tryit_grid(
+  id = "belt-grid",
+  title = "Three belt drives",
+  data = bd,
+  blank = c("Belt length L (mm)", "Arc of contact (deg)", "Belt speed (m/s)"),
+  tol = c(`Belt length L (mm)` = 3, `Arc of contact (deg)` = 0.5, `Belt speed (m/s)` = 0.05),
+  hints = c(`Belt length L (mm)` = "L = 2C + (pi/2)(D1 + D2) + (D2 - D1)^2 / (4C).",
+            `Arc of contact (deg)` = "theta = 180 - 2 asin((D2 - D1) / (2C)), with the arcsine in degrees.",
+            `Belt speed (m/s)` = "v = pi D n / 60 000 using the SMALLER pulley's diameter and speed."),
+  digits = 0,
+  answers = list(
+    tryit_answer("Number of drives whose arc of contact is below the 120 degree minimum", bd_n_fail, tol = 0.01, digits = 0,
+                 hint = "Compare each arc of contact with 120 degrees.")
+  ),
+  intro = "Give belt lengths to the nearest millimetre, the arc to one decimal and speeds to two decimals.",
+  question = paste0(
+    "<p>Open belt drives: fan drive (D1 = 90 mm, D2 = 280 mm, C = 450 mm, 1440 rpm), pump drive (125, 315, 600 mm, 1750 rpm), ",
+    "compact drive (63, 400, 300 mm, 960 rpm). L = 2C + (pi/2)(D1 + D2) + (D2 - D1)&sup2; / (4C); arc of contact on the small pulley = ",
+    "180 - 2 asin((D2 - D1) / (2C)) in degrees; belt speed v = pi D1 n1 / 60 000 in m/s. The arc of contact should be at least 120 degrees.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-belt-solution, echo=FALSE}
+knitr::kable(bd, digits = c(0, 0, 0, 0, 0, 0, 1, 2), align = "c")
+```
+
+The compact drive's large pulley ratio at a short center distance leaves only `r sprintf("%.0f", bd[["Arc of contact (deg)"]][3])` degrees of wrap: below 120, so it needs a longer center distance or an idler. All three belt speeds are below the 15 to 25 m/s optimum for V-belts, so speed is not the limiting check here.
+
+</details>
+
+#### Tension in the belt {#sec-tryit-belt-tension}
+
+A flat belt transmits $3.0$ kW at a belt speed of $14$ m/s over an arc of contact of $150^\circ$, with a friction coefficient $\mu = 0.30$.
+
+```{r tryit-belt-number, echo=FALSE, results='asis'}
+bt <- list(P = 3000, v = 14, mu = 0.30, theta = 150 * pi / 180)
+bt$dT    <- bt$P / bt$v
+bt$ratio <- exp(bt$mu * bt$theta)
+bt$T2    <- bt$dT / (bt$ratio - 1)
+bt$T1    <- bt$T2 * bt$ratio
+
+tryit_number(
+  id = "belt-tension",
+  title = "Tight-side and slack-side tension",
+  answers = list(
+    tryit_answer("Net tension T1 - T2", bt$dT, tol = 1, suffix = "N",
+                 hint = "P = (T1 - T2) x v, so T1 - T2 = P / v."),
+    tryit_answer("Tension ratio T1 / T2", bt$ratio, tol = 0.01,
+                 hint = "e^(mu x theta), with theta in radians (150 degrees = 2.618 rad)."),
+    tryit_answer("Slack-side tension T2", bt$T2, tol = 1, suffix = "N",
+                 hint = "T2 = (T1 - T2) / (ratio - 1)."),
+    tryit_answer("Tight-side tension T1", bt$T1, tol = 1, suffix = "N",
+                 hint = "T1 = T2 x ratio.")
+  ),
+  intro = "Work in newtons and radians.",
+  question = paste0(
+    "<p>A flat belt transmits 3.0 kW at a belt speed of 14 m/s. The arc of contact is 150 degrees and the friction coefficient between belt ",
+    "and pulley is 0.30. P = (T1 - T2) v and T1 / T2 = e^(mu theta) with theta in radians.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$T_1 - T_2 = \frac{3000}{14} = `r sprintf("%.1f", bt$dT)` \text{ N}, \qquad \frac{T_1}{T_2} = e^{0.30 \times 2.618} = `r sprintf("%.3f", bt$ratio)`$$
+
+$$T_2 = \frac{`r sprintf("%.1f", bt$dT)`}{`r sprintf("%.3f", bt$ratio)` - 1} = `r sprintf("%.1f", bt$T2)` \text{ N}, \qquad T_1 = `r sprintf("%.1f", bt$T1)` \text{ N}$$
+
+</details>
+
+#### Which belt type? {#sec-tryit-belt-types}
+
+```{r tryit-belt-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "belt-types",
+  title = "Match the requirement to the belt type",
+  bins = c("V-belt", "Timing (synchronous) belt", "Flat belt", "Ribbed (poly-V) belt"),
+  cards = data.frame(
+    text = c(
+      "The most common general-purpose power transmission drive, with a wedging action in the groove",
+      "A camshaft drive where the driven shaft must stay exactly in time with the driver",
+      "A long, high-speed drive over a large center distance",
+      "A compact serpentine drive that must wrap several pulleys with a large speed ratio",
+      "A drive that must not slip at all, even under heavy start-up torque",
+      "Several parallel belts sharing the load in a multi-groove sheave",
+      "A thin belt used where flexibility and high speed matter more than grip",
+      "A multi-ribbed belt that combines the flexibility of flat belts with the grip of V-belts"
+    ),
+    bin = c("V-belt", "Timing (synchronous) belt", "Flat belt", "Ribbed (poly-V) belt",
+            "Timing (synchronous) belt", "V-belt", "Flat belt", "Ribbed (poly-V) belt"),
+    why = c(
+      "V-belts are the most common choice for general power transmission.",
+      "Timing belts engage teeth, so there is no slip.",
+      "Flat belts suit high speed and long distances.",
+      "Poly-V belts run compactly over small pulleys and serpentine layouts.",
+      "Positive tooth engagement removes slip.",
+      "V-belts are used in matched sets on multi-groove sheaves.",
+      "Flat belts are thin and flexible.",
+      "Ribbed belts have longitudinal ribs that give wedging grip with a flat belt's flexibility."
+    )
+  ),
+  intro = "Use the chapter's descriptions of the four belt types.",
+  question = "<p>Match each requirement to the belt type that suits it: V-belt, timing belt, flat belt or ribbed (poly-V) belt.</p>"
+)
+```
+
 ### Practice Problems {#sec-belt-problems}
 
 **Problem 1:** A 2 HP motor runs at 1725 rpm and drives a fan through a V-belt drive. The fan must rotate at approximately 860 rpm. If the driver pulley is 4 inches in diameter, what size driven pulley is needed?
