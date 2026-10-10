@@ -570,7 +570,9 @@ qwebr_calc_card(
     qwebr_calc_input("BVR", "Bearing voltage ratio (BVR)", value = 0.04, min = 0.01, max = 0.1, step = 0.005),
     qwebr_calc_input("V_film_breakdown", "Film breakdown voltage", value = 10, min = 2, max = 30, step = 1, suffix = "V"),
     qwebr_calc_input("choke_reduction_pct", "Common-mode choke reduction (%)", value = 50, min = 0, max = 95, step = 5, type = "slider")
-  )
+  ),
+  goal = "On a 690 V line with a bearing voltage ratio of 0.06 and the film breakdown held at 10 V, find a choke reduction that keeps the bearing voltage below breakdown.",
+  goal_test = "V_line_rms >= 690 && BVR >= 0.06 && V_film_breakdown <= 10 && V_bearing_mitigated < V_film_breakdown"
 )
 ```
 
@@ -933,6 +935,132 @@ kable(summary_df, caption = "Design task summary: governing relationships and ke
                 full_width = knitr::is_html_output()) %>%
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
 ```
+
+## Try it yourself
+
+These use installations that are not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Which of the four jobs? {#sec-tryit-four-jobs-06-05}
+
+```{r tryit-jobs-sort-06-05, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "four-jobs-06-05",
+  title = "What is this conductor for?",
+  bins = c("System grounding", "Equipment bonding", "Functional ground", "Shielding"),
+  cards = data.frame(
+    text = c(
+      "The green conductor from a VFD enclosure back to the source, sized from the upstream breaker rating",
+      "A driven rod at the service entrance tied to the transformer secondary neutral",
+      "The 0 V reference terminal of a PLC analog input card",
+      "The braid around a 4-20 mA transmitter cable, grounded at one end only",
+      "Conduit and cable tray bonded together so that a faulted conductor trips its breaker",
+      "The path that lets a lightning surge dissipate into the earth",
+      "The drain wire of a VFD motor cable, terminated 360 degrees at both ends",
+      "A small-gauge signal common conductor that shares a terminal block with analog inputs"
+    ),
+    bin = c("Equipment bonding", "System grounding", "Functional ground", "Shielding",
+            "Equipment bonding", "System grounding", "Shielding", "Functional ground"),
+    why = c(
+      "It is the fault-clearing path: low impedance, sized from the OCPD.",
+      "It ties the supply to earth to stabilise voltage and dissipate surges.",
+      "It is a voltage reference carrying almost no current.",
+      "A shield intercepts noise; the way it is grounded depends on frequency.",
+      "Bonding makes the frame part of a low-impedance return to the source.",
+      "System grounding gives lightning and static a path to earth.",
+      "High-frequency drive noise needs a low-impedance 360 degree termination at both ends.",
+      "A reference conductor is not sized or intended to clear a fault."
+    )
+  ),
+  intro = "Pick the single job each conductor is doing.",
+  question = "<p>Match each conductor to the one job it does: system grounding, equipment bonding, functional (signal) ground, or shielding.</p>"
+)
+```
+
+### Size the bonding conductor {#sec-tryit-bonding-06-05}
+
+```{r tryit-bonding-grid-06-05, echo=FALSE, results='asis'}
+bt_rows <- c(20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200)
+bt_awg  <- c("12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG", "3 AWG", "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG")
+bd <- data.frame(
+  `Circuit` = c("Small conveyor", "Packaging motor", "Press feeder", "Mixer drive", "Panel feeder", "Oven supply"),
+  `Upstream OCPD (A)` = c(15, 45, 90, 250, 350, 700),
+  check.names = FALSE
+)
+bd[["Table row used (A)"]] <- vapply(bd[["Upstream OCPD (A)"]], function(x) min(bt_rows[bt_rows >= x]), numeric(1))
+bd_awg <- bt_awg[match(bd[["Table row used (A)"]], bt_rows)]
+
+tryit_grid(
+  id = "bonding-06-05",
+  title = "Which table row sets the bonding conductor?",
+  data = bd,
+  blank = "Table row used (A)",
+  tol = c(`Table row used (A)` = 0.5),
+  hints = c(`Table row used (A)` = "Never interpolate down: use the first table row whose OCPD rating is at least the actual device rating."),
+  digits = 0,
+  intro = "Use the chapter's illustrative table rows: 20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200 A.",
+  question = paste0(
+    "<p>The bonding conductor is sized from the upstream overcurrent device, rounded up to the next row of the table ",
+    "(20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200 A). For each circuit give the table row to use.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-bonding-solution-06-05, echo=FALSE}
+bd_show <- bd
+bd_show[["Bonding conductor (illustrative)"]] <- bd_awg
+knitr::kable(bd_show, align = "c")
+```
+
+The size follows the device rating in steps, not the connected load. The 90 A press-feeder breaker rounds up to the 100 A row (8 AWG), even though the motor may draw far less.
+
+</details>
+
+### Touch voltage on a faulted frame {#sec-tryit-touch-06-05}
+
+A 480Y/277 V system feeds a 30 A branch breaker. With a proper bonding conductor the fault loop impedance is $0.28\ \Omega$. If the frame were tied only to a driven rod ($18\ \Omega$) and the source electrode is $30\ \Omega$, the loop is through the earth.
+
+```{r tryit-touch-number-06-05, echo=FALSE, results='asis'}
+tv <- list(V = 277, OCPD = 30, Zb = 0.28, Rrod = 18, Rsrc = 30, Rbody = 1000)
+tv$I_b    <- tv$V / tv$Zb
+tv$trip   <- 9 * tv$OCPD
+tv$I_rod  <- tv$V / (tv$Rrod + tv$Rsrc)
+tv$V_t    <- tv$I_rod * tv$Rrod
+tv$I_body <- tv$V_t / tv$Rbody * 1000
+
+tryit_number(
+  id = "touch-06-05",
+  title = "Bonded vs rod-only fault",
+  answers = list(
+    tryit_answer("Fault current with a bonding conductor", tv$I_b, tol = 2, suffix = "A",
+                 hint = "I = V / Z_loop with Z_loop = 0.28 ohm."),
+    tryit_answer("Instantaneous trip region (9 x breaker rating)", tv$trip, tol = 0.5, suffix = "A",
+                 hint = "The chapter takes about 8 to 10 times the rating; use 9."),
+    tryit_answer("Fault current with a ground rod only", tv$I_rod, tol = 0.05, suffix = "A",
+                 hint = "The loop is rod resistance plus source electrode resistance."),
+    tryit_answer("Touch voltage on the frame (rod only)", tv$V_t, tol = 1, suffix = "V",
+                 hint = "V_touch = I_fault x R_rod (the frame-to-earth resistance)."),
+    tryit_answer("Body current if touched, dry skin 1000 ohm", tv$I_body, tol = 1, suffix = "mA",
+                 hint = "V_touch / 1000 ohm, in milliamperes.")
+  ),
+  intro = "Then compare: does the breaker trip in each case?",
+  question = paste0(
+    "<p>A 277 V phase-to-ground system feeds a 30 A branch breaker (instantaneous trip taken as 9 x the rating). ",
+    "With an equipment bonding conductor the fault loop impedance is 0.28 ohm. Without it, the frame is tied only to a ",
+    "driven rod of 18 ohm and the source electrode is 30 ohm, so the fault loop is the sum of the two. ",
+    "Touch voltage is the fault current times the rod resistance. Assume a body resistance of 1000 ohm.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+Bonded: $I = 277/0.28 = `r sprintf("%.0f", tv$I_b)`$ A, far above the `r tv$trip` A trip region, so the breaker clears the fault almost instantly.
+
+Rod only: $I = 277/(18 + 30) = `r sprintf("%.2f", tv$I_rod)`$ A, a fraction of the 30 A rating. The breaker never trips, and the frame sits at $`r sprintf("%.0f", tv$V_t)`$ V, driving about `r sprintf("%.0f", tv$I_body)` mA through a person who touches it: well past the let-go and fibrillation thresholds.
+
+</details>
 
 ## Practice Problems
 
