@@ -866,7 +866,9 @@ qwebr_calc_card(
     qwebr_calc_input("T_logic", "Logic (safety relay) time", value = 0.02, min = 0, max = 0.5, step = 0.005, suffix = "s"),
     qwebr_calc_input("T_fce", "Final control element time", value = 0.05, min = 0, max = 0.5, step = 0.005, suffix = "s"),
     qwebr_calc_input("T_coast", "Coast-down / braking time (s)", value = 0.55, min = 0, max = 2, step = 0.01, type = "slider")
-  )
+  ),
+  goal = "Get the overall stopping time to 0.40 s or less while keeping the 30 ms light curtain and the 20 ms relay (only the contactors and the braking may change).",
+  goal_test = "T_total <= 0.40 && T_device == 0.03 && T_logic == 0.02"
 )
 ```
 
@@ -1003,6 +1005,133 @@ summary_table %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, background = "#2C3E50", color = "white")
 ```
+
+## Try it yourself
+
+These use machines that are not in the worked example. Each exercise checks your answer and lets you try again.
+
+### Read the risk graph {#sec-tryit-plr-06-02}
+
+Use the chapter's decision tree (S1/S2, then F1/F2, then P1/P2) to find the required performance level for each machine.
+
+```{r tryit-plr-sort-06-02, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "plr-sort-06-02",
+  title = "What PLr does each hazard need?",
+  bins = c("PLr a", "PLr b", "PLr c", "PLr d", "PLr e"),
+  cards = data.frame(
+    text = c(
+      "Label dispenser guard: a pinch that bruises and heals; reached once a shift; the cycle start is visible and slow",
+      "Same dispenser, but the cycle starts without any warning and the hand cannot be pulled back in time",
+      "Small conveyor nip point: bruising only; cleared several times an hour; the conveyor is slow and its start is announced",
+      "Same conveyor but fast, with a silent automatic restart",
+      "Press brake: amputation possible; loaded once a shift; the slow stroke is clearly visible",
+      "Robot cell: broken limbs possible; entered once a shift; the robot starts silently and moves fast",
+      "Palletizer: crushing possible; entered about ten times an hour to clear jams; the motion is slow and a beacon warns first",
+      "Automated cutting line: amputation possible; operators reach in every cycle; the fast stroke starts without warning"
+    ),
+    bin = c("PLr a", "PLr b", "PLr b", "PLr c", "PLr c", "PLr d", "PLr d", "PLr e"),
+    why = c(
+      "S1, F1, P1 gives PLr a.",
+      "S1, F1, P2 gives PLr b.",
+      "S1, F2, P1 gives PLr b.",
+      "S1, F2, P2 gives PLr c.",
+      "S2, F1, P1 gives PLr c.",
+      "S2, F1, P2 gives PLr d.",
+      "S2, F2, P1 gives PLr d.",
+      "S2, F2, P2 gives PLr e."
+    )
+  ),
+  intro = "Decide severity, exposure and avoidance for each machine, then pick the required level.",
+  question = "<p>Using a simplified risk graph (S1 minor/reversible or S2 serious/irreversible; F1 rare or F2 frequent; P1 avoidance possible or P2 scarcely possible, giving PLr a to e), match each machine to its required performance level.</p>"
+)
+```
+
+### Stopping time and separation distance {#sec-tryit-stopping-06-02}
+
+```{r tryit-stopping-grid-06-02, echo=FALSE, results='asis'}
+C_mm <- c(850, 850, 250, 1200)
+st <- data.frame(
+  Machine = c("Packaging robot", "Palletizer", "Inspection table", "Stamping feeder"),
+  `T_device (s)` = c(0.025, 0.030, 0.020, 0.035),
+  `T_logic (s)`  = c(0.015, 0.020, 0.015, 0.020),
+  `T_fce (s)`    = c(0.040, 0.060, 0.035, 0.045),
+  `T_coast (s)`  = c(0.310, 0.720, 0.140, 0.480),
+  `C (mm)`       = as.character(C_mm),
+  check.names = FALSE
+)
+st[["T (s)"]]         <- st[["T_device (s)"]] + st[["T_logic (s)"]] + st[["T_fce (s)"]] + st[["T_coast (s)"]]
+st[["Coast share (%)"]] <- st[["T_coast (s)"]] / st[["T (s)"]] * 100
+st[["S (mm)"]]        <- 1600 * st[["T (s)"]] + C_mm
+
+tryit_grid(
+  id = "stopping-grid-06-02",
+  title = "Overall stopping time, coast-down share and minimum distance",
+  data = st,
+  blank = c("T (s)", "Coast share (%)", "S (mm)"),
+  tol = c(`T (s)` = 0.001, `Coast share (%)` = 0.2, `S (mm)` = 2),
+  hints = c(`T (s)` = "T = T_device + T_logic + T_fce + T_coast.",
+            `Coast share (%)` = "T_coast / T x 100.",
+            `S (mm)` = "S = K x T + C, with K = 1600 mm/s. Keep T in seconds."),
+  digits = 3,
+  intro = "Fill T, the coast-down share and the minimum separation distance S for each machine.",
+  question = paste0(
+    "<p>For each machine the overall stopping time is T = T_device + T_logic + T_fce + T_coast. ",
+    "The minimum separation distance is S = K x T + C with K = 1600 mm/s. For every row calculate T, the coast-down share ",
+    "(T_coast / T as a percentage) and S.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-stopping-solution-06-02, echo=FALSE}
+knitr::kable(st, digits = c(0, 3, 3, 3, 3, 0, 3, 1, 0), align = "c")
+```
+
+The stamping feeder needs the largest distance because its detection device is coarse (large $C$); the palletizer needs a lot because most of its time is coast-down, which is where shortening $T$ pays off first.
+
+</details>
+
+### Relay or safety PLC? {#sec-tryit-relay-plc-06-02}
+
+A small packaging line needs independent safety functions. The cost model is the chapter's: relays cost $c_{relay}$ per function; a safety PLC costs a base $C_{base}$ plus $c_{PLC}$ per safety I/O point. For this project $c_{relay} = \$720$, $C_{base} = \$11{,}200$ and $c_{PLC} = \$340$.
+
+```{r tryit-relay-number-06-02, echo=FALSE, results='asis'}
+rp <- list(c_relay = 720, C_base = 11200, c_plc = 340, n = 20)
+rp$n_star  <- rp$C_base / (rp$c_relay - rp$c_plc)
+rp$relay_n <- rp$n * rp$c_relay
+rp$plc_n   <- rp$C_base + rp$n * rp$c_plc
+
+tryit_number(
+  id = "relay-plc-06-02",
+  title = "Where do the two solutions cost the same?",
+  answers = list(
+    tryit_answer("Breakeven function count n*", rp$n_star, tol = 0.1,
+                 hint = "n* = C_base / (c_relay - c_PLC)."),
+    tryit_answer("Relay solution cost for 20 functions", rp$relay_n, tol = 1, prefix = "$",
+                 hint = "n x c_relay."),
+    tryit_answer("Safety PLC solution cost for 20 functions", rp$plc_n, tol = 1, prefix = "$",
+                 hint = "C_base + n x c_PLC."),
+    tryit_answer("Saving from choosing the cheaper option at 20 functions", abs(rp$relay_n - rp$plc_n), tol = 1, prefix = "$",
+                 hint = "Difference between the two costs; which side of n* is 20 on?")
+  ),
+  intro = "Then decide: at 20 functions, which solution is cheaper?",
+  question = paste0(
+    "<p>Cost model: relay solution = n x c_relay; safety PLC solution = C_base + n x c_PLC. ",
+    "For a project c_relay = $720 per function, C_base = $11,200 and c_PLC = $340 per safety I/O point. ",
+    "The breakeven count is n* = C_base / (c_relay - c_PLC).</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$n^* = \frac{11200}{720 - 340} = `r sprintf("%.1f", rp$n_star)`$$
+
+Below about 30 functions the relays are cheaper. At 20 functions: relays cost $`r format(rp$relay_n, big.mark = ",")`, the PLC costs $`r format(rp$plc_n, big.mark = ",")`, so relays save $`r format(abs(rp$relay_n - rp$plc_n), big.mark = ",")`. Remember the chapter's caveat: a diagnostics or networking requirement can change the answer even when the cost model says relays.
+
+</details>
 
 ## Practice Problems
 
