@@ -836,6 +836,79 @@ Chain drives provide reliable, positive power transmission for many applications
 
 ---
 
+### Try it yourself {#sec-chain-tryit}
+
+These use a drive that is not in the worked example. Each exercise checks your answer and lets you try again.
+
+#### Chain length and speed {#sec-tryit-chain-length}
+
+A #60 roller chain (pitch $P = 19.05$ mm) connects a 19-tooth driver sprocket turning at $720$ rpm to a 57-tooth driven sprocket. The center distance is about $550$ mm.
+
+```{r tryit-chain-number, echo=FALSE, results='asis'}
+ch <- list(P = 19.05, N1 = 19, N2 = 57, n1 = 720, C = 550)
+ch$n2    <- ch$n1 * ch$N1 / ch$N2
+ch$Cp    <- ch$C / ch$P
+ch$Lp    <- 2 * ch$Cp + (ch$N1 + ch$N2) / 2 + (ch$N2 - ch$N1)^2 / (4 * pi^2 * ch$Cp)
+ch$Lp_e  <- 2 * ceiling(ch$Lp / 2)
+ch$v     <- ch$P * ch$N1 * ch$n1 / 60000
+
+tryit_number(
+  id = "chain-length",
+  title = "Output speed, chain length and chain speed",
+  answers = list(
+    tryit_answer("Driven sprocket speed", ch$n2, tol = 0.5, suffix = "rpm",
+                 hint = "n2 = n1 x N1 / N2."),
+    tryit_answer("Center distance in pitches C_p", ch$Cp, tol = 0.05,
+                 hint = "C_p = C / P."),
+    tryit_answer("Chain length before rounding", ch$Lp, tol = 0.1, suffix = "pitches",
+                 hint = "L_p = 2 C_p + (N1 + N2) / 2 + (N2 - N1)^2 / (4 pi^2 C_p)."),
+    tryit_answer("Chain length to specify", ch$Lp_e, tol = 0.01, suffix = "pitches",
+                 hint = "Round up to the next EVEN number of pitches to avoid offset links."),
+    tryit_answer("Chain speed", ch$v, tol = 0.05, suffix = "m/s",
+                 hint = "v = P x N x n / 60 000, with the driver sprocket's N and n.")
+  ),
+  intro = "Then use the chain speed to pick the lubrication method.",
+  question = paste0(
+    "<p>A #60 roller chain (pitch 19.05 mm) runs between a 19-tooth driver sprocket at 720 rpm and a 57-tooth driven sprocket, ",
+    "with a center distance of about 550 mm. C_p = C / P; L_p = 2 C_p + (N1 + N2) / 2 + (N2 - N1)&sup2; / (4 pi&sup2; C_p); round L_p up to ",
+    "an even number of pitches; chain speed v = P N n / 60 000 in m/s.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$n_2 = 720 \times \frac{19}{57} = `r sprintf("%.0f", ch$n2)` \text{ rpm}, \qquad C_p = \frac{550}{19.05} = `r sprintf("%.2f", ch$Cp)`$$
+
+$$L_p = 2(`r sprintf("%.2f", ch$Cp)`) + \frac{19 + 57}{2} + \frac{(57 - 19)^2}{4\pi^2 (`r sprintf("%.2f", ch$Cp)`)} = `r sprintf("%.2f", ch$Lp)` \rightarrow `r ch$Lp_e` \text{ pitches}$$
+
+$$v = \frac{19.05 \times 19 \times 720}{60000} = `r sprintf("%.2f", ch$v)` \text{ m/s}$$
+
+At `r sprintf("%.1f", ch$v)` m/s the chain is in the 4 to 7 m/s band: bath or disc lubrication.
+
+</details>
+
+#### Lubrication method by chain speed {#sec-tryit-chain-lube}
+
+```{r tryit-chain-lube-sort, echo=FALSE, results='asis'}
+lu <- data.frame(v = c(2.5, 5.5, 9.0, 14.0, 3.1, 6.8, 10.5, 15.2))
+lu$bin <- as.character(cut(lu$v, c(0, 4, 7, 12, Inf), labels = c("Manual or drip", "Bath or disc", "Oil stream", "Oil mist or spray"), right = FALSE))
+tryit_sort(
+  id = "chain-lube",
+  title = "Which lubrication method does the chain speed call for?",
+  bins = c("Manual or drip", "Bath or disc", "Oil stream", "Oil mist or spray"),
+  cards = data.frame(
+    text = sprintf("A roller chain running at %.1f m/s", lu$v),
+    bin = lu$bin,
+    why = c("Below 4 m/s: periodic manual or drip lubrication.", "4 to 7 m/s: bath or disc.", "7 to 12 m/s: a continuous oil stream.",
+            "Above 12 m/s: oil mist or spray.", "Below 4 m/s: periodic manual or drip lubrication.", "4 to 7 m/s: bath or disc.",
+            "7 to 12 m/s: a continuous oil stream.", "Above 12 m/s: oil mist or spray.")
+  ),
+  intro = "Use the chapter's table of lubrication methods by chain speed.",
+  question = "<p>Choose the lubrication method for each chain speed: below 4 m/s manual or drip; 4 to 7 m/s bath or disc; 7 to 12 m/s oil stream; above 12 m/s oil mist or spray.</p>"
+)
+```
+
 ### Practice Problems {#sec-chain-problems}
 
 **Problem 1:** A chain drive uses a 21-tooth driver sprocket at 900 rpm. What size driven sprocket is needed for an output speed of 300 rpm?
