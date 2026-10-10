@@ -222,7 +222,9 @@ qwebr_calc_card(
     qwebr_calc_input("n_d", "Design factor n<sub>d</sub>", value = 3, min = 1, max = 6, step = 0.1),
     qwebr_calc_input("d_upsized_mm", "Upsized stock diameter", value = 18, min = 10, max = 60, step = 1, suffix = "mm"),
     qwebr_calc_input("Kt", "Stress concentration factor Kt", value = 1.6, min = 1, max = 3, step = 0.05, type = "slider")
-  )
+  ),
+  goal = "Size a keyed shaft for 70 N·m or more with Kt = 2.0 or worse and a design factor of at least 3, using stock no larger than 24 mm.",
+  goal_test = "T >= 70 && Kt >= 2 && n_d >= 3 && d_upsized_mm <= 24 && n_18_with_key >= n_d"
 )
 ```
 
@@ -762,6 +764,146 @@ kable(summary_df, caption = "Design task summary: governing equations and key ru
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
                 full_width = knitr::is_html_output()) %>%
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
+```
+
+## Try it yourself
+
+These use drives that are not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### A keyed shaft {#sec-tryit-shaft-06-09}
+
+A mixer shaft carries $T = 95$ N·m of steady torque in a steel with $S_y = 420$ MPa. Use a design factor $n_d = 3$ and the chapter's $S_{sy} = 0.577\,S_y$. The shaft has a profiled keyway with $K_t = 1.7$. Stock sizes available: 16, 18, 20, 22, 25, 28 mm.
+
+```{r tryit-shaft-number-06-09, echo=FALSE, results='asis'}
+sh <- list(T = 95, Sy = 420e6, nd = 3, Kt = 1.7, sizes = c(16, 18, 20, 22, 25, 28))
+sh$Ssy      <- 0.577 * sh$Sy
+sh$d_plain  <- (16 * sh$T * sh$nd / (pi * sh$Ssy))^(1/3) * 1000
+sh$d_key    <- sh$d_plain * sh$Kt^(1/3)
+sh$d_stock  <- min(sh$sizes[sh$sizes >= sh$d_key])
+sh$n_stock  <- sh$Ssy / (sh$Kt * 16 * sh$T / (pi * (sh$d_stock / 1000)^3))
+
+tryit_number(
+  id = "shaft-06-09",
+  title = "Shaft diameter with and without the keyway",
+  answers = list(
+    tryit_answer("Shear yield strength S_sy", sh$Ssy / 1e6, tol = 0.5, suffix = "MPa",
+                 hint = "S_sy = 0.577 x S_y."),
+    tryit_answer("Minimum diameter without a keyway", sh$d_plain, tol = 0.1, suffix = "mm",
+                 hint = "d = (16 T n_d / (pi S_sy))^(1/3). Work in N, m and Pa, then convert to mm."),
+    tryit_answer("Minimum diameter with the keyway", sh$d_key, tol = 0.1, suffix = "mm",
+                 hint = "Multiply by K_t^(1/3)."),
+    tryit_answer("Stock size selected", sh$d_stock, tol = 0.01, suffix = "mm",
+                 hint = "The next standard size at or above the keyway minimum."),
+    tryit_answer("Achieved design factor at that size, with the keyway", sh$n_stock, tol = 0.05,
+                 hint = "n = S_sy / (K_t x 16 T / (pi d^3)).")
+  ),
+  intro = "Round only the stock size; give the others to one decimal (the factor to two).",
+  question = paste0(
+    "<p>A mixer shaft carries a steady torque of 95 N&middot;m in a steel with tensile yield strength S_y = 420 MPa ",
+    "(S_sy = 0.577 S_y). The design factor is n_d = 3. The shaft has a profiled keyway with stress concentration factor K_t = 1.7. ",
+    "tau_max = K_t x 16 T / (pi d&sup3;), and the minimum diameter without a keyway is d = (16 T n_d / (pi S_sy))^(1/3). ",
+    "Stock sizes: 16, 18, 20, 22, 25 and 28 mm.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$S_{sy} = 0.577 \times 420 = `r sprintf("%.1f", sh$Ssy / 1e6)` \text{ MPa}, \qquad d_{plain} = \left(\frac{16 \cdot 95 \cdot 3}{\pi \cdot `r sprintf("%.1f", sh$Ssy / 1e6)` \times 10^6}\right)^{1/3} = `r sprintf("%.2f", sh$d_plain)` \text{ mm}$$
+
+$$d_{keyway} = `r sprintf("%.2f", sh$d_plain)` \times 1.7^{1/3} = `r sprintf("%.2f", sh$d_key)` \text{ mm} \Rightarrow \text{ stock } `r sh$d_stock` \text{ mm}$$
+
+At `r sh$d_stock` mm the keyed shaft reaches $n = `r sprintf("%.2f", sh$n_stock)`$. The keyway costs `r sprintf("%.1f", sh$d_key - sh$d_plain)` mm of diameter: the stress concentration is paid for in stock size.
+
+</details>
+
+### How many V-belts? {#sec-tryit-belts-06-09}
+
+A 7.5 hp, 1750 rpm motor drives a blower through a V-belt drive with a 125 mm driver sheave, a 400 mm driven sheave and a 550 mm center distance. The service factor is 1.3 and each belt is rated at 4.0 kW at this size and speed. The wrap-angle correction table (interpolate between rows):
+
+| Wrap angle (deg) | 130 | 140 | 150 | 160 | 170 | 180 |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|
+| $C_\theta$ | 0.86 | 0.89 | 0.92 | 0.95 | 0.97 | 1.00 |
+
+```{r tryit-belt-number-06-09, echo=FALSE, results='asis'}
+bt <- list(P_hp = 7.5, n = 1750, Dr = 125, Dn = 400, C = 550, SF = 1.3, Prated = 4.0)
+bt$P_tr   <- bt$P_hp * 0.746
+bt$ratio  <- bt$Dn / bt$Dr
+bt$n_out  <- bt$n / bt$ratio
+bt$theta  <- 180 - 2 * asin((bt$Dn - bt$Dr) / (2 * bt$C)) * 180 / pi
+bt$Ctheta <- approx(c(130, 140, 150, 160, 170, 180), c(0.86, 0.89, 0.92, 0.95, 0.97, 1.00), xout = bt$theta, rule = 2)$y
+bt$P_des  <- bt$P_tr * bt$SF
+bt$N_exact <- bt$P_des / (bt$Prated * bt$Ctheta)
+bt$N      <- ceiling(bt$N_exact)
+
+tryit_number(
+  id = "belts-06-09",
+  title = "Wrap angle, correction factor and belt count",
+  answers = list(
+    tryit_answer("Driven shaft speed", bt$n_out, tol = 2, suffix = "rpm",
+                 hint = "Speed ratio is D_driven / D_driver; divide the motor speed by it."),
+    tryit_answer("Wrap angle at the driver sheave", bt$theta, tol = 0.3, suffix = "degrees",
+                 hint = "180 - 2 asin((D_driven - D_driver) / (2 C)), with the asin in degrees."),
+    tryit_answer("Wrap-angle correction C_theta", bt$Ctheta, tol = 0.005,
+                 hint = "Interpolate in the table between the 150 and 160 degree rows."),
+    tryit_answer("Design power", bt$P_des, tol = 0.05, suffix = "kW",
+                 hint = "Motor power in kW (1 hp = 0.746 kW) times the service factor."),
+    tryit_answer("Number of belts (round up)", bt$N, tol = 0.01,
+                 hint = "Design power / (rated power per belt x C_theta), rounded up to a whole belt.")
+  ),
+  intro = "A fractional belt count is always rounded up.",
+  question = paste0(
+    "<p>A 7.5 hp (1 hp = 0.746 kW), 1750 rpm motor drives a blower through a V-belt drive: driver sheave 125 mm, driven sheave 400 mm, ",
+    "center distance 550 mm, service factor 1.3. Each belt is rated at 4.0 kW. Wrap angle = 180 - 2 asin((D_driven - D_driver) / (2 C)) in degrees. ",
+    "Wrap-angle correction C_theta (interpolate): 130 deg 0.86, 140 deg 0.89, 150 deg 0.92, 160 deg 0.95, 170 deg 0.97, 180 deg 1.00. ",
+    "Number of belts = design power / (rated power per belt x C_theta), rounded up.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$\text{ratio} = \frac{400}{125} = `r sprintf("%.1f", bt$ratio)`, \qquad n_{out} = \frac{1750}{`r sprintf("%.1f", bt$ratio)`} = `r sprintf("%.0f", bt$n_out)` \text{ rpm}$$
+
+$$\theta = 180 - 2 \sin^{-1}\!\left(\frac{400 - 125}{2 \cdot 550}\right) = `r sprintf("%.1f", bt$theta)`^\circ, \qquad C_\theta = `r sprintf("%.3f", bt$Ctheta)`$$
+
+$$P_{design} = 7.5 \times 0.746 \times 1.3 = `r sprintf("%.2f", bt$P_des)` \text{ kW}, \qquad N = \frac{`r sprintf("%.2f", bt$P_des)`}{4.0 \times `r sprintf("%.3f", bt$Ctheta)`} = `r sprintf("%.2f", bt$N_exact)` \rightarrow `r bt$N` \text{ belts}$$
+
+</details>
+
+### Which coupling? {#sec-tryit-coupling-06-09}
+
+```{r tryit-coupling-sort-06-09, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "coupling-06-09",
+  title = "Match the coupling to the drive",
+  bins = c("Jaw", "Beam", "Disc", "Grid"),
+  cards = data.frame(
+    text = c(
+      "An encoder shaft in a lab instrument: light torque, zero backlash, no shock",
+      "A pump drive from a general-purpose motor, up to a few hundred N·m, where the elastomer can absorb shock",
+      "A precision high-torque servo spindle drive that needs zero backlash and no elastomer wear part",
+      "A large compressor drive in heavy industrial duty with severe shock and vibration",
+      "A stepper motor driving a leadscrew in precision motion control, light torque",
+      "A conveyor gearbox drive where the soft spider damps vibration and is cheap to replace",
+      "A servo drive that needs an all-metal flexure with no working clearance anywhere in the load path",
+      "A rock-crusher drive with high torque and heavy shock loading"
+    ),
+    bin = c("Beam", "Jaw", "Disc", "Grid", "Beam", "Jaw", "Disc", "Grid"),
+    why = c(
+      "Beam couplings suit encoders and instrumentation: zero backlash, low torque.",
+      "Jaw couplings are the general-purpose choice; the spider absorbs shock.",
+      "Disc couplings give zero backlash at moderate to high torque.",
+      "Grid couplings are built for the harshest shock and the highest torque.",
+      "Light-duty precision motion control is the beam coupling's use.",
+      "The elastomeric spider is the wear part and the shock absorber.",
+      "All-metal discs have no working clearance.",
+      "Grid couplings are purpose-built for shock and vibration."
+    )
+  ),
+  intro = "Use the chapter's selection guide.",
+  question = "<p>Using the chapter's flexible coupling selection guide, match each drive to the coupling family that suits it: jaw, beam, disc or grid.</p>"
+)
 ```
 
 ## Practice Problems
