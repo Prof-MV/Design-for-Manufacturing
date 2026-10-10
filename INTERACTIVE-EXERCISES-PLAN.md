@@ -386,7 +386,7 @@ book's version (adds `goal`, `goal_test`, `rerun`); `R/helpers.R` sources
   safety-factor grid (12 cells), challenge goal on
   `bolt-load-response-interactive`.
 - [x] Phase B: 06-01 to 06-08 (3 to 4 exercises each; 8 challenge goals verified in plain R and in a real browser)
-- [ ] Phase C: 06-09 to 06-15
+- [x] Phase C: 06-09 to 06-15 (first use of the diagram widget in 06-12 and of the order widget in 06-15; both driven in a real browser)
 - [ ] Phase D: Part 2
 - [ ] Phase E: Parts 1 and 3
 - [ ] Phase F: sandboxes, Parts 4 and 5
