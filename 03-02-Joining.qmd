@@ -336,6 +336,135 @@ ggplot(selection_data, aes(x = Criterion, y = Process, fill = Score)) +
 
 ---
 
+### Try it yourself {#sec-joining-tryit}
+
+#### Weight the selection matrix {#sec-tryit-joining-matrix}
+
+The selection matrix above scores each process from 1 (poor) to 5 (excellent). A designer needs a joint on a machine guard that must be **removable**, will see some heat, and must be cheap. The weights are: high temperature $0.20$, dissimilar materials $0.20$, removable $0.40$, low cost $0.20$.
+
+```{r tryit-joining-grid, echo=FALSE, results='asis'}
+jm <- data.frame(
+  `Process` = c("Welding", "Brazing", "Soldering", "Adhesive", "Bolts", "Rivets"),
+  `High temp` = c(5, 4, 1, 1, 5, 4),
+  `Dissimilar materials` = c(2, 3, 3, 5, 4, 3),
+  `Removable` = c(1, 1, 1, 1, 5, 2),
+  `Low cost` = c(3, 4, 5, 4, 3, 4),
+  check.names = FALSE
+)
+w <- c(0.20, 0.20, 0.40, 0.20)
+jm[["Weighted score"]] <- as.matrix(jm[, 2:5]) %*% w
+jm_best <- max(jm[["Weighted score"]])
+
+tryit_grid(
+  id = "joining-matrix",
+  title = "Weighted score of each joining process",
+  data = jm,
+  blank = "Weighted score",
+  tol = c(`Weighted score` = 0.02),
+  hints = c(`Weighted score` = "Multiply each score by its weight (0.20, 0.20, 0.40, 0.20) and add the four products."),
+  digits = 0,
+  answers = list(
+    tryit_answer("Highest weighted score", jm_best, tol = 0.02, hint = "Which process wins when removability carries the largest weight?")
+  ),
+  intro = "Give each score to two decimals.",
+  question = paste0(
+    "<p>Using the chapter's joining process selection matrix (scores 1 to 5): welding (high temp 5, dissimilar 2, removable 1, low cost 3), ",
+    "brazing (4, 3, 1, 4), soldering (1, 3, 1, 5), adhesive (1, 5, 1, 4), bolts (5, 4, 5, 3), rivets (4, 3, 2, 4). ",
+    "The weights are high temperature 0.20, dissimilar materials 0.20, removable 0.40 and low cost 0.20. ",
+    "Weighted score = sum of weight x score. Find the weighted score of each process and the highest.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-joining-solution, echo=FALSE}
+knitr::kable(jm, digits = c(0, 0, 0, 0, 0, 2), align = "c")
+```
+
+Bolts win (`r sprintf("%.2f", jm_best)`) because the removable criterion carries 40% of the weight and bolts are the only process that scores well on it. Change the weights toward "permanent" and the answer would flip: the matrix is a tool for making the priorities explicit, not a lookup of one right answer.
+
+</details>
+
+#### Welding or bolting: where does the cost cross? {#sec-tryit-joining-cost}
+
+A bracket has 4 joints. **Welding** needs a jig costing \$1800 and then \$1.10 per joint. **Bolting** needs no jig; each joint costs \$0.45 of labor plus \$1.35 of hardware.
+
+```{r tryit-joining-cost-number, echo=FALSE, results='asis'}
+jc <- list(jig = 1800, weld = 1.10, bolt = 0.45 + 1.35, joints = 4, n = 2000)
+jc$weld_each <- jc$weld * jc$joints
+jc$bolt_each <- jc$bolt * jc$joints
+jc$n_star    <- jc$jig / (jc$bolt_each - jc$weld_each)
+jc$weld_n    <- jc$jig + jc$weld_each * jc$n
+jc$bolt_n    <- jc$bolt_each * jc$n
+
+tryit_number(
+  id = "joining-cost",
+  title = "Cost per bracket and break-even volume",
+  answers = list(
+    tryit_answer("Variable cost per welded bracket", jc$weld_each, tol = 0.01, prefix = "$",
+                 hint = "4 joints x $1.10."),
+    tryit_answer("Cost per bolted bracket", jc$bolt_each, tol = 0.01, prefix = "$",
+                 hint = "4 joints x ($0.45 + $1.35)."),
+    tryit_answer("Break-even number of brackets", jc$n_star, tol = 1, suffix = "brackets",
+                 hint = "Jig cost divided by the saving per bracket."),
+    tryit_answer("Total cost of 2000 welded brackets", jc$weld_n, tol = 1, prefix = "$",
+                 hint = "Jig plus 2000 x the welded cost per bracket."),
+    tryit_answer("Total cost of 2000 bolted brackets", jc$bolt_n, tol = 1, prefix = "$",
+                 hint = "2000 x the bolted cost per bracket.")
+  ),
+  intro = "Then decide: above which volume does welding win, and what does it give up?",
+  question = paste0(
+    "<p>A bracket has 4 joints. Welding needs a jig costing $1800 and then $1.10 per joint. Bolting needs no jig; each joint costs $0.45 ",
+    "of labor and $1.35 of hardware. Find the variable cost per bracket for each method, the number of brackets at which the total costs are equal, ",
+    "and the total cost of 2000 brackets by each method.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+Welded: $4 \times 1.10 = \$`r sprintf("%.2f", jc$weld_each)`$ per bracket; bolted: $4 \times 1.80 = \$`r sprintf("%.2f", jc$bolt_each)`$.
+
+Break-even: $1800 / (`r sprintf("%.2f", jc$bolt_each)` - `r sprintf("%.2f", jc$weld_each)`) = `r sprintf("%.0f", jc$n_star)`$ brackets. At 2000 brackets, welding costs \$`r format(jc$weld_n, big.mark = ",")` and bolting \$`r format(jc$bolt_n, big.mark = ",")`: a saving of \$`r format(jc$bolt_n - jc$weld_n, big.mark = ",")` for welding. Below the break-even volume bolting is cheaper, and bolted joints can also be taken apart.
+
+</details>
+
+#### Pick the joining method {#sec-tryit-joining-sort}
+
+```{r tryit-joining-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "joining-methods",
+  title = "Which joining method fits?",
+  bins = c("Welding", "Brazing", "Soldering", "Adhesive bonding", "Mechanical fasteners"),
+  cards = data.frame(
+    text = c(
+      "Seams of a pressurized tank that must be leak-proof and carry high loads",
+      "Surface-mount components on a heat-sensitive circuit board",
+      "A service panel that must come off for maintenance",
+      "Joining a thin aluminum sheet to a plastic panel, spreading the stress over a wide area",
+      "A joint of dissimilar metals using a filler that melts above 450 degrees C without melting the base metals",
+      "A pipeline needing the full strength of the parent metal at high service temperature",
+      "An electrical connection made with a filler that melts below 450 degrees C",
+      "A structure that may need repair by disassembly and must not loosen under vibration"
+    ),
+    bin = c("Welding", "Soldering", "Mechanical fasteners", "Adhesive bonding", "Brazing", "Welding", "Soldering", "Mechanical fasteners"),
+    why = c(
+      "Welding gives leak-proof, monolithic strength.",
+      "Soldering uses low temperature that protects components.",
+      "Fasteners allow disassembly.",
+      "Adhesives join dissimilar materials and distribute stress.",
+      "Above 450 degrees C it is brazing, below it soldering.",
+      "Welding keeps full strength where adhesives and solders would degrade.",
+      "Below 450 degrees C the process is soldering.",
+      "Fasteners can be removed and, with locking features, resist loosening."
+    )
+  ),
+  intro = "The 450 degrees C boundary separates brazing from soldering.",
+  question = "<p>Match each requirement to the joining method that suits it: welding, brazing, soldering, adhesive bonding or mechanical fasteners.</p>"
+)
+```
+
 ### Practice Problems {#sec-joining-practice}
 
 ::: {.question}
