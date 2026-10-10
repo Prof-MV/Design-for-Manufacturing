@@ -1094,6 +1094,110 @@ Specialized loss functions can encode this asymmetry (the original C-MAPSS compe
 
 ***
 
+### Try it yourself — Week 3 {#ml-w3-tryit}
+
+#### RMSE and MAE by hand {#ml-w3-tryit-metrics}
+
+A model predicts remaining useful life (RUL) for six engines. Prediction errors (predicted minus true, in cycles) are: $-12$, $+8$, $+25$, $-4$, $+40$, $-15$. A **positive** error means the engine was predicted to last longer than it really will.
+
+```{r tryit-ml-metrics, echo=FALSE, results='asis'}
+er <- c(-12, 8, 25, -4, 40, -15)
+er_mae  <- mean(abs(er))
+er_rmse <- sqrt(mean(er^2))
+er_gain <- 50 / er_rmse
+er_late <- sum(er > 0)
+
+tryit_number(
+  id = "ml-metrics",
+  title = "MAE, RMSE and the naive baseline",
+  answers = list(
+    tryit_answer("MAE", er_mae, tol = 0.05, suffix = "cycles", hint = "Mean of the absolute errors."),
+    tryit_answer("RMSE", er_rmse, tol = 0.05, suffix = "cycles", hint = "Square each error, take the mean, then the square root."),
+    tryit_answer("Improvement factor over the naive baseline (RMSE of about 50 cycles)", er_gain, tol = 0.05,
+                 hint = "50 / your RMSE. The chapter asks for at least 2x."),
+    tryit_answer("Number of dangerous (late) predictions", er_late, tol = 0.01, digits = 0,
+                 hint = "Count the positive errors: the engine was predicted to last longer than it did.")
+  ),
+  intro = "Then decide: is the model doing useful work?",
+  question = paste0(
+    "<p>A model's remaining-useful-life prediction errors (predicted minus true, in cycles) for six engines are -12, +8, +25, -4, +40 and -15. ",
+    "MAE = mean(|e|); RMSE = sqrt(mean(e&sup2;)). The naive baseline (always predicting the mean RUL) has an RMSE of about 50 cycles. ",
+    "A positive error means the engine was predicted to last longer than it really will (a late prediction). ",
+    "Find the MAE, the RMSE, the improvement factor 50 / RMSE, and the number of late predictions.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$\text{MAE} = (12 + 8 + 25 + 4 + 40 + 15)/6 = `r sprintf("%.2f", er_mae)`$ cycles. $\text{RMSE} = \sqrt{(144 + 64 + 625 + 16 + 1600 + 225)/6} = `r sprintf("%.1f", er_rmse)`$ cycles, larger than the MAE because the 40-cycle miss is penalized more heavily.
+
+Against the 50-cycle baseline the model is `r sprintf("%.1f", er_gain)` times better, above the 2x the chapter requires. But `r er_late` of the 6 errors are late predictions, and the worst (+40) is exactly the kind a maintenance planner cannot afford: RMSE hides the asymmetry.
+
+</details>
+
+#### Which maintenance regime? {#ml-w3-tryit-regimes}
+
+```{r tryit-ml-regime-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "maintenance-regimes",
+  title = "Name the maintenance regime",
+  bins = c("Reactive", "Preventive", "Predictive / CBM", "Prescriptive"),
+  cards = data.frame(
+    text = c(
+      "Run a non-critical exhaust fan until it fails, then replace it",
+      "Replace the spindle bearings every 2000 hours regardless of condition",
+      "Monitor vibration continuously and replace the bearing when its estimated remaining life falls below a threshold",
+      "The system recommends which repair to perform and when, using ground-truth feedback from earlier repairs",
+      "Wait for the failure and fix it, accepting catastrophic cost on capital equipment because no one is monitoring",
+      "Swap a cheap filter at a fixed interval because it is fast and inexpensive to replace"
+    ),
+    bin = c("Reactive", "Preventive", "Predictive / CBM", "Prescriptive", "Reactive", "Preventive"),
+    why = c(
+      "Run to failure suits equipment where failure has no downstream impact.",
+      "Fixed intervals regardless of condition: scheduled maintenance.",
+      "Decisions based on actual condition, monitored continuously.",
+      "Prescriptive systems recommend what to do, not only when.",
+      "Reactive maintenance is low cost day to day but catastrophic when the failure lands.",
+      "Preventive maintenance still makes sense for cheap, fast-to-replace components."
+    )
+  ),
+  intro = "Use the regime table at the start of Week 3.",
+  question = "<p>Match each practice to the maintenance regime it represents: reactive, preventive, predictive (condition-based) or prescriptive.</p>"
+)
+```
+
+#### Is the split sound? {#ml-w3-tryit-leakage}
+
+```{r tryit-ml-leak-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "split-leakage",
+  title = "Sound validation, or a leak?",
+  bins = c("Sound", "Leaks information"),
+  cards = data.frame(
+    text = c(
+      "Engines 1 to 80 are used for training and engines 81 to 100 for validation, with all cycles of each engine kept together",
+      "Rows are shuffled and 80% are assigned at random to training, so engine 12's cycle 50 is in training and its cycle 51 in validation",
+      "The validation RMSE is 5 cycles on FD001 when published results sit at 15 to 25 cycles",
+      "Scaling statistics are computed on the training engines only and then applied to the validation engines",
+      "Scaling statistics are computed on the full dataset before the split",
+      "The validation RMSE is about 20 cycles for a Random Forest on rolling features"
+    ),
+    bin = c("Sound", "Leaks information", "Leaks information", "Sound", "Leaks information", "Sound"),
+    why = c(
+      "Engine-wise splitting keeps each engine's history on one side.",
+      "Neighbouring cycles of the same engine are nearly identical, so the model has effectively seen the answer.",
+      "A suspiciously low RMSE is the classic symptom of row-wise splitting.",
+      "Everything learned comes from training data only.",
+      "The validation data have influenced the preprocessing.",
+      "This is in line with the chapter's target of about 20 cycles."
+    )
+  ),
+  intro = "Ask whether anything the model sees in training carries information about the validation answers.",
+  question = "<p>Decide whether each validation setup or result is sound, or leaks information from the validation data into training.</p>"
+)
+```
+
 ### Self-Check Questions — Week 3 {#ml-w3-check}
 
 1. A colleague's Random Forest achieves 5-cycle RMSE on C-MAPSS FD001 with default settings. You are suspicious. What is the most likely cause?
