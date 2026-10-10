@@ -385,7 +385,7 @@ book's version (adds `goal`, `goal_test`, `rerun`); `R/helpers.R` sources
 - [x] **02-01 Bolt joints:** tightening-method sorter, M10 chain (6 answers),
   safety-factor grid (12 cells), challenge goal on
   `bolt-load-response-interactive`.
-- [ ] Phase B: 06-01 to 06-08
+- [x] Phase B: 06-01 to 06-08 (3 to 4 exercises each; 8 challenge goals verified in plain R and in a real browser)
 - [ ] Phase C: 06-09 to 06-15
 - [ ] Phase D: Part 2
 - [ ] Phase E: Parts 1 and 3
