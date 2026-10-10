@@ -438,6 +438,111 @@ In the worked example of Figure @fig-lab2-results-12, the jump from Fine to Very
 
 ---
 
+### Try it yourself {#sec-fea-tryit}
+
+#### Put the five steps in order {#sec-tryit-fea-steps}
+
+```{r tryit-fea-order, echo=FALSE, results='asis'}
+tryit_order(
+  id = "fea-workflow",
+  title = "The static-study workflow",
+  steps = c(
+    "Material: tell the model what the part is made of",
+    "Fixtures: tell the model where the part is held",
+    "Loads: tell the model what forces or pressures act on it",
+    "Mesh: chop the part into elements",
+    "Run and interpret: solve, then read stress, displacement and factor of safety"
+  ),
+  intro = "Use the up and down buttons to put the steps in order.",
+  question = "<p>Put the five steps of a static FEA study in the order in which they are performed.</p>"
+)
+```
+
+#### Has the mesh converged? {#sec-tryit-convergence}
+
+A plate of width $w = 60$ mm and thickness $t = 5$ mm has a central hole of diameter $d = 12$ mm and carries $P = 12$ kN in tension. The stress concentration factor for the hole is taken as $K_t \approx 3$.
+
+```{r tryit-converge-grid, echo=FALSE, results='asis'}
+cv <- data.frame(
+  `Run` = c("Medium", "Fine", "Very fine"),
+  `Elements` = c(5200, 17500, 46000),
+  `Previous peak (MPa)` = c(116, 137, 146),
+  `Peak (MPa)` = c(137, 146, 149),
+  check.names = FALSE
+)
+cv[["Change (%)"]] <- abs(cv[["Peak (MPa)"]] - cv[["Previous peak (MPa)"]]) / cv[["Peak (MPa)"]] * 100
+cv_hand <- list(P = 12000, w = 60, d = 12, t = 5, Kt = 3)
+cv_hand$nom  <- cv_hand$P / ((cv_hand$w - cv_hand$d) * cv_hand$t)
+cv_hand$peak <- cv_hand$Kt * cv_hand$nom
+cv_diff <- abs(149 - cv_hand$peak) / cv_hand$peak * 100
+
+tryit_grid(
+  id = "mesh-convergence",
+  title = "Percentage change between refinements",
+  data = cv,
+  blank = "Change (%)",
+  tol = c(`Change (%)` = 0.1),
+  hints = c(`Change (%)` = "|new peak - previous peak| / new peak x 100, as in the chapter's worked example."),
+  digits = 0,
+  answers = list(
+    tryit_answer("Nominal stress on the reduced section", cv_hand$nom, tol = 0.2, suffix = "MPa",
+                 hint = "sigma_nom = P / ((w - d) t), in N and mm2 for MPa."),
+    tryit_answer("Hand-calculated peak stress (K_t = 3)", cv_hand$peak, tol = 0.5, suffix = "MPa", hint = "K_t x sigma_nom."),
+    tryit_answer("Difference between the converged FEA peak (149 MPa) and the hand calculation", cv_diff, tol = 0.1, suffix = "%",
+                 hint = "|FEA - hand| / hand x 100.")
+  ),
+  intro = "Then decide which run is the first to change by less than 5%.",
+  question = paste0(
+    "<p>A convergence study gave peak von Mises stresses of 116 MPa (coarse), 137 MPa (medium, 5200 elements), 146 MPa (fine, 17 500 elements) ",
+    "and 149 MPa (very fine, 46 000 elements). The percentage change of a refinement is |new - previous| / new x 100. ",
+    "Find the change for the medium, fine and very fine runs. A plate (w = 60 mm, t = 5 mm, central hole d = 12 mm, P = 12 kN) has ",
+    "sigma_nom = P / ((w - d) t) and a hand-calculated peak of K_t x sigma_nom with K_t = 3. Find both, and the percentage difference between the ",
+    "very fine FEA peak of 149 MPa and the hand calculation.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-converge-solution, echo=FALSE}
+knitr::kable(cv, digits = c(0, 0, 0, 0, 1), align = "c")
+```
+
+The change falls to `r sprintf("%.1f", cv[["Change (%)"]][3])`% on the last refinement, under the 5% threshold, so the study has converged at about 149 MPa. The hand calculation gives $3 \times `r sprintf("%.0f", cv_hand$nom)` = `r sprintf("%.0f", cv_hand$peak)`$ MPa, within `r sprintf("%.1f", cv_diff)`% of the FEA result: the model is validated against a hand calculation as well as against itself.
+
+</details>
+
+#### Trust it or not? {#sec-tryit-fea-trust}
+
+```{r tryit-fea-trust-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "fea-trust",
+  title = "Can you rely on this result?",
+  bins = c("Reasonable to trust", "Do not trust yet"),
+  cards = data.frame(
+    text = c(
+      "The peak stress changed by 1.8% between the last two mesh refinements",
+      "The peak stress at a sharp inside corner doubles every time the mesh is refined near it",
+      "The converged FEA peak agrees with the hand-calculated value within a few percent",
+      "The study was run once on a coarse mesh and the peak is 20% below the hand calculation",
+      "Fixtures were assigned to a single edge by mistake and the part is free to rotate, but the colours look smooth",
+      "Stress at a point load applied to a single node keeps climbing as the mesh is refined"
+    ),
+    bin = c("Reasonable to trust", "Do not trust yet", "Reasonable to trust", "Do not trust yet", "Do not trust yet", "Do not trust yet"),
+    why = c(
+      "A change under 5% between refinements indicates convergence.",
+      "A doubling peak at a corner is a singularity: use a fillet or evaluate away from it.",
+      "Agreement with an independent hand calculation is validation.",
+      "A coarse mesh cannot resolve a steep stress gradient; refine and compare.",
+      "Garbage in, garbage out: boundary conditions decide everything.",
+      "A point load on a node is a singularity, not a real stress."
+    )
+  ),
+  intro = "Think about convergence, singularities and boundary conditions.",
+  question = "<p>For each finite element result, decide whether it is reasonable to trust or should not be trusted yet.</p>"
+)
+```
+
 ## Week 3 — Validation, Redesign, and Reporting {#sec-week3-12}
 
 ### Verification Versus Validation {#sec-vandv-12}
