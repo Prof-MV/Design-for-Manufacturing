@@ -4,9 +4,9 @@ Scope: this book (Design for Manufacturing, 47 chapters in 6 parts).
 Reusable prompt: `../ProcessEngineering/INTERACTIVE-EXERCISES-PROMPT.md`.
 Reference proposal: `../ProcessEngineering/INTERACTIVE-EXERCISES-PLAN.md`.
 
-Status: **Phase A (pilot, 02-01) built and checked; waiting for your browser
-try-out before rolling out (section 7).** Mark items `[x]` as they are built so a later session can
-resume.
+Status: **All phases built on branch `interactive-exercises`: 115 checked
+exercises, 17 calculator challenges and 2 simulations across 41 chapters
+(section 7).**
 
 ---
 
@@ -370,24 +370,70 @@ arithmetic) agrees with the book. I did not recompute Part 6.
 ## 7. Decisions recorded and progress
 
 Decisions (from you): pilot 02-01; course code `ENGR-1025`; `quizzes/`
-gitignored; overlap with existing quizzes is fine; scope as proposed;
-no label-figure widget; sandboxes in 01-04 and 02-03 may load webR; no
+gitignored; overlap with existing quizzes is fine; scope as proposed; no
+label-figure widget; sandboxes in 01-04 and 02-03 may load webR; no
 different-numbers hidden twins (the twin carries the full problem statement,
-which you will turn into a Brightspace Arithmetic question by hand); fix the
-five items in section 5 (not yet done, nothing in the pilot touches them).
+which you turn into a Brightspace Arithmetic question by hand); fix the
+printed errors; commit and push to master when finished.
 
-Library port (done): `R/tryit.R`, `js/tryit.js`, `.tryit-*` section of
-`style.css` and the new `js/qwebr-calculator.js` copied unchanged from
-`../ProcessEngineering`; `qwebr_calc_card()` in `R/helpers.R` replaced by that
-book's version (adds `goal`, `goal_test`, `rerun`); `R/helpers.R` sources
-`R/tryit.R` and sets `options(tryit.course = "ENGR-1025")`.
+Library port: `R/tryit.R`, `js/tryit.js`, the `.tryit-*` section of
+`style.css` and `js/qwebr-calculator.js` were copied unchanged from
+`../ProcessEngineering`; `qwebr_calc_card()` in `R/helpers.R` is that book's
+version (adds `goal`, `goal_test`, `rerun`); `R/helpers.R` sources
+`R/tryit.R` and sets `options(tryit.course = "ENGR-1025")`. No widget type
+was added and no library bug was found, so there is nothing to carry back.
 
-- [x] **02-01 Bolt joints:** tightening-method sorter, M10 chain (6 answers),
-  safety-factor grid (12 cells), challenge goal on
-  `bolt-load-response-interactive`.
-- [x] Phase B: 06-01 to 06-08 (3 to 4 exercises each; 8 challenge goals verified in plain R and in a real browser)
-- [x] Phase C: 06-09 to 06-15 (first use of the diagram widget in 06-12 and of the order widget in 06-15; both driven in a real browser)
-- [ ] Phase D: Part 2
-- [ ] Phase E: Parts 1 and 3
-- [ ] Phase F: sandboxes, Parts 4 and 5
-- [ ] The five content items in section 5
+### Built
+
+| Phase | Chapters | Done |
+|---|---|---|
+| A pilot | 02-01 | yes |
+| B | 06-01 to 06-08 | yes |
+| C | 06-09 to 06-15 | yes |
+| D | 02-02 to 02-12 | yes |
+| E | 01-01 to 01-05, 03-00 to 03-07 | yes |
+| F | 01-04 and 02-03 simulators, 04-01, 05-01 | yes |
+
+Counts (from the sources): 115 `tryit_*` exercises, 19 `goal` challenges (17 on
+existing calculators, 2 simulations with a run number and "Run again"),
+267 graded-twin questions in `quizzes/tryit_<chapter>.csv` (gitignored).
+Widget use: number 37, grid 28, sort 44, order 4, diagram 2.
+
+### Not built, and why
+
+- **Overview chapters** 01-00, 02-00, 06-00 and **04-02** (lab): nothing to
+  perform, as agreed.
+- **Simulations beyond the two built:** the ideas in sections 3 for
+  tampering, push-vs-pull and similar belong to the Process Engineering book.
+- **Scorer type:** folded into `tryit_number()` as planned.
+- **Label-figure:** declined.
+- **Brightspace twins for the two simulators:** a random run has no single
+  right answer, so they have no twin.
+- **Third and fourth ideas from section 3** that were not built to keep
+  chapters at three or four exercises, for example the 06-01
+  collaborative-mode sorter, the 06-02 stop-category sorter, the 06-03
+  NEMA/IP picker and the 06-05 shield-rule sorter.
+
+### Printed content issues
+
+| Where | What | Action |
+|---|---|---|
+| 03-07 Sintering, Problem 3 | 150 g in the compact gives 20.4 g/cm^3 | **Fixed**: 48 g, so the stated 6.52 g/cm^3 and 82.8% hold |
+| 03-05 Machining, Problem 3 | $45 / 57% saving | **Fixed**: $60 / 43% |
+| 01-04 GD&T, Exercise 2 | "(0 degrees spacing)" | **Fixed**: removed |
+| 03-03 Stamping, Problem 2 | Single-draw depth by the chapter's own 40 to 50% rule gives 40 mm; equal blank and cup area at a draw ratio of 2.0 gives about 30 mm | **Left**: consistent with the chapter's stated rule of thumb; the conclusion (not possible in one draw) is the same |
+| 01-04 GD&T symbols | The book's tables use the same glyph for flatness and total runout, use the concentricity glyph for position, and show cylindricity as a circle | **Left**: changing them touches the figures and needs a PDF font check; recommend a separate pass |
+| 02-09 Couplings, multi-plate clutch | "n = number of discs x 2" and then "a 5-disc pack has n = 8 (4 friction discs x 2)" | **Left**: the exercise states the count explicitly |
+| 02-11 Brakes, Problems 1 to 6 | No printed solutions, so nothing to compare | None |
+| Part 6 (all) | Not recomputed beyond the cells used by the exercises | None |
+
+### Verification
+
+Per chapter, in headless Chrome (puppeteer-core): every exercise accepts its
+key (exact and rounded), flags one wrong answer and resets cleanly; every
+challenge is unmet at the defaults and met after one worked solution, in
+plain R (`challenge_check.R`) and in a real browser with webR; the simulators
+were also checked over seeds 1 to 10, and the bearing fleet reaches its goal
+from each starting seed within a few "Run again" presses. The print format
+(PDF) was rendered at the end of phases A, B, C and F with no raw HTML.
+The visual check in a browser is still yours.
