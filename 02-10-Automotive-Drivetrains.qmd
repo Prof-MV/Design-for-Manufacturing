@@ -769,6 +769,83 @@ ggplot(ev_long, aes(x = Attribute, y = Score, fill = Config)) +
 
 ***
 
+### Try it yourself {#sec-drivetrain-tryit}
+
+These use a drivetrain that is not in the worked example. Each exercise checks your answer and lets you try again.
+
+#### Gear ratios, wheel torque and road speed {#sec-tryit-gear-table}
+
+A manual gearbox has the ratios below, a final drive of $3.42$:1, a driveline efficiency of $0.92$ and tires with a rolling radius of $0.32$ m. The engine produces $160$ N·m.
+
+```{r tryit-gearbox-grid, echo=FALSE, results='asis'}
+gb <- data.frame(`Gear` = c("1st", "2nd", "3rd", "4th", "5th"),
+                 `Gearbox ratio` = c(3.55, 2.05, 1.38, 1.00, 0.78),
+                 check.names = FALSE)
+fd <- 3.42; eta <- 0.92; r_t <- 0.32; T_e <- 160; n_e <- 3000
+gb[["Overall ratio"]]           <- gb[["Gearbox ratio"]] * fd
+gb[["Wheel torque (N·m)"]]       <- T_e * gb[["Overall ratio"]] * eta
+gb[["Speed at 3000 rpm (km/h)"]] <- n_e * 2 * pi * r_t / (60 * gb[["Overall ratio"]]) * 3.6
+
+tryit_grid(
+  id = "gearbox-table",
+  title = "Overall ratio, wheel torque and road speed",
+  data = gb,
+  blank = c("Overall ratio", "Wheel torque (N·m)", "Speed at 3000 rpm (km/h)"),
+  tol = c(`Overall ratio` = 0.02, `Wheel torque (N·m)` = 5, `Speed at 3000 rpm (km/h)` = 0.5),
+  hints = c(`Overall ratio` = "Overall ratio = gearbox ratio x final drive (3.42).",
+            `Wheel torque (N·m)` = "T_wheel = T_engine x overall ratio x efficiency (0.92).",
+            `Speed at 3000 rpm (km/h)` = "Wheel rpm = 3000 / overall ratio; v = 2 pi r n / 60 in m/s, then x 3.6 for km/h."),
+  digits = 2,
+  intro = "Give the overall ratio to two decimals, torque to the nearest N·m and speed to one decimal.",
+  question = paste0(
+    "<p>A manual gearbox has ratios 3.55, 2.05, 1.38, 1.00 and 0.78 in gears 1 to 5, a final drive of 3.42:1, a driveline efficiency of 0.92 ",
+    "and tires with a rolling radius of 0.32 m. The engine produces 160 N&middot;m at 3000 rpm. For each gear find the overall ratio, ",
+    "the wheel torque (engine torque x overall ratio x efficiency) and the road speed at 3000 rpm in km/h.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-gearbox-solution, echo=FALSE}
+knitr::kable(gb, digits = c(0, 2, 2, 0, 1), align = "c")
+```
+
+First gear gives `r sprintf("%.1f", gb[["Wheel torque (N·m)"]][1] / gb[["Wheel torque (N·m)"]][4])` times the wheel torque of fourth gear but only `r sprintf("%.0f", 100 * gb[["Speed at 3000 rpm (km/h)"]][1] / gb[["Speed at 3000 rpm (km/h)"]][4])`% of its road speed at the same engine speed: torque is bought with speed.
+
+</details>
+
+#### Which drive layout? {#sec-tryit-drive-layout}
+
+```{r tryit-layout-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "drive-layout",
+  title = "FWD, RWD or AWD?",
+  bins = c("Front-wheel drive", "Rear-wheel drive", "All-wheel drive"),
+  cards = data.frame(
+    text = c(
+      "The engine's weight sits over the driven wheels, giving good traction on snow at low cost",
+      "Weight distribution can be balanced front to rear, and steering is not burdened by driving torque",
+      "Power can go to every wheel for the best traction, at the cost of added weight and complexity",
+      "A compact, packaging-efficient layout with the engine, transmission and differential in one unit at the front",
+      "A common choice for performance cars and trucks that tow, because weight transfers onto the driven wheels under acceleration",
+      "A system with a center differential or coupling that distributes torque between the axles"
+    ),
+    bin = c("Front-wheel drive", "Rear-wheel drive", "All-wheel drive", "Front-wheel drive", "Rear-wheel drive", "All-wheel drive"),
+    why = c(
+      "Weight over the driven wheels helps traction.",
+      "Separating steering and drive allows balanced weight and handling.",
+      "Driving all four wheels maximizes traction but adds cost and mass.",
+      "FWD packages everything at the front.",
+      "Under acceleration weight shifts rearward onto the driven wheels.",
+      "A center differential or coupling splits torque between axles."
+    )
+  ),
+  intro = "Use the drive configuration comparison in the chapter.",
+  question = "<p>Match each statement to the drive layout it describes: front-wheel drive, rear-wheel drive or all-wheel drive.</p>"
+)
+```
+
 ### Practice Problems {#sec-drivetrain-practice-13}
 
 **Problem 1 — Drive Configuration Selection**
