@@ -578,7 +578,9 @@ qwebr_calc_card(
     qwebr_calc_input("T_device", "Light curtain response time", value = 0.04, min = 0, max = 0.5, step = 0.005, suffix = "s"),
     qwebr_calc_input("C", "Intrusion allowance C", value = 850, min = 0, max = 1200, step = 10, suffix = "mm"),
     qwebr_calc_input("planned_distance", "Planned mounting distance (mm)", value = 1800, min = 500, max = 4000, step = 10, type = "slider")
-  )
+  ),
+  goal = "Make the check pass with the light curtain mounted no more than 1500 mm from the hazard.",
+  goal_test = "planned_distance >= S_required && planned_distance <= 1500"
 )
 ```
 
@@ -933,6 +935,144 @@ summary_table %>%
       col.names = c("Design Task", "Governing Relationship", "Key Rule of Thumb")) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, background = "#2C3E50", color = "white")
+```
+
+## Try it yourself
+
+These exercises use a different cell from the door-panel example, so you cannot copy the worked numbers. Each one checks your answer and lets you try again.
+
+### Reach and payload for a new cell {#sec-tryit-reach-payload-06-01}
+
+A machine-tending robot (rated maximum reach $R_{max} = 2400$ mm, rated payload $W_{max0} = 90$ kg for offsets up to $L_0 = 50$ mm) is mounted with its axis-1 centerline at $(1000, 0, 250)$ mm in cell coordinates. It must reach a fixture point at $(2600, -900, 650)$ mm with a 350 mm tool. The gripper (18 kg) and part (9 kg) have a combined CG offset of 240 mm from the flange.
+
+```{r tryit-reach-setup-06-01, echo=FALSE}
+rc <- list(Rmax = 2400, tool = 350, base = c(1000, 0, 250), pt = c(2600, -900, 650),
+           W0 = 90, L0 = 50, mass = 18 + 9, L = 240)
+rc$D        <- sqrt(sum((rc$pt - rc$base)^2))
+rc$reach    <- rc$D + rc$tool
+rc$margin   <- (rc$Rmax - rc$reach) / rc$Rmax * 100
+rc$Mcap     <- rc$W0 * rc$L0
+rc$pay_max  <- if (rc$L <= rc$L0) rc$W0 else rc$Mcap / rc$L
+```
+
+```{r tryit-reach-number-06-01, echo=FALSE, results='asis'}
+tryit_number(
+  id = "reach-payload-06-01",
+  title = "Reach margin and payload limit",
+  answers = list(
+    tryit_answer("Straight-line distance D from base to point", rc$D, tol = 2, suffix = "mm",
+                 hint = "Square the three coordinate differences, add them, take the square root."),
+    tryit_answer("Required reach (D + tool length)", rc$reach, tol = 2, suffix = "mm",
+                 hint = "The chapter adds the full tool length to D, whatever the orientation."),
+    tryit_answer("Reach margin", rc$margin, tol = 0.2, suffix = "%",
+                 hint = "(R_max - required reach) / R_max x 100."),
+    tryit_answer("Maximum allowable payload at the 240 mm offset", rc$pay_max, tol = 0.2, suffix = "kg",
+                 hint = "The offset is beyond L_0, so use M_cap / L with M_cap = W_max0 x L_0.")
+  ),
+  intro = "Then decide for yourself: does the point meet the 10% margin rule, and is the 27 kg load acceptable?",
+  question = paste0(
+    "<p>A robot has rated maximum reach R_max = 2400 mm and rated payload W_max0 = 90 kg for CG offsets up to L_0 = 50 mm. ",
+    "Its axis-1 centerline is at (1000, 0, 250) mm in cell coordinates. It must reach a point at (2600, -900, 650) mm with a ",
+    "350 mm tool (add the full tool length to the straight-line distance). The gripper (18 kg) and part (9 kg) have a combined ",
+    "CG offset of 240 mm from the flange. Beyond L_0 the allowable payload is M_cap / L, with M_cap = W_max0 x L_0.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$D = \sqrt{1600^2 + 900^2 + 400^2} = `r sprintf("%.0f", rc$D)` \text{ mm}$$
+
+$$\text{Required reach} = D + L_{tool} = `r sprintf("%.0f", rc$D)` + 350 = `r sprintf("%.0f", rc$reach)` \text{ mm}$$
+
+$$\text{Margin} = \frac{2400 - `r sprintf("%.0f", rc$reach)`}{2400} \times 100\% = `r sprintf("%.1f", rc$margin)`\%$$
+
+The point is reachable but the margin is below the 10% the chapter asks for wherever the tool needs a specific orientation, so it should be moved or the robot changed.
+
+$$Payload_{max} = \frac{M_{cap}}{L} = \frac{`r rc$Mcap`}{`r rc$L`} = `r sprintf("%.1f", rc$pay_max)` \text{ kg}$$
+
+The load is 27 kg, which is more than `r sprintf("%.1f", rc$pay_max)` kg: the payload check fails even though 27 kg is far below the 90 kg on the datasheet.
+
+</details>
+
+### Cycle time from move profiles {#sec-tryit-cycle-06-01}
+
+```{r tryit-cycle-grid-06-01, echo=FALSE, results='asis'}
+cy <- list(v = 1400, a = 4500, dwell = 1.5)
+move_time <- function(d, v, a) {
+  d_acc <- v^2 / (2 * a)
+  ifelse(d >= 2 * d_acc, 2 * v / a + (d - 2 * d_acc) / v, 2 * sqrt(d / a))
+}
+cy_tab <- data.frame(`Move` = paste0("M", 1:4), `Distance (mm)` = c(200, 600, 900, 350), check.names = FALSE)
+cy_tab[["Move time (s)"]] <- move_time(cy_tab[["Distance (mm)"]], cy$v, cy$a)
+cy$t_cycle <- sum(cy_tab[["Move time (s)"]]) + cy$dwell
+
+tryit_grid(
+  id = "cycle-time-06-01",
+  title = "Move times and cycle time",
+  data = cy_tab,
+  blank = "Move time (s)",
+  tol = c(`Move time (s)` = 0.005),
+  hints = c(`Move time (s)` = "First find d_accel = v^2 / (2a). If d is less than 2 d_accel the move never reaches v_max: use 2 sqrt(d/a). Otherwise use the trapezoidal formula."),
+  digits = 0,
+  answers = list(
+    tryit_answer("Cycle time including 1.5 s of dwell and handshake", cy$t_cycle, tol = 0.02, suffix = "s",
+                 hint = "Add the four move times and the 1.5 s of dwell.")
+  ),
+  intro = "Some of these moves are too short to reach full speed. Work to three decimals.",
+  question = paste0(
+    "<p>A robot moves at v_max = 1400 mm/s with acceleration and deceleration a = 4500 mm/s&sup2;. ",
+    "For a move of distance d the acceleration distance is d_accel = v_max&sup2; / (2a). If d is at least 2 d_accel the move is trapezoidal ",
+    "and t = 2 v_max / a + (d - 2 d_accel) / v_max; otherwise it is triangular and t = 2 sqrt(d / a). ",
+    "The cycle has four moves of 200, 600, 900 and 350 mm, plus a total of 1.5 s of weld dwell and PLC handshake.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-cycle-solution-06-01, echo=FALSE}
+knitr::kable(cy_tab, digits = c(0, 0, 3), align = "c")
+```
+
+$d_{accel} = 1400^2 / (2 \cdot 4500) = `r sprintf("%.1f", cy$v^2 / (2 * cy$a))`$ mm, so any move shorter than `r sprintf("%.1f", cy$v^2 / cy$a)` mm is triangular. Cycle time = `r sprintf("%.3f", sum(cy_tab[["Move time (s)"]]))` s of motion + `r cy$dwell` s of dwell = **`r sprintf("%.2f", cy$t_cycle)` s**.
+
+</details>
+
+### Choose the guarding {#sec-tryit-guarding-06-01}
+
+```{r tryit-guarding-sort-06-01, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "guarding-sort-06-01",
+  title = "Which guarding fits the access point?",
+  bins = c("Fixed fencing", "Safety light curtain", "Area scanner"),
+  cards = data.frame(
+    text = c(
+      "The back of a welding cell that nobody enters except during a scheduled shutdown",
+      "A load/unload window where the operator places a part by hand every cycle in a clean assembly area",
+      "A forklift lane crossing the cell where a slow-down zone and a stop zone are both needed",
+      "A perimeter segment with no routine access and a stable, high-hazard boundary",
+      "An irregular, L-shaped opening that is awkward to cover with straight beams",
+      "A press-style access opening used twenty times an hour at a fixed location",
+      "A cell that needs the reduced-speed warning zone to be moved by software when the layout changes",
+      "A mesh panel whose openings must respect the standoff distance in ISO 13857"
+    ),
+    bin = c("Fixed fencing", "Safety light curtain", "Area scanner", "Fixed fencing",
+            "Area scanner", "Safety light curtain", "Area scanner", "Fixed fencing"),
+    why = c(
+      "No routine opening is needed, so the lowest-cost option does the job.",
+      "Frequent access at a fixed point in a clean environment is the light-curtain case.",
+      "Graduated warn-then-stop zones from one sensor are what a scanner provides.",
+      "Fencing is the default for boundary segments without routine access.",
+      "A scanner protects an irregular shape with software-defined zones.",
+      "Frequent operator access at a fixed load/unload point.",
+      "Zones are software-defined on a scanner, so they can be changed without moving hardware.",
+      "Fencing still needs openings that respect the opening-to-standoff relationship."
+    )
+  ),
+  intro = "Pick the guarding technology each situation calls for.",
+  question = "<p>Match each robot-cell access point to the guarding technology that suits it: fixed fencing, safety light curtain, or safety-rated area scanner.</p>"
+)
 ```
 
 ## Practice Problems
