@@ -128,6 +128,86 @@ sophisticated PLM (Product Lifecycle Management) systems to track every drawing
 change.
 :::
 
+### Try it yourself {#sec-tryit-drafting}
+
+These use drawings that are not in the examples above. Each exercise checks your answer and lets you try again.
+
+#### Scale and default tolerances {#sec-tryit-scale}
+
+A drawing scale is written **Drawing : Object**. The default tolerance box of the drawing says: two-place dimensions $\pm 0.02$, three-place dimensions $\pm 0.010$.
+
+```{r tryit-scale-number, echo=FALSE, results='asis'}
+sc <- list(a_draw = 84, a_scale = 2, b_draw = 15, b_scale = 1 / 4, c_dim = 3.250, d_dim = 7.50)
+sc$a_part <- sc$a_draw / sc$a_scale
+sc$b_part <- sc$b_draw / sc$b_scale
+sc$c_lo <- sc$c_dim - 0.010; sc$c_hi <- sc$c_dim + 0.010
+sc$d_lo <- sc$d_dim - 0.02;  sc$d_hi <- sc$d_dim + 0.02
+
+tryit_number(
+  id = "scale-default-tol",
+  title = "Real size from the drawing, and default limits",
+  answers = list(
+    tryit_answer("Real length of a part drawn 84 mm long at 2:1", sc$a_part, tol = 0.05, suffix = "mm",
+                 hint = "2:1 means the drawing is twice the part's size, so divide the drawn length by 2."),
+    tryit_answer("Real length of a part drawn 15 mm long at 1:4", sc$b_part, tol = 0.05, suffix = "mm",
+                 hint = "1:4 means the drawing is one quarter of the part's size, so multiply by 4."),
+    tryit_answer("Upper limit of the three-place dimension 3.250", sc$c_hi, tol = 0.0005,
+                 hint = "Three-place default tolerance is plus or minus 0.010."),
+    tryit_answer("Lower limit of the two-place dimension 7.50", sc$d_lo, tol = 0.005,
+                 hint = "Two-place default tolerance is plus or minus 0.02.")
+  ),
+  intro = "Give lengths to one decimal and limits to the number of places shown.",
+  question = paste0(
+    "<p>A scale is written Drawing : Object. A part is drawn 84 mm long on a 2:1 drawing, and another is drawn 15 mm long on a 1:4 drawing. ",
+    "The default tolerance box gives +/-0.02 for two-place dimensions and +/-0.010 for three-place dimensions. ",
+    "Find the real length of each part, the upper limit of the three-place dimension 3.250, and the lower limit of the two-place dimension 7.50.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+At 2:1 the drawing is twice the size of the part: $84/2 = `r sprintf("%.0f", sc$a_part)`$ mm. At 1:4 it is a quarter of the size: $15 \times 4 = `r sprintf("%.0f", sc$b_part)`$ mm.
+
+The dimension 3.250 carries three decimal places, so its limits are $3.250 \pm 0.010$: `r sprintf("%.3f", sc$c_lo)` to `r sprintf("%.3f", sc$c_hi)`. The dimension 7.50 has two places, so its limits are $7.50 \pm 0.02$: `r sprintf("%.2f", sc$d_lo)` to `r sprintf("%.2f", sc$d_hi)`.
+
+</details>
+
+#### Find it in the title block {#sec-tryit-titleblock}
+
+```{r tryit-titleblock-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "title-block",
+  title = "Which title block entry answers the question?",
+  bins = c("Scale", "Projection", "Material", "Default tolerance box", "Sheet"),
+  cards = data.frame(
+    text = c(
+      "Is the drawing twice the size of the part?",
+      "Are the views arranged in first-angle or third-angle layout?",
+      "Which alloy must the part be made from?",
+      "What variation applies to a dimension that has no tolerance written on it?",
+      "Is this page 2 of 3 in the drawing set?",
+      "Has the part been reduced to one half of its size on the sheet?",
+      "Where does the right-side view sit relative to the front view?",
+      "How much variation does an untoleranced two-place dimension allow?"
+    ),
+    bin = c("Scale", "Projection", "Material", "Default tolerance box", "Sheet", "Scale", "Projection", "Default tolerance box"),
+    why = c(
+      "The scale block compares the drawing with the object.",
+      "The projection symbol identifies the layout convention.",
+      "The material block names the specific material.",
+      "The default tolerance box covers untoleranced dimensions.",
+      "The sheet block gives the current and total sheets.",
+      "A reduction scale such as 1:2 is stated in the scale block.",
+      "The projection symbol shows the view layout.",
+      "The default tolerance box gives the variation by number of decimal places."
+    )
+  ),
+  intro = "Pick the title block entry you would look at.",
+  question = "<p>For each question, choose the title block field that answers it: scale, projection, material, default tolerance box or sheet.</p>"
+)
+```
+
 ### Key Takeaways {-}
 
 - Engineering drawings are the universal language of manufacturing
