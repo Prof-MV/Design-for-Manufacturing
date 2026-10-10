@@ -965,6 +965,131 @@ $$GR = \frac{1800}{45} = 40:1$$
 
 ---
 
+### Try it yourself {#sec-gear-tryit}
+
+These use gear trains that are not in the worked examples. Each exercise checks your answer and lets you try again.
+
+#### Follow the speed through a compound and planetary train {#sec-tryit-train}
+
+A motor turns shaft 1 at $1500$ rpm. Gear A (18 teeth) on shaft 1 drives gear B (54 teeth); gear C (20 teeth) is on the same shaft as B and drives gear D (60 teeth) on shaft 3. Shaft 3 is the sun gear input of a planetary stage with $N_{sun} = 24$ and $N_{ring} = 72$, with the ring fixed and the carrier as output.
+
+```{r tryit-train-diagram, echo=FALSE, results='asis'}
+gt <- list(n_in = 1500, A = 18, B = 54, C = 20, D = 60, Ns = 24, Nr = 72)
+gt$n2    <- gt$n_in * gt$A / gt$B
+gt$n3    <- gt$n2 * gt$C / gt$D
+gt$GRp   <- 1 + gt$Nr / gt$Ns
+gt$n_out <- gt$n3 / gt$GRp
+gt$GR    <- gt$n_in / gt$n_out
+
+tryit_diagram(
+  id = "gear-train",
+  title = "Speeds along the gear train",
+  direction = "right",
+  nodes = list(
+    tryit_node("s1", "Shaft 1 (motor)", 1, given = c("Gear A" = "18 teeth", "Speed" = "1500 rpm")),
+    tryit_node("s2", "Shaft 2", 2, given = c("Gear B" = "54 teeth", "Gear C" = "20 teeth"),
+               blank = list(tryit_answer("Speed", gt$n2, tol = 1, suffix = "rpm",
+                                         hint = "A drives B: shaft 2 speed = 1500 x 18 / 54."))),
+    tryit_node("s3", "Shaft 3 (sun input)", 3, given = c("Gear D" = "60 teeth"),
+               blank = list(tryit_answer("Speed", gt$n3, tol = 1, suffix = "rpm",
+                                         hint = "C drives D: shaft 3 speed = shaft 2 speed x 20 / 60."))),
+    tryit_node("out", "Carrier (output)", 4, given = c("N_sun" = "24", "N_ring" = "72 (fixed)"),
+               blank = list(tryit_answer("Speed", gt$n_out, tol = 0.5, suffix = "rpm",
+                                         hint = "Ring fixed, sun in, carrier out: GR = 1 + N_ring / N_sun.")))
+  ),
+  edges = list(c("s1", "s2"), c("s2", "s3"), c("s3", "out")),
+  answers = list(
+    tryit_answer("Overall ratio, motor to carrier", gt$GR, tol = 0.1, suffix = ": 1",
+                 hint = "Input speed divided by output speed.")
+  ),
+  intro = "Each mesh divides the speed by driven teeth / driver teeth.",
+  question = paste0(
+    "<p>Shaft 1 turns at 1500 rpm and carries gear A (18 teeth), which drives gear B (54 teeth). Gear C (20 teeth) on the same shaft as B ",
+    "drives gear D (60 teeth) on shaft 3. Shaft 3 is the sun input of a planetary stage with N_sun = 24 and N_ring = 72, ring fixed, ",
+    "carrier output, for which GR = 1 + N_ring / N_sun.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$n_2 = 1500 \times \frac{18}{54} = `r sprintf("%.0f", gt$n2)` \text{ rpm}, \qquad n_3 = `r sprintf("%.0f", gt$n2)` \times \frac{20}{60} = `r sprintf("%.1f", gt$n3)` \text{ rpm}$$
+
+$$GR_{planetary} = 1 + \frac{72}{24} = `r sprintf("%.0f", gt$GRp)`, \qquad n_{out} = \frac{`r sprintf("%.1f", gt$n3)`}{`r sprintf("%.0f", gt$GRp)`} = `r sprintf("%.2f", gt$n_out)` \text{ rpm}, \qquad GR_{total} = `r sprintf("%.0f", gt$GR)`:1$$
+
+The overall ratio is the product of the stage ratios: $3 \times 3 \times 4 = `r gt$GR`$.
+
+</details>
+
+#### Gear terminology table {#sec-tryit-gear-terms}
+
+```{r tryit-gear-grid, echo=FALSE, results='asis'}
+gg <- data.frame(`Module m (mm)` = c(2.5, 4, 1.5, 6), `Teeth N` = c(36, 21, 48, 17), check.names = FALSE)
+gg[["Pitch diameter d (mm)"]]   <- gg[["Module m (mm)"]] * gg[["Teeth N"]]
+gg[["Circular pitch p (mm)"]]   <- pi * gg[["Module m (mm)"]]
+gg[["Outside diameter d_o (mm)"]] <- gg[["Module m (mm)"]] * (gg[["Teeth N"]] + 2)
+
+tryit_grid(
+  id = "gear-terms",
+  title = "Pitch diameter, circular pitch and outside diameter",
+  data = gg,
+  blank = c("Pitch diameter d (mm)", "Circular pitch p (mm)", "Outside diameter d_o (mm)"),
+  tol = c(`Pitch diameter d (mm)` = 0.1, `Circular pitch p (mm)` = 0.02, `Outside diameter d_o (mm)` = 0.1),
+  hints = c(`Pitch diameter d (mm)` = "d = m x N.",
+            `Circular pitch p (mm)` = "p = pi x m.",
+            `Outside diameter d_o (mm)` = "d_o = m (N + 2): the addendum is added twice."),
+  digits = 1,
+  intro = "Give p to two decimals and the diameters to one.",
+  question = paste0(
+    "<p>For each spur gear (module m in mm, number of teeth N) calculate the pitch diameter d = m N, the circular pitch p = pi m ",
+    "and the outside diameter d_o = m (N + 2). Rows: (m = 2.5, N = 36), (m = 4, N = 21), (m = 1.5, N = 48), (m = 6, N = 17).</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-gear-solution, echo=FALSE}
+knitr::kable(gg, digits = c(1, 0, 1, 2, 1), align = "c")
+```
+
+</details>
+
+#### Which gear type? {#sec-tryit-gear-types}
+
+```{r tryit-gear-type-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "gear-types",
+  title = "Match the requirement to the gear type",
+  bins = c("Spur", "Helical", "Bevel", "Worm", "Rack and pinion"),
+  cards = data.frame(
+    text = c(
+      "Parallel shafts, simple and cheap, and noise is not a concern",
+      "Parallel shafts at high speed where quiet running matters, accepting some axial thrust",
+      "Shafts that intersect at 90 degrees, such as the differential's ring and pinion",
+      "A single-stage ratio of 25:1 that must also hold its load without back-driving",
+      "Converting the rotation of a motor into straight-line motion of a carriage",
+      "A packaging line gearbox where the cheapest gear form is acceptable at moderate speed",
+      "A transmission where smooth, gradual tooth engagement reduces whine",
+      "A lift or hoist that must not run backwards when the motor is off"
+    ),
+    bin = c("Spur", "Helical", "Bevel", "Worm", "Rack and pinion", "Spur", "Helical", "Worm"),
+    why = c(
+      "Spur gears have straight teeth and parallel shafts: simple and inexpensive.",
+      "Angled teeth engage gradually; the angle creates axial thrust.",
+      "Bevel gears connect intersecting shafts.",
+      "Worm sets reach high ratios and can be self-locking.",
+      "A rack is a gear unrolled into a straight line.",
+      "Spur gears are the economical choice.",
+      "Helical teeth engage progressively.",
+      "Self-locking is a worm gear property when the lead angle is below the friction angle."
+    )
+  ),
+  intro = "Pick the gear type whose properties fit each requirement.",
+  question = "<p>Match each requirement to the gear type that fits it best: spur, helical, bevel, worm, or rack and pinion.</p>"
+)
+```
+
 ### Practice Problems {#sec-gear-problems}
 
 **Problem 1:** A spur gear has 24 teeth and a module of 4 mm. Calculate: (a) pitch diameter, (b) circular pitch, (c) addendum, (d) outside diameter.
