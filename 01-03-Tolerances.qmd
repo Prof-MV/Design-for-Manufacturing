@@ -204,6 +204,124 @@ without gaps that could harbor bacteria, yet still allow for disassembly during
 cleaning. This requires careful selection of clearance and interference fits.
 :::
 
+### Try it yourself {#sec-tryit-tolerances}
+
+These use dimensions that are not in the examples above. Each exercise checks your answer and lets you try again.
+
+#### From deviations to limits {#sec-tryit-limits}
+
+```{r tryit-limits-grid, echo=FALSE, results='asis'}
+tl <- data.frame(
+  `Basic size (mm)` = c(32.00, 18.50, 60.00, 12.700),
+  `Upper deviation` = c(0.05, 0.00, 0.10, 0.003),
+  `Lower deviation` = c(-0.02, -0.08, -0.10, 0.000),
+  check.names = FALSE
+)
+tl[["Upper limit (mm)"]] <- tl[["Basic size (mm)"]] + tl[["Upper deviation"]]
+tl[["Lower limit (mm)"]] <- tl[["Basic size (mm)"]] + tl[["Lower deviation"]]
+tl[["Tolerance (mm)"]]   <- tl[["Upper limit (mm)"]] - tl[["Lower limit (mm)"]]
+
+tryit_grid(
+  id = "tolerance-limits",
+  title = "Upper limit, lower limit and tolerance",
+  data = tl,
+  blank = c("Upper limit (mm)", "Lower limit (mm)", "Tolerance (mm)"),
+  tol = c(`Upper limit (mm)` = 0.0005, `Lower limit (mm)` = 0.0005, `Tolerance (mm)` = 0.0005),
+  hints = c(`Upper limit (mm)` = "Basic size + upper deviation.",
+            `Lower limit (mm)` = "Basic size + lower deviation (the deviation is negative or zero).",
+            `Tolerance (mm)` = "Tolerance = upper limit - lower limit; it is never negative."),
+  digits = 3,
+  intro = "Give limits to three decimals.",
+  question = paste0(
+    "<p>For each dimension (basic size with upper and lower deviation, in mm): 32.00 (+0.05, -0.02); 18.50 (0.00, -0.08); ",
+    "60.00 (+0.10, -0.10); 12.700 (+0.003, 0.000). Find the upper limit, the lower limit and the tolerance T = L_max - L_min.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-limits-solution, echo=FALSE}
+knitr::kable(tl, digits = c(3, 3, 3, 3, 3, 3), align = "c")
+```
+
+Row 2 is a unilateral tolerance (the upper deviation is zero) and row 3 an equal bilateral one. The tolerance is the same total band either way; it only shifts where the band sits against the basic size.
+
+</details>
+
+#### A shaft in a hole {#sec-tryit-allowance}
+
+A hole is specified as $25.000$ to $25.021$ mm and the mating shaft as $24.980$ to $24.993$ mm.
+
+```{r tryit-allowance-number, echo=FALSE, results='asis'}
+al <- list(h_max = 25.021, h_min = 25.000, s_max = 24.993, s_min = 24.980)
+al$allowance <- al$h_min - al$s_max
+al$max_clear <- al$h_max - al$s_min
+al$t_hole    <- al$h_max - al$h_min
+al$t_shaft   <- al$s_max - al$s_min
+
+tryit_number(
+  id = "allowance",
+  title = "Allowance, loosest fit and tolerances",
+  answers = list(
+    tryit_answer("Allowance (tightest fit)", al$allowance, tol = 0.0005, suffix = "mm",
+                 hint = "Smallest hole minus largest shaft: the maximum material limits."),
+    tryit_answer("Loosest fit (maximum clearance)", al$max_clear, tol = 0.0005, suffix = "mm",
+                 hint = "Largest hole minus smallest shaft."),
+    tryit_answer("Hole tolerance", al$t_hole, tol = 0.0005, suffix = "mm", hint = "Upper limit minus lower limit of the hole."),
+    tryit_answer("Shaft tolerance", al$t_shaft, tol = 0.0005, suffix = "mm", hint = "Upper limit minus lower limit of the shaft.")
+  ),
+  intro = "Give each to three decimals.",
+  question = paste0(
+    "<p>A hole has limits 25.000 and 25.021 mm; the mating shaft has limits 24.980 and 24.993 mm. ",
+    "The allowance is the difference between the maximum material limits (smallest hole minus largest shaft). ",
+    "Find the allowance, the maximum clearance and the tolerance of each part.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+Allowance $= 25.000 - 24.993 = `r sprintf("%.3f", al$allowance)`$ mm; loosest fit $= 25.021 - 24.980 = `r sprintf("%.3f", al$max_clear)`$ mm. The hole tolerance is `r sprintf("%.3f", al$t_hole)` mm and the shaft tolerance `r sprintf("%.3f", al$t_shaft)` mm. The clearance varies by the sum of the two tolerances, `r sprintf("%.3f", al$t_hole + al$t_shaft)` mm.
+
+</details>
+
+#### How is the tolerance written? {#sec-tryit-tol-styles}
+
+```{r tryit-tol-style-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "tolerance-styles",
+  title = "Name the tolerancing style",
+  bins = c("Equal bilateral", "Unequal bilateral", "Unilateral", "Limit dimensions", "Single limit (MAX/MIN)"),
+  cards = data.frame(
+    text = c(
+      "40.00 \u00b1 0.05",
+      "40.00 with +0.05 and -0.02",
+      "40.00 with +0.05 and -0.00",
+      "40.05 stacked over 39.95",
+      "R.020 MAX",
+      ".750 MIN (full thread)",
+      "12.50 with +0.00 and -0.10",
+      "12.50 \u00b1 0.15"
+    ),
+    bin = c("Equal bilateral", "Unequal bilateral", "Unilateral", "Limit dimensions", "Single limit (MAX/MIN)",
+            "Single limit (MAX/MIN)", "Unilateral", "Equal bilateral"),
+    why = c(
+      "The same variation is allowed on both sides.",
+      "Both directions are allowed but by different amounts.",
+      "Variation is allowed in one direction only.",
+      "The high and low limits are stated directly.",
+      "A MAX limit leaves the other limit to the geometry.",
+      "A MIN limit leaves the other limit to the stock or geometry.",
+      "The plus deviation is zero: one direction only.",
+      "The same variation is allowed on both sides."
+    )
+  ),
+  intro = "Look at whether the limits are given directly, as deviations, or as a single boundary.",
+  question = "<p>Name the tolerancing style used for each dimension: equal bilateral, unequal bilateral, unilateral, limit dimensions, or single limit (MAX/MIN).</p>"
+)
+```
+
 ### Key Takeaways {-}
 
 - Tolerances define the acceptable range of variation for manufactured parts
