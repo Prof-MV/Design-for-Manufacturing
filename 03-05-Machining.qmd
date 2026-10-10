@@ -329,6 +329,118 @@ ggplot(tolerance_data, aes(x = tolerance_mm, y = relative_cost)) +
 
 ---
 
+### Try it yourself {#sec-machining-tryit}
+
+#### Spindle speed and turning time {#sec-tryit-spindle}
+
+A carbide tool turns a $32$ mm diameter steel shaft over a length of $240$ mm at a cutting speed of $180$ m/min with a feed of $0.25$ mm/rev. The same shaft in stainless steel is cut at $70$ m/min.
+
+```{r tryit-spindle-number, echo=FALSE, results='asis'}
+sp <- list(v = 180, D = 32, L = 240, f = 0.25, v_ss = 70)
+sp$N    <- 1000 * sp$v / (pi * sp$D)
+sp$T    <- sp$L / (sp$f * sp$N)
+sp$N_ss <- 1000 * sp$v_ss / (pi * sp$D)
+sp$T_ss <- sp$L / (sp$f * sp$N_ss)
+
+tryit_number(
+  id = "spindle-speed",
+  title = "Spindle speed and machining time",
+  answers = list(
+    tryit_answer("Spindle speed for steel", sp$N, tol = 5, suffix = "rpm", hint = "N = 1000 v / (pi D)."),
+    tryit_answer("Machining time for steel", sp$T, tol = 0.01, suffix = "min", hint = "T = L / (f N)."),
+    tryit_answer("Spindle speed for stainless steel", sp$N_ss, tol = 3, suffix = "rpm", hint = "Same formula with v = 70 m/min."),
+    tryit_answer("Machining time for stainless steel", sp$T_ss, tol = 0.02, suffix = "min", hint = "Same feed and length, lower spindle speed.")
+  ),
+  intro = "Give times to two decimals in minutes.",
+  question = paste0(
+    "<p>A shaft 32 mm in diameter and 240 mm long is turned with a feed of 0.25 mm/rev. N = 1000 v / (pi D) and T = L / (f N). ",
+    "Find the spindle speed and machining time for steel at a cutting speed of 180 m/min, and for stainless steel at 70 m/min.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$N = \dfrac{1000 \times 180}{\pi \times 32} = `r sprintf("%.0f", sp$N)`$ rpm and $T = \dfrac{240}{0.25 \times `r sprintf("%.0f", sp$N)`} = `r sprintf("%.2f", sp$T)`$ min ($`r sprintf("%.0f", sp$T * 60)`$ s). For stainless at 70 m/min: $N = `r sprintf("%.0f", sp$N_ss)`$ rpm and $T = `r sprintf("%.2f", sp$T_ss)`$ min, about `r sprintf("%.1f", sp$T_ss / sp$T)` times as long.
+
+</details>
+
+#### What does the tolerance cost? {#sec-tryit-tolerance-cost}
+
+Use the chapter's cost curve: relative cost 1 at $\pm 0.5$ mm, 1.5 at $\pm 0.25$, 2.5 at $\pm 0.1$, 4 at $\pm 0.05$, 7 at $\pm 0.025$, 15 at $\pm 0.01$ and 30 at $\pm 0.005$. A feature machined at $\pm 0.5$ mm costs \$12.
+
+```{r tryit-tolcost-grid, echo=FALSE, results='asis'}
+curve_tol  <- c(0.5, 0.25, 0.1, 0.05, 0.025, 0.01, 0.005)
+curve_cost <- c(1, 1.5, 2.5, 4, 7, 15, 30)
+tc <- data.frame(
+  `Feature` = c("Bearing bore", "Mounting face", "Slot width", "Locating pin hole", "Cover recess"),
+  `Tolerance (mm)` = c(0.025, 0.25, 0.1, 0.01, 0.5),
+  check.names = FALSE
+)
+tc[["Relative cost"]] <- curve_cost[match(tc[["Tolerance (mm)"]], curve_tol)]
+tc[["Cost ($)"]]      <- 12 * tc[["Relative cost"]]
+tc_total   <- sum(tc[["Cost ($)"]])
+tc_relaxed <- 12 * (7 + 15 + 1 + 1 + 1)
+tc_pin     <- 12 * (7 + 4 + 1 + 1 + 1)
+
+tryit_grid(
+  id = "tolerance-cost",
+  title = "Cost of each feature at its specified tolerance",
+  data = tc,
+  blank = c("Relative cost", "Cost ($)"),
+  tol = c(`Relative cost` = 0.05, `Cost ($)` = 0.5),
+  hints = c(`Relative cost` = "Read the multiplier for that tolerance from the chapter's cost curve.",
+            `Cost ($)` = "$12 x the relative cost."),
+  digits = 3,
+  answers = list(
+    tryit_answer("Total cost of the part as specified", tc_total, tol = 0.5, prefix = "$", hint = "Add the five costs."),
+    tryit_answer("Total if the slot, mounting face and recess are all relaxed to +/-0.5 mm", tc_relaxed, tol = 0.5, prefix = "$",
+                 hint = "Those three features cost $12 each; the bore and the pin hole keep their tolerances."),
+    tryit_answer("Total if the pin hole can also be relaxed to +/-0.05 mm", tc_pin, tol = 0.5, prefix = "$",
+                 hint = "Pin hole at +/-0.05 costs 4 x $12.")
+  ),
+  intro = "Which single feature drives the cost?",
+  question = paste0(
+    "<p>A part has five features: bearing bore +/-0.025 mm, mounting face +/-0.25 mm, slot width +/-0.1 mm, locating pin hole +/-0.01 mm and ",
+    "cover recess +/-0.5 mm. Relative machining cost by tolerance: 1 at +/-0.5, 1.5 at +/-0.25, 2.5 at +/-0.1, 4 at +/-0.05, 7 at +/-0.025, ",
+    "15 at +/-0.01, 30 at +/-0.005. A feature at +/-0.5 mm costs $12. Find the cost of each feature, the total, the total if the slot, mounting face ",
+    "and recess are relaxed to +/-0.5, and the total if the pin hole is also relaxed to +/-0.05.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-tolcost-solution, echo=FALSE}
+knitr::kable(tc, digits = c(0, 3, 1, 0), align = "c")
+```
+
+Total \$`r sprintf("%.0f", tc_total)`. Of that, the locating pin hole alone costs \$`r sprintf("%.0f", tc[["Cost ($)"]][4])` (`r sprintf("%.0f", 100 * tc[["Cost ($)"]][4] / tc_total)`%). Relaxing the three non-critical features saves only \$`r sprintf("%.0f", tc_total - tc_relaxed)`, but relaxing the pin hole to $\pm 0.05$ mm brings the part to \$`r sprintf("%.0f", tc_pin)`: attack the tightest tolerance first.
+
+</details>
+
+#### Can the cutter make that corner? {#sec-tryit-corners}
+
+An end mill can only produce an internal corner radius of at least half its diameter.
+
+```{r tryit-corner-sort, echo=FALSE, results='asis'}
+cn <- data.frame(r = c(6, 3, 4, 1, 2.5, 5, 8, 1.5), D = c(10, 10, 8, 8, 6, 12, 12, 3))
+cn$bin <- ifelse(cn$r >= cn$D / 2, "Machinable with that end mill", "Needs a smaller tool or EDM")
+
+tryit_sort(
+  id = "corner-radius",
+  title = "Is the internal corner radius machinable?",
+  bins = c("Machinable with that end mill", "Needs a smaller tool or EDM"),
+  cards = data.frame(
+    text = sprintf("Pocket corner radius %.1f mm, cut with a %.0f mm end mill", cn$r, cn$D),
+    bin = cn$bin,
+    why = sprintf("The smallest radius a %.0f mm cutter leaves is %.1f mm.", cn$D, cn$D / 2)
+  ),
+  intro = "Compare the specified radius with half the cutter diameter.",
+  question = "<p>An end mill leaves an internal corner radius of at least half its diameter. Classify each pocket corner as machinable with the stated end mill, or needing a smaller tool or EDM.</p>"
+)
+```
+
 ### Check Your Understanding
 
 ::: {.question}
