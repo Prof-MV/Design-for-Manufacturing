@@ -36,6 +36,42 @@ was lost due to a unit conversion error. Clear dimensioning standards prevent
 such costly mistakes.
 :::
 
+### Try it yourself {#sec-tryit-dimensioning}
+
+```{r tryit-dim-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "dimension-practice",
+  title = "Good practice or a dimensioning error?",
+  bins = c("Good practice", "Dimensioning error"),
+  cards = data.frame(
+    text = c(
+      "Each dimension is stated once on the drawing",
+      "The same hole diameter is dimensioned in both the front view and the top view",
+      "A dimension is placed on the view that shows the feature's shape most clearly",
+      "A dimension is given to a hidden line instead of to a visible edge",
+      "Dimensions are chosen to relate to the function of the part",
+      "Numbers are given without units in a drawing that mixes inch and metric values and has no note",
+      "Standard symbols and conventions are used so that anyone can read the drawing",
+      "Several dimensions cross one another in a crowded view where space was available elsewhere"
+    ),
+    bin = c("Good practice", "Dimensioning error", "Good practice", "Dimensioning error",
+            "Good practice", "Dimensioning error", "Good practice", "Dimensioning error"),
+    why = c(
+      "Repeating a dimension invites contradictions when the drawing is revised.",
+      "A dimension should appear only once.",
+      "Placement should be for maximum clarity.",
+      "Do not dimension to hidden lines; use a visible edge or a section.",
+      "Dimensions should relate to functional requirements.",
+      "Unit confusion is how the Mars Climate Orbiter was lost.",
+      "Standard symbols give universal understanding.",
+      "Dimensions should be placed for clarity; crossing lines hide meaning."
+    )
+  ),
+  intro = "Decide whether each practice follows the chapter's dimensioning rules.",
+  question = "<p>Classify each practice as good dimensioning practice or a dimensioning error, using the rules of this chapter.</p>"
+)
+```
+
 ### Key Takeaways {-}
 
 - Dimensions should be placed for maximum clarity
