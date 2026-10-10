@@ -368,7 +368,9 @@ qwebr_calc_card(
     qwebr_calc_input("I_cont_rated", "Supply continuous rating", value = 10, min = 2.5, max = 40, step = 2.5, suffix = "A"),
     qwebr_calc_input("surge_pct", "Supply surge rating (% of continuous)", value = 150, min = 100, max = 300, step = 5, suffix = "%"),
     qwebr_calc_input("n_valves_start", "Valves firing together", value = 6, min = 0, max = 14, step = 1, type = "slider")
-  )
+  ),
+  goal = "Let 10 valves fire together at start-up on the same 10 A supply (150% surge rating, 4.23 A background load) and still pass, by choosing lower-inrush valves.",
+  goal_test = "n_valves_start >= 10 && I_cont_rated <= 10 && surge_pct <= 150 && I_run >= 4.23 && I_surge_planned <= I_surge_rated"
 )
 ```
 
@@ -907,6 +909,102 @@ summary_df %>%
   column_spec(2, width = "2.1in") %>%
   column_spec(3, width = "3.25in")
 ```
+
+## Try it yourself
+
+These use a panel that is not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Build a power budget {#sec-tryit-budget-06-13}
+
+```{r tryit-budget-grid-06-13, echo=FALSE, results='asis'}
+pb <- data.frame(
+  `Load` = c("PLC CPU", "I/O modules", "HMI", "Safety relay", "Valve bank", "Contactor coils", "Brake coil"),
+  `Type` = c("Continuous", "Continuous", "Continuous", "Continuous", "Intermittent", "Intermittent", "Intermittent"),
+  `I (A)` = c(0.80, 1.10, 0.90, 0.15, 2.40, 1.20, 0.60),
+  `Duty cycle` = c(1.00, 1.00, 1.00, 1.00, 0.35, 0.50, 0.15),
+  check.names = FALSE
+)
+pb[["Average current (A)"]] <- pb[["I (A)"]] * pb[["Duty cycle"]]
+pb_avg  <- sum(pb[["Average current (A)"]])
+pb_peak <- sum(pb[["I (A)"]])
+pb_P    <- pb_avg * 24
+pb_nameplate <- pb_P / 0.75
+
+tryit_grid(
+  id = "budget-06-13",
+  title = "24 VDC power budget",
+  data = pb,
+  blank = "Average current (A)",
+  tol = c(`Average current (A)` = 0.005),
+  hints = c(`Average current (A)` = "Continuous loads count in full; intermittent loads count their nameplate current times their duty cycle."),
+  digits = 2,
+  answers = list(
+    tryit_answer("Average bus current", pb_avg, tol = 0.02, suffix = "A", hint = "Add the average-current column."),
+    tryit_answer("Worst-case coincident peak current", pb_peak, tol = 0.02, suffix = "A",
+                 hint = "Peak assumes every intermittent load is energized at once: add the full nameplate currents."),
+    tryit_answer("Average load power at 24 V", pb_P, tol = 0.5, suffix = "W", hint = "P = V x I_avg."),
+    tryit_answer("Minimum supply nameplate at 75% loading", pb_nameplate, tol = 0.5, suffix = "W",
+                 hint = "Divide the average load power by the target loading fraction, 0.75.")
+  ),
+  intro = "Fill the average current of each load, then the totals.",
+  question = paste0(
+    "<p>A 24 VDC panel has continuous loads (PLC CPU 0.80 A, I/O modules 1.10 A, HMI 0.90 A, safety relay 0.15 A) and intermittent ",
+    "loads with duty cycles (valve bank 2.40 A at 0.35, contactor coils 1.20 A at 0.50, brake coil 0.60 A at 0.15). ",
+    "I_avg = sum of continuous currents + sum of (intermittent current x duty cycle); I_peak = the sum of all nameplate currents. ",
+    "Size the supply so that the average load is 75% of its nameplate power.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-budget-solution-06-13, echo=FALSE}
+knitr::kable(pb, digits = c(0, 0, 2, 2, 3), align = "c")
+```
+
+$I_{avg} = `r sprintf("%.2f", pb_avg)`$ A, $I_{peak} = `r sprintf("%.2f", pb_peak)`$ A, so the average load is $24 \times `r sprintf("%.2f", pb_avg)` = `r sprintf("%.1f", pb_P)`$ W and the supply nameplate should be at least `r sprintf("%.0f", pb_nameplate)` W: a 10 A (240 W) module is the next common size above that. A 5 A (120 W) supply would sit at `r sprintf("%.0f", pb_P / 120 * 100)`% of its rating, above the 70 to 80% band.
+
+</details>
+
+### Battery for a UPS {#sec-tryit-battery-06-13}
+
+An essential control load of $12$ A must stay up for $45$ min after a power failure. Use a depth-of-discharge limit of $0.80$ and a capacity retention of $0.70$ at the coldest service temperature. Standard battery sizes: 7, 12, 18, 26, 40 Ah.
+
+```{r tryit-battery-number-06-13, echo=FALSE, results='asis'}
+bt <- list(I = 12, t = 45 / 60, DoD = 0.80, ft = 0.70, sizes = c(7, 12, 18, 26, 40))
+bt$C_req  <- bt$I * bt$t / (bt$DoD * bt$ft)
+bt$C_sel  <- min(bt$sizes[bt$sizes >= bt$C_req])
+bt$margin <- (bt$C_sel / bt$C_req - 1) * 100
+
+tryit_number(
+  id = "battery-06-13",
+  title = "Required battery capacity",
+  answers = list(
+    tryit_answer("Backup energy in amp-hours (I x t)", bt$I * bt$t, tol = 0.05, suffix = "Ah",
+                 hint = "45 minutes is 0.75 h."),
+    tryit_answer("Required nameplate capacity", bt$C_req, tol = 0.1, suffix = "Ah",
+                 hint = "Divide by both the depth-of-discharge limit and the temperature retention."),
+    tryit_answer("Standard size selected", bt$C_sel, tol = 0.01, suffix = "Ah",
+                 hint = "The smallest standard size at or above the requirement."),
+    tryit_answer("Margin of the selected size over the requirement", bt$margin, tol = 1, suffix = "%",
+                 hint = "(selected / required - 1) x 100.")
+  ),
+  intro = "Give capacities to one decimal.",
+  question = paste0(
+    "<p>An essential load of 12 A must run for 45 minutes on battery. C_required = (I x t) / (DoD x f_temp) with a depth-of-discharge limit ",
+    "of 0.80 and a capacity retention of 0.70 at the coldest service temperature. Standard sizes: 7, 12, 18, 26 and 40 Ah. ",
+    "Choose the smallest size at or above the requirement.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$C_{required} = \frac{12 \times 0.75}{0.80 \times 0.70} = `r sprintf("%.1f", bt$C_req)` \text{ Ah} \Rightarrow `r bt$C_sel` \text{ Ah standard size}, \text{ a margin of } `r sprintf("%.0f", bt$margin)`\%$$
+
+Sizing to the room temperature rating alone would have called for only `r sprintf("%.1f", bt$I * bt$t / bt$DoD)` Ah: the cold-temperature retention is what pushes this to the next size.
+
+</details>
 
 ## Practice Problems
 
