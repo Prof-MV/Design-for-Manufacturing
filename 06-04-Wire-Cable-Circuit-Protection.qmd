@@ -431,7 +431,9 @@ qwebr_calc_card(
     qwebr_calc_input("R_ohm_km", "Conductor resistance", value = 0.525, min = 0.05, max = 5, step = 0.005, suffix = "Ω/km"),
     qwebr_calc_input("X_ohm_km", "Conductor reactance", value = 0.135, min = 0.05, max = 0.5, step = 0.005, suffix = "Ω/km"),
     qwebr_calc_input("L_m", "One-way feeder length (m)", value = 70, min = 5, max = 500, step = 5, type = "slider")
-  )
+  ),
+  goal = "Move the motor 450 m from the MCC and still meet the 3% limit at 600 V and 78 A by choosing a conductor with lower resistance.",
+  goal_test = "L_m >= 450 && pct_drop <= 3 && V_system == 600 && I_FLA == 78"
 )
 ```
 
@@ -969,6 +971,118 @@ kable(summary_df, caption = "Summary: Wire, Cable, and Circuit Protection design
                 full_width = knitr::is_html_output()) %>%
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white") %>%
   column_spec(1, width = "1in")
+```
+
+## Try it yourself
+
+These use circuits that are not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Derating chain for a continuous load {#sec-tryit-derating-06-04}
+
+A heater bank draws a continuous 64 A. The cable runs through a hot mechanical room (ambient correction factor 0.82) in a tray with enough current-carrying conductors that the bundling factor is 0.70.
+
+```{r tryit-derating-number-06-04, echo=FALSE, results='asis'}
+dr <- list(I_load = 64, CLF = 1.25, cf_amb = 0.82, cf_bun = 0.70)
+dr$I_req   <- dr$I_load * dr$CLF
+dr$cf      <- dr$cf_amb * dr$cf_bun
+dr$I_base  <- dr$I_req / dr$cf
+dr$I_check <- 150 * dr$cf
+
+tryit_number(
+  id = "derating-06-04",
+  title = "What table ampacity is needed?",
+  answers = list(
+    tryit_answer("Required ampacity I_required", dr$I_req, tol = 0.2, suffix = "A",
+                 hint = "Continuous load: multiply the running current by 1.25."),
+    tryit_answer("Combined derating factor", dr$cf, tol = 0.005,
+                 hint = "Multiply the ambient factor by the bundling factor."),
+    tryit_answer("Base table ampacity the conductor must have", dr$I_base, tol = 0.5, suffix = "A",
+                 hint = "The installed ampacity is I_base x CF, so I_base = I_required / CF."),
+    tryit_answer("Allowable ampacity of a conductor whose table value is 150 A", dr$I_check, tol = 0.5, suffix = "A",
+                 hint = "Multiply the table ampacity by the combined factor.")
+  ),
+  intro = "Then decide: does a 150 A conductor (table value) meet the requirement?",
+  question = paste0(
+    "<p>A heater bank draws a continuous 64 A. Continuous loads are sized at 1.25 x the running current. ",
+    "The cable is installed with an ambient temperature correction factor of 0.82 and a bundling adjustment factor of 0.70. ",
+    "I_allowable = I_base x CF_ambient x CF_bundling must be at least the required ampacity.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$I_{required} = 64 \times 1.25 = `r sprintf("%.0f", dr$I_req)` \text{ A}$$
+
+$$CF = 0.82 \times 0.70 = `r sprintf("%.3f", dr$cf)`$$
+
+$$I_{base} \ge \frac{`r sprintf("%.0f", dr$I_req)`}{`r sprintf("%.3f", dr$cf)`} = `r sprintf("%.1f", dr$I_base)` \text{ A}$$
+
+A conductor with a 150 A table value is allowed `r sprintf("%.1f", dr$I_check)` A once derated, so it passes. Note the combined factor of `r sprintf("%.2f", dr$cf)` is inside the 0.55 to 0.75 band the chapter says to expect on a busy tray.
+
+</details>
+
+### 24 VDC runs {#sec-tryit-vdrop-06-04}
+
+```{r tryit-vdrop-grid-06-04, echo=FALSE, results='asis'}
+vd <- data.frame(
+  `Run` = c("Photoeye, 18 AWG", "Valve bank, 14 AWG", "Safety relay, 12 AWG", "Remote I/O, 16 AWG"),
+  `I (A)` = c(0.8, 2.5, 5.0, 0.5),
+  `L one-way (m)` = c(60, 40, 25, 150),
+  `R (ohm/km)` = c(20.9, 8.3, 5.2, 13.2),
+  check.names = FALSE
+)
+vd[["V drop (V)"]] <- 2 * vd[["I (A)"]] * (vd[["L one-way (m)"]] / 1000) * vd[["R (ohm/km)"]]
+vd[["Drop (%)"]]   <- vd[["V drop (V)"]] / 24 * 100
+
+tryit_grid(
+  id = "vdrop-06-04",
+  title = "Voltage drop on a 24 VDC supply",
+  data = vd,
+  blank = c("V drop (V)", "Drop (%)"),
+  tol = c(`V drop (V)` = 0.02, `Drop (%)` = 0.1),
+  hints = c(`V drop (V)` = "V_drop = 2 x I x L x R, with L in km. The 2 is for the supply and return conductors.",
+            `Drop (%)` = "V_drop / 24 V x 100."),
+  digits = 1,
+  intro = "Work to two decimals for volts and one for percent. Which runs are within the 3% rule?",
+  question = paste0(
+    "<p>Four 24 VDC runs are listed with their load current, one-way length and conductor resistance. ",
+    "V_drop = 2 x I x L x R, with L in kilometres, and the percentage is V_drop / 24 V x 100. ",
+    "For each run calculate the voltage drop in volts and as a percentage.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-vdrop-solution-06-04, echo=FALSE}
+knitr::kable(vd, digits = c(0, 1, 0, 1, 2, 1), align = "c")
+```
+
+None of the four runs meets the 3% rule (0.72 V on a 24 V supply). The remote I/O run drops `r sprintf("%.1f", vd[["Drop (%)"]][4])`% even at 0.5 A, because length and a small conductor both count; the fix is a larger conductor, a shorter route or a local supply.
+
+</details>
+
+### Which fuse pairs are selective? {#sec-tryit-selective-06-04}
+
+```{r tryit-fuse-sort-06-04, echo=FALSE, results='asis'}
+fp <- data.frame(
+  up   = c(100, 200, 400, 60, 250, 150, 30, 600),
+  down = c(60, 100, 60, 40, 125, 90, 20, 200)
+)
+fp$bin <- ifelse(fp$up / fp$down >= 2, "Selective by the 2:1 rule", "Not guaranteed selective")
+tryit_sort(
+  id = "fuse-sort-06-04",
+  title = "Upstream and downstream fuse pairs",
+  bins = c("Selective by the 2:1 rule", "Not guaranteed selective"),
+  cards = data.frame(
+    text = sprintf("%d A upstream, %d A downstream", fp$up, fp$down),
+    bin = fp$bin,
+    why = sprintf("Ratio %d / %d = %.2f", fp$up, fp$down, fp$up / fp$down)
+  ),
+  intro = "Apply the ampere-rating ratio rule to each pair of same-class fuses.",
+  question = "<p>For two fuses of the same class in series, the rule of thumb is that an upstream-to-downstream ampere rating ratio of at least 2:1 gives full selective coordination. Classify each pair.</p>"
+)
 ```
 
 ## Practice Problems
