@@ -1,3 +1,13 @@
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
 ## Geometric Dimensioning and Tolerancing (GD&T) {#gdt}
 
 ```{r setup-01-04, include=FALSE}
@@ -1027,6 +1037,65 @@ tryit_sort(
   question = "<p>Place each geometric characteristic in its category: form, orientation, location or runout.</p>"
 )
 ```
+
+#### Simulate the stack-up {#sec-tryit-stack-sim}
+
+Worst-case limits add every tolerance. Real parts rarely sit at their limits together. Here four parts are drawn at random (normally distributed, with $\sigma = t/(3 C_p)$) and stacked 20 000 times. The card reports how many assemblies fall outside the worst-case limit and outside the statistical (RSS) limit.
+
+```{r tryit-stack-sim-card, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "stackup-sim-01-04",
+  title = "Tolerance Stack-Up Simulator",
+  icon = "layer-group",
+  inputs = list(
+    qwebr_calc_input("seed", "Run number (team number)", value = 1, min = 1, max = 9999, step = 1),
+    qwebr_calc_input("Cp", "Process capability C_p of every part", value = 0.8, min = 0.5, max = 2, step = 0.05, type = "slider")
+  ),
+  rerun = "seed",
+  goal = "Raise the process capability until fewer than 0.5% of assemblies fall outside the statistical (RSS) limit.",
+  goal_test = "pct_out_rss < 0.5"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this simulator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top.</p>
+
+```{webr-r}
+#| label: stackup-sim-01-04
+## Four parts stacked end to end, each normally distributed about its nominal
+seed <- 1       ## run number: a different number gives a different set of assemblies
+Cp   <- 0.8     ## process capability: sigma = tolerance / (3 x Cp)
+n    <- 20000   ## number of simulated assemblies
+
+nominal <- c(20, 12, 35, 8)           ## mm
+tol     <- c(0.15, 0.10, 0.20, 0.05)  ## mm, plus or minus
+sigma   <- tol / (3 * Cp)
+
+set.seed(seed)
+total <- rep(0, n)
+for (i in seq_along(nominal)) total <- total + rnorm(n, nominal[i], sigma[i])
+err <- total - sum(nominal)
+
+wc_tol  <- sum(tol)            ## worst-case tolerance of the stack
+rss_tol <- sqrt(sum(tol^2))    ## statistical (root-sum-square) tolerance
+
+pct_out_wc  <- 100 * mean(abs(err) > wc_tol)
+pct_out_rss <- 100 * mean(abs(err) > rss_tol)
+
+par(mar = c(5, 5, 3, 1), cex.main = 1.3, cex.lab = 1.2, cex.axis = 1.1)
+hist(err, breaks = 60, col = "#aab7c4", border = "white",
+     xlab = "Overall length error (mm)", main = "20 000 simulated assemblies")
+abline(v = c(-wc_tol, wc_tol), lty = 2, lwd = 2, col = "#c0392b")
+abline(v = c(-rss_tol, rss_tol), lty = 2, lwd = 2, col = "#2980b9")
+
+cat(sprintf("Outside the RSS limit of +/-%.3f mm: %.2f%% of assemblies\n", rss_tol, pct_out_rss))
+cat(sprintf("  Outside the worst-case limit of +/-%.2f mm   %.2f%%\n", wc_tol, pct_out_wc))
+cat(sprintf("  Standard deviation of the stack             %.3f mm\n", sd(err)))
+cat(sprintf("  RSS limit expressed in standard deviations  %.2f\n", rss_tol / sd(err)))
+```
+
+</details>
 
 ### Summary and Key Takeaways {-}
 

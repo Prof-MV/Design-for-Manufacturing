@@ -1,3 +1,13 @@
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
 ## Ball Bearings and Bushings {#chap-08-bearings}
 
 ```{r setup-08, include=FALSE}
@@ -2348,6 +2358,63 @@ tryit_sort(
   question = "<p>Match each operating situation to the lubrication regime: boundary, mixed or hydrodynamic.</p>"
 )
 ```
+
+#### How many bearings really fail before L10? {#sec-tryit-fleet}
+
+L10 is a statement about a *population*: 10% of identical bearings fail before it. A small fleet rarely behaves like the average. Press **Run again** to draw a new fleet of bearings and count the early failures. The red dots failed before the rated life.
+
+```{r tryit-fleet-card, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bearing-fleet-02-03",
+  title = "Bearing Fleet Simulator",
+  icon = "dice",
+  inputs = list(
+    qwebr_calc_input("seed", "Run number (team number)", value = 1, min = 1, max = 9999, step = 1),
+    qwebr_calc_input("shape", "Weibull shape (about 1.5 for rolling bearings)", value = 1.5, min = 0.8, max = 4, step = 0.1),
+    qwebr_calc_input("n_bearings", "Bearings in the fleet", value = 20, min = 5, max = 200, step = 5, type = "slider")
+  ),
+  rerun = "seed",
+  goal = "Set the fleet to 50 bearings and press Run again until a fleet shows only 2 or fewer failures before L10, even though 5 are expected on average.",
+  goal_test = "n_bearings >= 50 && failed_early <= 2"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this simulator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top.</p>
+
+```{webr-r}
+#| label: bearing-fleet-02-03
+## A fleet of identical bearings: each bearing's life is a random draw
+## from a Weibull distribution with 10% of the population below L10.
+seed       <- 1     ## run number: a different number gives a different fleet
+shape      <- 1.5   ## Weibull shape parameter
+n_bearings <- 20    ## bearings in the fleet
+L10        <- 100   ## rated L10 life, millions of revolutions
+
+## Scale chosen so that exactly 10% of the population fails before L10
+scale <- L10 / (-log(0.9))^(1 / shape)
+
+set.seed(seed)
+life <- sort(rweibull(n_bearings, shape, scale))
+failed_early <- sum(life < L10)
+expected     <- 0.1 * n_bearings
+
+par(mar = c(5, 5, 3, 1), cex.main = 1.3, cex.lab = 1.2, cex.axis = 1.1)
+plot(life, seq_along(life), pch = 19, cex = 1.6,
+     col = ifelse(life < L10, "#c0392b", "#2c3e50"),
+     xlab = "Life (million revolutions)", ylab = "Bearing (shortest life first)",
+     main = "One fleet of bearings: red = failed before L10")
+abline(v = L10, lty = 2, col = "#7f8c8d")
+
+cat(sprintf("%d of %d bearings failed before L10 (expected about %.1f)\n",
+            failed_early, n_bearings, expected))
+cat(sprintf("  Shortest life   %.0f million rev\n", min(life)))
+cat(sprintf("  Median life     %.0f million rev (%.1f x L10)\n", median(life), median(life) / L10))
+cat(sprintf("  Longest life    %.0f million rev\n", max(life)))
+```
+
+</details>
 
 ### Bearing vs. Bushing Selection Guide {#sec-selection-guide}
 
