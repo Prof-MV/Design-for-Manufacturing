@@ -387,7 +387,9 @@ qwebr_calc_card(
     qwebr_calc_input("min_gap", "Minimum gap between totes", value = 0.1, min = 0, max = 1, step = 0.01, suffix = "m"),
     qwebr_calc_input("margin", "Surge margin (fraction)", value = 0.3, min = 0, max = 1, step = 0.05),
     qwebr_calc_input("R_totes_per_min", "Required throughput (totes/min)", value = 45, min = 5, max = 150, step = 1, type = "slider")
-  )
+  ),
+  goal = "Deliver 60 totes per minute with 0.4 m totes, a gap of at least 50 mm and a 20% surge margin, without exceeding 0.6 m/s.",
+  goal_test = "R_totes_per_min >= 60 && margin >= 0.2 && tote_len >= 0.4 && min_gap >= 0.05 && v_design <= 0.6"
 )
 ```
 
@@ -759,6 +761,145 @@ kable(summary_df, caption = "Summary: Conveyor Design design tasks", escape = FA
                 full_width = knitr::is_html_output()) %>%
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white") %>%
   column_spec(1, width = "1.2in")
+```
+
+## Try it yourself
+
+These use a conveyor that is not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Belt pull and drive power {#sec-tryit-pull-06-10}
+
+A sloped carton conveyor is $L = 18$ m long at $\theta = 8^\circ$. The belt and idlers weigh $w_b = 9$ kg/m, the loaded material $q = 14$ kg/m. Use $C_b = 0.030$, $C_m = 0.035$, a 15% contingency, $g = 9.81$ m/s$^2$, belt speed $0.8$ m/s, drive efficiency $0.88$ and a head pulley of $200$ mm diameter.
+
+```{r tryit-pull-number-06-10, echo=FALSE, results='asis'}
+bp <- list(L = 18, th = 8 * pi / 180, wb = 9, q = 14, Cb = 0.030, Cm = 0.035, cont = 0.15,
+           g = 9.81, v = 0.8, eta = 0.88, D = 0.200)
+bp$Wbelt <- bp$wb * bp$L * bp$g
+bp$Wload <- bp$q * bp$L * bp$g
+bp$Tx    <- bp$Cb * bp$Wbelt * cos(bp$th)
+bp$Ty    <- bp$Cm * bp$Wload * cos(bp$th)
+bp$Tz    <- bp$Wload * sin(bp$th)
+bp$Te    <- bp$Tx + bp$Ty + bp$Tz
+bp$Ted   <- bp$Te * (1 + bp$cont)
+bp$Pmot  <- bp$Ted * bp$v / bp$eta
+bp$Tpul  <- bp$Ted * bp$D / 2
+
+tryit_number(
+  id = "pull-06-10",
+  title = "Effective tension, motor power and pulley torque",
+  answers = list(
+    tryit_answer("Friction of belt and idlers T_x", bp$Tx, tol = 1, suffix = "N",
+                 hint = "T_x = C_b x W_belt x cos(theta), with W_belt = w_b x L x g."),
+    tryit_answer("Friction of the load T_y", bp$Ty, tol = 1, suffix = "N",
+                 hint = "T_y = C_m x W_load x cos(theta), with W_load = q x L x g."),
+    tryit_answer("Gravity resistance T_z", bp$Tz, tol = 2, suffix = "N",
+                 hint = "T_z = W_load x sin(theta). Make sure the angle is in the right units."),
+    tryit_answer("Design effective tension T_e,design", bp$Ted, tol = 3, suffix = "N",
+                 hint = "Add T_x, T_y and T_z, then multiply by 1.15."),
+    tryit_answer("Motor power", bp$Pmot, tol = 3, suffix = "W",
+                 hint = "P_mech = T_e,design x v, then divide by the drive efficiency."),
+    tryit_answer("Head pulley torque", bp$Tpul, tol = 0.3, suffix = "N·m",
+                 hint = "T = T_e,design x pulley radius (half the diameter, in metres).")
+  ),
+  intro = "Work in newtons and metres. The incline is 8 degrees.",
+  question = paste0(
+    "<p>An inclined conveyor is 18 m long at 8 degrees. The belt and idlers have a mass per metre of 9 kg/m and the material on the belt ",
+    "14 kg/m (g = 9.81 m/s&sup2;). T_x = C_b W_belt cos(theta), T_y = C_m W_load cos(theta), T_z = W_load sin(theta) with C_b = 0.030 ",
+    "and C_m = 0.035; T_e = T_x + T_y + T_z and T_e,design = 1.15 T_e. The belt speed is 0.8 m/s, the drive efficiency 0.88 and the head ",
+    "pulley diameter 200 mm. P_motor = T_e,design x v / efficiency and T_pulley = T_e,design x radius.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$W_{belt} = 9 \cdot 18 \cdot 9.81 = `r sprintf("%.0f", bp$Wbelt)`$ N and $W_{load} = 14 \cdot 18 \cdot 9.81 = `r sprintf("%.0f", bp$Wload)`$ N.
+
+$$T_x = `r sprintf("%.1f", bp$Tx)` \text{ N}, \quad T_y = `r sprintf("%.1f", bp$Ty)` \text{ N}, \quad T_z = `r sprintf("%.1f", bp$Tz)` \text{ N}, \quad T_e = `r sprintf("%.1f", bp$Te)` \text{ N}, \quad T_{e,design} = `r sprintf("%.1f", bp$Ted)` \text{ N}$$
+
+$$P_{motor} = \frac{`r sprintf("%.1f", bp$Ted)` \times 0.8}{0.88} = `r sprintf("%.0f", bp$Pmot)` \text{ W}, \qquad T_{pulley} = `r sprintf("%.1f", bp$Ted)` \times 0.1 = `r sprintf("%.1f", bp$Tpul)` \text{ N·m}$$
+
+Gravity is the largest term on this slope; the friction terms together are less than a third of the total.
+
+</details>
+
+### Belt speed for each product {#sec-tryit-speed-06-10}
+
+```{r tryit-speed-grid-06-10, echo=FALSE, results='asis'}
+sp <- data.frame(
+  `Product` = c("Small tote", "Carton", "Large tote", "Tray"),
+  `Length (m)` = c(0.30, 0.45, 0.60, 0.25),
+  `Min gap (m)` = c(0.08, 0.12, 0.15, 0.05),
+  `Rate (items/min)` = c(70, 40, 25, 100),
+  check.names = FALSE
+)
+sp[["s_min (m)"]]   <- sp[["Length (m)"]] + sp[["Min gap (m)"]]
+sp[["v_min (m/s)"]] <- sp[["Rate (items/min)"]] / 60 * sp[["s_min (m)"]]
+sp[["v_design (m/s)"]] <- sp[["v_min (m/s)"]] * 1.3
+
+tryit_grid(
+  id = "speed-06-10",
+  title = "Minimum and design belt speed",
+  data = sp,
+  blank = c("s_min (m)", "v_min (m/s)", "v_design (m/s)"),
+  tol = c(`s_min (m)` = 0.005, `v_min (m/s)` = 0.005, `v_design (m/s)` = 0.005),
+  hints = c(`s_min (m)` = "Center-to-center spacing is the item length plus the minimum gap.",
+            `v_min (m/s)` = "v_min = rate (items per second) x s_min. Convert items/min to items/s first.",
+            `v_design (m/s)` = "Add the chapter's 30% surge margin: v_min x 1.3."),
+  digits = 2,
+  intro = "Give each speed to three decimals. Which product sets the belt speed on a shared conveyor?",
+  question = paste0(
+    "<p>For each product on a unit-load conveyor, s_min = item length + minimum gap, v_min = rate x s_min (rate in items per second), ",
+    "and the design speed includes a 30% surge margin: v_design = 1.3 x v_min. ",
+    "Lengths, gaps and peak rates are given in the table.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-speed-solution-06-10, echo=FALSE}
+knitr::kable(sp, digits = c(0, 2, 2, 0, 2, 3, 3), align = "c")
+```
+
+The tray, with the shortest items but the highest rate, needs the fastest belt (`r sprintf("%.3f", max(sp[["v_design (m/s)"]]))` m/s): rate times spacing, not item size alone, sets the speed.
+
+</details>
+
+### Frame material by zone {#sec-tryit-zone-06-10}
+
+```{r tryit-zone-sort-06-10, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "zone-06-10",
+  title = "Which frame material does the zone call for?",
+  bins = c("Painted or galvanized mild steel", "304 stainless", "316L stainless"),
+  cards = data.frame(
+    text = c(
+      "Sealed cartons riding a conveyor in dry-goods staging; dry sweep only",
+      "Packaged product with an occasional light rinse of the surrounding area",
+      "Raw poultry directly on the belt, hosed down daily with a caustic sanitizer",
+      "A stairwell riser conveyor that sealed totes use, away from any spray",
+      "Totes of sealed product in an area given a periodic rinse",
+      "Packaged product (indirect contact) in a zone that is hosed down with caustic sanitizer every day",
+      "Raw product on the belt where only a dry wipe is done between shifts",
+      "A conveyor leg in a dry corridor carrying cartons that are never exposed to water"
+    ),
+    bin = c("Painted or galvanized mild steel", "304 stainless", "316L stainless", "Painted or galvanized mild steel",
+            "304 stainless", "316L stainless", "316L stainless", "Painted or galvanized mild steel"),
+    why = c(
+      "No product contact and no washdown: a dry zone.",
+      "Packaged product with periodic rinse is the 304 zone.",
+      "Direct raw contact and daily caustic washdown is the most demanding zone.",
+      "Dry, non-contact: mild steel is acceptable.",
+      "Periodic rinse and packaged product: 304.",
+      "The more demanding of the two questions drives it: daily caustic washdown.",
+      "Direct raw product contact drives it even when washdown is light.",
+      "Dry, non-contact: mild steel."
+    )
+  ),
+  intro = "Ask two questions: does product contact the conveyor, and how aggressive is the washdown? The more demanding answer drives the choice.",
+  question = "<p>Using the chapter's sanitary zone classification (the more demanding of product contact and washdown frequency drives the material), choose the frame material for each zone.</p>"
+)
 ```
 
 ## Practice Problems
