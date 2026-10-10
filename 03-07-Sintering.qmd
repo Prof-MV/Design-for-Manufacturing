@@ -970,6 +970,141 @@ ggplot() +
 
 ---
 
+### Try it yourself {#sec-sintering-tryit}
+
+#### Density, porosity and oil capacity {#sec-tryit-density}
+
+Four sintered bushings were weighed and measured. Theoretical (fully dense) densities: bronze $8.8$ g/cm$^3$, iron $7.87$ g/cm$^3$. After vacuum impregnation $95\%$ of the pore volume is filled with oil.
+
+```{r tryit-density-grid, echo=FALSE, results='asis'}
+dn <- data.frame(
+  `Bushing` = c("A", "B", "C", "D"),
+  `Material` = c("Bronze", "Iron", "Bronze", "Iron"),
+  `Theoretical (g/cm3)` = c(8.80, 7.87, 8.80, 7.87),
+  `Measured (g/cm3)` = c(6.80, 6.40, 7.40, 7.10),
+  check.names = FALSE
+)
+dn[["% of theoretical"]]   <- dn[["Measured (g/cm3)"]] / dn[["Theoretical (g/cm3)"]] * 100
+dn[["Porosity (%)"]]       <- 100 - dn[["% of theoretical"]]
+dn[["Oil content (% vol)"]] <- dn[["Porosity (%)"]] * 0.95
+
+tryit_grid(
+  id = "sintered-density",
+  title = "Density, porosity and oil content",
+  data = dn,
+  blank = c("% of theoretical", "Porosity (%)", "Oil content (% vol)"),
+  tol = c(`% of theoretical` = 0.2, `Porosity (%)` = 0.2, `Oil content (% vol)` = 0.2),
+  hints = c(`% of theoretical` = "Measured density divided by the theoretical density, x 100.",
+            `Porosity (%)` = "100 minus the percentage of theoretical density.",
+            `Oil content (% vol)` = "95% of the porosity, since the pores are filled 95% by oil."),
+  digits = 2,
+  intro = "Give each to one decimal place.",
+  question = paste0(
+    "<p>Four sintered bushings: A bronze, measured density 6.80 g/cm&sup3; (theoretical 8.80); B iron, 6.40 g/cm&sup3; (theoretical 7.87); ",
+    "C bronze 7.40 g/cm&sup3;; D iron 7.10 g/cm&sup3;. Percent of theoretical density = measured / theoretical x 100; ",
+    "porosity = 100 - percent of theoretical; oil content = 95% of the porosity (vacuum impregnation, 95% pore filling). ",
+    "Find the three quantities for each bushing.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-density-solution, echo=FALSE}
+knitr::kable(dn, digits = c(0, 0, 2, 2, 1, 1, 1), align = "c")
+```
+
+Bushing A holds the most oil (`r sprintf("%.1f", dn[["Oil content (% vol)"]][1])% by volume) and D the least: porosity is the oil reservoir, and strength rises as it is traded away.
+
+</details>
+
+#### Green density of a compact {#sec-tryit-green-density}
+
+An iron powder compact is pressed in a cylindrical die of diameter $20$ mm to a height of $30$ mm. The compact has a mass of $62$ g.
+
+```{r tryit-green-number, echo=FALSE, results='asis'}
+gd <- list(d = 2.0, h = 3.0, m = 62, rho_th = 7.87, target = 7.0)
+gd$V     <- pi * (gd$d / 2)^2 * gd$h
+gd$rho   <- gd$m / gd$V
+gd$pct   <- gd$rho / gd$rho_th * 100
+gd$m_t   <- gd$target * gd$V
+
+tryit_number(
+  id = "green-density",
+  title = "Volume, density and the powder mass for a target density",
+  answers = list(
+    tryit_answer("Compact volume", gd$V, tol = 0.05, suffix = "cm3", hint = "pi x (d/2)^2 x h, with d and h in cm."),
+    tryit_answer("Green density", gd$rho, tol = 0.05, suffix = "g/cm3", hint = "Mass / volume."),
+    tryit_answer("Percentage of theoretical density (iron 7.87 g/cm3)", gd$pct, tol = 0.5, suffix = "%",
+                 hint = "Green density / 7.87 x 100."),
+    tryit_answer("Powder mass needed for a 7.0 g/cm3 compact in the same die", gd$m_t, tol = 0.5, suffix = "g",
+                 hint = "Target density x the same volume.")
+  ),
+  intro = "Work in centimetres and grams.",
+  question = paste0(
+    "<p>An iron powder compact is pressed in a die of 20 mm diameter to a height of 30 mm and has a mass of 62 g. ",
+    "The theoretical density of iron is 7.87 g/cm&sup3;. Find the compact volume (in cm&sup3;), the green density, the percentage of ",
+    "theoretical density, and the powder mass needed for a green density of 7.0 g/cm&sup3; in the same die.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$V = \pi (1.0)^2 (3.0) = `r sprintf("%.2f", gd$V)`$ cm$^3$; $\rho_{green} = 62 / `r sprintf("%.2f", gd$V)` = `r sprintf("%.2f", gd$rho)`$ g/cm$^3$ (`r sprintf("%.1f", gd$pct)`% of theoretical). To reach 7.0 g/cm$^3$ in the same die the fill must weigh $7.0 \times `r sprintf("%.2f", gd$V)` = `r sprintf("%.1f", gd$m_t)`$ g. A check on any density answer: it can never exceed the theoretical value of the material.
+
+</details>
+
+#### Put the PM process in order {#sec-tryit-pm-order}
+
+```{r tryit-pm-order, echo=FALSE, results='asis'}
+tryit_order(
+  id = "pm-steps",
+  title = "The powder metallurgy sequence",
+  steps = c(
+    "Powder production",
+    "Blending the powder with lubricant and alloying additions",
+    "Compaction in a die to form the green part",
+    "Sintering in a controlled atmosphere",
+    "Secondary operations such as sizing, machining, heat treatment or oil impregnation"
+  ),
+  intro = "Use the up and down buttons to put the steps in order.",
+  question = "<p>Put the steps of the powder metallurgy process in the correct order.</p>"
+)
+```
+
+#### Which sintered bearing? {#sec-tryit-sintered-bearing}
+
+```{r tryit-sintered-bearing-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "sintered-bearing",
+  title = "Oil-impregnated or solid-lubricant bearing?",
+  bins = c("Oil-impregnated bronze", "Solid-lubricant (graphite) bronze"),
+  cards = data.frame(
+    text = c(
+      "A fan motor shaft turning continuously at 1800 rpm in a clean enclosure",
+      "A conveyor pivot that oscillates through a small angle at 200 degrees C in a dusty bakery",
+      "A bearing that must develop a hydrodynamic film to run without wear for years",
+      "A slow reciprocating motion where a film cannot form",
+      "An environment where oil would attract contamination or exceed its temperature range",
+      "A moderate-temperature, high-speed application needing long maintenance-free life"
+    ),
+    bin = c("Oil-impregnated bronze", "Solid-lubricant (graphite) bronze", "Oil-impregnated bronze",
+            "Solid-lubricant (graphite) bronze", "Solid-lubricant (graphite) bronze", "Oil-impregnated bronze"),
+    why = c(
+      "Continuous high-speed rotation develops a hydrodynamic film.",
+      "Oscillation, 200 degrees C and dust rule out oil.",
+      "The oil film separates the surfaces at speed.",
+      "A solid lubricant is needed where a film cannot form.",
+      "Solid lubricant works in contaminated or hot environments.",
+      "Oil-impregnated bearings run maintenance-free at moderate temperature."
+    )
+  ),
+  intro = "Think about speed, motion type, temperature and contamination.",
+  question = "<p>Choose the sintered bearing type for each application: oil-impregnated bronze or solid-lubricant (graphite) bronze.</p>"
+)
+```
+
 ### Practice Problems {#sec-sintering-practice}
 
 ::: {.question}
