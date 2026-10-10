@@ -942,7 +942,9 @@ qwebr_calc_card(
     qwebr_calc_input("V_transmitter_min", "Transmitter minimum voltage", value = 12, min = 5, max = 30, step = 0.5, suffix = "V"),
     qwebr_calc_input("V_supply_nominal", "Loop supply (nominal)", value = 24, min = 12, max = 48, step = 1, suffix = "V"),
     qwebr_calc_input("L", "One-way cable length (m)", value = 950, min = 10, max = 3000, step = 10, type = "slider")
-  )
+  ),
+  goal = "Run a loop of 3000 m or more with a 14 V transmitter and a 250 ohm burden and pass the voltage budget, using a loop supply of no more than 30 V.",
+  goal_test = "L >= 3000 && V_transmitter_min >= 14 && R_burden >= 250 && V_supply_nominal <= 30 && margin_V >= 0"
 )
 ```
 
@@ -1016,6 +1018,141 @@ summary_table %>%
       col.names = c("Design Task", "Governing Relationship", "Key Rule of Thumb")) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, background = "#2C3E50", color = "white")
+```
+
+## Try it yourself
+
+These use sensing points that are not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Derate the inductive sensors {#sec-tryit-derate-06-14}
+
+Correction factors for the target material (relative to mild steel) are: stainless steel 304 = 0.7, brass = 0.5, aluminum = 0.4, copper = 0.3. A target smaller than the sensor's reference target is corrected by $C_{f,size} = \min(1, d_{target}/d_{reference})$, and the usable distance is 80% of the effective distance.
+
+```{r tryit-derate-grid-06-14, echo=FALSE, results='asis'}
+dr <- data.frame(
+  `Sensor` = c("M18", "M12", "M30", "M8"),
+  `S_n (mm)` = c(8, 4, 15, 2),
+  `Reference side (mm)` = c(18, 12, 30, 8),
+  `Target material` = c("Aluminum", "Brass", "Stainless 304", "Copper"),
+  `C_f material` = c(0.4, 0.5, 0.7, 0.3),
+  `Target side (mm)` = c(12, 12, 20, 10),
+  check.names = FALSE
+)
+dr[["C_f size"]]   <- pmin(1, dr[["Target side (mm)"]] / dr[["Reference side (mm)"]])
+dr[["S_r,eff (mm)"]] <- dr[["S_n (mm)"]] * dr[["C_f material"]] * dr[["C_f size"]]
+dr[["S_usable (mm)"]] <- 0.8 * dr[["S_r,eff (mm)"]]
+
+tryit_grid(
+  id = "derate-06-14",
+  title = "Effective and usable sensing distance",
+  data = dr,
+  blank = c("C_f size", "S_r,eff (mm)", "S_usable (mm)"),
+  tol = c(`C_f size` = 0.01, `S_r,eff (mm)` = 0.02, `S_usable (mm)` = 0.02),
+  hints = c(`C_f size` = "d_target / d_reference, but never more than 1.",
+            `S_r,eff (mm)` = "S_n x C_f,material x C_f,size.",
+            `S_usable (mm)` = "80% of the effective sensing distance."),
+  digits = 2,
+  intro = "The corrections multiply. Give each result to two decimals.",
+  question = paste0(
+    "<p>Four inductive sensors detect non-mild-steel targets. C_f,material is given; C_f,size = min(1, d_target / d_reference); ",
+    "S_r,eff = S_n x C_f,material x C_f,size; and the usable, reliable distance is 80% of S_r,eff. ",
+    "Rows: M18 (S_n 8 mm, reference 18 mm) on a 12 mm aluminum target, C_f = 0.4; M12 (S_n 4 mm, reference 12 mm) on a 12 mm brass target, C_f = 0.5; ",
+    "M30 (S_n 15 mm, reference 30 mm) on a 20 mm stainless 304 target, C_f = 0.7; M8 (S_n 2 mm, reference 8 mm) on a 10 mm copper target, C_f = 0.3.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-derate-solution-06-14, echo=FALSE}
+knitr::kable(dr, digits = c(0, 0, 0, 0, 1, 0, 2, 2, 2), align = "c")
+```
+
+The copper target on the M8 leaves only `r sprintf("%.2f", dr[["S_usable (mm)"]][4])` mm of reliable range from a sensor rated for 2 mm. An oversize target (10 mm on an 8 mm reference) gets no bonus: the size factor stops at 1.
+
+</details>
+
+### 4-20 mA loop voltage budget {#sec-tryit-loop-06-14}
+
+A level transmitter sits $2600$ m from the control room on a 20 AWG pair ($10.15\ \Omega$ per $304.8$ m, one way). The transmitter needs $14$ V minimum, the PLC card burden is $250\ \Omega$, and the loop is powered from a nominal $24$ V supply that must be checked at $-10\%$. Check at $I = 20$ mA.
+
+```{r tryit-loop-number-06-14, echo=FALSE, results='asis'}
+lp <- list(L = 2600, r = 10.15 / 304.8, Vt = 14, Rb = 250, Vs = 24, I = 0.020)
+lp$Rwire   <- 2 * lp$r * lp$L
+lp$Vwire   <- lp$I * lp$Rwire
+lp$Vburden <- lp$I * lp$Rb
+lp$Vreq    <- lp$Vt + lp$Vwire + lp$Vburden
+lp$Vworst  <- 0.9 * lp$Vs
+lp$margin  <- lp$Vworst - lp$Vreq
+
+tryit_number(
+  id = "loop-06-14",
+  title = "Does the loop have enough voltage?",
+  answers = list(
+    tryit_answer("Round-trip wire resistance", lp$Rwire, tol = 0.5, suffix = "ohm",
+                 hint = "R_wire = 2 x (10.15 / 304.8) x 2600. The 2 is for out and back."),
+    tryit_answer("Voltage dropped in the wire at 20 mA", lp$Vwire, tol = 0.02, suffix = "V",
+                 hint = "I x R_wire."),
+    tryit_answer("Total voltage required", lp$Vreq, tol = 0.05, suffix = "V",
+                 hint = "Transmitter minimum + wire drop + burden drop (20 mA x 250 ohm = 5 V)."),
+    tryit_answer("Worst-case loop supply voltage", lp$Vworst, tol = 0.05, suffix = "V",
+                 hint = "Nominal 24 V less 10%."),
+    tryit_answer("Margin (negative means the loop fails)", lp$margin, tol = 0.05, suffix = "V",
+                 hint = "Worst-case supply minus required voltage.")
+  ),
+  intro = "Give voltages to two decimals; a negative margin is a failure.",
+  question = paste0(
+    "<p>A two-wire level transmitter is 2600 m (one way) from the control room on 20 AWG cable with 10.15 ohm per 304.8 m, one way. ",
+    "It needs a minimum of 14 V, the PLC analog input burden is 250 ohm, and the loop supply is 24 V nominal, checked at 10% low. ",
+    "Check the budget at 20 mA: V_required = V_transmitter,min + I R_wire + I R_burden, with R_wire = 2 x r x L.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$R_{wire} = 2 \times \frac{10.15}{304.8} \times 2600 = `r sprintf("%.1f", lp$Rwire)` \text{ ohm}, \qquad V_{wire} = 0.020 \times `r sprintf("%.1f", lp$Rwire)` = `r sprintf("%.2f", lp$Vwire)` \text{ V}$$
+
+$$V_{required} = 14 + `r sprintf("%.2f", lp$Vwire)` + 5 = `r sprintf("%.2f", lp$Vreq)` \text{ V}, \qquad V_{supply,worst} = 0.9 \times 24 = `r sprintf("%.1f", lp$Vworst)` \text{ V}$$
+
+The margin is `r sprintf("%.2f", lp$margin)` V, so the loop **fails** at the worst-case low supply. Raising the supply voltage, lowering the burden or using a heavier conductor each restores the margin; the loop budget calculator above lets you try them.
+
+</details>
+
+### Match the sensor to the job {#sec-tryit-sensor-sort-06-14}
+
+```{r tryit-sensor-sort-06-14, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "sensor-sort-06-14",
+  title = "Which sensing technology fits?",
+  bins = c("Inductive", "Capacitive", "Photoelectric", "Ultrasonic"),
+  cards = data.frame(
+    text = c(
+      "Confirm that a steel clamp is closed in an oily machining cell, at 5 mm range",
+      "Sense powder level through the plastic wall of a hopper",
+      "Count cartons crossing a conveyor 8 m wide with a through-beam sensor",
+      "Detect clear plastic bottles on a conveyor regardless of colour or transparency",
+      "Detect tooling position on a metal fixture where dust and coolant are present",
+      "Detect a wooden block at close range, where metal sensors will not respond",
+      "Sense bulk level in a silo where dust makes no difference to the signal",
+      "Detect label and web edges at high speed"
+    ),
+    bin = c("Inductive", "Capacitive", "Photoelectric", "Ultrasonic",
+            "Inductive", "Capacitive", "Ultrasonic", "Photoelectric"),
+    why = c(
+      "Metal target, short range, harsh environment: the inductive default.",
+      "Capacitive sensors work through non-metallic walls on liquids and granules.",
+      "Through-beam photoelectric sensors reach tens of metres.",
+      "Ultrasonic sensors are independent of colour and clarity.",
+      "Inductive sensors are unaffected by oil, dust and debris.",
+      "Capacitive sensors detect non-metal targets.",
+      "Ultrasonic sensors measure bulk level from the surface echo.",
+      "Label and edge detection is a standard photoelectric use."
+    )
+  ),
+  intro = "Use the chapter's sensor selection reference.",
+  question = "<p>Using the chapter's sensor technology selection reference, match each sensing point to the best technology: inductive, capacitive, photoelectric or ultrasonic.</p>"
+)
 ```
 
 ## Practice Problems
