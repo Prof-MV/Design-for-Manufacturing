@@ -231,7 +231,9 @@ qwebr_calc_card(
     qwebr_calc_input("J_motor_A_kgcm2", "Candidate A rotor inertia", value = 1.2, min = 0.1, max = 50, step = 0.1, suffix = "kg·cm²"),
     qwebr_calc_input("J_motor_B_kgcm2", "Candidate B rotor inertia", value = 4.5, min = 0.1, max = 50, step = 0.1, suffix = "kg·cm²"),
     qwebr_calc_input("N", "Gear ratio N", value = 20, min = 1, max = 100, step = 1, type = "slider")
-  )
+  ),
+  goal = "Make the low-inertia Candidate A pass the 10:1 rule for the 1.6 kg·m² table by choosing a higher gear ratio.",
+  goal_test = "ratio_A <= 10 && J_load >= 1.6"
 )
 ```
 
@@ -993,6 +995,137 @@ kable(summary_df, caption = "Summary: Motor, Drive, and Gearbox Sizing design ta
                 full_width = knitr::is_html_output()) %>%
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white") %>%
   column_spec(1, width = "1.2in")
+```
+
+## Try it yourself
+
+These use a machine that is not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Reflect the load to the motor shaft {#sec-tryit-reflect-06-06}
+
+A rotary pick station must index $120^\circ$ in $t_m = 0.6$ s using the chapter's symmetric 1/3-1/3-1/3 profile. The load needs $18\ \text{N·m}$ at the output shaft and has $J_{load} = 0.9\ \text{kg·m}^2$. A $15{:}1$ gearbox with $\eta = 0.94$ is proposed, and the motor's rotor inertia is $6\ \text{kg·cm}^2$.
+
+```{r tryit-reflect-number-06-06, echo=FALSE, results='asis'}
+rf <- list(theta = 120 * pi / 180, tm = 0.6, N = 15, eta = 0.94, T_load = 18, J_load = 0.9, J_motor = 6)
+rf$w_peak   <- 1.5 * rf$theta / rf$tm
+rf$alpha    <- 4.5 * rf$theta / rf$tm^2
+rf$n_motor  <- rf$N * rf$w_peak * 60 / (2 * pi)
+rf$T_motor  <- rf$T_load / (rf$N * rf$eta)
+rf$J_refl   <- rf$J_load / rf$N^2 * 1e4
+rf$ratio    <- rf$J_refl / rf$J_motor
+
+tryit_number(
+  id = "reflect-06-06",
+  title = "Speed, torque and inertia at the motor",
+  answers = list(
+    tryit_answer("Peak load speed", rf$w_peak, tol = 0.05, suffix = "rad/s",
+                 hint = "w_peak = 1.5 x theta / t_m, with theta in radians (120 degrees = 2.094 rad)."),
+    tryit_answer("Peak angular acceleration", rf$alpha, tol = 0.3, suffix = "rad/s2",
+                 hint = "alpha = 4.5 x theta / t_m^2."),
+    tryit_answer("Peak motor speed", rf$n_motor, tol = 5, suffix = "rpm",
+                 hint = "Motor speed = N x load speed. Convert rad/s to rpm by x 60 / (2 pi)."),
+    tryit_answer("Motor torque at the load torque", rf$T_motor, tol = 0.02, suffix = "N·m",
+                 hint = "T_motor = T_load / (N x eta)."),
+    tryit_answer("Inertia ratio J_reflected : J_motor", rf$ratio, tol = 0.1,
+                 hint = "J_reflected = J_load / N^2. Convert kg.m2 to kg.cm2 with x 10,000 before dividing.")
+  ),
+  intro = "Then decide: does the 6 kg·cm² motor pass the 10:1 inertia rule?",
+  question = paste0(
+    "<p>A rotary pick station indexes 120 degrees in 0.6 s using a symmetric trapezoidal profile (omega_peak = 1.5 theta / t_m, ",
+    "alpha = 4.5 theta / t_m&sup2;). The load needs 18 N&middot;m at the output shaft and has J_load = 0.9 kg&middot;m&sup2;. ",
+    "A 15:1 gearbox with efficiency 0.94 is used and the motor rotor inertia is 6 kg&middot;cm&sup2;. ",
+    "Reflected inertia is J_load / N&sup2; (1 kg&middot;m&sup2; = 10 000 kg&middot;cm&sup2;).</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$\omega_{peak} = \frac{1.5 \cdot 2.094}{0.6} = `r sprintf("%.2f", rf$w_peak)` \text{ rad/s}, \qquad \alpha = \frac{4.5 \cdot 2.094}{0.6^2} = `r sprintf("%.1f", rf$alpha)` \text{ rad/s}^2$$
+
+$$n_{motor} = 15 \times `r sprintf("%.1f", rf$w_peak * 60 / (2 * pi))` = `r sprintf("%.0f", rf$n_motor)` \text{ rpm}, \qquad T_{motor} = \frac{18}{15 \times 0.94} = `r sprintf("%.2f", rf$T_motor)` \text{ N·m}$$
+
+$$J_{reflected} = \frac{0.9}{15^2} = `r sprintf("%.1f", rf$J_refl)` \text{ kg·cm}^2, \qquad \text{ratio} = \frac{`r sprintf("%.1f", rf$J_refl)`}{6} = `r sprintf("%.1f", rf$ratio)`{:}1$$
+
+The ratio is under 10:1, so the motor passes the inertia rule. (The motor torque and speed still have to be checked against the motor's curve.)
+
+</details>
+
+### RMS torque over one cycle {#sec-tryit-rms-06-06}
+
+```{r tryit-rms-grid-06-06, echo=FALSE, results='asis'}
+rm_tab <- data.frame(
+  `Segment` = c("Accelerate", "Cruise", "Decelerate", "Dwell"),
+  `T (N·m)` = c(5.5, 1.2, -3.9, 0.4),
+  `t (s)`   = c(0.15, 0.30, 0.15, 1.40),
+  check.names = FALSE
+)
+rm_tab[["T^2 x t (N2·m2·s)"]] <- rm_tab[["T (N·m)"]]^2 * rm_tab[["t (s)"]]
+rm_trms <- sqrt(sum(rm_tab[["T^2 x t (N2·m2·s)"]]) / sum(rm_tab[["t (s)"]]))
+rm_rated <- 2.4
+
+tryit_grid(
+  id = "rms-06-06",
+  title = "RMS torque of the move profile",
+  data = rm_tab,
+  blank = "T^2 x t (N2·m2·s)",
+  tol = c(`T^2 x t (N2·m2·s)` = 0.01),
+  hints = c(`T^2 x t (N2·m2·s)` = "Square the torque first (a negative torque squares to a positive number), then multiply by the time."),
+  digits = 2,
+  answers = list(
+    tryit_answer("RMS torque over the cycle", rm_trms, tol = 0.02, suffix = "N·m",
+                 hint = "sqrt(sum of T^2 x t / sum of t)."),
+    tryit_answer("RMS torque as a percentage of a 2.4 N·m continuous rating", rm_trms / rm_rated * 100, tol = 0.5, suffix = "%",
+                 hint = "T_rms / 2.4 x 100.")
+  ),
+  intro = "Work to three decimals. A motor should keep a meaningful margin below its continuous rating.",
+  question = paste0(
+    "<p>A servo cycle has four segments: accelerate at 5.5 N&middot;m for 0.15 s, cruise at 1.2 N&middot;m for 0.30 s, ",
+    "decelerate at -3.9 N&middot;m for 0.15 s and dwell at 0.4 N&middot;m for 1.40 s. ",
+    "T_rms = sqrt( sum(T&sup2; t) / sum(t) ). The motor's continuous rating is 2.4 N&middot;m.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-rms-solution-06-06, echo=FALSE}
+knitr::kable(rm_tab, digits = c(0, 1, 2, 3), align = "c")
+```
+
+$T_{rms} = \sqrt{`r sprintf("%.3f", sum(rm_tab[["T^2 x t (N2·m2·s)"]]))` / `r sum(rm_tab[["t (s)"]])`} = `r sprintf("%.3f", rm_trms)`$ N·m, which is `r sprintf("%.0f", rm_trms / rm_rated * 100)`% of the continuous rating. The 5.5 N·m peak is far above the RMS value; only the RMS figure matters for heating.
+
+</details>
+
+### Pick the service factor band {#sec-tryit-sf-06-06}
+
+```{r tryit-sf-sort-06-06, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "sf-sort-06-06",
+  title = "Which service-factor band applies?",
+  bins = c("1.0 - 1.2", "1.2 - 1.6", "1.6 - 2.0"),
+  cards = data.frame(
+    text = c(
+      "Smooth servo profile with no impact, 6 starts per hour",
+      "Typical index-table duty with moderate shock, 120 starts per hour",
+      "A transfer drive that sees frequent reversal under load",
+      "Uniform load, 3 starts per hour",
+      "Moderate shock on a conveyor drive, 250 starts per hour",
+      "Impacts and jams on a press transfer with continuous reversing"
+    ),
+    bin = c("1.0 - 1.2", "1.2 - 1.6", "1.6 - 2.0", "1.0 - 1.2", "1.2 - 1.6", "1.6 - 2.0"),
+    why = c(
+      "Uniform shock and under 10 starts per hour.",
+      "Moderate shock, 10 to 300 starts per hour.",
+      "Heavy shock: frequent reversal under load.",
+      "Uniform shock and under 10 starts per hour.",
+      "Moderate shock, 10 to 300 starts per hour.",
+      "Heavy shock and continuous reversing."
+    )
+  ),
+  intro = "Use the chapter's illustrative service-factor table.",
+  question = "<p>Using the chapter's illustrative gearbox service-factor table (uniform shock under 10 starts/hour: 1.0 to 1.2; moderate shock 10 to 300 starts/hour: 1.2 to 1.6; heavy shock, over 300 starts/hour or continuous reversing: 1.6 to 2.0), match each duty to its band.</p>"
+)
 ```
 
 ## Practice Problems
