@@ -1083,6 +1083,114 @@ ggplot(df_cop, aes(x = delta_T, y = COP, colour = Device)) +
 
 ***
 
+### Try it yourself {#sec-thermo-tryit}
+
+These use systems that are not in the worked examples. Each exercise checks your answer and lets you try again.
+
+#### Temperature scales {#sec-tryit-temperature}
+
+```{r tryit-temp-grid, echo=FALSE, results='asis'}
+tt <- data.frame(`Celsius (°C)` = c(-10, 25, 100, 350), check.names = FALSE)
+tt[["Kelvin (K)"]]      <- tt[["Celsius (°C)"]] + 273.15
+tt[["Fahrenheit (°F)"]] <- tt[["Celsius (°C)"]] * 1.8 + 32
+tt[["Rankine (°R)"]]    <- tt[["Kelvin (K)"]] * 1.8
+
+tryit_grid(
+  id = "temperature",
+  title = "Convert between the four temperature scales",
+  data = tt,
+  blank = c("Kelvin (K)", "Fahrenheit (°F)", "Rankine (°R)"),
+  tol = c(`Kelvin (K)` = 0.05, `Fahrenheit (°F)` = 0.1, `Rankine (°R)` = 0.2),
+  hints = c(`Kelvin (K)` = "K = °C + 273.15.",
+            `Fahrenheit (°F)` = "°F = 1.8 x °C + 32.",
+            `Rankine (°R)` = "°R = 1.8 x K (or °F + 459.67)."),
+  digits = 0,
+  intro = "Gas-law and efficiency calculations need absolute temperatures: K or °R.",
+  question = paste0(
+    "<p>Convert each Celsius temperature (-10, 25, 100 and 350 &deg;C) to kelvin (K = &deg;C + 273.15), degrees Fahrenheit ",
+    "(&deg;F = 1.8 &deg;C + 32) and degrees Rankine (&deg;R = 1.8 K).</p>")
+)
+```
+
+#### Heat engine efficiency {#sec-tryit-engine-eff}
+
+A heat engine receives $Q_H = 850$ kJ per cycle from a source at $1900$ K and rejects $Q_L = 540$ kJ to a sink at $320$ K. An ideal Otto cycle with compression ratio $r = 10.5$ and $\gamma = 1.4$ is used for comparison.
+
+```{r tryit-engine-number, echo=FALSE, results='asis'}
+he <- list(QH = 850, QL = 540, TH = 1900, TL = 320, r = 10.5, gam = 1.4)
+he$W     <- he$QH - he$QL
+he$eta   <- he$W / he$QH
+he$carn  <- 1 - he$TL / he$TH
+he$otto  <- 1 - 1 / he$r^(he$gam - 1)
+he$share <- he$eta / he$carn
+
+tryit_number(
+  id = "engine-efficiency",
+  title = "Real, Carnot and Otto efficiency",
+  answers = list(
+    tryit_answer("Net work per cycle", he$W, tol = 0.5, suffix = "kJ", hint = "W_net = Q_H - Q_L."),
+    tryit_answer("Thermal efficiency", he$eta * 100, tol = 0.1, suffix = "%", hint = "W_net / Q_H, as a percentage."),
+    tryit_answer("Carnot efficiency between 1900 K and 320 K", he$carn * 100, tol = 0.1, suffix = "%",
+                 hint = "1 - T_L / T_H, using absolute temperatures."),
+    tryit_answer("Otto cycle efficiency at r = 10.5", he$otto * 100, tol = 0.2, suffix = "%",
+                 hint = "1 - 1 / r^(gamma - 1) with gamma = 1.4."),
+    tryit_answer("Real efficiency as a share of the Carnot limit", he$share * 100, tol = 0.5, suffix = "%",
+                 hint = "Thermal efficiency divided by Carnot efficiency.")
+  ),
+  intro = "Check: can any of your answers be above the Carnot value?",
+  question = paste0(
+    "<p>A heat engine receives 850 kJ per cycle from a source at 1900 K and rejects 540 kJ to a sink at 320 K. ",
+    "eta_th = W_net / Q_H; eta_Carnot = 1 - T_L / T_H. An ideal air-standard Otto cycle has efficiency 1 - 1 / r^(gamma - 1) ",
+    "with r = 10.5 and gamma = 1.4. Give each efficiency as a percentage.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$W_{net} = 850 - 540 = `r he$W` \text{ kJ}, \qquad \eta_{th} = \frac{`r he$W`}{850} = `r sprintf("%.1f", he$eta * 100)`\%$$
+
+$$\eta_{Carnot} = 1 - \frac{320}{1900} = `r sprintf("%.1f", he$carn * 100)`\%, \qquad \eta_{Otto} = 1 - \frac{1}{10.5^{0.4}} = `r sprintf("%.1f", he$otto * 100)`\%$$
+
+The engine reaches `r sprintf("%.0f", he$share * 100)`% of the Carnot limit. The ideal Otto efficiency is an upper bound for a real spark-ignition engine at that compression ratio, which is why real engines sit well below it.
+
+</details>
+
+#### Name the process {#sec-tryit-process-types}
+
+```{r tryit-process-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "process-types",
+  title = "Which process is it?",
+  bins = c("Isothermal", "Isobaric", "Isochoric", "Adiabatic"),
+  cards = data.frame(
+    text = c(
+      "Gas heated inside a rigid, sealed tank",
+      "Gas expands slowly in a piston-cylinder kept at constant temperature by a heat bath",
+      "Gas heated under a freely moving piston that carries only the atmosphere's pressure",
+      "Air compressed so quickly in an engine cylinder that no heat can escape",
+      "Water boiling in an open pot at atmospheric pressure",
+      "A rigid cylinder of gas cooling slowly in the shade",
+      "Steam expanding through a well-insulated turbine nozzle",
+      "A gas compressed slowly while heat is removed to keep its temperature constant"
+    ),
+    bin = c("Isochoric", "Isothermal", "Isobaric", "Adiabatic", "Isobaric", "Isochoric", "Adiabatic", "Isothermal"),
+    why = c(
+      "Constant volume: no boundary work.",
+      "Constant temperature, with heat flowing in to replace the work done.",
+      "Constant pressure: Q = delta H.",
+      "No heat transfer: Q = 0.",
+      "The pressure is fixed by the atmosphere.",
+      "Constant volume cooling.",
+      "No heat transfer with the surroundings.",
+      "Heat removal holds the temperature constant."
+    )
+  ),
+  intro = "Ask what stays constant, or whether heat transfer is prevented.",
+  question = "<p>Classify each situation as an isothermal, isobaric, isochoric or adiabatic process.</p>"
+)
+```
+
 ### Practice Problems {#sec-thermo-practice-15}
 
 1. A gas at 150 kPa gauge pressure is at 85°C. Convert both values to SI absolute units (kPa abs, Kelvin) and to US customary units (psia, °F).
