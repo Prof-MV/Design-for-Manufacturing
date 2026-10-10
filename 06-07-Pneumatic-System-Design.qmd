@@ -840,7 +840,9 @@ qwebr_calc_card(
   inputs = list(
     qwebr_calc_input("cost_per_1000scf", "Compressed air cost", value = 0.28, min = 0.1, max = 1, step = 0.01, prefix = "$", suffix = "/ 1000 SCF"),
     qwebr_calc_input("leak_scfm", "Continuous leak flow (SCFM)", value = 22, min = 1, max = 100, step = 1, type = "slider")
-  )
+  ),
+  goal = "Find the continuous leak flow at which the annual cost of the leak falls to $1,000 or less at an air cost of $0.28 per 1,000 SCF or more.",
+  goal_test = "cost_per_1000scf >= 0.28 && leak_cost_per_year <= 1000"
 )
 ```
 
@@ -1028,6 +1030,107 @@ kable(summary_df, caption = "Pneumatic system design tasks: governing equations 
   column_spec(3, width = "2.9in") %>%
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
 ```
+
+## Try it yourself
+
+These use a machine that is not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Select the bore {#sec-tryit-bore-06-07}
+
+A clamp cylinder must deliver $1200\ \text{N}$ on its **retract** stroke at $6$ bar gauge, so the governing area is the rod-side annulus. Apply the 25% to 50% oversize guideline to the ISO 15552 bore and rod combinations below.
+
+```{r tryit-bore-grid-06-07, echo=FALSE, results='asis'}
+bs <- data.frame(`Bore (mm)` = c(40, 50, 63, 80), `Rod (mm)` = c(16, 20, 20, 25), check.names = FALSE)
+bs_req <- 1200 / (6 * 1e5) * 1e6        # mm2
+bs[["Annulus area (mm2)"]] <- pi / 4 * (bs[["Bore (mm)"]]^2 - bs[["Rod (mm)"]]^2)
+bs[["Margin over need (%)"]] <- (bs[["Annulus area (mm2)"]] / bs_req - 1) * 100
+bs_pick <- bs[["Bore (mm)"]][bs[["Margin over need (%)"]] >= 25 & bs[["Margin over need (%)"]] <= 50][1]
+bs_force <- 6 * 1e5 * bs[["Annulus area (mm2)"]][bs[["Bore (mm)"]] == bs_pick] * 1e-6
+
+tryit_grid(
+  id = "bore-06-07",
+  title = "Annulus area and margin for each standard size",
+  data = bs,
+  blank = c("Annulus area (mm2)", "Margin over need (%)"),
+  tol = c(`Annulus area (mm2)` = 5, `Margin over need (%)` = 0.5),
+  hints = c(`Annulus area (mm2)` = "A_annulus = (pi / 4) x (bore^2 - rod^2).",
+            `Margin over need (%)` = "(A_annulus / A_min - 1) x 100, with A_min = F / P in mm^2 (1 bar = 0.1 N/mm^2)."),
+  digits = 0,
+  answers = list(
+    tryit_answer("Bore that falls inside the 25% to 50% window", bs_pick, tol = 0.5, suffix = "mm",
+                 hint = "Pick the row whose margin is between 25 and 50."),
+    tryit_answer("Theoretical retract force of that cylinder", bs_force, tol = 5, suffix = "N",
+                 hint = "F = P x A_annulus. At 6 bar, 1 mm^2 gives 0.6 N.")
+  ),
+  intro = "First find the minimum area A_min = F / P, then fill the two columns.",
+  question = paste0(
+    "<p>A cylinder must deliver 1200 N on its retract stroke at 6 bar gauge. The retract force acts on the rod-side annulus area. ",
+    "Candidate ISO 15552 sizes (bore / rod): 40/16, 50/20, 63/20 and 80/25 mm. For each, find the annulus area and the margin over ",
+    "the minimum required area; the guideline is a margin between 25% and 50%.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-bore-solution-06-07, echo=FALSE}
+knitr::kable(bs, digits = c(0, 0, 0, 1), align = "c")
+```
+
+$A_{min} = 1200 / (6 \times 10^5\ \text{Pa}) = `r sprintf("%.0f", bs_req)`$ mm$^2$. The 40 mm and 50 mm cylinders fall short or sit under the 25% floor; the **`r bs_pick` mm** bore gives a margin of `r sprintf("%.0f", bs[["Margin over need (%)"]][bs[["Bore (mm)"]] == bs_pick])`% and a theoretical retract force of `r sprintf("%.0f", bs_force)` N. The 80 mm cylinder works but overshoots the window by a wide margin and costs air on every stroke.
+
+</details>
+
+### Air consumption and annual cost {#sec-tryit-air-06-07}
+
+The 63 mm bore, 20 mm rod cylinder has a $250$ mm stroke and runs at $20$ cycles/min on a $5$ bar gauge supply, $4000$ h per year, with air at $\$0.28$ per 1000 SCF.
+
+```{r tryit-air-number-06-07, echo=FALSE, results='asis'}
+ac <- list(bore = 63, rod = 20, stroke = 250, P = 5, cpm = 20, hours = 4000, cost = 0.28, Patm = 1.013)
+ac$A_bore <- pi / 4 * ac$bore^2
+ac$A_ann  <- pi / 4 * (ac$bore^2 - ac$rod^2)
+ac$V_c    <- (ac$A_bore + ac$A_ann) * ac$stroke / 1e6
+ac$ratio  <- (ac$P + ac$Patm) / ac$Patm
+ac$Q_NL   <- ac$V_c * ac$ratio * ac$cpm
+ac$Q_SCFM <- ac$Q_NL / 28.317
+ac$annual <- ac$Q_SCFM * 60 * ac$hours / 1000 * ac$cost
+
+tryit_number(
+  id = "air-06-07",
+  title = "Free-air flow and yearly cost",
+  answers = list(
+    tryit_answer("Compressed volume per cycle (extend + retract)", ac$V_c, tol = 0.01, suffix = "L",
+                 hint = "(A_bore + A_annulus) x stroke, in mm^3, divided by 1,000,000 for litres."),
+    tryit_answer("Compression ratio P_abs / P_atm", ac$ratio, tol = 0.01,
+                 hint = "P_abs = gauge + 1.013 bar."),
+    tryit_answer("Free-air flow", ac$Q_NL, tol = 0.5, suffix = "NL/min",
+                 hint = "Compressed volume x ratio x cycles per minute."),
+    tryit_answer("Free-air flow in SCFM", ac$Q_SCFM, tol = 0.02, suffix = "SCFM",
+                 hint = "Divide NL/min by 28.317."),
+    tryit_answer("Annual cost of the air", ac$annual, tol = 2, prefix = "$",
+                 hint = "SCFM x 60 x hours = SCF per year; divide by 1000 and multiply by the cost per 1000 SCF.")
+  ),
+  intro = "Treat each stroke as filling completely from atmospheric to line pressure, with no credit for recovered air.",
+  question = paste0(
+    "<p>A double-acting cylinder has a 63 mm bore, 20 mm rod and 250 mm stroke, and cycles 20 times per minute on a ",
+    "5 bar gauge supply (P_atm = 1.013 bar abs). Per cycle it fills the full bore area on extend and the annulus on retract. ",
+    "Free-air volume = compressed volume x P_abs / P_atm. 1 SCFM = 28.317 NL/min. ",
+    "The cylinder runs 4000 h per year and air costs $0.28 per 1000 SCF.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$V_{cycle} = (3117.2 + 2803.0) \times 250 / 10^6 = `r sprintf("%.3f", ac$V_c)` \text{ L}, \qquad \frac{P_{abs}}{P_{atm}} = \frac{6.013}{1.013} = `r sprintf("%.3f", ac$ratio)`$$
+
+$$Q = `r sprintf("%.3f", ac$V_c)` \times `r sprintf("%.3f", ac$ratio)` \times 20 = `r sprintf("%.1f", ac$Q_NL)` \text{ NL/min} = `r sprintf("%.2f", ac$Q_SCFM)` \text{ SCFM}$$
+
+$$\text{Cost} = \frac{`r sprintf("%.2f", ac$Q_SCFM)` \times 60 \times 4000}{1000} \times 0.28 = \$`r sprintf("%.0f", ac$annual)` \text{ per year}$$
+
+One long-stroke cylinder is cheap to run; the cost comes from fleets of them and from leaks, which the card above lets you explore.
+
+</details>
 
 ## Practice Problems
 
