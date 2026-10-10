@@ -244,7 +244,9 @@ qwebr_calc_card(
     qwebr_calc_input("m_carriage", "Carriage mass", value = 48, min = 1, max = 1000, step = 1, suffix = "kg"),
     qwebr_calc_input("dyn_factor", "Dynamic load factor", value = 1.4, min = 1, max = 3, step = 0.05),
     qwebr_calc_input("I_beam", "Beam second moment of area I", value = 9800000, min = 500000, max = 200000000, step = 100000, suffix = "mm⁴")
-  )
+  ),
+  goal = "Meet the deflection budget over a span of at least 3000 mm with a total tolerance of 0.1 mm, no more than 25% allocated to the frame, a 48 kg carriage and a beam of no more than 1e8 mm^4.",
+  goal_test = "L >= 3000 && T_total <= 0.1 && f_frame <= 0.25 && m_carriage >= 48 && I_beam <= 1e8 && delta_max <= delta_allow"
 )
 ```
 
@@ -892,6 +894,136 @@ kable(summary_df, caption = "Summary: Frame and Structural Design tasks", escape
                 full_width = knitr::is_html_output()) %>%
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white") %>%
   column_spec(1, width = "1in")
+```
+
+## Try it yourself
+
+These use a machine that is not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Deflection of a gantry beam {#sec-tryit-beam-06-11}
+
+An aluminum gantry beam ($E = 70\,000$ MPa, $I = 1.2 \times 10^7\ \text{mm}^4$) spans $L = 1800$ mm and is loaded at midspan by an $85$ kg carriage with a dynamic factor of $1.4$. The positioning budget is $T_{total} = 0.5$ mm with $25\%$ allocated to the frame.
+
+```{r tryit-beam-number-06-11, echo=FALSE, results='asis'}
+bm <- list(m = 85, dyn = 1.4, g = 9.81, L = 1800, E = 70000, I = 1.2e7, Tt = 0.5, f = 0.25)
+bm$P      <- bm$m * bm$g * bm$dyn
+bm$delta  <- bm$P * bm$L^3 / (48 * bm$E * bm$I)
+bm$allow  <- bm$Tt * bm$f
+bm$Ireq   <- bm$P * bm$L^3 / (48 * bm$E * bm$allow)
+
+tryit_number(
+  id = "beam-06-11",
+  title = "Does the beam meet the deflection budget?",
+  answers = list(
+    tryit_answer("Design load P", bm$P, tol = 2, suffix = "N",
+                 hint = "Carriage weight (mass x 9.81) times the dynamic factor."),
+    tryit_answer("Midspan deflection", bm$delta, tol = 0.002, suffix = "mm",
+                 hint = "delta = P L^3 / (48 E I), with L in mm, E in N/mm^2 and I in mm^4."),
+    tryit_answer("Allowable frame deflection", bm$allow, tol = 0.001, suffix = "mm",
+                 hint = "Total tolerance budget x the fraction allocated to the frame."),
+    tryit_answer("Required second moment of area", bm$Ireq / 1e6, tol = 0.1, suffix = "x 10^6 mm^4",
+                 hint = "I_required = P L^3 / (48 E delta_allow). Give it in millions of mm^4.")
+  ),
+  intro = "Then decide: does the beam pass, and by how much would it have to stiffen?",
+  question = paste0(
+    "<p>An aluminum beam (E = 70 000 MPa, I = 1.2 x 10&sup7; mm&sup4;) spans 1800 mm and carries an 85 kg carriage at midspan. ",
+    "The design load is the carriage weight (g = 9.81 m/s&sup2;) times a dynamic factor of 1.4. Midspan deflection is P L&sup3; / (48 E I). ",
+    "The positioning budget is 0.5 mm total, with 25% allocated to frame deflection. Give I_required in millions of mm&sup4;.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$P = 85 \times 9.81 \times 1.4 = `r sprintf("%.0f", bm$P)` \text{ N}, \qquad \delta_{max} = \frac{`r sprintf("%.0f", bm$P)` \cdot 1800^3}{48 \cdot 70000 \cdot 1.2 \times 10^7} = `r sprintf("%.3f", bm$delta)` \text{ mm}$$
+
+The allowance is $0.5 \times 0.25 = `r sprintf("%.3f", bm$allow)`$ mm, so the beam `r if (bm$delta <= bm$allow) "passes" else "fails"`. The second moment of area needed is $`r sprintf("%.1f", bm$Ireq / 1e6)` \times 10^6$ mm$^4$, which is `r sprintf("%.2f", bm$Ireq / bm$I)` times the current section. Note that the general L/240 rule would allow `r sprintf("%.1f", bm$L / 240)` mm: it is no guide for a precision axis.
+
+</details>
+
+### Overturning and anchoring {#sec-tryit-anchor-06-11}
+
+```{r tryit-anchor-grid-06-11, echo=FALSE, results='asis'}
+an <- data.frame(
+  `Machine` = c("Packaging cell", "Test stand", "Tall transfer unit", "Low bench module"),
+  `Mass (kg)` = c(300, 800, 600, 250),
+  `Width W (m)` = c(0.7, 1.2, 0.6, 1.0),
+  `CG height (m)` = c(1.1, 1.5, 1.4, 0.8),
+  check.names = FALSE
+)
+an[["M_ot (N·m)"]] <- 0.3 * an[["Mass (kg)"]] * 9.81 * an[["CG height (m)"]]
+an[["M_r (N·m)"]]  <- an[["Mass (kg)"]] * 9.81 * an[["Width W (m)"]] / 2
+an[["SR"]]         <- an[["M_r (N·m)"]] / an[["M_ot (N·m)"]]
+an_row <- 3
+an_F   <- (1.5 * an[["M_ot (N·m)"]][an_row] - an[["M_r (N·m)"]][an_row]) / an[["Width W (m)"]][an_row]
+
+tryit_grid(
+  id = "anchor-06-11",
+  title = "Stability ratio of four machines",
+  data = an,
+  blank = c("M_ot (N·m)", "M_r (N·m)", "SR"),
+  tol = c(`M_ot (N·m)` = 10, `M_r (N·m)` = 10, SR = 0.02),
+  hints = c(`M_ot (N·m)` = "M_ot = f_lat x M x g x h_cg, with f_lat = 0.3.",
+            `M_r (N·m)` = "M_r = M x g x W / 2.",
+            SR = "SR = M_r / M_ot. Anchoring is needed when SR is below 1.5."),
+  digits = 1,
+  answers = list(
+    tryit_answer("Anchor uplift force for the tall transfer unit (safety factor 1.5)", an_F, tol = 20, suffix = "N",
+                 hint = "F_anchor = (1.5 x M_ot - M_r) / W, using the tall transfer unit's row.")
+  ),
+  intro = "Use a lateral force fraction of 0.3 and g = 9.81 m/s². Which machines need anchoring?",
+  question = paste0(
+    "<p>Four machines are checked for tipping with a lateral static-equivalent force of 30% of weight acting at the center of gravity. ",
+    "M_ot = 0.3 M g h_cg, M_r = M g W / 2 and SR = M_r / M_ot (anchoring is needed below SR = 1.5). ",
+    "For the tall transfer unit (third row) also find the anchor uplift force F_anchor = (1.5 M_ot - M_r) / W.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-anchor-solution-06-11, echo=FALSE}
+knitr::kable(an, digits = c(0, 0, 1, 1, 0, 0, 2), align = "c")
+```
+
+Only the low bench module reaches the 1.5 ratio without anchors. Notice that mass cancels: $SR = W/(2 f_{lat} h_{cg})$, so a heavier machine is no more stable, only a wider or lower one is. The tall transfer unit needs about `r sprintf("%.0f", an_F)` N of uplift capacity at its trailing edge.
+
+</details>
+
+### Extrusion or welded steel? {#sec-tryit-frame-06-11}
+
+```{r tryit-frame-sort-06-11, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "frame-06-11",
+  title = "Which frame construction fits?",
+  bins = c("Aluminum T-slot extrusion", "Welded steel"),
+  cards = data.frame(
+    text = c(
+      "A benchtop cell that will be reconfigured every few months",
+      "A heavy press-line gantry with a 5 m span and high loads",
+      "A washdown-adjacent inspection station where corrosion resistance matters",
+      "A machine base that needs the highest absolute stiffness and damping for precision work",
+      "A prototype cell where modifying the frame by hand is expected",
+      "A large transfer axis frame with a span well beyond 2 m under heavy loads",
+      "A light-duty guarding and sensor mounting structure",
+      "A fixture frame carrying heavy tooling where reconfiguration is never needed"
+    ),
+    bin = c("Aluminum T-slot extrusion", "Welded steel", "Aluminum T-slot extrusion", "Welded steel",
+            "Aluminum T-slot extrusion", "Welded steel", "Aluminum T-slot extrusion", "Welded steel"),
+    why = c(
+      "Extrusion scores best on modularity and reconfigurability.",
+      "Heavy duty and long spans favour welded steel.",
+      "Extrusion scores well on corrosion resistance.",
+      "Welded steel has the highest absolute stiffness.",
+      "Extrusion is the easiest to modify.",
+      "Beyond roughly 2 m under heavy load, welded steel is the default.",
+      "Lighter-duty work is where extrusion is the default.",
+      "No reconfiguration, heavy load: welded steel."
+    )
+  ),
+  intro = "Use the chapter's criteria: stiffness, modularity, cost, corrosion resistance and ease of modification.",
+  question = "<p>Using the chapter's comparison of aluminum T-slot extrusion and welded steel frames, match each application to the construction it favours.</p>"
+)
 ```
 
 ## Practice Problems
