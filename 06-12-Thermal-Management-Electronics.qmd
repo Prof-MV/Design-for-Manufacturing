@@ -260,7 +260,9 @@ qwebr_calc_card(
     qwebr_calc_input("R_CS", "Case-to-sink resistance", value = 0.1, min = 0.01, max = 1, step = 0.01, suffix = "°C/W"),
     qwebr_calc_input("T_J_limit", "Junction temperature ceiling", value = 125, min = 80, max = 175, step = 1, suffix = "°C"),
     qwebr_calc_input("T_A", "Design ambient (°C)", value = 50, min = 20, max = 70, step = 1, type = "slider")
-  )
+  ),
+  goal = "Get a natural-convection heatsink of no more than 300 mm for at least 150 W of heat load, with ambient at 50 C or hotter and the junction ceiling no higher than 125 C.",
+  goal_test = "selected_natural <= 300 && Q_total >= 150 && T_A >= 50 && T_J_limit <= 125"
 )
 ```
 
@@ -688,6 +690,137 @@ kable(summary_df, caption = "Summary of thermal management design tasks: governi
 - Whether an enclosure needs a fan at all — or can stay sealed, or needs active cooling instead — is a heat-flux-density decision, not a fixed rule: compute the enclosure's natural-convection capacity and compare it, with margin, to the actual heat load.
 - A drive or power supply's nameplate rating is only valid at its reference ambient; installing it somewhere hotter, without re-checking the derating curve, can silently erode a margin that looked comfortable on paper.
 - All five of these design tasks are the same physics as the enclosure-level cooling decision in the [Control Panel Design](06-03-Control-Panel-Design.qmd) chapter, applied one level down, to the individual component and heatsink.
+
+## Try it yourself
+
+These use a drive that is not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Walk the thermal resistance chain {#sec-tryit-chain-06-12}
+
+An IGBT dissipates $P_D = 60$ W. The thermal resistances are $R_{\theta JC} = 0.35$ °C/W (junction to case), $R_{\theta CS} = 0.12$ °C/W (case to sink) and $R_{\theta SA} = 0.90$ °C/W (sink to ambient), with local ambient $T_A = 45$ °C.
+
+```{r tryit-chain-diagram-06-12, echo=FALSE, results='asis'}
+tc <- list(P = 60, Rjc = 0.35, Rcs = 0.12, Rsa = 0.90, Ta = 45, Tjlim = 125)
+tc$Ts   <- tc$Ta + tc$P * tc$Rsa
+tc$Tc   <- tc$Ts + tc$P * tc$Rcs
+tc$Tj   <- tc$Tc + tc$P * tc$Rjc
+tc$Rja  <- tc$Rjc + tc$Rcs + tc$Rsa
+tc$Pmax <- (tc$Tjlim - tc$Ta) / tc$Rja
+
+tryit_diagram(
+  id = "thermal-chain-06-12",
+  title = "Temperatures along the heat path",
+  direction = "right",
+  nodes = list(
+    tryit_node("tj", "Junction", 1, given = c("Heat flow" = "60 W", "R to case" = "0.35 °C/W"),
+               blank = list(tryit_answer("T_J", tc$Tj, tol = 0.3, suffix = "°C",
+                                         hint = "T_J = T_case + P x R_thetaJC."))),
+    tryit_node("tc", "Case", 2, given = c("R to sink" = "0.12 °C/W"),
+               blank = list(tryit_answer("T_case", tc$Tc, tol = 0.3, suffix = "°C",
+                                         hint = "T_case = T_sink + P x R_thetaCS."))),
+    tryit_node("ts", "Heatsink", 3, given = c("R to ambient" = "0.90 °C/W"),
+               blank = list(tryit_answer("T_sink", tc$Ts, tol = 0.3, suffix = "°C",
+                                         hint = "T_sink = T_ambient + P x R_thetaSA."))),
+    tryit_node("ta", "Ambient air", 4, given = c("T_A" = "45 °C"))
+  ),
+  edges = list(c("tj", "tc"), c("tc", "ts"), c("ts", "ta")),
+  answers = list(
+    tryit_answer("Total junction-to-ambient resistance", tc$Rja, tol = 0.01, suffix = "°C/W",
+                 hint = "Add the three resistances."),
+    tryit_answer("Maximum power at a 125 °C junction ceiling", tc$Pmax, tol = 0.5, suffix = "W",
+                 hint = "P_max = (T_J,limit - T_A) / R_thetaJA.")
+  ),
+  intro = "Work from the ambient end towards the junction: each step adds P x R.",
+  question = paste0(
+    "<p>A power device dissipates 60 W. Thermal resistances: junction to case 0.35 &deg;C/W, case to sink 0.12 &deg;C/W, ",
+    "sink to ambient 0.90 &deg;C/W. The local ambient is 45 &deg;C. Each temperature step equals power x resistance. ",
+    "The junction ceiling is 125 &deg;C.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$T_{sink} = 45 + 60 \times 0.90 = `r sprintf("%.1f", tc$Ts)` \text{ °C}, \quad T_{case} = `r sprintf("%.1f", tc$Ts)` + 60 \times 0.12 = `r sprintf("%.1f", tc$Tc)` \text{ °C}, \quad T_J = `r sprintf("%.1f", tc$Tc)` + 60 \times 0.35 = `r sprintf("%.1f", tc$Tj)` \text{ °C}$$
+
+$$R_{\theta JA} = 0.35 + 0.12 + 0.90 = `r sprintf("%.2f", tc$Rja)` \text{ °C/W}, \qquad P_{D,max} = \frac{125 - 45}{`r sprintf("%.2f", tc$Rja)`} = `r sprintf("%.1f", tc$Pmax)` \text{ W}$$
+
+The junction is `r sprintf("%.1f", tc$Tj - tc$Tjlim)` °C **above** the 125 °C working ceiling, so the 60 W is more than this chain can carry: the heatsink resistance is the lever (it contributes `r sprintf("%.0f", tc$Rsa / tc$Rja * 100)`% of the total).
+
+</details>
+
+### Size the heatsink {#sec-tryit-heatsink-06-12}
+
+A shared heatsink carries $Q_{total} = 320$ W from several devices; the hottest dissipates $P_{hottest} = 110$ W with $R_{\theta JC} = 0.15$ and $R_{\theta CS} = 0.08$ °C/W. Use a junction ceiling of $125$ °C and a design ambient of $45$ °C.
+
+```{r tryit-heatsink-number-06-12, echo=FALSE, results='asis'}
+hs <- list(Q = 320, Ph = 110, Rjc = 0.15, Rcs = 0.08, Tj = 125, Ta = 45)
+hs$Ts_allow <- hs$Tj - hs$Ph * (hs$Rjc + hs$Rcs)
+hs$Rsa_req  <- (hs$Ts_allow - hs$Ta) / hs$Q
+hs$Rsa_marg <- hs$Rsa_req * 0.90
+
+tryit_number(
+  id = "heatsink-06-12",
+  title = "Required sink-to-ambient resistance",
+  answers = list(
+    tryit_answer("Maximum allowable heatsink surface temperature", hs$Ts_allow, tol = 0.2, suffix = "°C",
+                 hint = "T_S,allow = T_J,limit - P_hottest x (R_thetaJC + R_thetaCS)."),
+    tryit_answer("Required heatsink resistance R_thetaSA", hs$Rsa_req, tol = 0.002, suffix = "°C/W",
+                 hint = "(T_S,allow - T_A) / Q_total: the whole shared load heats the sink."),
+    tryit_answer("Catalog resistance to look for with a 10% margin", hs$Rsa_marg, tol = 0.002, suffix = "°C/W",
+                 hint = "Multiply the required value by 0.90 so that the catalog part is 10% better than the bare minimum.")
+  ),
+  intro = "Give resistances to three decimals.",
+  question = paste0(
+    "<p>Several devices share a heatsink with a total heat load of 320 W. The hottest device dissipates 110 W; its junction-to-case ",
+    "resistance is 0.15 &deg;C/W and its case-to-sink resistance 0.08 &deg;C/W. The junction ceiling is 125 &deg;C and the design ambient ",
+    "is 45 &deg;C. T_S,allow = T_J,limit - P_hottest (R_JC + R_CS); R_SA,required = (T_S,allow - T_A) / Q_total; ",
+    "a catalog heatsink should be 10% better than the required value.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$T_{S,allow} = 125 - 110(0.15 + 0.08) = `r sprintf("%.1f", hs$Ts_allow)` \text{ °C}, \qquad R_{\theta SA,required} = \frac{`r sprintf("%.1f", hs$Ts_allow)` - 45}{320} = `r sprintf("%.3f", hs$Rsa_req)` \text{ °C/W}$$
+
+With the 10% margin look for a catalog part at or below `r sprintf("%.3f", hs$Rsa_marg)` °C/W, which is forced-air territory for most extrusions.
+
+</details>
+
+### Size the fan {#sec-tryit-fan-06-12}
+
+```{r tryit-fan-number-06-12, echo=FALSE, results='asis'}
+fn <- list(P = 480, dT = 12, rhocp = 1200, margin = 1.75)
+fn$V     <- fn$P / (fn$rhocp * fn$dT)
+fn$cfm   <- fn$V * 2118.88
+fn$sel   <- fn$cfm * fn$margin
+
+tryit_number(
+  id = "fan-06-12",
+  title = "Airflow for a 480 W panel",
+  answers = list(
+    tryit_answer("Required airflow", fn$V, tol = 0.0005, suffix = "m3/s",
+                 hint = "V = P / (rho c_p x delta T), with rho c_p = 1200 J/(m3 K)."),
+    tryit_answer("Required airflow in CFM", fn$cfm, tol = 0.5, suffix = "CFM",
+                 hint = "1 m3/s = 2118.88 CFM."),
+    tryit_answer("Fan free-air rating with a 1.75 x margin", fn$sel, tol = 1, suffix = "CFM",
+                 hint = "Multiply the calculated CFM by the sizing margin, to cover filter and louver pressure drop.")
+  ),
+  intro = "Give the airflow in m3/s to four decimals.",
+  question = paste0(
+    "<p>A control panel dissipates 480 W and its internal air may rise by no more than 12 K above the incoming air. ",
+    "V = P / (rho c_p delta T) with rho c_p = 1200 J/(m&sup3;&middot;K). 1 m&sup3;/s = 2118.88 CFM. ",
+    "Select a fan with a sizing margin of 1.75 on the calculated airflow.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$\dot V = \frac{480}{1200 \times 12} = `r sprintf("%.4f", fn$V)` \text{ m}^3\text{/s} = `r sprintf("%.1f", fn$cfm)` \text{ CFM}, \qquad \text{fan rating} \ge 1.75 \times `r sprintf("%.1f", fn$cfm)` = `r sprintf("%.0f", fn$sel)` \text{ CFM}$$
+
+</details>
 
 ## Practice Problems
 
