@@ -2213,6 +2213,142 @@ If your application requires 20 lbf at 3,500 RPM, you would need to either:
 
 ---
 
+### Try it yourself {#sec-bearing-tryit}
+
+These use bearings that are not in the worked examples. Each exercise checks your answer and lets you try again.
+
+#### Ball bearing life under combined load {#sec-tryit-l10}
+
+A single-row deep groove ball bearing has a basic dynamic load rating $C = 19.5$ kN. It carries a radial load $F_r = 3.2$ kN and an axial load $F_a = 1.1$ kN at $n = 1450$ rpm. For this bearing $e = 0.30$, and when $F_a/F_r > e$ the load factors are $X = 0.56$ and $Y = 1.6$.
+
+```{r tryit-l10-number, echo=FALSE, results='asis'}
+bl <- list(C = 19500, Fr = 3200, Fa = 1100, n = 1450, X = 0.56, Y = 1.6, e = 0.30, L_target = 10000, p = 3)
+bl$ratio  <- bl$Fa / bl$Fr
+bl$P      <- bl$X * bl$Fr + bl$Y * bl$Fa
+bl$L10    <- (bl$C / bl$P)^bl$p
+bl$L10h   <- bl$L10 * 1e6 / (60 * bl$n)
+bl$C_req  <- bl$P * (60 * bl$n * bl$L_target / 1e6)^(1 / bl$p)
+
+tryit_number(
+  id = "l10-bearing",
+  title = "Equivalent load, rating life and a required rating",
+  answers = list(
+    tryit_answer("Axial-to-radial ratio F_a / F_r", bl$ratio, tol = 0.005,
+                 hint = "Compare it with e = 0.30 to decide which X and Y apply."),
+    tryit_answer("Equivalent dynamic load P", bl$P, tol = 10, suffix = "N",
+                 hint = "P = X F_r + Y F_a with X = 0.56 and Y = 1.6, because F_a / F_r is larger than e."),
+    tryit_answer("Rating life L10", bl$L10, tol = 1, suffix = "million rev",
+                 hint = "(C / P)^3 for a ball bearing. The result is in millions of revolutions."),
+    tryit_answer("Rating life L10h", bl$L10h, tol = 20, suffix = "h",
+                 hint = "L10 x 10^6 / (60 n)."),
+    tryit_answer("Dynamic rating C needed for 10 000 h at this load and speed", bl$C_req, tol = 100, suffix = "N",
+                 hint = "Rearrange: C = P x (60 n L_h / 10^6)^(1/3).")
+  ),
+  intro = "Work in newtons. Give the ratio to three decimals and L10 to the nearest million revolutions.",
+  question = paste0(
+    "<p>A deep groove ball bearing has a basic dynamic load rating C = 19.5 kN and carries a radial load of 3.2 kN and an axial load of 1.1 kN ",
+    "at 1450 rpm. For this bearing e = 0.30; when F_a / F_r > e use X = 0.56 and Y = 1.6, otherwise X = 1 and Y = 0. ",
+    "P = X F_r + Y F_a; L10 = (C / P)&sup3; million revolutions; L10h = L10 x 10&#8310; / (60 n).</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$F_a/F_r = 1100/3200 = `r sprintf("%.3f", bl$ratio)` > 0.30$, so the combined-load factors apply:
+
+$$P = 0.56 \times 3200 + 1.6 \times 1100 = `r sprintf("%.0f", bl$P)` \text{ N}$$
+
+$$L_{10} = \left(\frac{19500}{`r sprintf("%.0f", bl$P)`}\right)^3 = `r sprintf("%.1f", bl$L10)` \text{ million rev}, \qquad L_{10h} = \frac{`r sprintf("%.1f", bl$L10)` \times 10^6}{60 \times 1450} = `r sprintf("%.0f", bl$L10h)` \text{ h}$$
+
+For 10 000 h the bearing would need $C = `r sprintf("%.0f", bl$C_req)`$ N: `r sprintf("%.1f", bl$C_req / bl$C)` times the catalog rating of this bearing, so a larger bearing (or a lower axial load) is required.
+
+</details>
+
+#### Bushing PV check {#sec-tryit-pv}
+
+```{r tryit-pv-grid, echo=FALSE, results='asis'}
+pv <- data.frame(
+  `Bushing` = c("A", "B", "C", "D"),
+  `d (mm)` = c(25, 20, 40, 30),
+  `L (mm)` = c(30, 25, 50, 20),
+  `F (N)`  = c(1800, 800, 4000, 600),
+  `n (rpm)` = c(600, 300, 120, 900),
+  check.names = FALSE
+)
+pv[["P (MPa)"]]       <- pv[["F (N)"]] / (pv[["d (mm)"]] * pv[["L (mm)"]])
+pv[["V (m/s)"]]       <- pi * pv[["d (mm)"]] * pv[["n (rpm)"]] / 60000
+pv[["PV (MPa·m/s)"]]  <- pv[["P (MPa)"]] * pv[["V (m/s)"]]
+pv_pass <- sum(pv[["PV (MPa·m/s)"]] <= 1.2)
+
+tryit_grid(
+  id = "pv-bushing",
+  title = "Pressure, velocity and PV for four bushings",
+  data = pv,
+  blank = c("P (MPa)", "V (m/s)", "PV (MPa·m/s)"),
+  tol = c(`P (MPa)` = 0.02, `V (m/s)` = 0.01, `PV (MPa·m/s)` = 0.03),
+  hints = c(`P (MPa)` = "P = F / (d x L): the projected area, with F in N and d, L in mm gives MPa.",
+            `V (m/s)` = "V = pi x d x n / 60 000, with d in mm and n in rpm.",
+            `PV (MPa·m/s)` = "Multiply P by V."),
+  digits = 0,
+  answers = list(
+    tryit_answer("Number of bushings within a PV limit of 1.2 MPa·m/s", pv_pass, tol = 0.01,
+                 hint = "Count the bushings whose PV is at or below 1.2.", digits = 0)
+  ),
+  intro = "Give P and V to two decimals and PV to three.",
+  question = paste0(
+    "<p>Four journal bushings: A (d = 25 mm, L = 30 mm, F = 1800 N, 600 rpm), B (20, 25, 800 N, 300 rpm), C (40, 50, 4000 N, 120 rpm) ",
+    "and D (30, 20, 600 N, 900 rpm). P = F / (d L) in MPa, V = pi d n / 60 000 in m/s and PV = P x V. ",
+    "The bushing material has a PV limit of 1.2 MPa&middot;m/s.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-pv-solution, echo=FALSE}
+pv_show <- pv
+pv_show[["Within 1.2?"]] <- ifelse(pv[["PV (MPa·m/s)"]] <= 1.2, "yes", "no")
+knitr::kable(pv_show, digits = c(0, 0, 0, 0, 0, 2, 3, 3, 0), align = "c")
+```
+
+A and D exceed the limit: A through pressure and speed together, D mainly through speed. Bushing C carries the biggest load but runs so slowly that its PV is low, which is why load alone never tells you the answer.
+
+</details>
+
+#### Which lubrication regime? {#sec-tryit-stribeck}
+
+```{r tryit-stribeck-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "stribeck",
+  title = "Where on the Stribeck curve is the bearing?",
+  bins = c("Boundary", "Mixed", "Hydrodynamic"),
+  cards = data.frame(
+    text = c(
+      "A shaft just starting to turn from rest under full load",
+      "A shaft coasting to a stop at shutdown",
+      "A slow oscillating motion under high load",
+      "Steady high-speed rotation with a full oil film and no metal contact",
+      "Speed rising: the surfaces still touch at some asperities but the oil film carries most of the load",
+      "The shaft floating on an established oil wedge",
+      "Operation near the minimum of the friction curve, where the film is thin and contact is partial"
+    ),
+    bin = c("Boundary", "Boundary", "Boundary", "Hydrodynamic", "Mixed", "Hydrodynamic", "Mixed"),
+    why = c(
+      "Low speed and high load give a low bearing parameter: metal-to-metal contact.",
+      "As speed falls the film collapses back into boundary lubrication.",
+      "Oscillation cannot build a film.",
+      "A full film separates the surfaces completely.",
+      "A mix of film support and asperity contact.",
+      "The wedge effect lifts the shaft off the bearing.",
+      "The transition region between boundary and full-film lubrication."
+    )
+  ),
+  intro = "Use the bearing parameter mu x N / P: low is boundary, high is full film.",
+  question = "<p>Match each operating situation to the lubrication regime: boundary, mixed or hydrodynamic.</p>"
+)
+```
+
 ### Bearing vs. Bushing Selection Guide {#sec-selection-guide}
 
 When should you use a ball bearing versus a bushing? The choice depends on operating conditions, space constraints, and maintenance requirements. For bushings, the decision between oil-impregnated and solid-lubricant types depends on the motion profile and environment—continuous rotation favors oil-impregnated bearings that can develop hydrodynamic films, while oscillating or high-temperature applications favor graphite-impregnated designs (see Chapter @sec-chap-sintering for details on manufacturing both types).
