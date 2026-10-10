@@ -284,6 +284,101 @@ There are many print defects. If you encounter one, check out this [excellent su
 
 [Annealing](https://www.cnckitchen.com/blog/better-performing-3d-prints-with-annealing-but-part-1-pla) is a heat treatment process that can improve the mechanical properties of 3D printed parts. By [heating](https://www.cnckitchen.com/blog/testing-the-strength-of-3d-prints-re-melted-in-salt) the part to a temperature below its melting point and then slowly cooling it, internal stresses are relieved and the crystalline structure of the material can be improved. This is particularly useful for PLA and other semi-crystalline polymers, resulting in increased strength, heat resistance, and dimensional stability.
 
+### Try it yourself {#sec-3dp-tryit}
+
+#### Will the feature print on a 0.4 mm nozzle? {#sec-tryit-fdm-rules}
+
+Use the chapter's rules for a 0.4 mm nozzle: minimum wall 0.8 mm, minimum feature size 2 mm, bridges up to about 10 mm, overhangs up to $45^\circ$ without support.
+
+```{r tryit-fdm-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "fdm-rules",
+  title = "Prints as designed, or needs a change?",
+  bins = c("Prints as designed", "Needs support or a redesign"),
+  cards = data.frame(
+    text = c(
+      "A 0.5 mm thin wall",
+      "A 1.2 mm wall",
+      "A 12 mm bridge between two risers",
+      "A 6 mm bridge between two risers",
+      "A 60 degree overhang with no support material",
+      "A 40 degree overhang with no support material",
+      "A 1.5 mm diameter pin",
+      "A 3 mm diameter pin"
+    ),
+    bin = c("Needs support or a redesign", "Prints as designed", "Needs support or a redesign", "Prints as designed",
+            "Needs support or a redesign", "Prints as designed", "Needs support or a redesign", "Prints as designed"),
+    why = c(
+      "The minimum wall is 2 x the nozzle, 0.8 mm.",
+      "Above the 0.8 mm minimum.",
+      "Bridges are possible up to about 10 mm; beyond that the droop is unknown.",
+      "Within the 10 mm bridge limit.",
+      "Overhangs steeper than 45 degrees need support: reorient the part first.",
+      "Within the 45 degree limit.",
+      "The minimum feature size is 2 mm.",
+      "Above the 2 mm minimum feature size."
+    )
+  ),
+  intro = "Compare each feature with the chapter's limits.",
+  question = "<p>For a 0.4 mm nozzle FDM printer (minimum wall 0.8 mm, minimum feature size 2 mm, bridges up to about 10 mm, overhangs up to 45 degrees without support), decide whether each feature prints as designed or needs support or a redesign.</p>"
+)
+```
+
+#### Walls for a different nozzle {#sec-tryit-nozzle}
+
+A printer is changed to a $0.6$ mm nozzle. The chapter's wall rules scale with the nozzle size: the minimum wall is $2 \times$ the nozzle and a stronger wall is $5 \times$ the nozzle.
+
+```{r tryit-nozzle-number, echo=FALSE, results='asis'}
+nz <- list(d = 0.6)
+nz$min    <- 2 * nz$d
+nz$strong <- 5 * nz$d
+nz$lines  <- nz$strong / nz$d
+
+tryit_number(
+  id = "nozzle-walls",
+  title = "Wall thickness for a 0.6 mm nozzle",
+  answers = list(
+    tryit_answer("Minimum wall thickness", nz$min, tol = 0.01, suffix = "mm", hint = "2 x the nozzle diameter."),
+    tryit_answer("Strong wall thickness", nz$strong, tol = 0.01, suffix = "mm", hint = "5 x the nozzle diameter."),
+    tryit_answer("Number of 0.6 mm extrusion lines across the strong wall", nz$lines, tol = 0.01, digits = 0,
+                 hint = "Divide the strong wall thickness by the nozzle diameter.")
+  ),
+  intro = "Give thicknesses to one decimal.",
+  question = "<p>A 3D printer has a 0.6 mm nozzle. The minimum wall thickness is 2 x the nozzle diameter and a stronger wall is 5 x the nozzle diameter. Find both thicknesses, and the number of 0.6 mm extrusion lines across the strong wall.</p>"
+)
+```
+
+#### Which printing technology? {#sec-tryit-printing-tech}
+
+```{r tryit-printing-tech-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "printing-tech",
+  title = "Match the description to the technology",
+  bins = c("SLA", "SLS", "FDM / FFF"),
+  cards = data.frame(
+    text = c(
+      "A laser cures liquid resin into hardened plastic by photopolymerization",
+      "A laser sinters polymer powder, and the unfused powder supports the part so no dedicated supports are needed",
+      "Thermoplastic filament such as PLA or ABS is extruded through a heated nozzle",
+      "The most widely used technology at the consumer level",
+      "Produces highly detailed, isotropic, watertight prototypes with a smooth surface",
+      "Nylon is the most common material and parts are a cost-effective alternative to injection molding for limited runs"
+    ),
+    bin = c("SLA", "SLS", "FDM / FFF", "FDM / FFF", "SLA", "SLS"),
+    why = c(
+      "Photopolymerization of resin is stereolithography.",
+      "Powder bed fusion with a laser is selective laser sintering.",
+      "Fused deposition modelling extrudes filament.",
+      "FDM or FFF is the consumer-level workhorse.",
+      "SLA gives high accuracy and smooth finish.",
+      "SLS parts are in nylon and suit bridge manufacturing."
+    )
+  ),
+  intro = "Use the descriptions of the three technologies in the chapter.",
+  question = "<p>Match each description to the 3D printing technology it describes: SLA, SLS or FDM/FFF.</p>"
+)
+```
+
 ### Check Your Understanding
 
 1. What is the minimum recommended wall thickness for a printer with a 0.4mm nozzle?
