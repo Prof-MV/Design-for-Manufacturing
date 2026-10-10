@@ -271,3 +271,530 @@ details.qwebr-calc-source > summary {
 details.qwebr-calc-source > summary:hover {
   text-decoration: underline;
 }
+
+/*--- "Try it yourself" exercises ----------------------------------------------
+   The student commits to an answer and the page marks it: numeric answers,
+   fill-in tables and sort-into-categories cards. Markup is built by
+   js/tryit.js from a declaration emitted by the tryit_*() helpers in
+   R/tryit.R. Same card language as the calculator cards above, with an
+   orange accent so "your turn" reads differently from "explore". */
+.tryit {
+  margin: 1.5em 0 0.75em;
+  padding: 1.25em 1.5em 1.25em;
+  border: 1px solid #d7dde3;
+  border-left: 6px solid #e67e22;
+  border-radius: 10px;
+  background-color: #f8fafb;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+
+.tryit-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  padding-bottom: 0.6em;
+  margin-bottom: 0.9em;
+  border-bottom: 2px solid #2c3e50;
+}
+
+.tryit-header h4 {
+  margin: 0;
+  font-size: 1.05em;
+  color: #2c3e50;
+}
+
+.tryit-badge {
+  flex: none;
+  padding: 0.15em 0.6em;
+  border-radius: 4px;
+  background-color: #e67e22;
+  color: #fff;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.tryit-intro {
+  margin: 0 0 0.9em;
+  font-size: 0.92em;
+  color: #34495e;
+}
+
+.tryit-scroll {
+  overflow-x: auto;
+}
+
+table.tryit-grid {
+  margin: 0 auto 0.5em;
+  border-collapse: collapse;
+  font-size: 0.92em;
+  background-color: #fff;
+}
+
+table.tryit-grid th,
+table.tryit-grid td {
+  padding: 0.35em 0.7em;
+  border: 1px solid #d7dde3;
+  text-align: center;
+  color: #2c3e50;
+  white-space: nowrap;
+}
+
+table.tryit-grid th {
+  background-color: #2c3e50;
+  color: #fff;
+  font-weight: 600;
+}
+
+.tryit input[type="text"] {
+  width: 6em;
+  padding: 0.2em 0.4em;
+  border: 1px solid #c7ced4;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #2c3e50;
+  font-size: 0.95em;
+  text-align: right;
+}
+
+.tryit input[type="text"]:focus-visible,
+.tryit-btn:focus-visible,
+.tryit-bins input:focus-visible + label {
+  outline: 2px solid #2980b9;
+  outline-offset: 1px;
+}
+
+.tryit-mark {
+  display: inline-block;
+  width: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.tryit-ok .tryit-mark { color: #16a085; }
+.tryit-no .tryit-mark { color: #c0392b; }
+
+.tryit-ok input[type="text"] { border-color: #16a085; background-color: #e8f8f3; }
+.tryit-no input[type="text"] { border-color: #c0392b; background-color: #fdedec; }
+
+.tryit-answers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  margin-top: 0.9em;
+}
+
+.tryit-answer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4em 1em;
+  flex-wrap: wrap;
+}
+
+.tryit-answer > label {
+  flex: 1 1 12em;
+  font-size: 0.92em;
+  color: #34495e;
+}
+
+.tryit-field {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.tryit-affix {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+.tryit-hint {
+  flex-basis: 100%;
+  margin-top: 0.3em;
+  padding: 0.4em 0.7em;
+  border-left: 3px solid #f39c12;
+  background-color: #fef5e7;
+  color: #7d5a0b;
+  font-size: 0.88em;
+}
+
+ol.tryit-cards {
+  margin: 0;
+  padding-left: 1.4em;
+}
+
+.tryit-card {
+  padding: 0.55em 0;
+  border-bottom: 1px solid #eceff1;
+  color: #2c3e50;
+}
+
+.tryit-card-text {
+  font-size: 0.95em;
+}
+
+.tryit-bins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-top: 0.4em;
+}
+
+/* The radio itself is visually hidden; its label is the pill. */
+.tryit-bins input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tryit-bins label {
+  padding: 0.2em 0.8em;
+  border: 1px solid #c7ced4;
+  border-radius: 999px;
+  background-color: #fff;
+  color: #34495e;
+  font-size: 0.88em;
+  cursor: pointer;
+}
+
+.tryit-bins label:hover {
+  border-color: #2980b9;
+}
+
+.tryit-bins input:checked + label {
+  border-color: #2980b9;
+  background-color: #2980b9;
+  color: #fff;
+}
+
+.tryit-ok .tryit-bins input:checked + label { border-color: #16a085; background-color: #16a085; }
+.tryit-no .tryit-bins input:checked + label { border-color: #c0392b; background-color: #c0392b; }
+
+.tryit-why {
+  margin-top: 0.4em;
+  font-size: 0.88em;
+  color: #128066;
+}
+
+/* Diagram exercises: boxes in layers, joined by lines drawn on an SVG that
+   sits underneath them (js/tryit.js, drawDiagram()). */
+.tryit-diagram {
+  position: relative;
+  display: flex;
+  gap: 1.9em;
+  width: max-content;
+  min-width: 100%;
+  padding: 0.5em 0.25em 0.75em;
+}
+
+.tryit-diagram-right { flex-direction: row; align-items: center; }
+.tryit-diagram-down { flex-direction: column; align-items: center; }
+
+.tryit-diagram-layer {
+  display: flex;
+  gap: 0.8em;
+  justify-content: center;
+}
+
+.tryit-diagram-right .tryit-diagram-layer { flex-direction: column; }
+.tryit-diagram-down .tryit-diagram-layer { flex-direction: row; align-items: flex-start; }
+
+.tryit-diagram-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.tryit-diagram-lines line {
+  stroke: #2980b9;
+  stroke-width: 2;
+}
+
+.tryit-diagram-lines polygon {
+  fill: #2980b9;
+}
+
+.tryit-node {
+  position: relative;
+  min-width: 7em;
+  max-width: 11.5em;
+  padding: 0.45em 0.6em 0.55em;
+  border: 2px solid #2c3e50;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #2c3e50;
+  font-size: 0.82em;
+}
+
+.tryit-scroll-note {
+  margin: 0.2em 0 0;
+  text-align: right;
+  font-size: 0.8em;
+  color: #7f8c8d;
+}
+
+.tryit-node.tryit-ok { border-color: #16a085; }
+.tryit-node.tryit-no { border-color: #c0392b; }
+
+.tryit-node-title {
+  font-weight: 700;
+}
+
+.tryit-node-sub {
+  margin-bottom: 0.35em;
+  color: #5d6d7e;
+  font-size: 0.92em;
+}
+
+.tryit-node-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+  margin-top: 0.3em;
+}
+
+.tryit-node-label {
+  color: #5d6d7e;
+}
+
+.tryit-node-value {
+  font-weight: 600;
+}
+
+.tryit-node-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.tryit-node input[type="text"] {
+  width: 4.2em;
+}
+
+.tryit select {
+  max-width: 100%;
+  padding: 0.2em 0.3em;
+  border: 1px solid #c7ced4;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #2c3e50;
+  font-size: 0.95em;
+}
+
+.tryit select:focus-visible {
+  outline: 2px solid #2980b9;
+  outline-offset: 1px;
+}
+
+.tryit-node select {
+  width: 100%;
+  margin-top: 0.3em;
+}
+
+table.tryit-stations {
+  margin-top: 0.9em;
+}
+
+table.tryit-grid tr.tryit-over td {
+  background-color: #fdedec;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+table.tryit-grid tfoot th,
+table.tryit-grid tfoot td {
+  background-color: #eef1f4;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.tryit-live {
+  margin: 0.4em 0 0;
+  text-align: center;
+  font-size: 0.92em;
+  font-weight: 600;
+  color: #2980b9;
+}
+
+.tryit-plan {
+  display: grid;
+  gap: 0.5em;
+  width: max-content;
+  min-width: min(100%, 26em);
+  margin: 0 auto 1em;
+}
+
+.tryit-plan-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.5em;
+  padding: 0.5em;
+  border: 2px solid #2c3e50;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+ol.tryit-steps {
+  margin: 0;
+  padding-left: 1.6em;
+}
+
+.tryit-step {
+  padding: 0.35em 0;
+  border-bottom: 1px solid #eceff1;
+  color: #2c3e50;
+  font-size: 0.95em;
+}
+
+.tryit-step-moves {
+  display: inline-flex;
+  gap: 0.25em;
+  margin-right: 0.7em;
+}
+
+.tryit-move {
+  padding: 0 0.45em;
+  border: 1px solid #c7ced4;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #2c3e50;
+  font-size: 0.75em;
+  line-height: 1.8;
+  cursor: pointer;
+}
+
+.tryit-move:hover,
+.tryit-move:focus-visible {
+  border-color: #2980b9;
+  color: #2980b9;
+}
+
+.tryit-step.tryit-ok .tryit-step-text { color: #128066; }
+.tryit-step.tryit-no .tryit-step-text { color: #c0392b; }
+
+.tryit-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  margin-top: 1.1em;
+  padding-top: 1em;
+  border-top: 1px dashed #c7ced4;
+}
+
+.tryit-btn {
+  padding: 0.4em 1.1em;
+  border: 1px solid #2c3e50;
+  border-radius: 6px;
+  background-color: #2c3e50;
+  color: #fff;
+  font-size: 0.92em;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tryit-btn:hover {
+  background-color: #34495e;
+}
+
+.tryit-btn-secondary {
+  background-color: #fff;
+  color: #2c3e50;
+}
+
+.tryit-btn-secondary:hover {
+  background-color: #eef1f4;
+}
+
+.tryit-feedback {
+  min-height: 1.4em;
+  margin-top: 0.7em;
+  font-size: 0.92em;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.tryit-feedback.tryit-all-ok {
+  color: #16a085;
+}
+
+details.tryit-solution {
+  margin: 0.5em 0 1.5em;
+}
+
+details.tryit-solution > summary {
+  cursor: pointer;
+  color: #2980b9;
+  font-weight: 600;
+}
+
+details.tryit-solution.tryit-locked > summary {
+  color: #7f8c8d;
+  cursor: not-allowed;
+}
+
+details.tryit-solution.tryit-locked > summary::after {
+  content: " (locked until you check an answer)";
+  font-weight: 400;
+  font-size: 0.9em;
+}
+
+/* A calculator card's optional challenge: a goal the student has to reach by
+   changing the inputs (see `goal`/`goal_test` in qwebr_calc_card()). */
+.qwebr-calc-goal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5em 1em;
+  flex-wrap: wrap;
+  margin-top: 1em;
+  padding: 0.6em 0.9em;
+  border-left: 4px solid #e67e22;
+  border-radius: 4px;
+  background-color: #fdf3ea;
+  color: #34495e;
+  font-size: 0.92em;
+  text-align: left;
+}
+
+.qwebr-calc-goal-label {
+  font-weight: 700;
+  color: #ca6510;
+}
+
+.qwebr-calc-goal-status {
+  flex: none;
+  font-weight: 700;
+  color: #7f8c8d;
+}
+
+.qwebr-calc-goal.qwebr-calc-goal-met {
+  border-left-color: #16a085;
+  background-color: #eefaf6;
+}
+
+.qwebr-calc-goal.qwebr-calc-goal-met .qwebr-calc-goal-label,
+.qwebr-calc-goal.qwebr-calc-goal-met .qwebr-calc-goal-status {
+  color: #128066;
+}
+
+.qwebr-calc-rerun {
+  align-self: flex-start;
+  margin-top: 0.3em;
+  padding: 0.35em 1em;
+  border: 1px solid #2c3e50;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #2c3e50;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.qwebr-calc-rerun:hover {
+  background-color: #eef1f4;
+}

@@ -82,7 +82,9 @@ qwebr_calc_card(
     qwebr_calc_input("preload", "Bolt preload F<sub>i</sub>", value = 5000, min = 500, max = 30000, step = 500, suffix = "N"),
     qwebr_calc_input("C", "Joint stiffness constant C", value = 0.25, min = 0.05, max = 0.95, step = 0.05),
     qwebr_calc_input("P_ext", "External load P (N)", value = 4000, min = 0, max = 20000, step = 250, type = "slider")
-  )
+  ),
+  goal = "Carry a working load of at least 8000 N with the joint still clamped and the bolt force no higher than 8500 N.",
+  goal_test = "P_ext >= 8000 && P_ext < sep_point && bolt_force <= 8500"
 )
 ```
 
@@ -1032,6 +1034,44 @@ These fasteners are designed to be a permanent, visual verification tool for mai
 
 > **Design Tip:** For critical applications, specify the tightening method on engineering drawings. Include the target preload, acceptable tolerance, and any special lubrication requirements.
 
+##### Try it yourself: choose the tightening method {#sec-tryit-tightening}
+
+You have just met three ways to control preload. Match each situation to the method that fits it.
+
+```{r tryit-tightening-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "tightening-sort",
+  title = "Which tightening method fits?",
+  bins = c("Torque wrench", "Torque-angle", "Elongation measurement"),
+  cards = data.frame(
+    text = c(
+      "Bolts on a non-critical jig fixture; a preload scatter of about 30% is acceptable",
+      "Cylinder-head bolts: snug to a low torque, then turn through a further 90 degrees",
+      "Studs on a nuclear pressure-vessel flange where preload must be known to within a few percent",
+      "Structural steel connections in a building frame",
+      "General assembly of a sheet-metal cabinet",
+      "An ultrasonic transducer on the bolt head times a pulse along the bolt",
+      "Aerospace engine mount where a bolt failure cannot be tolerated",
+      "A load-indicating washer whose protrusions flatten under load"
+    ),
+    bin = c("Torque wrench", "Torque-angle", "Elongation measurement", "Torque-angle",
+            "Torque wrench", "Elongation measurement", "Elongation measurement", "Elongation measurement"),
+    why = c(
+      "Torque wrenches give about +/-25-35% preload, which is fine when the joint is not critical.",
+      "Snug torque first, then an angle: the preload no longer depends on friction, about +/-10-15%.",
+      "Measuring the stretch is the only method accurate to +/-1-5%.",
+      "Torque-angle is the method the comparison table names for structural steel.",
+      "Fast and cheap; the accuracy is enough for general assembly.",
+      "Time of flight measures bolt length directly, so it is an elongation method.",
+      "High consequence of failure justifies the slow, expensive, accurate method.",
+      "The gap it leaves measures bolt load directly; the chapter groups it with elongation measurement."
+    )
+  ),
+  intro = "Choose a method under each card, then press Check.",
+  question = "<p>Match each situation to the bolt tightening method that suits it: torque wrench, torque-angle, or elongation measurement.</p>"
+)
+```
+
 
 ### Understanding Bolt Joints and Force Triangles {#bolt-joints}
 In bolted joints, the force triangle is a conceptual tool used to visualize and analyze the distribution of forces between the bolt and the clamped members under preload and external working loads. This representation helps engineers understand how forces are balanced to maintain joint integrity and prevent failure modes such as separation or fatigue [@shigley2020].
@@ -1907,6 +1947,105 @@ $$\sigma = \frac{F_i}{A_t} = \frac{20380}{0.1599} = 127454 \, psi$$
 > **Result:** Bolt will break while tightening.
 
 :::
+
+### Try it yourself: a metric joint {#sec-tryit-metric-joint}
+
+Example 2 used inch bolts. Work the same method on a metric joint. Six **M10 x 1.5, class 8.8** bolts clamp a motor-mount plate. Each bolt has a tensile stress area $A_t = 58.0\ \text{mm}^2$, proof strength $S_p = 600$ MPa and tensile strength $S_u = 830$ MPa. Stiffnesses per bolt are $k_b = 280$ kN/mm and $k_m = 1020$ kN/mm. Preload is 75% of proof, the torque factor is $K = 0.18$, and the plate carries a total external load of 36 kN shared equally by the six bolts.
+
+```{r tryit-metric-setup, echo=FALSE}
+mj <- list(At = 58.0, Sp = 600, Su = 830, kb = 280000, km = 1020000,
+           d = 10, K = 0.18, n = 6, P_total = 36000, K_lube = 0.10)
+mj$P   <- mj$P_total / mj$n
+mj$Fi  <- 0.75 * mj$At * mj$Sp
+mj$C   <- mj$kb / (mj$kb + mj$km)
+mj$Fb  <- mj$Fi + mj$C * mj$P
+mj$T   <- mj$K * mj$d * mj$Fi / 1000
+mj$nO  <- mj$Fi / (mj$P * (1 - mj$C))
+mj$Fi_lube <- mj$T * 1000 / (mj$K_lube * mj$d)
+mj$sig_lube <- mj$Fi_lube / mj$At
+```
+
+```{r tryit-metric-number, echo=FALSE, results='asis'}
+tryit_number(
+  id = "metric-joint",
+  title = "Preload, load share and torque for the M10 joint",
+  answers = list(
+    tryit_answer("Preload F_i", mj$Fi, tol = 50, suffix = "N",
+                 hint = "F_i = 0.75 x A_t x S_p. With A_t in mm^2 and S_p in MPa the result is in newtons."),
+    tryit_answer("Joint constant C", mj$C, tol = 0.002,
+                 hint = "C = k_b / (k_b + k_m). Use the same units for both."),
+    tryit_answer("Bolt force F_b", mj$Fb, tol = 100, suffix = "N",
+                 hint = "F_b = F_i + C x P, where P is the load on ONE bolt (total / 6)."),
+    tryit_answer("Tightening torque T", mj$T, tol = 0.2, suffix = "N·m",
+                 hint = "T = K x d x F_i gives N·mm; divide by 1000 for N·m."),
+    tryit_answer("Separation factor n_o", mj$nO, tol = 0.05,
+                 hint = "n_o = F_i / (P (1 - C)), with P per bolt."),
+    tryit_answer("Bolt stress if the same torque is applied to a lubricated bolt (K = 0.10)", mj$sig_lube,
+                 tol = 5, suffix = "MPa",
+                 hint = "Same torque, smaller K: F_i = T / (K d). Then divide by A_t.")
+  ),
+  intro = "Work to the precision shown by the tolerance. Use the load per bolt, not the total.",
+  question = paste0(
+    "<p>Six M10 x 1.5 class 8.8 bolts clamp a motor-mount plate. Each bolt has tensile stress area A_t = 58.0 mm&sup2;, ",
+    "proof strength S_p = 600 MPa and tensile strength S_u = 830 MPa. Per bolt, the bolt stiffness is k_b = 280 kN/mm ",
+    "and the member stiffness is k_m = 1020 kN/mm. Preload is 75% of proof load and the torque factor is K = 0.18 ",
+    "(bolt diameter d = 10 mm). The plate carries a total external load of 36 kN, shared equally by the six bolts.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$F_i = 0.75\, A_t S_p = 0.75 \cdot 58.0 \cdot 600 = `r sprintf("%.0f", mj$Fi)` \text{ N}$$
+
+$$C = \frac{k_b}{k_b + k_m} = \frac{280}{280 + 1020} = `r sprintf("%.3f", mj$C)`$$
+
+$$F_b = F_i + C P = `r sprintf("%.0f", mj$Fi)` + `r sprintf("%.3f", mj$C)` \cdot `r sprintf("%.0f", mj$P)` = `r sprintf("%.0f", mj$Fb)` \text{ N}$$
+
+$$T = K\, d\, F_i = 0.18 \cdot 10 \cdot `r sprintf("%.0f", mj$Fi)` = `r sprintf("%.0f", mj$K * mj$d * mj$Fi)` \text{ N·mm} = `r sprintf("%.1f", mj$T)` \text{ N·m}$$
+
+$$n_o = \frac{F_i}{P(1 - C)} = \frac{`r sprintf("%.0f", mj$Fi)`}{`r sprintf("%.0f", mj$P)` (1 - `r sprintf("%.3f", mj$C)`)} = `r sprintf("%.2f", mj$nO)`$$
+
+Lubricating the bolt lowers $K$ to 0.10, so the same torque gives $F_i = T/(K d) = `r sprintf("%.0f", mj$Fi_lube)`$ N and a stress of `r sprintf("%.0f", mj$sig_lube)` MPa. That is `r sprintf("%.0f", 100 * mj$sig_lube / mj$Su)`% of $S_u$ and above the 600 MPa proof strength: the bolt is permanently stretched.
+
+</details>
+
+The table below repeats the safety-factor step for four working loads on the same bolt. Notice how quickly the margin against separation shrinks.
+
+```{r tryit-metric-grid, echo=FALSE, results='asis'}
+mj_tab <- data.frame(`P per bolt (N)` = c(8000, 16000, 24000, 32000), check.names = FALSE)
+mj_tab[["F_b (N)"]] <- mj$Fi + mj$C * mj_tab[[1]]
+mj_tab[["n_p"]]     <- mj$Sp * mj$At / mj_tab[["F_b (N)"]]
+mj_tab[["n_o"]]     <- mj$Fi / (mj_tab[[1]] * (1 - mj$C))
+
+tryit_grid(
+  id = "metric-joint-factors",
+  title = "Safety factors as the working load rises",
+  data = mj_tab,
+  blank = c("F_b (N)", "n_p", "n_o"),
+  tol = c(`F_b (N)` = 100, n_p = 0.02, n_o = 0.05),
+  hints = c(`F_b (N)` = "F_b = F_i + C P, using F_i and C from the answers above.",
+            n_p = "n_p = S_p A_t / F_b. Proof load is S_p x A_t in newtons.",
+            n_o = "n_o = F_i / (P (1 - C))."),
+  digits = 0,
+  intro = "Fill F_b, n_p and n_o for each load. Round factors to two decimals.",
+  question = paste0(
+    "<p>Use the M10 class 8.8 joint above (F_i = 26 100 N, C = 0.215, A_t = 58.0 mm&sup2;, S_p = 600 MPa). ",
+    "For each load per bolt P, find the bolt force F_b, the proof factor n_p = S_p A_t / F_b and the separation factor ",
+    "n_o = F_i / (P (1 - C)).</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-metric-grid-solution, echo=FALSE}
+knitr::kable(mj_tab, digits = c(0, 0, 2, 2), align = "c")
+```
+
+The joint separates at $P = F_i/(1-C) = `r sprintf("%.0f", mj$Fi / (1 - mj$C))`$ N. At 32 kN the separation factor is already `r sprintf("%.2f", mj_tab[["n_o"]][4])`: a 4% overload would open the joint.
+
+</details>
 
 ---
 

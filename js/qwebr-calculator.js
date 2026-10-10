@@ -29,6 +29,11 @@
 //     it red instead of the default headline green / breakdown navy — a
 //     passing verdict, or a line with no verdict at all, needs no markers
 //   - any graphics device output becomes a canvas image under the card
+//
+// Challenge (optional): a card may carry a `.qwebr-calc-goal` row whose
+// `data-goal-test` is an R expression over the cell's variables. It is
+// evaluated at the end of every run and the row flips to "Reached" once it
+// is TRUE, so the student has to find inputs that meet a stated goal.
 
 (function (global) {
   "use strict";
@@ -115,6 +120,13 @@
     });
   }
 
+  const GOAL_MARKER = "@@qwebr-goal@@";
+
+  function renderGoal(goalEl, met) {
+    goalEl.classList.toggle("qwebr-calc-goal-met", met);
+    goalEl.querySelector(".qwebr-calc-goal-status").textContent = met ? "\u2713 Reached" : "Not yet";
+  }
+
   // Debounce helper: collapses rapid-fire slider "input" events into a
   // single webR evaluation after `wait` ms of quiet.
   function debounce(fn, wait) {
@@ -189,12 +201,15 @@
     const result = await global.mainWebRCodeShelter.captureR(opts.code, captureOptions);
 
     try {
-      const text = result.output
+      const lines = result.output
         .filter((evt) => evt.type === "stdout")
-        .map((evt) => evt.data)
-        .join("\n");
+        .map((evt) => evt.data);
 
-      renderText(opts.outputEl, text);
+      // The goal verdict is printed on its own marker line; lift it out so
+      // it never shows up among the results.
+      const verdict = lines.find((line) => line.trim().startsWith(GOAL_MARKER));
+      renderText(opts.outputEl, lines.filter((line) => line !== verdict).join("\n"));
+      if (opts.goalEl && verdict) renderGoal(opts.goalEl, /TRUE/.test(verdict));
 
       if (result.images && result.images.length > 0) {
         renderImages(opts.graphEl, result.images);
@@ -262,6 +277,7 @@
 
     const outputEl = card.querySelector(".qwebr-calc-results");
     const graphEl = card.querySelector(".qwebr-calc-graph");
+    const goalEl = card.querySelector(".qwebr-calc-goal");
     const inputs = Array.from(card.querySelectorAll("[data-var]"));
     const figWidth = parseInt(card.dataset.figWidth, 10) || 1200;
     const figHeight = parseInt(card.dataset.figHeight, 10) || 700;
@@ -273,13 +289,16 @@
         if (isNaN(value)) return null; // leave blank/invalid fields alone rather than guessing
         overrides.push({ varName: input.dataset.var, value });
       }
-      return buildOverrideCode(entry.code, overrides);
+      const code = buildOverrideCode(entry.code, overrides);
+      if (!code || !goalEl) return code;
+      // A goal that errors (e.g. a misspelt variable) simply reads as not met.
+      return code + `\ncat("\\n${GOAL_MARKER}", isTRUE(tryCatch(${goalEl.dataset.goalTest}, error = function(e) FALSE)), "\\n")`;
     }
 
     const run = debounce(function () {
       const code = buildCode();
       if (!code) return;
-      runCalc({ outputEl, graphEl, code, figWidth, figHeight });
+      runCalc({ outputEl, graphEl, goalEl, code, figWidth, figHeight });
     }, 200);
 
     inputs.forEach((input) => {
@@ -291,6 +310,18 @@
         run();
       });
     });
+
+    // "Run again" on a simulation card: move the seed input on by one.
+    const rerun = card.querySelector(".qwebr-calc-rerun");
+    if (rerun) {
+      rerun.addEventListener("click", function () {
+        // (the button names the seed input in data-seed-var, not data-var, so it
+        // is not itself picked up as one of the card's inputs)
+        const seed = card.querySelector(`[data-var="${rerun.dataset.seedVar}"]`);
+        seed.value = (parseInt(seed.value, 10) || 0) + 1;
+        run();
+      });
+    }
 
     whenReady(run);
   }
