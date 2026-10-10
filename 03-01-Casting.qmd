@@ -659,6 +659,110 @@ The table below summarizes key design guidelines to prevent common casting defec
 
 ---
 
+### Try it yourself {#sec-casting-tryit}
+
+#### Group the defects {#sec-tryit-defects}
+
+```{r tryit-defect-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "casting-defects",
+  title = "Which category does each defect belong to?",
+  bins = c("Gas-related", "Shrinkage-related", "Mold-related", "Metallurgical"),
+  cards = data.frame(
+    text = c("Porosity", "Blowholes", "Shrinkage cavity", "Hot tears", "Sand inclusions", "Misrun", "Cold shuts", "Segregation"),
+    bin = c("Gas-related", "Gas-related", "Shrinkage-related", "Shrinkage-related",
+            "Mold-related", "Mold-related", "Metallurgical", "Metallurgical"),
+    why = c(
+      "Gas trapped in the solidifying metal forms small voids.",
+      "Gas bubbles trapped in the casting.",
+      "The last metal to freeze is not fed with liquid metal.",
+      "Restrained shrinkage tears the casting while it is still hot.",
+      "Loose sand from the mold ends up in the casting.",
+      "The mold cavity is not completely filled.",
+      "Two metal streams meet without fully fusing.",
+      "Alloying elements are unevenly distributed."
+    )
+  ),
+  intro = "Use the chapter's classification of casting defects by cause.",
+  question = "<p>Place each casting defect in the category the chapter assigns it to: gas-related, shrinkage-related, mold-related or metallurgical.</p>"
+)
+```
+
+#### Good or poor casting design? {#sec-tryit-casting-design}
+
+```{r tryit-casting-design-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "casting-design",
+  title = "Design practice: help or hurt?",
+  bins = c("Good practice", "Poor practice"),
+  cards = data.frame(
+    text = c(
+      "Keep the wall thickness as uniform as possible",
+      "A thick boss attached to a thin wall with a sharp, square junction",
+      "Taper a large change of section slowly to avoid cooling strain",
+      "Round the corners where two sections meet",
+      "A tall vertical wall with no draft, so the pattern is gripped by the sand",
+      "Add a core that could have been avoided by changing the parting line",
+      "Smooth sharp angles and add cores to remove hot spots",
+      "An abrupt step from a thin section to a very thick one"
+    ),
+    bin = c("Good practice", "Poor practice", "Good practice", "Good practice", "Poor practice", "Poor practice", "Good practice", "Poor practice"),
+    why = c(
+      "Uniform thickness avoids hot spots.",
+      "A sharp junction creates a larger volume of metal: a hot spot.",
+      "Slow tapers prevent cooling strain.",
+      "Rounding keeps the metal volume at the junction consistent.",
+      "Drafts let the pattern leave the mold without disturbing the walls.",
+      "Cores are costly; avoid them when the geometry allows.",
+      "Both reduce high-volume hot spots.",
+      "Abrupt changes of thickness cause shrinkage defects and cooling strain."
+    )
+  ),
+  intro = "Use the design considerations for shape and mold in the chapter.",
+  question = "<p>Decide whether each design choice is good or poor casting design practice.</p>"
+)
+```
+
+#### Draft allowance {#sec-tryit-draft}
+
+A foundry specifies a draft of $1.5^\circ$ per 25 mm of depth for the first 50 mm and $0.8^\circ$ per 25 mm of depth beyond that. A sand-cast housing wall is $150$ mm deep.
+
+```{r tryit-draft-number, echo=FALSE, results='asis'}
+dr <- list(depth = 150, first = 50, rate1 = 1.5, rate2 = 0.8)
+dr$a1    <- dr$first / 25 * dr$rate1
+dr$a2    <- (dr$depth - dr$first) / 25 * dr$rate2
+dr$total <- dr$a1 + dr$a2
+dr$grow  <- dr$depth * tan(dr$total * pi / 180)
+
+tryit_number(
+  id = "draft-angle",
+  title = "Draft angle and its effect on the wall",
+  answers = list(
+    tryit_answer("Draft for the first 50 mm", dr$a1, tol = 0.05, suffix = "degrees",
+                 hint = "50 / 25 = 2 steps of 1.5 degrees."),
+    tryit_answer("Draft for the remaining 100 mm", dr$a2, tol = 0.05, suffix = "degrees",
+                 hint = "100 / 25 = 4 steps of 0.8 degrees."),
+    tryit_answer("Total draft angle", dr$total, tol = 0.05, suffix = "degrees", hint = "Add the two contributions."),
+    tryit_answer("Wall growth over the full depth (on one side)", dr$grow, tol = 0.2, suffix = "mm",
+                 hint = "depth x tan(total draft angle).")
+  ),
+  intro = "Give angles to one decimal and the wall growth to one decimal.",
+  question = paste0(
+    "<p>A foundry's rule is a draft of 1.5 degrees per 25 mm of depth for the first 50 mm, then 0.8 degrees per 25 mm of depth beyond 50 mm. ",
+    "A cast housing wall is 150 mm deep. Find the draft for each portion, the total draft angle, and the growth of the wall on one side ",
+    "over the full depth (depth x tan of the total angle).</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+First 50 mm: $2 \times 1.5 = `r sprintf("%.1f", dr$a1)`^\circ$. Remaining 100 mm: $4 \times 0.8 = `r sprintf("%.1f", dr$a2)`^\circ$. Total: **`r sprintf("%.1f", dr$total)`^\circ**.
+
+Over 150 mm the wall grows by $150 \tan(`r sprintf("%.1f", dr$total)`^\circ) = `r sprintf("%.1f", dr$grow)`$ mm on each side, which the designer must allow for in the wall thickness and the dimensions at the top of the pattern.
+
+</details>
+
 ### Practice Problems {#sec-casting-practice}
 
 ::: {.question}
