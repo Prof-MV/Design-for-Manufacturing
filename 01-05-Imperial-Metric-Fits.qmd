@@ -232,6 +232,110 @@ to the micrometer level, and incorrect fits can lead to premature bearing
 failure and warranty claims.
 :::
 
+### Try it yourself {#sec-tryit-fits}
+
+These use fits that are not in the charts above. Each exercise checks your answer and lets you try again.
+
+#### Clearance of five shafts in an H7 hole {#sec-tryit-hole-basis}
+
+A $\varnothing 20$ mm hole is $\text{H7}$: limits $20.000$ to $20.021$ mm. The mating shaft limits (in mm, from the ISO tables for this size range) are:
+
+```{r tryit-fit-grid, echo=FALSE, results='asis'}
+ft <- data.frame(
+  `Shaft` = c("f7", "g6", "k6", "n6", "p6"),
+  `Shaft max (mm)` = c(19.980, 19.993, 20.015, 20.028, 20.035),
+  `Shaft min (mm)` = c(19.959, 19.980, 20.002, 20.015, 20.022),
+  check.names = FALSE
+)
+ft[["Max clearance (mm)"]] <- 20.021 - ft[["Shaft min (mm)"]]
+ft[["Min clearance (mm)"]] <- 20.000 - ft[["Shaft max (mm)"]]
+ft_class <- ifelse(ft[["Min clearance (mm)"]] > 0, "Clearance",
+            ifelse(ft[["Max clearance (mm)"]] < 0, "Interference", "Transition"))
+
+tryit_grid(
+  id = "fit-clearance",
+  title = "Maximum and minimum clearance",
+  data = ft,
+  blank = c("Max clearance (mm)", "Min clearance (mm)"),
+  tol = c(`Max clearance (mm)` = 0.0005, `Min clearance (mm)` = 0.0005),
+  hints = c(`Max clearance (mm)` = "Largest hole minus smallest shaft. It can be negative for an interference fit.",
+            `Min clearance (mm)` = "Smallest hole minus largest shaft. A negative value means interference."),
+  digits = 3,
+  intro = "Give each to three decimals; a negative number is interference.",
+  question = paste0(
+    "<p>A 20 mm H7 hole has limits 20.000 and 20.021 mm. Five shafts have limits (max, min): f7 (19.980, 19.959), g6 (19.993, 19.980), ",
+    "k6 (20.015, 20.002), n6 (20.028, 20.015), p6 (20.035, 20.022) mm. Maximum clearance = largest hole - smallest shaft; ",
+    "minimum clearance = smallest hole - largest shaft (negative means interference).</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-fit-solution, echo=FALSE}
+ft_show <- ft
+ft_show[["Fit type"]] <- ft_class
+knitr::kable(ft_show, digits = c(0, 3, 3, 3, 3, 0), align = "c")
+```
+
+A fit is a **clearance** fit when the minimum clearance is positive, an **interference** fit when even the maximum clearance is negative, and a **transition** fit when the clearance can be either.
+
+</details>
+
+#### Classify the fits {#sec-tryit-fit-classes}
+
+```{r tryit-fit-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "fit-classes",
+  title = "Clearance, transition or interference?",
+  bins = c("Clearance", "Transition", "Interference"),
+  cards = data.frame(
+    text = sprintf("\u00d820 H7/%s", ft[["Shaft"]]),
+    bin = ft_class,
+    why = sprintf("Max clearance %+.3f mm, min clearance %+.3f mm.", ft[["Max clearance (mm)"]], ft[["Min clearance (mm)"]])
+  ),
+  intro = "Use the clearances you just calculated.",
+  question = "<p>Using the limits of a 20 mm H7 hole (20.000 to 20.021) and the shafts f7, g6, k6, n6 and p6 (limits in the previous table), classify each fit as clearance, transition or interference.</p>"
+)
+```
+
+#### Which family of imperial fits? {#sec-tryit-fit-families}
+
+```{r tryit-fit-family-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "fit-families",
+  title = "Match the application to the fit family",
+  bins = c("Running and sliding (RC)", "Locational clearance (LC)", "Locational transition (LT)",
+           "Locational interference (LN)", "Force or shrink (FN)"),
+  cards = data.frame(
+    text = c(
+      "A journal on accurate machinery with moderate surface speed where minimum play is wanted",
+      "Parts that are normally stationary but must assemble and disassemble freely",
+      "Accurate location where a small clearance or a small interference is both acceptable",
+      "Accurate, rigid alignment with no special requirement for bore pressure",
+      "Permanent assemblies pressed or shrunk together with constant bore pressure",
+      "A bearing fit where wide commercial tolerances and large temperature changes are expected",
+      "Ordinary steel parts shrunk onto a light section",
+      "A pilot or locating fit that is loose enough to assemble by hand but snug"
+    ),
+    bin = c("Running and sliding (RC)", "Locational clearance (LC)", "Locational transition (LT)", "Locational interference (LN)",
+            "Force or shrink (FN)", "Running and sliding (RC)", "Force or shrink (FN)", "Locational clearance (LC)"),
+    why = c(
+      "RC 4, close running fits, are for accurate machinery at moderate speeds.",
+      "LC fits range from snug to looser fastener fits.",
+      "LT is a compromise between clearance and interference.",
+      "LN fits give rigidity and alignment without a bore-pressure requirement.",
+      "FN fits are special interference fits that keep constant bore pressure.",
+      "RC 7 free running fits tolerate temperature variation.",
+      "FN 2 medium drive fits are for ordinary steel parts.",
+      "LC fits are snug to loose, for freely assembled stationary parts."
+    )
+  ),
+  intro = "Use the descriptions of the imperial fit classes above.",
+  question = "<p>Match each application to the imperial fit family: running and sliding (RC), locational clearance (LC), locational transition (LT), locational interference (LN) or force and shrink (FN).</p>"
+)
+```
+
 ### Key Takeaways {-}
 
 - Fits define the relationship between mating parts (hole and shaft)
