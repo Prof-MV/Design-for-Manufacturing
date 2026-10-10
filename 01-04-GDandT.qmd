@@ -919,6 +919,115 @@ server <- function(input, output) {
 shinyApp(ui, server)
 ```
 
+### Try it yourself {#sec-tryit-gdt}
+
+These use features that are not in the examples above. Each exercise checks your answer and lets you try again.
+
+#### Bonus tolerance at MMC {#sec-tryit-bonus}
+
+A hole is dimensioned $\varnothing 12.00 \ {}^{+0.10}_{-0.05}$ mm with a position tolerance of $\varnothing 0.25$ mm at MMC. The hole's MMC is its smallest size, $11.95$ mm.
+
+```{r tryit-bonus-grid, echo=FALSE, results='asis'}
+bn <- data.frame(`Actual hole size (mm)` = c(11.95, 12.00, 12.05, 12.10), check.names = FALSE)
+bn[["Bonus tolerance (mm)"]]  <- bn[["Actual hole size (mm)"]] - 11.95
+bn[["Total position tolerance (mm)"]] <- 0.25 + bn[["Bonus tolerance (mm)"]]
+bn_total_1208 <- 0.25 + (12.08 - 11.95)
+
+tryit_grid(
+  id = "bonus-tolerance",
+  title = "Position tolerance available at each hole size",
+  data = bn,
+  blank = c("Bonus tolerance (mm)", "Total position tolerance (mm)"),
+  tol = c(`Bonus tolerance (mm)` = 0.005, `Total position tolerance (mm)` = 0.005),
+  hints = c(`Bonus tolerance (mm)` = "Bonus = actual hole size - MMC size (11.95 mm). It is zero at MMC.",
+            `Total position tolerance (mm)` = "Total = stated position tolerance (0.25) + bonus."),
+  digits = 2,
+  answers = list(
+    tryit_answer("Position tolerance allowed for a hole that measures 12.08 mm", bn_total_1208, tol = 0.005, suffix = "mm",
+                 hint = "Bonus = 12.08 - 11.95; add it to 0.25.")
+  ),
+  intro = "Then decide: would a hole measuring 12.08 mm with a position error of 0.42 mm be accepted?",
+  question = paste0(
+    "<p>A hole is dimensioned 12.00 +0.10/-0.05 mm, so its limits are 11.95 and 12.10 mm and MMC is 11.95 mm. ",
+    "The position tolerance is 0.25 mm diameter at MMC. The bonus tolerance equals the actual size minus the MMC size, ",
+    "and the total position tolerance is 0.25 mm plus the bonus. Give the bonus and the total for holes of 11.95, 12.00, 12.05 and 12.10 mm, ",
+    "and the total for a hole that measures 12.08 mm.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-bonus-solution, echo=FALSE}
+knitr::kable(bn, digits = c(2, 2, 2), align = "c")
+```
+
+At 12.08 mm the allowance is `r sprintf("%.2f", bn_total_1208)` mm, so a measured position error of 0.42 mm is **rejected**. The same error on a 12.10 mm hole (allowance 0.40 mm) would also fail, but 0.38 mm would pass there. The bonus is the whole point of MMC: as the hole gets larger, the position can wander more without compromising assembly.
+
+</details>
+
+#### Worst-case against root-sum-square stack-up {#sec-tryit-stack}
+
+Four parts are stacked in a row: $20.00 \pm 0.15$, $12.00 \pm 0.10$, $35.00 \pm 0.20$ and $8.00 \pm 0.05$ mm. The worst-case stack adds the tolerances. The statistical (root-sum-square) stack combines them as $\sqrt{\sum t_i^2}$.
+
+```{r tryit-stack-number, echo=FALSE, results='asis'}
+st <- list(nom = c(20, 12, 35, 8), tol = c(0.15, 0.10, 0.20, 0.05))
+st$nominal <- sum(st$nom)
+st$wc      <- sum(st$tol)
+st$rss     <- sqrt(sum(st$tol^2))
+
+tryit_number(
+  id = "stack-up",
+  title = "How much does the stack vary?",
+  answers = list(
+    tryit_answer("Nominal overall length", st$nominal, tol = 0.01, suffix = "mm", hint = "Add the four nominal sizes."),
+    tryit_answer("Worst-case tolerance of the stack (plus or minus)", st$wc, tol = 0.005, suffix = "mm",
+                 hint = "Add the four tolerances."),
+    tryit_answer("Maximum possible length", st$nominal + st$wc, tol = 0.01, suffix = "mm",
+                 hint = "Nominal plus the worst-case tolerance."),
+    tryit_answer("Statistical (RSS) tolerance of the stack (plus or minus)", st$rss, tol = 0.005, suffix = "mm",
+                 hint = "Square each tolerance, add them, then take the square root.")
+  ),
+  intro = "Give tolerances to three decimals.",
+  question = paste0(
+    "<p>Four parts are assembled end to end: 20.00 &plusmn; 0.15, 12.00 &plusmn; 0.10, 35.00 &plusmn; 0.20 and 8.00 &plusmn; 0.05 mm. ",
+    "The worst-case stack tolerance is the sum of the tolerances. The statistical root-sum-square (RSS) tolerance is the square root of ",
+    "the sum of the squares of the tolerances. Find the nominal length, the worst-case tolerance, the maximum length and the RSS tolerance.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+Nominal $= 20 + 12 + 35 + 8 = `r st$nominal`$ mm. Worst case: $0.15 + 0.10 + 0.20 + 0.05 = \pm `r sprintf("%.2f", st$wc)`$ mm, so the length can reach `r sprintf("%.2f", st$nominal + st$wc)` mm.
+
+RSS: $\sqrt{0.15^2 + 0.10^2 + 0.20^2 + 0.05^2} = \pm `r sprintf("%.3f", st$rss)`$ mm, about `r sprintf("%.0f", 100 * st$rss / st$wc)`% of the worst case. The statistical figure assumes the parts vary independently and are centred; it allows tighter overall limits, but a few assemblies may fall outside them.
+
+</details>
+
+#### Which control category? {#sec-tryit-gdt-categories}
+
+```{r tryit-gdt-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "gdt-categories",
+  title = "Form, orientation, location or runout?",
+  bins = c("Form", "Orientation", "Location", "Runout"),
+  cards = data.frame(
+    text = c("Flatness", "Cylindricity", "Straightness", "Perpendicularity", "Parallelism", "Angularity",
+             "Position", "Concentricity", "Symmetry", "Circular runout", "Total runout"),
+    bin = c("Form", "Form", "Form", "Orientation", "Orientation", "Orientation",
+            "Location", "Location", "Location", "Runout", "Runout"),
+    why = c("Form controls need no datum.", "Form controls need no datum.", "Form controls need no datum.",
+            "Orientation controls refer to a datum.", "Orientation controls refer to a datum.", "Orientation controls refer to a datum.",
+            "Location controls say where a feature is relative to datums.", "Location controls say where a feature is.",
+            "Location controls say where a feature is.",
+            "Runout is measured about a datum axis.", "Runout is measured about a datum axis.")
+  ),
+  intro = "Form controls need no datum; the other three always refer to one.",
+  question = "<p>Place each geometric characteristic in its category: form, orientation, location or runout.</p>"
+)
+```
+
 ### Summary and Key Takeaways {-}
 
 - **GD&T provides unambiguous communication** of engineering design intent
