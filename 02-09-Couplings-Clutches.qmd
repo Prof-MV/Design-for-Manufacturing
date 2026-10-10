@@ -1017,6 +1017,115 @@ Couplings and clutches are essential power transmission components:
 
 ---
 
+### Try it yourself {#sec-coupling-tryit}
+
+These use drives that are not in the worked example. Each exercise checks your answer and lets you try again.
+
+#### Multi-plate clutch torque {#sec-tryit-clutch-torque}
+
+A multi-plate clutch has **three friction discs**, each lined on **both** faces, clamped between steel plates, so every lined face is a friction surface. The friction surface has $r_o = 120$ mm and $r_i = 70$ mm, $\mu = 0.35$, and the clamping force is $F = 3200$ N. It is fitted to a 15 kW motor at 1450 rpm and needs a service factor of 1.5.
+
+```{r tryit-clutch-number, echo=FALSE, results='asis'}
+cl <- list(ro = 0.120, ri = 0.070, mu = 0.35, F = 3200, discs = 3, P = 15000, n = 1450, SF = 1.5)
+cl$surfaces <- 2 * cl$discs
+cl$rm_wear  <- (cl$ro + cl$ri) / 2
+cl$rm_press <- 2 * (cl$ro^3 - cl$ri^3) / (3 * (cl$ro^2 - cl$ri^2))
+cl$T        <- cl$mu * cl$F * cl$rm_wear * cl$surfaces
+cl$T_motor  <- cl$P / (2 * pi * cl$n / 60)
+cl$T_rating <- cl$SF * cl$T_motor
+
+tryit_number(
+  id = "clutch-torque",
+  title = "Clutch capacity against the motor torque",
+  answers = list(
+    tryit_answer("Number of friction surfaces n", cl$surfaces, tol = 0.01, digits = 0,
+                 hint = "Each friction disc is lined on both faces, so count two surfaces per disc."),
+    tryit_answer("Mean radius, uniform wear", cl$rm_wear * 1000, tol = 0.5, suffix = "mm",
+                 hint = "r_m = (r_o + r_i) / 2."),
+    tryit_answer("Mean radius, uniform pressure", cl$rm_press * 1000, tol = 0.5, suffix = "mm",
+                 hint = "r_m = 2 (r_o^3 - r_i^3) / (3 (r_o^2 - r_i^2))."),
+    tryit_answer("Clutch torque capacity (uniform wear)", cl$T, tol = 2, suffix = "N·m",
+                 hint = "T = mu x F x r_m x n, with r_m in metres."),
+    tryit_answer("Motor torque at 1450 rpm", cl$T_motor, tol = 0.5, suffix = "N·m",
+                 hint = "T = P / omega, with omega = 2 pi n / 60."),
+    tryit_answer("Minimum torque rating with a 1.5 service factor", cl$T_rating, tol = 0.5, suffix = "N·m",
+                 hint = "Multiply the motor torque by the service factor.")
+  ),
+  intro = "Then decide: does the clutch have enough capacity for the rated torque?",
+  question = paste0(
+    "<p>A multi-plate clutch has three friction discs, each lined on both faces, so every lined face is a friction surface. ",
+    "The friction radii are r_o = 120 mm and r_i = 70 mm, the friction coefficient is 0.35 and the clamping force is 3200 N. ",
+    "T = mu F r_m n. Uniform wear: r_m = (r_o + r_i) / 2; uniform pressure: r_m = 2 (r_o&sup3; - r_i&sup3;) / (3 (r_o&sup2; - r_i&sup2;)). ",
+    "The clutch is on a 15 kW motor at 1450 rpm (T = P / omega) and the service factor is 1.5.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$n = 3 \times 2 = `r cl$surfaces`, \qquad r_m = \frac{120 + 70}{2} = `r sprintf("%.0f", cl$rm_wear * 1000)` \text{ mm (wear)}, \quad `r sprintf("%.1f", cl$rm_press * 1000)` \text{ mm (pressure)}$$
+
+$$T = 0.35 \times 3200 \times 0.095 \times 6 = `r sprintf("%.0f", cl$T)` \text{ N·m}$$
+
+The motor torque is $15000 / (2\pi \cdot 1450 / 60) = `r sprintf("%.1f", cl$T_motor)`$ N·m, and with the service factor the rating must be at least `r sprintf("%.0f", cl$T_rating)` N·m. The clutch capacity of `r sprintf("%.0f", cl$T)` N·m is `r sprintf("%.1f", cl$T / cl$T_rating)` times that: it will slip only under a gross overload. Counting the two faces of each disc is where this calculation usually goes wrong.
+
+</details>
+
+#### Misalignment and clutch types {#sec-tryit-coupling-sorts}
+
+```{r tryit-misalign-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "misalignment",
+  title = "Which type of misalignment is it?",
+  bins = c("Angular", "Parallel (offset)", "Axial"),
+  cards = data.frame(
+    text = c(
+      "The two shaft centerlines meet at a small angle",
+      "The shafts are parallel but displaced sideways from each other",
+      "A hot pump shaft grows and its end moves toward the motor",
+      "A motor base shimmed unevenly so the shafts cross at a slight angle",
+      "A motor that has slid sideways on its base bolts",
+      "A shaft end that floats back and forth along its axis under thrust"
+    ),
+    bin = c("Angular", "Parallel (offset)", "Axial", "Angular", "Parallel (offset)", "Axial"),
+    why = c("The centerlines are not parallel.", "The centerlines are parallel but offset.",
+            "Axial misalignment is a change in the distance between shaft ends.",
+            "Crossing at an angle is angular misalignment.", "Sideways displacement with parallel axes.",
+            "Movement along the shaft axis.")
+  ),
+  intro = "Decide whether the axes cross, are displaced, or move along their length.",
+  question = "<p>Classify each situation as angular, parallel (offset) or axial misalignment.</p>"
+)
+```
+
+```{r tryit-clutch-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "clutch-types",
+  title = "Which clutch type fits?",
+  bins = c("Friction clutch", "Positive-engagement (jaw) clutch", "Overrunning clutch"),
+  cards = data.frame(
+    text = c(
+      "Smooth, controlled engagement under load, with the ability to slip on overload",
+      "No slip is allowed once engaged, and engagement is done at standstill or synchronized speed",
+      "Torque in one direction only, and the driven shaft is free to rotate faster than the driver",
+      "A starting clutch in a vehicle that slips while the engine speed and vehicle speed match up",
+      "A bicycle's freewheel hub",
+      "A drive where the parts lock together mechanically and must not slip"
+    ),
+    bin = c("Friction clutch", "Positive-engagement (jaw) clutch", "Overrunning clutch",
+            "Friction clutch", "Overrunning clutch", "Positive-engagement (jaw) clutch"),
+    why = c("Friction clutches give smooth engagement and torque control.",
+            "Positive clutches give no slip but need synchronization.",
+            "Overrunning clutches engage or release automatically with direction.",
+            "A friction clutch lets the surfaces slip during engagement.",
+            "A freewheel is an overrunning clutch.",
+            "Positive engagement locks mechanically.")
+  ),
+  intro = "Use the chapter's three clutch families.",
+  question = "<p>Match each requirement to the clutch family: friction, positive-engagement (jaw) or overrunning.</p>"
+)
+```
+
 ### Practice Problems {#sec-coupling-problems}
 
 **Problem 1:** A jaw coupling connects a 15 kW motor running at 1450 rpm to a pump. If the service factor is 1.5, what minimum torque rating should the coupling have?
