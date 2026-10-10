@@ -1759,6 +1759,143 @@ The vertical shaft likely experiences:
 
 ---
 
+### Try it yourself {#sec-weld-tryit}
+
+#### Carbon equivalent of four steels {#sec-tryit-ce}
+
+```{r tryit-ce-grid, echo=FALSE, results='asis'}
+ce <- data.frame(
+  `Steel` = c("A", "B", "C", "D"),
+  `C` = c(0.18, 0.30, 0.35, 0.22),
+  `Mn` = c(0.90, 1.10, 0.75, 0.60),
+  `Cr` = c(0.00, 0.20, 0.80, 0.10),
+  `Mo` = c(0.00, 0.05, 0.15, 0.00),
+  `V`  = c(0.00, 0.00, 0.00, 0.00),
+  `Ni` = c(0.00, 0.00, 0.00, 0.50),
+  `Cu` = c(0.20, 0.00, 0.00, 0.00),
+  check.names = FALSE
+)
+ce[["CE"]] <- ce$C + ce$Mn / 6 + (ce$Cr + ce$Mo + ce$V) / 5 + (ce$Ni + ce$Cu) / 15
+ce_zone <- cut(ce$CE, c(-Inf, 0.35, 0.45, 0.55, Inf), labels = c("Excellent", "Good", "Fair", "Poor"), right = FALSE)
+
+tryit_grid(
+  id = "carbon-equivalent",
+  title = "Carbon equivalent (percent by weight of each element)",
+  data = ce,
+  blank = "CE",
+  tol = c(CE = 0.005),
+  hints = c(CE = "CE = C + Mn/6 + (Cr + Mo + V)/5 + (Ni + Cu)/15."),
+  digits = 2,
+  intro = "Give CE to three decimals. Then read the weldability zone from the chapter's chart.",
+  question = paste0(
+    "<p>Four steels have compositions (percent): A: C 0.18, Mn 0.90, Cu 0.20; B: C 0.30, Mn 1.10, Cr 0.20, Mo 0.05; ",
+    "C: C 0.35, Mn 0.75, Cr 0.80, Mo 0.15; D: C 0.22, Mn 0.60, Cr 0.10, Ni 0.50 (all other elements zero). ",
+    "CE = C + Mn/6 + (Cr + Mo + V)/5 + (Ni + Cu)/15. Weldability zones: below 0.35 excellent, 0.35 to 0.45 good, 0.45 to 0.55 fair, above 0.55 poor. ",
+    "Find CE for each steel.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-ce-solution, echo=FALSE}
+ce_show <- ce
+ce_show[["Zone"]] <- as.character(ce_zone)
+knitr::kable(ce_show, digits = c(0, 2, 2, 2, 2, 2, 2, 2, 3, 0), align = "c")
+```
+
+Steel C reaches CE `r sprintf("%.2f", ce$CE[3])` mainly through its chromium and manganese, even though its carbon is only 0.35%: carbon alone does not decide weldability.
+
+</details>
+
+```{r tryit-ce-zone-sort, echo=FALSE, results='asis'}
+zz <- c(0.31, 0.40, 0.48, 0.58, 0.52, 0.36, 0.28, 0.65)
+tryit_sort(
+  id = "weldability-zone",
+  title = "Which weldability zone is it?",
+  bins = c("Excellent (no preheat)", "Good (mild preheat)", "Fair (preheat required)", "Poor (preheat, low-hydrogen, PWHT)"),
+  cards = data.frame(
+    text = sprintf("Carbon equivalent CE = %.2f", zz),
+    bin = as.character(cut(zz, c(-Inf, 0.35, 0.45, 0.55, Inf),
+                           labels = c("Excellent (no preheat)", "Good (mild preheat)", "Fair (preheat required)", "Poor (preheat, low-hydrogen, PWHT)"),
+                           right = FALSE)),
+    why = sprintf("%.2f falls in the band set by the chapter's thresholds at 0.35, 0.45 and 0.55.", zz)
+  ),
+  intro = "Use the weldability chart: 0.35, 0.45 and 0.55 are the boundaries.",
+  question = "<p>Place each carbon equivalent in its weldability zone: below 0.35 excellent (no preheat), 0.35 to 0.45 good (mild preheat), 0.45 to 0.55 fair (preheat required), above 0.55 poor (preheat, low-hydrogen electrodes, post-weld heat treatment).</p>"
+)
+```
+
+#### Fillet weld strength {#sec-tryit-fillet}
+
+A fillet weld with equal legs of $6$ mm and a length of $150$ mm carries $28$ kN in shear. The allowable shear stress in the throat is $60$ MPa.
+
+```{r tryit-fillet-number, echo=FALSE, results='asis'}
+fw <- list(leg = 6, len = 150, F = 28000, tau_allow = 60)
+fw$throat <- 0.707 * fw$leg
+fw$area   <- fw$throat * fw$len
+fw$tau    <- fw$F / fw$area
+fw$A_req  <- fw$F / fw$tau_allow
+fw$leg_req <- fw$A_req / fw$len / 0.707
+
+tryit_number(
+  id = "fillet-weld",
+  title = "Throat, shear stress and the leg size needed",
+  answers = list(
+    tryit_answer("Theoretical throat", fw$throat, tol = 0.02, suffix = "mm", hint = "t = 0.707 x leg."),
+    tryit_answer("Throat area", fw$area, tol = 2, suffix = "mm2", hint = "Throat x weld length."),
+    tryit_answer("Shear stress in the throat", fw$tau, tol = 0.3, suffix = "MPa", hint = "Force / throat area, in N and mm2 for MPa."),
+    tryit_answer("Leg size needed for an allowable stress of 60 MPa", fw$leg_req, tol = 0.1, suffix = "mm",
+                 hint = "A_required = F / 60; throat = A_required / length; leg = throat / 0.707.")
+  ),
+  intro = "Then decide: does the 6 mm weld pass at 60 MPa?",
+  question = paste0(
+    "<p>An equal-leg fillet weld has a 6 mm leg and is 150 mm long. It carries a shear load of 28 kN through its throat. ",
+    "The theoretical throat is 0.707 x leg; the shear stress is force divided by throat area. The allowable shear stress is 60 MPa. ",
+    "Find the throat, the throat area, the shear stress and the leg size that would just meet the allowable stress.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$t = 0.707 \times 6 = `r sprintf("%.2f", fw$throat)`$ mm; $A = `r sprintf("%.2f", fw$throat)` \times 150 = `r sprintf("%.0f", fw$area)`$ mm$^2$; $\tau = 28000 / `r sprintf("%.0f", fw$area)` = `r sprintf("%.1f", fw$tau)`$ MPa, which is **below** 60 MPa, so the weld passes.
+
+The leg that would just meet 60 MPa is $\dfrac{28000/60}{150 \times 0.707} = `r sprintf("%.1f", fw$leg_req)`$ mm: the weld has a margin of `r sprintf("%.0f", (fw$leg / fw$leg_req - 1) * 100)`% on leg size.
+
+</details>
+
+#### Weld defects and their causes {#sec-tryit-weld-defects}
+
+```{r tryit-weld-defect-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "weld-defects",
+  title = "Which defect does the cause point to?",
+  bins = c("Porosity", "Undercut", "Lack of fusion", "Incomplete penetration", "Cracks", "Spatter"),
+  cards = data.frame(
+    text = c(
+      "Moisture in the electrode coating and poor shielding gas flow",
+      "Excessive current and fast travel melt a groove into the base metal at the toe",
+      "Oxide films and low heat input prevent the weld metal from bonding to the base metal",
+      "Low current with a large root face leaves the root of the joint unfused",
+      "High restraint, hydrogen and fast cooling in a hard heat-affected zone",
+      "High current and a long arc throw droplets of metal onto the surface"
+    ),
+    bin = c("Porosity", "Undercut", "Lack of fusion", "Incomplete penetration", "Cracks", "Spatter"),
+    why = c(
+      "Contamination and moisture trap gas in the weld.",
+      "A groove melted into the base metal at the toe is undercut.",
+      "The weld metal does not fuse with the base metal.",
+      "The root is not fused: improve joint preparation or back gouge.",
+      "Cracks are the most serious defect; preheat and use low-hydrogen electrodes.",
+      "Reduce current and use a shorter arc."
+    )
+  ),
+  intro = "Use the defect causes and prevention table.",
+  question = "<p>Match each cause to the weld defect it produces: porosity, undercut, lack of fusion, incomplete penetration, cracks or spatter.</p>"
+)
+```
+
 ### Practice Problems {#sec-weld-problems}
 
 **Problem 1:** A T-joint connects a 12 mm thick plate to a 8 mm thick plate using fillet welds on both sides. What is the maximum recommended fillet weld leg size?
