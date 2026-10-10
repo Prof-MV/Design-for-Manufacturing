@@ -379,7 +379,9 @@ qwebr_calc_card(
     qwebr_calc_input("D", "Enclosure depth", value = 0.3, min = 0.15, max = 1, step = 0.05, suffix = "m"),
     qwebr_calc_input("k", "Heat-transfer coefficient k", value = 5.5, min = 2, max = 12, step = 0.5, suffix = "W/(m²·°C)"),
     qwebr_calc_input("ambient_C", "Site ambient", value = 35, min = 0, max = 45, step = 1, suffix = "°C")
-  )
+  ),
+  goal = "Keep the passive temperature rise within the allowance for a site at 35 C or hotter, with at least three VFDs, an enclosure no taller than 1.2 m and no deeper than 0.4 m, and k no better than 6 (smaller drives or a wider cabinet).",
+  goal_test = "delta_T <= delta_T_allow && vfd_count >= 3 && H <= 1.2 && D <= 0.4 && ambient_C >= 35 && k <= 6"
 )
 ```
 
@@ -866,6 +868,152 @@ summary_table %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, background = "#2C3E50", color = "white")
 ```
+
+## Try it yourself
+
+These use a different panel from the worked examples. Each exercise checks your answer and lets you try again.
+
+### Duct fill and bend radius {#sec-tryit-duct-06-03}
+
+A duct run carries four conductor types. The duct has a **usable** cross-section of 650 mm$^2$ (after allowing for the fingers and partitions).
+
+```{r tryit-duct-grid-06-03, echo=FALSE, results='asis'}
+dt <- data.frame(
+  `Conductor` = c("18 AWG control", "14 AWG control", "10 AWG power", "Shielded multi-conductor"),
+  `OD (mm)`   = c(1.9, 3.1, 4.8, 7.4),
+  `Count`     = c(14, 9, 6, 2),
+  check.names = FALSE
+)
+dt[["Area each (mm2)"]]  <- pi * (dt[["OD (mm)"]] / 2)^2
+dt[["Total (mm2)"]]      <- dt[["Area each (mm2)"]] * dt[["Count"]]
+dt_usable <- 650
+dt_fill   <- sum(dt[["Total (mm2)"]]) / dt_usable * 100
+dt_bend   <- 9 * 7.4
+
+tryit_grid(
+  id = "duct-fill-06-03",
+  title = "Wire duct fill",
+  data = dt,
+  blank = c("Area each (mm2)", "Total (mm2)"),
+  tol = c(`Area each (mm2)` = 0.05, `Total (mm2)` = 0.5),
+  hints = c(`Area each (mm2)` = "Cross-section of a round conductor: pi x (OD / 2)^2, using the insulated outside diameter.",
+            `Total (mm2)` = "Area of one conductor x the number of conductors of that type."),
+  digits = 1,
+  answers = list(
+    tryit_answer("Total conductor area", sum(dt[["Total (mm2)"]]), tol = 1, suffix = "mm2",
+                 hint = "Add the four totals."),
+    tryit_answer("Duct fill", dt_fill, tol = 0.3, suffix = "%",
+                 hint = "Total area / usable duct area x 100."),
+    tryit_answer("Minimum bend radius for the shielded cable (k = 9)", dt_bend, tol = 0.5, suffix = "mm",
+                 hint = "R = k x OD, with the cable's outside diameter.")
+  ),
+  intro = "Work to one decimal place. Then compare the fill with the chapter's 40% limit.",
+  question = paste0(
+    "<p>A wire duct has a usable cross-sectional area of 650 mm&sup2;. It carries 14 conductors of 18 AWG (OD 1.9 mm), ",
+    "9 of 14 AWG (OD 3.1 mm), 6 of 10 AWG (OD 4.8 mm) and 2 shielded multi-conductor cables (OD 7.4 mm). ",
+    "Conductor area = pi (OD / 2)&sup2;. Fill % = total conductor area / usable duct area x 100. ",
+    "Minimum bend radius of a shielded cable = 9 x OD.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-duct-solution-06-03, echo=FALSE}
+knitr::kable(dt, digits = c(0, 1, 0, 2, 1), align = "c")
+```
+
+Total area = `r sprintf("%.1f", sum(dt[["Total (mm2)"]]))` mm$^2$, so the fill is `r sprintf("%.1f", dt_fill)`% of 650 mm$^2$: above the 40% limit, so a larger duct is needed. The shielded cable needs a bend of at least `r sprintf("%.1f", dt_bend)` mm; the fill and the bend radius are independent checks.
+
+</details>
+
+### Branch circuit for a 21 A motor {#sec-tryit-branch-06-03}
+
+A 15 hp, 460 V motor has a full-load current of 21 A and a service factor of 1.0, so the overload multiplier is 1.15. Use a time-delay fuse at 1.75 x FLA, rounded **up** to a standard size from 15, 20, 25, 30, 35, 40, 45, 50, 60, 70 A, and a locked-rotor multiplier of 6.5.
+
+```{r tryit-branch-number-06-03, echo=FALSE, results='asis'}
+br <- list(FLA = 21, m_OL = 1.15, m_fuse = 1.75, LRm = 6.5,
+           sizes = c(15, 20, 25, 30, 35, 40, 45, 50, 60, 70))
+br$cond  <- 1.25 * br$FLA
+br$I_OL  <- br$m_OL * br$FLA
+br$calc  <- br$m_fuse * br$FLA
+br$fuse  <- min(br$sizes[br$sizes >= br$calc])
+br$LRA   <- br$LRm * br$FLA
+
+tryit_number(
+  id = "branch-06-03",
+  title = "Conductor, overload and fuse for the motor branch",
+  answers = list(
+    tryit_answer("Minimum conductor ampacity", br$cond, tol = 0.1, suffix = "A",
+                 hint = "125% of the motor's full-load current."),
+    tryit_answer("Overload relay setting", br$I_OL, tol = 0.1, suffix = "A",
+                 hint = "Service factor 1.0 gives a 1.15 multiplier on FLA."),
+    tryit_answer("Calculated fuse rating before rounding", br$calc, tol = 0.1, suffix = "A",
+                 hint = "1.75 x FLA."),
+    tryit_answer("Standard time-delay fuse size selected", br$fuse, tol = 0.01, suffix = "A",
+                 hint = "The first standard size that is at least the calculated rating, not the nearest."),
+    tryit_answer("Locked-rotor current", br$LRA, tol = 0.5, suffix = "A",
+                 hint = "6.5 x FLA.")
+  ),
+  intro = "Round only the fuse; keep one decimal for the others.",
+  question = paste0(
+    "<p>A motor has a full-load current of 21 A and a service factor of 1.0 (overload multiplier 1.15). ",
+    "The branch circuit uses a time-delay fuse at 1.75 x FLA rounded up to the next standard size ",
+    "(15, 20, 25, 30, 35, 40, 45, 50, 60, 70 A). The conductor must carry at least 125% of FLA, ",
+    "and the locked-rotor current is 6.5 x FLA.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+- Conductor: $1.25 \times 21 = `r sprintf("%.2f", br$cond)`$ A
+- Overload relay: $1.15 \times 21 = `r sprintf("%.2f", br$I_OL)`$ A
+- Fuse before rounding: $1.75 \times 21 = `r sprintf("%.2f", br$calc)`$ A, which rounds **up** to **`r br$fuse` A**
+- Locked rotor: $6.5 \times 21 = `r sprintf("%.1f", br$LRA)`$ A, about `r sprintf("%.1f", br$LRA / br$fuse)` times the fuse rating, which a time-delay fuse rides through for a normal start.
+
+</details>
+
+### Weakest link: panel SCCR {#sec-tryit-sccr-06-03}
+
+```{r tryit-sccr-grid-06-03, echo=FALSE, results='asis'}
+sc <- data.frame(
+  Component = c("Main disconnect", "Feeder to VFD cabinet", "Conveyor motor starter", "Pump motor starter", "24 V power supply"),
+  `Standalone SCCR (kA)` = c(42, 10, 5, 5, 5),
+  check.names = FALSE
+)
+sc_combo <- c(NA, NA, 42, 22, NA)
+sc[["With current-limiting fuse (kA)"]] <- ifelse(is.na(sc_combo), "none", as.character(sc_combo))
+sc[["Installed SCCR (kA)"]] <- ifelse(is.na(sc_combo), sc[["Standalone SCCR (kA)"]], sc_combo)
+sc_panel <- min(sc[["Installed SCCR (kA)"]])
+
+tryit_grid(
+  id = "sccr-06-03",
+  title = "SCCR of each component as installed",
+  data = sc,
+  blank = "Installed SCCR (kA)",
+  tol = c(`Installed SCCR (kA)` = 0.5),
+  hints = c(`Installed SCCR (kA)` = "If a tested current-limiting combination is documented, use its rating; otherwise the standalone rating applies."),
+  digits = 0,
+  answers = list(
+    tryit_answer("Panel SCCR", sc_panel, tol = 0.5, suffix = "kA",
+                 hint = "The panel is only as good as its weakest component in the fault path.")
+  ),
+  intro = "Fill the installed rating for each component, then give the panel SCCR.",
+  question = paste0(
+    "<p>A panel has a main disconnect (standalone SCCR 42 kA), a feeder to a VFD cabinet (10 kA), a conveyor motor starter (5 kA, ",
+    "42 kA with a documented current-limiting fuse), a pump motor starter (5 kA, 22 kA with a documented current-limiting fuse) ",
+    "and a 24 V power supply (5 kA, no combination rating). All starters are fitted with the fuse. ",
+    "The panel SCCR is the lowest installed rating of any component. Give the installed rating of each component and the panel SCCR.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+The installed ratings are 42, 10, 42, 22 and 5 kA. The power supply (5 kA, no fused combination) sets the panel SCCR at **`r sc_panel` kA**, however well the other components are protected. Fixing it means a combination-rated or higher-SCCR supply, not more fuses on the starters.
+
+</details>
 
 ## Practice Problems
 
