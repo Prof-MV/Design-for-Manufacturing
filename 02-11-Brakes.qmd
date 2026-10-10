@@ -927,6 +927,133 @@ ggplot(stop_df, aes(x = Speed, y = Distance, colour = Surface)) +
 
 ***
 
+### Try it yourself {#sec-brakes-tryit}
+
+These use brakes that are not in the worked examples or the practice problems. Each exercise checks your answer and lets you try again.
+
+#### Leading and trailing shoe {#sec-tryit-shoe}
+
+A drum brake shoe has $l = 200$ mm, $l_1 = 120$ mm, $l_2 = 30$ mm, a lining friction coefficient $\mu = 0.36$ and a drum radius $r = 140$ mm. The actuating force on each shoe is $F = 450$ N.
+
+```{r tryit-shoe-number, echo=FALSE, results='asis'}
+sb <- list(l = 200, l1 = 120, l2 = 30, mu = 0.36, r = 0.140, F = 450)
+sb$FN_lead  <- sb$F * sb$l / (sb$l1 - sb$mu * sb$l2)
+sb$T_lead   <- sb$mu * sb$FN_lead * sb$r
+sb$FN_trail <- sb$F * sb$l / (sb$l1 + sb$mu * sb$l2)
+sb$T_trail  <- sb$mu * sb$FN_trail * sb$r
+sb$mu_crit  <- sb$l1 / sb$l2
+
+tryit_number(
+  id = "shoe-brake",
+  title = "Normal force, torque and self-locking",
+  answers = list(
+    tryit_answer("Normal force, leading shoe", sb$FN_lead, tol = 3, suffix = "N",
+                 hint = "F = F_N (l1 - mu l2) / l, so F_N = F l / (l1 - mu l2)."),
+    tryit_answer("Braking torque, leading shoe", sb$T_lead, tol = 0.2, suffix = "N·m",
+                 hint = "T = mu x F_N x r, with r in metres."),
+    tryit_answer("Normal force, trailing shoe", sb$FN_trail, tol = 3, suffix = "N",
+                 hint = "F_N = F l / (l1 + mu l2) for the trailing shoe."),
+    tryit_answer("Braking torque, trailing shoe", sb$T_trail, tol = 0.2, suffix = "N·m",
+                 hint = "T = mu x F_N x r."),
+    tryit_answer("Critical friction coefficient for self-locking", sb$mu_crit, tol = 0.05,
+                 hint = "The leading shoe self-locks when l1 <= mu l2, so mu_critical = l1 / l2.")
+  ),
+  intro = "Then judge: is self-locking a concern with a lining of mu = 0.36?",
+  question = paste0(
+    "<p>A drum brake shoe has lever dimensions l = 200 mm, l1 = 120 mm and l2 = 30 mm, lining friction coefficient 0.36 and drum radius 140 mm. ",
+    "The actuating force is 450 N on each shoe. Leading shoe: F = F_N (l1 - mu l2) / l; trailing shoe: F = F_N (l1 + mu l2) / l; ",
+    "torque T = mu F_N r; the leading shoe self-locks when l1 &le; mu l2.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$F_{N,lead} = \frac{450 \times 200}{120 - 0.36 \times 30} = `r sprintf("%.0f", sb$FN_lead)` \text{ N}, \qquad T_{lead} = 0.36 \times `r sprintf("%.0f", sb$FN_lead)` \times 0.14 = `r sprintf("%.1f", sb$T_lead)` \text{ N·m}$$
+
+$$F_{N,trail} = \frac{450 \times 200}{120 + 0.36 \times 30} = `r sprintf("%.0f", sb$FN_trail)` \text{ N}, \qquad T_{trail} = `r sprintf("%.1f", sb$T_trail)` \text{ N·m}$$
+
+The leading shoe makes `r sprintf("%.0f", (sb$T_lead / sb$T_trail - 1) * 100)`% more torque from the same force. Self-locking needs $\mu \ge l_1/l_2 = `r sb$mu_crit`$, far above a lining value of 0.36: a comfortable margin.
+
+</details>
+
+#### Stopping distance {#sec-tryit-stopping}
+
+A car at $80$ km/h has a driver reaction time of $1.3$ s. Dry asphalt gives $\mu_p = 0.70$ and ice $\mu_p = 0.15$.
+
+```{r tryit-stopping-number, echo=FALSE, results='asis'}
+sdist <- list(v = 80 / 3.6, tr = 1.3, mu_dry = 0.70, mu_ice = 0.15, g = 9.81)
+sdist$d_dry   <- sdist$v^2 / (2 * sdist$mu_dry * sdist$g)
+sdist$d_react <- sdist$v * sdist$tr
+sdist$d_tot   <- sdist$d_react + sdist$d_dry
+sdist$d_ice   <- sdist$d_react + sdist$v^2 / (2 * sdist$mu_ice * sdist$g)
+
+tryit_number(
+  id = "stopping-brakes",
+  title = "Stopping distances at 80 km/h",
+  answers = list(
+    tryit_answer("Initial speed", sdist$v, tol = 0.05, suffix = "m/s", hint = "Divide km/h by 3.6."),
+    tryit_answer("Braking distance on dry asphalt", sdist$d_dry, tol = 0.3, suffix = "m",
+                 hint = "d = v^2 / (2 mu_p g)."),
+    tryit_answer("Reaction distance", sdist$d_react, tol = 0.2, suffix = "m", hint = "v x t_r."),
+    tryit_answer("Total stopping distance, dry", sdist$d_tot, tol = 0.4, suffix = "m",
+                 hint = "Reaction distance plus braking distance."),
+    tryit_answer("Total stopping distance on ice", sdist$d_ice, tol = 1, suffix = "m",
+                 hint = "Same reaction distance; braking distance with mu_p = 0.15.")
+  ),
+  intro = "Use g = 9.81 m/s2.",
+  question = paste0(
+    "<p>A car travels at 80 km/h. The driver reaction time is 1.3 s. The braking distance is v&sup2; / (2 mu_p g) with g = 9.81 m/s&sup2;, ",
+    "the reaction distance is v x t_r, and the total stopping distance is the sum. Peak tyre-road friction is 0.70 on dry asphalt and 0.15 on ice.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$v = \frac{80}{3.6} = `r sprintf("%.2f", sdist$v)` \text{ m/s}, \qquad d_{dry} = \frac{`r sprintf("%.2f", sdist$v)`^2}{2 \times 0.70 \times 9.81} = `r sprintf("%.1f", sdist$d_dry)` \text{ m}$$
+
+$$d_{react} = `r sprintf("%.2f", sdist$v)` \times 1.3 = `r sprintf("%.1f", sdist$d_react)` \text{ m}, \quad d_{total} = `r sprintf("%.1f", sdist$d_tot)` \text{ m (dry)}, \quad `r sprintf("%.0f", sdist$d_ice)` \text{ m (ice)}$$
+
+On ice the braking distance alone is more than four times the dry value; the reaction distance does not change.
+
+</details>
+
+#### Disc or drum? {#sec-tryit-disc-drum}
+
+```{r tryit-disc-drum-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "disc-drum",
+  title = "Which brake is being described?",
+  bins = c("Disc brake", "Drum brake"),
+  cards = data.frame(
+    text = c(
+      "An open rotor exposes both friction faces to the airflow, giving excellent heat dissipation",
+      "A leading shoe is self-energizing, so less actuating force is needed for the same torque",
+      "The wiping action of the pads clears water and debris after driving through a puddle",
+      "The braking force is proportional to hydraulic pressure with no self-energizing, so the response is linear and predictable",
+      "Enclosed friction surfaces keep dirt out but trap heat, which raises the risk of fade",
+      "Lower cost, and a parking brake mechanism fits easily on the same shoes",
+      "The piston seal rolls back slightly when pressure is released, which keeps the running clearance constant automatically",
+      "The geometry can become self-locking if the lining friction coefficient exceeds l1 / l2"
+    ),
+    bin = c("Disc brake", "Drum brake", "Disc brake", "Disc brake", "Drum brake", "Drum brake", "Disc brake", "Drum brake"),
+    why = c(
+      "Good heat dissipation is a disc brake advantage.",
+      "Self-energizing is a drum brake (leading shoe) property.",
+      "Disc brakes are self-cleaning.",
+      "Disc brakes have no self-energizing: linear response.",
+      "Drums trap heat and are more prone to fade.",
+      "Drums are cheaper and integrate a parking brake easily.",
+      "Automatic adjustment through the piston seal is a disc brake property.",
+      "Self-locking is a shoe-brake effect."
+    )
+  ),
+  intro = "Use the disc and drum comparison in the chapter.",
+  question = "<p>Decide whether each statement describes a disc brake or a drum brake.</p>"
+)
+```
+
 ### Practice Problems {#sec-brakes-practice-14}
 
 **Problem 1 — Hydraulic Force Amplification**
