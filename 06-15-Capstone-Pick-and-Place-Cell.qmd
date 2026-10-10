@@ -664,7 +664,9 @@ qwebr_calc_card(
     qwebr_calc_input("T_coast", "Coast-down time", value = 0.45, min = 0, max = 2, step = 0.01, suffix = "s"),
     qwebr_calc_input("C", "Intrusion allowance C", value = 750, min = 0, max = 1200, step = 10, suffix = "mm"),
     qwebr_calc_input("planned_distance", "Planned mounting distance (mm)", value = 1500, min = 500, max = 4000, step = 10, type = "slider")
-  )
+  ),
+  goal = "Make the guarding check pass with the light curtain mounted no more than 1400 mm from the hazard.",
+  goal_test = "planned_distance >= S_required && planned_distance <= 1400"
 )
 ```
 
@@ -779,6 +781,28 @@ cat(sprintf("  Maximum bending stress                 %.2f MPa (%.1f%% of %g MPa
 </details>
 
 **Sanity check:** the calculated deflection (about 0.058 mm) clears the general L/240 reference (3.75 mm) with roughly a 65-fold margin, and the bending stress sits at under 3% of yield — the same "stiffness passes easily, strength isn't even close to the limiting factor" signature the Frame and Structural Design chapter's own gantry-beam example found. If this cell's pick-and-place task ever tightened into a genuinely vision-critical placement tolerance rather than a fixture-tray drop, the next step would be to check that 0.058 mm figure against a real positioning error budget the way that chapter's Design Task 2 does — not against L/240, which was never meant to answer a micron-level question — but for a fixture-tray placement with generous mechanical lead-in, L/240 is the right bar here, and this beam clears it comfortably.
+
+## Try it yourself
+
+### Carry the number {#sec-tryit-chain-06-15}
+
+The capstone's central skill is carrying a number from the calculation that produces it to the calculation that needs it. Put the steps of the infeed-conveyor chain in the order in which each result becomes the input of the next.
+
+```{r tryit-chain-order-06-15, echo=FALSE, results='asis'}
+tryit_order(
+  id = "conveyor-chain-06-15",
+  title = "Infeed conveyor: from throughput to bonding conductor",
+  steps = c(
+    "Throughput and part spacing give the minimum belt speed",
+    "Belt speed, belt pull and drive efficiency give the required motor power",
+    "The selected gearmotor's nameplate gives its full-load current (FLA)",
+    "FLA sets the time-delay fuse and the conductor ampacity of the branch circuit",
+    "The branch fuse rating sets the size of the equipment bonding conductor"
+  ),
+  intro = "Use the up and down buttons to put the steps in the order the numbers flow.",
+  question = "<p>The infeed conveyor's design numbers flow from one calculation to the next. Put the steps in the order in which each result becomes the input to the following step.</p>"
+)
+```
 
 ## How the Nine Chapters Fit Together
 
