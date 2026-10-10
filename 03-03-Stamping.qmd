@@ -1474,6 +1474,113 @@ ggplot() +
 
 ---
 
+### Try it yourself {#sec-stamping-tryit}
+
+#### Check the hole layout {#sec-tryit-hole-rules}
+
+The chapter's rules for pierced holes are: diameter at least $1 t$; hole-to-hole spacing at least $2 t$; hole-to-edge distance at least $1 t$ ($t$ = material thickness).
+
+```{r tryit-hole-sort, echo=FALSE, results='asis'}
+hl <- data.frame(
+  t     = c(2.0, 2.0, 1.5, 3.0, 1.0, 2.5, 0.8, 4.0),
+  d     = c(3.0, 1.5, 4.0, 6.0, 1.0, 2.0, 3.0, 6.0),
+  space = c(5.0, 5.0, 2.5, 7.0, 2.0, 6.0, 1.0, 9.0),
+  edge  = c(3.0, 3.0, 2.0, 2.0, 1.0, 3.0, 2.0, 5.0)
+)
+hl_check <- function(t, d, space, edge) {
+  if (d < t) "Hole too small"
+  else if (space < 2 * t) "Spacing too small"
+  else if (edge < t) "Too close to the edge"
+  else "Acceptable"
+}
+hl$bin <- mapply(hl_check, hl$t, hl$d, hl$space, hl$edge)
+
+tryit_sort(
+  id = "hole-rules",
+  title = "Is the hole layout acceptable?",
+  bins = c("Acceptable", "Hole too small", "Spacing too small", "Too close to the edge"),
+  cards = data.frame(
+    text = sprintf("%.1f mm sheet: %.1f mm holes, %.1f mm between holes, %.1f mm from the edge", hl$t, hl$d, hl$space, hl$edge),
+    bin = hl$bin,
+    why = sprintf("Limits for t = %.1f mm: diameter at least %.1f, spacing at least %.1f, edge distance at least %.1f mm.",
+                  hl$t, hl$t, 2 * hl$t, hl$t)
+  ),
+  intro = "Each layout breaks at most one rule. Compare each dimension with its limit.",
+  question = paste0(
+    "<p>Pierced holes in sheet metal must have a diameter of at least t, a hole-to-hole spacing of at least 2t and a hole-to-edge distance of ",
+    "at least t, where t is the sheet thickness. Classify each layout (each breaks at most one rule): acceptable, hole too small, ",
+    "spacing too small, or too close to the edge.</p>")
+)
+```
+
+#### Bend and springback {#sec-tryit-bend}
+
+A bracket must have a $90^\circ$ bend in a spring-steel strip $3$ mm thick that shows $7^\circ$ of springback. The minimum bend radius for spring steel is $2.0$ to $4.0$ times the thickness.
+
+```{r tryit-bend-number, echo=FALSE, results='asis'}
+bd <- list(t = 3, springback = 7, final = 90, lo = 2.0, hi = 4.0)
+bd$die    <- bd$final + bd$springback
+bd$r_lo   <- bd$lo * bd$t
+bd$r_hi   <- bd$hi * bd$t
+bd$safe   <- bd$r_hi
+
+tryit_number(
+  id = "bend-springback",
+  title = "Die angle and bend radius",
+  answers = list(
+    tryit_answer("Die angle needed to leave a 90 degree bend", bd$die, tol = 0.1, suffix = "degrees",
+                 hint = "Over-bend by the springback: desired angle + springback."),
+    tryit_answer("Smallest inside bend radius in the quoted range", bd$r_lo, tol = 0.1, suffix = "mm",
+                 hint = "2.0 x the thickness."),
+    tryit_answer("Conservative (largest) bend radius in the quoted range", bd$r_hi, tol = 0.1, suffix = "mm",
+                 hint = "4.0 x the thickness.")
+  ),
+  intro = "Which radius would you specify on the drawing if you do not know the grain direction?",
+  question = paste0(
+    "<p>A bracket requires a 90 degree bend in 3 mm spring steel strip. The material shows 7 degrees of springback, so the die must over-bend ",
+    "by that amount. The minimum inside bend radius for spring steel is 2.0 to 4.0 times the thickness. ",
+    "Find the die angle, the smallest radius in the range and the conservative (largest) radius.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+Die angle $= 90 + 7 = `r bd$die`^\circ$. Radius range: $2.0 \times 3 = `r bd$r_lo`$ mm to $4.0 \times 3 = `r bd$r_hi`$ mm. Bending along the grain needs the larger value, so the conservative specification is `r bd$r_hi` mm.
+
+</details>
+
+#### Name the defect from its cause {#sec-tryit-stamping-defects}
+
+```{r tryit-stamping-defect-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "stamping-defects",
+  title = "Which defect does this cause produce?",
+  bins = c("Wrinkling", "Tearing", "Springback", "Burrs", "Galling", "Orange peel"),
+  cards = data.frame(
+    text = c(
+      "Insufficient blank holder force in a draw die",
+      "Excessive tensile stress at a sharp corner",
+      "Elastic recovery of the material after the bending force is removed",
+      "Worn tooling or excessive die clearance on a cut edge",
+      "Metal-to-metal adhesion between the sheet and the die surface",
+      "Excessive grain growth and over-forming of the material"
+    ),
+    bin = c("Wrinkling", "Tearing", "Springback", "Burrs", "Galling", "Orange peel"),
+    why = c(
+      "Too little holding force lets the flange buckle.",
+      "Sharp corners concentrate tensile stress until the sheet splits.",
+      "The part opens slightly: over-bend to compensate.",
+      "Keep clearance at 5 to 10% of thickness and replace worn tools.",
+      "Use lubrication and die coatings.",
+      "Use fine-grain material and reduce strain."
+    )
+  ),
+  intro = "Use the defect table in the chapter.",
+  question = "<p>Match each cause to the stamping defect it produces: wrinkling, tearing, springback, burrs, galling or orange peel.</p>"
+)
+```
+
 ### Practice Problems {#sec-stamping-problems}
 
 Test your understanding with these problems:
