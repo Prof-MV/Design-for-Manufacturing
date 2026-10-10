@@ -802,7 +802,7 @@ This is a **position control** (⊙) with:
 
 #### Exercise 2: Applying GD&T to a Bolt Hole {-}
 
-**Design requirement**: Four bolt holes arranged in a square (0° spacing) with hole diameter Ø10 mm on a 40 mm × 40 mm grid. Holes must align within 0.5 mm for assembly.
+**Design requirement**: Four bolt holes arranged in a square pattern with hole diameter Ø10 mm on a 40 mm × 40 mm grid. Holes must align within 0.5 mm for assembly.
 
 **Your task**: Create a GD&T specification for this requirement.
 

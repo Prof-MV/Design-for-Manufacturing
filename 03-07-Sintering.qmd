@@ -1154,7 +1154,7 @@ Recommend the appropriate bearing type for each and justify your selection.
 :::
 
 ::: {.question}
-**Problem 3:** Calculate the green density of an iron powder compact if 150 g of powder is pressed into a cylindrical shape with diameter 25 mm and height 15 mm. Express the result as g/cm³ and as a percentage of theoretical density (7.87 g/cm³).
+**Problem 3:** Calculate the green density of an iron powder compact if 48 g of powder is pressed into a cylindrical shape with diameter 25 mm and height 15 mm. Express the result as g/cm³ and as a percentage of theoretical density (7.87 g/cm³).
 :::
 
 ::: {.answer}

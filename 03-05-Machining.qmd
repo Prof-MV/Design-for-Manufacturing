@@ -532,7 +532,7 @@ Using the tolerance-cost relationship:
 
 **Total estimated machining cost: $105 per part**
 
-Note: If Feature C could be relaxed to ±0.1 mm, the total would drop to $45—a 57% cost reduction.
+Note: If Feature C could be relaxed to ±0.1 mm, the total would drop to $60—a 43% cost reduction.
 :::
 
 ---
