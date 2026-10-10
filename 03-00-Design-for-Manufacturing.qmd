@@ -188,6 +188,41 @@ Each chapter follows a consistent structure:
 **Preparation Activity:** Before diving into the specific processes, sketch a simple part you'd like to manufacture (a phone stand, a hook, a bracket). As you read each chapter, consider: Could this process make my part? What design changes would be needed?
 :::
 
+## Try it yourself
+
+```{r tryit-process-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "process-picker",
+  title = "Which process family makes it?",
+  bins = c("Casting", "Joining", "Stamping", "Welding", "Machining", "3D printing"),
+  cards = data.frame(
+    text = c(
+      "A cast iron pump housing with internal passages",
+      "A plumbing assembly or an electronics assembly made by connecting separate components",
+      "An automotive body panel pressed from sheet metal with a die",
+      "A pressure vessel whose shell sections are fused together with heat",
+      "A precision aerospace shaft cut from bar stock with cutting tools",
+      "A custom prosthetic socket built layer by layer for one patient",
+      "A decorative hardware piece made by pouring molten metal into a mold",
+      "A vehicle frame whose tubes are fused at their junctions"
+    ),
+    bin = c("Casting", "Joining", "Stamping", "Welding", "Machining", "3D printing", "Casting", "Welding"),
+    why = c(
+      "Pouring metal into a mold is how housings with internal passages are made.",
+      "Joining connects separate components.",
+      "Stamping forms sheet metal with dies.",
+      "Welding fuses material with heat.",
+      "Machining removes material with cutting tools.",
+      "Additive manufacturing suits one-off custom parts.",
+      "Pouring molten material into molds is casting.",
+      "Welded frames join tubes by fusion."
+    )
+  ),
+  intro = "Match each part to the process family it is typically made by.",
+  question = "<p>Match each part or product to the manufacturing process family that normally makes it: casting, joining, stamping, welding, machining or 3D printing.</p>"
+)
+```
+
 ## Summary
 
 Design for Manufacturing is not about limiting creativity—it's about channeling creativity toward solutions that are both functional AND producible. The best designs elegantly balance form, function, and manufacturability.
