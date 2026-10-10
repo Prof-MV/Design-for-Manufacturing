@@ -794,7 +794,9 @@ qwebr_calc_card(
     qwebr_calc_input("L_lead", "Lead", value = 5, min = 1, max = 40, step = 0.5, suffix = "mm"),
     qwebr_calc_input("d_mean", "Mean (pitch) diameter", value = 19, min = 5, max = 80, step = 0.5, suffix = "mm"),
     qwebr_calc_input("mu", "Coefficient of friction (mu)", value = 0.15, min = 0.02, max = 0.4, step = 0.01, type = "slider")
-  )
+  ),
+  goal = "Find a screw that is still self-locking at mu = 0.15 but has a lead of at least 15 mm per revolution.",
+  goal_test = "L_lead >= 15 && mu <= 0.15 && mu >= tan_lambda"
 )
 ```
 
@@ -886,6 +888,132 @@ summary_table %>%
       col.names = c("Design Task", "Governing Relationship", "Key Rule of Thumb")) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, background = "#2C3E50", color = "white")
+```
+
+## Try it yourself
+
+These use an axis that is not in the worked examples. Each exercise checks your answer and lets you try again.
+
+### Critical speed of a supported screw {#sec-tryit-critical-06-08}
+
+A ball screw has a root diameter of $d_r = 20$ mm and a lead of $10$ mm/rev. Both ends are simply supported, over an unsupported span of $L = 1.0$ m. The screw is bearing-grade steel ($E = 205$ GPa, $\rho = 7850$ kg/m$^3$).
+
+```{r tryit-critical-number-06-08, echo=FALSE, results='asis'}
+cs <- list(dr = 0.020, L = 1.0, E = 205e9, rho = 7850, K1 = 9.87 / 4, lead = 10)
+cs$wn     <- cs$K1 * cs$dr / cs$L^2 * sqrt(cs$E / cs$rho)
+cs$Ncr    <- cs$wn * 60 / (2 * pi)
+cs$Nlimit <- 0.8 * cs$Ncr
+cs$vmax   <- cs$Nlimit * cs$lead / 1000
+
+tryit_number(
+  id = "critical-06-08",
+  title = "Critical speed and the fastest safe feed",
+  answers = list(
+    tryit_answer("K_1 for simply supported ends", cs$K1, tol = 0.005,
+                 hint = "Look up beta_1^2 for Supported - Supported in the chapter's table and divide by 4."),
+    tryit_answer("First natural frequency", cs$wn, tol = 1, suffix = "rad/s",
+                 hint = "w_n = K_1 x (d_r / L^2) x sqrt(E / rho), with d_r and L in metres."),
+    tryit_answer("Critical speed", cs$Ncr, tol = 10, suffix = "rpm",
+                 hint = "N_cr = w_n x 60 / (2 pi)."),
+    tryit_answer("Maximum operating speed at 80% of critical", cs$Nlimit, tol = 10, suffix = "rpm",
+                 hint = "The chapter's rule keeps the operating speed under 80% of the critical speed."),
+    tryit_answer("Fastest linear feed at that speed (10 mm lead)", cs$vmax, tol = 0.1, suffix = "m/min",
+                 hint = "rpm x lead (mm) / 1000 gives m/min.")
+  ),
+  intro = "Use the end-condition table in Design Task 1.",
+  question = paste0(
+    "<p>A ball screw has root diameter 20 mm, lead 10 mm/rev and an unsupported span of 1.0 m, with both ends simply supported ",
+    "(supported - supported, beta_1&sup2; = 9.87, K_1 = beta_1&sup2; / 4). Material: steel, E = 205 GPa, density 7850 kg/m&sup3;. ",
+    "w_n = K_1 (d_r / L&sup2;) sqrt(E / rho), N_cr = w_n x 60 / (2 pi), and the operating speed is limited to 80% of N_cr.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$$K_1 = 9.87/4 = `r sprintf("%.3f", cs$K1)`, \qquad \omega_n = `r sprintf("%.3f", cs$K1)` \cdot \frac{0.020}{1.0^2} \sqrt{\frac{205 \times 10^9}{7850}} = `r sprintf("%.0f", cs$wn)` \text{ rad/s}$$
+
+$$N_{cr} = `r sprintf("%.0f", cs$wn)` \times \frac{60}{2\pi} = `r sprintf("%.0f", cs$Ncr)` \text{ rpm}, \qquad 0.8 N_{cr} = `r sprintf("%.0f", cs$Nlimit)` \text{ rpm}$$
+
+At 10 mm lead the fastest feed is `r sprintf("%.1f", cs$vmax)` m/min. Halving the span would raise the critical speed fourfold; fixing both ends would raise $K_1$ to 5.59.
+
+</details>
+
+### Will the screw buckle? {#sec-tryit-buckling-06-08}
+
+The same 20 mm root-diameter screw is now used vertically as a lifter: fixed at one end and **free** at the other (fixed - free), with a loaded span of $L = 0.8$ m and a maximum axial thrust of $F_a = 1800$ N.
+
+```{r tryit-buckling-number-06-08, echo=FALSE, results='asis'}
+bk <- list(dr = 0.020, L = 0.8, E = 205e9, Ke = 2.0, Fa = 1800)
+bk$I   <- pi * bk$dr^4 / 64
+bk$Pcr <- pi^2 * bk$E * bk$I / (bk$Ke * bk$L)^2
+bk$SF  <- bk$Pcr / bk$Fa
+
+tryit_number(
+  id = "buckling-06-08",
+  title = "Euler buckling load and safety factor",
+  answers = list(
+    tryit_answer("Second moment of area I", bk$I * 1e12, tol = 5, suffix = "mm^4",
+                 hint = "I = pi d_r^4 / 64, with d_r in mm.",
+                 digits = 0),
+    tryit_answer("Critical buckling load P_cr", bk$Pcr, tol = 30, suffix = "N",
+                 hint = "P_cr = pi^2 E I / (K_e L)^2, with K_e = 2.0 for fixed - free. Use metres and pascals."),
+    tryit_answer("Buckling safety factor", bk$SF, tol = 0.05,
+                 hint = "SF = P_cr / F_a.")
+  ),
+  intro = "Then compare with the chapter's minimum safety factor of 3.",
+  question = paste0(
+    "<p>A steel screw (E = 205 GPa, root diameter 20 mm) is fixed at one end and free at the other (K_e = 2.0), with a loaded span of ",
+    "0.8 m and a maximum axial thrust of 1800 N. I = pi d_r&sup4; / 64, P_cr = pi&sup2; E I / (K_e L)&sup2; and SF = P_cr / F_a. ",
+    "Give I in mm&sup4;.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+$I = \pi (0.020)^4 / 64 = `r sprintf("%.3e", bk$I)`$ m$^4$ (`r sprintf("%.0f", bk$I * 1e12)` mm$^4$ $\times$ 1000 after dividing by 1000 is the figure asked for).
+
+$$P_{cr} = \frac{\pi^2 (205 \times 10^9)(`r sprintf("%.3e", bk$I)`)}{(2.0 \times 0.8)^2} = `r sprintf("%.0f", bk$Pcr)` \text{ N}, \qquad SF = \frac{`r sprintf("%.0f", bk$Pcr)`}{1800} = `r sprintf("%.2f", bk$SF)`$$
+
+The factor is above 3, so the screw passes, but only because the end condition is the poor fixed - free case at a short span. Doubling the span to 1.6 m would cut $P_{cr}$ to a quarter and fail.
+
+</details>
+
+### Pick the actuator {#sec-tryit-actuator-06-08}
+
+```{r tryit-actuator-sort-06-08, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "actuator-06-08",
+  title = "Which technology fits the requirement?",
+  bins = c("Lead screw", "Ball screw", "Timing belt", "Rack-and-pinion"),
+  cards = data.frame(
+    text = c(
+      "A vertical axis that must hold its load when the motor is de-energized, at the lowest cost and low speed",
+      "A short precision Z-axis with single-digit micron repeatability and a heavy sensor head",
+      "A very long, light, fast pick-and-place gantry where positioning of 0.2 mm is acceptable",
+      "A 3.5 m transfer axis with high speed and heavy panels where the screw cost would be excessive",
+      "A low-duty-cycle adjustment axis where self-locking is the main requirement",
+      "A preloaded, closed-loop axis where back-driving is acceptable and critical speed is checked",
+      "An axis that must travel several metres at the highest speed with minimal moving mass",
+      "A long axis that needs high stiffness and positioning accuracy, with the cost rising slowly with length"
+    ),
+    bin = c("Lead screw", "Ball screw", "Timing belt", "Rack-and-pinion",
+            "Lead screw", "Ball screw", "Timing belt", "Rack-and-pinion"),
+    why = c(
+      "Sliding friction makes a lead screw self-locking, and it is the cheapest.",
+      "Rolling contact and preload give the best precision of the four.",
+      "Belts have minimal reciprocating mass and suit long travel; stretch limits precision.",
+      "Rack cost scales with length less steeply than a long screw, at high speed.",
+      "Self-locking is a property of sliding friction.",
+      "Ball screws are efficient and back-drive freely; critical speed limits long ones.",
+      "Belts are the fastest of the four for long travel.",
+      "Rack-and-pinion gives moderate-to-high precision and cost scales gently with length."
+    )
+  ),
+  intro = "Use the selection matrix in Design Task 5.",
+  question = "<p>Using the chapter's selection matrix (speed, precision, cost, self-locking), match each axis requirement to the best actuation technology: lead screw, ball screw, timing belt or rack-and-pinion.</p>"
+)
 ```
 
 ## Practice Problems
