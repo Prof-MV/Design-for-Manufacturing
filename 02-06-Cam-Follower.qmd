@@ -974,6 +974,108 @@ In modern practice, this is done computationally using CAD software (SolidWorks,
 
 ***
 
+### Try it yourself {#sec-tryit-cam}
+
+These use a cam program that is not in the worked example. Each exercise checks your answer and lets you try again.
+
+#### Build the displacement table {#sec-tryit-cam-table}
+
+A follower rises $L = 24$ mm over a rise segment of $\beta = 90^\circ$. Use the chapter's rise equations with $\bar\theta$ measured from the start of the segment.
+
+```{r tryit-cam-grid, echo=FALSE, results='asis'}
+cm <- list(L = 24, beta = 90)
+cam_tab <- data.frame(`Cam angle (deg)` = c(15, 30, 45, 60, 75), check.names = FALSE)
+x <- cam_tab[[1]] / cm$beta
+cam_tab[["Uniform y (mm)"]]   <- cm$L * x
+cam_tab[["Parabolic y (mm)"]] <- ifelse(x <= 0.5, 2 * cm$L * x^2, cm$L - 2 * cm$L * (1 - x)^2)
+cam_tab[["Harmonic y (mm)"]]  <- cm$L / 2 * (1 - cos(pi * x))
+cam_tab[["Cycloidal y (mm)"]] <- cm$L * (x - sin(2 * pi * x) / (2 * pi))
+
+tryit_grid(
+  id = "cam-table",
+  title = "Follower displacement for four motion types",
+  data = cam_tab,
+  blank = c("Uniform y (mm)", "Parabolic y (mm)", "Harmonic y (mm)", "Cycloidal y (mm)"),
+  tol = c(`Uniform y (mm)` = 0.02, `Parabolic y (mm)` = 0.02, `Harmonic y (mm)` = 0.02, `Cycloidal y (mm)` = 0.02),
+  hints = c(`Uniform y (mm)` = "y = L x (theta / beta).",
+            `Parabolic y (mm)` = "First half (theta up to beta/2): y = 2 L (theta/beta)^2. Second half: y = L - 2 L ((beta - theta)/beta)^2.",
+            `Harmonic y (mm)` = "y = (L/2)(1 - cos(pi theta / beta)). Work in radians for the cosine.",
+            `Cycloidal y (mm)` = "y = L (theta/beta - sin(2 pi theta / beta) / (2 pi))."),
+  digits = 0,
+  intro = "Give each displacement to two decimals. Which motion type is ahead at 30 degrees, and why does it matter?",
+  question = paste0(
+    "<p>A follower rises L = 24 mm over a segment of beta = 90 degrees, with the cam angle measured from the start of the rise. ",
+    "Uniform: y = L theta / beta. Parabolic: y = 2 L (theta / beta)&sup2; for theta up to beta / 2, then y = L - 2 L ((beta - theta) / beta)&sup2;. ",
+    "Harmonic: y = (L / 2)(1 - cos(pi theta / beta)). Cycloidal: y = L (theta / beta - sin(2 pi theta / beta) / (2 pi)). ",
+    "Find y for each type at cam angles of 15, 30, 45, 60 and 75 degrees.</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-cam-solution, echo=FALSE}
+knitr::kable(cam_tab, digits = c(0, 2, 2, 2, 2), align = "c")
+```
+
+All four pass through 12 mm at the midpoint (45 degrees), as symmetry requires. They differ most near the ends: the cycloidal curve starts and finishes more gently, which is what removes the acceleration jump at the dwell boundaries.
+
+</details>
+
+#### Put the construction steps in order {#sec-tryit-cam-steps}
+
+```{r tryit-cam-order, echo=FALSE, results='asis'}
+tryit_order(
+  id = "cam-steps",
+  title = "Constructing a displacement diagram",
+  steps = c(
+    "Define the motion program: list the rise, dwell and return segments so that the angles sum to 360 degrees",
+    "Choose the total lift L, the required follower stroke",
+    "Choose a motion type for each rise and return segment",
+    "Apply the displacement equation at regular cam-angle increments",
+    "Plot cam angle against follower displacement",
+    "Check that the displacement values match smoothly at the start and end of every segment"
+  ),
+  intro = "Use the up and down buttons to put the steps in order.",
+  question = "<p>Put the steps of constructing a follower displacement diagram in the correct order.</p>"
+)
+```
+
+#### Which motion type? {#sec-tryit-cam-types}
+
+```{r tryit-cam-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "cam-types",
+  title = "Match the property to the motion type",
+  bins = c("Uniform", "Parabolic", "Harmonic", "Cycloidal"),
+  cards = data.frame(
+    text = c(
+      "The follower velocity jumps from zero at the start of the rise",
+      "Constant acceleration in the first half, equal deceleration in the second, with infinite jerk at the midpoint",
+      "A half-cosine displacement curve with non-zero acceleration at the segment ends",
+      "Velocity and acceleration are both zero at the segment ends; jerk is finite everywhere",
+      "Acceptable only below about 30 rpm, where inertial forces are negligible",
+      "Suited to moderate speeds of roughly 100 to 500 rpm",
+      "Recommended above about 500 rpm, at the cost of a higher peak acceleration",
+      "Suited to low speeds of roughly 30 to 100 rpm"
+    ),
+    bin = c("Uniform", "Parabolic", "Harmonic", "Cycloidal", "Uniform", "Harmonic", "Cycloidal", "Parabolic"),
+    why = c(
+      "A straight displacement line has constant velocity inside the segment, so it jumps at the boundaries.",
+      "Two parabolic arcs meet at the midpoint.",
+      "Zero velocity at the ends but acceleration of L pi^2 / (2 beta^2) there.",
+      "Cycloidal motion is the gold standard for high-speed cams.",
+      "Uniform motion causes violent impact loading at every transition.",
+      "Harmonic is the medium-speed choice in the selection guide.",
+      "Cycloidal has about 1.57 times the peak acceleration of harmonic.",
+      "Parabolic improves on uniform but is still limited by the midpoint jerk."
+    )
+  ),
+  intro = "Use the motion type selection guide.",
+  question = "<p>Match each property or application to the follower motion type it describes: uniform, parabolic, harmonic or cycloidal.</p>"
+)
+```
+
 ### Practice Problems {-}
 
 **Problem 1.** A cam has the following motion program:
