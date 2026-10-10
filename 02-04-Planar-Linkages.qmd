@@ -766,6 +766,90 @@ This deliberate overconstrained design is common in heavy equipment and is a key
 
 ***
 
+### Try it yourself {#sec-tryit-linkages}
+
+These use mechanisms that are not in the worked examples. Each exercise checks your answer and lets you try again.
+
+#### Mobility of six mechanisms {#sec-tryit-mobility}
+
+Use the Gruebler-Kutzbach formula $M = 3(n - 1) - 2 j_1 - j_2$. A pin that joins three links counts as **two** joints, and a joint that joins two links counts as one.
+
+```{r tryit-mobility-grid, echo=FALSE, results='asis'}
+mb <- data.frame(
+  `Mechanism` = c("Four-bar", "Six-bar with one triple pin", "Slider-crank with a cam contact", "Five-bar", "Eight-link chain with one triple pin", "Six links, two triple pins"),
+  `Links n` = c(4, 6, 5, 5, 8, 6),
+  `Simple pins and sliders` = c(4, 5, 5, 5, 8, 4),
+  `Triple pins` = c(0, 1, 0, 0, 1, 2),
+  `Higher pairs` = c(0, 0, 1, 0, 0, 0),
+  check.names = FALSE
+)
+mb[["j1 (lower pairs)"]] <- mb[["Simple pins and sliders"]] + 2 * mb[["Triple pins"]]
+mb[["Mobility M"]]       <- 3 * (mb[["Links n"]] - 1) - 2 * mb[["j1 (lower pairs)"]] - mb[["Higher pairs"]]
+
+tryit_grid(
+  id = "mobility",
+  title = "Count the lower pairs, then the mobility",
+  data = mb,
+  blank = c("j1 (lower pairs)", "Mobility M"),
+  tol = c(`j1 (lower pairs)` = 0.01, `Mobility M` = 0.01),
+  hints = c(`j1 (lower pairs)` = "Each triple pin is two lower pairs: j1 = simple pins and sliders + 2 x triple pins.",
+            `Mobility M` = "M = 3 (n - 1) - 2 j1 - j2. Count the ground link in n."),
+  digits = 0,
+  intro = "A negative or zero result is a structure, not a mechanism.",
+  question = paste0(
+    "<p>Find the number of lower pairs j1 (a pin joining three links counts as two) and the mobility M = 3 (n - 1) - 2 j1 - j2 for each mechanism. ",
+    "Rows (n, simple pins and sliders, triple pins, higher pairs): four-bar (4, 4, 0, 0); six-bar with one triple pin (6, 5, 1, 0); ",
+    "slider-crank with a cam contact (5, 5, 0, 1); five-bar (5, 5, 0, 0); eight-link chain with one triple pin (8, 8, 1, 0); ",
+    "six links with two triple pins (6, 4, 2, 0).</p>")
+)
+```
+
+<details class="tryit-solution">
+<summary>Show the worked solution</summary>
+
+```{r tryit-mobility-solution, echo=FALSE}
+mb_show <- mb
+mb_show[["Meaning"]] <- ifelse(mb$`Mobility M` == 1, "one input drives it",
+                        ifelse(mb$`Mobility M` > 1, "needs more than one input",
+                               "structure or overconstrained"))
+knitr::kable(mb_show, align = "c")
+```
+
+The last row gives $M = 3(5) - 2(8) = -1$: it cannot move unless link lengths happen to make it a special geometry. The five-bar needs two actuators.
+
+</details>
+
+#### Classify the joints {#sec-tryit-joint-classes}
+
+```{r tryit-joint-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "joint-classes",
+  title = "Lower pair, higher pair or compound joint?",
+  bins = c("Lower pair", "Higher pair", "Compound joint"),
+  cards = data.frame(
+    text = c(
+      "A revolute pin joining two links over a surface contact",
+      "A prismatic slider moving in a straight guide",
+      "A cam in contact with its follower along a line",
+      "Two gear teeth meshing at a point of contact",
+      "Three links all joined at the same pin",
+      "A roller rolling on a profiled cam surface with line contact"
+    ),
+    bin = c("Lower pair", "Lower pair", "Higher pair", "Higher pair", "Compound joint", "Higher pair"),
+    why = c(
+      "Surface contact, removes two degrees of freedom.",
+      "Surface contact in a guide, removes two degrees of freedom.",
+      "Point or line contact: a higher pair, removes one degree of freedom.",
+      "Point or line contact between teeth: a higher pair.",
+      "A pin joining three links is counted as two lower pairs.",
+      "Line contact: a higher pair."
+    )
+  ),
+  intro = "Decide from the type of contact: surface contact, point or line contact, or more than two links.",
+  question = "<p>Classify each joint as a lower pair, a higher pair or a compound joint.</p>"
+)
+```
+
 ### Practice Problems {#sec-practice-10}
 
 ::: {.question}
