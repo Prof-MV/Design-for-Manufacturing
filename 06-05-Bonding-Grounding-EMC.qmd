@@ -128,8 +128,8 @@ ggplot() +
   theme_void() +
   labs(title = "Four Conductive Paths, One Confusing Name",
        subtitle = "Equipment bonding, system grounding, functional/signal ground, and shield each serve a different purpose") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
 ### Governing Calculation
@@ -257,10 +257,10 @@ ggplot(bond_table, aes(x = ocpd_A, y = area_mm2)) +
        x = "Upstream overcurrent device rating (A, log scale)",
        y = "Min. copper bonding conductor area (mm^2)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9 * diagram_text_scale),
-        axis.title = element_text(size = 10.5 * diagram_text_scale),
-        axis.text = element_text(size = 9.5 * diagram_text_scale))
+  theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9 * chart_text_scale),
+        axis.title = element_text(size = 10.5 * chart_text_scale),
+        axis.text = element_text(size = 9.5 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -553,7 +553,7 @@ ggplot() +
   xlim(-0.2, 12.6) + ylim(2.0, 7.0) +
   theme_void() +
   labs(title = "Where Does the Common-Mode Current Go?") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Worked Example
@@ -880,10 +880,10 @@ ggplot(fault_cases, aes(x = case, y = fault_current, fill = case)) +
        x = NULL, y = "Fault current (A)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.title = element_text(size = 10.5 * diagram_text_scale),
-        axis.text = element_text(size = 10 * diagram_text_scale))
+        plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.title = element_text(size = 10.5 * chart_text_scale),
+        axis.text = element_text(size = 10 * chart_text_scale))
 ```
 
 **Sanity check:** the properly bonded circuit drives nearly 1000 A through the fault — comfortably past the breaker's instantaneous trip region, so the hazard exists only for the fraction of a second it takes the breaker to open. The rod-only circuit drives less than 7 A — not even close to the breaker's continuous rating, let alone its trip threshold — leaving the equipment frame sitting at roughly 173 V relative to true earth, indefinitely, until someone finds the fault some other way (often by getting shocked). In a washdown environment, wet skin and standing water can drop body resistance well below the 1000 Ω used here, making the actual shock current higher still. The magnitude of the touch voltage matters, but the *duration* is what makes the rod-only case genuinely dangerous rather than merely undesirable — this is the numeric core of why CSA C22.2 No. 0.4, CEC Section 10, and NEC Article 250 all require a bonding conductor as the primary fault-clearing path, with the grounding electrode system serving its separate, legitimate purpose alongside it, never in place of it.

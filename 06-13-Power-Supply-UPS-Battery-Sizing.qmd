@@ -175,11 +175,11 @@ ggplot(budget_df, aes(x = Scenario, y = Current_A, fill = Load_Type)) +
        x = NULL, y = "Current (A)", fill = "Load type") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10.5 * diagram_text_scale),
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10.5 * chart_text_scale),
     legend.position = "bottom",
-    legend.text = element_text(size = 10 * diagram_text_scale)
+    legend.text = element_text(size = 10 * chart_text_scale)
   )
 ```
 
@@ -230,8 +230,8 @@ ggplot() +
   theme_minimal() +
   theme(
     axis.text.y = element_blank(),
-    axis.title.x = element_text(size = 11 * diagram_text_scale),
-    axis.text.x = element_text(size = 10 * diagram_text_scale),
+    axis.title.x = element_text(size = 11 * chart_text_scale),
+    axis.text.x = element_text(size = 10 * chart_text_scale),
     panel.grid.major.y = element_blank(),
     panel.grid.minor = element_blank()
   )
@@ -463,11 +463,11 @@ ggplot(timeline_df, aes(x = t_ms, y = I_A)) +
        x = "Time from pushbutton press (ms)", y = "Bus current (A)") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-    strip.text = element_text(size = 10 * diagram_text_scale, face = "bold"),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 9.5 * diagram_text_scale)
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+    strip.text = element_text(size = 10 * chart_text_scale, face = "bold"),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 9.5 * chart_text_scale)
   )
 ```
 
@@ -505,9 +505,9 @@ ggplot(derate_df, aes(x = Temp_C, y = Retention)) +
        x = "Temperature (degrees C)", y = "Capacity retention (% of 25C rated capacity)") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale)
+    plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale)
   )
 ```
 
@@ -640,7 +640,7 @@ ggplot() +
   coord_cartesian(xlim = c(0, 10), ylim = c(1, 7)) +
   theme_void() +
   labs(title = "N+1 Redundant Supply with Diode-OR Combining") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Governing Calculation
@@ -868,7 +868,7 @@ ggplot() +
   coord_cartesian(xlim = c(-0.3, 11), ylim = c(1.6, 7.2)) +
   theme_void() +
   labs(title = "Selective Branch Fusing on the 24VDC Distribution Bus") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 **Sanity check:** every branch fuse rating clears the 50% coordination check against the 10A main, and the valve manifold branch — the one branch with a real inrush event to accommodate — uses a time-delay fuse type specifically so its rating can be sized for the transient without either nuisance-tripping on every normal start or being oversized to the point of losing selectivity. That's the whole design task in one sentence: a fault anywhere on this bus now costs the plant one cheap, quickly-diagnosed fuse instead of twenty minutes of line-down troubleshooting.

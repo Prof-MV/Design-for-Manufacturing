@@ -10,14 +10,14 @@ source("R/required_packages.R")
 ## Set a consistent theme for all plots in this chapter
 theme_cam <- theme_minimal() +
   theme(
-    plot.title    = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
-    axis.title    = element_text(size = 11 * diagram_text_scale, face = "bold"),
-    axis.text     = element_text(size = 9 * diagram_text_scale),
+    plot.title    = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale),
+    axis.title    = element_text(size = 11 * chart_text_scale, face = "bold"),
+    axis.text     = element_text(size = 9 * chart_text_scale),
     panel.grid.minor  = element_blank(),
     legend.position   = "bottom",
-    legend.title      = element_text(size = 10 * diagram_text_scale, face = "bold"),
-    legend.text       = element_text(size = 9 * diagram_text_scale),
+    legend.title      = element_text(size = 10 * chart_text_scale, face = "bold"),
+    legend.text       = element_text(size = 9 * chart_text_scale),
     plot.background   = element_rect(fill = "white", color = NA),
     panel.background  = element_rect(fill = "white", color = NA)
   )
@@ -673,7 +673,7 @@ ggplot(df_svaj, aes(x = theta, y = value, colour = curve)) +
        y = "Normalised Value") +
   theme_cam +
   theme(legend.position = "none",
-        strip.text = element_text(face = "bold", size = 10 * diagram_text_scale))
+        strip.text = element_text(face = "bold", size = 10 * chart_text_scale))
 ```
 
 ```{r jerk-comparison, echo=FALSE, message=FALSE, fig.width=11, fig.height=6, fig.align='center', fig.cap="Jerk comparison for the four motion types over a rise segment. Uniform motion has theoretically infinite jerk at both endpoints — shown as large red spikes. Parabolic motion has infinite jerk at the midpoint (θ̄ = β/2) where acceleration reverses. Harmonic motion has a finite jerk within the segment but a step discontinuity at both ends (shown by the dashed vertical lines). Cycloidal motion has finite, smooth jerk everywhere — making it the best choice for high-speed cams."}

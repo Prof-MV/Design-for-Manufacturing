@@ -107,7 +107,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(1.5, 5.8)) +
   theme_void() +
   labs(title = "Powder Metallurgy Process Flow") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 #### Stage 1: Powder Production {#sec-powder-production}
@@ -244,7 +244,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.3, 4.2)) +
   theme_void() +
   labs(title = "Evolution of Particle Bonding During Sintering") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 Typical sintering conditions:
@@ -305,9 +305,9 @@ ggplot(density_data, aes(y = category)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale),
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale),
     legend.position = "none",
-    axis.text.y = element_text(size = 10 * diagram_text_scale, face = "bold"),
+    axis.text.y = element_text(size = 10 * chart_text_scale, face = "bold"),
     panel.grid.major.y = element_blank()
   )
 ```
@@ -416,7 +416,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0, 5)) +
   theme_void() +
   labs(title = "Self-Lubricating Bearing Operation") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 #### Bearing Density and Porosity Requirements {#sec-bearing-density}
@@ -519,7 +519,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0.8, 5)) +
   theme_void() +
   labs(title = "Graphite Crystal Structure - Basis for Solid Lubrication") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 #### Other Solid Lubricants {#sec-other-solid-lubes}
@@ -606,7 +606,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 8)) +
   theme_void() +
   labs(title = "Hydrodynamic Lubrication - Shaft Floats on Oil Film") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 #### The Oil Impregnation Process {#sec-oil-impregnation}
@@ -684,7 +684,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 13), ylim = c(0.5, 4.8)) +
   theme_void() +
   labs(title = "Vacuum-Pressure Oil Impregnation Process") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 #### Oil Selection for Impregnation {#sec-oil-selection}
@@ -767,7 +767,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 10)) +
   theme_void() +
   labs(title = "Self-Lubricating Bearing Selection Guide") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 #### Summary Comparison Table {#sec-comparison-table}
@@ -961,7 +961,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0.5, 6)) +
   theme_void() +
   labs(title = "Design for Powder Metallurgy") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 ::: {.callout-discussion}

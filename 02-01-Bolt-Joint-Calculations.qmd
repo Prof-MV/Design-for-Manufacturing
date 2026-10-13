@@ -949,7 +949,7 @@ ggplot(df, aes(x = Angle, y = Torque)) +
     axis.line = element_line(arrow = arrow(type = "closed", length = unit(0.15, "inches"))),
     axis.text = element_blank(),
     axis.ticks = element_blank(),
-    axis.title = element_text(size = 14 * diagram_text_scale, face = "plain", hjust = 1)
+    axis.title = element_text(size = 14 * chart_text_scale, face = "plain", hjust = 1)
   ) +
   labs(x = "Angle", y = "Torque")
 ```

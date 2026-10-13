@@ -6,14 +6,14 @@ source("R/required_packages.R")
 
 theme_thermo <- theme_minimal() +
   theme(
-    plot.title       = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle    = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
-    axis.title       = element_text(size = 11 * diagram_text_scale, face = "bold"),
-    axis.text        = element_text(size = 9 * diagram_text_scale),
+    plot.title       = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle    = element_text(hjust = 0.5, size = 10 * chart_text_scale),
+    axis.title       = element_text(size = 11 * chart_text_scale, face = "bold"),
+    axis.text        = element_text(size = 9 * chart_text_scale),
     panel.grid.minor = element_blank(),
     legend.position  = "bottom",
-    legend.title     = element_text(size = 10 * diagram_text_scale, face = "bold"),
-    legend.text      = element_text(size = 9 * diagram_text_scale),
+    legend.title     = element_text(size = 10 * chart_text_scale, face = "bold"),
+    legend.text      = element_text(size = 9 * chart_text_scale),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )

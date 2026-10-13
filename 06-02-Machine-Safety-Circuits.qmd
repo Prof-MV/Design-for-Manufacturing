@@ -117,7 +117,7 @@ ggplot() +
   coord_cartesian(xlim = c(-0.2, 8.2), ylim = c(-0.4, 4.4)) +
   theme_void() +
   labs(title = "How Severity, Exposure, and Avoidance Combine to Set a Required PL (Illustrative)") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 13 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 13 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -342,7 +342,7 @@ ggplot() +
   facet_wrap(~panel, ncol = 1) +
   coord_fixed(xlim = c(-0.3, 6.8), ylim = c(0, 4)) +
   theme_void() +
-  theme(strip.text = element_text(size = 12 * diagram_text_scale, face = "bold"))
+  theme(strip.text = element_text(size = 12 * chart_text_scale, face = "bold"))
 ```
 
 ### Governing Calculation
@@ -503,10 +503,10 @@ ggplot(cost_df, aes(x = n, y = cost, color = option)) +
        x = "Number of independent safety functions", y = "Total installed cost", color = NULL) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 13 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale),
-    legend.text = element_text(size = 10 * diagram_text_scale),
+    plot.title = element_text(size = 13 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale),
+    legend.text = element_text(size = 10 * chart_text_scale),
     legend.position = "bottom"
   )
 ```
@@ -611,10 +611,10 @@ ggplot(stop_profiles, aes(x = t, y = v, color = category)) +
        x = "Time after stop command (s)", y = "Hazard speed (% of running speed)", color = NULL) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 13 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale),
-    legend.text = element_text(size = 9 * diagram_text_scale),
+    plot.title = element_text(size = 13 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale),
+    legend.text = element_text(size = 9 * chart_text_scale),
     legend.position = "bottom"
   )
 ```
@@ -751,11 +751,11 @@ ggplot(grid_df, aes(x = category, y = dc_band, fill = pl_rank)) +
        x = "Category", y = "Diagnostic coverage (DCavg) band") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 12.5 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale),
-    legend.text = element_text(size = 9 * diagram_text_scale),
-    legend.title = element_text(size = 10 * diagram_text_scale)
+    plot.title = element_text(size = 12.5 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale),
+    legend.text = element_text(size = 9 * chart_text_scale),
+    legend.title = element_text(size = 10 * chart_text_scale)
   )
 ```
 
@@ -901,10 +901,10 @@ ggplot(t_components, aes(x = component, y = seconds, fill = component)) +
   coord_flip() +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 13 * diagram_text_scale, face = "bold", hjust = 0.5),
-    plot.subtitle = element_text(size = 10.5 * diagram_text_scale, hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale),
+    plot.title = element_text(size = 13 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 10.5 * chart_text_scale, hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale),
     legend.position = "none"
   )
 ```

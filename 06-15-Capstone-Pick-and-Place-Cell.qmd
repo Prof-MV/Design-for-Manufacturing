@@ -91,8 +91,8 @@ ggplot() +
   theme_void() +
   labs(title = "Pick-and-Place Cell Layout",
        subtitle = "720 brackets/hour, 5.0 s cycle time -- Tier-2 automotive supplier, Cambridge, Ontario") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale, hjust = 0.5))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(size = 10 * chart_text_scale, hjust = 0.5))
 ```
 
 The cell's throughput target — 720 brackets/hour, a 5.0 s cycle — is the single number every subsystem in this chapter has to agree with. It sets the fill-time requirement for the gripper's lift cylinder (Section 2), the minimum belt speed for the infeed conveyor (Section 3), and, indirectly, the duty expected of every branch circuit feeding the cell (Section 4). Seven things have to be sized before this cell can be quoted and built:
@@ -642,10 +642,10 @@ ggplot(t_components, aes(x = component, y = seconds, fill = component)) +
   coord_flip() +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 13 * diagram_text_scale, face = "bold", hjust = 0.5),
-    plot.subtitle = element_text(size = 10.5 * diagram_text_scale, hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale),
+    plot.title = element_text(size = 13 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 10.5 * chart_text_scale, hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale),
     legend.position = "none"
   )
 ```

@@ -47,7 +47,7 @@ ggplot(dfm_data, aes(x = stage)) +
   theme(
     legend.position = "bottom",
     plot.title = element_text(hjust = 0.5, face = "bold"),
-    axis.text.x = element_text(size = 9 * diagram_text_scale)
+    axis.text.x = element_text(size = 9 * chart_text_scale)
   ) +
   ylim(0, 100)
 ```

@@ -80,8 +80,8 @@ ggplot() +
   theme_void() +
   labs(title = "8-Station Rotary Index Table — Drive Layout",
        subtitle = "Servo motor drives the table shaft through a 20:1 precision planetary gearbox") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale))
 ```
 
 ### Design Guidelines and Rules of Thumb
@@ -211,10 +211,10 @@ ggplot(df_inertia, aes(x = N, y = J_reflected_kgcm2)) +
        subtitle = "J_load = 1.6 kg·m² at the table; log scale on reflected inertia",
        x = "Gear ratio N", y = "Reflected inertia (kg·cm², log scale)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale),
-        axis.text = element_text(size = 10 * diagram_text_scale))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale),
+        axis.text = element_text(size = 10 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -315,11 +315,11 @@ ggplot(segments_df) +
        subtitle = "8-station table, 0.5 s index move + 2.5 s dwell (3.0 s cycle)",
        x = "Time (s)", y = "Motor torque (N·m)", fill = "Phase") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
         legend.position = "bottom",
-        axis.title = element_text(size = 11 * diagram_text_scale),
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        legend.text = element_text(size = 9 * diagram_text_scale))
+        axis.title = element_text(size = 11 * chart_text_scale),
+        axis.text = element_text(size = 10 * chart_text_scale),
+        legend.text = element_text(size = 9 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -541,11 +541,11 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Option)) +
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — actual scores are application-specific",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale),
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Governing Calculation
@@ -641,8 +641,8 @@ ggplot() +
   theme_void() +
   labs(title = "Decline Conveyor Force Balance",
        subtitle = "Gravity exceeds friction: the belt overhauls the motor and needs regenerative braking") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
 ### Design Guidelines and Rules of Thumb
@@ -700,11 +700,11 @@ ggplot(df_duty, aes(x = t, y = power, color = system)) +
        subtitle = "Continuous braking needs a continuous-duty (100% ED) resistor; brief pulses do not",
        x = "Time (s)", y = "Regenerated power (W)", color = NULL) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale),
+  theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -875,10 +875,10 @@ ggplot(eff_df, aes(x = class, y = relative_losses, fill = class)) +
        x = NULL, y = "Relative full-load losses (illustrative index, IE1 = 100)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 <details>

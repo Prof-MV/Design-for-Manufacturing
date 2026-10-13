@@ -9,8 +9,8 @@ source("R/required_packages.R")
 ## Set a consistent theme for all plots
 theme_stamping <- theme_minimal() +
 theme(
- plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
- plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+ plot.title = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+ plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale),
  axis.text = element_blank(),
  axis.title = element_blank(),
  axis.ticks = element_blank(),
@@ -581,8 +581,8 @@ ggplot() +
      y = "Major Strain (ε₁)") +
  theme_minimal() +
  theme(
-   plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-   axis.title = element_text(size = 11 * diagram_text_scale),
+   plot.title = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+   axis.title = element_text(size = 11 * chart_text_scale),
    panel.grid.minor = element_blank()
  ) +
  coord_cartesian(xlim = c(-0.35, 0.45), ylim = c(-0.05, 0.75))

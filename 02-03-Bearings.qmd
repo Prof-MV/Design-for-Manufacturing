@@ -20,8 +20,8 @@ source("R/required_packages.R")
 ## Set a consistent theme for all plots
 theme_bearing <- theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    plot.title = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale),
     plot.background = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
@@ -164,7 +164,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(-5, 9), ylim = c(-5.5, 5)) +
   labs(title = "Deep Groove Ball Bearing Cross-Section") +
   theme_void() +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 **Key Components:**
@@ -261,8 +261,8 @@ ggplot(life_df, aes(x = life)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    plot.title = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale),
     plot.background = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   ) +
@@ -1266,8 +1266,8 @@ ggplot() +
   labs(title = "Hydrodynamic Wedge Effect in Journal Bearings",
        subtitle = "Shaft rotation creates pressure that lifts the shaft off the bearing surface") +
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale),
-    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale, color = "gray40")
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale, color = "gray40")
   )
 ```
 
@@ -1469,7 +1469,7 @@ ggplot() +
   # Theme Cleanup
   theme_void() + # Remove axes and grids
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold", color = "white", 
+    plot.title = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold", color = "white", 
                               margin=margin(b=10), debug=FALSE),
     plot.background = element_rect(fill = "white", color = NA),
     # Simulate the dark blue title header bar
@@ -1555,9 +1555,9 @@ ggplot(df, aes(x = Hersey, y = Friction)) +
 
   theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale),
-    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale, color = "gray40"),
-    axis.title = element_text(size = 11 * diagram_text_scale),
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale, color = "gray40"),
+    axis.title = element_text(size = 11 * chart_text_scale),
     panel.grid.minor = element_blank()
   )
 ```
@@ -1701,7 +1701,7 @@ ggplot(df, aes(x = Speed, y = Friction)) +
     axis.line = element_line(arrow = arrow(type = "closed", length = unit(0.15, "inches"))),
     axis.text = element_blank(),
     axis.ticks = element_blank(),
-    axis.title = element_text(size = 14 * diagram_text_scale, face = "plain", hjust = 1),
+    axis.title = element_text(size = 14 * chart_text_scale, face = "plain", hjust = 1),
     plot.margin = margin(20, 20, 20, 20)
   )
 ```

@@ -10,8 +10,8 @@ source("R/required_packages.R")
 ## Custom theme for belt and pulley visualizations
 theme_pulley <- theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    plot.title = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale),
     axis.text = element_blank(),
     axis.title = element_blank(),
     axis.ticks = element_blank(),

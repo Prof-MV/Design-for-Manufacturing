@@ -6,14 +6,14 @@ source("R/required_packages.R")
 
 theme_drivetrain <- theme_minimal() +
   theme(
-    plot.title       = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle    = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
-    axis.title       = element_text(size = 11 * diagram_text_scale, face = "bold"),
-    axis.text        = element_text(size = 9 * diagram_text_scale),
+    plot.title       = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle    = element_text(hjust = 0.5, size = 10 * chart_text_scale),
+    axis.title       = element_text(size = 11 * chart_text_scale, face = "bold"),
+    axis.text        = element_text(size = 9 * chart_text_scale),
     panel.grid.minor = element_blank(),
     legend.position  = "bottom",
-    legend.title     = element_text(size = 10 * diagram_text_scale, face = "bold"),
-    legend.text      = element_text(size = 9 * diagram_text_scale),
+    legend.title     = element_text(size = 10 * chart_text_scale, face = "bold"),
+    legend.text      = element_text(size = 9 * chart_text_scale),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
@@ -174,8 +174,8 @@ ggplot(drive_long, aes(x = Attribute, y = Score, fill = Configuration)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title    = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    plot.title    = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale),
     axis.text.x   = element_text(angle = 20, hjust = 1),
     legend.position = "bottom"
   )
@@ -237,7 +237,7 @@ ggplot(gear_df, aes(x = RPM, y = Wheel_Torque, colour = Gear)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.title      = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
     legend.position = "right"
   )
 ```
@@ -390,7 +390,7 @@ ggplot(tc_long, aes(x = Speed_Ratio, y = Value, colour = Metric)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.title      = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
     legend.position = "bottom"
   )
 ```
@@ -487,7 +487,7 @@ ggplot(rpm_df, aes(x = Speed, y = RPM, colour = Gear)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
+    plot.title      = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
     legend.position = "right"
   )
 ```
@@ -613,7 +613,7 @@ ggplot(eff_data, aes(x = Condition, y = Efficiency, fill = Type)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 13 * diagram_text_scale, face = "bold"),
+    plot.title      = element_text(hjust = 0.5, size = 13 * chart_text_scale, face = "bold"),
     axis.text.x     = element_text(angle = 20, hjust = 1),
     legend.position = "bottom"
   )
@@ -744,8 +744,8 @@ ggplot(ev_long, aes(x = Attribute, y = Score, fill = Config)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title      = element_text(hjust = 0.5, size = 14 * diagram_text_scale, face = "bold"),
-    plot.subtitle   = element_text(hjust = 0.5, size = 10 * diagram_text_scale),
+    plot.title      = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.subtitle   = element_text(hjust = 0.5, size = 10 * chart_text_scale),
     axis.text.x     = element_text(angle = 20, hjust = 1),
     legend.position = "bottom"
   )

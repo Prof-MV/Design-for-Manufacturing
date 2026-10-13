@@ -91,8 +91,8 @@ ggplot() +
   theme_void() +
   labs(title = "Inclined Tote Conveyor: Force Balance",
        subtitle = "22-degree incline, roller-bed belt conveyor, 0.5 m/s design speed") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
 ### Design Guidelines and Rules of Thumb
@@ -202,10 +202,10 @@ ggplot(te_df, aes(x = component, y = force_N, fill = component)) +
        x = NULL, y = "Force contribution (N)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.text = element_text(size = 10.5 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.text = element_text(size = 10.5 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 **Sanity check:** the gravity/elevation term ($T_z \approx 1521$ N) makes up nearly 90% of the effective tension, with the two friction terms together contributing only about 10%. That's the expected signature of a genuinely steep incline conveyor — physically, most of the drive's effort here is lifting totes against gravity, not overcoming rolling friction, which is exactly the opposite balance you'd see on a long, gently-inclined or level conveyor, where friction dominates and the gravity term shrinks toward zero. If this ratio came out reversed for a 22° incline, that would be a strong signal of an arithmetic error (most likely a $\sin\theta$/$\cos\theta$ swap) rather than a real result worth trusting.
@@ -327,10 +327,10 @@ ggplot(df_p, aes(x = v, y = P / 1000)) +
        subtitle = "Effective tension held constant at 1867 N (Design Task 1 result)",
        x = "Belt speed (m/s)", y = "Motor power (kW)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.text = element_text(size = 10.5 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.text = element_text(size = 10.5 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 **Sanity check:** roughly 1.04 kW (1.4 hp) required at the motor rounds up cleanly to a standard 1.5 kW (2 hp) NEMA/IEC frame motor with reasonable margin — a physically sensible size for a single 600 mm belt lifting totes at this rate, not an order of magnitude off in either direction. The pulley itself turns quite slowly (about 38 rpm), which is typical for a conveyor head pulley; a roughly 46:1 gear reduction from a standard 1750 rpm 4-pole motor is well within the range commonly available in a single helical-bevel gearmotor package, so this doesn't force an unusual two-stage drive train.
@@ -445,10 +445,10 @@ ggplot(df_v, aes(x = R, y = v_min, color = s)) +
        subtitle = "Three minimum tote center-to-center spacings",
        x = "Required throughput (totes/min)", y = "Minimum belt speed (m/s)", color = "Spacing") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.text = element_text(size = 10.5 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale),
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.text = element_text(size = 10.5 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale),
         legend.position = "bottom")
 ```
 
@@ -588,11 +588,11 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Type)) +
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — application-specific",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 **Sanity check:** tabletop chain wins clearly (4.00 vs. roller's 3.20 and belt's 2.90), which matches what a food-plant conveyor engineer would specify from experience for a washdown zone that needs turns and accumulation — this decision matrix isn't discovering anything surprising, it's documenting and defending a choice an experienced engineer would already lean toward. The value of running the matrix explicitly is what happens when priorities shift: re-weight toward the automotive stamping example instead — heavy skids, straight run, no washdown, cost and accumulation matter far more than sanitation or turns — and the recommendation flips to roller conveyor, exactly matching that application's real-world default.
@@ -645,7 +645,7 @@ ggplot() +
   xlim(-5.2, 5.2) + ylim(-1.5, 4.5) +
   theme_void() +
   labs(title = "Sanitary vs. Non-Sanitary Frame Cross-Sections") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"))
 ```
 
 In Canada, conveyor construction expectations for equipment used in a federally registered food establishment flow from the **Canadian Food Inspection Agency (CFIA)**, administering the **Safe Food for Canadians Regulations (SFCR)**. CFIA does not typically publish its own detailed equipment-construction dimensional standard the way a mechanical standards body does; instead, it expects equipment to meet recognized sanitary design practice and be maintained in a condition consistent with the plant's own food safety plan and CFIA's inspection expectations. In practice, plants and equipment suppliers demonstrate that compliance by designing to established sanitary equipment standards — most commonly the **3-A Sanitary Standards** (originally developed for dairy equipment in the US, now widely referenced across food equipment generally), **NSF/ANSI 169** (Special-Purpose Food Equipment), and, for baking-specific equipment, the **BISSC** (Baking Industry Sanitation Standards Committee) standard. These are the international/US equivalents CFIA-regulated plants reference directly, the same way this book's electromechanical chapters point to CEC/OESC first and NEC second — here, CFIA sets the Canadian regulatory expectation, and the named standards provide the engineering detail behind meeting it.

@@ -72,7 +72,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 9), ylim = c(0.5, 5)) +
   theme_void() +
   labs(title = "Internal Corners Must Have Fillet Radii") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 **Guideline:** Internal fillet radius should be at least **1.5× the tool radius** to allow the tool to move smoothly without dwelling in corners.

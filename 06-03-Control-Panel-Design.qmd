@@ -117,9 +117,9 @@ ggplot(duct_options, aes(x = duct_size, y = fill_pct)) +
   ylim(0, 55) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale)
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale)
   )
 ```
 
@@ -386,9 +386,9 @@ ggplot(heat_components, aes(x = component, y = loss_w)) +
        x = NULL, y = "Heat loss (W)") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale)
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale)
   )
 ```
 
@@ -566,11 +566,11 @@ ggplot(curve_df, aes(x = mult, y = t, color = curve)) +
        y = "Time (s, log scale)", color = NULL) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale),
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale),
     legend.position = "bottom",
-    legend.text = element_text(size = 9 * diagram_text_scale)
+    legend.text = element_text(size = 9 * chart_text_scale)
   )
 ```
 
@@ -715,7 +715,7 @@ ggplot() +
   xlim(-0.6, 6.2) + ylim(-0.1, 2.9) +
   theme_void() +
   labs(title = "Weakest-Link Principle for Panel SCCR") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 ### Worked Example

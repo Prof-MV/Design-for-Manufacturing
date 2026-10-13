@@ -87,8 +87,8 @@ ggplot() +
   theme_void() +
   labs(title = "Gantry Beam — Simply Supported, Midspan Carriage Load",
        subtitle = "Steel HSS 152x102x6.4 beam spanning between two support columns") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale))
 ```
 
 ### Design Guidelines and Rules of Thumb
@@ -207,10 +207,10 @@ ggplot(budget_df, aes(x = category, y = deflection_mm, color = category)) +
        x = NULL, y = "Deflection (mm, log scale)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Governing Calculation
@@ -350,11 +350,11 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Construction)) +
        subtitle = "1 (poor fit) to 5 (excellent fit); actual scores depend on the specific application and scale",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+  theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
-        axis.text = element_text(size = 9.5 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        axis.text = element_text(size = 9.5 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Governing Calculation
@@ -486,8 +486,8 @@ ggplot() +
   theme_void() +
   labs(title = "Friction-Grip Bolted Frame Joint",
        subtitle = "Shear is resisted by friction between the clamped flange faces, not by the bolt shank bearing in the hole") +
-  theme(plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale))
+  theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
 ### Governing Calculation
@@ -612,8 +612,8 @@ ggplot() +
   theme_void() +
   labs(title = "Overturning Stability Check — Precision Inspection Fixture",
        subtitle = "Tall, high-CG fixture: lateral disturbance vs. restoring moment about the leading edge") +
-  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale))
+  theme(plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
 ### Governing Calculation
@@ -751,10 +751,10 @@ ggplot(freq_df, aes(x = case, y = freq_hz, fill = case)) +
        x = NULL, y = "Frequency (Hz)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.text = element_text(size = 9.5 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.text = element_text(size = 9.5 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Governing Calculation

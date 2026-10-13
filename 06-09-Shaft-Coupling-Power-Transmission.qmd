@@ -85,8 +85,8 @@ ggplot() +
   theme_void() +
   labs(title = "Accumulation Conveyor Drivetrain",
        subtitle = "Same catalog gearbox as the index table (06-06), standardized for plant spares commonality") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale))
 ```
 
 ### Design Guidelines and Rules of Thumb
@@ -189,7 +189,7 @@ ggplot() +
   coord_fixed() + xlim(-11, 12) + ylim(-16, 16) +
   theme_void() +
   labs(title = "Keyway Cross-Section and Stress Concentration") +
-  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"))
+  theme(plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"))
 ```
 
 ### Governing Calculation
@@ -346,11 +346,11 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Coupling)) +
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — actual capability varies by manufacturer and size",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 **Rule of thumb:** default to the simplest, cheapest coupling family that meets the drive's torque, misalignment, and shock requirements with reasonable margin — for the large majority of general industrial drives below a few hundred N·m, that's a jaw coupling. This breaks down for precision motion control (encoder feedback couplings, small stepper/servo shafts) where a beam coupling's zero backlash and low added inertia matter more than shock tolerance, and for large, continuously running, shock-loaded industrial equipment (big pumps, fans, compressors) where a grid coupling's shock tolerance and torque capacity justify its extra cost and the periodic lubrication its housing needs.
@@ -516,7 +516,7 @@ ggplot() +
   coord_fixed() + xlim(-280, 900) + ylim(-350, 345) +
   theme_void() +
   labs(title = "V-Belt Drive Geometry and Wrap Angle") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"))
 ```
 
 Once a belt drive is installed, correct **tensioning** matters as much as correct sizing: a belt that's too loose slips under load (wasting power as heat and wearing the belt's sidewalls prematurely) and whips, while a belt that's too tight overloads both shafts' bearings with unnecessary radial force, shortening bearing life without adding any transmittable power once the belt is no longer slipping.
@@ -674,11 +674,11 @@ ggplot(cb_long, aes(x = Criterion, y = Score, fill = Drive)) +
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — a standard (non-washdown, non-self-lubricating) chain assumed",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9 * diagram_text_scale),
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9 * chart_text_scale),
         legend.position = "bottom",
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 **Rule of thumb:** chain generally beats belt whenever a drive needs high torque at low speed with zero slip and no long-term ratio drift — augers, positive-displacement pumps, and exactly-synchronized indexing conveyors are the classic cases. This breaks down hard in a washdown or direct-food-contact zone: chain's own lubrication requirement can erase the advantage entirely unless a **self-lubricating** (oil-impregnated bushing) or **dry-film-lubricated stainless washdown chain** is specified, fully enclosed in a lubricant-tight guard to keep both wash water out and any residual lubricant in — and even then, periodic inspection and re-lubrication remain a real maintenance burden a sealed, lubrication-free belt simply doesn't carry. Don't default to chain on torque capacity alone without checking whether the environment can actually support what chain needs to survive in it.

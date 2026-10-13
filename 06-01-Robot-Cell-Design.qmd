@@ -177,7 +177,7 @@ ggplot() +
   coord_fixed() +
   theme_void() +
   labs(title = "Reach Envelope and Weld Points") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
 ```
 
 ## Design Task 2: Payload Check Including End-Effector CG Offset
@@ -265,9 +265,9 @@ ggplot(curve_df, aes(x = L, y = payload)) +
        x = "Horizontal CG offset, L (mm)", y = "Maximum allowable payload (kg)") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale)
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale)
   )
 ```
 
@@ -418,9 +418,9 @@ ggplot(profile_df, aes(x = t, y = v)) +
        x = "Time (s)", y = "TCP speed (mm/s)") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale)
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale)
   )
 ```
 
@@ -900,7 +900,7 @@ ggplot() +
   xlim(0, 10) + ylim(0.5, 9.8) +
   theme_void() +
   labs(title = "Does This Robot Cell Need a Pre-Start Health and Safety Review?") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 13 * diagram_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 13 * chart_text_scale))
 ```
 
 ```{r tbl-06-01-psr-triggers, echo=FALSE, message=FALSE}

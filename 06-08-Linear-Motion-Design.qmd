@@ -98,7 +98,7 @@ ggplot() +
   coord_fixed(xlim = c(-0.5, 10.5), ylim = c(-0.2, 5.2)) +
   theme_void() +
   labs(title = "Dispensing Gantry Axis — Fixed-Supported Ball Screw Layout") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Design Guidelines and Rules of Thumb
@@ -237,11 +237,11 @@ ggplot(curve_df, aes(x = L, y = N_cr, color = condition)) +
        y = "Critical speed (rpm)", color = "End condition") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale),
-    legend.text = element_text(size = 10 * diagram_text_scale),
-    legend.title = element_text(size = 10.5 * diagram_text_scale)
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale),
+    legend.text = element_text(size = 10 * chart_text_scale),
+    legend.title = element_text(size = 10.5 * chart_text_scale)
   )
 ```
 
@@ -392,9 +392,9 @@ ggplot(buckling_df, aes(x = L, y = Pcr)) +
        y = "Critical buckling load (kN)") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 11 * diagram_text_scale),
-    axis.text = element_text(size = 10 * diagram_text_scale)
+    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 11 * chart_text_scale),
+    axis.text = element_text(size = 10 * chart_text_scale)
   )
 ```
 
@@ -621,7 +621,7 @@ ggplot() +
   coord_fixed(xlim = c(-1.1, 1.1), ylim = c(-0.75, 0.6)) +
   theme_void() +
   labs(title = "Four-Block Guide Pattern — Top View") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Worked Example

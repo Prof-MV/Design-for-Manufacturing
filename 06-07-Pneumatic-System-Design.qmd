@@ -83,7 +83,7 @@ ggplot() +
   coord_fixed() + xlim(-3.5, 7.5) + ylim(-0.5, 7.2) +
   theme_void() +
   labs(title = "Pick-and-Place Lift Cylinder — Vertical Mount, Rod Down") +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Design Guidelines and Rules of Thumb
@@ -153,11 +153,11 @@ ggplot(candidates, aes(x = reorder(label, bore), y = margin_pct, fill = selected
        subtitle = "Retract-stroke requirement: 550 N at 6 bar (A_min = 917 mm²)",
        x = "Bore / rod (mm)", y = "Oversize margin over A_min (%)", fill = NULL) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale),
+  theme(plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -258,12 +258,12 @@ ggplot(force_df, aes(x = type, y = force, fill = type)) +
        subtitle = "Dashed red line = required force for that stroke",
        x = NULL, y = "Force (N)", fill = NULL) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale),
+  theme(plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
-        strip.text = element_text(size = 11 * diagram_text_scale, face = "bold"),
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        strip.text = element_text(size = 11 * chart_text_scale, face = "bold"),
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -384,10 +384,10 @@ ggplot(df_rate, aes(x = rate, y = Q_SCFM)) +
        subtitle = "50 mm bore / 20 mm rod, 100 mm stroke, 6 bar line pressure",
        x = "Cycle rate (cycles/min)", y = "Free-air flow (SCFM)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale),
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+  theme(plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale),
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -511,10 +511,10 @@ ggplot(df_cv, aes(x = t_fill, y = Cv)) +
        subtitle = "Extend-stroke fill, 50 mm bore, 100 mm stroke, 6 bar supply, 15 psi valve pressure drop",
        x = "Target fill time (s)", y = "Required Cv") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.text = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+  theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.text = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -763,11 +763,11 @@ ggplot(cost_df, aes(x = scenario, y = cost, fill = scenario)) +
        subtitle = "At an illustrative industry rule-of-thumb rate of $0.28 per 1,000 SCF, 4 000 operating h/yr",
        x = NULL, y = "Annual cost") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13.5 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 9.5 * diagram_text_scale),
-        axis.text.x = element_text(size = 9 * diagram_text_scale),
-        axis.text.y = element_text(size = 10 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+  theme(plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 9.5 * chart_text_scale),
+        axis.text.x = element_text(size = 9 * chart_text_scale),
+        axis.text.y = element_text(size = 10 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -909,11 +909,11 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Option)) +
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — actual scores are application-specific",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * diagram_text_scale, face = "bold"),
-        plot.subtitle = element_text(size = 10 * diagram_text_scale),
+  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
-        axis.text = element_text(size = 9.5 * diagram_text_scale),
-        axis.title = element_text(size = 11 * diagram_text_scale))
+        axis.text = element_text(size = 9.5 * chart_text_scale),
+        axis.title = element_text(size = 11 * chart_text_scale))
 ```
 
 ### Governing Calculation

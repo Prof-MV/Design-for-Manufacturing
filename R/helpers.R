@@ -6,21 +6,27 @@
 # ───────────────────────────────────────────────────────────────
 # Figures in this book are authored wide (fig.width ~9-12in) but displayed
 # in a much narrower book column, so ggplot2's default text sizes look tiny
-# once the browser scales the image down. diagram_text_scale is the single
-# knob controlling all chart text; chunks multiply their geom_text()/
-# geom_label()/annotate("text", ...)/element_text(size = ...) literals by
-# it, and theme_minimal()/theme_void() below pick it up automatically.
-diagram_text_scale <- 1.4
+# once the browser scales the image down. Two knobs:
+#   chart_text_scale   - axes, titles, legends, theme base size, default
+#                        geom_text size (text that can grow freely)
+#   diagram_text_scale - labels inside boxes, circles and pills of hand-built
+#                        diagrams (text in a fixed shape must grow less)
+# Chunks multiply element_text(size = ...) literals by chart_text_scale and
+# geom_text()/geom_label()/annotate("text", ...) literals by
+# diagram_text_scale; theme_minimal()/theme_void() below pick up
+# chart_text_scale automatically.
+chart_text_scale <- 1.4
+diagram_text_scale <- 1.1
 
-theme_minimal <- function(base_size = 11 * diagram_text_scale, ...) {
+theme_minimal <- function(base_size = 11 * chart_text_scale, ...) {
   ggplot2::theme_minimal(base_size = base_size, ...)
 }
 
-theme_void <- function(base_size = 11 * diagram_text_scale, ...) {
+theme_void <- function(base_size = 11 * chart_text_scale, ...) {
   ggplot2::theme_void(base_size = base_size, ...)
 }
 
-ggplot2::update_geom_defaults("text", list(size = 3.88 * diagram_text_scale))
+ggplot2::update_geom_defaults("text", list(size = 3.88 * chart_text_scale))
 
 #' Embed a YouTube video with conditional output
 #'
