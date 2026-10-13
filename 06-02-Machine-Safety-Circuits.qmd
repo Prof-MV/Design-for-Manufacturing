@@ -117,7 +117,7 @@ ggplot() +
   coord_cartesian(xlim = c(-0.2, 8.2), ylim = c(-0.4, 4.4)) +
   theme_void() +
   labs(title = "How Severity, Exposure, and Avoidance Combine to Set a Required PL (Illustrative)") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 13 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 ### Worked Example
@@ -342,7 +342,7 @@ ggplot() +
   facet_wrap(~panel, ncol = 1) +
   coord_fixed(xlim = c(-0.3, 6.8), ylim = c(0, 4)) +
   theme_void() +
-  theme(strip.text = element_text(size = 12 * chart_text_scale, face = "bold"))
+  theme(strip.text = element_text(size = 12 * chart_text_scale, face = "bold", margin = margin(10, 0, 10, 0)))
 ```
 
 ### Governing Calculation
@@ -503,7 +503,7 @@ ggplot(cost_df, aes(x = n, y = cost, color = option)) +
        x = "Number of independent safety functions", y = "Total installed cost", color = NULL) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 13 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale),
     legend.text = element_text(size = 10 * chart_text_scale),
@@ -599,8 +599,8 @@ v_cat12 <- pmax(0, 100 - (100 / 0.6) * t_seq)
 stop_profiles <- data.frame(
   t = rep(t_seq, 2),
   v = c(v_cat0, v_cat12),
-  category = rep(c("Category 0: power removed immediately (coasts under friction/inertia alone)",
-                    "Category 1 or 2: controlled deceleration (active braking)"),
+  category = rep(c("Category 0: power removed, coasts",
+                    "Category 1 or 2: controlled deceleration"),
                   each = length(t_seq))
 )
 
@@ -611,7 +611,7 @@ ggplot(stop_profiles, aes(x = t, y = v, color = category)) +
        x = "Time after stop command (s)", y = "Hazard speed (% of running speed)", color = NULL) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 13 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale),
     legend.text = element_text(size = 9 * chart_text_scale),
@@ -747,11 +747,11 @@ ggplot(grid_df, aes(x = category, y = dc_band, fill = pl_rank)) +
   geom_text(aes(label = pl_letter, color = text_color), size = 4 * diagram_text_scale, fontface = "bold") +
   scale_color_identity() +
   scale_fill_gradient(low = "#AED6F1", high = "#154360", breaks = 1:5, labels = pl_scale, name = "Achieved PL") +
-  labs(title = "Illustrative Achieved PL by Category and DCavg (MTTFd = \"high\")",
+  labs(title = "Achieved PL by Category and DCavg (MTTFd = \"high\")",
        x = "Category", y = "Diagnostic coverage (DCavg) band") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 12.5 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale),
     legend.text = element_text(size = 9 * chart_text_scale),
@@ -901,7 +901,7 @@ ggplot(t_components, aes(x = component, y = seconds, fill = component)) +
   coord_flip() +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 13 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     plot.subtitle = element_text(size = 10.5 * chart_text_scale, hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale),

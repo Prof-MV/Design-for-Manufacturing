@@ -183,7 +183,7 @@ ggplot(mat_df, aes(x = material, y = correction_factor, fill = material)) +
        x = NULL, y = "Correction factor (relative to mild steel)") +
   ylim(0, 1.15) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         axis.title = element_text(size = 11 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale))
 ```
@@ -355,7 +355,7 @@ build_wiring_panel <- function(panel_title, out_switches_high, subtitle_result) 
     coord_fixed(xlim = c(-1.1, 5.3), ylim = c(0, 5.6)) +
     theme_void() +
     labs(title = panel_title, subtitle = subtitle_result) +
-    theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold", hjust = 0.5),
+    theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
           plot.subtitle = element_text(size = 9.5 * chart_text_scale, hjust = 0.5, color = "#27AE60"))
 }
 
@@ -500,7 +500,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Architecture)) +
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) -- actual scores are installation-specific",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
         axis.text = element_text(size = 10 * chart_text_scale),
@@ -605,7 +605,7 @@ ggplot(signal_df, aes(x = length_m, y = error_pct, color = scenario)) +
        subtitle = "18 AWG copper, round-trip wire resistance -- current loop error stays at zero",
        x = "One-way cable length (m)", y = "Signal error (%)", color = NULL) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
         axis.title = element_text(size = 11 * chart_text_scale),
@@ -717,7 +717,7 @@ ggplot(ip_pressure_df, aes(x = rating, y = test_pressure_bar, fill = rating)) +
        subtitle = "Log scale -- IP69K's test pressure is roughly three orders of magnitude higher",
        x = NULL, y = "Approximate test pressure (bar, log scale)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale))
@@ -940,7 +940,7 @@ ggplot(io_summary_df, aes(x = io_type, y = count, fill = kind)) +
   labs(title = "I/O Count: Tallied Need vs. Installed Capacity",
        x = NULL, y = "I/O points", fill = NULL) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         legend.position = "bottom",
         axis.title = element_text(size = 11 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale))

@@ -107,7 +107,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(1.5, 5.8)) +
   theme_void() +
   labs(title = "Powder Metallurgy Process Flow") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 #### Stage 1: Powder Production {#sec-powder-production}
@@ -244,7 +244,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.3, 4.2)) +
   theme_void() +
   labs(title = "Evolution of Particle Bonding During Sintering") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 Typical sintering conditions:
@@ -305,7 +305,7 @@ ggplot(density_data, aes(y = category)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale),
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale),
     legend.position = "none",
     axis.text.y = element_text(size = 10 * chart_text_scale, face = "bold"),
     panel.grid.major.y = element_blank()
@@ -377,7 +377,7 @@ ggplot() +
   # Rotation arrow on shaft
   geom_curve(aes(x = 3, xend = 3.3, y = 2.5, yend = 2.8), curvature = -0.3,
              arrow = arrow(length = unit(0.15, "cm")), linewidth = 1, color = "black") +
-  annotate("text", x = 3.5, y = 2.65, label = "Rotation", size = 3 * diagram_text_scale) +
+  annotate("text", x = 3, y = 2.2, label = "Rotation", size = 3 * diagram_text_scale) +
 
   # Right side - Operating condition
   geom_rect(aes(xmin = 7, xmax = 11, ymin = 1, ymax = 4), fill = "tan", color = "black", linewidth = 1) +
@@ -400,7 +400,7 @@ ggplot() +
   # Fast rotation
   geom_curve(aes(x = 9, xend = 9.4, y = 2.45, yend = 2.9), curvature = -0.4,
              arrow = arrow(length = unit(0.2, "cm")), linewidth = 1.5, color = "black") +
-  annotate("text", x = 9.6, y = 2.7, label = "Fast\nRotation", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 9, y = 2.15, label = "Fast rotation", size = 2.5 * diagram_text_scale, color = "white") +
 
   # Labels
   annotate("text", x = 3, y = 4.5, label = "AT REST", fontface = "bold", size = 4 * diagram_text_scale) +
@@ -416,7 +416,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0, 5)) +
   theme_void() +
   labs(title = "Self-Lubricating Bearing Operation") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 #### Bearing Density and Porosity Requirements {#sec-bearing-density}
@@ -519,7 +519,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0.8, 5)) +
   theme_void() +
   labs(title = "Graphite Crystal Structure - Basis for Solid Lubrication") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 #### Other Solid Lubricants {#sec-other-solid-lubes}
@@ -600,13 +600,13 @@ ggplot() +
   annotate("text", x = 5, y = 0.3,
            label = "Shaft 'floats' on oil film - no metal contact",
            size = 3.5 * diagram_text_scale, fontface = "italic") +
-  annotate("text", x = 7.5, y = 4, label = "Thin film\n(convergent\nwedge)", size = 2.5 * diagram_text_scale, color = "darkgoldenrod") +
-  annotate("text", x = 2.8, y = 4.5, label = "Thick\nfilm", size = 2.5 * diagram_text_scale, color = "darkgoldenrod") +
+  annotate("text", x = 7.5, y = 4, label = "Thin film\n(convergent\nwedge)", size = 2.5 * diagram_text_scale, color = "black") +
+  annotate("text", x = 2.8, y = 4.5, label = "Thick\nfilm", size = 2.5 * diagram_text_scale, color = "black") +
 
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 8)) +
   theme_void() +
   labs(title = "Hydrodynamic Lubrication - Shaft Floats on Oil Film") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 #### The Oil Impregnation Process {#sec-oil-impregnation}
@@ -628,7 +628,7 @@ library(ggplot2)
 
 ggplot() +
   # Stage 1: Heating
-  annotate("text", x = 1.5, y = 4.2, label = "1. HEAT\nBEARINGS", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 1.5, y = 4.6, label = "1. HEAT\nBEARINGS", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 0.5, xmax = 2.5, ymin = 1.5, ymax = 3.5), fill = "coral", color = "black", linewidth = 1) +
   # Bearings
   geom_point(aes(x = c(1, 1.5, 2, 1.25, 1.75), y = c(2, 2.5, 2, 3, 3)),
@@ -636,7 +636,7 @@ ggplot() +
   annotate("text", x = 1.5, y = 1, label = "80-90°C", size = 3 * diagram_text_scale, fontface = "italic") +
 
   # Stage 2: Vacuum
-  annotate("text", x = 4, y = 4.2, label = "2. APPLY\nVACUUM", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 4, y = 4.6, label = "2. APPLY\nVACUUM", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 3, xmax = 5, ymin = 1.5, ymax = 3.5), fill = "lightblue", color = "black", linewidth = 1) +
   geom_point(aes(x = c(3.5, 4, 4.5, 3.75, 4.25), y = c(2, 2.5, 2, 3, 3)),
              size = 8, color = "tan", shape = 21, fill = "tan", stroke = 1) +
@@ -646,7 +646,7 @@ ggplot() +
   annotate("text", x = 4, y = 1, label = "< 50 mbar", size = 3 * diagram_text_scale, fontface = "italic") +
 
   # Stage 3: Introduce Oil
-  annotate("text", x = 6.5, y = 4.2, label = "3. INTRODUCE\nOIL", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 6.5, y = 4.6, label = "3. INTRODUCE\nOIL", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 5.5, xmax = 7.5, ymin = 1.5, ymax = 3.5), fill = "gold", color = "black", linewidth = 1) +
   geom_point(aes(x = c(6, 6.5, 7, 6.25, 6.75), y = c(2, 2.5, 2, 3, 3)),
              size = 8, color = "tan", shape = 21, fill = "sienna", stroke = 1) +
@@ -655,17 +655,17 @@ ggplot() +
   annotate("text", x = 6.5, y = 1, label = "Oil covers\nbearings", size = 3 * diagram_text_scale, fontface = "italic") +
 
   # Stage 4: Pressure
-  annotate("text", x = 9, y = 4.2, label = "4. APPLY\nPRESSURE", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 9, y = 4.6, label = "4. APPLY\nPRESSURE", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 8, xmax = 10, ymin = 1.5, ymax = 3.5), fill = "gold", color = "black", linewidth = 1.5) +
   geom_point(aes(x = c(8.5, 9, 9.5, 8.75, 9.25), y = c(2, 2.5, 2, 3, 3)),
              size = 8, color = "sienna", shape = 21, fill = "sienna", stroke = 1) +
   # Pressure arrows
-  geom_segment(aes(x = 9, xend = 9, y = 4, yend = 3.6),
+  geom_segment(aes(x = 9, xend = 9, y = 4.0, yend = 3.6),
                arrow = arrow(length = unit(0.15, "cm")), color = "red", linewidth = 1.2) +
   annotate("text", x = 9, y = 1, label = "3-5 bar", size = 3 * diagram_text_scale, fontface = "italic") +
 
   # Stage 5: Complete
-  annotate("text", x = 11.5, y = 4.2, label = "5. DRAIN &\nSTABILIZE", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 11.5, y = 4.6, label = "5. DRAIN &\nSTABILIZE", fontface = "bold", size = 3 * diagram_text_scale) +
   geom_rect(aes(xmin = 10.5, xmax = 12.5, ymin = 1.5, ymax = 3.5), fill = "white", color = "black", linewidth = 1) +
   geom_point(aes(x = c(11, 11.5, 12, 11.25, 11.75), y = c(2, 2.5, 2, 3, 3)),
              size = 8, color = "sienna", shape = 21, fill = "sienna", stroke = 1.5) +
@@ -681,10 +681,10 @@ ggplot() +
   geom_segment(aes(x = 10.1, xend = 10.4, y = 2.5, yend = 2.5),
                arrow = arrow(length = unit(0.15, "cm")), linewidth = 0.8) +
 
-  coord_fixed(ratio = 1, xlim = c(0, 13), ylim = c(0.5, 4.8)) +
+  coord_fixed(ratio = 1, xlim = c(0, 13), ylim = c(0.5, 5.2)) +
   theme_void() +
   labs(title = "Vacuum-Pressure Oil Impregnation Process") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 #### Oil Selection for Impregnation {#sec-oil-selection}
@@ -719,8 +719,8 @@ ggplot() +
   geom_vline(xintercept = 5, linewidth = 1) +
 
   # Axis labels
-  annotate("text", x = 5, y = 0.3, label = "SPEED", fontface = "bold", size = 4 * diagram_text_scale) +
-  annotate("text", x = 0.3, y = 5, label = "LOAD", fontface = "bold", size = 4 * diagram_text_scale, angle = 90) +
+  annotate("label", x = 5, y = 0.3, label = "SPEED", fontface = "bold", size = 4 * diagram_text_scale, fill = "white", linewidth = 0) +
+  annotate("label", x = 0.3, y = 5, label = "LOAD", fontface = "bold", size = 4 * diagram_text_scale, angle = 90, fill = "white", linewidth = 0) +
 
   # Low speed, low load - Graphite
   geom_rect(aes(xmin = 0.5, xmax = 4.8, ymin = 0.5, ymax = 4.8),
@@ -767,7 +767,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 10)) +
   theme_void() +
   labs(title = "Self-Lubricating Bearing Selection Guide") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 #### Summary Comparison Table {#sec-comparison-table}
@@ -872,11 +872,11 @@ ggplot(process_data, aes(x = metric, y = score, fill = process)) +
     y = "Score",
     fill = "Process"
   ) +
+  scale_x_discrete(labels = scales::label_wrap(12)) +
   theme_minimal() +
   theme(
     plot.title = element_text(hjust = 0.5, face = "bold"),
     plot.subtitle = element_text(hjust = 0.5),
-    axis.text.x = element_text(angle = 15, hjust = 1),
     legend.position = "right"
   ) +
   coord_cartesian(ylim = c(0, 100))
@@ -905,7 +905,7 @@ library(ggplot2)
 
 ggplot() +
   # Good design example
-  annotate("text", x = 2.5, y = 5.5, label = "GOOD DESIGN", fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
+  annotate("text", x = 2.5, y = 6.1, label = "GOOD DESIGN", fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
 
   # Part outline - good
   geom_rect(aes(xmin = 1, xmax = 4, ymin = 2, ymax = 4.5), fill = "lightgray", color = "black", linewidth = 1) +
@@ -920,14 +920,14 @@ ggplot() +
   # Annotations - good
   annotate("segment", x = 1.15, xend = 0.7, y = 4.35, yend = 4.7,
            arrow = arrow(length = unit(0.1, "cm"))) +
-  annotate("text", x = 0.5, y = 4.9, label = "Chamfer", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 0.55, y = 5.0, label = "Chamfer", size = 2.5 * diagram_text_scale) +
   annotate("segment", x = 2.5, xend = 2.5, y = 4.7, yend = 5.1,
            arrow = arrow(length = unit(0.1, "cm"))) +
-  annotate("text", x = 2.5, y = 5.3, label = "Hole parallel\nto press", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 2.5, y = 5.35, label = "Hole parallel\nto press", size = 2.5 * diagram_text_scale) +
   annotate("text", x = 2.5, y = 1.5, label = "Uniform wall thickness", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
   # Bad design example
-  annotate("text", x = 7.5, y = 5.5, label = "POOR DESIGN", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
+  annotate("text", x = 7.5, y = 6.1, label = "POOR DESIGN", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
 
   # Part outline - bad
   geom_rect(aes(xmin = 6, xmax = 9, ymin = 2, ymax = 4.5), fill = "lightgray", color = "black", linewidth = 1) +
@@ -940,28 +940,26 @@ ggplot() +
   geom_polygon(aes(x = c(6, 6, 6.4, 6.4), y = c(2.3, 2, 2, 2.3)), fill = "white", color = "red", linewidth = 1.5) +
 
   # Annotations - bad
-  annotate("segment", x = 6.8, xend = 6.2, y = 3.25, yend = 3.8,
+  annotate("segment", x = 6.8, xend = 5.8, y = 3.25, yend = 3.9,
            arrow = arrow(length = unit(0.1, "cm")), color = "red") +
-  annotate("text", x = 6, y = 4.1, label = "Horizontal\nhole - NO", size = 2.5 * diagram_text_scale, color = "red") +
+  annotate("text", x = 5.1, y = 4.3, label = "Horizontal\nhole - NO", size = 2.5 * diagram_text_scale, color = "red") +
   annotate("segment", x = 8.3, xend = 8.8, y = 3.25, yend = 3.25,
            arrow = arrow(length = unit(0.1, "cm")), color = "red") +
-  annotate("text", x = 9.2, y = 3.25, label = "Thin\nwall", size = 2.5 * diagram_text_scale, color = "red") +
+  annotate("text", x = 9.45, y = 3.25, label = "Thin\nwall", size = 2.5 * diagram_text_scale, color = "red") +
   annotate("segment", x = 6.2, xend = 5.7, y = 2.15, yend = 1.8,
            arrow = arrow(length = unit(0.1, "cm")), color = "red") +
   annotate("text", x = 5.5, y = 1.5, label = "Undercut\n- NO", size = 2.5 * diagram_text_scale, color = "red") +
-  annotate("text", x = 9, y = 4.5, label = "Sharp\ncorners", size = 2.5 * diagram_text_scale, color = "red") +
+  annotate("text", x = 9.5, y = 5.0, label = "Sharp\ncorners", size = 2.5 * diagram_text_scale, color = "red") +
 
   # Press direction arrows
   geom_segment(aes(x = 2.5, xend = 2.5, y = 0.8, yend = 1.3),
                arrow = arrow(length = unit(0.2, "cm")), linewidth = 1.2, color = "blue") +
-  geom_segment(aes(x = 2.5, xend = 2.5, y = 5.7, yend = 5.2),
-               arrow = arrow(length = unit(0.2, "cm")), linewidth = 1.2, color = "blue") +
-  annotate("text", x = 3.5, y = 0.8, label = "Press direction", size = 3 * diagram_text_scale, color = "blue") +
+    annotate("text", x = 3.5, y = 0.8, label = "Press direction", size = 3 * diagram_text_scale, color = "blue") +
 
-  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0.5, 6)) +
+  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0.5, 6.6)) +
   theme_void() +
   labs(title = "Design for Powder Metallurgy") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 ::: {.callout-discussion}

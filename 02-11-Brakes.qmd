@@ -6,14 +6,14 @@ source("R/required_packages.R")
 
 theme_brake <- theme_minimal() +
   theme(
-    plot.title       = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.title       = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold"),
     plot.subtitle    = element_text(hjust = 0.5, size = 10 * chart_text_scale),
     axis.title       = element_text(size = 11 * chart_text_scale, face = "bold"),
     axis.text        = element_text(size = 9 * chart_text_scale),
     panel.grid.minor = element_blank(),
     legend.position  = "bottom",
-    legend.title     = element_text(size = 10 * chart_text_scale, face = "bold"),
-    legend.text      = element_text(size = 9 * chart_text_scale),
+    legend.title     = element_text(size = 8.5 * chart_text_scale, face = "bold"),
+    legend.text      = element_text(size = 7.5 * chart_text_scale),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
@@ -56,12 +56,12 @@ library(ggforce)
 
 # System block diagram using ggplot
 nodes <- data.frame(
-  x     = c(1, 3, 5, 7, 5, 7, 7, 7),
-  y     = c(3, 3, 3, 4, 1, 2, 3, 4) * 1.5,
+  x     = c(1, 3, 5, 7, 9, 9, 9, 9),
+  y     = c(4.5, 4.5, 4.5, 4.5, 6.6, 5.2, 3.8, 2.4),
   label = c("Driver\nPedal", "Vacuum\nBooster", "Master\nCylinder",
-            "FL Disc\nBrake", "RR Drum\nBrake", "RL Drum\nBrake",
-            "FR Disc\nBrake", "ABS/ESC\nModule"),
-  fill  = c("#457B9D","#2A9D8F","#E9C46A","#E63946","#E63946","#E63946","#E63946","#264653")
+            "ABS/ESC\nModule", "FL Disc\nBrake", "FR Disc\nBrake",
+            "RL Drum\nBrake", "RR Drum\nBrake"),
+  fill  = c("#457B9D","#2A9D8F","#E9C46A","#264653","#E63946","#E63946","#E63946","#E63946")
 )
 
 ggplot(nodes, aes(x = x, y = y)) +
@@ -72,11 +72,15 @@ ggplot(nodes, aes(x = x, y = y)) +
            arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
   annotate("segment", x = 3.75, xend = 4.25, y = 4.5, yend = 4.5,
            arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
-  annotate("text", x = 4, y = 5.2, label = "Hydraulic circuit →\nABS module modulates",
+  annotate("segment", x = 5.75, xend = 6.25, y = 4.5, yend = 4.5,
+           arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
+  annotate("segment", x = 7.75, xend = 8.25, y = 4.5, yend = 4.5,
+           arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
+  annotate("text", x = 4, y = 5.4, label = "Hydraulic circuit →\nABS module modulates",
            hjust = 0.5, size = 2.8 * diagram_text_scale, colour = "grey30") +
   labs(title = "Vehicle Braking System — Major Sub-Systems") +
   theme_void() +
-  theme(plot.title = element_text(hjust = 0.5, size = 13 * chart_text_scale, face = "bold"))
+  theme(plot.title = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold"))
 ```
 
 ***
@@ -231,8 +235,8 @@ temp_df <- data.frame(
 ggplot(temp_df, aes(x = Time, y = Temp, colour = Type)) +
   geom_line(linewidth = 0.9) +
   geom_hline(yintercept = 400, linetype = "dashed", colour = "#E63946", alpha = 0.6) +
-  annotate("text", x = 10, y = 415, label = "Fade risk threshold (~400°C)",
-           hjust = 0, size = 3 * diagram_text_scale, colour = "#E63946") +
+  annotate("label", x = 330, y = 400, label = "Fade risk threshold (~400°C)",
+           size = 3 * diagram_text_scale, colour = "#E63946", fill = "white", linewidth = 0) +
   scale_colour_manual(values = c("#457B9D", "#2A9D8F")) +
   labs(
     title  = "Brake Rotor Temperature — Repeated Hard Stops",
@@ -587,8 +591,9 @@ friction_df <- data.frame(
 ggplot(friction_df, aes(x = Slip * 100, y = Friction_Coef, colour = Type)) +
   geom_line(linewidth = 1.2) +
   geom_vline(xintercept = 15, linetype = "dashed", colour = "#E9C46A") +
-  annotate("text", x = 17, y = 0.5, label = "ABS operating\nzone (10–20% slip)",
-           hjust = 0, size = 3 * diagram_text_scale, colour = "#E9C46A") +
+  annotate("text", x = 40, y = 0.78, label = "ABS operating zone
+(10-20% slip, dashed line)",
+           hjust = 0, size = 3 * diagram_text_scale, colour = "#9A7B0A") +
   annotate("point", x = 15, y = max(mu_long[round(slip_ratio, 2) == 0.15]),
            colour = "#E63946", size = 4) +
   scale_colour_manual(values = c("#2A9D8F", "#457B9D")) +

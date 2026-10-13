@@ -98,7 +98,7 @@ processes <- data.frame(
 
 ggplot(processes, aes(x = volume, y = complexity, color = category, label = process)) +
   geom_point(size = 5) +
-  geom_text(vjust = -1, hjust = 0.5, size = 3.5 * diagram_text_scale) +
+  geom_text(vjust = -1, hjust = 0.5, size = 3.5 * diagram_text_scale, show.legend = FALSE) +
   scale_color_manual(values = c("Casting" = "darkorange", "Forming" = "steelblue",
                                  "Subtractive" = "forestgreen", "Additive" = "purple",
                                  "Joining" = "brown")) +

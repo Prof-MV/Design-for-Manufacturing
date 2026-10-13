@@ -10,7 +10,7 @@ source("R/required_packages.R")
 ## Custom theme for coupling visualizations
 theme_coupling <- theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.title = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold"),
     plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale),
     axis.text = element_blank(),
     axis.title = element_blank(),
@@ -321,10 +321,10 @@ ggplot() +
            color = "darkblue", linewidth = 0.8) +
   annotate("text", x = -2.8, y = 1.5,
            label = "Drive\nHub", size = 4 * diagram_text_scale, color = "darkblue") +
-  annotate("text", x = 2.5, y = 0,
+  annotate("text", x = 3.0, y = 0,
            label = "Driven\nHub", size = 4 * diagram_text_scale, color = "darkred") +
   coord_fixed() +
-  xlim(-3.5, 3.5) +
+  xlim(-3.5, 3.9) +
   ylim(-2.5, 2.8) +
   theme_coupling +
   labs(title = "Jaw Coupling (Exploded View)",
@@ -657,7 +657,7 @@ ggplot() +
   ## Labels
   annotate("segment", x = -2.75, y = 2.5, xend = -2.75, yend = 3,
            color = "gray40", linewidth = 0.6) +
-  annotate("text", x = -2.75, y = 3.3, label = "Flywheel",
+  annotate("text", x = -3.3, y = 3.4, label = "Flywheel",
            size = 3.5 * diagram_text_scale, color = "gray40") +
   annotate("segment", x = -2.1, y = 1.9, xend = -2.1, yend = 2.8,
            color = "brown4", linewidth = 0.6) +
@@ -667,7 +667,7 @@ ggplot() +
            color = "darkblue", linewidth = 0.6) +
   annotate("text", x = -1.0, y = 2.8, label = "Pressure\nPlate",
            size = 3.5 * diagram_text_scale, color = "darkblue") +
-  annotate("text", x = -0.5, y = 1.5, label = "Diaphragm\nSpring",
+  annotate("text", x = 1.0, y = 2.2, label = "Diaphragm\nSpring",
            size = 3.5 * diagram_text_scale, color = "darkorange") +
   annotate("text", x = 0.5, y = -0.8, label = "Release\nBearing",
            size = 3.5 * diagram_text_scale, color = "purple4") +
@@ -675,7 +675,7 @@ ggplot() +
            size = 3.5 * diagram_text_scale, color = "gray40") +
   annotate("segment", x = -0.8, y = -0.4, xend = -0.8, yend = -1.2,
            color = "darkred", linewidth = 0.6) +
-  annotate("text", x = -0.8, y = -1.5, label = "Output\nShaft",
+  annotate("text", x = 0.2, y = -1.9, label = "Output\nShaft",
            size = 3.5 * diagram_text_scale, color = "darkred") +
   coord_fixed() +
   xlim(-4, 2) +
@@ -791,7 +791,7 @@ ggplot() +
   annotate("segment", x = 2, y = 1.2, xend = 0.3, yend = 1.2,
            arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
            color = "darkgreen", linewidth = 1.5) +
-  annotate("text", x = 1.2, y = 1.6, label = "Engagement",
+  annotate("text", x = 1.2, y = 1.95, label = "Engagement",
            size = 4 * diagram_text_scale, color = "darkgreen", fontface = "bold") +
   ## Labels
   annotate("text", x = -2, y = -1.8, label = "Fixed Half",
@@ -800,7 +800,7 @@ ggplot() +
            size = 4 * diagram_text_scale, color = "darkred") +
   coord_fixed() +
   xlim(-3.5, 3.5) +
-  ylim(-2.2, 2) +
+  ylim(-2.2, 2.3) +
   theme_coupling +
   labs(title = "Jaw (Dog) Clutch",
        subtitle = "Positive engagement — must synchronize before engaging")

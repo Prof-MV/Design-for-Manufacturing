@@ -91,7 +91,7 @@ ggplot() +
   theme_void() +
   labs(title = "Inclined Tote Conveyor: Force Balance",
        subtitle = "22-degree incline, roller-bed belt conveyor, 0.5 m/s design speed") +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
@@ -202,7 +202,7 @@ ggplot(te_df, aes(x = component, y = force_N, fill = component)) +
        x = NULL, y = "Force contribution (N)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+        plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text = element_text(size = 10.5 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale))
@@ -320,14 +320,14 @@ P_design_pt <- T_e_design_fig * 0.5 / eta_drive_fig / 1000
 ggplot(df_p, aes(x = v, y = P / 1000)) +
   geom_line(color = "#3498DB", linewidth = 1.2) +
   annotate("point", x = 0.5, y = P_design_pt, color = "#E74C3C", size = 4) +
-  annotate("text", x = 0.53, y = P_design_pt + 0.15,
+  annotate("text", x = 0.55, y = P_design_pt - 0.25,
            label = sprintf("Design point:\n0.5 m/s -> %.2f kW", P_design_pt),
            size = 3 * diagram_text_scale, hjust = 0, color = "#E74C3C") +
   labs(title = "Required Motor Power vs. Belt Speed",
        subtitle = "Effective tension held constant at 1867 N (Design Task 1 result)",
        x = "Belt speed (m/s)", y = "Motor power (kW)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text = element_text(size = 10.5 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale))
@@ -445,7 +445,7 @@ ggplot(df_v, aes(x = R, y = v_min, color = s)) +
        subtitle = "Three minimum tote center-to-center spacings",
        x = "Required throughput (totes/min)", y = "Minimum belt speed (m/s)", color = "Spacing") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text = element_text(size = 10.5 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale),
@@ -588,7 +588,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Type)) +
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — application-specific",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
         axis.text = element_text(size = 10 * chart_text_scale),
@@ -645,7 +645,7 @@ ggplot() +
   xlim(-5.2, 5.2) + ylim(-1.5, 4.5) +
   theme_void() +
   labs(title = "Sanitary vs. Non-Sanitary Frame Cross-Sections") +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"))
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"))
 ```
 
 In Canada, conveyor construction expectations for equipment used in a federally registered food establishment flow from the **Canadian Food Inspection Agency (CFIA)**, administering the **Safe Food for Canadians Regulations (SFCR)**. CFIA does not typically publish its own detailed equipment-construction dimensional standard the way a mechanical standards body does; instead, it expects equipment to meet recognized sanitary design practice and be maintained in a condition consistent with the plant's own food safety plan and CFIA's inspection expectations. In practice, plants and equipment suppliers demonstrate that compliance by designing to established sanitary equipment standards — most commonly the **3-A Sanitary Standards** (originally developed for dairy equipment in the US, now widely referenced across food equipment generally), **NSF/ANSI 169** (Special-Purpose Food Equipment), and, for baking-specific equipment, the **BISSC** (Baking Industry Sanitation Standards Committee) standard. These are the international/US equivalents CFIA-regulated plants reference directly, the same way this book's electromechanical chapters point to CEC/OESC first and NEC second — here, CFIA sets the Canadian regulatory expectation, and the named standards provide the engineering detail behind meeting it.

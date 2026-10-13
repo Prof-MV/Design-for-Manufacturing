@@ -128,7 +128,7 @@ ggplot() +
   theme_void() +
   labs(title = "Four Conductive Paths, One Confusing Name",
        subtitle = "Equipment bonding, system grounding, functional/signal ground, and shield each serve a different purpose") +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
@@ -257,7 +257,7 @@ ggplot(bond_table, aes(x = ocpd_A, y = area_mm2)) +
        x = "Upstream overcurrent device rating (A, log scale)",
        y = "Min. copper bonding conductor area (mm^2)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9 * chart_text_scale),
         axis.title = element_text(size = 10.5 * chart_text_scale),
         axis.text = element_text(size = 9.5 * chart_text_scale))
@@ -553,7 +553,7 @@ ggplot() +
   xlim(-0.2, 12.6) + ylim(2.0, 7.0) +
   theme_void() +
   labs(title = "Where Does the Common-Mode Current Go?") +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Worked Example
@@ -863,11 +863,11 @@ ggplot(fault_cases, aes(x = case, y = fault_current, fill = case)) +
   geom_col(width = 0.55) +
   annotate("segment", x = 0.5, xend = 2.5, y = 20, yend = 20,
            linetype = "dashed", color = "grey30", linewidth = 0.9) +
-  annotate("text", x = 1.5, y = 60, label = "20 A breaker rating",
+  annotate("text", x = 2, y = 60, label = "20 A breaker rating",
            size = 2.6 * diagram_text_scale, color = "grey30") +
   annotate("segment", x = 0.5, xend = 2.5, y = 180, yend = 180,
            linetype = "dashed", color = "#E74C3C", linewidth = 0.9) +
-  annotate("text", x = 1.5, y = 225, label = "instantaneous trip threshold (~180 A)",
+  annotate("text", x = 2, y = 225, label = "instantaneous trip threshold (~180 A)",
            size = 2.6 * diagram_text_scale, color = "#E74C3C") +
   annotate("text", x = 1, y = 1060, label = "TRIPS in a few cycles (<0.1 s)",
            size = 2.8 * diagram_text_scale, color = "#2ECC71", fontface = "bold") +
@@ -880,7 +880,7 @@ ggplot(fault_cases, aes(x = case, y = fault_current, fill = case)) +
        x = NULL, y = "Fault current (A)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+        plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.title = element_text(size = 10.5 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale))

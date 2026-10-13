@@ -85,7 +85,7 @@ ggplot() +
   theme_void() +
   labs(title = "Junction-to-Ambient Thermal Resistance Chain",
        subtitle = "Power dissipation P_D plays the role of current; temperature difference plays the role of voltage") +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale))
 ```
 
@@ -219,7 +219,7 @@ ggplot(heatsink_curve, aes(x = L_mm, y = R_theta_SA, color = condition)) +
        subtitle = "Representative extruded-aluminum finned heatsink; dashed line is this design's required R_theta-SA",
        x = "Heatsink length (mm)", y = "R_theta-SA (C/W)", color = NULL) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
         axis.title = element_text(size = 11 * chart_text_scale),
@@ -457,8 +457,8 @@ ggplot() +
   annotate("point", x = points_df$dT, y = points_df$Q, size = 4, color = "black") +
   annotate("text", x = points_df$dT + 0.6, y = points_df$Q, label = points_df$label,
            size = 3 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 4, y = 20, label = "Natural\nconvection OK", size = 3 * diagram_text_scale, color = "#1E8449", hjust = 0) +
-  annotate("text", x = 4, y = 200, label = "Forced air\nrequired", size = 3 * diagram_text_scale, color = "#B9770E", hjust = 0) +
+  annotate("text", x = 15.5, y = 45, label = "Natural\nconvection OK", size = 3 * diagram_text_scale, color = "#1E8449", hjust = 0) +
+  annotate("text", x = 12, y = 270, label = "Forced air\nrequired", size = 3 * diagram_text_scale, color = "#B9770E", hjust = 0) +
   annotate("text", x = 4, y = 480, label = "Active cooling (AC / heat\nexchanger) required",
            size = 3 * diagram_text_scale, color = "#943126", hjust = 0) +
   scale_y_continuous(labels = scales::label_comma(big.mark = " ")) +
@@ -467,7 +467,7 @@ ggplot() +
        subtitle = "800 x 600 x 300 mm wall-mounted enclosure, A_eff = 1.14 m^2, U_natural = 5.5 W/(m^2*C)",
        x = "Allowable internal temperature rise, delta-T (C)", y = "Total internal heat load (W)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale))

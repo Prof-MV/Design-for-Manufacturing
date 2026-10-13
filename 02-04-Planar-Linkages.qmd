@@ -10,7 +10,7 @@ source("R/required_packages.R")
 ## Set a consistent theme for all plots
 theme_linkage10 <- theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14 * chart_text_scale, face = "bold"),
+    plot.title = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold"),
     plot.subtitle = element_text(hjust = 0.5, size = 10 * chart_text_scale),
     axis.text = element_blank(),
     axis.title = element_blank(),
@@ -285,11 +285,11 @@ ggplot() +
   annotate("text", x = 2.5, y = 4.4, label = "Include ground link (link 1)", size = 3.2 * diagram_text_scale) +
   annotate("text", x = 2.5, y = 3.9, label = "Each free link = 3 DOF", size = 3.2 * diagram_text_scale, color = "steelblue") +
   geom_rect(aes(xmin = 4.3, xmax = 7.5, ymin = 3.5, ymax = 5.2), fill = "#FFF8E1", color = "#F57F17", linewidth = 1.2) +
-  annotate("text", x = 5.9, y = 4.9, label = "j\u2081  =  full joints", fontface = "bold", size = 4 * diagram_text_scale, color = "#F57F17") +
+  annotate("text", x = 5.9, y = 4.9, label = "j1  =  full joints", fontface = "bold", size = 4 * diagram_text_scale, color = "#F57F17") +
   annotate("text", x = 5.9, y = 4.4, label = "Revolute (R), Prismatic (P)", size = 3.2 * diagram_text_scale) +
   annotate("text", x = 5.9, y = 3.9, label = "Each removes 2 DOF", size = 3.2 * diagram_text_scale, color = "#E65100") +
   geom_rect(aes(xmin = 7.8, xmax = 11, ymin = 3.5, ymax = 5.2), fill = "#F3E5F5", color = "#7B1FA2", linewidth = 1.2) +
-  annotate("text", x = 9.4, y = 4.9, label = "j\u2082  =  half joints", fontface = "bold", size = 4 * diagram_text_scale, color = "#7B1FA2") +
+  annotate("text", x = 9.4, y = 4.9, label = "j2  =  half joints", fontface = "bold", size = 4 * diagram_text_scale, color = "#7B1FA2") +
   annotate("text", x = 9.4, y = 4.4, label = "Cam pair, Gear pair", size = 3.2 * diagram_text_scale) +
   annotate("text", x = 9.4, y = 3.9, label = "Each removes 1 DOF", size = 3.2 * diagram_text_scale, color = "#4A148C") +
   geom_rect(aes(xmin = 1, xmax = 11, ymin = 1.8, ymax = 3.2), fill = "#E8F5E9", color = "#2E7D32", linewidth = 1) +
@@ -297,7 +297,7 @@ ggplot() +
   annotate("text", x = 6, y = 2.45,
            label = "If m links share one joint location  \u2192  count it as (m \u2212 1) full joints", size = 3.5 * diagram_text_scale) +
   annotate("text", x = 6, y = 2.0,
-           label = "Example: 3 links at one pin = 2 full joints  (j\u2081 += 2, not 1)", size = 3.2 * diagram_text_scale, color = "gray30") +
+           label = "Example: 3 links at one pin = 2 full joints  (j1 += 2, not 1)", size = 3.2 * diagram_text_scale, color = "gray30") +
   coord_cartesian(xlim = c(0.5, 11.5), ylim = c(1.5, 7)) +
   theme_linkage10 +
   labs(title = "Gruebler\u2013Kutzbach Mobility Formula for Planar Mechanisms")
@@ -551,7 +551,7 @@ ggplot(mob_data, aes(x = factor(M), y = 1)) +
   labs(title = "Mobility (M) and Physical Interpretation", x = "Mobility Value") +
   theme_linkage10 +
   theme(axis.text.x = element_text(size = 10 * chart_text_scale, face = "bold"),
-        plot.title = element_text(hjust = 0.5, size = 13 * chart_text_scale, face = "bold")) +
+        plot.title = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold")) +
   coord_cartesian(ylim = c(0.6, 1.6))
 ```
 

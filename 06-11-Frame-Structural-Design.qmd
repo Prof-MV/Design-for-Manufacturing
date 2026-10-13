@@ -80,14 +80,14 @@ ggplot() +
   annotate("segment", x = 0, xend = L_fig, y = -1.25, yend = -1.25,
            arrow = arrow(ends = "both", length = unit(0.2, "cm")), linewidth = 0.8) +
   annotate("text", x = L_fig / 2, y = -1.42, label = "L = 2.4 m", size = 3.2 * diagram_text_scale) +
-  annotate("text", x = L_fig / 2, y = -0.16, label = "Exaggerated deflected shape (not to scale)",
+  annotate("text", x = L_fig / 2, y = -0.6, label = "Exaggerated deflected shape (not to scale)",
            size = 2.5 * diagram_text_scale, color = "#E74C3C") +
   coord_fixed() +
   xlim(-0.5, L_fig + 0.5) + ylim(-1.6, 1.15) +
   theme_void() +
   labs(title = "Gantry Beam — Simply Supported, Midspan Carriage Load",
        subtitle = "Steel HSS 152x102x6.4 beam spanning between two support columns") +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale))
 ```
 
@@ -207,7 +207,7 @@ ggplot(budget_df, aes(x = category, y = deflection_mm, color = category)) +
        x = NULL, y = "Deflection (mm, log scale)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale))
@@ -350,7 +350,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Construction)) +
        subtitle = "1 (poor fit) to 5 (excellent fit); actual scores depend on the specific application and scale",
        x = NULL, y = "Relative rating (1-5)") +
   theme_minimal() +
-  theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
         axis.text = element_text(size = 9.5 * chart_text_scale),
@@ -475,18 +475,18 @@ ggplot() +
            size = 2.8 * diagram_text_scale, color = "#E74C3C") +
   annotate("segment", x = 0.5, xend = 1.7, y = 0.18, yend = 0.18,
            arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#2ECC71", linewidth = 1.2) +
-  annotate("text", x = 1.1, y = 0.36, label = "Applied shear\n(axis accel. reaction)",
+  annotate("text", x = 1.1, y = 0.68, label = "Applied shear\n(axis accel. reaction)",
            size = 2.8 * diagram_text_scale, color = "#2ECC71") +
   annotate("segment", x = 1.7, xend = 0.85, y = -0.18, yend = -0.18,
            arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "#3498DB", linewidth = 1.2) +
-  annotate("text", x = 1.2, y = -0.36, label = "Friction resistance\n(clamp force x mu)",
+  annotate("text", x = 1.2, y = -0.68, label = "Friction resistance\n(clamp force x mu)",
            size = 2.8 * diagram_text_scale, color = "#3498DB") +
   coord_fixed() +
   xlim(-1.6, 2.2) + ylim(-1.3, 1.35) +
   theme_void() +
   labs(title = "Friction-Grip Bolted Frame Joint",
-       subtitle = "Shear is resisted by friction between the clamped flange faces, not by the bolt shank bearing in the hole") +
-  theme(plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+       subtitle = "Friction between the clamped faces resists shear, not the bolt shank") +
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
@@ -589,18 +589,18 @@ Once the lateral disturbance force is estimated, compare the **overturning momen
 library(ggplot2)
 library(ggforce)
 
-cg_df <- data.frame(x0 = 0, y0 = 1.35, r = 0.09)
+cg_df <- data.frame(x0 = 0, y0 = 1.35, r = 0.13)
 
 ggplot() +
   annotate("rect", xmin = -0.45, xmax = 0.45, ymin = 0, ymax = 1.8, fill = "#95A5A6", color = "black") +
   annotate("segment", x = -1.1, xend = 1.1, y = 0, yend = 0, color = "black", linewidth = 1.4) +
   geom_circle(data = cg_df, aes(x0 = x0, y0 = y0, r = r), fill = "#E74C3C", color = "black") +
-  annotate("text", x = 0, y = 1.35, label = "CG", size = 2.6 * diagram_text_scale, color = "white", fontface = "bold") +
+  annotate("text", x = 0, y = 1.35, label = "CG", size = 2.2 * diagram_text_scale, color = "black", fontface = "bold") +
   annotate("point", x = 0.45, y = 0, size = 4, color = "black", shape = 17) +
   annotate("text", x = 0.45, y = -0.16, label = "Pivot\n(leading edge)", size = 2.6 * diagram_text_scale) +
   annotate("segment", x = -0.15, xend = 0.55, y = 1.35, yend = 1.35,
            arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1.2) +
-  annotate("text", x = 0.1, y = 1.58, label = "F_lateral at h_cg = 1.35 m",
+  annotate("text", x = 0.62, y = 1.62, label = "F_lateral\n(at h_cg = 1.35 m)", hjust = 0,
            size = 2.8 * diagram_text_scale, color = "#E74C3C") +
   annotate("segment", x = -0.45, xend = -0.45, y = 0, yend = -0.32, linewidth = 2.5, color = "#F39C12") +
   annotate("text", x = -0.45, y = -0.5, label = "Anchor\nbolt(s)", size = 2.6 * diagram_text_scale, color = "#F39C12") +
@@ -608,11 +608,11 @@ ggplot() +
            arrow = arrow(ends = "both", length = unit(0.2, "cm")), linewidth = 0.8) +
   annotate("text", x = 0, y = -0.92, label = "W = 0.9 m", size = 2.8 * diagram_text_scale) +
   coord_fixed() +
-  xlim(-1.3, 1.3) + ylim(-1.1, 1.85) +
+  xlim(-1.3, 1.5) + ylim(-1.1, 1.95) +
   theme_void() +
-  labs(title = "Overturning Stability Check — Precision Inspection Fixture",
-       subtitle = "Tall, high-CG fixture: lateral disturbance vs. restoring moment about the leading edge") +
-  theme(plot.title = element_text(size = 13.5 * chart_text_scale, face = "bold"),
+  labs(title = "Overturning Stability Check: Inspection Fixture",
+       subtitle = "Lateral disturbance vs. restoring moment about the leading edge") +
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
 
@@ -751,7 +751,7 @@ ggplot(freq_df, aes(x = case, y = freq_hz, fill = case)) +
        x = NULL, y = "Frequency (Hz)") +
   theme_minimal() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 13 * chart_text_scale, face = "bold"),
+        plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text = element_text(size = 9.5 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale))

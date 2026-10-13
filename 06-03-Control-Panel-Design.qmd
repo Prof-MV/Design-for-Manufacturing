@@ -117,7 +117,7 @@ ggplot(duct_options, aes(x = duct_size, y = fill_pct)) +
   ylim(0, 55) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale)
   )
@@ -386,7 +386,7 @@ ggplot(heat_components, aes(x = component, y = loss_w)) +
        x = NULL, y = "Heat loss (W)") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale)
   )
@@ -554,9 +554,9 @@ ggplot(curve_df, aes(x = mult, y = t, color = curve)) +
   geom_line(linewidth = 1.2) +
   annotate("point", x = start_point$mult, y = start_point$t, size = 3.5,
            shape = 4, stroke = 1.6, color = "black") +
-  annotate("text", x = start_point$mult, y = start_point$t * 2.4,
+  annotate("text", x = start_point$mult * 1.15, y = start_point$t * 0.3,
            label = "Motor starting:\nLRA ~ 3.5x fuse rating\nfor ~8 s",
-           size = 2.9 * diagram_text_scale, hjust = 0.5) +
+           size = 2.9 * diagram_text_scale, hjust = 0) +
   scale_x_log10() +
   scale_y_log10() +
   scale_color_manual(values = c("Time-delay fuse melting curve" = "steelblue",
@@ -566,7 +566,7 @@ ggplot(curve_df, aes(x = mult, y = t, color = curve)) +
        y = "Time (s, log scale)", color = NULL) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale),
     legend.position = "bottom",
@@ -715,7 +715,7 @@ ggplot() +
   xlim(-0.6, 6.2) + ylim(-0.1, 2.9) +
   theme_void() +
   labs(title = "Weakest-Link Principle for Panel SCCR") +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14 * chart_text_scale))
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
 ### Worked Example

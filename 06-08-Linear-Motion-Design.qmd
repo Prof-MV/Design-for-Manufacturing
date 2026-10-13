@@ -98,7 +98,7 @@ ggplot() +
   coord_fixed(xlim = c(-0.5, 10.5), ylim = c(-0.2, 5.2)) +
   theme_void() +
   labs(title = "Dispensing Gantry Axis — Fixed-Supported Ball Screw Layout") +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Design Guidelines and Rules of Thumb
@@ -225,19 +225,20 @@ ggplot(curve_df, aes(x = L, y = N_cr, color = condition)) +
   geom_line(linewidth = 1.2) +
   annotate("segment", x = 0.6, xend = 2.2, y = req_speed, yend = req_speed,
            linetype = "dashed", color = "grey30", linewidth = 0.8) +
-  annotate("text", x = 1.85, y = req_speed + 250, label = "Required speed (2400 rpm)",
+  annotate("text", x = 1.85, y = req_speed + 1100, hjust = 0.5, label = "Required speed (2400 rpm)",
            size = 3 * diagram_text_scale, color = "grey30") +
   annotate("point", x = 1.35, y = compute_ncr(1.35, 3.855), size = 4, shape = 4,
            stroke = 1.5, color = "black") +
-  annotate("text", x = 1.35, y = compute_ncr(1.35, 3.855) + 350,
-           label = "Operating point\n(L = 1.35 m)", size = 2.9 * diagram_text_scale, hjust = 0.4) +
+  annotate("text", x = 1.55, y = 6500, hjust = 0,
+           label = "Operating point\n(L = 1.35 m)", size = 2.9 * diagram_text_scale) +
+  annotate("segment", x = 1.49, xend = 1.36, y = 6000, yend = compute_ncr(1.35, 3.855) + 150, color = "grey40", linewidth = 0.4) +
   scale_color_manual(values = c("Fixed-Supported (this axis)" = "steelblue",
                                  "Fixed-Free" = "firebrick", "Fixed-Fixed" = "#2ECC71")) +
   labs(title = "Critical Speed vs. Unsupported Span", x = "Span, L (m)",
        y = "Critical speed (rpm)", color = "End condition") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale),
     legend.text = element_text(size = 10 * chart_text_scale),
@@ -378,7 +379,7 @@ ggplot(buckling_df, aes(x = L, y = Pcr)) +
   geom_line(color = "steelblue", linewidth = 1.2) +
   annotate("segment", x = 0.5, xend = 10, y = 3 * Fa_fig / 1000, yend = 3 * Fa_fig / 1000,
            linetype = "dashed", color = "firebrick", linewidth = 0.8) +
-  annotate("text", x = 7, y = 3 * Fa_fig / 1000 + 6, label = "3x actual thrust (minimum SF line)",
+  annotate("text", x = 7, y = 3 * Fa_fig / 1000 + 30, label = "3x actual thrust (minimum SF line)",
            size = 2.9 * diagram_text_scale, color = "firebrick") +
   annotate("point", x = 1.15, y = pi^2 * E_fig * I_fig / (Ke_fig * 1.15)^2 / 1000,
            size = 4, shape = 4, stroke = 1.5, color = "black") +
@@ -392,7 +393,7 @@ ggplot(buckling_df, aes(x = L, y = Pcr)) +
        y = "Critical buckling load (kN)") +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale)
   )
@@ -621,7 +622,7 @@ ggplot() +
   coord_fixed(xlim = c(-1.1, 1.1), ylim = c(-0.75, 0.6)) +
   theme_void() +
   labs(title = "Four-Block Guide Pattern — Top View") +
-  theme(plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Worked Example

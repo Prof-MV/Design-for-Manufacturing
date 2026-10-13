@@ -86,7 +86,7 @@ ggplot() +
   labs(title = "Design Dependencies Across the Fourteen Chapters", fill = "Domain") +
   theme_void() +
   theme(
-    plot.title = element_text(size = 14 * chart_text_scale, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     legend.position = "bottom",
     legend.text = element_text(size = 9 * chart_text_scale),
     legend.title = element_text(size = 10 * chart_text_scale)

@@ -292,9 +292,9 @@ ggplot(conv, aes(dof, peak)) +
   geom_point(size = 3, color = "darkblue") +
   annotate("text", x = 120000, y = true_peak + 4,
            label = "Converged value ~188 MPa", color = "firebrick", size = 3.7 * diagram_text_scale) +
-  annotate("text", x = 8000, y = peak[3] - 8,
+  annotate("text", x = 12000, y = peak[2] - 8, hjust = 0,
            label = "Default coarse mesh\n(under-predicts!)", color = "grey25", size = 3.5 * diagram_text_scale) +
-  annotate("segment", x = 8000, xend = 3500, y = peak[3] - 14, yend = peak[2],
+  annotate("segment", x = 11500, xend = 4000, y = peak[2] - 6, yend = peak[2] - 1,
            arrow = arrow(length = unit(0.2, "cm")), color = "grey40") +
   labs(x = "Degrees of freedom (mesh refinement)", y = "Peak von Mises stress (MPa)") +
   theme_minimal()
@@ -632,6 +632,7 @@ ggplot(iter, aes(mass, fos)) +
            color = "firebrick", size = 3.6 * diagram_text_scale) +
   labs(x = "Part mass (kg)", y = "Minimum factor of safety") +
   ylim(1.4, 2.8) +
+  scale_x_continuous(expand = expansion(mult = 0.15)) +
   theme_minimal() +
   theme(legend.position = "bottom")
 ```

@@ -97,23 +97,23 @@ p2 <- ggplot() +
 
            fill="white", color="black", linewidth=1) +
 
-  geom_circle(aes(x0=2, y0=1.5, r=0.5), 
+  geom_circle(aes(x0=2, y0=1.5, r=0.75), 
 
            fill="lightblue", color="red", linewidth=1.5) +
 
   annotate("text", x=2, y=2.5, label="Feature", fontface="bold", size = 5 * diagram_text_scale) +
 
-  annotate("text", x=2, y=1.5, label="Ø0.5 mm", size = 4 * diagram_text_scale) +
+  annotate("text", x=2, y=1.5, label="Ø0.5 mm", size = 3.5 * diagram_text_scale) +
 
-  annotate("text", x=2, y=0.2, label="GD&T: Circular Tolerance Zone", 
+  annotate("text", x=2, y=-0.15, label="GD&T: Circular Tolerance Zone", 
 
            fontface="italic", size = 3 * diagram_text_scale) +
 
-  xlim(-0.5, 4.5) + ylim(-0.5, 3) +
+  coord_fixed(xlim = c(-0.5, 4.5), ylim = c(-0.5, 3)) +
 
   theme_void() +
 
-  ggtitle("GD&T with Positional Tolerance")
+  ggtitle("GD&T Position Zone")
 
 grid.arrange(p1, p2, ncol=2)
 ```
@@ -153,14 +153,14 @@ vp <- viewport(width=0.8, height=0.6, x=0.5, y=0.5)
 pushViewport(vp)
 
 ## Draw the FCF boxes
-fcf_x <- c(0.1, 0.25, 0.45, 0.65, 0.85)
-fcf_labels <- c("A\\n(Symbol)", "B\\n(Tolerance)", "C\\n(Datum A)", "D\\n(Datum B)", "E\\n(Datum C)")
+fcf_x <- c(0.1, 0.3, 0.5, 0.7, 0.9)
+fcf_labels <- c("A\n(Symbol)", "B\n(Tolerance)", "C\n(Datum A)", "D\n(Datum B)", "E\n(Datum C)")
 fcf_colors <- c("lightcoral", "lightyellow", "lightblue", "lightblue", "lightblue")
 
 for (i in 1:5) {
-  grid.rect(x=fcf_x[i], y=0.5, width=0.15, height=0.3, 
+  grid.rect(x=fcf_x[i], y=0.5, width=0.17, height=0.3, 
             gp=gpar(fill=fcf_colors[i], col="black", lwd=2))
-  grid.text(fcf_labels[i], x=fcf_x[i], y=0.5, gp=gpar(fontsize=9 * diagram_text_scale, fontface="bold"))
+  grid.text(fcf_labels[i], x=fcf_x[i], y=0.5, gp=gpar(fontsize=7.5 * diagram_text_scale, fontface="bold"))
 }
 
 ## Add annotations
@@ -341,7 +341,7 @@ ggplot() +
 
   geom_hline(yintercept=50, color="red", linetype="dashed", alpha=0.5) +
 
-  annotate("text", x=51.5, y=50.5, label="Datum Intersection", size=3 * diagram_text_scale, color="red") +
+  annotate("text", x=47.1, y=50.4, label="Datum Intersection", size=3 * diagram_text_scale, color="red", hjust=0) +
 
   
 
@@ -351,7 +351,7 @@ ggplot() +
 
             fill="lightblue", color="blue", alpha=0.3, linewidth=1) +
 
-  annotate("text", x=50, y=49.3, label="Ø0.7 mm\\nTolerance Zone", 
+  annotate("text", x=50, y=49.3, label="Ø0.7 mm\nTolerance Zone", 
 
            size=3 * diagram_text_scale, color="blue", fontface="bold") +
 
@@ -425,11 +425,12 @@ library(gridExtra)
 p1 <- ggplot() +
   geom_rect(aes(xmin=0, xmax=10, ymin=0, ymax=7), 
             fill="lightcoral", color="black", linewidth=1) +
-  annotate("text", x=5, y=3.5, label="PRIMARY DATUM (A)\\nLargest, most stable surface", 
+  annotate("text", x=5, y=3.5, label="PRIMARY\nDATUM (A)\nLargest,\nmost stable\nsurface", 
            size=4 * diagram_text_scale, fontface="bold") +
   xlim(-1, 11) + ylim(-1, 8) +
   theme_void() +
-  ggtitle("Step 1: Primary")
+  ggtitle("Step 1: Primary") +
+  theme(plot.title = element_text(size = 12 * chart_text_scale, hjust = 0.5))
 
 ## Secondary datum (perpendicular surface)
 p2 <- ggplot() +
@@ -437,11 +438,12 @@ p2 <- ggplot() +
             fill="white", color="black", linewidth=1) +
   geom_rect(aes(xmin=8, xmax=10, ymin=0, ymax=7), 
             fill="lightblue", color="black", linewidth=1) +
-  annotate("text", x=9, y=3.5, label="SECONDARY\\nDATUM (B)", 
+  annotate("text", x=4, y=3.5, label="SECONDARY\nDATUM (B)\n(blue edge)", 
            size=3 * diagram_text_scale, fontface="bold") +
   xlim(-1, 11) + ylim(-1, 8) +
   theme_void() +
-  ggtitle("Step 2: Secondary (perpendicular to A)")
+  ggtitle("Step 2: Secondary") +
+  theme(plot.title = element_text(size = 12 * chart_text_scale, hjust = 0.5))
 
 ## Tertiary datum (edge)
 p3 <- ggplot() +
@@ -451,11 +453,12 @@ p3 <- ggplot() +
             fill="white", color="black", linewidth=1) +
   geom_rect(aes(xmin=0, xmax=10, ymin=6.5, ymax=7), 
             fill="lightgreen", color="black", linewidth=1) +
-  annotate("text", x=5, y=6.75, label="TERTIARY DATUM (C)", 
+  annotate("text", x=5, y=3.5, label="TERTIARY\nDATUM (C)\n(green edge)", 
            size=3 * diagram_text_scale, fontface="bold") +
   xlim(-1, 11) + ylim(-1, 8) +
   theme_void() +
-  ggtitle("Step 3: Tertiary (perpendicular to A & B)")
+  ggtitle("Step 3: Tertiary") +
+  theme(plot.title = element_text(size = 12 * chart_text_scale, hjust = 0.5))
 
 grid.arrange(p1, p2, p3, ncol=3)
 ```
@@ -490,7 +493,7 @@ library(ggplot2)
 hole_data <- data.frame(
   condition = c("MMC", "Nominal", "LMC"),
   diameter = c(9.8, 10.0, 10.2),
-  description = c("Smallest hole\\n(most material)", "Mid-range", "Largest hole\\n(least material)")
+  description = c("Smallest hole\n(most material)", "Mid-range", "Largest hole\n(least material)")
 )
 
 ggplot(hole_data, aes(x=reorder(condition, diameter), y=diameter, fill=condition)) +
@@ -674,7 +677,7 @@ ggplot(data, aes(x=x, y=y, color=type, linewidth=type)) +
 
   geom_hline(yintercept=0, color="blue", linetype="dashed", alpha=0.5) +
 
-  annotate("text", x=0.5, y=6, label="Datum A\\n(Shaft Axis)", size=3 * diagram_text_scale, color="blue") +
+  annotate("text", x=0.5, y=6, label="Datum A\n(Shaft Axis)", size=3 * diagram_text_scale, color="blue") +
 
   coord_fixed() +
 
