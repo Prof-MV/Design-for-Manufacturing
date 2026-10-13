@@ -359,7 +359,32 @@ This is a decision-framework task: each category has a maximum PL it can realist
 
 ### Worked Example
 
-Live cell — try changing `required_pl` to `"b"` or `"e"` and re-run to see the recommendation change.
+Live cell — change the required PL (or a category's architecture ceiling) to see the recommended category change.
+
+```{r calc-category-select-06-02, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "category-select-06-02",
+  title = "Safety Category Selector",
+  icon = "shield-halved",
+  inputs = list(
+    qwebr_calc_input("required_pl", "Required performance level, PLr", value = "d",
+                     type = "select", options = c("a", "b", "c", "d", "e"))
+  ),
+  tables = list(
+    qwebr_calc_table(
+      frame = "category_ceiling",
+      columns = list(
+        qwebr_calc_col("category", c("B", "1", "2", "3", "4"), type = "label", label = "Category"),
+        qwebr_calc_col("max_pl", c("b", "b", "c", "d", "e"), type = "select", label = "Max achievable PL",
+                       options = c("a", "b", "c", "d", "e"))),
+      note = "The ceiling is the best PL each category can reach even with excellent components and diagnostics.")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: category-select-06-02
@@ -377,22 +402,26 @@ required_pl <- "d"   # PLr from Design Task 1
 
 category_ceiling$meets_requirement <- pl_rank[category_ceiling$max_pl] >= pl_rank[required_pl]
 
-cat("Required PL for this safety function: PLr =", required_pl, "\n\n")
-cat("Category | Max achievable PL | Meets PLr =", required_pl, "?\n")
-for (i in seq_len(nrow(category_ceiling))) {
-  cat(" ", category_ceiling$category[i], "      |        ", category_ceiling$max_pl[i],
-      "          | ", category_ceiling$meets_requirement[i], "\n")
-}
-
 qualifying <- category_ceiling$category[category_ceiling$meets_requirement]
 selected <- qualifying[1]  # lowest-complexity qualifying category
 
-cat("\nQualifying categories:", paste(qualifying, collapse = ", "), "\n")
-cat("Selected category:", selected,
-    "-- the least complex architecture that still reaches the required PL.\n")
-cat("Category 4 would also qualify but adds cost/complexity this risk\n")
-cat("assessment does not call for.\n")
+if (length(qualifying) == 0) {
+  cat(sprintf("No category reaches PLr = %s: !!FAILS!!\n", required_pl))
+} else {
+  cat(sprintf("Selected category: %s (required PLr = %s)\n", selected, required_pl))
+}
+for (i in seq_len(nrow(category_ceiling))) {
+  cat(sprintf("Category %s  max PL %s - %s\n", category_ceiling$category[i], category_ceiling$max_pl[i],
+              if (category_ceiling$meets_requirement[i]) "meets PLr" else "!!below PLr!!"))
+}
+if (length(qualifying) > 0) {
+  cat("Qualifying categories:", paste(qualifying, collapse = ", "), "\n")
+  cat("The selected category is the least complex architecture that still reaches the required PL;",
+      "any higher category that also qualifies adds cost/complexity this risk assessment does not call for.\n")
+}
 ```
+
+</details>
 
 **Sanity check:** Categories B, 1, and 2 are eliminated immediately because their architecture ceiling (b or c) falls short of PLr = d, regardless of how good the individual components are — this matches the design guideline above and is exactly why category selection has to happen before, not after, sourcing components. Category 3 is the cheapest architecture that clears the bar; Category 4 is reserved for functions that actually need PL e.
 
@@ -603,7 +632,30 @@ This is a decision-framework task: match the function's characteristics to the c
 
 ### Worked Example
 
-Live cell — try flipping `significant_inertia` or `hazard_severity_high` for one of the functions and re-run to see the recommendation change.
+Live cell — flip *significant_inertia* or *hazard_severity_high* for one of the functions in the table (or add a row) to see the recommendation change.
+
+```{r calc-stop-category-06-02, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "stop-category-06-02",
+  title = "Stop Category Selector",
+  icon = "shield-halved",
+  tables = list(
+    qwebr_calc_table(
+      frame = "functions_df", add_rows = TRUE,
+      columns = list(
+        qwebr_calc_col("name", c("Dough mixer agitator E-stop", "Checkweigher infeed jam-clear door"),
+                       type = "text", label = "Safety function"),
+        qwebr_calc_col("significant_inertia", c(TRUE, FALSE), type = "logical", label = "Significant inertia?"),
+        qwebr_calc_col("hazard_severity_high", c(TRUE, FALSE), type = "logical", label = "High severity?"),
+        qwebr_calc_col("needs_immediate_resume", c(FALSE, TRUE), type = "logical", label = "Needs immediate resume?")),
+      note = "Category 1 needs both inertia and high severity; Category 2 needs low severity and a need to resume quickly; everything else is Category 0.")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: stop-category-06-02
@@ -615,10 +667,10 @@ functions_df <- data.frame(
   stringsAsFactors = FALSE
 )
 
+cat(sprintf("Stop categories selected for %d functions\n", nrow(functions_df)))
+
 for (i in seq_len(nrow(functions_df))) {
   f <- functions_df[i, ]
-  cat("Function:", f$name, "\n")
-
   if (f$significant_inertia && f$hazard_severity_high) {
     category <- "Category 1"
     reason <- paste("high-inertia rotating mass with a serious entanglement hazard --",
@@ -636,14 +688,14 @@ for (i in seq_len(nrow(functions_df))) {
     reason <- "low inertia and no reason to retain power -- immediate removal is simplest and safest."
   }
 
-  cat("  Selected stop category:", category, "\n")
-  cat("  Reasoning:", reason, "\n\n")
+  cat(sprintf("%s  %s\n", f$name, category))
+  cat("Why:", reason, "\n")
 }
 
-cat("Note: per ISO 13850, the emergency stop function itself must always be\n")
-cat("Category 0 or Category 1 -- Category 2 (power retained) is never\n")
-cat("acceptable for the E-stop function, only for non-emergency access interlocks.\n")
+cat("Note: per ISO 13850, the emergency stop function itself must always be Category 0 or Category 1 -- Category 2 (power retained) is never acceptable for the E-stop function, only for non-emergency access interlocks.\n")
 ```
+
+</details>
 
 **Sanity check:** the mixer's decision hinges on inertia and severity together, not either alone — a light-duty mixer with the same access pattern but a small, low-inertia agitator could reasonably land on Category 0 instead, which is exactly why the framework checks both conditions rather than defaulting every rotating machine to Category 1.
 
@@ -724,7 +776,29 @@ The circuit passes verification when $Achieved\ PL \ge PLr$ (compare using the r
 
 ### Worked Example
 
-Live cell — try setting `dc_avg_band` to `"low"` and re-run to see the achieved PL and pass/fail result change.
+Live cell — set the DCavg band to *low* to see the achieved PL and the pass/fail result change.
+
+```{r calc-pl-verify-06-02, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "pl-verify-06-02",
+  title = "PL Verification (Category + DCavg + MTTFd)",
+  icon = "shield-halved",
+  inputs = list(
+    qwebr_calc_input("category", "Architecture category", value = "3", type = "select",
+                     options = c("B", "1", "2", "3", "4")),
+    qwebr_calc_input("dc_avg_band", "Diagnostic coverage, DCavg", value = "medium", type = "select",
+                     options = c("none", "low", "medium", "high")),
+    qwebr_calc_input("mttfd_band", "MTTFd per channel", value = "high", type = "select",
+                     options = c("low", "medium", "high")),
+    qwebr_calc_input("required_pl", "Required performance level, PLr", value = "d", type = "select",
+                     options = c("a", "b", "c", "d", "e"))
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: pl-verify-06-02
@@ -755,30 +829,27 @@ mttfd_band <- "high"      # both channels' declared MTTFd values are well into
 achieved_pl <- estimate_pl(category, dc_avg_band, mttfd_band)
 required_pl <- "d"        # PLr from Design Task 1/2
 
-cat("Category:", category, "\n")
-cat("DCavg band:", dc_avg_band, "\n")
-cat("MTTFd band (per channel):", mttfd_band, "\n")
-cat("Achieved PL:", achieved_pl, "\n")
-cat("Required PL, PLr:", required_pl, "\n\n")
-
 if (pl_rank[achieved_pl] >= pl_rank[required_pl]) {
-  cat("Achieved PL >= PLr: PASS\n\n")
+  cat(sprintf("Achieved PL %s >= PLr %s: PASS\n", achieved_pl, required_pl))
 } else {
-  cat("Achieved PL < PLr: FAILS\n\n")
+  cat(sprintf("Achieved PL %s < PLr %s: !!FAILS!!\n", achieved_pl, required_pl))
 }
+cat(sprintf("Category  %s\n", category))
+cat(sprintf("DCavg band  %s\n", dc_avg_band))
+cat(sprintf("MTTFd band (per channel)  %s\n", mttfd_band))
+cat(sprintf("Required PL, PLr  %s\n", required_pl))
 
 ## Sensitivity check: what if the diagnostic coverage is actually lower
 ## than assumed -- e.g., the mirror-contact feedback only catches a
 ## fraction of possible contactor faults in practice?
 achieved_pl_low_dc <- estimate_pl(category, "low", mttfd_band)
-cat("Sensitivity check -- if DCavg is actually only 'low':\n")
-cat("  Achieved PL drops to:", achieved_pl_low_dc, "\n")
+cat(sprintf("Achieved PL if DCavg is only 'low'  %s\n", achieved_pl_low_dc))
 if (pl_rank[achieved_pl_low_dc] < pl_rank[required_pl]) {
-  cat("  This would now FAIL the PLr = d requirement.\n")
-  cat("  The circuit's periodic proof-test/diagnostic function is not a\n")
-  cat("  nice-to-have -- it is load-bearing for the PL verification itself.\n")
+  cat("At low DCavg this would FAIL the PLr requirement: the circuit's periodic proof-test/diagnostic function is not a nice-to-have -- it is load-bearing for the PL verification itself.\n")
 }
 ```
+
+</details>
 
 **Sanity check:** the circuit passes with a full letter of margin above the low-DC sensitivity case (achieved PL d vs. a failing PL c), which is a comfortable, not marginal, result — but the sensitivity check itself is the real takeaway: this circuit's PL verification depends on the mirror-contact diagnostic actually working as designed for the life of the equipment, which is precisely why Design Task 8's documentation package includes a periodic proof-test plan rather than treating the initial verification as a one-time event.
 
@@ -931,7 +1002,36 @@ This is a decision-framework task: a documentation completeness checklist, evalu
 
 ### Worked Example
 
-Live cell — try flipping one of the `present` values and re-run to see the readiness conclusion change.
+Live cell — flip one of the *present* entries in the table (or add a document) to see the readiness conclusion change.
+
+```{r calc-psr-doc-06-02, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "psr-doc-06-02",
+  title = "PSR Documentation Package Check",
+  icon = "clipboard-check",
+  tables = list(
+    qwebr_calc_table(
+      frame = "doc_package", add_rows = TRUE,
+      columns = list(
+        qwebr_calc_col("item", c("Circuit diagram / wiring schematic showing category architecture",
+                                 "Risk assessment record (severity/exposure/avoidance)",
+                                 "PL/SIL verification worksheet (Category, DCavg, MTTFd -> achieved PL)",
+                                 "Category justification memo (PLr vs. selected architecture)",
+                                 "Component certificates of conformity (relay, curtain, contactors)",
+                                 "Verification & validation (functional test) report",
+                                 "Periodic proof-test / maintenance plan",
+                                 "P.Eng.-sealed PSR application"),
+                       type = "text", label = "Required record"),
+        qwebr_calc_col("present", c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE), type = "logical",
+                       label = "Present?")),
+      note = "The package is ready only when every record exists and is retrievable on demand.")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: psr-doc-06-02
@@ -951,28 +1051,25 @@ doc_package <- data.frame(
 n_present <- sum(doc_package$present)
 n_total <- nrow(doc_package)
 
-cat("Documentation package review:\n\n")
-for (i in seq_len(n_total)) {
-  status <- if (doc_package$present[i]) "present" else "MISSING"
-  cat(" -", doc_package$item[i], ":", status, "\n")
+pct <- round(n_present / n_total * 100)
+if (n_present == n_total) {
+  cat(sprintf("Documentation package: %g of %g items present (%g%%) - COMPLETE\n", n_present, n_total, pct))
+} else {
+  cat(sprintf("Documentation package: %g of %g items present (%g%%) - !!INCOMPLETE!!\n", n_present, n_total, pct))
 }
-
-cat("\n", n_present, " of ", n_total, " required items are present (",
-    round(n_present / n_total * 100), "% ).\n\n", sep = "")
+for (i in seq_len(n_total)) {
+  status <- if (doc_package$present[i]) "present" else "!!MISSING!!"
+  cat(sprintf("%s  %s\n", doc_package$item[i], status))
+}
 
 if (n_present == n_total) {
   cat("Documentation package is complete -- ready to support PSR submission.\n")
 } else {
-  missing_items <- doc_package$item[!doc_package$present]
-  cat("Documentation package is INCOMPLETE. Missing:\n")
-  for (m in missing_items) cat("  -", m, "\n")
-  cat("\nThe circuit itself may be technically sound (it passed PL verification\n")
-  cat("in Design Task 6), but the cell is not ready for PSR submission until\n")
-  cat("every record in the package exists and is retrievable on demand --\n")
-  cat("exactly the discipline this plant already applies to its Controlled\n")
-  cat("Goods Program technical data for audit purposes.\n")
+  cat("The circuit itself may be technically sound (it passed PL verification in Design Task 6), but the cell is not ready for PSR submission until every record in the package exists and is retrievable on demand -- exactly the discipline this plant already applies to its Controlled Goods Program technical data for audit purposes.\n")
 }
 ```
+
+</details>
 
 **Sanity check:** 7 of 8 items present (87.5%) sounds close to done, but the framework's conclusion doesn't average — a single missing item (the proof-test plan) is enough to block PSR readiness outright, which is the correct behavior for a checklist gate rather than a weighted score: a documentation package is complete or it isn't.
 

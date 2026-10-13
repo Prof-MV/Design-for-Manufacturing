@@ -236,21 +236,52 @@
     setTimeout(() => whenReady(callback, attemptsLeft - 1), 100);
   }
 
+  // Find where the expression assigned to a variable ends: scan from `from`,
+  // tracking bracket depth and skipping strings and comments, and stop at the
+  // first newline / semicolon / comment that sits outside every bracket. That
+  // lets a multi-line `c(...)` or `data.frame(...)` be swapped out as one unit.
+  function expressionEnd(code, from) {
+    let depth = 0;
+    let i = from;
+    while (i < code.length) {
+      const ch = code[i];
+      if (ch === '"' || ch === "'") {
+        i++;
+        while (i < code.length && code[i] !== ch) i += code[i] === "\\" ? 2 : 1;
+      } else if (ch === "#") {
+        if (depth <= 0) break;
+        while (i < code.length && code[i] !== "\n") i++;
+        continue;
+      } else if (ch === "(" || ch === "[" || ch === "{") {
+        depth++;
+      } else if (ch === ")" || ch === "]" || ch === "}") {
+        depth--;
+      } else if ((ch === "\n" || ch === ";") && depth <= 0) {
+        break;
+      }
+      i++;
+    }
+    return i;
+  }
+
   // Substitute the current input values into the chunk's own source: replace
-  // each input's R variable's assignment line (wherever it's first declared)
-  // with the input's current value, leaving everything else — including
-  // comments and the rest of the logic — untouched. Returns null (and warns)
-  // if a variable can't be found, so a typo in `data-var` fails loudly
-  // instead of silently running the unmodified default.
+  // each input's R variable's assignment (wherever it's first declared, and
+  // however many lines it spans) with the input's current value or R
+  // expression, leaving everything else — including comments and the rest of
+  // the logic — untouched. Returns null (and warns) if a variable can't be
+  // found, so a typo in `data-var` fails loudly instead of silently running
+  // the unmodified default.
   function buildOverrideCode(baseCode, overrides) {
     let code = baseCode;
     let ok = true;
 
     overrides.forEach(({ varName, value }) => {
       const escaped = escapeRegExp(varName);
-      const re = new RegExp("(^|\\n)(\\s*" + escaped + "\\s*(?:<-|=)\\s*)[^\\n]*");
-      if (re.test(code)) {
-        code = code.replace(re, `$1$2${value}`);
+      const re = new RegExp("(^|\\n)([ \\t]*" + escaped + "[ \\t]*(?:<-|=)[ \\t]*)");
+      const m = re.exec(code);
+      if (m) {
+        const valueStart = m.index + m[0].length;
+        code = code.slice(0, valueStart) + value + code.slice(expressionEnd(code, valueStart));
       } else {
         console.warn(`qwebr-calculator: variable "${varName}" not found as a top-level assignment in this cell — check the input's data-var attribute.`);
         ok = false;
@@ -258,6 +289,134 @@
     });
 
     return ok ? code : null;
+  }
+
+  // ---- Editable tables -------------------------------------------------------
+  // A card may carry `.qwebr-calc-table[data-spec]` blocks (emitted by
+  // qwebr_calc_table() in R/helpers.R): a small grid of fields standing in for
+  // a data frame or a set of parallel vectors in the cell's source.
+  //   - spec.frame set  -> the whole `frame <- data.frame(...)` is rebuilt from
+  //     the grid, one R column per grid column (named by column.name)
+  //   - column.var set  -> that vector's `var <- c(...)` is rebuilt from its column
+  //   - column.type "label" is display-only (still a data-frame column)
+  function rLiteral(value, isNumber) {
+    if (isNumber) return value === null || value === undefined || isNaN(value) ? "NA" : String(value);
+    return JSON.stringify(String(value));
+  }
+
+  function buildTable(wrap, onChange) {
+    const spec = JSON.parse(wrap.dataset.spec);
+    const cols = spec.columns;
+    const nRows = Math.max.apply(null, cols.map((c) => c.values.length));
+    const rows = []; // rows[r][c] = current value
+    for (let r = 0; r < nRows; r++) rows.push(cols.map((c) => c.values[r]));
+
+    const table = document.createElement("table");
+    table.className = "qwebr-calc-grid";
+    wrap.appendChild(table);
+
+    function draw() {
+      table.innerHTML = "";
+      const head = table.createTHead().insertRow();
+      cols.forEach((c) => {
+        const th = document.createElement("th");
+        th.textContent = c.label || c.name;
+        head.appendChild(th);
+      });
+      const body = table.createTBody();
+      rows.forEach((row, r) => {
+        const tr = body.insertRow();
+        cols.forEach((c, ci) => {
+          const td = tr.insertCell();
+          if (c.type === "label") {
+            td.textContent = row[ci];
+            td.className = "qwebr-calc-grid-label";
+            return;
+          }
+          let el;
+          if (c.type === "select" || c.type === "logical") {
+            el = document.createElement("select");
+            (c.type === "logical" ? ["TRUE", "FALSE"] : c.options).forEach((o) => {
+              const opt = document.createElement("option");
+              opt.value = opt.textContent = o;
+              if (o === row[ci]) opt.selected = true;
+              el.appendChild(opt);
+            });
+          } else {
+            el = document.createElement("input");
+            el.type = c.type === "number" ? "number" : "text";
+            el.value = row[ci];
+            if (c.type === "number") {
+              if (c.min != null) el.min = c.min;
+              if (c.max != null) el.max = c.max;
+              if (c.step != null) el.step = c.step;
+            }
+          }
+          el.setAttribute("aria-label", (c.label || c.name) + ", row " + (r + 1));
+          el.addEventListener("input", function () {
+            row[ci] = c.type === "number" ? (el.value === "" ? null : parseFloat(el.value)) : el.value;
+            onChange();
+          });
+          td.appendChild(el);
+        });
+      });
+    }
+    draw();
+
+    if (spec.addRows) {
+      const bar = document.createElement("div");
+      bar.className = "qwebr-calc-grid-buttons";
+      const add = document.createElement("button");
+      add.type = "button";
+      add.textContent = "+ Add row";
+      add.addEventListener("click", function () {
+        const next = rows[rows.length - 1].slice();
+        let lastText = -1;
+        cols.forEach((c, ci) => { if (c.type === "text") lastText = ci; });
+        if (lastText >= 0) next[lastText] = "New item";
+        rows.push(next);
+        draw();
+        onChange();
+      });
+      const del = document.createElement("button");
+      del.type = "button";
+      del.textContent = "− Remove last row";
+      del.addEventListener("click", function () {
+        if (rows.length > 1) {
+          rows.pop();
+          draw();
+          onChange();
+        }
+      });
+      bar.appendChild(add);
+      bar.appendChild(del);
+      wrap.appendChild(bar);
+    }
+
+    // The R assignments this grid stands for, or null while a number is blank.
+    return function overrides() {
+      // A blank number blocks the run, unless the column's defaults already
+      // contain an NA (then blank is how a student enters NA).
+      const allowNA = cols.map((c) => c.values.some((v) => v === null));
+      for (const row of rows) {
+        for (let ci = 0; ci < cols.length; ci++) {
+          if (cols[ci].type === "number" && !allowNA[ci] && (row[ci] === null || isNaN(row[ci]))) return null;
+        }
+      }
+      const vec = (ci) =>
+        "c(" + rows.map((row) =>
+          cols[ci].type === "logical" ? String(row[ci]) : rLiteral(row[ci], cols[ci].type === "number")
+        ).join(", ") + ")";
+      if (spec.frame) {
+        const parts = cols.map((c, ci) => "`" + c.name + "` = " + vec(ci));
+        return [{ varName: spec.frame, value: "data.frame(" + parts.join(", ") + ", stringsAsFactors = FALSE)" }];
+      }
+      const out = [];
+      cols.forEach((c, ci) => {
+        if (c.var) out.push({ varName: c.var, value: vec(ci) });
+      });
+      return out;
+    };
   }
 
   // Bind one calculator card: find its source cell, wire up its inputs, and
@@ -279,15 +438,29 @@
     const graphEl = card.querySelector(".qwebr-calc-graph");
     const goalEl = card.querySelector(".qwebr-calc-goal");
     const inputs = Array.from(card.querySelectorAll("[data-var]"));
+    const tableGetters = [];
     const figWidth = parseInt(card.dataset.figWidth, 10) || 1200;
     const figHeight = parseInt(card.dataset.figHeight, 10) || 700;
 
     function buildCode() {
       const overrides = [];
       for (const input of inputs) {
+        if (input.tagName === "SELECT") {
+          // A dropdown stands for an R string ("d") or an R logical (TRUE/FALSE)
+          overrides.push({
+            varName: input.dataset.var,
+            value: input.dataset.kind === "string" ? JSON.stringify(input.value) : input.value,
+          });
+          continue;
+        }
         const value = parseFloat(input.value);
         if (isNaN(value)) return null; // leave blank/invalid fields alone rather than guessing
         overrides.push({ varName: input.dataset.var, value });
+      }
+      for (const getTableOverrides of tableGetters) {
+        const tableOverrides = getTableOverrides();
+        if (!tableOverrides) return null;
+        overrides.push(...tableOverrides);
       }
       const code = buildOverrideCode(entry.code, overrides);
       if (!code || !goalEl) return code;
@@ -300,6 +473,10 @@
       if (!code) return;
       runCalc({ outputEl, graphEl, goalEl, code, figWidth, figHeight });
     }, 200);
+
+    card.querySelectorAll(".qwebr-calc-table[data-spec]").forEach((wrap) => {
+      tableGetters.push(buildTable(wrap, run));
+    });
 
     inputs.forEach((input) => {
       input.addEventListener("input", function () {

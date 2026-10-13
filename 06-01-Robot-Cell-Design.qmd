@@ -683,7 +683,32 @@ guarding_options %>%
 
 ### Worked Example
 
-Live cell — try changing the `access_frequency` or `needs_reconfig_zones` values and re-run to see the recommendation change.
+Live cell — change an access point's access frequency or its need for reconfigurable zones in the table (or add a row) to see the recommended guarding change.
+
+```{r calc-guarding-selection-06-01, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "guarding-selection-06-01",
+  title = "Guarding Technology Selector",
+  icon = "shield-halved",
+  tables = list(
+    qwebr_calc_table(
+      frame = "access_points", add_rows = TRUE,
+      columns = list(
+        qwebr_calc_col("point", c("Far perimeter (no routine access)", "Operator load/unload station", "AGV pallet rack aisle"),
+                       type = "text", label = "Access point"),
+        qwebr_calc_col("access_frequency", c("Never", "Every cycle (high)", "Continuous AGV traffic, rare person"),
+                       type = "select", label = "Access frequency",
+                       options = c("Never", "Every cycle (high)", "Continuous AGV traffic, rare person")),
+        qwebr_calc_col("needs_reconfig_zones", c(FALSE, FALSE, TRUE), type = "logical",
+                       label = "Needs reconfigurable zones?")),
+      note = "\"Never\" means no routine opening is needed. Answer TRUE for needs-reconfigurable-zones only where a reduced-speed warning zone plus a hard-stop zone are both required.")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: guarding-selection-06-01
@@ -698,9 +723,10 @@ access_points <- data.frame(
   stringsAsFactors = FALSE
 )
 
+cat(sprintf("Guarding recommended for %d access points\n", nrow(access_points)))
+
 for (i in seq_len(nrow(access_points))) {
   ap <- access_points[i, ]
-  cat("Access point:", ap$point, "\n")
   if (ap$access_frequency == "Never") {
     choice <- "Fixed fencing"
     reason <- "no routine opening is needed, so the lowest-cost option satisfies the hazard."
@@ -715,10 +741,12 @@ for (i in seq_len(nrow(access_points))) {
                      "environment is clean enough that beam blockage from debris",
                      "is not a major risk.")
   }
-  cat("  Recommended guarding:", choice, "\n")
-  cat("  Reasoning:", reason, "\n\n")
+  cat(sprintf("%s  %s\n", ap$point, choice))
+  cat("Why:", reason, "\n")
 }
 ```
+
+</details>
 
 **Sanity check:** each recommendation follows directly from a single dominant criterion — access frequency for the fence-vs-curtain split, need for graduated zones for the scanner — which is exactly the point of a decision framework: it should be traceable back to *why*, not just produce an answer.
 
@@ -755,7 +783,24 @@ CSA Z434 incorporates collaborative robot requirements in the Canadian context b
 
 ### Worked Example
 
-Live cell — try setting `tool_has_sharp_or_pinch_hazard` to `FALSE` (e.g., swap the driver for a blunt-tip capacitive screwdriver) and re-run to see the conclusion change.
+Live cell — set *Tool has its own sharp or pinch hazard* to FALSE (e.g., swap the driver for a blunt-tip capacitive screwdriver) to see the conclusion change.
+
+```{r calc-collab-check-06-01, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "collab-check-06-01",
+  title = "Collaborative Application Check",
+  icon = "shield-halved",
+  inputs = list(
+    qwebr_calc_input("robot_is_power_force_limited", "Arm is vendor-rated power/force-limiting", value = TRUE, type = "logical"),
+    qwebr_calc_input("tool_has_sharp_or_pinch_hazard", "Tool has its own sharp or pinch hazard", value = TRUE, type = "logical"),
+    qwebr_calc_input("biomechanical_limit_exceeded", "Contact exceeds ISO/TS 15066 limit", value = TRUE, type = "logical")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: collab-check-06-01
@@ -768,27 +813,32 @@ biomechanical_limit_exceeded <- TRUE    # estimated bit-tip contact pressure exc
                                          # ISO/TS 15066 Annex A transient contact
                                          # limits for the fingertip region
 
-cat("Robot arm is vendor-rated power/force-limiting collaborative:", robot_is_power_force_limited, "\n")
-cat("End-effector introduces its own contact hazard (sharp/spinning bit):", tool_has_sharp_or_pinch_hazard, "\n")
-cat("Estimated bit-tip contact exceeds ISO/TS 15066 biomechanical limit:", biomechanical_limit_exceeded, "\n\n")
+cleared <- robot_is_power_force_limited && !tool_has_sharp_or_pinch_hazard && !biomechanical_limit_exceeded
 
-if (robot_is_power_force_limited && !tool_has_sharp_or_pinch_hazard && !biomechanical_limit_exceeded) {
-  cat("Conclusion: the application-level risk assessment supports unguarded\n")
-  cat("collaborative operation as configured.\n")
+if (cleared) {
+  cat("Unguarded collaborative operation: supported\n")
 } else {
-  cat("Conclusion: the robot's own collaborative rating does NOT clear this\n")
-  cat("application. The end-effector's sharp, spinning bit is a separate\n")
-  cat("hazard that the robot's power/force limiting does not cover.\n\n")
+  cat("Unguarded collaborative operation: !!NOT CLEARED!!\n")
+}
+cat(sprintf("Arm is vendor-rated power/force-limiting  %s\n", robot_is_power_force_limited))
+cat(sprintf("End-effector has its own contact hazard  %s\n",
+            if (tool_has_sharp_or_pinch_hazard) "!!TRUE (sharp/spinning bit)!!" else "FALSE"))
+cat(sprintf("Contact exceeds ISO/TS 15066 biomechanical limit  %s\n",
+            if (biomechanical_limit_exceeded) "!!TRUE!!" else "FALSE"))
+
+if (cleared) {
+  cat("The application-level risk assessment supports unguarded collaborative operation as configured.\n")
+} else {
+  cat("The robot's own collaborative rating does NOT clear this application: the end-effector's sharp, spinning bit is a separate hazard that its power/force limiting does not cover.\n")
   cat("Required mitigations (at least one):\n")
-  cat(" - Slow or stop bit rotation whenever a person is within reach\n")
-  cat("   (speed and separation monitoring around the fastening motion)\n")
-  cat(" - Add a physical guard or light curtain around the fastening zone\n")
-  cat("   so the bit is never exposed while a person is present\n")
-  cat(" - Redesign the end-effector to remove the exposed point/pinch hazard\n\n")
-  cat("A vendor 'collaborative' marketing claim is not, by itself, a\n")
-  cat("substitute for this application-specific risk assessment.\n")
+  cat("- Slow or stop bit rotation whenever a person is within reach (speed and separation monitoring around the fastening motion)\n")
+  cat("- Add a physical guard or light curtain around the fastening zone so the bit is never exposed while a person is present\n")
+  cat("- Redesign the end-effector to remove the exposed point/pinch hazard\n")
+  cat("A vendor 'collaborative' marketing claim is not, by itself, a substitute for this application-specific risk assessment.\n")
 }
 ```
+
+</details>
 
 **Sanity check:** the conclusion doesn't hinge on the robot at all — every input that flips the outcome is a property of the *tool and task*, which is exactly the point: the risk assessment for a collaborative application lives mostly in the end-effector and the specific motion, not in the robot's datasheet.
 
@@ -872,7 +922,24 @@ psr_triggers %>%
 
 ### Worked Example
 
-Live cell — try setting `like_for_like_replacement` to `TRUE` (imagine this is a repair, not a new install) and re-run to see the conclusion change.
+Live cell — set *Like-for-like replacement* to TRUE (imagine this is a repair, not a new install) to see the conclusion change.
+
+```{r calc-psr-check-06-01, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "psr-check-06-01",
+  title = "Pre-Start Review (PSR) Applicability",
+  icon = "clipboard-check",
+  inputs = list(
+    qwebr_calc_input("new_apparatus", "New or modified apparatus installed", value = TRUE, type = "logical"),
+    qwebr_calc_input("new_guards_or_devices", "Guards or protective devices are part of the change", value = TRUE, type = "logical"),
+    qwebr_calc_input("like_for_like_replacement", "Like-for-like replacement", value = FALSE, type = "logical")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: psr-check-06-01
@@ -882,30 +949,28 @@ new_guards_or_devices <- TRUE  # perimeter fencing, light curtain, and safety
                                  # PLC program are all new
 like_for_like_replacement <- FALSE
 
-cat("New or modified apparatus installed:", new_apparatus, "\n")
-cat("Guards or protective devices are part of the change:", new_guards_or_devices, "\n")
-cat("Is this a like-for-like replacement:", like_for_like_replacement, "\n\n")
-
 psr_required <- new_apparatus && new_guards_or_devices && !like_for_like_replacement
 
 if (psr_required) {
-  cat("Conclusion: a Pre-Start Health and Safety Review IS required before\n")
-  cat("this cell is put into production.\n\n")
-  cat("Next steps:\n")
-  cat(" - Engage a Professional Engineer (P.Eng.) licensed in Ontario to\n")
-  cat("   perform or certify the review\n")
-  cat(" - Assemble documentation: general arrangement and safety circuit\n")
-  cat("   drawings, hazard/risk assessment, applicable standards referenced\n")
-  cat("   (CSA Z434, ISO 10218, ISO 13849-1 for the safety circuit),\n")
-  cat("   commissioning/test records for the safety devices\n")
-  cat(" - Obtain the P.Eng.'s signed and sealed PSR report before the\n")
-  cat("   cell is released for production use\n")
+  cat("Pre-Start Health and Safety Review: REQUIRED before production\n")
 } else {
-  cat("Conclusion: based on these inputs, a PSR is not clearly triggered --\n")
-  cat("but document the reasoning; when in doubt, consult a P.Eng. or the\n")
-  cat("plant's health and safety representative.\n")
+  cat("Pre-Start Health and Safety Review: not clearly triggered\n")
+}
+cat(sprintf("New or modified apparatus installed  %s\n", new_apparatus))
+cat(sprintf("Guards or protective devices are part of the change  %s\n", new_guards_or_devices))
+cat(sprintf("Like-for-like replacement  %s\n", like_for_like_replacement))
+
+if (psr_required) {
+  cat("Next steps:\n")
+  cat("- Engage a Professional Engineer (P.Eng.) licensed in Ontario to perform or certify the review\n")
+  cat("- Assemble documentation: general arrangement and safety circuit drawings, hazard/risk assessment, applicable standards referenced (CSA Z434, ISO 10218, ISO 13849-1 for the safety circuit), commissioning/test records for the safety devices\n")
+  cat("- Obtain the P.Eng.'s signed and sealed PSR report before the cell is released for production use\n")
+} else {
+  cat("Based on these inputs a PSR is not clearly triggered -- but document the reasoning; when in doubt, consult a P.Eng. or the plant's health and safety representative.\n")
 }
 ```
+
+</details>
 
 **Sanity check:** every input in this scenario points the same direction (new apparatus, new guarding, not a replacement), so the conclusion is unambiguous — a genuinely borderline case (say, a significant reprogram that changes robot speed near a guard opening but touches no hardware) is exactly where a rule-based checklist like this one runs out of authority and a P.Eng.'s judgment takes over.
 

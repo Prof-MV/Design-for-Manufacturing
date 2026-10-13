@@ -248,7 +248,35 @@ There is no single formula for enclosure rating selection — it is a documented
 
 ### Worked Example
 
-Live cell — try changing the environment inputs for a fourth panel and re-run to see the recommended rating change.
+Live cell — change the environment answers for a panel in the table, or add a fourth panel, to see the recommended rating change.
+
+```{r calc-nema-ip-select-06-03, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "nema-ip-select-06-03",
+  title = "NEMA / IP Enclosure Selector",
+  icon = "shield-halved",
+  tables = list(
+    qwebr_calc_table(
+      frame = "panels", add_rows = TRUE,
+      columns = list(
+        qwebr_calc_col("panel", c("Automotive plant - general assembly area",
+                                  "Tank farm - outdoor, no routine washdown",
+                                  "Dairy processing line - direct washdown zone"),
+                       type = "text", label = "Panel"),
+        qwebr_calc_col("outdoor", c(FALSE, TRUE, FALSE), type = "logical", label = "Outdoor?"),
+        qwebr_calc_col("routine_washdown", c(FALSE, FALSE, TRUE), type = "logical", label = "Routine washdown?"),
+        qwebr_calc_col("high_pressure_hot_washdown", c(FALSE, FALSE, TRUE), type = "logical",
+                       label = "High-pressure hot washdown?"),
+        qwebr_calc_col("corrosive_or_food_environment", c(FALSE, FALSE, TRUE), type = "logical",
+                       label = "Corrosive or food environment?")),
+      note = "The most severe condition drives the rating: high-pressure hot washdown overrides routine washdown or corrosive, which override outdoor, which overrides indoor dry.")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: nema-ip-select-06-03
@@ -264,10 +292,10 @@ panels <- data.frame(
   stringsAsFactors = FALSE
 )
 
+cat(sprintf("Enclosure ratings recommended for %d panels\n", nrow(panels)))
+
 for (i in seq_len(nrow(panels))) {
   p <- panels[i, ]
-  cat("Panel:", p$panel, "\n")
-
   if (p$high_pressure_hot_washdown) {
     rating <- "NEMA 4X, IP69K"
     reason <- paste("routine high-pressure, high-temperature washdown demands the",
@@ -284,10 +312,12 @@ for (i in seq_len(nrow(panels))) {
     reason <- "indoor, dry, general industrial environment -- the standard baseline rating."
   }
 
-  cat("  Recommended rating:", rating, "\n")
-  cat("  Reasoning:", reason, "\n\n")
+  cat(sprintf("%s  %s\n", p$panel, rating))
+  cat("Why:", reason, "\n")
 }
 ```
+
+</details>
 
 **Sanity check:** the dairy line panel and the general assembly panel land on very different ratings from the same decision framework because the framework is driven by the environment, not by "how important" the panel is — a mission-critical automotive panel in a dry area still only needs NEMA 12, while a comparatively simple dairy-line control station needs NEMA 4X/IP69K because of where it physically sits, which is exactly the point of separating the decision from intuition.
 
@@ -690,7 +720,34 @@ ggplot() +
 
 ### Worked Example
 
-Live cell — try changing `standalone_sccr_kA` or `cl_fuse_combination_sccr_kA` for a component and re-run to see the panel's overall SCCR update.
+Live cell — change a component's standalone or fuse-combination SCCR in the table to see the panel's overall SCCR update.
+
+```{r calc-sccr-check-06-03, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "sccr-check-06-03",
+  title = "Panel SCCR Weakest-Link Check",
+  icon = "bolt",
+  inputs = list(
+    qwebr_calc_input("required_sccr", "Required panel SCCR", value = 65, min = 5, max = 200, step = 5, suffix = "kA")
+  ),
+  tables = list(
+    qwebr_calc_table(
+      frame = "components", add_rows = TRUE,
+      columns = list(
+        qwebr_calc_col("component", c("Main incoming circuit breaker", "Weld-pump motor contactor (Branch 1)",
+                                      "Coolant-pump motor contactor (Branch 2)", "24VDC control power supply"),
+                       type = "text", label = "Component"),
+        qwebr_calc_col("standalone_sccr_kA", c(65, 5, 5, 5), label = "Standalone SCCR (kA)", min = 0, step = 1),
+        qwebr_calc_col("cl_fuse_combination_sccr_kA", c(NA, 65, 65, 65), label = "With CL fuse (kA)", min = 0, step = 1)),
+      note = "Leave the fuse-combination cell blank (NA) where no tested fuse/device combination is applied.")
+  ),
+  fig_width = 1000, fig_height = 600
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: sccr-check-06-03
@@ -711,17 +768,6 @@ components <- data.frame(
 components$effective_sccr_before <- components$standalone_sccr_kA
 panel_sccr_before <- min(components$effective_sccr_before)
 
-cat("--- Before: standalone component ratings only ---\n")
-for (i in seq_len(nrow(components))) {
-  cat(sprintf("%-38s %5.0f kA\n", components$component[i], components$effective_sccr_before[i]))
-}
-cat("Panel SCCR (weakest link) =", panel_sccr_before, "kA\n")
-if (panel_sccr_before >= required_sccr) {
-  cat("PASS -- meets the 65 kA requirement\n\n")
-} else {
-  cat("FAILS -- far short of the 65 kA requirement\n\n")
-}
-
 ## Pass 2: add a documented current-limiting fuse ahead of each low-rated
 ## branch device, using the manufacturer's published tested combination
 ## rating for that specific fuse/device pairing
@@ -732,17 +778,29 @@ components$effective_sccr_after <- ifelse(
 )
 panel_sccr_after <- min(components$effective_sccr_after)
 
-cat("--- After: current-limiting fuse combinations applied ---\n")
-for (i in seq_len(nrow(components))) {
-  cat(sprintf("%-38s %5.0f kA\n", components$component[i], components$effective_sccr_after[i]))
-}
-cat("Panel SCCR (weakest link) =", panel_sccr_after, "kA\n")
 if (panel_sccr_after >= required_sccr) {
-  cat("PASS -- panel now meets the 65 kA requirement\n")
+  cat(sprintf("Panel SCCR with current-limiting fuses: %g kA - PASS\n", panel_sccr_after))
 } else {
-  cat("Still FAILS -- further component or fusing changes are required\n")
+  cat(sprintf("Panel SCCR with current-limiting fuses: %g kA - !!FAILS!!\n", panel_sccr_after))
 }
+cat(sprintf("Required panel SCCR  %g kA\n", required_sccr))
+cat(sprintf("Panel SCCR as specified (weakest link)  %s\n",
+            if (panel_sccr_before >= required_sccr) sprintf("%g kA", panel_sccr_before) else sprintf("!!%g kA!!", panel_sccr_before)))
+for (i in seq_len(nrow(components))) {
+  cat(sprintf("%s  %g kA -> %g kA\n", components$component[i],
+              components$effective_sccr_before[i], components$effective_sccr_after[i]))
+}
+
+par(mar = c(5, 5, 3, 1))
+bar_col <- ifelse(components$effective_sccr_after >= required_sccr, "#27AE60", "#C0392B")
+barplot(components$effective_sccr_after, names.arg = seq_len(nrow(components)), col = bar_col,
+        ylim = c(0, max(components$effective_sccr_after, required_sccr) * 1.15),
+        xlab = "Component (table row)", ylab = "Effective SCCR (kA)",
+        main = "SCCR after fusing; dashed line = required")
+abline(h = required_sccr, lty = 2, lwd = 2)
 ```
+
+</details>
 
 **Sanity check:** the "before" case shows a panel with a genuinely 65 kA-rated main breaker still only achieving a 5 kA overall SCCR — the exact trap the rule of thumb above warns about. The fix doesn't touch the main breaker at all; it adds current-limiting fuses ahead of the three low-rated branch devices, each backed by a manufacturer-published tested combination rating, which is the documentation a UL 508A panel shop's build file needs to justify the 65 kA nameplate marking, not just an engineer's assertion that it should work.
 
@@ -793,46 +851,63 @@ cert_paths %>%
 
 ### Worked Example
 
-Live cell — try setting `recognized_mark_present` to `TRUE` and re-run to see the conclusion change.
+Live cell — set *Panel B has a recognized certification mark* to TRUE to see the conclusion change.
+
+```{r calc-cert-pathway-06-03, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "cert-pathway-06-03",
+  title = "Certification Pathway Check",
+  icon = "clipboard-check",
+  inputs = list(
+    qwebr_calc_input("recognized_mark_present", "Panel B (used press panel): recognized mark present", value = FALSE, type = "logical"),
+    qwebr_calc_input("recognized_mark_present_2", "Panel A (new UL 508A build): recognized mark present", value = TRUE, type = "logical"),
+    qwebr_calc_input("field_modified_since_listing", "Panel A: field-modified since listing", value = FALSE, type = "logical")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: cert-pathway-06-03
 ## Panel B: used stamping press control panel from an overseas reseller
 recognized_mark_present <- FALSE  # no CSA, cULus, ETL, or other accredited mark visible
 
-cat("Recognized certification mark present:", recognized_mark_present, "\n\n")
-
 if (!recognized_mark_present) {
-  cat("Conclusion: the ESA will not approve this panel for connection as-is.\n")
-  cat("Required path: ESA field evaluation (Special Inspection)\n\n")
-  cat("Steps:\n")
-  cat(" 1. Engage an accredited field evaluation agency\n")
-  cat(" 2. Agency inspects THIS specific panel against the applicable standard\n")
-  cat("    (e.g., CSA C22.2 No. 286)\n")
-  cat(" 3. Correct any deficiencies identified during inspection\n")
-  cat(" 4. Agency applies a Special Inspection / field evaluation label to\n")
-  cat("    this physical unit (the label does not extend to any other unit,\n")
-  cat("    even an identical one)\n")
-  cat(" 5. File the documentation with the ESA; the plant may then connect\n")
-  cat("    and energize the panel\n")
+  cat("Panel B: !!ESA field evaluation (Special Inspection) required!!\n")
 } else {
-  cat("Conclusion: a recognized mark is present -- the ESA will generally\n")
-  cat("accept the panel without a separate field evaluation, provided it has\n")
-  cat("not been field-modified in a way that affects the original listing.\n")
+  cat("Panel B: ESA will generally accept without a separate field evaluation\n")
 }
+cat(sprintf("Panel B recognized certification mark present  %s\n", recognized_mark_present))
 
 ## Panel A, for comparison: new build from a UL 508A listed panel shop,
 ## self-applied mark, 65 kA SCCR on the nameplate
 recognized_mark_present_2 <- TRUE
 field_modified_since_listing <- FALSE
 
-cat("\n--- Comparison: Panel A (new build, UL 508A listed shop) ---\n")
-cat("Recognized certification mark present:", recognized_mark_present_2, "\n")
-cat("Field-modified since listing:", field_modified_since_listing, "\n")
+cat(sprintf("Panel A recognized certification mark present  %s\n", recognized_mark_present_2))
+cat(sprintf("Panel A field-modified since listing  %s\n", field_modified_since_listing))
 if (recognized_mark_present_2 && !field_modified_since_listing) {
-  cat("Conclusion: ESA field evaluation is NOT required for this panel.\n")
+  cat("Panel A  ESA field evaluation is NOT required\n")
+} else {
+  cat("Panel A  !!ESA field evaluation may be required!!\n")
+}
+
+if (!recognized_mark_present) {
+  cat("The ESA will not approve Panel B for connection as-is. Required path -- steps:\n")
+  cat("1. Engage an accredited field evaluation agency\n")
+  cat("2. Agency inspects THIS specific panel against the applicable standard (e.g., CSA C22.2 No. 286)\n")
+  cat("3. Correct any deficiencies identified during inspection\n")
+  cat("4. Agency applies a Special Inspection / field evaluation label to this physical unit (the label does not extend to any other unit, even an identical one)\n")
+  cat("5. File the documentation with the ESA; the plant may then connect and energize the panel\n")
+} else {
+  cat("A recognized mark is present, so the ESA will generally accept Panel B without a separate field evaluation, provided it has not been field-modified in a way that affects the original listing.\n")
 }
 ```
+
+</details>
 
 **Sanity check:** the two panels headed for the same plant, in the same month, reach opposite conclusions purely because of documentation history, not because either panel is necessarily better or worse engineering — which is exactly the point of a certification pathway that runs on verifiable marks and inspection records rather than on someone's confidence that "it looks fine."
 

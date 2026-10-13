@@ -697,7 +697,31 @@ $$Score_{option} = \sum_i w_i \times s_{i,option}$$
 
 ### Worked Example
 
-Live cell — try re-weighting the criteria for your own plant's zone classification and see whether the recommendation flips.
+Live cell — re-weight the criteria in the table for your own plant's zone classification (or re-score chain and belt) and see whether the recommendation flips.
+
+```{r calc-chain-belt-decision-06-09, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "chain-belt-decision-06-09",
+  title = "Chain vs. Belt Weighted Decision",
+  icon = "scale-balanced",
+  tables = list(
+    qwebr_calc_table(
+      columns = list(
+        qwebr_calc_col("criterion", c("Torque capacity", "No slip", "Hygiene", "Maintenance", "Cost"),
+                       type = "label", label = "Criterion"),
+        qwebr_calc_col("chain_scores", c(5, 5, 1, 2, 4), var = "chain_scores", label = "Chain score", min = 1, max = 5, step = 1),
+        qwebr_calc_col("belt_scores", c(3, 4, 5, 5, 3), var = "belt_scores", label = "Belt score", min = 1, max = 5, step = 1),
+        qwebr_calc_col("weights_A", c(0.15, 0.15, 0.40, 0.20, 0.10), var = "weights_A", label = "Zone A weight", min = 0, max = 1, step = 0.05),
+        qwebr_calc_col("weights_B", c(0.30, 0.20, 0.10, 0.15, 0.25), var = "weights_B", label = "Zone B weight", min = 0, max = 1, step = 0.05)),
+      note = "Scores run from 1 (poor fit) to 5 (excellent fit). Each weight column should sum to 1.0.")
+  ),
+  fig_width = 1000, fig_height = 600
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: chain-belt-decision-06-09
@@ -717,16 +741,25 @@ score_zone <- function(weights) {
 zoneA <- score_zone(weights_A)
 zoneB <- score_zone(weights_B)
 
+cat(sprintf("Recommendation: Zone A %s, Zone B %s\n", names(zoneA)[which.max(zoneA)], names(zoneB)[which.max(zoneB)]))
+
 cat("Zone A - primary washdown, direct product contact (auger conveyor):\n")
-cat(sprintf("  Chain weighted score: %.2f\n", zoneA["Chain"]))
-cat(sprintf("  Belt weighted score:  %.2f\n", zoneA["Belt"]))
-cat(sprintf("  -> Recommendation: %s\n\n", names(zoneA)[which.max(zoneA)]))
+cat(sprintf("Zone A chain weighted score  %.2f\n", zoneA["Chain"]))
+cat(sprintf("Zone A belt weighted score  %.2f\n", zoneA["Belt"]))
+cat(sprintf("Zone A recommendation  %s\n", names(zoneA)[which.max(zoneA)]))
 
 cat("Zone B - secondary, packaged-product zone (case conveyor):\n")
-cat(sprintf("  Chain weighted score: %.2f\n", zoneB["Chain"]))
-cat(sprintf("  Belt weighted score:  %.2f\n", zoneB["Belt"]))
-cat(sprintf("  -> Recommendation: %s\n", names(zoneB)[which.max(zoneB)]))
+cat(sprintf("Zone B chain weighted score  %.2f\n", zoneB["Chain"]))
+cat(sprintf("Zone B belt weighted score  %.2f\n", zoneB["Belt"]))
+cat(sprintf("Zone B recommendation  %s\n", names(zoneB)[which.max(zoneB)]))
+
+par(mar = c(5, 5, 3, 1))
+barplot(c(zoneA, zoneB), names.arg = c("A chain", "A belt", "B chain", "B belt"), cex.names = 0.9,
+        col = c("#2E86C1", "#E67E22", "#2E86C1", "#E67E22"), ylim = c(0, 5),
+        ylab = "Weighted score", main = "Weighted drive scores by zone")
 ```
+
+</details>
 
 **Sanity check:** the recommendation flips between the two zones (belt wins Zone A 4.35 to 2.70; chain wins Zone B 3.90 to 3.70), which is the whole point of scoring the *same* two drive types against *different* zone priorities rather than picking one winner for the whole plant. Zone B's result is close — a 0.20-point margin — which correctly signals a genuine trade-off rather than an obvious call; specifying a self-lubricating washdown chain there (raising its hygiene score from 1 toward 3) would likely tip it further toward chain, while a shock-loaded, hygiene-critical zone like the auger conveyor isn't close at all.
 

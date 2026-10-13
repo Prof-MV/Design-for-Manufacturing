@@ -590,7 +590,37 @@ There's no formula here — cable type selection is a documented decision framew
 
 ### Worked Example
 
-Live cell — try changing an application's environment or electrical characteristics and see the recommendation change.
+Live cell — change a run's environmental or electrical answers in the table (or add a run) to see the recommended cable change.
+
+```{r calc-cable-selection-06-04, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "cable-selection-06-04",
+  title = "Cable Construction Selector",
+  icon = "plug",
+  tables = list(
+    qwebr_calc_table(
+      frame = "applications", add_rows = TRUE,
+      columns = list(
+        qwebr_calc_col("run", c("New outdoor yard feeder, transformer pad to electrical room",
+                                "VFD output, machining floor drive to conveyor gearmotor",
+                                "Overhead control wiring, dry electrical room, existing tray",
+                                "Washdown-zone instrumentation power, food plant packaging line"),
+                       type = "text", label = "Run"),
+        qwebr_calc_col("direct_buried_or_exposed_outdoor", c(TRUE, FALSE, FALSE, FALSE), type = "logical",
+                       label = "Buried / exposed outdoor?"),
+        qwebr_calc_col("is_vfd_output", c(FALSE, TRUE, FALSE, FALSE), type = "logical", label = "VFD output?"),
+        qwebr_calc_col("dry_indoor_tray_only", c(FALSE, FALSE, TRUE, FALSE), type = "logical",
+                       label = "Dry indoor tray only?"),
+        qwebr_calc_col("washdown_or_chemical", c(FALSE, FALSE, FALSE, TRUE), type = "logical",
+                       label = "Washdown / chemical?")),
+      note = "A VFD output overrides everything else; a washdown or chemical environment adds a jacket and glanding requirement on top of the base cable.")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: cable-selection-06-04
@@ -607,10 +637,10 @@ applications <- data.frame(
   stringsAsFactors = FALSE
 )
 
+cat(sprintf("Cable construction recommended for %d runs\n", nrow(applications)))
+
 for (i in seq_len(nrow(applications))) {
   a <- applications[i, ]
-  cat("Run:", a$run, "\n")
-
   if (a$is_vfd_output) {
     choice <- "VFD cable"
     reason <- "the reflected-wave and common-mode effects of a PWM drive output override every other consideration."
@@ -632,10 +662,12 @@ for (i in seq_len(nrow(applications))) {
                      "at every termination, regardless of which base cable is otherwise selected.")
   }
 
-  cat("  Recommended:", choice, "\n")
-  cat("  Reasoning:", reason, "\n\n")
+  cat(sprintf("%s  %s\n", a$run, choice))
+  cat("Why:", reason, "\n")
 }
 ```
+
+</details>
 
 **Sanity check:** each recommendation traces back to a single dominant environmental or electrical driver — burial/outdoor exposure for TECK90, PWM output characteristics for VFD cable, an existing tray system for tray cable — exactly the traceability a documented decision framework is supposed to provide. The washdown zone is a useful reminder that jacket selection is a *layer on top of* the base cable-type decision, not a fifth cable type competing with the other four.
 

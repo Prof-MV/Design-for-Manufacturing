@@ -371,7 +371,31 @@ $$Score_{option} = \sum_i w_i \times s_{i,option}$$
 
 ### Worked Example
 
-Live cell — try different weight profiles (what matters most for *your* machine?) and see whether the recommendation flips.
+Live cell — try different weight profiles in the table (what matters most for *your* machine?) and see whether the recommendation flips.
+
+```{r calc-material-decision-06-11, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "material-decision-06-11",
+  title = "Frame Material Weighted Decision",
+  icon = "scale-balanced",
+  tables = list(
+    qwebr_calc_table(
+      columns = list(
+        qwebr_calc_col("criterion", c("Stiffness", "Modularity", "Cost", "Corrosion resistance", "Ease of modification"),
+                       type = "label", label = "Criterion"),
+        qwebr_calc_col("extrusion_scores", c(2, 5, 4, 5, 5), var = "extrusion_scores", label = "Extrusion score", min = 1, max = 5, step = 1),
+        qwebr_calc_col("steel_scores", c(5, 1, 3, 2, 2), var = "steel_scores", label = "Steel score", min = 1, max = 5, step = 1),
+        qwebr_calc_col("weights_A", c(0.15, 0.30, 0.25, 0.15, 0.15), var = "weights_A", label = "Scenario A weight", min = 0, max = 1, step = 0.05),
+        qwebr_calc_col("weights_B", c(0.50, 0.05, 0.15, 0.10, 0.20), var = "weights_B", label = "Scenario B weight", min = 0, max = 1, step = 0.05)),
+      note = "Scores run from 1 (poor fit) to 5 (excellent fit). Each weight column should sum to 1.0.")
+  ),
+  fig_width = 1000, fig_height = 600
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: material-decision-06-11
@@ -390,18 +414,29 @@ score_steel_A <- sum(weights_A * steel_scores)
 score_extrusion_B <- sum(weights_B * extrusion_scores)
 score_steel_B <- sum(weights_B * steel_scores)
 
+rec_A <- ifelse(score_extrusion_A > score_steel_A, "ALUMINUM EXTRUSION", "WELDED STEEL")
+rec_B <- ifelse(score_extrusion_B > score_steel_B, "ALUMINUM EXTRUSION", "WELDED STEEL")
+
+cat(sprintf("Recommendation: Scenario A %s, Scenario B %s\n", rec_A, rec_B))
+
 cat("Scenario A -- light-duty pick-and-place cell:\n")
-cat(sprintf("  Extrusion weighted score: %.2f\n", score_extrusion_A))
-cat(sprintf("  Welded steel weighted score: %.2f\n", score_steel_A))
-cat(sprintf("  -> Recommendation: %s\n\n",
-            ifelse(score_extrusion_A > score_steel_A, "ALUMINUM EXTRUSION", "WELDED STEEL")))
+cat(sprintf("Scenario A extrusion weighted score  %.2f\n", score_extrusion_A))
+cat(sprintf("Scenario A welded steel weighted score  %.2f\n", score_steel_A))
+cat(sprintf("Scenario A recommendation  %s\n", rec_A))
 
 cat("Scenario B -- heavy-duty press-to-press transfer base:\n")
-cat(sprintf("  Extrusion weighted score: %.2f\n", score_extrusion_B))
-cat(sprintf("  Welded steel weighted score: %.2f\n", score_steel_B))
-cat(sprintf("  -> Recommendation: %s\n",
-            ifelse(score_extrusion_B > score_steel_B, "ALUMINUM EXTRUSION", "WELDED STEEL")))
+cat(sprintf("Scenario B extrusion weighted score  %.2f\n", score_extrusion_B))
+cat(sprintf("Scenario B welded steel weighted score  %.2f\n", score_steel_B))
+cat(sprintf("Scenario B recommendation  %s\n", rec_B))
+
+par(mar = c(5, 5, 3, 1))
+barplot(c(score_extrusion_A, score_steel_A, score_extrusion_B, score_steel_B),
+        names.arg = c("A extrusion", "A steel", "B extrusion", "B steel"), cex.names = 0.8,
+        col = c("#2E86C1", "#E67E22", "#2E86C1", "#E67E22"), ylim = c(0, 5),
+        ylab = "Weighted score", main = "Weighted material scores by scenario")
 ```
+
+</details>
 
 **Sanity check:** the same five criterion scores produce opposite recommendations once the weights reflect what each application actually needs — extrusion wins clearly for the pick-and-place cell (4.30 vs. 2.40), while welded steel wins, more narrowly, for the heavy-duty transfer base (3.60 vs. 3.35). The narrower margin in Scenario B is worth noticing: it's not a landslide, which is realistic — a heavily gusseted, closely-supported extrusion frame really could compete with welded steel for a transfer base at the margin, and a specific quote should still run the actual stiffness numbers (Design Tasks 1 and 2) for both options before finalizing, rather than stopping at the decision matrix alone.
 

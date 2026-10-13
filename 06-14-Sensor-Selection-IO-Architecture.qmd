@@ -384,7 +384,23 @@ There's no formula here — the "calculation" is a fault-mode walkthrough, appli
 
 ### Worked Example
 
-Live cell — change `output_type` to `"NPN"` and re-run to see the fault analysis flip.
+Live cell — change the output type to *NPN* to see the fault analysis flip.
+
+```{r calc-pnp-npn-fault-06-14, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "pnp-npn-fault-06-14",
+  title = "PNP vs. NPN Chafed-Wire Fault",
+  icon = "plug",
+  inputs = list(
+    qwebr_calc_input("output_type", "Sensor output type", value = "PNP", type = "select",
+                     options = c("PNP", "NPN"))
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: pnp-npn-fault-06-14
@@ -392,8 +408,6 @@ Live cell — change `output_type` to `"NPN"` and re-run to see the fault analys
 ## exposed to chafing against the machine's grounded, bonded frame.
 
 output_type <- "PNP"   # try "NPN"
-
-cat("Output type:", output_type, "\n\n")
 
 if (output_type == "PNP") {
   voltage_when_active <- "+24V (sourced to load)"
@@ -407,20 +421,24 @@ if (output_type == "PNP") {
   matches_active_state <- TRUE
 }
 
-cat("Normal voltage when sensor is ACTIVE:  ", voltage_when_active, "\n")
-cat("Normal voltage when sensor is INACTIVE:", voltage_when_inactive, "\n")
-cat("A chafed-wire short to the grounded frame forces the wire to:", fault_forces_wire_to, "\n\n")
+if (matches_active_state) {
+  cat("Fault reads as ACTIVE: !!false detection (higher-risk failure mode)!!\n")
+} else {
+  cat("Fault reads as INACTIVE: detectable nuisance fault\n")
+}
+cat(sprintf("Output type  %s\n", output_type))
+cat(sprintf("Normal voltage when sensor is ACTIVE  %s\n", voltage_when_active))
+cat(sprintf("Normal voltage when sensor is INACTIVE  %s\n", voltage_when_inactive))
+cat(sprintf("Chafed-wire short to the grounded frame forces the wire to  %s\n", fault_forces_wire_to))
 
 if (matches_active_state) {
-  cat("CONCLUSION: the fault-forced state matches the ACTIVE state.\n")
-  cat("Downstream logic cannot distinguish this fault from a real detection --\n")
-  cat("this is the higher-risk failure mode.\n")
+  cat("The fault-forced state matches the ACTIVE state, so downstream logic cannot distinguish this fault from a real detection -- this is the higher-risk failure mode.\n")
 } else {
-  cat("CONCLUSION: the fault-forced state matches the INACTIVE state.\n")
-  cat("Downstream logic reads this as the sensor simply being off -- a\n")
-  cat("detectable nuisance fault, not a false detection.\n")
+  cat("The fault-forced state matches the INACTIVE state, so downstream logic reads this as the sensor simply being off -- a detectable nuisance fault, not a false detection.\n")
 }
 ```
+
+</details>
 
 **Sanity check:** switching `output_type` to `"NPN"` flips the conclusion exactly as the wiring diagram predicts — the physical wiring hasn't changed conceptually, only which rail the load sits against, and that single difference is what determines whether a chafed-wire fault reads as "off" or mimics "on." This is precisely why the choice matters even though both wiring schemes control the load identically under normal, fault-free operation.
 
@@ -726,7 +744,34 @@ A "no" on any of questions 3-6, combined with a "yes" on question 1, means the c
 
 ### Worked Example
 
-Live cell — change any of the boolean inputs (e.g., set `wash_pressure_psi` lower, or `housing_material` to `"316 stainless"`) and re-run to see the recommendation change.
+Live cell — change the wash conditions or the sensor specification (e.g., set the housing material to *316 stainless steel*) to see the recommendation change.
+
+```{r calc-washdown-checklist-06-14, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "washdown-checklist-06-14",
+  title = "Washdown Sensor Checklist",
+  icon = "droplet",
+  inputs = list(
+    qwebr_calc_input("in_direct_spray_zone", "Mounted in direct hand-held wash spray path", value = TRUE, type = "logical"),
+    qwebr_calc_input("wash_pressure_psi", "Wash pressure", value = 1500, min = 0, max = 3000, step = 50, suffix = "psi"),
+    qwebr_calc_input("wash_temp_C", "Wash temperature", value = 80, min = 0, max = 100, step = 5, suffix = "\u00b0C"),
+    qwebr_calc_input("housing_rating", "Housing rating", value = "IP67", type = "select",
+                     options = c("IP65", "IP67", "IP68", "IP69K")),
+    qwebr_calc_input("housing_material", "Housing material", value = "Black polycarbonate", type = "select",
+                     options = c("Black polycarbonate", "Nickel-plated brass", "316 stainless steel")),
+    qwebr_calc_input("connector_rating", "Connector rating",
+                     value = "IP67 (rated only as part of the overall housing claim)", type = "select",
+                     options = c("IP67 (rated only as part of the overall housing claim)",
+                                 "IP69K (independently rated stainless M12)")),
+    qwebr_calc_input("seal_material", "Seal material", value = "Standard nitrile", type = "select",
+                     options = c("Standard nitrile", "EPDM", "FKM/Viton"))
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+<p>The card above re-runs this exact webR code every time you change an input, substituting your values for the variables at the top. Edit the code directly and press <strong>Run Code</strong> to experiment further.</p>
 
 ```{webr-r}
 #| label: washdown-checklist-06-14
@@ -741,15 +786,6 @@ housing_material <- "Black polycarbonate"
 connector_rating <- "IP67 (rated only as part of the overall housing claim)"
 seal_material <- "Standard nitrile"
 
-cat("Mounting location in direct hand-held wash spray path:", in_direct_spray_zone, "\n")
-cat("Plant washdown conditions: ", wash_pressure_psi, "psi at", wash_temp_C, "C\n\n")
-
-cat("Currently specified sensor:\n")
-cat("  Housing rating:  ", housing_rating, "\n")
-cat("  Housing material:", housing_material, "\n")
-cat("  Connector rating:", connector_rating, "\n")
-cat("  Seal material:   ", seal_material, "\n\n")
-
 fails_checklist <- in_direct_spray_zone && (
   housing_rating != "IP69K" ||
   !grepl("stainless", housing_material, ignore.case = TRUE) ||
@@ -757,18 +793,33 @@ fails_checklist <- in_direct_spray_zone && (
   !grepl("FKM|Viton", seal_material, ignore.case = TRUE)
 )
 
+## Mark an item red only when it fails the checklist in a direct-spray zone
+flag <- function(ok, text) if (ok || !in_direct_spray_zone) text else sprintf("!!%s!!", text)
+
 if (fails_checklist) {
-  cat("CONCLUSION: current specification FAILS the washdown checklist.\n\n")
-  cat("Recommended replacement specification:\n")
-  cat("  Housing rating:   IP69K (ISO 20653), tested at conditions meeting or\n")
-  cat("                    exceeding this plant's actual wash pressure/temperature\n")
-  cat("  Housing material: 316 stainless steel\n")
-  cat("  Connector:        Stainless M12, independently IP69K-rated\n")
-  cat("  Seals:            FKM/Viton, rated for continuous 80 C+ exposure\n")
+  cat("Washdown checklist: !!FAILS!!\n")
 } else {
-  cat("CONCLUSION: current specification PASSES the washdown checklist.\n")
+  cat("Washdown checklist: PASSES\n")
+}
+cat(sprintf("In direct hand-held wash spray path  %s\n", in_direct_spray_zone))
+cat(sprintf("Plant washdown conditions  %g psi at %g C\n", wash_pressure_psi, wash_temp_C))
+cat(sprintf("Housing rating  %s\n", flag(housing_rating == "IP69K", housing_rating)))
+cat(sprintf("Housing material  %s\n",
+            flag(grepl("stainless", housing_material, ignore.case = TRUE), housing_material)))
+cat(sprintf("Connector rating  %s\n", flag(grepl("IP69K", connector_rating), connector_rating)))
+cat(sprintf("Seal material  %s\n",
+            flag(grepl("FKM|Viton", seal_material, ignore.case = TRUE), seal_material)))
+
+if (fails_checklist) {
+  cat("Recommended replacement specification:\n")
+  cat("Replacement housing rating  IP69K (ISO 20653), tested at conditions meeting or exceeding this plant's actual wash pressure/temperature\n")
+  cat("Replacement housing material  316 stainless steel\n")
+  cat("Replacement connector  Stainless M12, independently IP69K-rated\n")
+  cat("Replacement seals  FKM/Viton, rated for continuous 80 C+ exposure\n")
 }
 ```
+
+</details>
 
 **Sanity check:** the plant's actual wash conditions (1500 psi, 80°C, direct spray) sit well inside what the IP69K test protocol is specifically designed to replicate, and nowhere near what the IP67 immersion test represents — the failing sensors in the scenario weren't defective, they were simply never tested against anything resembling their actual service environment. This is the recurring lesson of this design task: an IP rating is only meaningful in the context of the specific test it certifies, not as a generic "waterproof" label.
 
