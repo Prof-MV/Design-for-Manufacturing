@@ -205,7 +205,7 @@ ggplot() +
  ## Bend angle annotation
  geom_curve(aes(x = 5, y = 3.5, xend = 6.5, yend = 4.2),
            curvature = -0.3, linewidth = 0.5, color = "red") +
- annotate("text", x = 6.8, y = 3.5, label = "Bend\nAngle", color = "red", size = 3 * diagram_text_scale) +
+ annotate("label", x = 8.4, y = 2.6, label = "Bend\nAngle", color = "red", fill = "white", linewidth = 0, size = 3 * diagram_text_scale) +
 
  ## Bend radius annotation
  geom_point(aes(x = 5, y = 2.15), size = 2, color = "red") +

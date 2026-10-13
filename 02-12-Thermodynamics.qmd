@@ -774,8 +774,7 @@ ggplot() +
   # State points
   geom_point(data = data.frame(s = c(s1,s2,s3,s4), T = c(T1,T2,T3,T4)),
              aes(x = s, y = T), size = 3.5, colour = "#E63946") +
-  annotate("text", x = s1-0.2, y = T1,    label = "1\nCondenser out", hjust=1, size = 3.0 * diagram_text_scale) +
-  annotate("text", x = s2-0.2, y = T2+90, label = "2\nPump out",      hjust=1, size = 3.0 * diagram_text_scale) +
+  annotate("text", x = s1-0.2, y = T1+40, label = "1, 2\nCondenser out /\nPump out", hjust=1, size = 3.0 * diagram_text_scale) +
   annotate("text", x = s3+0.1, y = T3,    label = "3\nTurbine in",    hjust=0, size = 3.0 * diagram_text_scale) +
   annotate("text", x = s4+0.1, y = T4+15, label = "4\nTurbine out",   hjust=0, size = 3.0 * diagram_text_scale) +
   # Process annotations
@@ -785,7 +784,7 @@ ggplot() +
            colour = "#2A9D8F", fontface = "italic") +
   annotate("text", x = 3.7,  y = 30,  label = "Condenser (4→1)", size = 3.2 * diagram_text_scale,
            colour = "#2A9D8F", fontface = "italic") +
-  annotate("text", x = 0.55, y = 200, label = "Pump\n(1→2)", size = 3.0 * diagram_text_scale,
+  annotate("text", x = 1.6, y = 85, hjust = 0, label = "Pump (1→2)", size = 3.0 * diagram_text_scale,
            colour = "#2A9D8F", fontface = "italic") +
   # Critical point marker
   annotate("point", x = 1.3,  y = 374, size = 4, colour = "#E63946") +
@@ -873,13 +872,13 @@ ggplot() +
   geom_point(data = data.frame(s = c(s1,s2,s3,s4), T = c(T1,T2,T3,T4)),
              aes(x = s, y = T), size = 3.5, colour = "#E63946") +
   # State labels
-  annotate("text", x = s1+0.1, y = T1-60, label = "1\n(BDC)", hjust=0, size = 3.2 * diagram_text_scale, colour="#264653") +
-  annotate("text", x = s2+0.1, y = T2+60, label = "2\n(TDC)", hjust=0, size = 3.2 * diagram_text_scale, colour="#264653") +
+  annotate("text", x = s1-0.1, y = T1-20, label = "1\n(BDC)", hjust=1, size = 3.2 * diagram_text_scale, colour="#264653") +
+  annotate("text", x = s2-0.1, y = T2+20, label = "2\n(TDC)", hjust=1, size = 3.2 * diagram_text_scale, colour="#264653") +
   annotate("text", x = s3+0.1, y = T3,    label = "3\n(TDC\nPost-combustion)", hjust=0, size = 3.0 * diagram_text_scale, colour="#264653") +
   annotate("text", x = s4+0.1, y = T4,    label = "4\n(BDC\nPost-expansion)", hjust=0, size = 3.0 * diagram_text_scale, colour="#264653") +
   # Process annotations
-  annotate("text", x = (s1+s2)/2 - 0.15, y = (T1+T2)/2 + 60,
-           label = "1→2\nIsentropic\nCompression", hjust=1, size = 2.8 * diagram_text_scale, colour="#457B9D") +
+  annotate("text", x = s1 + 0.12, y = 640,
+           label = "1→2\nIsentropic\nCompression", hjust=0, size = 2.8 * diagram_text_scale, colour="#457B9D") +
   annotate("text", x = (s2+s3)/2 - 0.1, y = (T2+T3)/2 + 100,
            label = "2→3\nConst. Vol.\nHeat Addition", hjust=1, size = 2.8 * diagram_text_scale, colour="#E63946") +
   annotate("text", x = (s3+s4)/2 - 0.12, y = (T3+T4)/2,

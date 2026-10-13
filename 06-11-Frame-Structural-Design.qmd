@@ -589,13 +589,13 @@ Once the lateral disturbance force is estimated, compare the **overturning momen
 library(ggplot2)
 library(ggforce)
 
-cg_df <- data.frame(x0 = 0, y0 = 1.35, r = 0.13)
+cg_df <- data.frame(x0 = 0, y0 = 1.35, r = 0.2)
 
 ggplot() +
   annotate("rect", xmin = -0.45, xmax = 0.45, ymin = 0, ymax = 1.8, fill = "#95A5A6", color = "black") +
   annotate("segment", x = -1.1, xend = 1.1, y = 0, yend = 0, color = "black", linewidth = 1.4) +
   geom_circle(data = cg_df, aes(x0 = x0, y0 = y0, r = r), fill = "#E74C3C", color = "black") +
-  annotate("text", x = 0, y = 1.35, label = "CG", size = 2.2 * diagram_text_scale, color = "black", fontface = "bold") +
+  annotate("text", x = 0, y = 1.35, label = "CG", size = 4.2 * diagram_text_scale, color = "white", fontface = "bold") +
   annotate("point", x = 0.45, y = 0, size = 4, color = "black", shape = 17) +
   annotate("text", x = 0.45, y = -0.16, label = "Pivot\n(leading edge)", size = 2.6 * diagram_text_scale) +
   annotate("segment", x = -0.15, xend = 0.55, y = 1.35, yend = 1.35,

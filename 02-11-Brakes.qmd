@@ -74,7 +74,8 @@ ggplot(nodes, aes(x = x, y = y)) +
            arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
   annotate("segment", x = 5.75, xend = 6.25, y = 4.5, yend = 4.5,
            arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
-  annotate("segment", x = 7.75, xend = 8.25, y = 4.5, yend = 4.5,
+  annotate("segment", x = 8.35, xend = 8.35, y = 2.4, yend = 6.6, colour = "grey40") +
+  annotate("segment", x = 7.75, xend = 8.35, y = 4.5, yend = 4.5,
            arrow = arrow(length = unit(0.2, "cm")), colour = "grey40") +
   annotate("text", x = 4, y = 5.4, label = "Hydraulic circuit →\nABS module modulates",
            hjust = 0.5, size = 2.8 * diagram_text_scale, colour = "grey30") +

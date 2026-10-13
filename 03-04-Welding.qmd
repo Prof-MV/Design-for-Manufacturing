@@ -99,7 +99,7 @@ ggplot() +
   ## Reinforcement label
   geom_segment(aes(x = 6.8, xend = 5.8, y = 4, yend = 3.5),
                arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  annotate("text", x = 8.2, y = 4.8, label = "Weld\nReinforcement", size = 3 * diagram_text_scale) +
+  annotate("text", x = 7.9, y = 4.7, label = "Weld\nReinforcement", size = 3 * diagram_text_scale) +
 
   ## Root label
   geom_segment(aes(x = 5, xend = 5, y = -1, yend = -0.4),
@@ -108,9 +108,9 @@ ggplot() +
 
   ## Toe labels
   geom_point(aes(x = c(4, 6), y = c(3, 3)), size = 3, color = "red") +
-  geom_segment(aes(x = 3, xend = 3.9, y = 2.2, yend = 2.9),
+  geom_segment(aes(x = 2.6, xend = 3.9, y = 3.45, yend = 2.9),
                arrow = arrow(length = unit(0.15, "cm")), color = "red") +
-  annotate("text", x = 1.5, y = 3.9, label = "Weld Toe", color = "red", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 1.9, y = 3.7, label = "Weld Toe", color = "red", size = 3.5 * diagram_text_scale) +
 
   ## Fusion line
   geom_segment(aes(x = 4.3, xend = 4.3, y = 0, yend = 3),

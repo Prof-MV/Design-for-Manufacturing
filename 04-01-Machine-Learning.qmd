@@ -570,10 +570,10 @@ ggplot(xbar, aes(x = day, y = mean_diam)) +
   scale_colour_manual(values = c("FALSE" = "#1976d2", "TRUE" = "#c62828"),
                       labels = c("In control", "Out of control"),
                       name   = NULL) +
-  annotate("text", x = 99.5, y = ucl + 0.002, label = "UCL", hjust = 1, vjust = -0.5, size = 3 * diagram_text_scale) +
-  annotate("text", x = 99.5, y = lcl - 0.002, label = "LCL", hjust = 1, vjust = 1.4, size = 3 * diagram_text_scale) +
-  annotate("text", x = 99.5, y = usl + 0.002, label = "USL", hjust = 1, vjust = 1.4, size = 3 * diagram_text_scale, colour = "#b71c1c") +
-  annotate("text", x = 99.5, y = lsl - 0.002, label = "LSL", hjust = 1, vjust = -0.5, size = 3 * diagram_text_scale, colour = "#b71c1c") +
+  annotate("text", x = 99.5, y = ucl + 0.0015, label = "UCL", hjust = 1, vjust = 0, size = 3 * diagram_text_scale) +
+  annotate("text", x = 99.5, y = lcl - 0.0015, label = "LCL", hjust = 1, vjust = 1, size = 3 * diagram_text_scale) +
+  annotate("text", x = 99.5, y = usl - 0.0015, label = "USL", hjust = 1, vjust = 1, size = 3 * diagram_text_scale, colour = "#b71c1c") +
+  annotate("text", x = 99.5, y = lsl + 0.0015, label = "LSL", hjust = 1, vjust = 0, size = 3 * diagram_text_scale, colour = "#b71c1c") +
   coord_cartesian(xlim = c(1, 100)) +
   labs(title   = "X-bar Control Chart: CNC Cell 3 (Simulated)",
        subtitle = "Red = specification limits | Orange = control limits",
@@ -845,8 +845,8 @@ ggplot(df_pf, aes(x = time, y = condition)) +
   annotate("text", x = (t_P + t_F) / 2 - 14, y = -13,
            label = "P-F Interval\n(decision window)",
            colour = "#2e7d32", size = 3.2 * diagram_text_scale, fontface = "bold", hjust = 0.5) +
-  annotate("text", x = t_P - 1, y = cond_P + 14,
-           label = "P: First\ndetectable sign",
+  annotate("label", x = t_P - 1, y = cond_P + 14,
+           label = "P: First\ndetectable sign", fill = "white", linewidth = 0,
            colour = "#f57f17", size = 3 * diagram_text_scale, hjust = 1) +
   annotate("text", x = t_F + 1, y = cond_F + 40,
            label = "F: Functional\nfailure",
@@ -855,9 +855,10 @@ ggplot(df_pf, aes(x = time, y = condition)) +
   geom_point(data = sensor_labels,
              aes(x = t_detect, y = y), colour = "#7b1fa2",
              size = 3, shape = 18) +
-  geom_text(data = sensor_labels,
-            aes(x = t_detect, y = y - 6, label = label),
-            colour = "#7b1fa2", size = 2.5 * diagram_text_scale, hjust = 1) +
+  geom_label(data = sensor_labels,
+            aes(x = t_detect, y = y + 7, label = label),
+            colour = "#7b1fa2", fill = "white", linewidth = 0,
+            size = 2.5 * diagram_text_scale, hjust = 0.5) +
   scale_y_continuous(limits = c(-22, 100),
                      breaks  = seq(0, 100, 20)) +
   labs(title    = "The P-F Curve",
