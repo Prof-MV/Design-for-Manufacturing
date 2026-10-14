@@ -1118,6 +1118,7 @@ On the left of Figure ~@fig-force-triangle-plot, the bolt is modeled as a tensio
 ###### The Force-Deformation Graph (Right) {-}
 
 The graph translates these physical movements into a geometric diagram where the slopes represent stiffness ($k = \frac{Force}{Deformation}$).
+
 * **Elongation (Green Line):** This is the bolt's behavior. As the load increases, the bolt stretches. Because a bolt is typically long and thin, it is relatively "stretchy," resulting in a shallower slope.
 * **Compression (Yellow Line):** This is the members' behavior. It is plotted starting from the right and moving toward the center. Clamped members (like steel plates) are usually much stiffer than the bolt, so this line has a steeper slope.
 * **The Intersection Point ($F_v$):** The peak of the triangle represents the state after tightening but before any external "working load" is applied. At this point, the bolt tension and member compression are balanced at the preload value $F_v$.
@@ -1331,6 +1332,7 @@ $$C = \frac{k_b}{k_b + k_m}$$
 
 ##### Force Distribution {-}
 The total force in the bolt ($F_b$) and the remaining clamping force in the member ($F_m$) are calculated as follows:
+
 * $F_b = C \cdot P + F_i$
 * $F_m = (1 - C) \cdot P - F_i$
 
@@ -1632,7 +1634,7 @@ The calculation results are summarized below. The Joint Constant ($C$) indicates
 
 In this example we are verifying if the bolts can hold the applied load and how big the safety factors are.
 
-**Bolt material: SAE J429 Grade 5** properties  [Fastenal Technical Reference Guide](http://www-eng.lbl.gov/~shuman/NEXT/MATERIALS&COMPONENTS/Pressure_vessels/FastenalTechnicalReferenceGuide.pdf)
+**Bolt material: SAE J429 Grade 5** properties  [Fastenal Technical Reference Guide](https://www.fastenal.com/content/merch_rules/images/fcom/content-library/Fastener%20Reference%20Guide.pdf)
 
 | Strength Property | Minimum Value |
 | :--- | :--- |
