@@ -269,12 +269,14 @@ There are many print defects. If you encounter one, check out this [excellent su
 **Hairy Models**: [The Hairy Lion](https://www.printables.com/model/119009-the-hairy-lion)
 
 **Printable Velcro**:
+
 - [Printable Velcro](https://www.printables.com/model/543802-printable-velcro)
 - [Hook & Loop Prints Contest](https://www.printables.com/contest/397-hook-loop-prints)
 
 **Arc Overhangs**: [Arc Overhangs in PrusaSlicer](https://www.cnckitchen.com/blog/arc-overhangs-in-prusaslicer)
 
 **Brick Layers**:
+
 - [Brick Layers Make 3D Prints Stronger](https://www.cnckitchen.com/blog/brick-layers-make-3d-prints-stronger)
 - [Bricklayers GitHub Repository](https://github.com/TengerTechnologies/Bricklayers)
 

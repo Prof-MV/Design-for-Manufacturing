@@ -238,6 +238,7 @@ ggplot() +
 **Best choice: Butt Joint with full penetration groove weld**
 
 Reasoning:
+
 - **Full penetration** ensures the weld is as strong as the base metal
 - **Continuous load path** - bending stresses transfer smoothly across the joint
 - **No overlap** - maintains the beam's cross-sectional geometry
@@ -565,6 +566,7 @@ knitr::include_graphics("images/C26_F04_pg212.jpg")
 ```
 
 The symbols are designed to visually represent the cross-section of the weld:
+
 - **Fillet symbol** (triangle) resembles the triangular cross-section of a fillet weld
 - **V-groove symbol** looks like a "V" shape
 - **Square groove symbol** represents two parallel lines (the gap)
@@ -805,6 +807,7 @@ knitr::include_graphics("images/C26_F09_pg214.jpg")
 ```
 
 **Reading multiple reference lines:**
+
 - The reference line **closest to the arrow** represents the **first operation**
 - Subsequent operations are read from bottom to top (or closest to farthest from arrow)
 - This is critical for back gouging, backing welds, and multi-pass procedures
@@ -837,6 +840,7 @@ knitr::include_graphics("images/C26_F10_pg214.jpg")
 <summary>Click for answer</summary>
 
 Staggered intermittent welds provide:
+
 - More uniform heat distribution during welding (less distortion)
 - Better stress distribution under load
 - Reduced likelihood of fatigue crack initiation at the ends of welds
@@ -854,6 +858,7 @@ knitr::include_graphics("images/C26_F11_pg215.jpg")
 ```
 
 **Interpreting located welds:**
+
 - The weld length is specified in the welding symbol (e.g., ".25 / 4.00" means 0.25" leg, 4.00" length)
 - Standard dimensioning practices locate the weld start/end points
 - This is common for gussets, brackets, and partial-length stiffeners
@@ -892,6 +897,7 @@ knitr::include_graphics("images/C27_F01_pg219.jpg")
 ```
 
 **Key rule:** When the arrow has a **break (bend)**, the break points to the member that receives the edge preparation. This is critical for:
+
 - Single-bevel groove welds
 - Single-J groove welds
 - Any asymmetric groove preparation
@@ -918,6 +924,7 @@ knitr::include_graphics("images/C27_F02_pg219.jpg")
 | Root opening | Inside the weld symbol | Gap at the root before welding |
 
 **Example from Figure @fig-groove-combined-dims-ref:**
+
 - `.31 (.38)` means: 0.31" weld size (effective throat), 0.38" depth of groove preparation
 - `25°` is the groove angle on each side
 - The interpretation shows the actual joint geometry
@@ -931,6 +938,7 @@ knitr::include_graphics("images/C27_F03_pg220.jpg")
 ```
 
 **When to specify CJP welds:**
+
 - Primary structural members in tension or flexure
 - Fatigue-critical connections
 - Pressure vessels and piping
@@ -960,6 +968,7 @@ knitr::include_graphics("images/C27_F04_pg220.jpg")
 | **Symbol** | No size shown (full by default) | Size specified |
 
 **Reading PJP symbols from Figure @fig-pjp-welds-ref:**
+
 - `(.75)` - depth of groove preparation is 0.75"
 - `(.50)` with groove angle - specifies both depth and geometry
 - The weld doesn't extend all the way through the material
@@ -1021,6 +1030,7 @@ knitr::include_graphics("images/C27_F07_pg221.jpg")
 ```
 
 **Flare weld applications:**
+
 - Joining round bars to flat plates
 - Tube-to-tube connections at angles
 - Handrail and structural tube fabrication
@@ -1063,6 +1073,7 @@ knitr::include_graphics("images/C27_F09_pg223.jpg")
 - Nuclear and aerospace applications requiring radiographic proof of penetration
 
 **Reading melt-through dimensions:**
+
 - The height shown (e.g., `.06`, `.12`) specifies the required root reinforcement height
 - Root reinforcement is the weld metal extending beyond the original surface on the back side
 
@@ -1446,6 +1457,7 @@ $$CE = 0.4 + 0.15 + 0.24 + 0 = 0.79$$
 With CE = 0.79 (in the "poor" weldability zone):
 
 **Required precautions:**
+
 1. **Preheat** to 200-300°C before welding
 2. Use **low-hydrogen electrodes** (e.g., E7018)
 3. Control **interpass temperature**
@@ -1652,18 +1664,22 @@ ggplot() +
 <summary>Click to reveal analysis and recommendations</summary>
 
 **Issue 1: Single-sided fillet welds**
+
 - Problem: May cause angular distortion; stress concentration
 - Solution: Use double-sided fillet welds or specify full penetration at critical corners
 
 **Issue 2: No stiffener at load application point**
+
 - Problem: Concentrated load may cause local buckling or fatigue cracking
 - Solution: Add a gusset plate or stiffener at the load point
 
 **Issue 3: Sharp corners at brace connections**
+
 - Problem: High stress concentration; poor fatigue performance
 - Solution: Add cope holes or radius transitions; grind weld toes smooth
 
 **Additional Recommendations:**
+
 1. Specify welding sequence (start from center, work outward)
 2. Use intermittent welds on brace if continuous weld causes distortion
 3. Specify weld toe grinding for fatigue-critical joints
@@ -1686,24 +1702,28 @@ knitr::include_graphics("images/C26_A66_pg217.jpg")
 ```
 
 **Analysis of Assembly A:**
+
 - The symbol shows `.25` fillet welds with a flush contour symbol
 - "Weld A to be ground flat" indicates postweld finishing required
 - Process specified: Gas Metal-Arc Welding (GMAW)
 - The interpretation shows both dimension callout and final appearance
 
 **Analysis of Assembly B:**
+
 - Intermittent fillet welds: `.50` leg size
 - Pattern: `5.00` length with `10.00` pitch (center-to-center)
 - Welds on both sides with `3.00` spacing between
 - Concave contour specified (no postweld finishing needed)
 
 **Analysis of Assembly C:**
+
 - `.38` fillet weld, both sides
 - Dimensions `20.00` × `10.00` define the welded region
 - This demonstrates dimensional location of welds
 
 ::: {.callout-activity}
 **Try This:** For Assembly D in Figure @fig-fillet-weld-assignment-ref, identify:
+
 1. What weld sizes are specified (A, B, C)?
 2. What process is indicated?
 3. What finishing is required?
@@ -1713,6 +1733,7 @@ knitr::include_graphics("images/C26_A66_pg217.jpg")
 <summary>Click for solution</summary>
 
 **Assembly D Analysis:**
+
 - A = .38 Carbon-Arc Weld
 - B = .31 Weld ground flat
 - C = .38 Carbon-Arc Weld
@@ -1729,6 +1750,7 @@ knitr::include_graphics("images/C26_A67_pg218.jpg")
 ```
 
 **Component Identification:**
+
 - **Ribs** - Provide stiffening for the horizontal shafts
 - **Horizontal Shafts** - Main structural members
 - **Arms** - Connect horizontal shafts to base
@@ -1736,6 +1758,7 @@ knitr::include_graphics("images/C26_A67_pg218.jpg")
 - **Base** - Foundation plate
 
 **Weld Specifications (from the assignment notes):**
+
 1. Horizontal shafts welded both sides to arms: `.25` fillet welds on outside, `.19` fillet welds inside, flat finish (no postweld finishing)
 2. Arms welded both sides to base: `.19` fillet welds
 3. Ribs welded both sides to base and arms: `.12` fillet welds
@@ -1751,6 +1774,7 @@ knitr::include_graphics("images/C26_A67_pg218.jpg")
 <summary>Click for discussion points</summary>
 
 The vertical shaft likely experiences:
+
 - **Fatigue loading** from cyclic forces transmitted through the shaft
 - **Bending moments** at the base connection
 - A concave contour provides a smoother stress flow at the weld toe, improving fatigue life
@@ -2015,6 +2039,7 @@ On a grid sheet, make detailed sketches of the six welds shown in the circled ar
 
 ::: {.callout-check}
 **Self-Assessment:** After completing your sketches, verify:
+
 - Do your groove angles match the symbol specifications?
 - Are root openings shown correctly?
 - Does the weld size match the effective throat requirements?

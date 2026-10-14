@@ -49,6 +49,7 @@ The significance of stamping lies in its ability to produce high volumes of iden
 ### Essential Components of Stamping {#sec-stamping-components}
 
 Every stamping operation requires several basic elements working in harmony:
+
 1. **The Sheet Metal (Workpiece):** This is the raw material, typically supplied as coils or flat sheets. Common materials include steel, aluminum, brass, copper, and stainless steel.
 
 2. **The Die:** A specialized tool that contains the negative (female) form of the part. The die is mounted on the press bed.

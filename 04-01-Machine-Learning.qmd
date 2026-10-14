@@ -1021,11 +1021,13 @@ Many algorithms can solve the RUL regression problem. Your capstone uses **Rando
 A **decision tree** is a flowchart of yes/no questions about your features, with a prediction at each leaf node. The questions and their split thresholds are *learned from the data* — the algorithm picks the questions that best separate training rows by their RUL values.
 
 **Strengths of a single tree:**
+
 - Trivially interpretable — you can read the exact rules
 - Handles mixed numeric and categorical inputs without normalization
 - Fast to train and predict
 
 **Critical weakness:**
+
 - A deep tree memorizes training data and generalizes poorly to new engines. It learns the noise, not the signal.
 
 #### Step 2: Many Trees, Averaged {#ml-w3-ensemble}
@@ -1033,6 +1035,7 @@ A **decision tree** is a flowchart of yes/no questions about your features, with
 Random Forest's key idea: build many trees, each slightly different, and average their predictions.
 
 Two sources of randomness make each tree unique:
+
 1. **Row bagging:** each tree is trained on a random subset of rows, sampled with replacement
 2. **Feature subsets:** at each split point, each tree considers only a random subset of features
 
@@ -1540,6 +1543,7 @@ ggplot(df_drift, aes(x = month, y = rmse)) +
 | **Retirement** | When the process changes fundamentally enough that the model assumptions no longer hold; decommission cleanly; notify users | Engineering management |
 
 **Retraining cadence:** there is no universal answer. Considerations:
+
 - How fast does the process change? A high-volume production line changes faster than a low-cycle heavy equipment fleet.
 - How expensive is labelled data? For C-MAPSS this is free (simulation). For a real plant, you only get the "true RUL" label after the equipment actually fails or is removed.
 - How expensive is a wrong prediction? Higher stakes require more frequent validation and lower drift tolerance.
@@ -1605,6 +1609,7 @@ Machine learning models learn patterns from historical data. If the historical d
 The Air Canada case (2024) established that companies are liable for what their AI-powered customer-service bots say. The principle extends to manufacturing: if your predictive maintenance model causes a consequential decision — stopping production, removing a part prematurely, or failing to flag an imminent failure — and that decision results in financial loss or injury, the question of liability is not trivial.
 
 Current state of Canadian and US law: liability typically falls on the company deploying the system, not the model vendor. The engineer who deployed the system may be asked to demonstrate that the model was:
+
 - Validated appropriately before deployment
 - Used within its intended scope (not applied to equipment or conditions outside the training distribution)
 - Subject to human review for consequential decisions
@@ -1626,6 +1631,7 @@ For some decisions this is acceptable — if the stakes are low and the model is
 | Optimizing a non-critical scheduling parameter | Low | Errors are cheap to reverse |
 
 **Tools for explainability with Random Forest:**
+
 - **Feature importance** (built in to scikit-learn): which features contributed most, on average
 - **SHAP values** (library: `shap`): which features pushed a *specific* prediction up or down, and by how much — the gold standard for local explanation
 - **Partial dependence plots**: how the prediction changes as one feature varies while others are held constant
@@ -1639,6 +1645,7 @@ For your capstone, feature importance is sufficient. In a real deployment for sa
 :::
 
 Good AI deployment design includes:
+
 - Clear statements of what the model does and does not know
 - Confidence or uncertainty estimates displayed appropriately (to the right audience)
 - Easy mechanisms for human feedback and override
@@ -1658,6 +1665,7 @@ What is actually in production at scale (not pilot or demo) in North American ma
 - **LLM-assisted documentation:** work order generation, SOP drafting, supplier emails — on the rise since 2023; most common at the engineering and supervision level, not on the shop floor
 
 What is in rapid development / early deployment:
+
 - **Digital twins with ML feedback:** real-time simulation of production processes updated by sensor data — very capital-intensive but accelerating
 - **Autonomous quality control with closed-loop feedback:** the system detects a defect, diagnoses the probable cause, and sends a corrective offset directly to the CNC controller — no human in the loop for the adjustment
 - **Multimodal LLMs for maintenance technicians:** technician describes a symptom in natural language, uploads a photo of the machine, and receives a structured troubleshooting checklist from a model fine-tuned on OEM maintenance manuals

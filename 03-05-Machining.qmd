@@ -509,6 +509,7 @@ $$T = \frac{L}{f \times N} = \frac{200}{0.3 \times 1910} = \frac{200}{573} = 0.3
 No, this design will not work. The 8 mm end mill has a 4 mm radius, so the minimum internal fillet it can produce is 4 mm—not 1 mm.
 
 **Recommendations:**
+
 1. Increase the internal fillet radius to at least 4 mm (preferably 6 mm for smoother tool motion)
 2. Or, specify that corners be finished with EDM (electrical discharge machining) at significant additional cost
 3. Or, redesign to eliminate the pocket entirely
@@ -526,6 +527,7 @@ No, this design will not work. The 8 mm end mill has a 4 mm radius, so the minim
 **Solution:**
 
 Using the tolerance-cost relationship:
+
 - Feature A (±0.5 mm): 1× baseline = $10
 - Feature B (±0.1 mm): ~2.5× baseline = $25
 - Feature C (±0.025 mm): ~7× baseline = $70
@@ -559,9 +561,11 @@ embed_youtube("sq3Ht-ivG5U", "DFM Guide for Mechanical Engineers")
 ```
 
 **Reference Tables:**
+
 - [Machinery's Handbook](https://www.industrialpress.com/machinerys-handbook/) - Comprehensive reference for speeds, feeds, and tolerances
 - [Cutting Speed Charts by Material](https://www.sandvik.coromant.com/) - Sandvik Coromant technical resources
 
 **Reading:**
+
 - Design for Manufacturability Handbook, James G. Bralla
 - Fundamentals of Modern Manufacturing, Mikell P. Groover

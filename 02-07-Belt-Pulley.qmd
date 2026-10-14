@@ -662,6 +662,7 @@ This is within acceptable range (15-25 m/s optimal, up to 30 m/s maximum). ✓
 For 5 kW at 1450 rpm with a 100 mm pulley, referencing V-belt power rating tables, a **B-section** V-belt is appropriate. One belt should be sufficient, but two belts would provide a safety factor.
 
 **Summary:**
+
 - Driver pulley: 100 mm pitch diameter, B-section groove
 - Driven pulley: 280 mm pitch diameter, B-section groove
 - Belt: B64 (1626 mm pitch length), B-section

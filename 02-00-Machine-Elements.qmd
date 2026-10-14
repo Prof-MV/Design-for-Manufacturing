@@ -47,16 +47,19 @@ Machine elements are the vocabulary of mechanical design. Just as a writer must 
 The machine elements covered in this section are used across all industries where our students will work:
 
 **Automotive Industry:**
+
 - Transmissions use gears, bearings, and synchronizers
 - Engine assemblies rely on bolted joints and timing chains
 - Suspension systems incorporate linkages and bushings
 
 **Food Processing Industry:**
+
 - Conveyor systems use chain drives and bearings
 - Mixing equipment employs gears and couplings
 - Packaging machines utilize linkages and belt drives
 
 **Defense Industry:**
+
 - Vehicle drivetrains require heavy-duty gears and couplings
 - Weapon systems use precision linkages and bearings
 - Support equipment relies on standard bolted assemblies

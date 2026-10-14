@@ -399,6 +399,7 @@ knitr::include_graphics("images/drTrain-image20.png")
 ##### Example 1: Leading Shoe — Normal Force and Braking Torque
 
 **Given:**
+
 - $l = 200$ mm, $l_1 = 120$ mm, $l_2 = 30$ mm
 - $\mu = 0.35$, drum radius $r = 150$ mm
 - Applied actuating force: $F = 200$ N *(leading shoe)*
@@ -452,6 +453,7 @@ This geometry has a very large safety margin — intentionally so for an automot
 ##### Example 4: Complete Drum Brake — Leading and Trailing Combined
 
 **Given:** One leading and one trailing shoe, same wheel cylinder force per shoe:
+
 - $F = 350$ N per shoe, $l = 180$ mm, $l_1 = 110$ mm, $l_2 = 25$ mm
 - $\mu = 0.38$, $r = 140$ mm
 
@@ -649,6 +651,7 @@ Traditional vehicles used a **proportioning valve** — a hydraulic valve that a
 **Electronic Brake-Force Distribution (EBD)** uses the ABS hardware (wheel speed sensors and modulator) to dynamically adjust the front-rear brake bias based on actual wheel slip, vehicle speed, deceleration rate, and load condition. It is software in the ABS ECU — no additional hardware is required.
 
 EBD can:
+
 - Compensate for different loads (empty vs. fully laden vehicle)
 - Compensate for trailer towing (increased rear axle load)
 - Work with AWD systems where front-rear brake force must match front-rear traction availability

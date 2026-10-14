@@ -178,6 +178,7 @@ As you work through the chapters in this section, you will develop the ability t
 5. **Evaluate** trade-offs between design features and manufacturing costs
 
 Each chapter follows a consistent structure:
+
 - Learning objectives
 - Process fundamentals
 - Design guidelines with calculations

@@ -432,6 +432,7 @@ In the worked example of Figure @fig-lab2-results-12, the jump from Fine to Very
 
 ::: {.callout-check}
 **Quick Check:**  
+
 1. If two successive mesh refinements give 210 MPa and 214 MPa, what is the percentage change, and has the study converged?  
 2. Your FEA peak keeps doubling every time you refine the mesh near a corner. What does this tell you, and what should you do?
 :::

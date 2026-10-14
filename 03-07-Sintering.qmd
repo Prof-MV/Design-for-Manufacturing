@@ -1129,6 +1129,7 @@ This porosity level is appropriate for a self-lubricating bearing application.
 
 ::: {.question}
 **Problem 2:** An engineer must select bearings for two applications:
+
 - Application A: Electric fan motor, 1800 RPM, 25°C ambient, clean environment
 - Application B: Oven conveyor pivot, oscillating ±15°, 200°C, flour dust present
 
@@ -1139,12 +1140,14 @@ Recommend the appropriate bearing type for each and justify your selection.
 **Solution:**
 
 **Application A: Oil-impregnated sintered bronze bearing**
+
 - Continuous rotation at high speed will develop hydrodynamic lubrication
 - Clean environment won't contaminate the oil
 - Moderate temperature is within oil operating range
 - Long maintenance-free life expected
 
 **Application B: Graphite-impregnated sintered bronze bearing**
+
 - Oscillating motion cannot develop hydrodynamic film—solid lubricant needed
 - 200°C exceeds the operating range of most lubricating oils
 - Flour dust would contaminate oil and accelerate wear

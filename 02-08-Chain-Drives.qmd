@@ -593,6 +593,7 @@ $$v = \frac{12.7 \times 17 \times 1200}{60,000} = 4.32 \text{ m/s}$$
 This is acceptable for #40 chain (max recommended ~7-10 m/s for this size).
 
 **Summary:**
+
 - Chain: ANSI #40 (1/2" pitch)
 - Driver sprocket: 17 teeth, 69.1 mm pitch diameter
 - Driven sprocket: 51 teeth, 206.2 mm pitch diameter

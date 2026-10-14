@@ -42,12 +42,14 @@ Geometric Dimensioning and Tolerancing (GD&T) is a standardized method of specif
 #### Why GD&T Matters
 
 Traditional dimensioning (Figure \@fig-traditional-vs-gdt) can lead to:
+
 - Ambiguous interpretations of design intent
 - Excessive part cost due to overly tight tolerances
 - Functional failures due to under-constrained features
 - Increased manufacturing costs and waste
 
 GD&T solves these problems by:
+
 - Clearly communicating design intent
 - Maximizing functional tolerance zones
 - Reducing manufacturing costs
@@ -483,6 +485,7 @@ kable(drf_table, caption="Datum Reference Frame Structure", booktabs=TRUE)
 #### Maximum Material Condition (MMC) {-}
 
 MMC is the condition where a feature contains the maximum amount of material:
+
 - Smallest hole diameter
 - Largest shaft diameter
 - Widest slot
@@ -792,6 +795,7 @@ ggplot(data, aes(x=size, y=probability, fill=method)) +
 ```
 
 **Question**: 
+
 - What type of control is being applied?
 - What is the tolerance value?
 - How many datums are referenced?
@@ -799,6 +803,7 @@ ggplot(data, aes(x=size, y=probability, fill=method)) +
 
 **Answer**: 
 This is a **position control** (⊙) with:
+
 - Tolerance: Ø0.8 mm (circular zone)
 - Three datums: A (primary), B (secondary), C (tertiary)
 - Datum establishment order: A (largest plane) → B (perpendicular) → C (tertiary reference)
@@ -821,11 +826,13 @@ This is a **position control** (⊙) with:
 #### Exercise 3: Tolerance Stack-Up Problem {-}
 
 **Given**:
+
 - Part 1: 10.0 ± 0.1 mm
 - Part 2: 8.0 ± 0.15 mm
 - Part 3: 6.0 ± 0.1 mm
 
 **Calculate**:
+
 - Minimum total length
 - Maximum total length
 - Total tolerance stack-up

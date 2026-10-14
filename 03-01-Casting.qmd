@@ -375,6 +375,7 @@ ggplot() +
 
 ::: {.callout-industry}
 **Industry Applications:**
+
 - **Aerospace:** Turbine blades for jet engines (single-crystal superalloy castings)
 - **Medical:** Orthopedic implants (hip joints, knee replacements)
 - **Defense:** Firearm components, missile parts
@@ -773,6 +774,7 @@ Over 150 mm the wall grows by $150 \tan(`r sprintf("%.1f", dr$total)`^\circ) = `
 **Solution:** The cylinder solidifies from the outside inward and from the ends toward the middle. The center is the last area to solidify and becomes isolated from liquid feed metal.
 
 **Design modifications:**
+
 1. Add a riser at the top connected to the center of the casting to provide feed metal during solidification
 2. Taper the cylinder slightly (larger diameter at top) to promote directional solidification toward the riser
 :::
@@ -783,6 +785,7 @@ Over 150 mm the wall grows by $150 \tan(`r sprintf("%.1f", dr$total)`^\circ) = `
 
 ::: {.answer}
 **Solution:**
+
 - First 50 mm: $\frac{50}{25} \times 1.5° = 3°$
 - Remaining 100 mm: $\frac{100}{25} \times 1° = 4°$
 - Total draft angle: $3° + 4° = 7°$
@@ -798,6 +801,7 @@ The pattern should have a 7° draft angle on vertical surfaces.
 **Recommendation: Investment Casting**
 
 **Reasoning:**
+
 - Internal passages are easier to achieve without cores
 - Steel's high melting point works well with ceramic shells
 - 500 units justifies the higher per-part cost
@@ -831,6 +835,7 @@ embed_youtube("fKLKSN8H6Xg", "Investment Casting Process")
 ```
 
 **Reading:**
+
 - [Reliance Foundry: Casting Design Guidelines](https://www.reliance-foundry.com/blog/metal-casting-design)
 - [3DPCasting: Sand Casting Detailed Steps](https://www.3dpcasting.com/blogs/sand-casting-8-key-steps-in-detail/)
 - [General Kinematics: Sand Casting Overview](https://www.generalkinematics.com/blog/sand-casting/)

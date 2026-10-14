@@ -914,6 +914,7 @@ grid.arrange(p1, p2, ncol = 2)
 ### 🧮 Worked Example: Clutch Torque Calculation {-}
 
 **Problem:** A single-plate automotive clutch has the following specifications:
+
 - Outer friction radius: 125 mm
 - Inner friction radius: 80 mm
 - Coefficient of friction: 0.35
@@ -1177,6 +1178,7 @@ $$T = \mu \times F_n \times r_m = 0.30 \times 3846 \times 0.075 = 86.5 \text{ N�
 **Recommended: Jaw/Spider coupling with elastomeric element**
 
 Justification:
+
 - Parallel misalignment (0.5 mm) is within typical jaw coupling capacity (0.2-0.5 mm)
 - Angular misalignment (0.3°) is within typical capacity (0.5-1.0°)
 - Provides good vibration damping
@@ -1184,6 +1186,7 @@ Justification:
 - Moderate cost
 
 Alternatives:
+
 - Disc coupling would work but offers less damping
 - Gear coupling is oversized for this application
 

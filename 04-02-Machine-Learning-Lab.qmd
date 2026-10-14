@@ -38,6 +38,7 @@ All six weeks of lab work are set in a consistent workplace context to make the 
 Your plant manager, Sophie Tran, has heard a great deal about AI and machine learning in the past year. She has seen what GE and Toyota are doing with predictive maintenance, and she wants to know whether Précitech can benefit too — without leaking IP to public tools, without trusting outputs that haven't been verified, and without a million-dollar investment in infrastructure.
 
 She has assigned you to:
+
 1. Learn enough about AI tools to use them safely and productively for your daily engineering work (Weeks 1–2)
 2. Build a proof-of-concept predictive maintenance system using publicly available data and free tools, to demonstrate whether the approach has merit (Weeks 3–5)
 3. Present your findings and the deployed application to the plant leadership team (Week 6)
@@ -178,6 +179,7 @@ The code must:
 **You must understand every line.** Before saving the code to `spc_starter.py`, read through it and make sure you can explain what each line does. The instructor will ask you to explain a specific line in Week 2. If you cannot, go back to the LLM and ask it to explain that line, or look it up.
 
 **Deliverables for Week 1:** Submit via Brightspace:
+
 - `prompts.md` — your before/after prompt pairs (Exercises 1–3) and hallucination documentation
 - `spc_starter.py` — the Python code you generated in Exercise 4
 
@@ -214,6 +216,7 @@ Three things will happen:
 This is normal and expected. Week 2 is about learning to make industrial data trustworthy *before* you analyze it. Your Week 1 code was correct for clean data — the problem is the data, not necessarily the code.
 
 **In the notebook's first markdown cell, describe:**
+
 - What the spike looks like (approximate value)
 - Whether your outlier detection flagged the right rows
 - What error or warning you encountered, if any
@@ -772,6 +775,7 @@ print("You will need them in your GitHub repo for Week 5.")
 To download from Colab: click the folder icon in the left sidebar → right-click `rul_model.pkl` → Download. Repeat for `feature_cols.pkl`.
 
 **Deliverable for Week 4:** Submit via Brightspace:
+
 - Your completed `predictive_maintenance.ipynb` with all cells executed
 - `rul_model.pkl` and `feature_cols.pkl` uploaded as additional files (or confirm they are already in your GitHub repo)
 
@@ -800,6 +804,7 @@ Before the lab session, complete these steps (they require a few minutes each):
 Download `streamlit_app.py` from Brightspace. This is your starter template — it has the skeleton of the app already written, with `TODO` comments marking the parts you need to complete.
 
 The template already includes:
+
 - Page configuration and title
 - Cached model loading from `rul_model.pkl` and `feature_cols.pkl`
 - Rolling feature computation for a single engine (no groupby needed — single engine = no boundary issue)
@@ -897,6 +902,7 @@ git push -u origin main
 Deployment typically takes 2–3 minutes. You will get a public URL in the format `https://your-username-rul-predictor-streamlit-app-XXXXXX.streamlit.app`.
 
 If deployment fails:
+
 - Check the log for the specific error (usually a missing package or wrong file path)
 - Most common issue: `rul_model.pkl` is too large (> 50 MB). If so, retrain with fewer trees (`n_estimators=50`) to reduce file size.
 - Second most common: `requirements.txt` has a version conflict. Remove version pins and let Streamlit resolve them, then re-add specific pins if needed.
@@ -921,6 +927,7 @@ A working app is the minimum. A well-polished app is what gets the attention at 
 #### Task 5: Test with a Classmate (15 minutes) {#sec-ml-lab-w5-task5}
 
 Swap your public URL with a classmate. Try to:
+
 - Upload a valid CSV (your sample file should work)
 - Upload an invalid CSV (wrong columns, extra columns, missing values)
 - Test edge cases: what happens with 1-row CSV? A 1000-row CSV?
@@ -928,6 +935,7 @@ Swap your public URL with a classmate. Try to:
 Document **one bug you find in their app** and **one bug they find in yours**. Note these in a markdown cell in your notebook — you do not need to fix them before submission (but you may), and the finding itself demonstrates good engineering judgment.
 
 **Deliverable for Week 5:** Submit via Brightspace:
+
 - Your public Streamlit URL
 - A screenshot showing your app with a prediction displayed
 - The `rul-predictor` GitHub repository URL (must be public)

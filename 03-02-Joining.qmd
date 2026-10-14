@@ -475,6 +475,7 @@ tryit_sort(
 **Recommendation: Welding (TIG/GTAW)**
 
 **Reasoning:**
+
 - Creates smooth, crevice-free joints for hygiene
 - Provides leak-proof seal for liquid containment
 - Stainless steel is readily weldable with proper technique
@@ -492,6 +493,7 @@ Orbital TIG welding would be ideal for consistent, high-quality pipe joints.
 **Recommendation: Soldering (Reflow)**
 
 **Reasoning:**
+
 - Low temperature (< 250°C peak) protects heat-sensitive components
 - Provides excellent electrical conductivity
 - Industry-standard process for PCB assembly
@@ -505,10 +507,12 @@ Orbital TIG welding would be ideal for consistent, high-quality pipe joints.
 
 ::: {.answer}
 **Welding:**
+
 - Cost per bracket: 4 joints × $2/joint = $8
 - Total cost: 1000 × $8 = **$8,000**
 
 **Bolting:**
+
 - Labor per bracket: 4 joints × $0.50/joint = $2
 - Hardware per bracket: 4 joints × $1.50/joint = $6
 - Cost per bracket: $2 + $6 = $8
@@ -541,6 +545,7 @@ embed_youtube("2CIcvB72dmk", "Welding Process Overview")
 ```
 
 **Reading:**
+
 - AWS D1.1 Structural Welding Code - Steel
 - ASM Handbook Volume 6: Welding, Brazing, and Soldering
 - Adhesive Bonding of Aluminum Alloys (EAA/AA)

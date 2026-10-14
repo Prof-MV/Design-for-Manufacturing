@@ -264,6 +264,7 @@ Q - W = \Delta U = U_2 - U_1
 $$ {#eq-first-law-closed-15}
 
 where:
+
 - $Q$ = heat transferred **into** the system (positive when heat enters)
 - $W$ = work done **by** the system (positive when the system does work on surroundings)
 - $\Delta U$ = change in internal energy of the system
@@ -466,6 +467,7 @@ q - w_s = (h_2 - h_1) + \frac{V_2^2 - V_1^2}{2} + g(z_2 - z_1)
 $$ {#eq-sfee-15}
 
 where:
+
 - $q$ = specific heat transfer (J/kg), positive into system
 - $w_s$ = specific shaft work (J/kg), positive out of system
 - $h$ = specific enthalpy (J/kg)
@@ -579,6 +581,7 @@ $$ {#eq-carnot-efficiency-15}
 where $T_H$ and $T_L$ are the **absolute** (Kelvin) temperatures of the hot source and cold sink.
 
 The Carnot cycle consists of four reversible processes:
+
 1. **Isothermal expansion** at $T_H$ (heat addition $Q_H$)
 2. **Adiabatic expansion** from $T_H$ to $T_L$
 3. **Isothermal compression** at $T_L$ (heat rejection $Q_L$)

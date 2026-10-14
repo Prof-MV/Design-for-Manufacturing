@@ -749,12 +749,14 @@ coupler_types %>%
 ###### Problem Statement {-}
 
 A four-bar linkage has the following link lengths:
+
 - Link 1 (ground): $g = 100$ mm
 - Link 2 (input): $a = 40$ mm
 - Link 3 (coupler): $b = 80$ mm
 - Link 4 (output): $c = 60$ mm
 
 Determine:
+
 1. Whether this is a Grashof or non-Grashof linkage
 2. The type of mechanism (crank-rocker, double-crank, etc.)
 3. Which link should be the input for continuous rotation
@@ -944,6 +946,7 @@ results %>%
 
 
 For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), calculate the transmission angle when the input is at:
+
 1. $\theta_2 = 60°$
 2. Determine the minimum transmission angle through the full rotation
 

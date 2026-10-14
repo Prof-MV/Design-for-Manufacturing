@@ -1034,6 +1034,7 @@ A deep groove ball bearing (6207) supports a shaft rotating at **1,750 RPM**. Th
 3. The L5 life (95% reliability) in hours
 
 **Given data from catalog:**
+
 - Bearing: 6207
 - Dynamic load rating: $C = 26.0$ kN = 26,000 N
 - For Fa/Fr ratio, use: $e = 0.24$, $X = 0.56$, $Y = 1.6$
@@ -1852,6 +1853,7 @@ limits_data %>%
 A shaft rotating at **500 RPM** is supported by a SAE 660 bronze bushing. The shaft diameter is **1.5 inches** and the bushing length is **2.0 inches**. The radial load on the bushing is **800 lbf**.
 
 Determine:
+
 1. The bearing pressure ($P$)
 2. The sliding velocity ($V$)
 3. The PV value
@@ -2216,6 +2218,7 @@ $$F_{max} = \boxed{`r round(F_max, 1)`\ \text{lbf}}$$
 **Design Insight:** Notice that at 3,500 RPM with a 0.5 in bushing, the maximum load is only about `r round(F_max, 0)` lbf—very close to the 20 lbf used in the previous examples. This illustrates why it's critical to check both P/V limits AND the combined PV limit. The individual limits (P < 2,500 psi, V < 800 ft/min) are both easily satisfied, but the PV combination becomes the controlling factor at higher speeds.
 
 If your application requires 20 lbf at 3,500 RPM, you would need to either:
+
 1. Increase the bushing length (as calculated in the previous example: L ≥ 0.52 in)
 2. Select a material with a higher PV limit (e.g., SAE 660 Bronze with PV = 75,000)
 :::

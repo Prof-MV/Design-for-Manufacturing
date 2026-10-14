@@ -402,6 +402,7 @@ The most important derivative to control in cam design is **jerk**. Here is why:
 The "shape" of the rise and return segments in the displacement diagram determines whether the follower motion is smooth or violent. There are five standard motion types, ranging from simple-but-dangerous to complex-but-smooth.
 
 We will use a standard example throughout this section:
+
 - **Total lift:** $L = 1.0$ (normalized)
 - **Rise:** cam angle $\theta = 0°$ to $90°$ ($\beta_{rise} = 90°$)
 - **Dwell high:** $90°$ to $180°$
@@ -570,6 +571,7 @@ knitr::include_graphics("images/cam1-image9.png")
 ```
 
 Harmonic motion has these properties at the segment endpoints ($\bar{\theta} = 0$ and $\bar{\theta} = \beta$):
+
 - Velocity = 0 ✓ (smooth velocity transition with adjacent dwells)
 - Acceleration = $\pm L\pi^2/(2\beta^2)$ ✗ (non-zero → still a jerk discontinuity at dwell boundaries)
 
@@ -590,6 +592,7 @@ y = L\left(1 - \frac{\bar{\theta}}{\beta} + \frac{1}{2\pi}\sin\frac{2\pi\bar{\th
 $$ {#eq-cycloidal-return-10}
 
 At the endpoints:
+
 - Velocity = 0 ✓
 - Acceleration = 0 ✓ (jerk is finite at the boundary — much better than harmonic!)
 
@@ -781,6 +784,7 @@ A cam is designed with the following motion program:
 - **Return:** 210° to 360° using **harmonic motion** ($\beta = 150°$)
 
 Calculate the follower displacement at:
+
 1. $\theta = 150°$ (during the rise)
 2. $\theta = 270°$ (during the return)
 3. Verify both answers using the tabulated values provided.
@@ -853,6 +857,7 @@ knitr::include_graphics("images/cam1-image12.png")
 ```
 
 The tabulated values in Figure @fig-harmonic-tables-rise and Figure @fig-harmonic-tables-return confirm both results:
+
 - At θ = 150°: $y = 0.4000$ ✓
 - At θ = 270°: $y = 0.5236$ ✓
 
@@ -1077,6 +1082,7 @@ tryit_sort(
 ### Practice Problems {-}
 
 **Problem 1.** A cam has the following motion program:
+
 - Rise over 120° using **harmonic motion**, $L = 25$ mm
 - Dwell at top for 60°
 - Return over 180° using **cycloidal motion**
