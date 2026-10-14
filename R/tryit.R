@@ -428,7 +428,7 @@ tryit_node <- function(id, label, layer, given = NULL, blank = list(), sub = NUL
 #'   Response question for the boxes plus a Short Answer per entry in `answers`.
 tryit_diagram <- function(id, title, nodes, edges, direction = c("right", "down"),
                           arrows = TRUE, answers = list(), intro = NULL,
-                          question = NULL, show = TRUE) {
+                          question = NULL, show = TRUE, wide = TRUE) {
   direction <- match.arg(direction)
   ids <- vapply(nodes, function(n) n$id, character(1))
   stopifnot(!anyDuplicated(ids), all(unlist(edges) %in% ids))
@@ -466,7 +466,7 @@ tryit_diagram <- function(id, title, nodes, edges, direction = c("right", "down"
   if (!show) return(invisible(NULL))
 
   if (tryit_html()) {
-    tryit_emit("diagram", id, wide = TRUE, spec = list(
+    tryit_emit("diagram", id, wide = wide, spec = list(
       title = title, intro = intro, direction = direction, arrows = arrows,
       nodes = lapply(nodes, function(n) {
         n
