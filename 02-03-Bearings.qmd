@@ -365,10 +365,10 @@ load_factors %>%
       escape = FALSE) %>%
   kable_styling(latex_options = "hold_position", full_width = knitr::is_html_output()) %>%
   add_header_above(c(" " = 1, "Fa/Fr ≤ e" = 2, "Fa/Fr > e" = 2, " " = 1)) %>%
-  row_spec(0, background = "#D81B60", color = "white") %>%
-  footnote(general = "*Values depend on bearing geometry; consult manufacturer catalog",
-           general_title = "Note: ")
+  row_spec(0, background = "#D81B60", color = "white")
 ```
+
+*Note:* \*Values depend on bearing geometry; consult the manufacturer catalog.
 
 ---
 
@@ -397,10 +397,10 @@ catalog_data %>%
       booktabs = TRUE) %>%
   kable_styling(latex_options = "hold_position", full_width = knitr::is_html_output()) %>%
   column_spec(5, background = "#F9E7F0") %>%
-  row_spec(0, background = "#D81B60", color = "white") %>%
-  footnote(general = "C = Dynamic load rating; C₀ = Static load rating",
-           general_title = "Legend: ")
+  row_spec(0, background = "#D81B60", color = "white")
 ```
+
+*Legend:* C = dynamic load rating; C₀ = static load rating.
 
 ---
 
@@ -469,10 +469,10 @@ fc_values %>%
                      "Double Row\nRadial Contact" = 2,
                      "Self-Aligning" = 2)) %>%
   row_spec(0, background = "#D81B60", color = "white") %>%
-  row_spec(c(6, 10, 11), background = "#E8F5E9") %>%
-  footnote(general = "Source: ANSI-AFBMA Std. 9-1978. Metric fc gives C in Newtons (D in mm); Inch fc gives C in pounds (D in inches).",
-           general_title = "Note: ")
+  row_spec(c(6, 10, 11), background = "#E8F5E9")
 ```
+
+*Note:* Source: ANSI-AFBMA Std. 9-1978. The metric $f_c$ gives $C$ in newtons (with $D$ in mm); the inch $f_c$ gives $C$ in pounds (with $D$ in inches).
 
 ##### Conrad-Type Single-Row Radial Bearing Dimensions {-}
 
@@ -544,10 +544,10 @@ conrad_bearings %>%
   pack_rows("55mm Bore Series", 28, 30) %>%
   pack_rows("60mm Bore Series", 31, 33) %>%
   pack_rows("65mm Bore Series", 34, 36) %>%
-  pack_rows("70mm Bore Series", 37, 39) %>%
-  footnote(general = "C = Dynamic load rating; P_st = Static load rating. Source: ANSI-AFBMA standards.",
-           general_title = "Note: ")
+  pack_rows("70mm Bore Series", 37, 39)
 ```
+
+*Note:* $C$ = dynamic load rating; $P_{st}$ = static load rating. Source: ANSI-AFBMA standards.
 
 ##### The Load-Life Relationship: Why It Matters {-}
 
@@ -1115,6 +1115,232 @@ results %>%
 
 ---
 
+#### Interactive Calculators: Ball Bearings {#sec-calc-ball}
+
+The three calculators below use the equations from this section. Change a number and the answer updates straight away. They run in your browser, so they work on a phone too. Each one ends with a **challenge**: the card tells you when you have reached it.
+
+##### Calculator 1: Life under combined load {-}
+
+Try it: change the axial load and watch what happens at the point where $F_a/F_r$ crosses $e$. The curve shows how fast life falls as the radial load rises.
+
+```{r calc-life-card, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bearing-life-calc",
+  title = "Ball Bearing Life Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("C", "Basic dynamic load rating C", value = 19500, min = 1000, max = 100000, step = 100, suffix = "N"),
+    qwebr_calc_input("Fr", "Radial load Fr", value = 3200, min = 100, max = 20000, step = 50, suffix = "N"),
+    qwebr_calc_input("Fa", "Axial load Fa", value = 1100, min = 0, max = 10000, step = 10, suffix = "N", type = "slider"),
+    qwebr_calc_input("e", "Limit ratio e (from the catalog)", value = 0.30, min = 0.1, max = 1.5, step = 0.01),
+    qwebr_calc_input("X", "Radial factor X (when Fa/Fr > e)", value = 0.56, min = 0.3, max = 1, step = 0.01),
+    qwebr_calc_input("Y", "Axial factor Y (when Fa/Fr > e)", value = 1.6, min = 0, max = 4, step = 0.01),
+    qwebr_calc_input("n", "Speed n", value = 1450, min = 10, max = 20000, step = 10, suffix = "rpm"),
+    qwebr_calc_input("reliability", "Reliability wanted", value = "90", type = "select",
+                     options = c("90", "95", "96", "97", "98", "99"))
+  ),
+  goal = "Keep Fr = 3200 N, n = 1450 rpm and C = 19500 N. Reduce only the axial load until the L10 life reaches 2500 hours. What happens to the life at the moment Fa/Fr drops to e?",
+  goal_test = "L10h >= 2500 && Fr == 3200 && n == 1450 && C == 19500"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+
+The card above re-runs this exact webR code every time you change an input. Edit the code directly and press **Run Code** to experiment further.
+
+```{webr-r}
+#| label: bearing-life-calc
+## Ball bearing life under combined radial and axial load
+C           <- 19500   ## basic dynamic load rating, N
+Fr          <- 3200    ## radial load, N
+Fa          <- 1100    ## axial load, N
+e           <- 0.30    ## limit ratio from the catalog
+X           <- 0.56    ## radial factor used when Fa/Fr > e
+Y           <- 1.6     ## axial factor used when Fa/Fr > e
+n           <- 1450    ## speed, rpm
+reliability <- "90"    ## percent reliability wanted
+
+ratio <- Fa / Fr
+if (ratio > e) {
+  Xu <- X; Yu <- Y
+} else {
+  Xu <- 1; Yu <- 0
+}
+P    <- Xu * Fr + Yu * Fa             ## equivalent dynamic load, N
+L10  <- (C / P)^3                     ## million revolutions (ball bearing: p = 3)
+L10h <- L10 * 1e6 / (60 * n)          ## hours
+a1   <- switch(reliability, "90" = 1, "95" = 0.64, "96" = 0.55,
+               "97" = 0.47, "98" = 0.37, "99" = 0.25)
+Lnh  <- a1 * L10h                     ## adjusted life at the chosen reliability
+
+cat(sprintf("L10 life = %s hours\n", format(round(L10h), big.mark = " ")))
+cat(sprintf("Fa / Fr  %.3f (%s e = %.2f)\n", ratio, ifelse(ratio > e, "above", "at or below"), e))
+cat(sprintf("Factors used  X = %g, Y = %g\n", Xu, Yu))
+cat(sprintf("Equivalent load P  %s N\n", format(round(P), big.mark = " ")))
+cat(sprintf("L10 in revolutions  %.1f million\n", L10))
+cat(sprintf("Life at %s%% reliability  %s hours\n", reliability, format(round(Lnh), big.mark = " ")))
+
+loads <- seq(0.3 * Fr, 2 * Fr, length.out = 80)
+P_curve <- ifelse(Fa / loads > e, X * loads + Y * Fa, loads)
+life_curve <- (C / P_curve)^3 * 1e6 / (60 * n)
+par(mar = c(5, 5, 3, 1))
+plot(loads, life_curve, type = "l", lwd = 2, log = "y", col = "#D81B60",
+     xlab = "Radial load Fr (N)", ylab = "L10 life (hours, log scale)",
+     main = "Life falls with the cube of the load")
+points(Fr, L10h, pch = 19, cex = 1.8)
+```
+
+</details>
+
+Notice the jump in the curve. Catalogs give $X$ and $Y$ as a step at $F_a/F_r = e$, so a small extra axial load can cost a surprising amount of life. Real catalogs smooth this with several $Y$ values.
+
+<details>
+<summary>Discussion: the load doubles. What happens to the L10 life?</summary>
+
+Life varies with the cube of the load ratio, so doubling the equivalent load cuts life to $1/2^3 = 1/8$. Try it: double $F_r$ and compare the two L10 values.
+
+</details>
+
+##### Calculator 2: Rating C from the bearing geometry {-}
+
+Try it: the defaults are the 207 bearing from the worked example. The card looks up $f_c$ in the single-row table for you.
+
+```{r calc-fc-card, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bearing-C-calc",
+  title = "Dynamic Load Rating from Geometry",
+  icon = "ruler-combined",
+  inputs = list(
+    qwebr_calc_input("bore_in", "Bore", value = 1.378, min = 0.4, max = 6, step = 0.001, suffix = "in"),
+    qwebr_calc_input("OD_in", "Outside diameter", value = 2.8346, min = 1, max = 12, step = 0.001, suffix = "in"),
+    qwebr_calc_input("Z", "Balls per row Z", value = 9, min = 4, max = 20, step = 1),
+    qwebr_calc_input("D", "Ball diameter D", value = 0.4375, min = 0.0625, max = 1.25, step = 0.0625, suffix = "in", type = "slider"),
+    qwebr_calc_input("alpha", "Contact angle", value = 0, min = 0, max = 40, step = 5, suffix = "deg"),
+    qwebr_calc_input("i", "Rows of balls", value = 1, min = 1, max = 2, step = 1)
+  ),
+  goal = "Keep the 207 envelope (bore 1.378 in, OD 2.8346 in) and 9 balls. Choose a bigger ball diameter so that C reaches 5000 lbf, while the balls still fit in the ring.",
+  goal_test = "C_calc >= 5000 && bore_in == 1.378 && OD_in == 2.8346 && Z == 9 && balls_fit"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+
+```{webr-r}
+#| label: bearing-C-calc
+## Basic dynamic load rating of a radial ball bearing (inch units, lbf)
+bore_in <- 1.378    ## bore, in
+OD_in   <- 2.8346   ## outside diameter, in
+Z       <- 9        ## balls per row
+D       <- 0.4375   ## ball diameter, in
+alpha   <- 0        ## contact angle, degrees
+i       <- 1        ## rows of balls
+
+## fc for single-row radial bearings, inch column of the table above
+ratios <- c(0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.12, 0.14, 0.16, 0.18, 0.20,
+            0.22, 0.24, 0.26, 0.28, 0.30, 0.32, 0.34, 0.36, 0.38, 0.40)
+fc_tab <- c(3550, 3730, 3880, 4020, 4130, 4220, 4370, 4470, 4530, 4550, 4550,
+            4530, 4480, 4420, 4340, 4250, 4160, 4050, 3930, 3800, 3670)
+
+dm       <- (OD_in + bore_in) / 2                 ## pitch diameter
+ratio    <- D * cos(alpha * pi / 180) / dm        ## D cos(alpha) / dm
+fc       <- approx(ratios, fc_tab, xout = ratio, rule = 2)$y
+C_calc   <- fc * (i * cos(alpha * pi / 180))^0.7 * Z^(2/3) * D^1.8
+balls_fit <- Z * D <= 0.9 * pi * dm               ## balls must fit round the pitch circle
+
+cat(sprintf("C = %s lbf\n", format(round(C_calc), big.mark = " ")))
+cat(sprintf("Pitch diameter dm  %.4f in\n", dm))
+cat(sprintf("Ratio D cos(alpha) / dm  %.3f\n", ratio))
+cat(sprintf("fc from the table  %.0f\n", fc))
+if (ratio < 0.05 || ratio > 0.40) {
+  cat("Table range  !!ratio is outside 0.05 to 0.40: fc is held at the table edge!!\n")
+}
+if (balls_fit) {
+  cat(sprintf("Balls fit round the ring  yes (%.2f of %.2f in)\n", Z * D, 0.9 * pi * dm))
+} else {
+  cat(sprintf("Balls fit round the ring  !!no: %.2f in of balls, room for %.2f in!!\n", Z * D, 0.9 * pi * dm))
+}
+if (D >= (OD_in - bore_in) / 2) {
+  cat("Ball size  !!ball is thicker than the ring cross-section!!\n")
+}
+
+par(mar = c(5, 5, 3, 1))
+plot(ratios, fc_tab, type = "b", pch = 19, col = "#2c3e50",
+     xlab = "D cos(alpha) / dm", ylab = "fc (inch units)",
+     main = "Geometry factor fc")
+points(min(max(ratio, 0.05), 0.40), fc, pch = 19, cex = 2, col = "#D81B60")
+```
+
+</details>
+
+Doubling the ball diameter multiplies $C$ by about $2^{1.8} \approx 3.5$, but the balls have to fit round the ring and the ring must stay thick enough to carry them. The card checks both.
+
+##### Calculator 3: Select a bearing for a required life {-}
+
+Try it: enter the load and the life you need. The card finds the smallest Conrad-type bearing from the catalog table whose rating is high enough. The defaults ask for more than any bearing in the table can give.
+
+```{r calc-select-card, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bearing-select-calc",
+  title = "Bearing Selection from the Catalog",
+  icon = "magnifying-glass",
+  inputs = list(
+    qwebr_calc_input("P", "Equivalent load P", value = 2000, min = 100, max = 6000, step = 50, suffix = "lbf", type = "slider"),
+    qwebr_calc_input("n", "Speed n", value = 1500, min = 50, max = 10000, step = 50, suffix = "rpm"),
+    qwebr_calc_input("L_h", "Required life", value = 10000, min = 500, max = 100000, step = 500, suffix = "h")
+  ),
+  goal = "Find a load for which a bearing in the table works for at least 10 000 h at 1500 rpm or more. The load must stay at 1500 lbf or higher.",
+  goal_test = "selected_ok && L_h >= 10000 && n >= 1500 && P >= 1500"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+
+```{webr-r}
+#| label: bearing-select-calc
+## Smallest catalog bearing that gives the required life
+P   <- 2000    ## equivalent dynamic load, lbf
+n   <- 1500    ## speed, rpm
+L_h <- 10000   ## required L10 life, hours
+
+## Conrad-type single-row bearings from the table above, smallest rating first
+bearing  <- c("102", "103", "202", "104", "302", "105", "203", "204", "106", "303", "205", "304", "107", "108", "206", "305", "109", "110", "207", "111", "112", "306", "113", "208", "209", "307", "210", "114", "211", "308", "212", "309", "310", "214", "213", "311", "312", "313", "314")
+C_rating <- c(965, 1040, 1340, 1620, 1660, 1740, 1960, 2210, 2290, 2400, 2420, 2760, 2760, 3060, 3360, 3550, 3630, 3770, 4440, 4890, 5090, 5120, 5280, 5640, 5660, 5750, 6070, 6580, 7500, 7670, 9070, 9120, 10680, 10760, 10770, 12350, 14130, 16010, 18000)   ## basic dynamic load rating, lbf
+
+C_req <- (60 * n * L_h * P^3 / 1e6)^(1/3)       ## rating needed, lbf
+ok    <- C_rating >= C_req
+selected_ok <- any(ok)
+
+if (selected_ok) {
+  pick <- which(ok)[1]
+  life_h <- (C_rating[pick] / P)^3 * 1e6 / (60 * n)
+  cat(sprintf("Use bearing %s (C = %s lbf)\n", bearing[pick], format(C_rating[pick], big.mark = " ")))
+  cat(sprintf("Rating needed  %s lbf\n", format(round(C_req), big.mark = " ")))
+  cat(sprintf("Life with this bearing  %s hours\n", format(round(life_h), big.mark = " ")))
+  cat(sprintf("Margin on the rating  %.0f %%\n", 100 * (C_rating[pick] / C_req - 1)))
+} else {
+  cat("!!No bearing in the table is big enough!!\n")
+  cat(sprintf("Rating needed  %s lbf\n", format(round(C_req), big.mark = " ")))
+  cat(sprintf("Largest in the table  %s lbf (bearing %s)\n",
+              format(max(C_rating), big.mark = " "), bearing[which.max(C_rating)]))
+}
+
+par(mar = c(5, 5, 3, 1))
+cols <- ifelse(ok, "#2e7d32", "#95a5a6")
+barplot(C_rating, names.arg = bearing, col = cols, cex.names = 0.5,
+        xlab = "Bearing number (smallest rating first)", ylab = "C (lbf)",
+        main = "Green bars carry the load for the life you asked for")
+abline(h = C_req, col = "#D81B60", lwd = 2, lty = 2)
+```
+
+</details>
+
+Two things to notice. Raising the speed or the life by 10 % raises the rating you need by only about 3 %, because of the cube root. Raising the **load** by 10 % raises it by the full 10 %.
+
+---
+
 #### External Resources: Bearing Calculation Tools {-}
 
 Major bearing manufacturers provide comprehensive technical documentation and online calculators for bearing selection. These resources include detailed load rating tables, application examples, and life calculation methodologies.
@@ -1172,9 +1398,10 @@ bushing_types %>%
       booktabs = TRUE) %>%
   kable_styling(latex_options = c("hold_position", "scale_down"), full_width = knitr::is_html_output()) %>%
   column_spec(3, background = "#F9E7F0") %>%
-  row_spec(0, background = "#D81B60", color = "white") %>%
-  footnote(symbol = c("See Chapter 7 (Powder Metallurgy and Sintering) for manufacturing details of sintered bearings"))
+  row_spec(0, background = "#D81B60", color = "white") 
 ```
+
+\*Sintered bushings: see Chapter @sec-chap-sintering (Powder Metallurgy and Sintering) for how they are manufactured.
 
 ---
 
@@ -1332,6 +1559,66 @@ h_{min} = c(1 - \varepsilon)
 $$ {#eq-min-film-thickness}
 
 For safe operation, the minimum film thickness must exceed the combined surface roughness of the shaft and bearing, plus a safety margin for contaminants and vibration.
+
+Try it: the shaft sits lower in the bearing as the load goes up or the speed comes down. Drag the eccentricity ratio and watch the film thin out. The picture exaggerates the clearance so you can see it.
+
+```{r calc-film-card, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "film-thickness-calc",
+  title = "Minimum Oil Film Thickness",
+  icon = "droplet",
+  inputs = list(
+    qwebr_calc_input("clearance_um", "Radial clearance c", value = 20, min = 5, max = 100, step = 1, suffix = "um"),
+    qwebr_calc_input("eps", "Eccentricity ratio", value = 0.90, min = 0.05, max = 0.98, step = 0.01, type = "slider"),
+    qwebr_calc_input("Ra_shaft", "Shaft roughness Ra", value = 0.8, min = 0.1, max = 3, step = 0.1, suffix = "um"),
+    qwebr_calc_input("Ra_bush", "Bearing roughness Ra", value = 1.2, min = 0.1, max = 3, step = 0.1, suffix = "um")
+  ),
+  goal = "Keep c = 20 um and the two roughness values. Bring the eccentricity ratio down until the film is at least 3 times the combined roughness.",
+  goal_test = "film_ratio >= 3 && clearance_um == 20 && Ra_shaft == 0.8 && Ra_bush == 1.2"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+
+```{webr-r}
+#| label: film-thickness-calc
+## Minimum film thickness h_min = c (1 - eps) against surface roughness
+clearance_um <- 20    ## radial clearance c, micrometres
+eps          <- 0.90  ## eccentricity ratio e / c
+Ra_shaft     <- 0.8   ## shaft roughness, micrometres
+Ra_bush      <- 1.2   ## bearing bore roughness, micrometres
+
+h_min      <- clearance_um * (1 - eps)
+sigma      <- sqrt(Ra_shaft^2 + Ra_bush^2)    ## combined roughness
+film_ratio <- h_min / sigma
+
+cat(sprintf("h_min = %.2f um, %.1f times the roughness\n", h_min, film_ratio))
+cat(sprintf("Combined roughness  %.2f um\n", sigma))
+if (film_ratio >= 3) {
+  cat("Regime  full film, the surfaces are separated\n")
+} else if (film_ratio >= 1) {
+  cat("Regime  !!mixed: asperities touch from time to time!!\n")
+} else {
+  cat("Regime  !!boundary: metal-to-metal contact!!\n")
+}
+cat(sprintf("Film needed for 3 times the roughness  %.2f um\n", 3 * sigma))
+
+th <- seq(0, 2 * pi, length.out = 200)
+cc <- 0.25                                   ## clearance drawn large so it is visible
+par(mar = c(3, 1, 3, 1))
+plot(NULL, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), asp = 1, axes = FALSE,
+     xlab = "", ylab = "", main = "Shaft in the bearing (clearance exaggerated)")
+polygon(1.08 * cos(th), 1.08 * sin(th), col = "#cfd8dc", border = NA)
+polygon(cos(th), sin(th), col = "white", border = "#5F9EA0", lwd = 3)
+off <- eps * cc
+polygon((1 - cc) * cos(th), -off + (1 - cc) * sin(th), col = "#FF9933", border = "#cc7a29", lwd = 2)
+text(0, -off, "shaft")
+mtext(sprintf("eccentricity ratio = %.2f", eps), side = 1, line = 1)
+```
+
+</details>
+
 
 ---
 
@@ -1660,53 +1947,37 @@ For sintered self-lubricating bearings (see Chapter @sec-chap-sintering), the oi
 
 ---
 
-### Oil Circulation in Sintered Bearings (continued) {#sec-oil-circulation-diagram}
+### How the Oil Circulates, Step by Step {#sec-oil-circulation-diagram}
 
-The following diagram illustrates how oil circulates through a sintered oil-impregnated bearing during operation. The porous structure acts as an oil reservoir, continuously replenishing the hydrodynamic film:
+The oil-circulation figure earlier in this chapter (@fig-oil-circulation) shows one instant of the process. The porous structure is an oil reservoir that keeps refilling the hydrodynamic film, and the cycle runs in a loop:
 
-```{r bushing-striebeck-curve-old, echo=FALSE, message=FALSE, include=FALSE}
-# This old simple curve is replaced by the more detailed version above
-# Keeping for reference but not displaying
-library(ggplot2)
-library(ggforce) # For the ellipses/ovals
+1. **At rest**, the pores are full and a thin oil layer coats the bore.
+2. **At start-up**, friction warms the bearing. The oil expands and thins, and flows out of the pores into the clearance.
+3. **As the shaft turns**, it drags oil into the converging wedge, pressure builds, and the shaft lifts onto the film.
+4. **While running**, the high-pressure zone pushes oil back into the pores, and the low-pressure zone on the other side lets oil flow out of them. The oil circulates through the wall.
+5. **At shutdown**, the bearing cools, and capillary action pulls the oil back into the pores to wait for the next start.
 
-# 1. Create the data for the curve
-# Using a function to simulate the Stribeck behavior:
-# Friction = a * exp(-b * speed) + c * speed + d
-speed <- seq(0, 100, length.out = 300)
-friction <- 0.15 * exp(-0.15 * speed) + 0.0005 * speed + 0.02
+### Try it yourself: put the circulation cycle in order {#sec-tryit-oil-cycle}
 
-df <- data.frame(Speed = speed, Friction = friction)
+The steps are shuffled. Move each one up or down until the cycle runs from rest to the next rest.
 
-# 2. Build the plot
-ggplot(df, aes(x = Speed, y = Friction)) +
-  # The main Stribeck curve (Red line)
-  geom_line(color = "#D93025", linewidth = 1.2) +
-
-  # Vertical dashed boundary lines
-  geom_vline(xintercept = c(10, 40), linetype = "dotted", color = "black") +
-
-  # Text Labels for Lubrication Zones
-  annotate("text", x = 5, y = 0.18, label = "Boundary Lubrication", angle = 90, size = 4 * diagram_text_scale) +
-  annotate("text", x = 25, y = 0.18, label = "Mixed Lubrication", angle = 90, size = 4 * diagram_text_scale) +
-  annotate("text", x = 70, y = 0.15, label = "Hydrodynamic lubrication", size = 5 * diagram_text_scale) +
-
-
-
-  # Stylized Arrows for the axes
-  theme_classic() +
-  scale_x_continuous(expand = c(0, 0), limits = c(0, 110)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.22)) +
-  labs(x = "Speed [rpm]", y = "Friction Coefficient") +
-  theme(
-    axis.line = element_line(arrow = arrow(type = "closed", length = unit(0.15, "inches"))),
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    axis.title = element_text(size = 14 * chart_text_scale, face = "plain", hjust = 1),
-    plot.margin = margin(20, 20, 20, 20)
-  )
+```{r tryit-oil-cycle-order, echo=FALSE, results='asis'}
+tryit_order(
+  id = "oil-cycle",
+  title = "Oil circulation in a sintered bearing",
+  steps = c(
+    "The bearing is at rest: oil fills the pores and coats the bore",
+    "The shaft starts to turn; friction warms the bearing and the thinner oil flows out of the pores",
+    "The shaft drags oil into the converging wedge and the pressure lifts the shaft",
+    "Running: oil is pushed into the pores where pressure is high and drawn out where pressure is low",
+    "The shaft stops, the bearing cools and capillary action pulls the oil back into the pores"
+  ),
+  intro = "Move each step up or down until the cycle is in order.",
+  question = NULL
+)
 ```
 
+---
 
 ### PV Limits for Bushings {#pv-limits}
 
@@ -2227,6 +2498,100 @@ If your application requires 20 lbf at 3,500 RPM, you would need to either:
 
 ---
 
+### Interactive Calculator: Bushing Sizing {#sec-calc-bushing}
+
+This one card does all four bushing examples above. Pick a material, enter the shaft and load, and it checks $P$, $V$ and $PV$ against that material's limits. It also works backwards to give the **maximum speed**, the **minimum length** and the **maximum load**. The chart shows the safe region as a green area: the dot must sit inside it.
+
+```{r calc-bushing-card, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bushing-sizing-calc",
+  title = "Bushing Sizing Calculator",
+  icon = "circle-notch",
+  inputs = list(
+    qwebr_calc_input("material", "Bushing material", value = "SAE 660 Bronze", type = "select",
+                     options = c("SAE 660 Bronze", "Bronze", "PTFE/Bronze Composite", "Acetal (Delrin)",
+                                 "Nylon 6/6", "PEEK", "Iron", "Bronze-Iron", "Lead-Iron", "Aluminum")),
+    qwebr_calc_input("F_load", "Radial load F", value = 2500, min = 10, max = 20000, step = 50, suffix = "lbf"),
+    qwebr_calc_input("d_shaft", "Shaft diameter d", value = 1.5, min = 0.25, max = 6, step = 0.125, suffix = "in"),
+    qwebr_calc_input("L_bush", "Bushing length L", value = 2, min = 0.25, max = 8, step = 0.25, suffix = "in", type = "slider"),
+    qwebr_calc_input("n_rpm", "Speed n", value = 1200, min = 1, max = 6000, step = 10, suffix = "rpm")
+  ),
+  goal = "Keep F = 2500 lbf and d = 1.5 in, and keep the speed at 400 rpm or more. Choose a bushing length that makes the bushing pass all three limits.",
+  goal_test = "all_ok && F_load == 2500 && d_shaft == 1.5 && n_rpm >= 400"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+
+```{webr-r}
+#| label: bushing-sizing-calc
+## Plain bushing check using the P, V and PV limits from the table above
+material <- "SAE 660 Bronze"
+F_load   <- 2500   ## radial load, lbf
+d_shaft  <- 1.5    ## shaft diameter, in
+L_bush   <- 2      ## bushing length, in
+n_rpm    <- 1200   ## speed, rpm
+
+mats   <- c("SAE 660 Bronze", "Bronze", "PTFE/Bronze Composite", "Acetal (Delrin)",
+            "Nylon 6/6", "PEEK", "Iron", "Bronze-Iron", "Lead-Iron", "Aluminum")
+P_lims <- c(4000, 2000, 2500, 1500, 1000, 3000, 3000, 2500, 1000, 2000)       ## psi
+V_lims <- c(750, 1200, 500, 600, 400, 650, 400, 800, 800, 1200)               ## ft/min
+PV_lims <- c(75000, 50000, 25000, 10000, 5000, 40000, 30000, 35000, 50000, 50000)
+k <- match(material, mats)
+P_max <- P_lims[k]; V_max <- V_lims[k]; PV_max <- PV_lims[k]
+
+P_bearing <- F_load / (d_shaft * L_bush)        ## psi
+V_sliding <- pi * d_shaft * n_rpm / 12          ## ft/min
+PV_actual <- P_bearing * V_sliding              ## psi ft/min
+ok_P  <- P_bearing <= P_max
+ok_V  <- V_sliding <= V_max
+ok_PV <- PV_actual <= PV_max
+all_ok <- ok_P && ok_V && ok_PV
+
+## Working backwards
+V_allowed <- min(V_max, PV_max / P_bearing)
+n_max <- 12 * V_allowed / (pi * d_shaft)
+L_min <- max(F_load / (d_shaft * P_max), F_load * V_sliding / (d_shaft * PV_max))
+F_max <- if (ok_V) min(P_max, PV_max / V_sliding) * d_shaft * L_bush else 0
+
+fmt <- function(x) format(round(x), big.mark = " ")
+if (all_ok) {
+  cat(sprintf("Suitable: all three limits are met (PV safety factor %.2f)\n", PV_max / PV_actual))
+} else {
+  failed <- c(if (!ok_P) "P", if (!ok_V) "V", if (!ok_PV) "PV")
+  cat(sprintf("!!Not suitable: exceeds the %s limit!!\n", paste(failed, collapse = ", ")))
+}
+cat(sprintf("Bearing pressure P  %s psi (limit %s)\n", fmt(P_bearing), fmt(P_max)))
+cat(sprintf("Sliding velocity V  %s ft/min (limit %s)\n", fmt(V_sliding), fmt(V_max)))
+cat(sprintf("PV  %s psi ft/min (limit %s)\n", fmt(PV_actual), fmt(PV_max)))
+cat(sprintf("Maximum speed at this size and load  %s rpm\n", fmt(n_max)))
+if (ok_V) {
+  cat(sprintf("Minimum length at this load and speed  %.2f in\n", L_min))
+} else {
+  cat("Minimum length  !!none: the speed alone exceeds the V limit!!\n")
+}
+cat(sprintf("Maximum load at this size and speed  %s lbf\n", fmt(F_max)))
+
+## Log-log axes keep the operating point and the limits on one readable chart
+xr <- c(min(V_sliding, V_max) / 5, max(1.3 * V_max, 1.5 * V_sliding))
+yr <- c(min(P_bearing, PV_max / V_max) / 5, max(1.5 * P_max, 1.5 * P_bearing))
+Vs <- exp(seq(log(xr[1]), log(V_max), length.out = 200))
+Plim <- pmin(P_max, PV_max / Vs)
+par(mar = c(5, 5, 3, 1))
+plot(NULL, xlim = xr, ylim = yr, log = "xy",
+     xlab = "Sliding velocity V (ft/min)", ylab = "Bearing pressure P (psi)",
+     main = "Inside the green area is safe")
+polygon(c(xr[1], Vs, V_max), c(yr[1], Plim, yr[1]), col = "#E8F5E9", border = "#2e7d32", lwd = 2)
+points(V_sliding, P_bearing, pch = 19, cex = 2, col = ifelse(all_ok, "#2e7d32", "#c0392b"))
+```
+
+</details>
+
+Look at the shape of the safe area (both axes are logarithmic): pressure is capped at the top, speed on the right, and the sloping PV limit cuts the corner. A heavily loaded bushing has to run slowly, and a fast one has to be lightly loaded.
+
+---
+
 ### Try it yourself {#sec-bearing-tryit}
 
 These use bearings that are not in the worked examples. Each exercise checks your answer and lets you try again.
@@ -2449,6 +2814,42 @@ selection_guide %>%
   column_spec(2, background = "#FFF3E0") %>%
   column_spec(3, background = "#E8F5E9")
 ```
+
+#### Try it yourself: ball bearing or bushing? {#sec-tryit-selection}
+
+Use the table above. Decide which type suits each application.
+
+```{r tryit-selection-sort, echo=FALSE, results='asis'}
+tryit_sort(
+  id = "bearing-or-bushing",
+  title = "Ball bearing or bushing?",
+  bins = c("Ball bearing", "Bushing"),
+  cards = data.frame(
+    text = c(
+      "A machine-tool spindle turns at 24 000 rpm and needs precise running",
+      "A press pivot takes heavy shock loads at a few rpm in a tight radial space",
+      "A pump shaft at 5 000 rpm carries axial thrust from the impeller",
+      "A small fan motor must run quietly, cost very little and never be greased",
+      "A conveyor roller is designed for a calculated 20 000 h life at 1 800 rpm",
+      "An appliance hinge swings slowly through 90 degrees and has almost no radial space",
+      "A food-line pivot must run dry, with no grease that could contaminate product"
+    ),
+    bin = c("Ball bearing", "Bushing", "Ball bearing", "Bushing", "Ball bearing", "Bushing", "Bushing"),
+    why = c(
+      "High speeds (above about 3 000 rpm) favour rolling bearings.",
+      "Large contact area handles shock, and a bushing needs very little radial space.",
+      "A ball bearing handles combined radial and axial load at high speed.",
+      "Sintered bushings are low cost, quiet and self-lubricating.",
+      "The L10 life method is well established for ball bearings.",
+      "Low speed, low cost and a compact fit point to a bushing.",
+      "A PTFE-lined or polymer bushing runs dry."
+    )
+  ),
+  intro = "Pick the better choice for each application.",
+  question = NULL
+)
+```
+
 
 ---
 
