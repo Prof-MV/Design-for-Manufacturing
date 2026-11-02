@@ -589,6 +589,118 @@ In automotive applications, this relationship explains why bearing failures ofte
 
 ---
 
+##### Live Demo: Life Against Load {-}
+
+The curve is $L_{10} = (C/P)^3$ with the load on the x-axis and the life on the y-axis. The rating $C$ is the load at which the bearing lasts exactly 1 million revolutions, so the C-point sits on the curve at the right-hand end of the usable range. A bearing carrying a lighter load $P < C$ sits to the left of it, higher up the curve. Drag the **C** slider to move the C line and watch the slope of the tangent there change, drag the **P** slider to move the load, then drag the **load reduction** slider to 50%: the triangle shows P climbing to P' with 8 times the life.
+
+```{r calc-cubic-demo, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "cubic-load-life-demo",
+  title = "Load-Life Demo: Why the Cubic Matters",
+  icon = "chart-line",
+  inputs = list(
+    qwebr_calc_input("C", "Dynamic load rating C", value = 5000, min = 1000, max = 10000, step = 100, suffix = "N", type = "slider"),
+    qwebr_calc_input("P", "Equivalent load P", value = 3500, min = 500, max = 10000, step = 100, suffix = "N", type = "slider"),
+    qwebr_calc_input("reduction", "Reduction in load", value = 0, min = 0, max = 75, step = 5, suffix = "%", type = "slider")
+  )
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this demo</summary>
+
+The card re-runs this code every time a slider moves. The solid blue line marks the load rating C, the dashed orange line is the tangent at the C-point, and the red band is the overload zone, where the load is above the rating.
+
+```{webr-r}
+#| label: cubic-load-life-demo
+## Life against load, with the tangent at the C-point
+C         <- 5000    ## dynamic load rating, N (1 million revolutions)
+P         <- 3500    ## actual equivalent load, N (the P-point)
+reduction <- 0       ## reduction in load, percent
+
+P_new   <- P * (1 - reduction / 100)
+L_P     <- (C / P)^3                     ## million revolutions at the load P
+L_new   <- (C / P_new)^3                 ## million revolutions at the reduced load
+slope_C <- -3 / C                        ## dL/dP at the C-point, million rev per N
+
+if (P > C) {
+  cat("!!WARNING: load P is above the rating C. Overloaded, life under 1 million rev!!\n")
+  cat(sprintf("Life multiplier  x %.2f\n", L_new / L_P))
+} else {
+  cat(sprintf("Life multiplier x %.2f\n", L_new / L_P))
+}
+cat(sprintf("Life at load P  %.1f million rev\n", L_P))
+cat(sprintf("Life at reduced load  %.1f million rev\n", L_new))
+cat(sprintf("Load P  %s N to %s N\n", format(round(P), big.mark = " "), format(round(P_new), big.mark = " ")))
+cat(sprintf("Slope at the C-point  %.2f million rev per 1000 N\n", 1000 * slope_C))
+
+x_max <- 12000
+y_max <- 50                              ## life axis limited to 50 million revolutions
+xs <- seq(50, x_max, length.out = 400)
+tx <- c(C - 1500, C + 1500)              ## partial tangent, +/- 1500 N around C
+
+par(mar = c(5, 5, 3, 1))
+plot(xs, (C / xs)^3, type = "l", lwd = 3, col = "#1F4E79",
+     xlim = c(0, x_max), ylim = c(0, y_max),
+     xlab = "Load (N)", ylab = "L10 life (million revolutions)",
+     main = ifelse(P > C, "WARNING: load P above rating C - overload, risk of permanent damage",
+                   "Life is the cube of C / P"),
+     col.main = ifelse(P > C, "#B71C1C", "black"), cex.main = ifelse(P > C, 1, 1.2))
+
+## Overload zone: the load is above the rating (P > C), so the bearing is
+## outside its design range and risks permanent damage
+rect(C, 0, x_max, y_max, col = adjustcolor("#C62828", alpha.f = 0.15), border = NA)
+## Darker red: the part of the overload that the actual load really reaches
+if (P > C) rect(C, 0, P, y_max, col = adjustcolor("#C62828", alpha.f = 0.25), border = NA)
+if (reduction > 0 && P_new > C) rect(C, 0, P_new, y_max, col = adjustcolor("#C62828", alpha.f = 0.25), border = NA)
+text(C + (x_max - C) / 2, y_max * 0.6, "Overload: load above rating C", srt = 90, col = "#C62828", cex = 1)
+
+lines(xs, (C / xs)^3, lwd = 3, col = "#1F4E79")
+lines(tx, 1 + slope_C * (tx - C), lwd = 3, lty = 2, col = "#F9A825")
+
+## Vertical line marking where C is, and the C-point at 1 million revolutions
+segments(C, 0, C, y_max, lwd = 2, col = "#1F4E79")
+text(C, y_max * 0.97, sprintf("C = %s N", format(C, big.mark = " ")),
+     pos = ifelse(C > 8000, 2, 4), offset = 0.6, font = 2, col = "#1F4E79")
+points(C, 1, pch = 19, cex = 2, col = "#1F4E79")
+text(C, 1, "C  (1 million rev)", pos = 3, offset = 1.2, col = "#1F4E79")
+
+## P-point: the actual load, higher up on the curve
+if (L_P <= y_max) {
+  segments(P, 0, P, L_P, lty = 3, col = "grey50")
+  points(P, L_P, pch = 19, cex = 2, col = "#1F4E79")
+  text(P, L_P, sprintf("P  %.1f", L_P), pos = 4, offset = 0.8, col = "#1F4E79")
+} else {
+  text(P, y_max, sprintf("P  %.0f (off the chart)", L_P), pos = 4, col = "#1F4E79")
+}
+
+if (reduction > 0) {
+  if (L_new <= y_max) {
+    ## Right triangle: horizontal leg = load removed, vertical leg = life gained
+    polygon(c(P_new, P, P_new), c(L_P, L_P, L_new), col = adjustcolor("#D81B60", alpha.f = 0.08), border = NA)
+    segments(P_new, L_P, P, L_P, lwd = 2, lty = 2, col = "#D81B60")
+    segments(P_new, L_P, P_new, L_new, lwd = 2, lty = 2, col = "#D81B60")
+    arrows(P, L_P, P_new, L_new, length = 0.12, lwd = 2, col = "#D81B60")
+    par(xpd = NA)
+    text((P + P_new) / 2, L_P, sprintf("%s N less load", format(round(P - P_new), big.mark = " ")),
+         pos = 1, offset = 0.6, col = "#D81B60")
+    text(P_new, (L_P + L_new) / 2, sprintf("+%.1f million rev", L_new - L_P),
+         pos = 2, offset = 0.6, col = "#D81B60")
+    par(xpd = FALSE)
+    points(P_new, L_new, pch = 19, cex = 2, col = "#D81B60")
+    text(P_new, L_new, sprintf("P'  %.1f", L_new), pos = 3, offset = 1, col = "#D81B60")
+  } else {
+    text(P_new, y_max, sprintf("P'  %.0f (off the chart)", L_new), pos = 4, col = "#D81B60")
+  }
+}
+```
+
+</details>
+
+At the C-point the rating equals the load, so the life is exactly 1 million revolutions. Any lighter load $P < C$ sits to the left and lasts $(C/P)^3$ times longer: half the load gives $2^3 = 8$ times the life. The red band to the right of C marks loads above the rating: the bearing is overloaded there and could be permanently damaged, so it is not a usable operating point. (The true damage limit is the static rating, $C_0$, which comes from a different test than $C$, but the message is the same: stay out of this zone.)
+
+---
+
 #### How Much Life is Required? {-}
 
 Before selecting a bearing, engineers must determine the **required design life** for the application. The table below provides industry guidelines for different machine types:
@@ -1117,7 +1229,7 @@ results %>%
 
 #### Interactive Calculators: Ball Bearings {#sec-calc-ball}
 
-The three calculators below use the equations from this section. Change a number and the answer updates straight away. They run in your browser, so they work on a phone too. Each one ends with a **challenge**: the card tells you when you have reached it.
+The four calculators below use the equations from this section. Change a number and the answer updates straight away. They run in your browser, so they work on a phone too. Each one ends with a **challenge**: the card tells you when you have reached it.
 
 ##### Calculator 1: Life under combined load {-}
 
@@ -1338,6 +1450,134 @@ abline(h = C_req, col = "#D81B60", lwd = 2, lty = 2)
 </details>
 
 Two things to notice. Raising the speed or the life by 10 % raises the rating you need by only about 3 %, because of the cube root. Raising the **load** by 10 % raises it by the full 10 %.
+
+##### Calculator 4: Life worksheet for a radial ball bearing {-}
+
+Try it: this card lays the whole calculation out step by step, the way you should write it in an assignment. It covers a **single-row ball bearing under a radial load only**, so $X = 1$ and $Y = 0$ and the equivalent load is $P = V \cdot F_r$. The rotation factor $V$ is 1 when the inner ring turns (the usual case) and 1.2 when the outer ring turns.
+
+```{r calc-worksheet-card, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "bearing-worksheet-calc",
+  title = "Bearing Life Worksheet (Radial Load, Single-Row Ball Bearing)",
+  icon = "circle-notch",
+  inputs = list(
+    qwebr_calc_input("C", "Basic dynamic load rating C", value = 50000, min = 1000, max = 250000, step = 500, suffix = "N"),
+    qwebr_calc_input("Fr", "Radial load Fr", value = 12000, min = 100, max = 40000, step = 100, suffix = "N", type = "slider"),
+    qwebr_calc_input("n", "Speed n", value = 1200, min = 10, max = 20000, step = 10, suffix = "rpm"),
+    qwebr_calc_input("V", "Rotation factor V (1 = inner ring turns, 1.2 = outer ring turns)", value = "1", type = "select",
+                     options = c("1", "1.2")),
+    qwebr_calc_input("hours_day", "Operating hours per day", value = 24, min = 1, max = 24, step = 1, suffix = "h"),
+    qwebr_calc_input("required_years", "Life the machine needs", value = 4, min = 0.5, max = 30, step = 0.5, suffix = "years")
+  ),
+  fig_width = 1000, fig_height = 1150,
+  goal = "The default bearing lasts only a few weeks. Keep n = 1200 rpm and 24 hours per day, and change the load or the rating C until the bearing lasts the 4 years the machine needs. The sheet turns green when you get there.",
+  goal_test = "life_years >= required_years && n == 1200 && hours_day == 24 && required_years == 4"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+
+The card above re-runs this exact webR code every time you change an input. Edit the code directly and press **Run Code** to experiment further.
+
+```{webr-r}
+#| label: bearing-worksheet-calc
+## Bearing life worksheet: single-row deep-groove ball bearing, radial load only
+C          <- 50000   ## basic dynamic load rating, N
+Fr         <- 12000   ## radial load, N
+n          <- 1200    ## speed, rpm
+V          <- "1"     ## rotation factor: 1 = inner ring turns, 1.2 = outer ring turns
+hours_day  <- 24      ## operating hours per day
+required_years <- 4   ## life the machine needs, years
+
+p  <- 3                                   ## load-life exponent for ball bearings
+Vf <- as.numeric(V)
+P  <- Vf * Fr                             ## equivalent dynamic load, N  (X = 1, Y = 0)
+L10   <- (C / P)^p                        ## million revolutions
+L10h  <- L10 * 1e6 / (60 * n)             ## hours
+life_years <- L10h / (hours_day * 365)    ## years
+ok <- life_years >= required_years
+
+fmt <- function(x, d = 0) format(round(x, d), big.mark = " ", nsmall = d, scientific = FALSE)
+navy <- "#14284b"; green <- "#1b5e20"; red <- "#b71c1c"; blue <- "#1f5fa8"
+pale <- "#eef3fa"; line_col <- "#14284b"
+
+par(mar = c(0, 0, 0, 0), family = "sans")
+plot.new(); plot.window(xlim = c(0, 100), ylim = c(0, 132), xaxs = "i", yaxs = "i")
+
+box <- function(x1, y1, x2, y2, fill, border = line_col, lwd = 3) rect(x1, y1, x2, y2, col = fill, border = border, lwd = lwd)
+
+## Two-line label drawn as two separate texts, so the lines cannot collide
+text2 <- function(x, y, l1, l2, gap, ...) {
+  text(x, y + gap / 2, l1, ...)
+  text(x, y - gap / 2, l2, ...)
+}
+
+## Title banner
+box(0, 122, 100, 132, navy, navy)
+text(50, 128.4, "BEARING LIFE CALCULATION", col = "white", font = 2, cex = 1.55)
+text(50, 124.2, "Single-row ball bearing  |  radial load only", col = "#c9d8f0", cex = 0.62)
+
+## Given data
+box(2, 103, 98, 119.5, pale)
+box(2, 103, 22, 119.5, green, green)
+text2(12, 111.25, "GIVEN", "DATA", 5, col = "white", font = 2, cex = 0.95)
+text(25, 116.6, bquote(C == .(fmt(C)) ~ N), adj = 0, cex = 0.72)
+text(25, 111.3, bquote(F[r] == .(fmt(Fr)) ~ N), adj = 0, cex = 0.72)
+text(25, 106, bquote(n == .(fmt(n)) ~ rpm), adj = 0, cex = 0.72)
+text(62, 116.6, bquote(V == .(Vf)), adj = 0, cex = 0.72)
+text(62, 111.3, bquote(p == .(p) ~ "(ball)"), adj = 0, cex = 0.72)
+text(62, 106, sprintf("%s h/day, need %s yr", hours_day, required_years), adj = 0, cex = 0.62)
+
+## One step row: label box, formula box, red result
+step <- function(top, num, what, formula, working, result, unit) {
+  bot <- top - 15
+  box(2, bot, 98, top, "white")
+  box(2, bot, 27, top, navy, navy)
+  text(14.5, top - 3.5, paste0("STEP ", num), col = "white", font = 2, cex = 1.05)
+  what <- strsplit(what, "\n", fixed = TRUE)[[1]]
+  text2(14.5, top - 10, what[1], what[2], 3, col = "#c9d8f0", cex = 0.5)
+  text(29.5, top - 4.5, formula, adj = 0, cex = 0.74, col = navy, font = 2)
+  text(29.5, top - 10.5, working, adj = 0, cex = 0.62, col = "#444444")
+  text(96.5, top - 5.5, result, adj = 1, cex = 1.05, col = red, font = 2)
+  text(96.5, top - 11.2, unit, adj = 1, cex = 0.55, col = red)
+}
+step(100, 1, "Equivalent dynamic\nload (P)", expression(P == V %*% F[r]),
+     sprintf("= %s x %s", Vf, fmt(Fr)), paste(fmt(P), "N"), "(X = 1, Y = 0)")
+step(83, 2, "Basic rating life\n(L10)", expression(L[10] == (C / P)^3),
+     bquote(" = " * (.(fmt(C)) / .(fmt(P)))^3), bquote(.(fmt(L10, 2)) %*% 10^6), "revolutions")
+step(66, 3, "Life in hours\n(L10h)", expression(L["10h"] == L[10] %*% 10^6 / (60 %*% n)),
+     bquote(" = " * .(fmt(L10, 2)) %*% 10^6 / (60 %*% .(fmt(n)))), fmt(L10h), "hours")
+step(49, 4, "Convert life\ninto years", bquote(Years == L["10h"] / (.(hours_day) %*% 365)),
+     sprintf("= %s / (%s x 365)", fmt(L10h), hours_day), fmt(life_years, 2), "years")
+
+## Final answer
+box(2, 3, 98, 32, pale)
+box(2, 3, 30, 32, if (ok) green else red, NA)
+text2(16, 17.5, "FINAL", "ANSWER", 7, col = "white", font = 2, cex = 1.2)
+cells <- list(list(expression(L[10]), fmt(L10, 2), "million rev"),
+              list(expression(L["10h"]), fmt(L10h), "hours"),
+              list(expression(Life), fmt(life_years, 2), "years"))
+xs <- c(40, 62, 85)
+for (i in 1:3) {
+  text(xs[i], 28, cells[[i]][[1]], cex = 0.75, col = navy, font = 2)
+  text(xs[i], 19.5, cells[[i]][[2]], cex = if (i == 2) 0.95 else 1.05, col = red, font = 2)
+  text(xs[i], 12.5, cells[[i]][[3]], cex = 0.5, col = "#444444")
+}
+text(64, 6, sprintf("%s: needs %s years at %s h/day",
+                    if (ok) "PASS" else "TOO SHORT", required_years, hours_day),
+     col = if (ok) green else red, font = 2, cex = 0.62)
+
+cat(sprintf("Equivalent load P  %s N\n", fmt(P)))
+cat(sprintf("L10 life  %s million revolutions\n", fmt(L10, 2)))
+cat(sprintf("L10 life  %s hours\n", fmt(L10h)))
+cat(sprintf("Life at %s h/day  %s years (%s)\n", hours_day, fmt(life_years, 2),
+            if (ok) "meets the requirement" else "too short"))
+```
+
+</details>
+
+Cutting the load from 12 000 N to about 3 700 N is what it takes at this rating, because life changes with the cube of the load. The other route is a bearing with a much larger $C$. Compare both: which one costs less in a real design?
 
 ---
 
