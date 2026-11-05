@@ -8,7 +8,7 @@ webr:
     autorun: true
 ---
 
-## Gears, Gear Trains, and Transmissions {#sec-chap-02-gears}
+# Gears, Gear Trains, and Transmissions {#sec-chap-02-gears}
 
 ```{r setup-04, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -46,7 +46,7 @@ gear_profile <- function(cx, cy, r_pitch, n_teeth, rotation = 0) {
 }
 ```
 
-### Learning Objectives {#sec-objectives-04}
+## Learning Objectives {#sec-objectives-04}
 
 By the end of this chapter, you will be able to:
 
@@ -61,7 +61,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Your car's engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this speed reduction, and why is it necessary?
 :::
 
-### Introduction to Gears {#sec-gears-intro}
+## Introduction to Gears {#sec-gears-intro}
 
 Gears are toothed mechanical components that transmit **power and motion** between rotating shafts. They are among the oldest and most important machine elements, found in virtually every mechanical system—from wristwatches to wind turbines, from automotive transmissions to industrial robots.
 
@@ -72,9 +72,9 @@ Gears serve four fundamental purposes:
 3. **Change torque** (increase or decrease turning force)
 4. **Change direction** of rotation or axis of rotation
 
-### Fundamental Gear Concepts {#sec-gear-fundamentals}
+## Fundamental Gear Concepts {#sec-gear-fundamentals}
 
-#### The Basic Principle
+### The Basic Principle
 
 When two gears mesh, their teeth interlock. As one gear (the **driver** or **pinion**) rotates, it pushes against the teeth of the other gear (the **driven gear**), causing it to rotate.
 
@@ -122,13 +122,13 @@ ggplot() +
   theme_gear
 ```
 
-#### The Fundamental Law of Gearing
+### The Fundamental Law of Gearing
 
 For smooth, constant-velocity power transmission, the **common normal** at the point of contact between gear teeth must always pass through a fixed point called the **pitch point**. This is achieved through the **involute tooth profile**, which is the standard for most modern gears.
 
 ---
 
-### Gear Terminology {#sec-gear-terminology}
+## Gear Terminology {#sec-gear-terminology}
 
 Understanding gear terminology is essential for specifying, designing, and manufacturing gears.
 
@@ -136,7 +136,7 @@ Understanding gear terminology is essential for specifying, designing, and manuf
 knitr::include_graphics("images/Gear-terminology-with-defination-4-1.png")
 ```
 
-#### Essential Gear Formulas
+### Essential Gear Formulas
 
 | Parameter | Metric (Module) | Imperial (Diametral Pitch) |
 |:----------|:----------------|:---------------------------|
@@ -182,13 +182,11 @@ qwebr_calc_card(
   title = "Gear Pair Geometry Calculator",
   icon = "gear",
   inputs = list(
-    qwebr_calc_input("m", "Module m", value = 2, min = 0.5, max = 10, step = 0.5, suffix = "mm"),
-    qwebr_calc_input("N1", "Pinion teeth N<sub>1</sub>", value = 24, min = 8, max = 120, step = 1),
+    qwebr_calc_input("m", "Module m", value = 2, min = 0.5, max = 10, step = 0.5, suffix = "mm", type = "slider"),
+    qwebr_calc_input("N1", "Pinion teeth N<sub>1</sub>", value = 24, min = 8, max = 120, step = 1, type = "slider"),
     qwebr_calc_input("N2", "Gear teeth N<sub>2</sub>", value = 60, min = 20, max = 200, step = 1, type = "slider")
   ),
-  goal = "Fit a pair into a gearbox with a centre distance of exactly 90 mm, a ratio of at least 3:1 and a pinion of at least 17 teeth.",
-  goal_test = "abs(center_dist - 90) < 1e-9 && ratio >= 3 - 1e-9 && N1 >= 17"
-)
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -274,11 +272,11 @@ $$p = \pi \times m = \pi \times 3 = 9.42 \text{ mm}$$
 
 ---
 
-### Types of Gears {#sec-gear-types}
+## Types of Gears {#sec-gear-types}
 
 Different gear types are designed for different applications based on shaft orientation, load capacity, speed, and noise requirements.
 
-#### Spur Gears
+### Spur Gears
 
 **Spur gears** have straight teeth parallel to the axis of rotation. They are the simplest, most common, and most economical type.
 
@@ -297,7 +295,7 @@ if (knitr::is_html_output()) {
 
 ---
 
-#### Helical Gears
+### Helical Gears
 
 **Helical gears** have teeth cut at an angle (helix angle) to the shaft axis. This allows gradual tooth engagement, resulting in smoother, quieter operation.
 
@@ -312,7 +310,7 @@ if (knitr::is_html_output()) {
 **Disadvantages:** More complex to manufacture, Higher axial thrust, Slightly lower efficiency (97-99%)
 **Applications:** Automotive transmissions, industrial gearboxes, machine tools, elevators
 
-#### Herringbone Gears
+### Herringbone Gears
 
 **Herringbone gears** are a special type of helical gear with two sets of teeth in a V-shaped pattern. This design cancels out axial thrust and allows for very high load capacity.
 
@@ -328,7 +326,7 @@ knitr::include_graphics("images/Herringbone_gears_(Bentley,_Sketches_of_Engine_a
 
 ---
 
-#### Bevel Gears
+### Bevel Gears
 
 **Bevel gears** transmit power between shafts that intersect, typically at 90°. The teeth are cut on a conical surface.
 
@@ -345,7 +343,7 @@ knitr::include_graphics("images/Gear-kegelzahnrad.png")
 
 ---
 
-#### Worm Gears
+### Worm Gears
 
 **Worm gears** consist of a worm (screw-like) driving a worm wheel. They provide very high reduction ratios in a compact space and can be self-locking.
 
@@ -365,7 +363,7 @@ if (knitr::is_html_output()) {
 
 ---
 
-#### Rack and Pinion
+### Rack and Pinion
 
 **Rack and pinion** converts rotational motion to linear motion (or vice versa). The rack is essentially a gear with infinite radius.
 
@@ -384,7 +382,7 @@ if (knitr::is_html_output()) {
 
 ---
 
-#### Gear Type Comparison
+### Gear Type Comparison
 
 | Gear Type | Shaft Arrangement | Ratio Range | Efficiency | Noise Level | Cost |
 |:----------|:------------------|:------------|:-----------|:------------|:-----|
@@ -418,9 +416,9 @@ Reasons:
 
 ---
 
-### Gear Ratios and Calculations {#sec-gear-ratios}
+## Gear Ratios and Calculations {#sec-gear-ratios}
 
-#### Speed and Torque Relationships
+### Speed and Torque Relationships
 
 The **gear ratio** is the fundamental relationship between meshing gears:
 
@@ -476,7 +474,7 @@ ggplot() +
   theme_gear
 ```
 
-#### Key Relationships
+### Key Relationships
 
 **For a simple gear pair:**
 
@@ -557,8 +555,8 @@ qwebr_calc_card(
     qwebr_calc_input("eta_pct", "Mesh efficiency", value = 98, min = 90, max = 99, step = 1, suffix = "%")
   ),
   goal = "With the motor still at 1750 rpm and 5 kW, get at least 250 N m at the output while the output turns at 100 rpm or faster.",
-  goal_test = "T_out >= 250 && n_out >= 100 && n_in == 1750 && P_kW == 5 && eta_pct <= 98"
-)
+  goal_test = "T_out >= 250 && n_out >= 100 && n_in == 1750 && P_kW == 5 && eta_pct <= 98",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -601,11 +599,11 @@ cat(sprintf("  Lost as heat           %.0f W\n", P_lost))
 
 ---
 
-### Gear Trains {-}
+## Gear Trains {-}
 
 A **gear train** is a combination of two or more gears used to transmit power from one shaft to another. Gear trains allow for larger speed ratios and more complex motion transmission than a single gear pair.
 
-#### Simple Gear Train
+### Simple Gear Train
 
 In a **simple gear train**, each shaft carries only one gear. The intermediate gears are called **idlers** and do not affect the overall gear ratio—they only change the direction of rotation.
 
@@ -668,7 +666,7 @@ The idler gears only affect **direction of rotation**, not the gear ratio.
 
 ---
 
-#### Compound Gear Train
+### Compound Gear Train
 
 In a **compound gear train**, two or more gears are mounted on the same shaft, rotating together. This allows for much higher gear ratios in a compact space.
 
@@ -747,8 +745,8 @@ qwebr_calc_card(
     qwebr_calc_input("N4", "Stage 2 gear teeth", value = 60, min = 20, max = 130, step = 1, type = "slider")
   ),
   goal = "Keep the motor at 1800 rpm and land the output within 2% of 45 rpm, with both pinions at 17 teeth or more and both gears at 120 teeth or fewer.",
-  goal_test = "n_out >= 44.1 && n_out <= 45.9 && min(N1, N3) >= 17 && max(N2, N4) <= 120 && n_in == 1800"
-)
+  goal_test = "n_out >= 44.1 && n_out <= 45.9 && min(N1, N3) >= 17 && max(N2, N4) <= 120 && n_in == 1800",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -802,7 +800,7 @@ if (min(N1, N3) < 17) {
 
 ---
 
-#### Planetary (Epicyclic) Gear Train
+### Planetary (Epicyclic) Gear Train
 
 **Planetary gear systems** are compact, high-ratio gear trains widely used in automatic transmissions, power tools, and aerospace applications.
 
@@ -907,8 +905,8 @@ qwebr_calc_card(
     qwebr_calc_input("N_ring", "Ring teeth", value = 60, min = 40, max = 150, step = 1, type = "slider")
   ),
   goal = "With the sun at 500 rpm, ring fixed and carrier as output, slow the carrier to 80 rpm or less using a sun of 17 teeth or more and whole-number planet teeth.",
-  goal_test = "n_carrier <= 80 + 1e-9 && N_sun >= 17 && n_sun == 500 && (N_ring - N_sun) / 2 == round((N_ring - N_sun) / 2)"
-)
+  goal_test = "n_carrier <= 80 + 1e-9 && N_sun >= 17 && n_sun == 500 && (N_ring - N_sun) / 2 == round((N_ring - N_sun) / 2)",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -990,8 +988,8 @@ qwebr_calc_card(
     qwebr_calc_input("tire_r", "Tyre rolling radius", value = 0.34, min = 0.28, max = 0.40, step = 0.01, suffix = "m")
   ),
   goal = "Cruise at 120 km/h with the engine at 2600 rpm or less, using a tyre radius of 0.36 m or less and a final drive of 3.0 or more.",
-  goal_test = "engine_rpm <= 2600 && road_speed == 120 && tire_r <= 0.36 && final_drive >= 3"
-)
+  goal_test = "engine_rpm <= 2600 && road_speed == 120 && tire_r <= 0.36 && final_drive >= 3",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1035,9 +1033,9 @@ cat(sprintf("  Overall ratio, engine/wheel  %.2f : 1\n", gear_ratio * final_driv
 
 ---
 
-### Industry Applications {-}
+## Industry Applications {-}
 
-#### Automotive Industry
+### Automotive Industry
 
 ```{r automotive-gears, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Gear applications in automotive systems."}
 ggplot() +
@@ -1090,7 +1088,7 @@ ggplot() +
 
 ---
 
-#### Food Processing Industry
+### Food Processing Industry
 
 ```{r food-industry-gears, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Gear applications in food processing equipment: a worm-gear conveyor drive, a planetary mixer head and a gear-driven packaging indexer."}
 a_ring <- seq(0, 2 * pi, length.out = 81)
@@ -1195,7 +1193,7 @@ ggplot() +
 
 ---
 
-#### Defense Industry
+### Defense Industry
 
 ```{r defense-gears, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Gear applications in defense systems: a vehicle drivetrain, a gear-driven turret ring and a harmonic drive actuator."}
 a_ring <- seq(0, 2 * pi, length.out = 81)
@@ -1288,9 +1286,9 @@ ggplot() +
 
 ---
 
-### Gear Design Considerations {#sec-gear-design}
+## Gear Design Considerations {#sec-gear-design}
 
-#### Material Selection
+### Material Selection
 
 | Material | Applications | Advantages | Limitations |
 |:---------|:-------------|:-----------|:------------|
@@ -1301,7 +1299,7 @@ ggplot() +
 | **Nylon/Acetal** | Light loads, quiet operation | Self-lubricating, quiet | Limited load, temperature |
 | **Stainless Steel** | Food, medical, marine | Corrosion resistant | Lower hardness possible |
 
-#### Common Failure Modes
+### Common Failure Modes
 
 ```{r gear-failures, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Common gear failure modes."}
 ggplot() +
@@ -1342,7 +1340,7 @@ ggplot() +
   theme_gear
 ```
 
-#### Design Guidelines
+### Design Guidelines
 
 1. **Minimum teeth:** To avoid undercut (20° pressure angle):
    - Minimum pinion teeth ≈ 17 for standard gears
@@ -1359,9 +1357,9 @@ ggplot() +
 
 ---
 
-### Design Checklist for Gears {-}
+## Design Checklist for Gears {-}
 
-#### Gear Specification
+### Gear Specification
 - [ ] Gear type selected based on shaft arrangement
 - [ ] Module/diametral pitch specified
 - [ ] Number of teeth determined for required ratio
@@ -1369,20 +1367,20 @@ ggplot() +
 - [ ] Face width determined
 - [ ] Material selected based on load and environment
 
-#### Strength Verification
+### Strength Verification
 - [ ] Bending stress calculated and within limits
 - [ ] Contact (Hertzian) stress calculated and within limits
 - [ ] Service factors applied for shock loading
 - [ ] Safety factor adequate (typically 1.5-2.5)
 
-#### Gear Train Design
+### Gear Train Design
 - [ ] Overall ratio achieved
 - [ ] Intermediate shafts and bearings specified
 - [ ] Center distances calculated
 - [ ] Shaft alignment considered
 - [ ] Housing/mounting provisions adequate
 
-#### Manufacturing and Assembly
+### Manufacturing and Assembly
 - [ ] Gear quality grade specified (AGMA or ISO)
 - [ ] Surface finish requirements defined
 - [ ] Heat treatment specified if required
@@ -1391,7 +1389,7 @@ ggplot() +
 
 ---
 
-### Case Study: Food Packaging Line Drive {-}
+## Case Study: Food Packaging Line Drive {-}
 
 **Design Requirements:**
 
@@ -1457,11 +1455,11 @@ $$GR = \frac{1800}{45} = 40:1$$
 
 ---
 
-### Try it yourself {#sec-gear-tryit}
+## Try it yourself {#sec-gear-tryit}
 
 These use gear trains that are not in the worked examples. Each exercise checks your answer and lets you try again.
 
-#### Try it yourself: follow the speed through a compound and planetary train {#sec-tryit-train}
+### Try it yourself: follow the speed through a compound and planetary train {#sec-tryit-train}
 
 A motor turns shaft 1 at $1500$ rpm. Gear A (18 teeth) on shaft 1 drives gear B (54 teeth); gear C (20 teeth) is on the same shaft as B and drives gear D (60 teeth) on shaft 3. Shaft 3 is the sun gear input of a planetary stage with $N_{sun} = 24$ and $N_{ring} = 72$, with the ring fixed and the carrier as output.
 
@@ -1520,7 +1518,7 @@ The overall ratio is the product of the stage ratios: $3 \times 3 \times 4 = `r 
 
 </details>
 
-#### Try it yourself: gear terminology table {#sec-tryit-gear-terms}
+### Try it yourself: gear terminology table {#sec-tryit-gear-terms}
 
 Fill in the pitch diameter, circular pitch and outside diameter of each spur gear.
 
@@ -1562,7 +1560,7 @@ knitr::kable(gg, digits = c(1, 0, 1, 2, 1), align = "c")
 
 </details>
 
-#### Try it yourself: which gear type? {#sec-tryit-gear-types}
+### Try it yourself: which gear type? {#sec-tryit-gear-types}
 
 ```{r tryit-gear-type-sort, echo=FALSE, results='asis'}
 gear_bins <- c("Spur", "Helical", "Bevel", "Worm", "Rack and pinion")
@@ -1621,7 +1619,7 @@ tryit_sort(
 )
 ```
 
-### Key Takeaways {#sec-gear-takeaways}
+## Key Takeaways {#sec-gear-takeaways}
 
 - The gear ratio is driven teeth over driver teeth. It divides speed and multiplies torque, and power stays constant apart from the mesh losses.
 - Module and diametral pitch are inverse measures of tooth size, and meshing gears must share the same one.
@@ -1629,7 +1627,7 @@ tryit_sort(
 - A planetary set with the ring fixed, sun input and carrier output gives $1 + N_{ring}/N_{sun}$.
 - Pick the gear type from the shaft arrangement, speed, noise and whether the drive must self-lock.
 
-### Practice Problems {#sec-gear-problems}
+## Practice Problems {#sec-gear-problems}
 
 **Problem 1:** A spur gear has 24 teeth and a module of 4 mm. Calculate the pitch diameter, circular pitch, addendum and outside diameter.
 
@@ -1736,7 +1734,7 @@ $$n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}$$
 
 ---
 
-### Further Reading {#sec-gear-resources}
+## Further Reading {#sec-gear-resources}
 
 [AGMA Gear Standards](https://www.agma.org/)
 
@@ -1748,27 +1746,27 @@ $$n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}$$
 
 ---
 
-### Supplemental Videos {-}
+## Supplemental Videos {-}
 
-#### How Gear Ratios Work
+### How Gear Ratios Work
 
 ```{r video-gear-ratios, echo=FALSE, results='asis'}
 embed_youtube("JOLtS4VUcvQ", "How Gear Ratios Work")
 ```
 
-#### Planetary Gears Explained
+### Planetary Gears Explained
 
 ```{r video-planetary-gears, echo=FALSE, results='asis'}
 embed_youtube("ARd-Om2VyiE", "Planetary Gears Explained")
 ```
 
-#### How Manual Transmissions Work
+### How Manual Transmissions Work
 
 ```{r video-manual-transmission, echo=FALSE, results='asis'}
 embed_youtube("wCu9W9xNwtI", "Manual Transmission Explained")
 ```
 
-#### How Differentials Work
+### How Differentials Work
 
 ```{r video-differentials, echo=FALSE, results='asis'}
 embed_youtube("yYAw79386WI", "How Differentials Work")
@@ -1776,7 +1774,7 @@ embed_youtube("yYAw79386WI", "How Differentials Work")
 
 ---
 
-### References {-}
+## References {-}
 
 1. Shigley, J. E., & Mischke, C. R. (2011). *Mechanical Engineering Design* (10th ed.). McGraw-Hill.
 

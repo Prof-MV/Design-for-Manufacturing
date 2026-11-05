@@ -1,4 +1,4 @@
-## Interpreting and Creating Drawings {#interpreting}
+# Interpreting and Creating Drawings {#interpreting}
 
 ```{r setup-01-01, include=FALSE}
 # Include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,7 +7,7 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {-}
+## Learning Objectives {-}
 
 By the end of this chapter, you will be able to:
 
@@ -23,9 +23,9 @@ What made the instructions easy or difficult to follow? Engineering drawings
 serve a similar purpose but for much more complex assemblies.
 :::
 
-### Introduction to Engineering Working Drawings [@Hijazi]
+## Introduction to Engineering Working Drawings [@Hijazi]
 
-#### Engineering Working Drawings Basics
+### Engineering Working Drawings Basics
 
 Engineering graphics is an effective way of communicating technical ideas and
 it is an essential tool in engineering design where most of the design process
@@ -37,7 +37,7 @@ Graphics is a visual communications language that include images, text, and nume
 * **An engineering (or technical) drawing** is a graphical representation of a part, assembly, system, or structure and it can be produced using freehand, mechanical tools, or computer methods.
 * **Working drawings** are the set of technical drawings used during the manufacturing phase of a product. They contain all the information needed to manufacture and assemble a product.
 
-#### Codes and Standards
+### Codes and Standards
 
 Codes and standards are made to organize and unify the engineering work.
 
@@ -49,7 +49,7 @@ might arise in manufacturing and maintenance? Discuss with your team.
 * **A code** is a set of specifications for the analysis, design, manufacture, and construction of something.
 * **A standard** is a set of specifications for parts, materials, or processes intended to achieve uniformity, efficiency and specific quality.
 
-###### Organizations {-}
+##### Organizations {-}
 Examples of the organizations that establish standards and design codes include: 
 **ISO, AISI, SAE, ASTM, ASME, ANSI, DIN.**
 
@@ -58,7 +58,7 @@ There are many different standards related to technical drawings. The ISO standa
 * **ISO Standards Handbook: Technical drawings, Volume 1:** Technical drawings in general.
 * **ISO Standards Handbook: Technical drawings, Volume 2:** Mechanical engineering drawings; Construction drawings; Drawing equipment.
 
-##### Drawing Sheet Layout
+#### Drawing Sheet Layout
 
 Standard layouts of drawing sheets are specified by the various standards organizations.
 
@@ -68,7 +68,7 @@ The figure below shows the layout of a typical sheet, showing the drawing frame,
 knitr::include_graphics("images/7-2-1-1536x1192.png")
 ```
 
-###### Title Block Components [@lorier2025blueprint]
+##### Title Block Components [@lorier2025blueprint]
 
 * **Part Title**: The title is a descriptive name given to the drawing, typically the largest box in the title block.
 * **Company Information**: The name of the company responsible for the drawing will also appear in a larger box in the title block. Often, a logo for the company will be displayed as well.
@@ -94,7 +94,7 @@ knitr::include_graphics("images/7-2-1-1536x1192.png")
 * **Finish**: Displays any part finish specifications. These may be indicated for specific regions using leader lines.
 * **Application**: Used to identify the assemblies on which the part is used.
 
-###### Default Tolerances
+##### Default Tolerances
 
 **Default Tolerance Box**: Displays the amount of variation allowed on dimension values that do not have a specific tolerance attached to them. These are usually categorized by the number of decimal places.
 
@@ -107,7 +107,7 @@ knitr::include_graphics("images/7-3-768x508.png")
 > * A two-place dimension of **2.00** allows for a $\pm 0.02$ tolerance (Range: $1.98$ to $2.02$).
 > * A three-place dimension of **2.000** allows for a $\pm 0.010$ tolerance (Range: $1.990$ to $2.010$).
 
-###### Document Control and Layout
+##### Document Control and Layout
 
 * **Revision**: Revisions are changes made to the drawing after the original release to correct errors, improve design, or reduce manufacturing costs.
     * The **revision level** (letter or number) is located in the lower right.
@@ -128,11 +128,11 @@ sophisticated PLM (Product Lifecycle Management) systems to track every drawing
 change.
 :::
 
-### Try it yourself {#sec-tryit-drafting}
+## Try it yourself {#sec-tryit-drafting}
 
 These use drawings that are not in the examples above. Each exercise checks your answer and lets you try again.
 
-#### Scale and default tolerances {#sec-tryit-scale}
+### Scale and default tolerances {#sec-tryit-scale}
 
 A drawing scale is written **Drawing : Object**. The default tolerance box of the drawing says: two-place dimensions $\pm 0.02$, three-place dimensions $\pm 0.010$.
 
@@ -173,7 +173,7 @@ The dimension 3.250 carries three decimal places, so its limits are $3.250 \pm 0
 
 </details>
 
-#### Find it in the title block {#sec-tryit-titleblock}
+### Find it in the title block {#sec-tryit-titleblock}
 
 ```{r tryit-titleblock-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -208,7 +208,7 @@ tryit_sort(
 )
 ```
 
-### Key Takeaways {-}
+## Key Takeaways {-}
 
 - Engineering drawings are the universal language of manufacturing
 - Standards organizations (ISO, ASME, ANSI) ensure drawings are interpreted

@@ -1,4 +1,4 @@
-## Power Transmission: Chain Drives {#chap-11-chains}
+# Power Transmission: Chain Drives {#chap-11-chains}
 
 ```{r setup-11, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -21,7 +21,7 @@ theme_chain <- theme_minimal() +
   )
 ```
 
-### Learning Objectives {#sec-objectives-11}
+## Learning Objectives {#sec-objectives-11}
 
 By the end of this chapter, you will be able to:
 
@@ -35,7 +35,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Consider a bicycle—the chain connecting your pedals to the rear wheel is a perfect example of a chain drive. Why do bicycles use chains instead of belts? What advantages does positive engagement provide?
 :::
 
-### Introduction to Chain Drives {#sec-chains-intro}
+## Introduction to Chain Drives {#sec-chains-intro}
 
 Chain drives are mechanical power transmission systems that use a series of interconnected links to transfer motion and force between rotating shafts. Unlike belt drives that rely on friction, chain drives use positive engagement between chain links and sprocket teeth, ensuring no slip and maintaining exact speed ratios.
 
@@ -48,7 +48,7 @@ Chain drives are found everywhere in mechanical systems:
 - **Construction equipment** – Excavators, forklifts, cranes
 - **Power tools** – Chainsaws, drill presses
 
-#### Why Choose Chain Drives?
+### Why Choose Chain Drives?
 
 | Advantage | Description |
 | :--- | :--- |
@@ -61,11 +61,11 @@ Chain drives are found everywhere in mechanical systems:
 
 ---
 
-### Roller Chain Fundamentals {#sec-chain-fundamentals}
+## Roller Chain Fundamentals {#sec-chain-fundamentals}
 
 The most common type of industrial chain is the **roller chain**, standardized under ANSI (American) and ISO (International) specifications. Understanding its construction is essential for proper selection and maintenance.
 
-#### Roller Chain Anatomy
+### Roller Chain Anatomy
 
 ```{r chain-anatomy, echo=FALSE, fig.align='center', fig.cap="Roller chain link construction showing key components", fig.width=11, fig.height=6}
 library(ggplot2)
@@ -188,7 +188,7 @@ ggplot() +
       subtitle = "Standard ANSI/ISO roller chain showing alternating inner and outer link plates")
 ```
 
-#### Chain Component Functions
+### Chain Component Functions
 
 | Component | Function |
 | :--- | :--- |
@@ -198,7 +198,7 @@ ggplot() +
 | **Inner Plates** | Hold bushings; transfer tension through chain |
 | **Outer Plates** | Connect pins; alternate with inner links |
 
-#### Standard Chain Sizes
+### Standard Chain Sizes
 
 Roller chains are designated by standardized numbers that encode their pitch and construction:
 
@@ -228,7 +228,7 @@ kable(chain_sizes,
 
 ---
 
-### Sprocket Design and Selection {#sec-chain-sprockets}
+## Sprocket Design and Selection {#sec-chain-sprockets}
 
 Sprockets are toothed wheels designed to engage with chain links. Proper sprocket selection is critical for chain drive performance and longevity.
 
@@ -342,7 +342,7 @@ ggplot() +
       subtitle = "17-tooth sprocket showing chain rollers seated in tooth gaps")
 ```
 
-#### Sprocket Terminology
+### Sprocket Terminology
 
 | Term | Definition | Formula |
 | :--- | :--- | :--- |
@@ -353,7 +353,7 @@ ggplot() +
 | **Root Diameter** | Diameter at tooth base | $D_r = D - \text{Roller Ø}$ |
 | **Chordal Action** | Velocity variation due to polygon effect | Minimized with more teeth |
 
-#### Minimum Sprocket Teeth
+### Minimum Sprocket Teeth
 
 The number of teeth affects smooth operation. Fewer teeth cause more "chordal action" (speed variation as chain engages).
 
@@ -368,9 +368,9 @@ The number of teeth affects smooth operation. Fewer teeth cause more "chordal ac
 
 ---
 
-### Chain Drive Calculations {#sec-chain-calculations}
+## Chain Drive Calculations {#sec-chain-calculations}
 
-#### Speed Ratio
+### Speed Ratio
 
 Like belt and gear drives, chain drives follow a simple speed ratio relationship:
 
@@ -388,7 +388,7 @@ Where:
 
 > **Key Point:** Since chain engagement is positive (no slip), the speed ratio is exact and constant—unlike belt drives where slip can occur.
 
-#### Chain Length Calculation
+### Chain Length Calculation
 
 The chain length is calculated in terms of **pitches** (number of links):
 
@@ -408,7 +408,7 @@ $$L = L_p \times P$$
 
 > **Important:** Chain length must be a whole number of pitches. An **even number** of pitches is preferred to avoid offset links, which are weaker than standard links.
 
-#### Center Distance Calculation
+### Center Distance Calculation
 
 Given a chain length, the center distance can be calculated:
 
@@ -418,7 +418,7 @@ Or approximately:
 
 $$C \approx \frac{P}{4}\left[2L_p - N_1 - N_2 + \sqrt{(2L_p - N_1 - N_2)^2 - 0.81(N_2 - N_1)^2}\right]$$
 
-#### Chain Speed
+### Chain Speed
 
 The linear chain speed is:
 
@@ -435,7 +435,7 @@ Where:
 
 ---
 
-### Chain Drive System Layout {#sec-chain-layout}
+## Chain Drive System Layout {#sec-chain-layout}
 
 ```{r chain-drive-layout, echo=FALSE, fig.align='center', fig.cap="Chain drive system showing driver and driven sprockets with chain path", fig.width=11, fig.height=7}
 library(ggplot2)
@@ -534,7 +534,7 @@ ggplot() +
 
 ---
 
-### 🧮 Worked Example: Chain Drive Design {-}
+## 🧮 Worked Example: Chain Drive Design {-}
 
 **Problem:** Design a chain drive to transmit power from a 1200 rpm motor to a conveyor shaft that must rotate at 400 rpm. The center distance should be approximately 500 mm. Select an appropriate chain size for moderate industrial service.
 
@@ -605,11 +605,11 @@ This is acceptable for #40 chain (max recommended ~7-10 m/s for this size).
 
 ---
 
-### ⚡ Chain Tensioning and Adjustment {-}
+## ⚡ Chain Tensioning and Adjustment {-}
 
 Unlike belts, chains do not stretch significantly, but they do **wear**. As chain links wear, the effective pitch increases (chain "elongation"), requiring adjustment.
 
-#### Chain Slack
+### Chain Slack
 
 Proper chain slack on the **slack side** (typically the lower span) is essential:
 
@@ -670,14 +670,14 @@ ggplot() +
       subtitle = "Proper slack prevents excessive tension while maintaining engagement")
 ```
 
-#### Tensioning Methods
+### Tensioning Methods
 
 1. **Adjustable shaft position** – Move one sprocket to take up slack
 2. **Idler sprocket** – Engages with chain to increase wrap and tension
 3. **Shoe tensioner** – Spring-loaded shoe presses against chain back
 4. **Automatic tensioner** – Self-adjusting mechanism for varying loads
 
-#### Chain Wear and Replacement
+### Chain Wear and Replacement
 
 Chain wear is measured as **elongation** (increase in pitch length):
 
@@ -692,7 +692,7 @@ Chain wear is measured as **elongation** (increase in pitch length):
 
 ---
 
-### Lubrication Requirements {#sec-chain-lubrication}
+## Lubrication Requirements {#sec-chain-lubrication}
 
 Proper lubrication is critical for chain drive life. The lubrication method depends on chain speed.
 
@@ -728,7 +728,7 @@ kable(lube_df,
 
 ---
 
-### 🔄 Chain vs. Belt Comparison {-}
+## 🔄 Chain vs. Belt Comparison {-}
 
 When should you choose a chain drive over a belt drive?
 
@@ -778,9 +778,9 @@ kable(compare_df,
 
 ---
 
-### 🎯 Design Guidelines and Best Practices {-}
+## 🎯 Design Guidelines and Best Practices {-}
 
-#### Sprocket Selection
+### Sprocket Selection
 
 | Parameter | Recommendation |
 | :--- | :--- |
@@ -789,7 +789,7 @@ kable(compare_df,
 | Teeth difference | At least 4-5 teeth between sprockets |
 | Material | Hardened steel for drivers; cast iron acceptable for slow driven |
 
-#### Installation Best Practices
+### Installation Best Practices
 
 1. **Alignment** – Sprockets must be parallel and in the same plane
 2. **Initial tension** – Set slack per recommendations; slightly tight is better
@@ -797,7 +797,7 @@ kable(compare_df,
 4. **Lubrication** – Establish lubrication schedule before startup
 5. **Guards** – Always install safety guards around chain drives
 
-#### Common Problems and Solutions
+### Common Problems and Solutions
 
 | Problem | Likely Cause | Solution |
 | :--- | :--- | :--- |
@@ -809,7 +809,7 @@ kable(compare_df,
 
 ---
 
-### Related Topics {#sec-chain-resources}
+## Related Topics {#sec-chain-resources}
 
 Chain drives are part of the power transmission family. For related content, see:
 
@@ -819,7 +819,7 @@ Chain drives are part of the power transmission family. For related content, see
 
 ---
 
-### 📚 Chapter Summary {-}
+## 📚 Chapter Summary {-}
 
 Chain drives provide reliable, positive power transmission for many applications:
 
@@ -837,11 +837,11 @@ Chain drives provide reliable, positive power transmission for many applications
 
 ---
 
-### Try it yourself {#sec-chain-tryit}
+## Try it yourself {#sec-chain-tryit}
 
 These use a drive that is not in the worked example. Each exercise checks your answer and lets you try again.
 
-#### Chain length and speed {#sec-tryit-chain-length}
+### Chain length and speed {#sec-tryit-chain-length}
 
 A #60 roller chain (pitch $P = 19.05$ mm) connects a 19-tooth driver sprocket turning at $720$ rpm to a 57-tooth driven sprocket. The center distance is about $550$ mm.
 
@@ -889,7 +889,7 @@ At `r sprintf("%.1f", ch$v)` m/s the chain is in the 4 to 7 m/s band: bath or di
 
 </details>
 
-#### Lubrication method by chain speed {#sec-tryit-chain-lube}
+### Lubrication method by chain speed {#sec-tryit-chain-lube}
 
 ```{r tryit-chain-lube-sort, echo=FALSE, results='asis'}
 lu <- data.frame(v = c(2.5, 5.5, 9.0, 14.0, 3.1, 6.8, 10.5, 15.2))
@@ -910,7 +910,7 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-chain-problems}
+## Practice Problems {#sec-chain-problems}
 
 **Problem 1:** A chain drive uses a 21-tooth driver sprocket at 900 rpm. What size driven sprocket is needed for an output speed of 300 rpm?
 

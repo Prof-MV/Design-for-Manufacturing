@@ -8,7 +8,7 @@ webr:
     autorun: true
 ---
 
-## Ball Bearings and Bushings {#chap-08-bearings}
+# Ball Bearings and Bushings {#chap-08-bearings}
 
 ```{r setup-08, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -27,7 +27,7 @@ theme_bearing <- theme_minimal() +
   )
 ```
 
-### Learning Objectives {#sec-objectives-08}
+## Learning Objectives {#sec-objectives-08}
 
 By the end of this chapter, you will be able to:
 
@@ -44,7 +44,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Every rotating machine—from tiny precision instruments to massive industrial equipment—relies on bearings. What functions do you think bearings serve, and why can't rotating shafts simply rest directly in their housings?
 :::
 
-### Introduction to Bearings {#sec-bearings-intro}
+## Introduction to Bearings {#sec-bearings-intro}
 
 Bearings are machine elements that **constrain relative motion** and **reduce friction** between moving parts. They are fundamental to virtually every rotating machine—from tiny precision instruments to massive industrial equipment.
 
@@ -56,7 +56,7 @@ Bearings serve three primary functions:
 
 ---
 
-#### Classification of Bearings {-}
+### Classification of Bearings {-}
 
 Bearings are broadly classified into two main categories:
 
@@ -116,11 +116,11 @@ ggplot() +
 
 ---
 
-### Ball Bearings {-}
+## Ball Bearings {-}
 
 Ball bearings are the most common type of rolling element bearing. They use spherical balls as the rolling elements, held between an inner race and an outer race.
 
-#### Anatomy of a Ball Bearing {-}
+### Anatomy of a Ball Bearing {-}
 
 ```{r ball-bearing-anatomy, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="Cross-section of a deep groove ball bearing showing main components."}
 ## Create ball bearing cross-section
@@ -179,7 +179,7 @@ ggplot() +
 
 ---
 
-#### Types of Ball Bearings {-}
+### Types of Ball Bearings {-}
 
 ```{r ball-bearing-types-table, echo=FALSE, message=FALSE}
 bearing_types <- tribble(
@@ -200,11 +200,11 @@ bearing_types %>%
 
 ---
 
-### Ball Bearing Life Calculations {#bearing-life}
+## Ball Bearing Life Calculations {#bearing-life}
 
 The life of a rolling element bearing is inherently **statistical**—even identical bearings operating under identical conditions will fail at different times due to the random nature of material fatigue. Understanding this statistical behavior is essential for proper bearing selection and reliability engineering.
 
-#### Understanding Statistical Bearing Life {-}
+### Understanding Statistical Bearing Life {-}
 
 ::: {.callout-think}
 **Before You Read:** If you tested 100 identical bearings under identical loads and speeds, would they all fail at the same time? What factors might cause variation in their lifetimes?
@@ -269,7 +269,7 @@ ggplot(life_df, aes(x = life)) +
   coord_cartesian(xlim = c(0, 250), expand = FALSE)
 ```
 
-#### L10 vs. L50: Which Life Do We Use? {-}
+### L10 vs. L50: Which Life Do We Use? {-}
 
 The figure above illustrates several important life values:
 
@@ -291,13 +291,13 @@ If we designed for L50 life, half of our bearings would fail before the "rated" 
 
 The relationship between L10 and L50 also explains an important insight: if a bearing achieves its L10 life, it still has substantial remaining life. The **median bearing** (L50) lasts about 5 times longer than L10!
 
-#### The L10 Life Concept {-}
+### The L10 Life Concept {-}
 
 > **Definition:** The L10 life is the number of revolutions (or hours at a given speed) that **90% of a group of identical bearings** will complete or exceed before the first evidence of fatigue failure (flaking/spalling).
 
 In other words, 10% of bearings will fail before reaching L10 life, while 90% will survive.
 
-#### Basic Life Equation {-}
+### Basic Life Equation {-}
 
 The fundamental bearing life equation is:
 
@@ -317,7 +317,7 @@ $$L_{10} = \left(\frac{C}{P}\right)^p \times 10^6 \text{ revolutions}$$
 - **Ball bearings:** $p = 3$
 - **Roller bearings:** $p = 10/3 \approx 3.33$
 
-#### Converting to Hours {-}
+### Converting to Hours {-}
 
 For bearings operating at constant speed, it is more practical to express life in hours:
 
@@ -331,7 +331,7 @@ $$L_{10h} = \frac{10^6}{60 \cdot n}\left(\frac{C}{P}\right)^p$$
 
 ---
 
-#### Equivalent Dynamic Load {-}
+### Equivalent Dynamic Load {-}
 
 When a bearing experiences both radial ($F_r$) and axial ($F_a$) loads simultaneously, an **equivalent dynamic load** ($P$) must be calculated:
 
@@ -372,7 +372,7 @@ load_factors %>%
 
 ---
 
-#### Basic Dynamic Load Rating (C) {-}
+### Basic Dynamic Load Rating (C) {-}
 
 The **basic dynamic load rating** ($C$) is a catalog value provided by the manufacturer. It represents:
 
@@ -404,7 +404,7 @@ catalog_data %>%
 
 ---
 
-#### Calculating the Basic Dynamic Load Rating (C) {-}
+### Calculating the Basic Dynamic Load Rating (C) {-}
 
 While catalog values are convenient, understanding **how** the dynamic load rating is calculated provides valuable engineering insight. The basic dynamic load rating for radial ball bearings is determined by:
 
@@ -427,7 +427,7 @@ The factor $f_c$ depends on the bearing geometry and is tabulated based on the r
 **Consider This:** Looking at the formula, which parameter has the greatest influence on load capacity? The ball diameter $D$ appears with an exponent of 1.8—nearly squared! This means **doubling the ball diameter increases load capacity by a factor of** $2^{1.8} \approx 3.5$.
 :::
 
-##### Values of $f_c$ (Geometry Factor) {-}
+#### Values of $f_c$ (Geometry Factor) {-}
 
 The following table provides $f_c$ values based on the bearing geometry ratio. Use the **Metric** column when ball diameter $D$ is in mm (result is $C$ in Newtons). Use the **Inch** column when $D$ is in inches (result is $C$ in pounds).
 
@@ -474,7 +474,7 @@ fc_values %>%
 
 *Note:* Source: ANSI-AFBMA Std. 9-1978. The metric $f_c$ gives $C$ in newtons (with $D$ in mm); the inch $f_c$ gives $C$ in pounds (with $D$ in inches).
 
-##### Conrad-Type Single-Row Radial Bearing Dimensions {-}
+#### Conrad-Type Single-Row Radial Bearing Dimensions {-}
 
 The following table provides dimensions and basic load ratings for Conrad-type (deep groove) single-row radial ball bearings. These are among the most commonly used bearings in industry.
 
@@ -549,7 +549,7 @@ conrad_bearings %>%
 
 *Note:* $C$ = dynamic load rating; $P_{st}$ = static load rating. Source: ANSI-AFBMA standards.
 
-##### The Load-Life Relationship: Why It Matters {-}
+#### The Load-Life Relationship: Why It Matters {-}
 
 The bearing life equation $L_{10} = \left(\frac{C}{P}\right)^3 \times 10^6$ reveals a powerful relationship: **bearing life varies with the cube of the load ratio**.
 
@@ -589,7 +589,7 @@ In automotive applications, this relationship explains why bearing failures ofte
 
 ---
 
-##### Live Demo: Life Against Load {-}
+#### Live Demo: Life Against Load {-}
 
 The curve is $L_{10} = (C/P)^3$ with the load on the x-axis and the life on the y-axis. The rating $C$ is the load at which the bearing lasts exactly 1 million revolutions, so the C-point sits on the curve at the right-hand end of the usable range. A bearing carrying a lighter load $P < C$ sits to the left of it, higher up the curve. Drag the **C** slider to move the C line and watch the slope of the tangent there change, drag the **P** slider to move the load, then drag the **load reduction** slider to 50%: the triangle shows P climbing to P' with 8 times the life.
 
@@ -602,8 +602,8 @@ qwebr_calc_card(
     qwebr_calc_input("C", "Dynamic load rating C", value = 5000, min = 1000, max = 10000, step = 100, suffix = "N", type = "slider"),
     qwebr_calc_input("P", "Equivalent load P", value = 3500, min = 500, max = 10000, step = 100, suffix = "N", type = "slider"),
     qwebr_calc_input("reduction", "Reduction in load", value = 0, min = 0, max = 75, step = 5, suffix = "%", type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -701,7 +701,7 @@ At the C-point the rating equals the load, so the life is exactly 1 million revo
 
 ---
 
-#### How Much Life is Required? {-}
+### How Much Life is Required? {-}
 
 Before selecting a bearing, engineers must determine the **required design life** for the application. The table below provides industry guidelines for different machine types:
 
@@ -734,7 +734,7 @@ life_guidelines %>%
 
 ---
 
-#### Two Approaches to Bearing Selection {-}
+### Two Approaches to Bearing Selection {-}
 
 There are two common scenarios when working with bearing life equations:
 
@@ -763,7 +763,7 @@ The following examples demonstrate both approaches.
 
 ---
 
-#### Applied Example: Calculate C from Bearing Dimensions {#example-calc-C-dimensions}
+### Applied Example: Calculate C from Bearing Dimensions {#example-calc-C-dimensions}
 
 ::: {.question}
 Find the basic dynamic load rating $C$ for a **207 radial bearing** with contact angle $\alpha = 0°$.
@@ -856,7 +856,7 @@ calc_steps %>%
   row_spec(7, background = "#E8F5E9", bold = TRUE)
 ```
 
-###### Verification {-}
+##### Verification {-}
 
 $$C = f_c \cdot (i \cos\alpha)^{0.7} \cdot Z^{2/3} \cdot D^{1.8} = 4550 \times 1 \times 9^{2/3} \times 0.4375^{1.8} = \boxed{4440\ \text{lbf}}$$
 
@@ -866,7 +866,7 @@ This matches the catalog value of **C = 4,440 lbf** from Table @tbl-conrad-beari
 
 ---
 
-#### Applied Example: Calculate Allowable Load P {#example-calc-P}
+### Applied Example: Calculate Allowable Load P {#example-calc-P}
 
 ::: {.question}
 For the **207 bearing** where we found C = 4,440 lbf, find the maximum radial load $P$ for a required L₁₀ life of **500 hours** at **1,500 RPM**.
@@ -934,7 +934,7 @@ p_calc_steps %>%
   row_spec(6, background = "#E8F5E9", bold = TRUE)
 ```
 
-###### Conclusion {-}
+##### Conclusion {-}
 
 $$P = \sqrt[3]{\frac{10^6 \times 4440^3}{60 \times 1500 \times 500}} = \sqrt[3]{1.945 \times 10^9} = \boxed{1250\ \text{lbf}}$$
 
@@ -944,7 +944,7 @@ $$P = \sqrt[3]{\frac{10^6 \times 4440^3}{60 \times 1500 \times 500}} = \sqrt[3]{
 
 ---
 
-#### Applied Example: Select a Bearing for Required Life {#example-select-bearing}
+### Applied Example: Select a Bearing for Required Life {#example-select-bearing}
 
 ::: {.question}
 A bearing of the **X07 family** (35 mm bore) needs to run for **2,000 hours** at **5,000 RPM** and carry a load of **415 lbf**. Which bearing from the X07 family should be selected?
@@ -1014,7 +1014,7 @@ select_steps %>%
   row_spec(5, background = "#E8F5E9", bold = TRUE)
 ```
 
-###### Bearing Selection {-}
+##### Bearing Selection {-}
 
 $$C_{required} = \sqrt[3]{\frac{60 \times 5000 \times 2000 \times 415^3}{10^6}} = \sqrt[3]{4.29 \times 10^{10}} = \boxed{3500\ \text{lbf}}$$
 
@@ -1037,7 +1037,7 @@ selection_table %>%
   row_spec(2, background = "#E8F5E9", bold = TRUE)
 ```
 
-###### Conclusion {-}
+##### Conclusion {-}
 
 Select the **207 bearing** (C = 4,440 lbf). It exceeds the required C of 3,500 lbf while being more compact and economical than the 307.
 
@@ -1051,7 +1051,7 @@ The 107 bearing is **not suitable**—its C = 2,760 lbf is below the required 3,
 
 ---
 
-#### Adjusted Rating Life {-}
+### Adjusted Rating Life {-}
 
 The basic L10 equation assumes ideal operating conditions. In practice, factors such as **reliability requirements**, **lubrication quality**, and **contamination** affect bearing life. The **adjusted rating life** accounts for these factors:
 
@@ -1095,7 +1095,7 @@ reliability_data %>%
 
 ---
 
-#### Life Calculation Plot {-}
+### Life Calculation Plot {-}
 
 The following plot illustrates how bearing life varies with the C/P ratio:
 
@@ -1135,7 +1135,7 @@ ggplot(life_data, aes(x = CP_Ratio, y = Life_Millions, color = Type, linetype = 
 
 ---
 
-### Applied Example: Ball Bearing Life Calculation {#bearing-example}
+## Applied Example: Ball Bearing Life Calculation {#bearing-example}
 
 ::: {.question}
 
@@ -1217,7 +1217,7 @@ results %>%
 ```
 
 
-###### Interpretation {-}
+##### Interpretation {-}
 
 - The **L10 life** of `r formatC(L10_hours, format = "f", digits = 0, big.mark = " ")` hours means that 90% of these bearings will operate at least this long before fatigue failure.
 - For applications requiring **95% reliability**, use the L5 life of `r formatC(L5_hours, format = "f", digits = 0, big.mark = " ")` hours.
@@ -1227,11 +1227,11 @@ results %>%
 
 ---
 
-#### Interactive Calculators: Ball Bearings {#sec-calc-ball}
+### Interactive Calculators: Ball Bearings {#sec-calc-ball}
 
 The four calculators below use the equations from this section. Change a number and the answer updates straight away. They run in your browser, so they work on a phone too. Each one ends with a **challenge**: the card tells you when you have reached it.
 
-##### Calculator 1: Life under combined load {-}
+#### Calculator 1: Life under combined load {-}
 
 Try it: change the axial load and watch what happens at the point where $F_a/F_r$ crosses $e$. The curve shows how fast life falls as the radial load rises.
 
@@ -1252,8 +1252,8 @@ qwebr_calc_card(
                      options = c("90", "95", "96", "97", "98", "99"))
   ),
   goal = "Keep Fr = 3200 N, n = 1450 rpm and C = 19500 N. Reduce only the axial load until the L10 life reaches 2500 hours. What happens to the life at the moment Fa/Fr drops to e?",
-  goal_test = "L10h >= 2500 && Fr == 3200 && n == 1450 && C == 19500"
-)
+  goal_test = "L10h >= 2500 && Fr == 3200 && n == 1450 && C == 19500",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1314,7 +1314,7 @@ Life varies with the cube of the load ratio, so doubling the equivalent load cut
 
 </details>
 
-##### Calculator 2: Rating C from the bearing geometry {-}
+#### Calculator 2: Rating C from the bearing geometry {-}
 
 Try it: the defaults are the 207 bearing from the worked example. The card looks up $f_c$ in the single-row table for you.
 
@@ -1332,8 +1332,8 @@ qwebr_calc_card(
     qwebr_calc_input("i", "Rows of balls", value = 1, min = 1, max = 2, step = 1)
   ),
   goal = "Keep the 207 envelope (bore 1.378 in, OD 2.8346 in) and 9 balls. Choose a bigger ball diameter so that C reaches 5000 lbf, while the balls still fit in the ring.",
-  goal_test = "C_calc >= 5000 && bore_in == 1.378 && OD_in == 2.8346 && Z == 9 && balls_fit"
-)
+  goal_test = "C_calc >= 5000 && bore_in == 1.378 && OD_in == 2.8346 && Z == 9 && balls_fit",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1388,7 +1388,7 @@ points(min(max(ratio, 0.05), 0.40), fc, pch = 19, cex = 2, col = "#D81B60")
 
 Doubling the ball diameter multiplies $C$ by about $2^{1.8} \approx 3.5$, but the balls have to fit round the ring and the ring must stay thick enough to carry them. The card checks both.
 
-##### Calculator 3: Select a bearing for a required life {-}
+#### Calculator 3: Select a bearing for a required life {-}
 
 Try it: enter the load and the life you need. The card finds the smallest Conrad-type bearing from the catalog table whose rating is high enough. The defaults ask for more than any bearing in the table can give.
 
@@ -1403,8 +1403,8 @@ qwebr_calc_card(
     qwebr_calc_input("L_h", "Required life", value = 10000, min = 500, max = 100000, step = 500, suffix = "h")
   ),
   goal = "Find a load for which a bearing in the table works for at least 10 000 h at 1500 rpm or more. The load must stay at 1500 lbf or higher.",
-  goal_test = "selected_ok && L_h >= 10000 && n >= 1500 && P >= 1500"
-)
+  goal_test = "selected_ok && L_h >= 10000 && n >= 1500 && P >= 1500",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1451,7 +1451,7 @@ abline(h = C_req, col = "#D81B60", lwd = 2, lty = 2)
 
 Two things to notice. Raising the speed or the life by 10 % raises the rating you need by only about 3 %, because of the cube root. Raising the **load** by 10 % raises it by the full 10 %.
 
-##### Calculator 4: Life worksheet for a radial ball bearing {-}
+#### Calculator 4: Life worksheet for a radial ball bearing {-}
 
 Try it: this card lays the whole calculation out step by step, the way you should write it in an assignment. It covers a **single-row ball bearing under a radial load only**, so $X = 1$ and $Y = 0$ and the equivalent load is $P = V \cdot F_r$. The rotation factor $V$ is 1 when the inner ring turns (the usual case) and 1.2 when the outer ring turns.
 
@@ -1471,8 +1471,8 @@ qwebr_calc_card(
   ),
   fig_width = 1000, fig_height = 1150,
   goal = "The default bearing lasts only a few weeks. Keep n = 1200 rpm and 24 hours per day, and change the load or the rating C until the bearing lasts the 4 years the machine needs. The sheet turns green when you get there.",
-  goal_test = "life_years >= required_years && n == 1200 && hours_day == 24 && required_years == 4"
-)
+  goal_test = "life_years >= required_years && n == 1200 && hours_day == 24 && required_years == 4",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1581,7 +1581,7 @@ Cutting the load from 12 000 N to about 3 700 N is what it takes at this rating,
 
 ---
 
-#### External Resources: Bearing Calculation Tools {-}
+### External Resources: Bearing Calculation Tools {-}
 
 Major bearing manufacturers provide comprehensive technical documentation and online calculators for bearing selection. These resources include detailed load rating tables, application examples, and life calculation methodologies.
 
@@ -1601,7 +1601,7 @@ These resources are invaluable for real-world bearing selection beyond the simpl
 
 ---
 
-### Plain Bearings (Bushings) {#bushings}
+## Plain Bearings (Bushings) {#bushings}
 
 Plain bearings, also called **bushings** or **sleeve bearings**, are the simplest form of bearing. They consist of a bearing surface with no rolling elements—the shaft slides directly against the bearing material.
 
@@ -1609,7 +1609,7 @@ Plain bearings, also called **bushings** or **sleeve bearings**, are the simples
 **Before You Read:** When a shaft rotates inside a bushing, what prevents the two metal surfaces from grinding together and wearing out rapidly? Is there something more sophisticated happening than just "oil between two surfaces"?
 :::
 
-#### Advantages of Bushings {-}
+### Advantages of Bushings {-}
 
 | Advantage | Explanation |
 |:----------|:------------|
@@ -1621,7 +1621,7 @@ Plain bearings, also called **bushings** or **sleeve bearings**, are the simples
 
 Many of the most successful bushing designs use **sintered metals**—porous metal structures created through powder metallurgy. These porous bushings can store lubricant within their structure and release it during operation, creating truly maintenance-free bearings. For a detailed understanding of how sintered bearings are manufactured and how their porosity is controlled, see Chapter @sec-chap-sintering.
 
-#### Types of Bushings {-}
+### Types of Bushings {-}
 
 ```{r bushing-types-table, echo=FALSE, message=FALSE}
 bushing_types <- tribble(
@@ -1647,11 +1647,11 @@ bushing_types %>%
 
 ---
 
-### Hydrodynamic Lubrication and the Oil Cushion {#sec-hydrodynamic-lubrication}
+## Hydrodynamic Lubrication and the Oil Cushion {#sec-hydrodynamic-lubrication}
 
 One of the most remarkable phenomena in bearing engineering is **hydrodynamic lubrication**—the ability of a rotating shaft to "float" on a thin cushion of oil, with complete separation between the metal surfaces. Understanding this mechanism is essential for designing reliable bushing applications.
 
-#### The Wedge Effect {#sec-wedge-effect}
+### The Wedge Effect {#sec-wedge-effect}
 
 When a shaft begins to rotate inside a lubricated bushing, something remarkable happens. The shaft doesn't rotate concentrically within the bore—instead, it shifts slightly off-center, creating a **converging wedge** of oil between the shaft and bearing surfaces.
 
@@ -1749,7 +1749,7 @@ The physics of this process are elegant:
 
 This is the **hydrodynamic cushion**: a self-generated oil film that supports the shaft load through fluid pressure alone.
 
-#### The Pressure Distribution {#sec-pressure-distribution}
+### The Pressure Distribution {#sec-pressure-distribution}
 
 The pressure profile that develops in the oil film is not uniform. Maximum pressure occurs in the converging wedge region, just before the minimum film thickness point:
 
@@ -1773,7 +1773,7 @@ This is a simplified form of the **Reynolds equation**, which governs hydrodynam
 **Industry Application:** Modern automotive engines rely entirely on hydrodynamic lubrication for their crankshaft main bearings and connecting rod bearings. At idle speed (~800 RPM), a typical crankshaft main bearing develops oil film pressures of 5-10 MPa, supporting loads of several kilonewtons on a film just 2-5 micrometers thick. At highway speeds, this film pressure can exceed 50 MPa.
 :::
 
-#### Eccentricity Ratio {#sec-eccentricity}
+### Eccentricity Ratio {#sec-eccentricity}
 
 The position of the shaft within the bearing is characterized by the **eccentricity ratio** ($\varepsilon$):
 
@@ -1814,8 +1814,8 @@ qwebr_calc_card(
     qwebr_calc_input("Ra_bush", "Bearing roughness Ra", value = 1.2, min = 0.1, max = 3, step = 0.1, suffix = "um")
   ),
   goal = "Keep c = 20 um and the two roughness values. Bring the eccentricity ratio down until the film is at least 3 times the combined roughness.",
-  goal_test = "film_ratio >= 3 && clearance_um == 20 && Ra_shaft == 0.8 && Ra_bush == 1.2"
-)
+  goal_test = "film_ratio >= 3 && clearance_um == 20 && Ra_shaft == 0.8 && Ra_bush == 1.2",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1862,7 +1862,7 @@ mtext(sprintf("eccentricity ratio = %.2f", eps), side = 1, line = 1)
 
 ---
 
-### Oil Circulation in Sintered Bearings {#sec-oil-circulation}
+## Oil Circulation in Sintered Bearings {#sec-oil-circulation}
 
 For sintered oil-impregnated bushings (see Chapter @sec-chap-sintering for manufacturing details), the hydrodynamic mechanism works in concert with the porous structure. The following diagram shows how oil circulates through a sintered bearing during operation:
 
@@ -2011,7 +2011,7 @@ ggplot() +
 
 ---
 
-### The Stribeck Curve: Understanding Lubrication Regimes {#sec-stribeck-curve}
+## The Stribeck Curve: Understanding Lubrication Regimes {#sec-stribeck-curve}
 
 The transition from metal-to-metal contact to full hydrodynamic separation doesn't happen instantly. German engineer Richard Stribeck (1861-1950) systematically studied this transition and developed one of the most important diagrams in tribology—the **Stribeck curve**.
 
@@ -2090,7 +2090,7 @@ ggplot(df, aes(x = Hersey, y = Friction)) +
   )
 ```
 
-#### The Three Lubrication Regimes {#sec-lubrication-regimes}
+### The Three Lubrication Regimes {#sec-lubrication-regimes}
 
 The Stribeck curve reveals three distinct operating regimes, determined by the **bearing parameter** (also called the Hersey number or Sommerfeld variable):
 
@@ -2147,7 +2147,7 @@ Notice that friction actually **increases** slightly at very high bearing parame
 
 ---
 
-#### Practical Implications for Bearing Design {#sec-stribeck-implications}
+### Practical Implications for Bearing Design {#sec-stribeck-implications}
 
 The Stribeck curve has profound implications for bearing selection and design:
 
@@ -2163,7 +2163,7 @@ The Stribeck curve has profound implications for bearing selection and design:
 **Industry Application:** Large turbine bearings in power plants use **hydrostatic jacking**—externally pressurized oil is pumped into the bearing at startup to lift the shaft before rotation begins. This eliminates the boundary lubrication phase entirely, preventing wear during the 10-15 seconds it takes to reach hydrodynamic speed.
 :::
 
-#### Watch It Happen: One Start–Stop Cycle {#sec-oil-film-cycle-video}
+### Watch It Happen: One Start–Stop Cycle {#sec-oil-film-cycle-video}
 
 The animation below follows a bushing through a complete start–stop cycle: at rest, startup, liftoff, full-speed running, coast-down, and touchdown. Four views update together. The bearing cross-section shows the shaft position and the oil-film pressure. The Stribeck curve marks where the bearing is operating. The zoom panel shows the asperities at $h_{min}$, and the last panel plots cumulative wear.
 
@@ -2187,7 +2187,7 @@ For sintered self-lubricating bearings (see Chapter @sec-chap-sintering), the oi
 
 ---
 
-### How the Oil Circulates, Step by Step {#sec-oil-circulation-diagram}
+## How the Oil Circulates, Step by Step {#sec-oil-circulation-diagram}
 
 The oil-circulation figure earlier in this chapter (@fig-oil-circulation) shows one instant of the process. The porous structure is an oil reservoir that keeps refilling the hydrodynamic film, and the cycle runs in a loop:
 
@@ -2197,7 +2197,7 @@ The oil-circulation figure earlier in this chapter (@fig-oil-circulation) shows 
 4. **While running**, the high-pressure zone pushes oil back into the pores, and the low-pressure zone on the other side lets oil flow out of them. The oil circulates through the wall.
 5. **At shutdown**, the bearing cools, and capillary action pulls the oil back into the pores to wait for the next start.
 
-### Try it yourself: put the circulation cycle in order {#sec-tryit-oil-cycle}
+## Try it yourself: put the circulation cycle in order {#sec-tryit-oil-cycle}
 
 The steps are shuffled. Move each one up or down until the cycle runs from rest to the next rest.
 
@@ -2219,11 +2219,11 @@ tryit_order(
 
 ---
 
-### PV Limits for Bushings {#pv-limits}
+## PV Limits for Bushings {#pv-limits}
 
 The **PV limit** is the most important design criterion for plain bearings. It represents the maximum combination of **bearing pressure** (P) and **sliding velocity** (V) that the bearing material can sustain without excessive wear or failure.
 
-#### The PV Concept {-}
+### The PV Concept {-}
 
 $$PV = P \times V$$
 
@@ -2235,7 +2235,7 @@ $$PV = P \times V$$
 | $V$ | Sliding velocity | ft/min (or m/s) |
 | $PV$ | PV factor | psi·ft/min (or MPa·m/s) |
 
-#### Calculating Bearing Pressure (P) {-}
+### Calculating Bearing Pressure (P) {-}
 
 For a journal bearing (shaft in a bushing):
 
@@ -2251,7 +2251,7 @@ $$P = \frac{F}{d \times L}$$
 
 > **Note:** This is the **projected area** method, using $A = d \times L$, not the cylindrical surface area.
 
-#### Calculating Sliding Velocity (V) {-}
+### Calculating Sliding Velocity (V) {-}
 
 $$V = \pi \times d \times n$$
 
@@ -2265,7 +2265,7 @@ $$V = \frac{\pi \times d \times n}{60,000} \quad \text{(m/s, where } d \text{ in
 
 ---
 
-#### PV Limit Visualization {-}
+### PV Limit Visualization {-}
 
 ```{r pv-limit-plot, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="PV limit diagram showing safe operating region for different bushing materials."}
 ## Create PV limit curves
@@ -2323,7 +2323,7 @@ ggplot(pv_data, aes(x = P, y = V, color = Material)) +
 
 ---
 
-#### Design Rules for PV {-}
+### Design Rules for PV {-}
 
 1. **Calculate the actual PV** for your application
 2. **Select a bushing material** with a PV limit **at least 2× higher** than calculated
@@ -2357,7 +2357,7 @@ limits_data %>%
 
 ---
 
-### Applied Example: Bushing PV Calculation {#bushing-example}
+## Applied Example: Bushing PV Calculation {#bushing-example}
 
 ::: {.question}
 
@@ -2435,7 +2435,7 @@ bushing_results %>%
   row_spec(4:6, background = "#E3F2FD")
 ```
 
-###### Conclusion {-}
+##### Conclusion {-}
 
 The SAE 660 bronze bushing is **suitable** for this application:
 
@@ -2447,7 +2447,7 @@ The SAE 660 bronze bushing is **suitable** for this application:
 
 ---
 
-### Applied Example: Maximum Speed Calculation {#bushing-example-speed}
+## Applied Example: Maximum Speed Calculation {#bushing-example-speed}
 
 ::: {.question}
 A bushing is loaded with **20 lbf**. The shaft has a diameter of **5/16 in**. The self-lubricating bushing is made of **Bronze-Iron**. The bushing has a length of **0.5 in**.
@@ -2528,7 +2528,7 @@ speed_results %>%
   row_spec(7, background = "#E8F5E9", bold = TRUE)
 ```
 
-###### Conclusion {-}
+##### Conclusion {-}
 
 The **PV limit governs** this design. Although the V limit alone would allow `r formatC(N_from_Vlimit, format = "f", digits = 0, big.mark = " ")` RPM, the combined PV constraint limits the speed to:
 
@@ -2542,7 +2542,7 @@ $$N_{max} = \boxed{`r formatC(N_max, format = "f", digits = 0, big.mark = " ")`\
 
 ---
 
-### Applied Example: Minimum Bushing Length {#bushing-example-length}
+## Applied Example: Minimum Bushing Length {#bushing-example-length}
 
 ::: {.question}
 A bushing is loaded with **20 lbf**. The shaft runs at **3,500 RPM** and has a diameter of **5/16 in**. The self-lubricating bushing is made of **Bronze-Iron**.
@@ -2623,14 +2623,14 @@ length_results %>%
   row_spec(6, background = "#E8F5E9", bold = TRUE)
 ```
 
-###### Verification {-}
+##### Verification {-}
 
 Let's verify by substituting $L_{min}$ back into both constraints:
 
 - **Bearing pressure:** $P = \frac{`r F_load`}{`r d_shaft` \times `r round(L_min, 3)`} = `r round(P_actual, 1)`$ psi < 2,500 psi ✓
 - **PV factor:** $PV = `r round(P_actual, 1)` \times `r round(V_sliding, 1)` = `r formatC(PV_actual, format = "f", digits = 0, big.mark = " ")`$ psi·ft/min ≈ 35,000 psi·ft/min ✓
 
-###### Conclusion {-}
+##### Conclusion {-}
 
 The **PV limit governs** this design. The minimum bushing length is:
 
@@ -2642,7 +2642,7 @@ In practice, you would round up to the next standard size (e.g., **0.5625 in = 9
 
 ---
 
-### Applied Example: Maximum Load Capacity {#bushing-example-load}
+## Applied Example: Maximum Load Capacity {#bushing-example-load}
 
 ::: {.question}
 A shaft runs at **3,500 RPM** and has a diameter of **5/16 in**. The self-lubricating bushing is made of **Bronze-Iron** and has a length of **0.5 in**.
@@ -2719,7 +2719,7 @@ load_results %>%
   row_spec(6, background = "#E8F5E9", bold = TRUE)
 ```
 
-###### Conclusion {-}
+##### Conclusion {-}
 
 Once again, the **PV limit governs** this design. The maximum allowable load is:
 
@@ -2738,7 +2738,7 @@ If your application requires 20 lbf at 3,500 RPM, you would need to either:
 
 ---
 
-### Interactive Calculator: Bushing Sizing {#sec-calc-bushing}
+## Interactive Calculator: Bushing Sizing {#sec-calc-bushing}
 
 This one card does all four bushing examples above. Pick a material, enter the shaft and load, and it checks $P$, $V$ and $PV$ against that material's limits. It also works backwards to give the **maximum speed**, the **minimum length** and the **maximum load**. The chart shows the safe region as a green area: the dot must sit inside it.
 
@@ -2757,8 +2757,8 @@ qwebr_calc_card(
     qwebr_calc_input("n_rpm", "Speed n", value = 1200, min = 1, max = 6000, step = 10, suffix = "rpm")
   ),
   goal = "Keep F = 2500 lbf and d = 1.5 in, and keep the speed at 400 rpm or more. Choose a bushing length that makes the bushing pass all three limits.",
-  goal_test = "all_ok && F_load == 2500 && d_shaft == 1.5 && n_rpm >= 400"
-)
+  goal_test = "all_ok && F_load == 2500 && d_shaft == 1.5 && n_rpm >= 400",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -2832,11 +2832,11 @@ Look at the shape of the safe area (both axes are logarithmic): pressure is capp
 
 ---
 
-### Try it yourself {#sec-bearing-tryit}
+## Try it yourself {#sec-bearing-tryit}
 
 These use bearings that are not in the worked examples. Each exercise checks your answer and lets you try again.
 
-#### Ball bearing life under combined load {#sec-tryit-l10}
+### Ball bearing life under combined load {#sec-tryit-l10}
 
 A single-row deep groove ball bearing has a basic dynamic load rating $C = 19.5$ kN. It carries a radial load $F_r = 3.2$ kN and an axial load $F_a = 1.1$ kN at $n = 1450$ rpm. For this bearing $e = 0.30$, and when $F_a/F_r > e$ the load factors are $X = 0.56$ and $Y = 1.6$.
 
@@ -2884,7 +2884,7 @@ For 10 000 h the bearing would need $C = `r sprintf("%.0f", bl$C_req)`$ N: `r sp
 
 </details>
 
-#### Bushing PV check {#sec-tryit-pv}
+### Bushing PV check {#sec-tryit-pv}
 
 ```{r tryit-pv-grid, echo=FALSE, results='asis'}
 pv <- data.frame(
@@ -2935,7 +2935,7 @@ A and D exceed the limit: A through pressure and speed together, D mainly throug
 
 </details>
 
-#### Which lubrication regime? {#sec-tryit-stribeck}
+### Which lubrication regime? {#sec-tryit-stribeck}
 
 ```{r tryit-stribeck-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -2968,7 +2968,7 @@ tryit_sort(
 )
 ```
 
-#### How many bearings really fail before L10? {#sec-tryit-fleet}
+### How many bearings really fail before L10? {#sec-tryit-fleet}
 
 L10 is a statement about a *population*: 10% of identical bearings fail before it. A small fleet rarely behaves like the average. Press **Run again** to draw a new fleet of bearings and count the early failures. The red dots failed before the rated life.
 
@@ -2984,8 +2984,8 @@ qwebr_calc_card(
   ),
   rerun = "seed",
   goal = "Set the fleet to 50 bearings and press Run again until a fleet shows only 2 or fewer failures before L10, even though 5 are expected on average.",
-  goal_test = "n_bearings >= 50 && failed_early <= 2"
-)
+  goal_test = "n_bearings >= 50 && failed_early <= 2",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -3025,7 +3025,7 @@ cat(sprintf("  Longest life    %.0f million rev\n", max(life)))
 
 </details>
 
-### Bearing vs. Bushing Selection Guide {#sec-selection-guide}
+## Bearing vs. Bushing Selection Guide {#sec-selection-guide}
 
 When should you use a ball bearing versus a bushing? The choice depends on operating conditions, space constraints, and maintenance requirements. For bushings, the decision between oil-impregnated and solid-lubricant types depends on the motion profile and environment—continuous rotation favors oil-impregnated bearings that can develop hydrodynamic films, while oscillating or high-temperature applications favor graphite-impregnated designs (see Chapter @sec-chap-sintering for details on manufacturing both types).
 
@@ -3055,7 +3055,7 @@ selection_guide %>%
   column_spec(3, background = "#E8F5E9")
 ```
 
-#### Try it yourself: ball bearing or bushing? {#sec-tryit-selection}
+### Try it yourself: ball bearing or bushing? {#sec-tryit-selection}
 
 Use the table above. Decide which type suits each application.
 
@@ -3093,9 +3093,9 @@ tryit_sort(
 
 ---
 
-### Summary Equations {-}
+## Summary Equations {-}
 
-#### Ball Bearing Life {-}
+### Ball Bearing Life {-}
 
 | Equation | Description |
 |:---------|:------------|
@@ -3104,7 +3104,7 @@ tryit_sort(
 | $P = X \cdot F_r + Y \cdot F_a$ | Equivalent dynamic load |
 | $L_{na} = a_1 \cdot a_{ISO} \cdot L_{10}$ | Adjusted rating life |
 
-#### Bushing PV Limits {-}
+### Bushing PV Limits {-}
 
 | Equation | Description |
 |:---------|:------------|
@@ -3112,7 +3112,7 @@ tryit_sort(
 | $V = \frac{\pi d n}{12}$ | Sliding velocity (ft/min) |
 | $PV = P \times V$ | PV factor—must be less than material PV limit |
 
-#### Hydrodynamic Lubrication {-}
+### Hydrodynamic Lubrication {-}
 
 | Equation | Description |
 |:---------|:------------|
@@ -3124,7 +3124,7 @@ tryit_sort(
 
 ---
 
-### Design Checklist {-}
+## Design Checklist {-}
 
 **For Ball Bearings:**
 

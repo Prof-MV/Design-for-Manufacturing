@@ -377,11 +377,11 @@ qwebr_calc_card(
   title = "Ground Loop Current Calculator",
   icon = "bolt",
   inputs = list(
-    qwebr_calc_input("shield_R_per_m", "Shield resistance per metre", value = 0.03, min = 0.005, max = 0.2, step = 0.005, suffix = "Ω/m"),
-    qwebr_calc_input("delta_V_ground", "Ground potential difference", value = 1.2, min = 0.1, max = 10, step = 0.1, suffix = "V"),
+    qwebr_calc_input("shield_R_per_m", "Shield resistance per metre", value = 0.03, min = 0.005, max = 0.2, step = 0.005, suffix = "Ω/m", type = "slider"),
+    qwebr_calc_input("delta_V_ground", "Ground potential difference", value = 1.2, min = 0.1, max = 10, step = 0.1, suffix = "V", type = "slider"),
     qwebr_calc_input("cable_length_m", "Cable length (m)", value = 85, min = 5, max = 500, step = 5, type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -433,8 +433,10 @@ qwebr_calc_card(
     qwebr_calc_input("L_clamp_nH", "360° clamp residual inductance", value = 2, min = 0.5, max = 20, step = 0.5, suffix = "nH"),
     qwebr_calc_input("t_rise_ns", "VFD edge rise time", value = 50, min = 5, max = 500, step = 5, suffix = "ns"),
     qwebr_calc_input("L_pigtail_mm", "Pigtail length (mm)", value = 120, min = 5, max = 500, step = 5, type = "slider")
-  )
-)
+  ),
+  goal = "Keep the 2 nH clamp and the 50 ns edge. How short must the pigtail be (at least 10 mm) for its reactance at the knee to drop to 10 times the clamp's or less?",
+  goal_test = "X_pigtail_knee / X_clamp_knee <= 10 + 1e-9 && L_pigtail_mm >= 10 && L_clamp_nH == 2 && t_rise_ns == 50",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -572,8 +574,8 @@ qwebr_calc_card(
     qwebr_calc_input("choke_reduction_pct", "Common-mode choke reduction (%)", value = 50, min = 0, max = 95, step = 5, type = "slider")
   ),
   goal = "On a 690 V line with a bearing voltage ratio of 0.06 and the film breakdown held at 10 V, find a choke reduction that keeps the bearing voltage below breakdown.",
-  goal_test = "V_line_rms >= 690 && BVR >= 0.06 && V_film_breakdown <= 10 && V_bearing_mitigated < V_film_breakdown"
-)
+  goal_test = "V_line_rms >= 690 && BVR >= 0.06 && V_film_breakdown <= 10 && V_bearing_mitigated < V_film_breakdown",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -722,12 +724,12 @@ qwebr_calc_card(
   title = "Star vs. Mesh Grounding Decision Matrix",
   icon = "scale-balanced",
   inputs = list(
-    qwebr_calc_input("w_panel_count", "Weight: panel count", value = 0.25, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_hf_noise_content", "Weight: high-frequency noise content", value = 0.3, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_sensitive_analog", "Weight: sensitive analog signals", value = 0.2, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_maintenance_ease", "Weight: maintenance ease", value = 0.25, min = 0, max = 1, step = 0.05)
-  )
-)
+    qwebr_calc_input("w_panel_count", "Weight: panel count", value = 0.25, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_hf_noise_content", "Weight: high-frequency noise content", value = 0.3, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_sensitive_analog", "Weight: sensitive analog signals", value = 0.2, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_maintenance_ease", "Weight: maintenance ease", value = 0.25, min = 0, max = 1, step = 0.05, type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -806,8 +808,10 @@ qwebr_calc_card(
     qwebr_calc_input("Z_loop_bonded", "Bonded fault loop impedance", value = 0.35, min = 0.05, max = 5, step = 0.05, suffix = "Ω"),
     qwebr_calc_input("R_rod_equipment", "Equipment ground rod resistance", value = 25, min = 1, max = 100, step = 1, suffix = "Ω"),
     qwebr_calc_input("R_electrode_source", "Source electrode resistance", value = 25, min = 1, max = 100, step = 1, suffix = "Ω")
-  )
-)
+  ),
+  goal = "With ground rods only, the 20 A breaker never trips. How low must the two rod resistances get (whole ohms, 347 V, 20 A) before it does? Is that realistic?",
+  goal_test = "I_fault_rod >= OCPD_rating && OCPD_rating == 20 && V_phase == 347",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

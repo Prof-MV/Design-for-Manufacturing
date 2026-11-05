@@ -8,7 +8,7 @@ webr:
     autorun: true
 ---
 
-## Strength of Bolt Joint Calculations {#sec-chap-03-bolts}
+# Strength of Bolt Joint Calculations {#sec-chap-03-bolts}
 
 ```{r setup-03, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -18,7 +18,7 @@ inject_jquery()
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {#sec-objectives-03}
+## Learning Objectives {#sec-objectives-03}
 
 By the end of this chapter, you will be able to:
 
@@ -32,7 +32,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Why do mechanics use torque wrenches when tightening critical bolts, rather than just tightening "until it feels tight"? What could go wrong with an improperly tightened bolt?
 :::
 
-### Mechanics of Bolted Joint Integrity {#sec-bolted-joints}
+## Mechanics of Bolted Joint Integrity {#sec-bolted-joints}
 
 Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt Preload
 When a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_p$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself. 
@@ -84,8 +84,8 @@ qwebr_calc_card(
     qwebr_calc_input("P_ext", "External load P (N)", value = 4000, min = 0, max = 20000, step = 250, type = "slider")
   ),
   goal = "Carry a working load of at least 8000 N with the joint still clamped and the bolt force no higher than 8500 N.",
-  goal_test = "P_ext >= 8000 && P_ext < sep_point && bolt_force <= 8500"
-)
+  goal_test = "P_ext >= 8000 && P_ext < sep_point && bolt_force <= 8500",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -141,7 +141,7 @@ cat(sprintf("  Added to the bolt per 1000 N of P  %s N (while clamped)\n", fmt(C
 * Calculate stiffness-es ($k_b, k_m$) to find the joint constant.
 * Verify safety factors against yielding, joint separation, and fatigue.
 
-### Bolt Definitions {#sec-bolt-definitions}
+## Bolt Definitions {#sec-bolt-definitions}
 
 Key terminology used to describe the geometry of a bolt.
 
@@ -169,7 +169,7 @@ knitr::include_graphics("images/TensileStressArea.png")
 It is the effective area of a threaded rod to be used for stress  calculations.  
 The diameter of this unthreaded rod is the average of the  pitch diameter and the minor diameter of the threaded rod.
 
-##### English Bolt - Tensile Cross Sectional Area {-}
+#### English Bolt - Tensile Cross Sectional Area {-}
 
 ```{r tbl-english-cross-section-area-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
@@ -232,7 +232,7 @@ fastener_lookup %>%
 ```
 
 
-##### Metric Bolt - Tensile Cross Sectional Area {-}
+#### Metric Bolt - Tensile Cross Sectional Area {-}
 
 ```{r metric-cross-section-area-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
@@ -307,7 +307,7 @@ knitr::include_graphics("images/BoltDimensions.png")
 
 Although many other thread lengths exist, to standardize the bolts used in this course, we only use a tread length determined by the equations below.
 
-###### English Units: {-#thread-lengths-english}
+##### English Units: {-#thread-lengths-english}
 $$
 L_{T} = \begin{cases} 
 2d + \frac{1}{4} \text{ in} & L \le 6 \text{ in} \\ 
@@ -315,7 +315,7 @@ L_{T} = \begin{cases}
 \end{cases}
 $$
 
-###### Metric Units: {-#thread-lengths-metric}
+##### Metric Units: {-#thread-lengths-metric}
 $$
 L_T = \begin{cases} 
 2d + 6 & L \le 125, \quad d \le 48 \\ 
@@ -324,7 +324,7 @@ L_T = \begin{cases}
 \end{cases}
 $$
 
-#### Nut Dimensions
+### Nut Dimensions
 
 * First three threads of nut carry majority of load
 * Localized plastic strain in the first thread is likely, so **nuts  should not be re-used in critical applications**.
@@ -426,7 +426,7 @@ metric_nuts %>%
   row_spec(0, background = "#D81B60", color = "white") ## Matches source pink header
 ```
 
-#### Why Use a Washer? {#sec-why-washer}
+### Why Use a Washer? {#sec-why-washer}
 
 A plain washer looks like the most trivial part in the assembly, yet it protects the most highly stressed region of the whole joint. To see why, follow the **force flow** (the path the preload takes) through the joint in @fig-washer-force-path. The preload is a closed loop of internal force: the bolt shank is in tension, the threads hand that tension over to the nut, the nut pushes down on the washer, the washer spreads the load into the clamped members (which are in compression), and the members push back up against the bolt head, which closes the loop into the shank again.
 
@@ -703,7 +703,7 @@ A hardened flat washer solves all three: it bridges the hole edge so the burr ca
 **Check your understanding:** Why does making a nut twice as tall barely increase the strength of the thread engagement? And why is a burr at the hole edge more damaging under the nut than a scratch on the outer edge of the nut's bearing face?
 :::
 
-#### Washer Dimensions
+### Washer Dimensions
 
 ```{r tbl-english-washer-dimensions-table, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
@@ -842,11 +842,11 @@ metric_washer_data %>%
 
 
 
-### Bolt Tightening Methods {#bolt-tightening-methods}
+## Bolt Tightening Methods {#bolt-tightening-methods}
 
 Achieving the correct preload in a bolted joint is critical for joint integrity. Three primary methods are used in industry to control bolt tension during assembly: torque-controlled tightening, torque-angle tightening, and direct elongation measurement. Each method offers different levels of accuracy and is suited to different applications.
 
-#### Why Tighten the Nut, Not the Bolt?
+### Why Tighten the Nut, Not the Bolt?
 
 In most bolted joint assemblies, it is preferable to **rotate the nut while holding the bolt stationary** rather than turning the bolt head. This practice offers several important advantages:
 
@@ -862,11 +862,11 @@ In most bolted joint assemblies, it is preferable to **rotate the nut while hold
 
 ---
 
-#### Method 1: Torque-Controlled Tightening (Torque Wrench) {#torque-wrench-method}
+### Method 1: Torque-Controlled Tightening (Torque Wrench) {#torque-wrench-method}
 
 The most common method for achieving bolt preload is **torque-controlled tightening** using a torque wrench. This method relies on the relationship between applied torque and resulting bolt tension.
 
-##### How It Works {-}
+#### How It Works {-}
 
 A torque wrench measures the rotational force applied to the nut. When the specified torque value is reached, the wrench signals the operator (via a click, breakover, or digital display) to stop tightening. The torque is related to preload by the short-form torque equation:
 
@@ -874,14 +874,14 @@ $$T = K \cdot d \cdot F_i$$
 
 Where $T$ is the applied torque, $K$ is the nut factor (typically 0.15–0.25), $d$ is the nominal bolt diameter, and $F_i$ is the resulting preload.
 
-##### Advantages {-}
+#### Advantages {-}
 
 * **Simplicity:** Torque wrenches are widely available, easy to use, and require minimal training.
 * **Speed:** Tightening is fast compared to more precise methods.
 * **Cost-Effective:** Equipment costs are low, and the method is suitable for high-volume production.
 * **Traceability:** Torque values can be documented for quality records.
 
-##### Disadvantages {-}
+#### Disadvantages {-}
 
 * **High Variability:** Approximately 70–90% of the applied torque is consumed by friction in the threads and under the nut face. Small changes in lubrication, surface finish, or thread condition can cause preload variations of ±25–35%.
 * **No Direct Tension Measurement:** The actual bolt tension is not measured; it is inferred from the torque-tension relationship.
@@ -889,11 +889,11 @@ Where $T$ is the applied torque, $K$ is the nut factor (typically 0.15–0.25), 
 
 ---
 
-#### Method 2: Torque-Angle Tightening {#torque-angle-method}
+### Method 2: Torque-Angle Tightening {#torque-angle-method}
 
 The **torque-angle method** (also called "turn-of-nut" method) improves upon pure torque control by adding a controlled angular rotation after reaching an initial "snug" torque. This method is widely used in automotive and structural steel applications.
 
-##### How It Works {-}
+#### How It Works {-}
 
 1. **Snug Tightening:** The bolt is first tightened to a low "snug" torque that brings all joint surfaces into firm contact. This establishes a consistent starting point.
 2. **Angle Turn:** From the snug position, the nut is rotated through a specified additional angle (e.g., 60°, 90°, or 120°). This rotation directly corresponds to bolt elongation.
@@ -956,13 +956,13 @@ ggplot(df, aes(x = Angle, y = Torque)) +
 
 As shown in Figure @fig-torque-angle-plot, the tightening process begins with a rapid torque rise as surfaces come into contact. Once the "snug" limit is reached, the additional angle rotation stretches the bolt into the elastic (or slightly plastic) region, achieving consistent preload regardless of friction variations.
 
-##### Advantages {-}
+#### Advantages {-}
 
 * **Reduced Friction Sensitivity:** Since the angle turn directly controls elongation, friction variations after the snug point have less effect on final preload.
 * **Higher Preload Accuracy:** Typical preload scatter is reduced to ±10–15%, compared to ±25–35% for torque-only methods.
 * **Detects Anomalies:** If the torque rises too quickly or slowly during the angle turn, it indicates problems such as cross-threading, galling, or incorrect bolt grade.
 
-##### Disadvantages {-}
+#### Disadvantages {-}
 
 * **Requires Calibration:** The snug torque and angle values must be determined experimentally for each joint configuration.
 * **More Complex Tooling:** Requires angle-measuring capability (electronic torque-angle wrenches or manual protractor fixtures).
@@ -970,11 +970,11 @@ As shown in Figure @fig-torque-angle-plot, the tightening process begins with a 
 
 ---
 
-#### Method 3: Elongation Measurement {#elongation-method}
+### Method 3: Elongation Measurement {#elongation-method}
 
 The most accurate method for controlling bolt preload is **direct measurement of bolt elongation**. Since bolt tension is directly proportional to elongation through Hooke's law, measuring elongation eliminates the uncertainties associated with friction.
 
-##### How It Works {-}
+#### How It Works {-}
 
 The bolt is tightened while its elongation is monitored using one of several techniques:
 
@@ -1009,13 +1009,13 @@ Key Details About Color-Changing Bolts:
 
 These fasteners are designed to be a permanent, visual verification tool for maintenance and safety. 
 
-##### Advantages {-}
+#### Advantages {-}
 
 * **Highest Accuracy:** Preload accuracy of ±1–5% is achievable with measurements, as friction is completely eliminated from the measurement.
 * **Direct Measurement:** The actual bolt tension is measured, not inferred from torque.
 * **Ideal for Critical Applications:** Essential for pressure vessels, nuclear reactors, aerospace structures, and other safety-critical joints.
 
-##### Disadvantages {-}
+#### Disadvantages {-}
 
 * **High Cost:** Ultrasonic equipment is expensive, and the method requires trained operators.
 * **Time-Consuming:** Each bolt must be measured individually, making the method slow for large-volume production.
@@ -1024,7 +1024,7 @@ These fasteners are designed to be a permanent, visual verification tool for mai
 
 ---
 
-#### Comparison of Tightening Methods
+### Comparison of Tightening Methods
 
 | Method | Preload Accuracy | Speed | Cost | Best Application |
 | :--- | :---: | :---: | :---: | :--- |
@@ -1034,7 +1034,7 @@ These fasteners are designed to be a permanent, visual verification tool for mai
 
 > **Design Tip:** For critical applications, specify the tightening method on engineering drawings. Include the target preload, acceptable tolerance, and any special lubrication requirements.
 
-##### Try it yourself: choose the tightening method {#sec-tryit-tightening}
+#### Try it yourself: choose the tightening method {#sec-tryit-tightening}
 
 You have just met three ways to control preload. Match each situation to the method that fits it.
 
@@ -1073,7 +1073,7 @@ tryit_sort(
 ```
 
 
-### Understanding Bolt Joints and Force Triangles {#bolt-joints}
+## Understanding Bolt Joints and Force Triangles {#bolt-joints}
 In bolted joints, the force triangle is a conceptual tool used to visualize and analyze the distribution of forces between the bolt and the clamped members under preload and external working loads. This representation helps engineers understand how forces are balanced to maintain joint integrity and prevent failure modes such as separation or fatigue [@shigley2020].
 When a bolt is tightened to apply a preload $F_p$, it elongates the bolt shaft by a small amount $\delta_b$, governed by the bolt's stiffness $k_b$ according to Hooke's law: $\delta_b = F_p / k_b$. Simultaneously, this preload compresses the clamped members (e.g., plates or flanges) by an equivalent amount $\delta_m = F_p / k_m$, where $k_m$ is the stiffness of the members. The preload creates an initial tensile force in the bolt and a compressive force in the members, establishing equilibrium in the joint before any external load is applied.
 The introduction of an external working force $F_w$ alters this balance. In a typical force triangle diagram, the preload forms the base, and the working force is distributed between the bolt and members based on their relative stiffnesses. The change in bolt force becomes $\Delta F_b = (k_b / (k_b + k_m)) F_w$, while the change in member force is $\Delta F_m = -(k_m / (k_b + k_m)) F_w$. Thus, the bolt experiences an increase in tension, and the members see a reduction in compression. If the working force exceeds a critical threshold, it may lead to joint separation when the member compression approaches zero.
@@ -1111,11 +1111,11 @@ knitr::include_graphics("images/ForceTriangle2.png")
 
 This image illustrates the Joint Diagram (often called a "Force Triangle" or "Frustum") for a bolted connection. It visualizes how forces and deformations are distributed between the bolt and the clamped members when a preload is applied.
 
-###### The Physical Model (Left) {-}
+##### The Physical Model (Left) {-}
 
 On the left of Figure ~@fig-force-triangle-plot, the bolt is modeled as a tension spring (green coil) and the clamped members are modeled as a compression spring (yellow coils). Preload ($F_v$): When the nut is tightened, the bolt is pulled into tension (elongation), and the members are squeezed into compression. Equilibrium: The red arrows represent the internal forces. The force pulling the bolt ($F_v$) is exactly equal to the force pushing against the members.
 
-###### The Force-Deformation Graph (Right) {-}
+##### The Force-Deformation Graph (Right) {-}
 
 The graph translates these physical movements into a geometric diagram where the slopes represent stiffness ($k = \frac{Force}{Deformation}$).
 
@@ -1123,7 +1123,7 @@ The graph translates these physical movements into a geometric diagram where the
 * **Compression (Yellow Line):** This is the members' behavior. It is plotted starting from the right and moving toward the center. Clamped members (like steel plates) are usually much stiffer than the bolt, so this line has a steeper slope.
 * **The Intersection Point ($F_v$):** The peak of the triangle represents the state after tightening but before any external "working load" is applied. At this point, the bolt tension and member compression are balanced at the preload value $F_v$.
 
-###### Key Engineering Takeaway {-} 
+##### Key Engineering Takeaway {-} 
 
 The "triangle" shows that for any given preload, the members will deform less (linear distance) than the bolt because they are stiffer. This is crucial for fatigue resistance: when an external load is applied to the joint, the "stiff" members absorb most of the force change, protecting the "stretchy" bolt from large fluctuations in tension that could lead to failure.
 
@@ -1175,7 +1175,7 @@ ggplot(plot_data, aes(x = x, y = y, color = group, linetype = group)) +
        color = "Scenario", linetype = "Scenario") +
   theme_minimal()
 ```
-#### How to Interpret the Result
+### How to Interpret the Result
 * **The "Triangle" stretches upward:** The peak moves from $F_i$ (preload) to $F_b$ (total bolt load).
 * **The Red Arrow:** This represents the additional tension the bolt carries. Notice that it is much smaller than the total external force ($P = 15,000$). This is because the members "gave up" some of their compression to support the load.
 * **Member Safety:** As long as the yellow line (member compression) does not reach $y = 0$, the joint remains "clamped." If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.
@@ -1189,12 +1189,12 @@ qwebr_calc_card(
   title = "Joint Load-Sharing Calculator",
   icon = "bolt",
   inputs = list(
-    qwebr_calc_input("preload", "Bolt preload F<sub>i</sub>", value = 30000, min = 1000, max = 100000, step = 1000, suffix = "N"),
-    qwebr_calc_input("kb", "Bolt stiffness k<sub>b</sub>", value = 431027, min = 50000, max = 3000000, step = 1000, suffix = "N/mm"),
-    qwebr_calc_input("km", "Member stiffness k<sub>m</sub>", value = 1724108, min = 50000, max = 10000000, step = 1000, suffix = "N/mm"),
+    qwebr_calc_input("preload", "Bolt preload F<sub>i</sub>", value = 30000, min = 1000, max = 100000, step = 1000, suffix = "N", type = "slider"),
+    qwebr_calc_input("kb", "Bolt stiffness k<sub>b</sub>", value = 431027, min = 50000, max = 3000000, step = 1000, suffix = "N/mm", type = "slider"),
+    qwebr_calc_input("km", "Member stiffness k<sub>m</sub>", value = 1724108, min = 50000, max = 10000000, step = 1000, suffix = "N/mm", type = "slider"),
     qwebr_calc_input("external_p", "External working load P (N)", value = 15000, min = 0, max = 60000, step = 500, type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -1239,11 +1239,11 @@ cat(sprintf("  Separation would occur at P    %s N\n", fmt(preload / (1 - Phi)))
 
 
 
-### Advanced Analysis of Bolted Joints with applicable Formulas {#sec-bolted-analysis-formulas}
+## Advanced Analysis of Bolted Joints with applicable Formulas {#sec-bolted-analysis-formulas}
 
 The reliability of a bolted joint depends on understanding the stiffness relationship between the fastener and the clamped members. This chapter details the analytical steps required to ensure joint integrity based on the force triangle principles.
 
-#### Fastener Stiffness ($k_b$) {#kb}
+### Fastener Stiffness ($k_b$) {#kb}
 
 A bolt is not a perfectly rigid body; it acts as a series of springs with different cross-sections. To calculate the total fastener stiffness ($k_b$), we must account for both the unthreaded shank and the threaded portion within the grip.
 
@@ -1306,7 +1306,7 @@ modulus_lookup %>%
 
 ---
 
-#### Member Stiffness ($k_m$) and Substitute Cylinders {#km}
+### Member Stiffness ($k_m$) and Substitute Cylinders {#km}
 
 Calculating the stiffness of the clamped members ($k_m$) is complex because the compressive stress spreads out from the bolt head rather than remaining a uniform cylinder. We use the **Area of a substitute cylinder** ($A_s$) to model this behavior.
 
@@ -1324,23 +1324,23 @@ The calculation of $A_s$ depends on the relationship between the joint diameter 
 
 ---
 
-#### Joint Forces and Tightening Torque 
+### Joint Forces and Tightening Torque 
 
 The **Joint Stiffness Constant** ($C$) determines how much of an external load $P$ is shared by the bolt.
 
 $$C = \frac{k_b}{k_b + k_m}$$
 
-##### Force Distribution {-}
+#### Force Distribution {-}
 The total force in the bolt ($F_b$) and the remaining clamping force in the member ($F_m$) are calculated as follows:
 
 * $F_b = C \cdot P + F_i$
 * $F_m = (1 - C) \cdot P - F_i$
 
-##### Preload {-}
+#### Preload {-}
 The initial preload ($F_i$) is typically set to 75% of the proof load ($F_p$):
 $$F_i = 0.75 F_p = 0.75 \cdot A_t S_p$$
 
-##### Torque {-}
+#### Torque {-}
 To achieve this preload, the required tightening torque ($T$) is calculated using the nominal diameter ($d$) and a friction factor ($K$):
 $$T = K \cdot d \cdot F_i$$
 
@@ -1351,7 +1351,7 @@ According to standard tables, the friction factor $K$ varies by bolt condition:
 * **Lubricated:** $0.12 - 0.16$
 
 
-#### Stress Analysis and Safety Factors
+### Stress Analysis and Safety Factors
 
 The tensile stress in the bolt ($\sigma$) is the total bolt force divided by the tensile area:
 $$\sigma = \frac{F_b}{A_t} = \frac{CP + F_i}{A_t}$$
@@ -1367,11 +1367,11 @@ To ensure a safe design, we evaluate three safety factors:
 
 ---
 
-### Applied Example: Bolted Joint Safety Calculation {#bolt-example}
+## Applied Example: Bolted Joint Safety Calculation {#bolt-example}
 
 To ensure the reliability of a bolted joint, we must move from theoretical equations to practical application. In this example, we will calculate the safety factors for a specific joint configuration by retrieving standard dimensions from the tables provided in Chapter @sec-bolt-definitions and applying the stiffness formulas derived in Chapter @sec-bolted-analysis-formulas.
 
-##### Problem Statement {-}
+#### Problem Statement {-}
 
 We are designing a bolted connection to clamp two plates together: one made of **Steel** and one made of **Cast Iron**. The joint is subjected to an external tensile load $P$.
 
@@ -1389,14 +1389,14 @@ We are designing a bolted connection to clamp two plates together: one made of *
     * Bolt ($E_b$): $29 \times 10^6$ psi.
 * **Bolt Proof Strength ($S_p$):** 85,000 psi (SAE Grade 5).
 
-##### Step 1: Retrieving Table Data {-}
+#### Step 1: Retrieving Table Data {-}
 
 First, we need to gather the geometric properties of the hardware. Instead of guessing, we look up the exact values from the reference tables.
 
 1.  **Tensile Stress Area ($A_t$):** From Table @tbl-english-cross-section-area-table for a "1/2" size UNC bolt.
 2.  **Washer Thickness ($t_w$):** From Table @tbl-english-washer-dimensions-table for a "1/2 N" washer.
 
-##### Step 2: Calculation {-}
+#### Step 2: Calculation {-}
 
 ::: {.content-visible when-format="html"}
 *This one is live — drag the load or change the plate thicknesses, proof strength, or bolt length and the stiffnesses, the joint constant, and all three safety factors update immediately. Every other design parameter and table lookup (moduli, bolt size, looked-up areas) is a variable at the top of the code underneath.*
@@ -1412,8 +1412,10 @@ qwebr_calc_card(
     qwebr_calc_input("t2", "Cast iron plate thickness", value = 0.75, min = 0.25, max = 3, step = 0.05, suffix = "in"),
     qwebr_calc_input("L_total", "Bolt length", value = 3, min = 2.5, max = 6, step = 0.25, suffix = "in"),
     qwebr_calc_input("P", "External tensile load P (lbf)", value = 4000, min = 500, max = 20000, step = 250, type = "slider")
-  )
-)
+  ),
+  goal = "Keep the load at 4000 lbf and the bolt at Grade 5 (S_p = 85 000 psi), and still raise the yield safety factor n_P to 1.20 or more. Hint: which parameters change the joint constant C?",
+  goal_test = "nP >= 1.2 && P == 4000 && Sp == 85000",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1630,7 +1632,7 @@ The calculation results are summarized below. The Joint Constant ($C$) indicates
 ---
 
 
-### Example 2
+## Example 2
 
 In this example we are verifying if the bolts can hold the applied load and how big the safety factors are.
 
@@ -1663,8 +1665,10 @@ qwebr_calc_card(
     qwebr_calc_input("Sp", "Proof strength S<sub>p</sub>", value = 85000, min = 30000, max = 150000, step = 1000, suffix = "psi"),
     qwebr_calc_input("K", "Torque / nut factor K", value = 0.2, min = 0.05, max = 0.4, step = 0.01),
     qwebr_calc_input("P_total", "Total external load on the joint (lbf)", value = 10000, min = 1000, max = 60000, step = 500, type = "slider")
-  )
-)
+  ),
+  goal = "Question 8 trap: find the highest nut factor K (two decimals) for which a lubricated bolt tightened to the same torque still stays just below S_u.",
+  goal_test = "sigma_lube <= Su && sigma_lube >= 0.95 * Su",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1765,7 +1769,7 @@ cat(sprintf("  Q8 Lubricated bolt stress           %s psi - %s\n", fmt(sigma_lub
 :::
 
 ::: {.question}
-###### **1)** What is the spring constant of the bolt $k_b$? {-}
+##### **1)** What is the spring constant of the bolt $k_b$? {-}
 :::
 
 ::: {.answer}
@@ -1801,7 +1805,7 @@ $$k_b = \frac{0.1963 \cdot 0.1599 \cdot 29 \cdot 10^6}{0.1963 \cdot 1.095 + 0.15
 :::
 
 ::: {.question}
-###### **2)** What is the spring constant of the compressed joint $k_m$? {-}
+##### **2)** What is the spring constant of the compressed joint $k_m$? {-}
 :::
 
 ::: {.answer}
@@ -1855,17 +1859,17 @@ $$ k_m = 5.24 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} $$
 
 
 ::: {.question}
-###### **3)** What is the initial load in the bolt $F_i$? {-}
+##### **3)** What is the initial load in the bolt $F_i$? {-}
 :::
 
 ::: {.answer}
 
-###### Joint Stiffness Constant (C) {-}
+##### Joint Stiffness Constant (C) {-}
 The stiffness constant **C** defines how the external load is shared between the bolt and the clamped members:
 $$ C = \frac{k_b}{k_b + k_m} = \frac{3.57 \cdot 10^6}{3.57 \cdot 10^6 + 5.24 \cdot 10^6} = 0.405 $$
 
 
-###### Load and Preload Parameters {-}
+##### Load and Preload Parameters {-}
 * **Portion of Load (P):** The external load shared by the individual fastener:
     $$ P = \frac{10000 \text{ lbf}}{4} = 2500 \text{ lbf} $$
 * **Initial Preload ($F_i$):** Calculated based on the *Fastenal Technical Reference Guide*[@fastenal_guide]:
@@ -1873,12 +1877,12 @@ $$ C = \frac{k_b}{k_b + k_m} = \frac{3.57 \cdot 10^6}{3.57 \cdot 10^6 + 5.24 \cd
 :::
 
 ::: {.question}
-###### **4)** What is the tensile force in the bolt $F_b$? {-}
+##### **4)** What is the tensile force in the bolt $F_b$? {-}
 :::
 
 ::: {.answer}
 
-###### Resulting Forces {-}
+##### Resulting Forces {-}
 **Force in the Bolt ($F_b$):**
 The total tension in the bolt after the external load is applied:
 $$ F_b = C \cdot P + F_i $$
@@ -1887,7 +1891,7 @@ $$ F_b = 0.405 \cdot 2500 + 10194 = 11207 \text{ lbf} $$
 
 
 ::: {.question}
-###### **5)** What is the compression force in the members $F_m$? {-}
+##### **5)** What is the compression force in the members $F_m$? {-}
 :::
 ::: {.answer}
 
@@ -1900,7 +1904,7 @@ $$ F_m = (1 - 0.405) \cdot 2500 - 10194 = -8707 \text{ lbf} $$
 :::
 
 ::: {.question}
-###### **6)** Tensile Stress in Bolt  {-}
+##### **6)** Tensile Stress in Bolt  {-}
 :::
 ::: {.answer}
 
@@ -1911,7 +1915,7 @@ $$\sigma_b = \frac{F_b}{A_t} = \frac{11207}{0.1599 \, in^2} = 70 \, ksi$$
 
 :::
 ::: {.question}
-###### **7)** What are the safety factors $n_L$, $n_P$, $n_O$?   {-}
+##### **7)** What are the safety factors $n_L$, $n_P$, $n_O$?   {-}
 :::
 ::: {.answer}
 **1. Proof Load Safety Factor ($n_p$):**
@@ -1926,7 +1930,7 @@ $$n_o = \frac{F_i}{P(1 - C)} = \frac{10194}{2500(1 - 0.405)} = 6.85$$
 :::
 
 ::: {.question}
-###### **8)** Torque Requirements and Lubrication Effects  {-}
+##### **8)** Torque Requirements and Lubrication Effects  {-}
 :::
 ::: {.answer}
 
@@ -1950,7 +1954,7 @@ $$\sigma = \frac{F_i}{A_t} = \frac{20380}{0.1599} = 127454 \, psi$$
 
 :::
 
-### Try it yourself: a metric joint {#sec-tryit-metric-joint}
+## Try it yourself: a metric joint {#sec-tryit-metric-joint}
 
 Example 2 used inch bolts. Work the same method on a metric joint. Six **M10 x 1.5, class 8.8** bolts clamp a motor-mount plate. Each bolt has a tensile stress area $A_t = 58.0\ \text{mm}^2$, proof strength $S_p = 600$ MPa and tensile strength $S_u = 830$ MPa. Stiffnesses per bolt are $k_b = 280$ kN/mm and $k_m = 1020$ kN/mm. Preload is 75% of proof, the torque factor is $K = 0.18$, and the plate carries a total external load of 36 kN shared equally by the six bolts.
 

@@ -1,4 +1,4 @@
-## Design for Stamping {#chap-stamping}
+# Design for Stamping {#chap-stamping}
 
 ```{r setup-05, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -20,7 +20,7 @@ theme(
 )
 ```
 
-### Learning Objectives {#sec-objectives-05}
+## Learning Objectives {#sec-objectives-05}
 
 By the end of this chapter, you will be able to:
 
@@ -34,7 +34,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Look around you right now. How many stamped metal parts can you identify? Consider items like your phone's SIM tray, car body panels, kitchen utensils, or even the clips holding papers together.
 :::
 
-### Introduction to the Stamping Process {#sec-stamping-intro}
+## Introduction to the Stamping Process {#sec-stamping-intro}
 
 Metal stamping is one of the most versatile and widely used manufacturing processes in modern industry. It involves placing flat sheet metal—either in coil or blank form—into a stamping press where a tool and die surface forms the metal into the desired shape. Stamping encompasses a variety of operations including **blanking, punching, bending, drawing, embossing, and coining**.
 
@@ -46,7 +46,7 @@ The significance of stamping lies in its ability to produce high volumes of iden
 
 ---
 
-### Essential Components of Stamping {#sec-stamping-components}
+## Essential Components of Stamping {#sec-stamping-components}
 
 Every stamping operation requires several basic elements working in harmony:
 
@@ -104,11 +104,11 @@ ggplot() +
 
 ---
 
-### Types of Stamping Operations {#sec-stamping-operations}
+## Types of Stamping Operations {#sec-stamping-operations}
 
 Stamping is not a single process but a family of related operations. Understanding each operation is crucial for designing parts that can be efficiently manufactured.
 
-#### Blanking and Punching
+### Blanking and Punching
 
 **Blanking** and **punching** are shearing operations that cut sheet metal using a punch and die.
 
@@ -179,7 +179,7 @@ ggplot() +
 
 ---
 
-#### Bending
+### Bending
 
 **Bending** is a forming operation where the sheet metal is deformed along a straight axis to create an angled shape. The metal on the outside of the bend is stretched (in tension), while the metal on the inside is compressed.
 
@@ -241,7 +241,7 @@ Key bending terminology:
 
 ---
 
-#### Drawing
+### Drawing
 
 **Drawing** is a process that transforms a flat sheet metal blank into a hollow, three-dimensional shape (like a cup or box) by pulling the material into a die cavity with a punch.
 
@@ -331,7 +331,7 @@ The maximum blank diameter for a single draw operation is **132 mm**. Any larger
 
 ---
 
-#### Embossing and Coining
+### Embossing and Coining
 
 * **Embossing:** Creates raised or recessed designs in sheet metal without changing the material thickness significantly. One side has a raised pattern while the other has a corresponding depression.
 
@@ -404,9 +404,9 @@ ggplot() +
 
 ---
 
-### 🏭 Stamping Press Types and Progressive Dies {-}
+## 🏭 Stamping Press Types and Progressive Dies {-}
 
-#### Types of Stamping Presses
+### Types of Stamping Presses
 
 | Press Type | Force Mechanism | Characteristics | Best Applications |
 |:-----------|:----------------|:----------------|:------------------|
@@ -414,7 +414,7 @@ ggplot() +
 | **Hydraulic** | Fluid pressure | Variable speed, full force throughout stroke | Deep drawing, complex forming |
 | **Servo** | Electric servo motors | Programmable motion profiles, energy efficient | Precision parts, variable operations |
 
-#### Progressive Die Stamping
+### Progressive Die Stamping
 
 Progressive die stamping is a highly efficient method where a coil of sheet metal is fed through a series of stations, each performing a different operation. The part remains attached to a carrier strip until the final station, where it is cut free.
 
@@ -499,7 +499,7 @@ embed_youtube("NuFpzJLMnFs", "Progressive Die Stamping")
 
 ---
 
-### Advantages and Limitations of Stamping {#sec-stamping-pros-cons}
+## Advantages and Limitations of Stamping {#sec-stamping-pros-cons}
 
 | Aspect | Advantages | Limitations |
 |:-------|:-----------|:------------|
@@ -512,11 +512,11 @@ embed_youtube("NuFpzJLMnFs", "Progressive Die Stamping")
 
 ---
 
-### Material Considerations for Stamping {#sec-stamping-materials}
+## Material Considerations for Stamping {#sec-stamping-materials}
 
 Not all materials are equally suitable for stamping. The key material properties that influence stampability include:
 
-#### Formability
+### Formability
 
 **Formability** describes how much a material can be deformed before it cracks or tears. It is influenced by:
 
@@ -591,7 +591,7 @@ ggplot() +
 
 The **Forming Limit Diagram (FLD)** is a critical tool that shows the combination of major and minor strains a material can withstand before failure.
 
-#### Common Stamping Materials
+### Common Stamping Materials
 
 | Material | Formability | Typical Applications | Special Considerations |
 |:---------|:------------|:---------------------|:-----------------------|
@@ -619,13 +619,13 @@ The final choice depends on budget constraints and specific environmental condit
 
 ---
 
-### Design Guidelines for Stamping {#sec-stamping-guidelines}
+## Design Guidelines for Stamping {#sec-stamping-guidelines}
 
 Designing parts for efficient stamping requires understanding the capabilities and limitations of the process. Following these guidelines will result in lower costs, better quality, and faster production.
 
-#### Hole Design
+### Hole Design
 
-##### Minimum Hole Size
+#### Minimum Hole Size
 
 The minimum hole diameter should be at least equal to the material thickness to prevent punch breakage.
 
@@ -679,7 +679,7 @@ ggplot() +
  theme_stamping
 ```
 
-##### Hole Spacing
+#### Hole Spacing
 
 Holes should be spaced adequately apart to prevent distortion and ensure die strength:
 
@@ -760,9 +760,9 @@ The hole spacing is too close. The designer should increase the spacing to at le
 
 ---
 
-#### Bend Design
+### Bend Design
 
-##### Minimum Bend Radius
+#### Minimum Bend Radius
 
 The minimum inside bend radius depends on material type, thickness, and grain direction. Bending perpendicular to the grain direction allows tighter radii.
 
@@ -834,7 +834,7 @@ ggplot() +
 
 > **⚠️ Warning:** Specifying a bend radius that is too small will result in cracking on the outer surface of the bend. Always check material specifications!
 
-##### Springback Compensation
+#### Springback Compensation
 
 All materials exhibit **springback**—the tendency to partially return to their original shape after bending. Designers must account for this:
 
@@ -923,7 +923,7 @@ The die should bend the part to **95°** so that after springback, the final ang
 
 </details>
 
-##### Bend Relief
+#### Bend Relief
 
 When a bend line intersects or comes close to an edge, **bend relief** cuts or notches are required to prevent tearing.
 
@@ -994,9 +994,9 @@ ggplot() +
 
 ---
 
-#### Drawing Design
+### Drawing Design
 
-##### Draw Depth Limits
+#### Draw Depth Limits
 
 The maximum depth of a single draw operation is limited by the drawing ratio. Exceeding this limit causes wrinkling, tearing, or both.
 
@@ -1061,7 +1061,7 @@ ggplot() +
  theme_stamping
 ```
 
-##### Corner Radii in Drawn Parts
+#### Corner Radii in Drawn Parts
 
 Sharp corners in drawn parts concentrate stress and cause tearing. Minimum corner radii:
 
@@ -1144,13 +1144,13 @@ ggplot() +
 
 ---
 
-#### General Design Best Practices
+### General Design Best Practices
 
-##### Uniform Wall Thickness
+#### Uniform Wall Thickness
 
 Maintain uniform wall thickness throughout the part when possible. Significant thickness variations cause uneven material flow and stress concentrations.
 
-##### Avoid Sharp Corners
+#### Avoid Sharp Corners
 
 Replace all sharp corners with radii or chamfers:
 
@@ -1158,7 +1158,7 @@ Replace all sharp corners with radii or chamfers:
 * Extends die life
 * Improves material flow
 
-##### Design for Nesting
+#### Design for Nesting
 
 Consider how blanks will be nested on the sheet to minimize material waste.
 
@@ -1213,7 +1213,7 @@ ggplot() +
 
 > **💰 Cost Impact:** Material costs can represent 40-60% of total stamped part cost. A well-nested design that improves material utilization from 70% to 85% can significantly reduce part cost!
 
-##### Symmetry
+#### Symmetry
 
 Design symmetrical parts whenever possible:
 
@@ -1223,7 +1223,7 @@ Design symmetrical parts whenever possible:
 
 ---
 
-### Common Stamping Defects and Prevention {#sec-stamping-defects}
+## Common Stamping Defects and Prevention {#sec-stamping-defects}
 
 Understanding potential defects helps designers avoid them through proper design.
 
@@ -1313,29 +1313,29 @@ ggplot() +
 
 ---
 
-### 📋 Design Checklist for Stamping {-}
+## 📋 Design Checklist for Stamping {-}
 
 Before finalizing a stamped part design, verify the following:
 
-#### Holes and Cutouts
+### Holes and Cutouts
 - [ ] Hole diameter ≥ material thickness
 - [ ] Hole-to-hole spacing ≥ 2× material thickness
 - [ ] Hole-to-edge distance ≥ 1× material thickness
 - [ ] No holes in bend zones (or proper relief provided)
 
-#### Bends
+### Bends
 - [ ] Bend radius ≥ minimum for material (check data sheet)
 - [ ] Bend relief provided where bend meets edge
 - [ ] Springback compensation accounted for
 - [ ] Grain direction considered for tight bends
 
-#### Draws
+### Draws
 - [ ] Draw ratio within single-stage limits
 - [ ] Bottom radius ≥ 4× material thickness
 - [ ] Wall radii ≥ 3× material thickness
 - [ ] No sharp transitions between surfaces
 
-#### General
+### General
 - [ ] All corners filleted or chamfered
 - [ ] Uniform wall thickness (or gradual transitions)
 - [ ] Part can be nested efficiently on sheet
@@ -1344,7 +1344,7 @@ Before finalizing a stamped part design, verify the following:
 
 ---
 
-### 🎯 Case Study: Automotive Bracket Design {-}
+## 🎯 Case Study: Automotive Bracket Design {-}
 
 Let's apply our knowledge to a real-world example.
 
@@ -1356,7 +1356,7 @@ Let's apply our knowledge to a real-world example.
 * Two flanges bent at 90°
 * Must be produced at 50,000 units/year
 
-#### Initial Design Evaluation
+### Initial Design Evaluation
 
 ```{r bracket-case-study, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Initial bracket design with potential issues highlighted."}
 ggplot() +
@@ -1460,7 +1460,7 @@ ggplot() +
 
 ---
 
-### 📚 "Summary: Key Design Rules for Stamping" {-}
+## 📚 "Summary: Key Design Rules for Stamping" {-}
 
 | Design Feature | Minimum Requirement |
 |:---------------|:--------------------|
@@ -1475,9 +1475,9 @@ ggplot() +
 
 ---
 
-### Try it yourself {#sec-stamping-tryit}
+## Try it yourself {#sec-stamping-tryit}
 
-#### Check the hole layout {#sec-tryit-hole-rules}
+### Check the hole layout {#sec-tryit-hole-rules}
 
 The chapter's rules for pierced holes are: diameter at least $1 t$; hole-to-hole spacing at least $2 t$; hole-to-edge distance at least $1 t$ ($t$ = material thickness).
 
@@ -1514,7 +1514,7 @@ tryit_sort(
 )
 ```
 
-#### Bend and springback {#sec-tryit-bend}
+### Bend and springback {#sec-tryit-bend}
 
 A bracket must have a $90^\circ$ bend in a spring-steel strip $3$ mm thick that shows $7^\circ$ of springback. The minimum bend radius for spring steel is $2.0$ to $4.0$ times the thickness.
 
@@ -1551,7 +1551,7 @@ Die angle $= 90 + 7 = `r bd$die`^\circ$. Radius range: $2.0 \times 3 = `r bd$r_l
 
 </details>
 
-#### Name the defect from its cause {#sec-tryit-stamping-defects}
+### Name the defect from its cause {#sec-tryit-stamping-defects}
 
 ```{r tryit-stamping-defect-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -1582,7 +1582,7 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-stamping-problems}
+## Practice Problems {#sec-stamping-problems}
 
 Test your understanding with these problems:
 
@@ -1633,7 +1633,7 @@ The die should over-bend the part to 96° so that after springback, the final an
 
 ---
 
-### Further Reading {#sec-stamping-resources}
+## Further Reading {#sec-stamping-resources}
 
 [Stamping Design Guidelines - Xometry](https://www.xometry.com/resources/sheet/metal-stamping-design-guidelines/)
 
@@ -1645,21 +1645,21 @@ The die should over-bend the part to 96° so that after springback, the final an
 
 ---
 
-### 🎬 Supplemental Videos {-}
+## 🎬 Supplemental Videos {-}
 
-#### How Stamping Dies Work
+### How Stamping Dies Work
 
 ```{r video-stamping-dies, echo=FALSE, results='asis'}
 embed_youtube("ipMnAe0xNwM", "How Stamping Dies Work")
 ```
 
-#### Deep Drawing Process Explained
+### Deep Drawing Process Explained
 
 ```{r video-deep-drawing, echo=FALSE, results='asis'}
 embed_youtube("2KZRQSI8GkQ", "Deep Drawing Process")
 ```
 
-#### Stamping by 'Smarter Every Day'
+### Stamping by 'Smarter Every Day'
 
 ```{r video-stamping-smarter-every-day, echo=FALSE, results='asis'}
 embed_youtube("GDzBE6vz5r0", "Stamping by Smarter Every Day")
@@ -1667,7 +1667,7 @@ embed_youtube("GDzBE6vz5r0", "Stamping by Smarter Every Day")
 
 ---
 
-### 📖 References {-}
+## 📖 References {-}
 
 1. Groover, M. P. (2020). *Fundamentals of Modern Manufacturing: Materials, Processes, and Systems* (7th ed.). Wiley.
 

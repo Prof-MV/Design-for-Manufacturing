@@ -270,8 +270,8 @@ qwebr_calc_card(
         qwebr_calc_col("corrosive_or_food_environment", c(FALSE, FALSE, TRUE), type = "logical",
                        label = "Corrosive or food environment?")),
       note = "The most severe condition drives the rating: high-pressure hot washdown overrides routine washdown or corrosive, which override outdoor, which overrides indoor dry.")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -411,8 +411,8 @@ qwebr_calc_card(
     qwebr_calc_input("ambient_C", "Site ambient", value = 35, min = 0, max = 45, step = 1, suffix = "°C")
   ),
   goal = "Keep the passive temperature rise within the allowance for a site at 35 C or hotter, with at least three VFDs, an enclosure no taller than 1.2 m and no deeper than 0.4 m, and k no better than 6 (smaller drives or a wider cabinet).",
-  goal_test = "delta_T <= delta_T_allow && vfd_count >= 3 && H <= 1.2 && D <= 0.4 && ambient_C >= 35 && k <= 6"
-)
+  goal_test = "delta_T <= delta_T_allow && vfd_count >= 3 && H <= 1.2 && D <= 0.4 && ambient_C >= 35 && k <= 6",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -584,13 +584,13 @@ qwebr_calc_card(
   title = "Motor Branch Circuit Protection Calculator",
   icon = "plug",
   inputs = list(
-    qwebr_calc_input("FLA", "Motor full-load amps (FLA)", value = 32, min = 1, max = 50, step = 0.5, suffix = "A"),
-    qwebr_calc_input("conductor_ampacity_actual", "Selected conductor ampacity", value = 44, min = 10, max = 150, step = 1, suffix = "A"),
-    qwebr_calc_input("service_factor", "Motor service factor", value = 1.15, min = 1, max = 1.25, step = 0.05),
-    qwebr_calc_input("m_fuse", "Time-delay fuse multiplier", value = 1.75, min = 1.25, max = 2.25, step = 0.05, suffix = "x FLA"),
-    qwebr_calc_input("LRA_multiplier", "Locked-rotor multiplier", value = 6.5, min = 4, max = 9, step = 0.5, suffix = "x FLA")
-  )
-)
+    qwebr_calc_input("FLA", "Motor full-load amps (FLA)", value = 32, min = 1, max = 50, step = 0.5, suffix = "A", type = "slider"),
+    qwebr_calc_input("conductor_ampacity_actual", "Selected conductor ampacity", value = 44, min = 10, max = 150, step = 1, suffix = "A", type = "slider"),
+    qwebr_calc_input("service_factor", "Motor service factor", value = 1.15, min = 1, max = 1.25, step = 0.05, type = "slider"),
+    qwebr_calc_input("m_fuse", "Time-delay fuse multiplier", value = 1.75, min = 1.25, max = 2.25, step = 0.05, suffix = "x FLA", type = "slider"),
+    qwebr_calc_input("LRA_multiplier", "Locked-rotor multiplier", value = 6.5, min = 4, max = 9, step = 0.5, suffix = "x FLA", type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -728,7 +728,7 @@ qwebr_calc_card(
   title = "Panel SCCR Weakest-Link Check",
   icon = "bolt",
   inputs = list(
-    qwebr_calc_input("required_sccr", "Required panel SCCR", value = 65, min = 5, max = 200, step = 5, suffix = "kA")
+    qwebr_calc_input("required_sccr", "Required panel SCCR", value = 65, min = 5, max = 200, step = 5, suffix = "kA", type = "slider")
   ),
   tables = list(
     qwebr_calc_table(
@@ -741,8 +741,8 @@ qwebr_calc_card(
         qwebr_calc_col("cl_fuse_combination_sccr_kA", c(NA, 65, 65, 65), label = "With CL fuse (kA)", min = 0, step = 1)),
       note = "Leave the fuse-combination cell blank (NA) where no tested fuse/device combination is applied.")
   ),
-  fig_width = 1000, fig_height = 600
-)
+  fig_width = 1000, fig_height = 600,
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -862,8 +862,10 @@ qwebr_calc_card(
     qwebr_calc_input("recognized_mark_present", "Panel B (used press panel): recognized mark present", value = FALSE, type = "logical"),
     qwebr_calc_input("recognized_mark_present_2", "Panel A (new UL 508A build): recognized mark present", value = TRUE, type = "logical"),
     qwebr_calc_input("field_modified_since_listing", "Panel A: field-modified since listing", value = FALSE, type = "logical")
-  )
-)
+  ),
+  goal = "Make Panel B acceptable without a field evaluation, while Panel A, although marked, loses its exemption. What changed on Panel A?",
+  goal_test = "recognized_mark_present && recognized_mark_present_2 && field_modified_since_listing",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

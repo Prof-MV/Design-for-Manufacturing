@@ -1,4 +1,4 @@
-## Design for Joining {#chap-joining}
+# Design for Joining {#chap-joining}
 
 ```{r setup-02, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,7 +7,7 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {#sec-objectives-02}
+## Learning Objectives {#sec-objectives-02}
 
 By the end of this chapter, you will be able to:
 
@@ -21,9 +21,9 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Consider the products around you—your phone, car, furniture, and buildings. Each is made of multiple parts joined together. What different methods might have been used to join these parts, and why might engineers have chosen those particular methods?
 :::
 
-### Joining Processes: Uniting Materials for Function {#sec-joining-intro}
+## Joining Processes: Uniting Materials for Function {#sec-joining-intro}
 
-#### Introduction {#sec-joining-overview}
+### Introduction {#sec-joining-overview}
 
 The ability to permanently or temporarily unite two or more separate material components is fundamental to nearly every branch of engineering and manufacturing. Whether creating the fuselage of an aircraft, the circuitry of a smartphone, or the frame of a bicycle, **joining processes** are essential for assembling parts into functional products. 
 
@@ -31,33 +31,33 @@ Joining processes can be broadly categorized based on the method used to create 
 
 ---
 
-#### Classification of Joining Methods
+### Classification of Joining Methods
 
 Joining techniques are typically classified into three main groups based on how the bond is established:
 
-##### Fusion and Cohesion
+#### Fusion and Cohesion
 
 These processes create a continuous, strong bond by achieving atomic or molecular cohesion between the joined parts, often involving melting the base materials.
 
 * **Welding:** This is a permanent joining process that involves heating the base metal parts to their melting point and allowing them to fuse together, often with the addition of a filler metal. Welding creates a joint that can be as strong, or even stronger, than the parent material itself. It is widely used in heavy industries like construction, shipbuilding, and pipe fabrication.
 
-##### Chemical/Metallurgical Bonding with Fillers
+#### Chemical/Metallurgical Bonding with Fillers
 
 These processes use a separate material (a filler) to create the bond between two materials without melting the base materials.
 
 * **Brazing:** A joining process where a non-ferrous filler metal is melted and drawn into the joint gap by capillary action. The filler metal has a melting point **above $450^\circ\text{C}$ ($840^\circ\text{F}$)**, but below the melting point of the base metals. Brazing creates strong, leak-tight joints with minimal thermal distortion to the base parts.
 * **Soldering:** Similar to brazing, soldering uses a filler metal (solder) that melts at a temperature **below $450^\circ\text{C}$ ($840^\circ\text{F}$)**. This process is primarily used in electronics and sheet metal work where strong mechanical bonds are less critical than electrical conductivity or a leak-proof seal.
 
-##### Mechanical and Chemical Adhesion
+#### Mechanical and Chemical Adhesion
 
 These methods rely on either a sticky substance or physical interlocking to hold parts together.
 
 * **Adhesive Joining:** This method uses chemical compounds (adhesives, glues, epoxies) that cure to form a chemical bond between the surfaces. Adhesives can join dissimilar materials (like metal to plastic), distribute stress over a wide area, and provide excellent sealing.
 * **Mechanical Fasteners:** These are non-permanent methods that use hardware to hold materials together. This category includes common items like **bolts, screws, rivets, nuts, pins, and clips**. The primary advantage of mechanical fasteners is that they allow for easy disassembly and reassembly for maintenance or repair.
 
-### The Welding Process {#sec-welding-process}
+## The Welding Process {#sec-welding-process}
 
-#### Introduction to Welding
+### Introduction to Welding
 
 Welding is a **fusion joining process** that creates a permanent, monolithic bond between two or more separate metal parts. Unlike brazing or soldering, welding typically involves heating the base metal parts to their melting temperature and allowing them to fuse together, often with the addition of a **filler material** 
 
@@ -71,11 +71,11 @@ How is it possible that a weld is stronger than the original parent materials?
 
 ---
 
-#### Classification and Types of Welding Processes
+### Classification and Types of Welding Processes
 
 Welding processes are broadly classified based on the source of energy used to achieve the necessary heat for fusion. The three major categories are:
 
-##### Arc Welding
+#### Arc Welding
 
 Arc welding is the most common category, utilizing an electrical arc to generate the heat required to melt the metals. A power source creates an arc between an electrode and the base metal, generating temperatures high enough to melt both.
 
@@ -93,7 +93,7 @@ knitr::include_graphics("images/Gemini_Generated_Image_ftcdd1ftcdd1ftcd.png")
 ```
 
 
-##### Resistance Welding
+#### Resistance Welding
 
 Resistance welding uses the heat generated by the electrical resistance of the materials themselves when a current is passed through them under pressure.
 
@@ -103,7 +103,7 @@ Resistance welding uses the heat generated by the electrical resistance of the m
 knitr::include_graphics("images/Picture299.jpg")
 ```
 
-##### High-Energy Beam Welding
+#### High-Energy Beam Welding
 
 These advanced processes use highly concentrated energy sources for deep, narrow, and precise welds.
 
@@ -112,7 +112,7 @@ These advanced processes use highly concentrated energy sources for deep, narrow
 
 ---
 
-#### When to Choose Welding
+### When to Choose Welding
 
 Welding is not always the best solution, but it is the superior choice over other joining processes like mechanical fastening, brazing, or adhesives in several key scenarios:
 
@@ -128,7 +128,7 @@ Welding is not always the best solution, but it is the superior choice over othe
     * **Thick Sections:** Welding is highly effective for joining very thick metal plates, where fasteners would be impractical or structurally insufficient.
     * **Material Compatibility:** While welding *can* join dissimilar metals, it is best suited for scenarios where the material properties of the filler metal can be carefully matched to the base metals to maintain structural and chemical properties.
 
-##### Comparison to Other Processes:
+#### Comparison to Other Processes:
 
 | Process | Primary Advantage Over Welding | Why Welding is Chosen Instead |
 | :--- | :--- | :--- |
@@ -142,11 +142,11 @@ Welding is not always the best solution, but it is the superior choice over othe
 
 ---
 
-### Brazing and Soldering {#sec-brazing-soldering}
+## Brazing and Soldering {#sec-brazing-soldering}
 
 Both brazing and soldering use a filler metal to join parts without melting the base materials. The key difference is the filler metal's melting temperature.
 
-#### Brazing
+### Brazing
 
 **Brazing** uses filler metals that melt above 450°C (840°F). The process relies on **capillary action** to draw the molten filler into the joint gap.
 
@@ -193,7 +193,7 @@ ggplot() +
 
 **Applications:** HVAC systems (copper tubing), bicycle frames, carbide tool tips, heat exchangers
 
-#### Soldering
+### Soldering
 
 **Soldering** uses filler metals that melt below 450°C (840°F). It creates joints with lower mechanical strength but excellent electrical conductivity.
 
@@ -211,11 +211,11 @@ ggplot() +
 
 ---
 
-### Adhesive Bonding {#sec-adhesive-bonding}
+## Adhesive Bonding {#sec-adhesive-bonding}
 
 Adhesive bonding uses chemical compounds that cure to form a bond between surfaces. Modern structural adhesives can achieve remarkable strength while offering unique advantages.
 
-#### Advantages of Adhesive Bonding
+### Advantages of Adhesive Bonding
 
 - **Joins dissimilar materials** (metal to plastic, glass to composite)
 - **Distributes stress** over large areas (no stress concentration at holes)
@@ -223,7 +223,7 @@ Adhesive bonding uses chemical compounds that cure to form a bond between surfac
 - **Minimal thermal distortion** (no heat required for many adhesives)
 - **Electrical and thermal insulation** between parts
 
-#### Limitations
+### Limitations
 
 - **Surface preparation** is critical (cleaning, roughening, priming)
 - **Cure time** can be long (minutes to hours)
@@ -231,7 +231,7 @@ Adhesive bonding uses chemical compounds that cure to form a bond between surfac
 - **Difficult to inspect** non-destructively
 - **Limited peel and cleavage strength** compared to tensile shear
 
-#### Common Structural Adhesive Types
+### Common Structural Adhesive Types
 
 | Type | Cure Mechanism | Typical Applications |
 |:-----|:---------------|:---------------------|
@@ -246,11 +246,11 @@ Adhesive bonding uses chemical compounds that cure to form a bond between surfac
 
 ---
 
-### Mechanical Fastening {#sec-mechanical-fastening}
+## Mechanical Fastening {#sec-mechanical-fastening}
 
 Mechanical fasteners provide non-permanent joining that allows for disassembly. For detailed coverage of bolted joints, see Chapter @sec-chap-03-bolts.
 
-#### Categories of Mechanical Fasteners
+### Categories of Mechanical Fasteners
 
 ```{r fig-fastener-types, echo=FALSE, fig.cap="Categories of mechanical fasteners and their characteristics.", fig.align='center', fig.width=10, fig.height=5}
 library(ggplot2)
@@ -289,7 +289,7 @@ ggplot(fasteners_long, aes(x = type, y = value, fill = attribute)) +
 
 ---
 
-### Joining Process Selection Guide {#sec-joining-selection}
+## Joining Process Selection Guide {#sec-joining-selection}
 
 Selecting the right joining process requires considering multiple factors:
 
@@ -336,9 +336,9 @@ ggplot(selection_data, aes(x = Criterion, y = Process, fill = Score)) +
 
 ---
 
-### Try it yourself {#sec-joining-tryit}
+## Try it yourself {#sec-joining-tryit}
 
-#### Weight the selection matrix {#sec-tryit-joining-matrix}
+### Weight the selection matrix {#sec-tryit-joining-matrix}
 
 The selection matrix above scores each process from 1 (poor) to 5 (excellent). A designer needs a joint on a machine guard that must be **removable**, will see some heat, and must be cheap. The weights are: high temperature $0.20$, dissimilar materials $0.20$, removable $0.40$, low cost $0.20$.
 
@@ -386,7 +386,7 @@ Bolts win (`r sprintf("%.2f", jm_best)`) because the removable criterion carries
 
 </details>
 
-#### Welding or bolting: where does the cost cross? {#sec-tryit-joining-cost}
+### Welding or bolting: where does the cost cross? {#sec-tryit-joining-cost}
 
 A bracket has 4 joints. **Welding** needs a jig costing \$1800 and then \$1.10 per joint. **Bolting** needs no jig; each joint costs \$0.45 of labor plus \$1.35 of hardware.
 
@@ -430,7 +430,7 @@ Break-even: $1800 / (`r sprintf("%.2f", jc$bolt_each)` - `r sprintf("%.2f", jc$w
 
 </details>
 
-#### Pick the joining method {#sec-tryit-joining-sort}
+### Pick the joining method {#sec-tryit-joining-sort}
 
 ```{r tryit-joining-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -465,7 +465,7 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-joining-practice}
+## Practice Problems {#sec-joining-practice}
 
 ::: {.question}
 **Problem 1:** A food processing plant needs to join stainless steel pipes carrying hot (90°C) acidic liquids. The joints must be leak-proof and cleanable. Which joining method would you recommend?
@@ -523,7 +523,7 @@ Orbital TIG welding would be ideal for consistent, high-quality pipe joints.
 
 ---
 
-### Key Takeaways {#sec-joining-takeaways}
+## Key Takeaways {#sec-joining-takeaways}
 
 1. **Process classification:** Joining methods are classified by bonding mechanism—fusion (welding), filler metals (brazing/soldering), adhesion (adhesives), or mechanical (fasteners).
 
@@ -537,7 +537,7 @@ Orbital TIG welding would be ideal for consistent, high-quality pipe joints.
 
 ---
 
-### Further Resources {#sec-joining-resources}
+## Further Resources {#sec-joining-resources}
 
 **Videos:**
 ```{r video-welding-basics, echo=FALSE, results='asis'}

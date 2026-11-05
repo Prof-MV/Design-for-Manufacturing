@@ -880,3 +880,31 @@ details.tryit-solution.tryit-locked > summary::after {
 .qwebr-calc-rerun:hover {
   background-color: #eef1f4;
 }
+
+
+/*--- Calculator card modes: teaching demo and class task ---*/
+.qwebr-calc-badge {
+  margin-left: auto;
+  padding: 0.15em 0.7em;
+  border-radius: 999px;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.qwebr-calc-demo {
+  border: 2px solid #2e86c1;
+}
+.qwebr-calc-demo .qwebr-calc-badge { background-color: #2e86c1; }
+.qwebr-calc-demo .qwebr-calc-header { border-bottom-color: #2e86c1; }
+.qwebr-calc-demo .qwebr-calc-slider-readout { font-size: 1.25em; }
+.qwebr-calc-demo .qwebr-calc-row label { font-size: 1.1em; }
+
+.qwebr-calc-task {
+  border: 2px dashed #e67e22;
+}
+.qwebr-calc-task .qwebr-calc-badge { background-color: #e67e22; }
+.qwebr-calc-task .qwebr-calc-header { border-bottom-color: #e67e22; }

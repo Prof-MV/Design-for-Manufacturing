@@ -1,4 +1,4 @@
-## Powder Metallurgy and Sintering {#sec-chap-sintering}
+# Powder Metallurgy and Sintering {#sec-chap-sintering}
 
 ```{r setup-sintering, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -8,7 +8,7 @@ inject_jquery()
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {#sec-objectives-sintering}
+## Learning Objectives {#sec-objectives-sintering}
 
 By the end of this chapter, you will be able to:
 
@@ -22,7 +22,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Have you ever wondered how bushings in electric motors or automotive components can run for years without external lubrication? What manufacturing process could create a part that stores its own lubricant?
 :::
 
-### Introduction to Powder Metallurgy {#sec-pm-intro}
+## Introduction to Powder Metallurgy {#sec-pm-intro}
 
 Powder metallurgy (PM) is a manufacturing process that creates metal parts from powdered materials through compaction and heat treatment. Unlike casting, which starts with molten metal, or machining, which removes material from a solid block, powder metallurgy builds parts by pressing metal powder into a die and then heating the compact to bond the particles together.
 
@@ -37,7 +37,7 @@ This unique approach enables several capabilities impossible with other manufact
 
 ---
 
-### The Powder Metallurgy Process {#sec-pm-process}
+## The Powder Metallurgy Process {#sec-pm-process}
 
 The powder metallurgy process consists of four main stages: powder production, blending, compaction, and sintering.
 
@@ -110,7 +110,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
-#### Stage 1: Powder Production {#sec-powder-production}
+### Stage 1: Powder Production {#sec-powder-production}
 
 Metal powders are produced through several methods, each yielding particles with different characteristics:
 
@@ -124,7 +124,7 @@ Metal powders are produced through several methods, each yielding particles with
 
 Particle size typically ranges from 1 to 200 micrometers, with most PM parts using powders in the 40-150 micrometer range.
 
-#### Stage 2: Blending {#sec-blending}
+### Stage 2: Blending {#sec-blending}
 
 Raw powders are rarely used directly. Instead, they are blended with:
 
@@ -134,7 +134,7 @@ Raw powders are rarely used directly. Instead, they are blended with:
 
 Thorough blending ensures uniform distribution of all constituents, which is critical for consistent final properties.
 
-#### Stage 3: Compaction {#sec-compaction}
+### Stage 3: Compaction {#sec-compaction}
 
 The blended powder is pressed in a rigid die at pressures typically between 400 and 700 MPa (60,000-100,000 psi). During compaction:
 
@@ -186,7 +186,7 @@ ggplot(compaction_data, aes(x = pressure, y = density)) +
   )
 ```
 
-#### Stage 4: Sintering {#sec-sintering-process}
+### Stage 4: Sintering {#sec-sintering-process}
 
 Sintering is the heart of the powder metallurgy process. The green compact is heated in a controlled atmosphere furnace to a temperature typically 70-90% of the material's absolute melting point. During sintering:
 
@@ -261,11 +261,11 @@ Typical sintering conditions:
 
 ---
 
-### Density Control in Sintered Parts {#sec-density-control}
+## Density Control in Sintered Parts {#sec-density-control}
 
 One of the unique advantages of powder metallurgy is the ability to precisely control the final density of the part. Unlike casting or forging, which produce fully dense material, sintered parts can be manufactured with intentional porosity levels tailored to specific applications.
 
-#### Understanding Density Levels {#sec-density-levels}
+### Understanding Density Levels {#sec-density-levels}
 
 Sintered density is typically expressed as a percentage of the theoretical density (the density of the fully dense, wrought material). For iron, the theoretical density is 7.87 g/cm³.
 
@@ -312,7 +312,7 @@ ggplot(density_data, aes(y = category)) +
   )
 ```
 
-#### Factors Controlling Final Density {#sec-density-factors}
+### Factors Controlling Final Density {#sec-density-factors}
 
 The final density of a sintered part depends on several controllable parameters:
 
@@ -335,11 +335,11 @@ The final density of a sintered part depends on several controllable parameters:
 
 ---
 
-### Self-Lubricating Sintered Bearings {#sec-sintered-bearings}
+## Self-Lubricating Sintered Bearings {#sec-sintered-bearings}
 
 One of the most successful applications of powder metallurgy is the manufacture of self-lubricating bearings—also called porous metal bearings, oilite bearings, or sintered bronze bearings. These components exploit the inherent porosity of sintered materials to store and deliver lubricant throughout their service life.
 
-#### The Self-Lubrication Mechanism {#sec-self-lub-mechanism}
+### The Self-Lubrication Mechanism {#sec-self-lub-mechanism}
 
 Self-lubricating bearings work on a simple but elegant principle: interconnected pores within the bearing structure act as microscopic reservoirs that hold lubricant. During operation:
 
@@ -419,7 +419,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
-#### Bearing Density and Porosity Requirements {#sec-bearing-density}
+### Bearing Density and Porosity Requirements {#sec-bearing-density}
 
 For effective self-lubrication, bearings require interconnected porosity in the range of 20-30%, corresponding to a sintered density of 70-80% of theoretical. At lower densities, the structure becomes too weak; at higher densities, insufficient lubricant can be stored.
 
@@ -452,7 +452,7 @@ kable(bearing_specs,
 
 ---
 
-### Low-Speed and Reciprocating Applications: Solid Lubricant Bearings {#sec-solid-lubricant-bearings}
+## Low-Speed and Reciprocating Applications: Solid Lubricant Bearings {#sec-solid-lubricant-bearings}
 
 Not all bearing applications can use oil-impregnated bushings effectively. In certain conditions, solid lubricant bearings provide superior performance:
 
@@ -462,7 +462,7 @@ Not all bearing applications can use oil-impregnated bushings effectively. In ce
 - **Food and pharmaceutical applications:** Oil contamination is unacceptable
 - **Vacuum or space applications:** Oils outgas or evaporate
 
-#### Graphite-Impregnated Bearings {#sec-graphite-bearings}
+### Graphite-Impregnated Bearings {#sec-graphite-bearings}
 
 For these challenging applications, sintered bearings are impregnated with solid lubricants, most commonly **graphite**. Graphite is a form of carbon with a layered crystal structure—the layers slide easily over one another, providing lubrication through mechanical shearing rather than fluid film formation.
 
@@ -522,7 +522,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
-#### Other Solid Lubricants {#sec-other-solid-lubes}
+### Other Solid Lubricants {#sec-other-solid-lubes}
 
 While graphite is most common, other solid lubricants are used for specific conditions:
 
@@ -539,11 +539,11 @@ While graphite is most common, other solid lubricants are used for specific cond
 
 ---
 
-### High-Speed Applications: Oil-Impregnated Bearings {#sec-oil-impregnated-bearings}
+## High-Speed Applications: Oil-Impregnated Bearings {#sec-oil-impregnated-bearings}
 
 For applications involving continuous, high-speed rotation, oil-impregnated sintered bearings are the preferred solution. At sufficient speeds, these bearings develop a hydrodynamic oil film that completely separates the shaft from the bearing surface, virtually eliminating wear.
 
-#### The Hydrodynamic Lubrication Principle {#sec-hydrodynamic-principle}
+### The Hydrodynamic Lubrication Principle {#sec-hydrodynamic-principle}
 
 When a shaft rotates within an oil-lubricated bearing, it creates a converging wedge of lubricant. At sufficient speed:
 
@@ -609,7 +609,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
-#### The Oil Impregnation Process {#sec-oil-impregnation}
+### The Oil Impregnation Process {#sec-oil-impregnation}
 
 Oil impregnation is performed after sintering and any secondary operations. The process ensures complete filling of the interconnected pore network:
 
@@ -687,7 +687,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
-#### Oil Selection for Impregnation {#sec-oil-selection}
+### Oil Selection for Impregnation {#sec-oil-selection}
 
 The lubricating oil must be carefully matched to the application:
 
@@ -706,7 +706,7 @@ The lubricating oil must be carefully matched to the application:
 
 ---
 
-### Comparing Bearing Types for Different Applications {#sec-bearing-comparison}
+## Comparing Bearing Types for Different Applications {#sec-bearing-comparison}
 
 The choice between oil-impregnated and solid-lubricant bearings depends on the specific operating conditions:
 
@@ -770,7 +770,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
-#### Summary Comparison Table {#sec-comparison-table}
+### Summary Comparison Table {#sec-comparison-table}
 
 ```{r tab-bearing-comparison, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
@@ -813,9 +813,9 @@ kable(comparison,
 
 ---
 
-### Advantages and Limitations of Powder Metallurgy {#sec-pm-advantages}
+## Advantages and Limitations of Powder Metallurgy {#sec-pm-advantages}
 
-#### Advantages {#sec-pm-pros}
+### Advantages {#sec-pm-pros}
 
 1. **Near-net-shape capability:** Parts require minimal or no machining, reducing waste and cost
 2. **Controlled porosity:** Enables unique products like self-lubricating bearings and filters
@@ -825,7 +825,7 @@ kable(comparison,
 6. **Excellent repeatability:** High-volume production with consistent quality
 7. **Energy efficiency:** Lower processing temperatures than casting
 
-#### Limitations {#sec-pm-cons}
+### Limitations {#sec-pm-cons}
 
 1. **Size constraints:** Parts typically limited to <25 kg due to press capacity
 2. **Shape constraints:** Difficult to produce re-entrant features, threads, or horizontal holes
@@ -884,11 +884,11 @@ ggplot(process_data, aes(x = metric, y = score, fill = process)) +
 
 ---
 
-### Design Guidelines for Sintered Parts {#sec-pm-design-guidelines}
+## Design Guidelines for Sintered Parts {#sec-pm-design-guidelines}
 
 Designing for powder metallurgy requires understanding the unique capabilities and constraints of the process.
 
-#### Geometric Considerations {#sec-pm-geometry}
+### Geometric Considerations {#sec-pm-geometry}
 
 | Feature | Guideline |
 |:--------|:----------|
@@ -968,9 +968,9 @@ ggplot() +
 
 ---
 
-### Try it yourself {#sec-sintering-tryit}
+## Try it yourself {#sec-sintering-tryit}
 
-#### Density, porosity and oil capacity {#sec-tryit-density}
+### Density, porosity and oil capacity {#sec-tryit-density}
 
 Four sintered bushings were weighed and measured. Theoretical (fully dense) densities: bronze $8.8$ g/cm$^3$, iron $7.87$ g/cm$^3$. After vacuum impregnation $95\%$ of the pore volume is filled with oil.
 
@@ -1016,7 +1016,7 @@ Bushing A holds the most oil (`r sprintf("%.1f", dn[["Oil content (% vol)"]][1])
 
 </details>
 
-#### Green density of a compact {#sec-tryit-green-density}
+### Green density of a compact {#sec-tryit-green-density}
 
 An iron powder compact is pressed in a cylindrical die of diameter $20$ mm to a height of $30$ mm. The compact has a mass of $62$ g.
 
@@ -1053,7 +1053,7 @@ $V = \pi (1.0)^2 (3.0) = `r sprintf("%.2f", gd$V)`$ cm$^3$; $\rho_{green} = 62 /
 
 </details>
 
-#### Put the PM process in order {#sec-tryit-pm-order}
+### Put the PM process in order {#sec-tryit-pm-order}
 
 ```{r tryit-pm-order, echo=FALSE, results='asis'}
 tryit_order(
@@ -1071,7 +1071,7 @@ tryit_order(
 )
 ```
 
-#### Which sintered bearing? {#sec-tryit-sintered-bearing}
+### Which sintered bearing? {#sec-tryit-sintered-bearing}
 
 ```{r tryit-sintered-bearing-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -1103,7 +1103,7 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-sintering-practice}
+## Practice Problems {#sec-sintering-practice}
 
 ::: {.question}
 **Problem 1:** A sintered bronze bushing has a density of 6.4 g/cm³. Bronze has a theoretical density of 8.8 g/cm³. Calculate:
@@ -1175,7 +1175,7 @@ This is typical green density for a structural PM part.
 
 ---
 
-### Key Takeaways {#sec-sintering-takeaways}
+## Key Takeaways {#sec-sintering-takeaways}
 
 1. **Powder metallurgy** produces parts by compacting metal powder and heating below the melting point—the sintering process bonds particles through solid-state diffusion.
 
@@ -1193,7 +1193,7 @@ This is typical green density for a structural PM part.
 
 ---
 
-### Further Resources {#sec-sintering-resources}
+## Further Resources {#sec-sintering-resources}
 
 **Videos:**
 

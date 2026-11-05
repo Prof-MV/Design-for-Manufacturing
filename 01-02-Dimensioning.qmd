@@ -1,4 +1,4 @@
-## Dimensioning Rules {#dimensioningrules}
+# Dimensioning Rules {#dimensioningrules}
 
 ```{r setup-01-02, include=FALSE}
 # Include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,7 +7,7 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {-}
+## Learning Objectives {-}
 
 By the end of this chapter, you will be able to:
 
@@ -23,7 +23,7 @@ communicate its exact size to someone who needs to manufacture it? What
 measurements would be most important?
 :::
 
-### Introduction to Dimensioning
+## Introduction to Dimensioning
 
 Dimensioning is the process of adding size and location information to
 engineering drawings. Proper dimensioning ensures that parts can be
@@ -36,7 +36,7 @@ was lost due to a unit conversion error. Clear dimensioning standards prevent
 such costly mistakes.
 :::
 
-### Try it yourself {#sec-tryit-dimensioning}
+## Try it yourself {#sec-tryit-dimensioning}
 
 ```{r tryit-dim-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -72,7 +72,7 @@ tryit_sort(
 )
 ```
 
-### Key Takeaways {-}
+## Key Takeaways {-}
 
 - Dimensions should be placed for maximum clarity
 - Each dimension should appear only once on a drawing

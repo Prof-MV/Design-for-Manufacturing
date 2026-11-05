@@ -1,4 +1,4 @@
-## Thermodynamics {#chap-15-thermo}
+# Thermodynamics {#chap-15-thermo}
 
 ```{r setup-15, include=FALSE}
 source("R/helpers.R")
@@ -19,7 +19,7 @@ theme_thermo <- theme_minimal() +
   )
 ```
 
-### Learning Objectives {#sec-objectives-15}
+## Learning Objectives {#sec-objectives-15}
 
 By the end of this chapter, you will be able to:
 
@@ -39,7 +39,7 @@ By the end of this chapter, you will be able to:
 
 ***
 
-### Introduction {#sec-thermo-intro-15}
+## Introduction {#sec-thermo-intro-15}
 
 Thermodynamics is the science of energy — how it is stored, transferred, and converted from one form to another. Every manufacturing process, every engine, every heating and cooling system operates according to thermodynamic principles. Understanding these principles allows engineers to:
 
@@ -57,9 +57,9 @@ These are not suggestions or approximations — they are the most thoroughly tes
 
 ***
 
-### Part 1: Fundamentals {#sec-thermo-fundamentals-15}
+## Part 1: Fundamentals {#sec-thermo-fundamentals-15}
 
-#### Systems and Surroundings {#sec-systems-15}
+### Systems and Surroundings {#sec-systems-15}
 
 Every thermodynamic analysis starts by defining what you are studying.
 
@@ -81,7 +81,7 @@ Systems are classified by what can cross their boundary:
 **Industry Application:** When analyzing a turbocharger in an automotive engine, you treat it as an **open system** — exhaust gas enters, compressed air exits, and heat is exchanged with the engine compartment. When analyzing the compression stroke of a single cylinder (valves closed), you treat it as a **closed system** — no mass crosses the boundary, but the piston does work on the gas.
 :::
 
-#### State, Properties, and Processes {#sec-state-props-15}
+### State, Properties, and Processes {#sec-state-props-15}
 
 The **state** of a system is its condition at a given instant, fully described by a set of **intensive properties** (independent of mass, e.g., temperature, pressure, density) and **extensive properties** (proportional to mass, e.g., volume, internal energy, enthalpy).
 
@@ -96,7 +96,7 @@ A **process** is a path from one state to another. The four standard process typ
 
 A process is **reversible** if it can be returned to its original state with no net effect on the surroundings. Real processes are always **irreversible** due to friction, heat transfer across finite temperature differences, and mixing.
 
-#### Temperature Scales {#sec-temperature-15}
+### Temperature Scales {#sec-temperature-15}
 
 Four temperature scales are in common use in engineering. The two **absolute** scales (Kelvin and Rankine) have their zero at absolute zero — the point of minimum possible thermal energy.
 
@@ -132,7 +132,7 @@ $$T(°\text{F}) = \frac{9}{5}(350) + 32 = 630 + 32 = \mathbf{662\,°\text{F}}$$
 
 $$T(\text{R}) = 662 + 459.67 = \mathbf{1{,}121.67 \text{ R}}$$
 
-#### Pressure {#sec-pressure-15}
+### Pressure {#sec-pressure-15}
 
 **Absolute pressure** ($P_{abs}$) is measured relative to a perfect vacuum. **Gauge pressure** ($P_{gauge}$) is measured relative to the local atmospheric pressure. A **vacuum pressure** is a gauge pressure below atmospheric.
 
@@ -156,13 +156,13 @@ $$P_{abs} = P_{gauge} + P_{atm} = 220 + 101.325 = \mathbf{321.3 \text{ kPa}}$$
 
 Note that if the tyre were completely flat, the pressure inside would equal atmospheric (101.3 kPa), not zero.
 
-#### The Zeroth Law of Thermodynamics {#sec-zeroth-law-15}
+### The Zeroth Law of Thermodynamics {#sec-zeroth-law-15}
 
 > *If two bodies are each in thermal equilibrium with a third body, they are in thermal equilibrium with each other.*
 
 This law establishes that **temperature** is a meaningful, measurable property — and it is the basis for all thermometry. When a thermometer reads 350°C, it means the thermometer and the object have reached thermal equilibrium.
 
-#### Phases of Matter and the Phase Diagram {#sec-phases-15}
+### Phases of Matter and the Phase Diagram {#sec-phases-15}
 
 Matter exists in three principal phases: **solid**, **liquid**, and **vapor (gas)**. The phase of a pure substance depends on its temperature and pressure.
 
@@ -229,7 +229,7 @@ ggplot(df_all, aes(x = T, y = P, colour = curve)) +
 - **Critical point:** Above this temperature and pressure, the distinction between liquid and vapor disappears — the fluid becomes **supercritical**. For water: $T_c = 374.1°\text{C}$, $P_c = 22.09 \text{ MPa}$.
 - **Sublimation:** Direct transition from solid to vapor (bypassing liquid), occurring below the triple point pressure. Dry ice (CO$_2$) sublimates at atmospheric pressure.
 
-#### Quality of a Wet Steam Mixture {#sec-quality-15}
+### Quality of a Wet Steam Mixture {#sec-quality-15}
 
 When a pure substance exists as a **mixture** of saturated liquid and saturated vapor (the wet region), its state is defined by the **quality** $x$:
 
@@ -251,9 +251,9 @@ where $y_f$ is the value at saturated liquid, $y_g$ is the value at saturated va
 
 ***
 
-### Part 2: The First Law and Energy {#sec-first-law-15}
+## Part 2: The First Law and Energy {#sec-first-law-15}
 
-#### The First Law of Thermodynamics {#sec-first-law-statement-15}
+### The First Law of Thermodynamics {#sec-first-law-statement-15}
 
 > *Energy cannot be created or destroyed. The total energy of the universe is constant.*
 
@@ -271,7 +271,7 @@ where:
 
 This sign convention is the **physics convention**. (Some engineering texts use $Q - W = \Delta U$ consistently; always check which sign convention a textbook uses before applying formulas.)
 
-#### Internal Energy and Enthalpy {#sec-internal-energy-enthalpy-15}
+### Internal Energy and Enthalpy {#sec-internal-energy-enthalpy-15}
 
 **Internal energy** ($U$, or specific internal energy $u$ in J/kg) represents the microscopic energy of a substance — the kinetic and potential energy of its molecules.
 
@@ -289,7 +289,7 @@ $$Q_P = \Delta H = m \cdot c_p \cdot \Delta T$$
 **Think About It:** Why is enthalpy more useful than internal energy for analyzing a steam turbine? What crosses the system boundary in that case?
 :::
 
-#### Heat and Work {#sec-heat-work-15}
+### Heat and Work {#sec-heat-work-15}
 
 **Heat** ($Q$) is energy transfer driven by a temperature difference. **Work** ($W$) is energy transfer due to a force acting through a distance. Both are **path functions** — their values depend on the process taken, not just the initial and final states.
 
@@ -361,7 +361,7 @@ ggplot(df_all, aes(x = V, y = P, colour = process)) +
   theme_thermo
 ```
 
-#### Specific Heats {#sec-specific-heats-15}
+### Specific Heats {#sec-specific-heats-15}
 
 The **specific heat** of a substance is the energy required to raise the temperature of 1 kg by 1°C (or 1 K).
 
@@ -390,7 +390,7 @@ $$ {#eq-delta-h-15}
 
 Typical values for air: $c_p = 1.005 \text{ kJ/kg·K}$, $c_v = 0.718 \text{ kJ/kg·K}$, $R = 0.287 \text{ kJ/kg·K}$, $\gamma = 1.4$.
 
-#### The Ideal Gas Law {#sec-ideal-gas-15}
+### The Ideal Gas Law {#sec-ideal-gas-15}
 
 An **ideal gas** is a model in which molecules have negligible volume and no intermolecular forces. This is a good approximation for gases at low-to-moderate pressures and temperatures well above the boiling point.
 
@@ -458,7 +458,7 @@ $$\Delta H = m c_p \Delta T = 2 \times 1.005 \times 175 = \mathbf{351.75 \text{ 
 
 Note: $\Delta H \neq Q$ here because the process is not at constant pressure. The enthalpy change is larger than the heat added because enthalpy also accounts for the $P\Delta V$ term (which is zero in the rigid tank, but is computed from the temperature change alone for an ideal gas).
 
-#### Steady-State Flow Energy Equation (SFEE) {#sec-sfee-15}
+### Steady-State Flow Energy Equation (SFEE) {#sec-sfee-15}
 
 For an **open system** at steady state (mass flow rate $\dot{m}$ = constant, no accumulation), the energy balance per unit mass is:
 
@@ -518,9 +518,9 @@ This is roughly equivalent to running a typical home for 3 full days — just to
 
 ***
 
-### Part 3: The Second Law and Entropy {#sec-second-law-15}
+## Part 3: The Second Law and Entropy {#sec-second-law-15}
 
-#### The Second Law of Thermodynamics {#sec-second-law-statement-15}
+### The Second Law of Thermodynamics {#sec-second-law-statement-15}
 
 The First Law tells us *how much* energy is conserved. The Second Law tells us *in which direction* processes naturally occur and places limits on what is achievable.
 
@@ -536,7 +536,7 @@ Both statements are equivalent — if one is violated, so is the other.
 **Think About It:** A wind turbine converts wind kinetic energy directly to electricity with no heat rejection needed. Does this violate the Kelvin–Planck statement? Why or why not?
 :::
 
-#### Thermal Efficiency of Heat Engines {#sec-thermal-efficiency-15}
+### Thermal Efficiency of Heat Engines {#sec-thermal-efficiency-15}
 
 A **heat engine** is a cyclic device that receives heat from a high-temperature source ($Q_H$), converts some to work ($W_{net}$), and rejects the rest to a low-temperature sink ($Q_L$).
 
@@ -570,7 +570,7 @@ $$\dot{Q}_L = \dot{Q}_H - \dot{W}_{net} = 280 - 100 = \mathbf{180 \text{ kW}}$$
 
 This 180 kW of rejected heat exits through the exhaust (roughly 120 kW) and the radiator (roughly 60 kW) — which is why both get very hot. Turbocharged and direct-injection engines achieve 38–42% thermal efficiency; the best automotive spark-ignition engines reach approximately 45%.
 
-#### The Carnot Cycle and Maximum Efficiency {#sec-carnot-15}
+### The Carnot Cycle and Maximum Efficiency {#sec-carnot-15}
 
 The **Carnot cycle** is a theoretical reversible cycle operating between two fixed temperatures. It is the most efficient possible cycle between those temperatures. Its efficiency is:
 
@@ -653,7 +653,7 @@ ggplot() +
   theme_thermo
 ```
 
-#### Entropy {#sec-entropy-15}
+### Entropy {#sec-entropy-15}
 
 **Entropy** ($S$, specific entropy $s$ in J/kg·K) is a measure of the microscopic disorder of a system. For a reversible heat transfer at temperature $T$:
 
@@ -679,7 +679,7 @@ $$
 \Delta s = c_v \ln\!\left(\frac{T_2}{T_1}\right) + R \ln\!\left(\frac{v_2}{v_1}\right)
 $$ {#eq-entropy-ideal-gas-v-15}
 
-#### Coefficient of Performance — Refrigerators and Heat Pumps {#sec-cop-15}
+### Coefficient of Performance — Refrigerators and Heat Pumps {#sec-cop-15}
 
 A **refrigerator** uses work input to transfer heat from a cold space ($Q_L$) to a warm space. A **heat pump** uses work input to transfer heat into a warm space ($Q_H$) from a cold space. In both cases:
 
@@ -719,9 +719,9 @@ A COP of 3.2 means the refrigerator moves 3.2 J of heat for every 1 J of electri
 
 ***
 
-### Part 4: Power Cycles and Applications {#sec-cycles-15}
+## Part 4: Power Cycles and Applications {#sec-cycles-15}
 
-#### The Rankine Cycle (Steam Power) {#sec-rankine-15}
+### The Rankine Cycle (Steam Power) {#sec-rankine-15}
 
 The **Rankine cycle** is the standard cycle for steam power plants — coal, nuclear, and biomass electricity generation all use variations of it. It operates with water as the working fluid.
 
@@ -814,7 +814,7 @@ $$\dot{W}_{turbine} = 15 \times 1{,}300 = \mathbf{19{,}500 \text{ kW} = 19.5 \te
 
 $$\eta_{Rankine} = \frac{1{,}300 - 4}{3{,}200} = \frac{1{,}296}{3{,}200} = \mathbf{40.5\%}$$
 
-#### The Otto Cycle (Spark-Ignition Gasoline Engine) {#sec-otto-15}
+### The Otto Cycle (Spark-Ignition Gasoline Engine) {#sec-otto-15}
 
 The **Otto cycle** is the ideal cycle for spark-ignition internal combustion engines (gasoline/petrol engines). It consists of four internally reversible processes:
 
@@ -898,7 +898,7 @@ ggplot() +
   theme_thermo
 ```
 
-#### The Diesel Cycle (Compression-Ignition Engine) {#sec-diesel-15}
+### The Diesel Cycle (Compression-Ignition Engine) {#sec-diesel-15}
 
 The **Diesel cycle** models compression-ignition engines (diesel engines). The key difference from the Otto cycle: combustion occurs at **constant pressure** (not constant volume), allowing higher compression ratios without knock.
 
@@ -926,7 +926,7 @@ $$\eta_{Diesel} = 1 - \frac{1.088}{3.177} = 1 - 0.342 = \mathbf{0.658 = 65.8\%}$
 
 Note: The Diesel cycle efficiency (ideal) is lower than the Otto cycle at the same compression ratio, but diesel engines run at much higher compression ratios (16–22 vs. 8–12 for gasoline), so real diesel engines typically achieve higher thermal efficiencies (40–50%) than real gasoline engines.
 
-#### The Brayton Cycle (Gas Turbine) {#sec-brayton-15}
+### The Brayton Cycle (Gas Turbine) {#sec-brayton-15}
 
 The **Brayton cycle** is the ideal cycle for gas turbine engines — used in aircraft jet engines, helicopter turbines, and industrial power generation.
 
@@ -951,7 +951,7 @@ $$\eta_{Brayton} = 1 - \frac{1}{10^{0.4/1.4}} = 1 - \frac{1}{10^{0.2857}} = 1 - 
 **Industry Application:** The General Electric CF34 turbofan engine (used on many regional jets) achieves a pressure ratio of approximately 28:1 in the core compressor. Modern high-bypass turbofan engines have overall pressure ratios exceeding 50:1. Defense applications such as the Rolls-Royce Adour (used in the BAE Hawk trainer) use similar thermodynamic principles but are optimized for high thrust-to-weight ratio rather than fuel efficiency.
 :::
 
-#### Vapor-Compression Refrigeration Cycle {#sec-refrigeration-cycle-15}
+### Vapor-Compression Refrigeration Cycle {#sec-refrigeration-cycle-15}
 
 The **vapor-compression refrigeration cycle** is used in virtually every modern refrigerator, air conditioner, and heat pump. It is the reverse of the Rankine power cycle.
 
@@ -974,7 +974,7 @@ Common refrigerants include R-134a (automotive AC), R-410A (residential AC), R-7
 **Industry Application:** Modern electric vehicles use a **heat pump** system (reversible refrigeration cycle) for cabin heating and cooling. Rather than an inefficient resistance heater that converts 1 kWh of electricity to 1 kWh of heat, a heat pump can deliver 2.5–4 kWh of heat per kWh of electricity consumed (COP = 2.5–4.0). This significantly extends EV range in cold climates, where heating is the dominant energy consumer at low speeds.
 :::
 
-#### Heat Exchangers — LMTD Method {#sec-heat-exchangers-15}
+### Heat Exchangers — LMTD Method {#sec-heat-exchangers-15}
 
 A **heat exchanger** transfers heat between two fluid streams without mixing them. The **Log Mean Temperature Difference (LMTD)** method calculates the required heat transfer area:
 
@@ -992,7 +992,7 @@ For a **counterflow** exchanger (most efficient): the two fluids flow in opposit
 
 ***
 
-### Cycle Efficiency Comparison {#sec-efficiency-comparison-15}
+## Cycle Efficiency Comparison {#sec-efficiency-comparison-15}
 
 ```{r efficiency-comparison-15, fig.cap="Comparison of ideal thermal efficiencies for major thermodynamic power cycles at representative operating conditions. The Carnot efficiency (at T_H=800 K, T_L=300 K) sets the theoretical maximum. Real engines always fall below their ideal cycle efficiency due to irreversibilities, heat losses, and friction.", fig.align='center', echo=FALSE}
 library(ggplot2)
@@ -1071,7 +1071,7 @@ ggplot(df_cop, aes(x = delta_T, y = COP, colour = Device)) +
 
 ***
 
-### Key Takeaways {#sec-thermo-takeaways-15}
+## Key Takeaways {#sec-thermo-takeaways-15}
 
 1. **Systems and processes:** Define your system boundary first. Open systems exchange mass and energy; closed systems exchange energy only. Process type (isothermal, isobaric, isochoric, adiabatic) determines which boundary work formula applies.
 
@@ -1087,11 +1087,11 @@ ggplot(df_cop, aes(x = delta_T, y = COP, colour = Device)) +
 
 ***
 
-### Try it yourself {#sec-thermo-tryit}
+## Try it yourself {#sec-thermo-tryit}
 
 These use systems that are not in the worked examples. Each exercise checks your answer and lets you try again.
 
-#### Temperature scales {#sec-tryit-temperature}
+### Temperature scales {#sec-tryit-temperature}
 
 ```{r tryit-temp-grid, echo=FALSE, results='asis'}
 tt <- data.frame(`Celsius (°C)` = c(-10, 25, 100, 350), check.names = FALSE)
@@ -1116,7 +1116,7 @@ tryit_grid(
 )
 ```
 
-#### Heat engine efficiency {#sec-tryit-engine-eff}
+### Heat engine efficiency {#sec-tryit-engine-eff}
 
 A heat engine receives $Q_H = 850$ kJ per cycle from a source at $1900$ K and rejects $Q_L = 540$ kJ to a sink at $320$ K. An ideal Otto cycle with compression ratio $r = 10.5$ and $\gamma = 1.4$ is used for comparison.
 
@@ -1160,7 +1160,7 @@ The engine reaches `r sprintf("%.0f", he$share * 100)`% of the Carnot limit. The
 
 </details>
 
-#### Name the process {#sec-tryit-process-types}
+### Name the process {#sec-tryit-process-types}
 
 ```{r tryit-process-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -1195,7 +1195,7 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-thermo-practice-15}
+## Practice Problems {#sec-thermo-practice-15}
 
 1. A gas at 150 kPa gauge pressure is at 85°C. Convert both values to SI absolute units (kPa abs, Kelvin) and to US customary units (psia, °F).
 
@@ -1215,7 +1215,7 @@ tryit_sort(
 
 ***
 
-### Formula Summary {#sec-thermo-formulas-15}
+## Formula Summary {#sec-thermo-formulas-15}
 
 | Formula Name | Equation | Variables | Conditions / Notes |
 |:-------------|:---------|:----------|:------------------|

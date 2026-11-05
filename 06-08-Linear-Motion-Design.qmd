@@ -298,14 +298,14 @@ qwebr_calc_card(
   title = "Ball Screw Buckling Safety Factor",
   icon = "ruler",
   inputs = list(
-    qwebr_calc_input("d_r", "Screw root diameter", value = 0.0274, min = 0.008, max = 0.08, step = 0.0002, suffix = "m"),
-    qwebr_calc_input("mass_carriage", "Carriage mass", value = 42, min = 1, max = 500, step = 1, suffix = "kg"),
-    qwebr_calc_input("accel", "Commanded acceleration", value = 4.5, min = 0.5, max = 30, step = 0.5, suffix = "m/s²"),
-    qwebr_calc_input("F_friction", "Friction / preload drag", value = 180, min = 0, max = 2000, step = 10, suffix = "N"),
-    qwebr_calc_input("F_process", "Process reaction force", value = 50, min = 0, max = 5000, step = 10, suffix = "N"),
+    qwebr_calc_input("d_r", "Screw root diameter", value = 0.0274, min = 0.008, max = 0.08, step = 0.0002, suffix = "m", type = "slider"),
+    qwebr_calc_input("mass_carriage", "Carriage mass", value = 42, min = 1, max = 500, step = 1, suffix = "kg", type = "slider"),
+    qwebr_calc_input("accel", "Commanded acceleration", value = 4.5, min = 0.5, max = 30, step = 0.5, suffix = "m/s²", type = "slider"),
+    qwebr_calc_input("F_friction", "Friction / preload drag", value = 180, min = 0, max = 2000, step = 10, suffix = "N", type = "slider"),
+    qwebr_calc_input("F_process", "Process reaction force", value = 50, min = 0, max = 5000, step = 10, suffix = "N", type = "slider"),
     qwebr_calc_input("L_buck", "Loaded (buckling) span (m)", value = 1.15, min = 0.2, max = 4, step = 0.05, type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -463,8 +463,10 @@ qwebr_calc_card(
     qwebr_calc_input("F2", "Return pass load", value = 400, min = 50, max = 20000, step = 50, suffix = "N"),
     qwebr_calc_input("jph", "Production rate", value = 40, min = 1, max = 200, step = 1, suffix = "jobs/h"),
     qwebr_calc_input("target_km", "Target L10 life", value = 25000, min = 1000, max = 500000, step = 1000, suffix = "km")
-  )
-)
+  ),
+  goal = "A heavier dispensing head raises the forward load. Find the largest forward load F1 (nearest 50 N) at which the screw still meets the 25 000 km target, within 5 percent. Keep the screw, the lead and the 400 N return load.",
+  goal_test = "L10_km >= target_km && L10_km <= 1.05 * target_km && Ca == 24500 && target_km == 25000 && lead == 10 && F2 == 400",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -641,8 +643,10 @@ qwebr_calc_card(
     qwebr_calc_input("M_yaw", "Yaw moment", value = 4, min = 0, max = 500, step = 1, suffix = "N·m"),
     qwebr_calc_input("fw", "Service factor f<sub>w</sub>", value = 1.2, min = 1, max = 3, step = 0.05),
     qwebr_calc_input("C_candidate", "Guide dynamic capacity C (N)", value = 1450, min = 500, max = 6000, step = 50, type = "slider")
-  )
-)
+  ),
+  goal = "The 1450 N block misses the 250 000 km target. Without changing the block, the mass or the service factor, get it to pass by changing only the pitch moment. How low must it go?",
+  goal_test = "L10_km >= target_km && C_candidate == 1450 && mass_total == 15 && fw == 1.2 && M_roll == 9 && M_yaw == 4",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -797,8 +801,8 @@ qwebr_calc_card(
     qwebr_calc_input("mu", "Coefficient of friction (mu)", value = 0.15, min = 0.02, max = 0.4, step = 0.01, type = "slider")
   ),
   goal = "Find a screw that is still self-locking at mu = 0.15 but has a lead of at least 15 mm per revolution.",
-  goal_test = "L_lead >= 15 && mu <= 0.15 && mu >= tan_lambda"
-)
+  goal_test = "L_lead >= 15 && mu <= 0.15 && mu >= tan_lambda",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

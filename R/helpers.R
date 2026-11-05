@@ -255,13 +255,34 @@ qwebr_calc_table <- function(columns, frame = NULL, add_rows = FALSE, note = NUL
 #'   result changes from run to run. The seed must also be one of `inputs`,
 #'   and the cell must call `set.seed()` with it. In class, teams can each
 #'   enter their team number as the run number to get different data.
+#' @param mode `"demo"` or `"task"`. A demo is driven by the instructor on the
+#'   projector: every scalar input is a slider and there is no `goal`. A task is
+#'   worked by students on their own devices and needs a `goal`. The card gets a
+#'   badge and a coloured border so the two are told apart at a glance.
 qwebr_calc_card <- function(label, title, icon = "gears", inputs = list(), tables = list(),
                              fig_width = 1200, fig_height = 700,
-                             goal = NULL, goal_test = NULL, rerun = NULL) {
+                             goal = NULL, goal_test = NULL, rerun = NULL,
+                             mode = NULL) {
   if (!knitr::is_html_output(excludes = "epub")) return(invisible(NULL))
 
   sanitize <- function(x) gsub("[^a-zA-Z0-9]+", "-", x)
   card_id <- paste0("qcalc-", sanitize(label))
+
+  if (!is.null(mode)) {
+    mode <- match.arg(mode, c("demo", "task"))
+    if (mode == "demo") {
+      if (!is.null(goal)) stop("qwebr_calc_card '", label, "': a demo card has no goal")
+      loose <- Filter(function(inp) inp$type != "slider" && !identical(inp$var, rerun), inputs)
+      if (length(loose)) stop("qwebr_calc_card '", label, "': every input of a demo card must be a slider (",
+                              paste(vapply(loose, function(i) i$var, ""), collapse = ", "), ")")
+    } else if (is.null(goal)) {
+      stop("qwebr_calc_card '", label, "': a task card needs a goal")
+    }
+  }
+  mode_class <- if (is.null(mode)) "" else paste0(" qwebr-calc-", mode)
+  mode_badge <- if (is.null(mode)) "" else sprintf(
+    '
+    <span class="qwebr-calc-badge">%s</span>', if (mode == "demo") "Teaching demo" else "Class task")
 
   render_input <- function(inp) {
     input_id <- paste0(card_id, "-", sanitize(inp$var))
@@ -294,11 +315,12 @@ qwebr_calc_card <- function(label, title, icon = "gears", inputs = list(), table
       readout_id <- paste0(input_id, "-readout")
       sprintf('
     <div class="qwebr-calc-row qwebr-calc-row-slider">
-      <label for="%s">%s <span class="qwebr-calc-slider-readout" data-readout-for="%s" id="%s">%s</span></label>
+      <label for="%s">%s <span class="qwebr-calc-slider-readout" data-readout-for="%s" id="%s" data-prefix="%s" data-suffix="%s">%s</span></label>
       <input type="range" class="qwebr-calc-slider" %s>
     </div>',
-        input_id, inp$label, input_id, readout_id,
-        format(inp$value, big.mark = " ", scientific = FALSE), attrs)
+        input_id, inp$label, input_id, readout_id, inp$prefix, inp$suffix,
+        paste0(inp$prefix, format(inp$value, big.mark = " ", scientific = FALSE),
+               if (nzchar(inp$suffix)) paste0(" ", inp$suffix) else ""), attrs)
     } else {
       sprintf('
     <div class="qwebr-calc-row">
@@ -345,10 +367,10 @@ qwebr_calc_card <- function(label, title, icon = "gears", inputs = list(), table
 ```{=html}
 <script src="js/qwebr-calculator.js"></script>
 
-<div class="qwebr-calc-card" data-qwebr-label="%s" data-fig-width="%d" data-fig-height="%d">
+<div class="qwebr-calc-card%s" data-qwebr-label="%s" data-fig-width="%d" data-fig-height="%d">
   <div class="qwebr-calc-header">
     <i class="fa-solid fa-%s qwebr-calc-icon"></i>
-    <h4>%s</h4>
+    <h4>%s</h4>%s
   </div>
   <div class="qwebr-calc-inputs">%s%s%s
   </div>
@@ -356,7 +378,7 @@ qwebr_calc_card <- function(label, title, icon = "gears", inputs = list(), table
   <div class="qwebr-calc-graph"></div>
 </div>
 ```
-', label, fig_width, fig_height, icon, title, input_rows, table_rows, rerun_row, goal_row))
+', mode_class, label, fig_width, fig_height, icon, title, mode_badge, input_rows, table_rows, rerun_row, goal_row))
 }
 
 # "Try it yourself" exercises: tryit_number(), tryit_grid(), tryit_sort(), ...

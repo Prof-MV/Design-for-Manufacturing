@@ -281,13 +281,13 @@ qwebr_calc_card(
   title = "Payload vs. CG Offset Calculator",
   icon = "robot",
   inputs = list(
-    qwebr_calc_input("W_max0", "Rated payload at near-zero offset", value = 130, min = 10, max = 500, step = 5, suffix = "kg"),
-    qwebr_calc_input("L0", "Flat-region boundary offset", value = 60, min = 10, max = 300, step = 5, suffix = "mm"),
-    qwebr_calc_input("gripper_mass", "Gripper mass", value = 28, min = 1, max = 150, step = 1, suffix = "kg"),
-    qwebr_calc_input("case_mass", "Case (workpiece) mass", value = 16, min = 1, max = 150, step = 1, suffix = "kg"),
+    qwebr_calc_input("W_max0", "Rated payload at near-zero offset", value = 130, min = 10, max = 500, step = 5, suffix = "kg", type = "slider"),
+    qwebr_calc_input("L0", "Flat-region boundary offset", value = 60, min = 10, max = 300, step = 5, suffix = "mm", type = "slider"),
+    qwebr_calc_input("gripper_mass", "Gripper mass", value = 28, min = 1, max = 150, step = 1, suffix = "kg", type = "slider"),
+    qwebr_calc_input("case_mass", "Case (workpiece) mass", value = 16, min = 1, max = 150, step = 1, suffix = "kg", type = "slider"),
     qwebr_calc_input("L_offset", "CG offset from flange (mm)", value = 210, min = 0, max = 600, step = 5, type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -439,8 +439,10 @@ qwebr_calc_card(
     qwebr_calc_input("weld_dwell_each", "Weld dwell per point", value = 0.35, min = 0, max = 2, step = 0.05, suffix = "s"),
     qwebr_calc_input("handshake_time", "PLC handshake time", value = 0.3, min = 0, max = 2, step = 0.05, suffix = "s"),
     qwebr_calc_input("allotment", "Cycle time allotment", value = 9.5, min = 2, max = 30, step = 0.1, suffix = "s")
-  )
-)
+  ),
+  goal = "A second robot joins the station and this robot's allotment drops to 5.0 s. Make the cycle PASS with the TCP speed at 2000 mm/s or less (people nearby) and a weld dwell of at least 0.30 s.",
+  goal_test = "total_cycle <= allotment && allotment == 5 && v_max <= 2000 && weld_dwell_each >= 0.3",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -580,8 +582,8 @@ qwebr_calc_card(
     qwebr_calc_input("planned_distance", "Planned mounting distance (mm)", value = 1800, min = 500, max = 4000, step = 10, type = "slider")
   ),
   goal = "Make the check pass with the light curtain mounted no more than 1500 mm from the hazard.",
-  goal_test = "planned_distance >= S_required && planned_distance <= 1500"
-)
+  goal_test = "planned_distance >= S_required && planned_distance <= 1500",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -702,8 +704,8 @@ qwebr_calc_card(
         qwebr_calc_col("needs_reconfig_zones", c(FALSE, FALSE, TRUE), type = "logical",
                        label = "Needs reconfigurable zones?")),
       note = "\"Never\" means no routine opening is needed. Answer TRUE for needs-reconfigurable-zones only where a reduced-speed warning zone plus a hard-stop zone are both required.")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -794,8 +796,10 @@ qwebr_calc_card(
     qwebr_calc_input("robot_is_power_force_limited", "Arm is vendor-rated power/force-limiting", value = TRUE, type = "logical"),
     qwebr_calc_input("tool_has_sharp_or_pinch_hazard", "Tool has its own sharp or pinch hazard", value = TRUE, type = "logical"),
     qwebr_calc_input("biomechanical_limit_exceeded", "Contact exceeds ISO/TS 15066 limit", value = TRUE, type = "logical")
-  )
-)
+  ),
+  goal = "Find the configuration that is cleared for unguarded collaborative operation, keeping the arm vendor-rated power/force-limiting. Which two hazards must go?",
+  goal_test = "cleared && robot_is_power_force_limited",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -933,8 +937,10 @@ qwebr_calc_card(
     qwebr_calc_input("new_apparatus", "New or modified apparatus installed", value = TRUE, type = "logical"),
     qwebr_calc_input("new_guards_or_devices", "Guards or protective devices are part of the change", value = TRUE, type = "logical"),
     qwebr_calc_input("like_for_like_replacement", "Like-for-like replacement", value = FALSE, type = "logical")
-  )
-)
+  ),
+  goal = "New apparatus is going in, yet no Pre-Start Review is clearly triggered. Find a combination of the other two answers that does this.",
+  goal_test = "!psr_required && new_apparatus",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

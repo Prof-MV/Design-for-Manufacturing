@@ -1,4 +1,4 @@
-## Design for Casting {#chap-casting}
+# Design for Casting {#chap-casting}
 
 ```{r setup-01, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,7 +7,7 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {#sec-objectives-01}
+## Learning Objectives {#sec-objectives-01}
 
 By the end of this chapter, you will be able to:
 
@@ -21,7 +21,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Have you ever noticed the small raised lines or marks on metal objects like engine blocks or cast iron cookware? What do you think causes these marks during manufacturing?
 :::
 
-### Introduction to the Casting Process {#sec-casting-intro}
+## Introduction to the Casting Process {#sec-casting-intro}
 
 Casting is one of the oldest and most fundamental processes in manufacturing, dating back thousands of years. It involves pouring a liquid material, typically a molten metal, into a mold cavity where it is allowed to solidify in the desired shape. The resulting solidified object is called a **casting**. 
 
@@ -29,14 +29,14 @@ The significance of casting lies in its ability to produce complex, intricate sh
 
 ---
 
-### Essential Components of Casting {#sec-casting-components}
+## Essential Components of Casting {#sec-casting-components}
 
 Every casting operation requires two basic elements:
 
 1.  **The Casting Material:** This is the material, usually metal (such as iron, steel, aluminum, or bronze), that is melted into a liquid state.
 2.  **The Mold:** This is the container that holds the liquid material and determines the final shape of the part. The mold contains a cavity that is the inverse of the part being made.
 
-### The Basic Steps of Casting {#sec-casting-steps}
+## The Basic Steps of Casting {#sec-casting-steps}
 
 While the specifics vary greatly depending on the material and method (e.g., sand casting vs. die casting), the fundamental steps remain consistent:
 
@@ -46,14 +46,14 @@ While the specifics vary greatly depending on the material and method (e.g., san
 4.  **Removal (Fettling):** The solidified casting is removed from the mold.
 5.  **Cleaning and Finishing:** The casting is cleaned of any excess material (like gates or risers) and prepared for its intended use.
 
-### Applications and Scope {#sec-casting-applications}
+## Applications and Scope {#sec-casting-applications}
 
 The versatility of casting allows it to produce parts ranging in size from a few grams (e.g., dental crowns) to hundreds of tons (e.g., steam turbine housings). The choice of a specific casting method—such as sand casting, investment casting, die casting, or continuous casting—depends on the required surface finish, dimensional accuracy, batch size, and the type of material being processed.
 
 
-### Sand Mould Casting: The Versatile Workhorse
+## Sand Mould Casting: The Versatile Workhorse
 
-#### Introduction {#sec-sand-casting-intro}
+### Introduction {#sec-sand-casting-intro}
 
 Sand casting, also known as sand mould casting, is the oldest and most frequently used metal casting process, responsible for producing over 70% of all metal castings. It is highly valued for its **versatility** and **cost-effectiveness**, making it the foundational method for manufacturing a vast array of metal components, from massive engine blocks and turbine parts to small fittings and decorative items.
 
@@ -61,7 +61,7 @@ The basic principle is simple: create a mould using sand, pour molten metal into
 
 ---
 
-#### Components and Steps of the Process {#sec-sand-casting-steps}
+### Components and Steps of the Process {#sec-sand-casting-steps}
 
 The sand casting process is typically performed in two halves and involves five main steps.
 
@@ -69,7 +69,7 @@ The sand casting process is typically performed in two halves and involves five 
 knitr::include_graphics("images/Sand-Casting-Infographic-2048x1366.png")
 ```
 
-##### Mold Preparation 
+#### Mold Preparation 
 
 The mold is created inside a metal frame called a **flask** (or molding box). The flask has two halves: the **cope** (top half) and the **drag** (bottom half).
 
@@ -81,26 +81,26 @@ The mold is created inside a metal frame called a **flask** (or molding box). Th
 * **Compacting:** Molding sand—typically a mix of sand, clay (bentonite), and water or other bonding agents—is packed tightly around the pattern inside the flask.
 * **Pattern Removal:** The flask is separated, and the pattern is carefully removed, leaving the inverse cavity of the part.
 
-##### Core Placement (Optional)
+#### Core Placement (Optional)
 
 If the casting requires **internal features** (like a hollow pipe or engine cylinder), a pre-formed core (usually made of a different, rigid sand mix) is placed into the mold cavity. This core remains suspended inside the cavity and prevents the molten metal from filling that space.
 
-##### Mold Closure and Pouring
+#### Mold Closure and Pouring
 
 * The cope and drag are sealed and clamped together.
 * Molten metal is poured from a ladle down the **sprue** and through the gating system until the mold cavity and risers are completely filled.
 
-##### Solidification, Cooling, and Shakeout
+#### Solidification, Cooling, and Shakeout
 
 The metal cools and solidifies within the sand mold. Since sand molds are non-reusable (they are broken to remove the part), this step is often called **shakeout**.
 
-##### Finishing
+#### Finishing
 
 The final casting is removed, and the metal from the sprue, runners, and risers (the non-part material) is cut away (a process called **fettling**) and typically recycled.
 
 ---
 
-#### Advantages and Disadvantages {#sec-sand-casting-pros-cons}
+### Advantages and Disadvantages {#sec-sand-casting-pros-cons}
 
 | Feature | Advantage | Disadvantage |
 | :--- | :--- | :--- |
@@ -117,24 +117,24 @@ knitr::include_graphics("images/SandCastingCompany.png")
   The process is characterized by two main streams: **Metal Melting** and **Sand/Core Preparation**, which converge at the pouring stage.
 
   
-##### Primary Metal Melting Methods {-}
+#### Primary Metal Melting Methods {-}
   
   The image identifies three distinct industrial furnaces. Each uses a different physical principle to reach the melting point of the metal (often exceeding 1,370°C or 2,500°F for iron).
   
-###### Electric Arc Furnace (EAF) {-}
+##### Electric Arc Furnace (EAF) {-}
   * **Mechanism:** This furnace uses high-voltage electric arcs to melt the charge. Large graphite electrodes are lowered toward the metal scrap; electricity "arcs" from the electrodes to the metal, generating intense thermal energy.
   * **Emissions:** As indicated by the "Gas and Particulate Emissions" label, this process is volatile. The arc can cause rapid vaporization of surface contaminants on the scrap metal.
   
-###### Induction Furnace {-}
+##### Induction Furnace {-}
   * **Mechanism:** This method utilizes a high-voltage electrical source passed through a copper coil. This creates a rapidly reversing magnetic field that induces "eddy currents" inside the metal. The metal’s own electrical resistance generates the heat internally.
   * **Characteristics:** It is generally cleaner than the EAF and provides a natural "stirring" action due to electromagnetic forces, which ensures a consistent alloy mix.
   
-###### Cupola Furnace {-}
+##### Cupola Furnace {-}
   * **Mechanism:** A Cupola is a vertical, cylindrical furnace. It is a "combustion" furnace where layers of **Coke** (fuel), **Flux**, and **Metallics** are layered. A blower forces air into the bottom to facilitate the burning of the coke, which melts the metal as it drops through the stack.
   * **Characteristics:** This is a continuous melting process. The diagram shows a tall stack to manage the significant volume of flue gases produced by the burning fuel.
   
   
-##### Mold and Core Preparation {-}
+#### Mold and Core Preparation {-}
   
   For a casting to have a specific shape, the molten metal must be poured into a "negative" space.
   
@@ -143,7 +143,7 @@ knitr::include_graphics("images/SandCastingCompany.png")
   * **Core Making & Baking:** **Cores** are used to create hollow internal cavities (like the inside of an engine block). These are often "baked" in an oven to harden the binder so the core doesn't collapse when hit by molten metal.
   
   
-##### Post-Melting and Finishing {-}
+#### Post-Melting and Finishing {-}
   
   Once the metal is liquid and the molds are ready, the final steps of production occur:
   
@@ -179,11 +179,11 @@ Further reading:
 [Design Rules](https://diecasting.zinc.org/properties/en/design/eng_prop_d_design-rules/)
 
 
-### Full Mould Casting (Lost Foam Casting) {#sec-full-mould-casting}
+## Full Mould Casting (Lost Foam Casting) {#sec-full-mould-casting}
 
 Full mould casting, also known as **lost foam casting** or **evaporative pattern casting**, is an innovative process that uses expendable foam patterns instead of traditional reusable patterns. The foam pattern is coated with a refractory material, placed in unbonded sand, and vaporizes when the molten metal is poured—leaving behind a precise casting.
 
-#### The Process
+### The Process
 
 ```{r fig-lost-foam-process, echo=FALSE, fig.cap="Lost foam casting process: the foam pattern vaporizes as molten metal replaces it.", fig.align='center', fig.width=10, fig.height=6}
 library(ggplot2)
@@ -251,7 +251,7 @@ ggplot() +
 
 5. **Shakeout:** After solidification, the sand is simply poured away—no mold breaking is required.
 
-#### Advantages and Disadvantages
+### Advantages and Disadvantages
 
 | Feature | Advantage | Disadvantage |
 |:--------|:----------|:-------------|
@@ -267,11 +267,11 @@ ggplot() +
 
 ---
 
-### Investment Casting (Lost Wax Casting) {#sec-investment-casting}
+## Investment Casting (Lost Wax Casting) {#sec-investment-casting}
 
 **Investment casting**, also known as **lost wax casting**, is a precision casting process capable of producing intricate, near-net-shape parts with excellent surface finish and dimensional accuracy. The process derives its name from the ceramic mold material that is "invested" (surrounded) around a wax pattern.
 
-#### The Process
+### The Process
 
 ```{r fig-investment-casting-process, echo=FALSE, fig.cap="Investment casting process from wax pattern to finished casting.", fig.align='center', fig.width=12, fig.height=5}
 library(ggplot2)
@@ -363,7 +363,7 @@ ggplot() +
 
 7. **Shell Removal:** After solidification, the ceramic shell is broken away, and individual castings are cut from the tree.
 
-#### Advantages and Disadvantages
+### Advantages and Disadvantages
 
 | Feature | Advantage | Disadvantage |
 |:--------|:----------|:-------------|
@@ -388,9 +388,9 @@ ggplot() +
 
 ---
 
-### Design for Casting [@reliance-casting-design]
+## Design for Casting [@reliance-casting-design]
 
-#### Engineering Metal Castings for Quality and Value {#sec-engineering-castings}
+### Engineering Metal Castings for Quality and Value {#sec-engineering-castings}
 
 Good metal casting design aims to create the simplest mold that will produce the desired shape. This process requires expert knowledge of metals and casting methods to strike the best balance between quality and value in the final product.
 
@@ -398,11 +398,11 @@ Engineers and designers select metals and casting methods based on the mechanica
 
 Ultimately, the designer uses their experience of how material properties and casting methods influence each other in the foundry to create the final design. A key skill is knowing the behavior of metal in its liquid, cooling, and solid states to create a design that minimizes production problems.
 
-#### Variables in Metal Casting Design {#sec-casting-variables}
+### Variables in Metal Casting Design {#sec-casting-variables}
 
 Several characteristics of the metal itself and the physics of heat transfer significantly affect the outcome of a casting design.
 
-##### Metal Castability
+#### Metal Castability
 
 Four main metal characteristics influence the casting process:
 
@@ -421,7 +421,7 @@ knitr::include_graphics("images/dross-slag-titanium.jpg")
 
 * **Pouring Temperature:** This is the specific temperature at which an alloy can be poured. Generally, the hotter the metal, the more production challenges are introduced.
 
-##### Heat Transfer and Solidification Patterns
+#### Heat Transfer and Solidification Patterns
 
 Solidification is controlled by how heat is transferred and dispersed:
 
@@ -435,11 +435,11 @@ Solidification is controlled by how heat is transferred and dispersed:
     * **Risers:** Reservoirs, called risers, are connected to the cooling casting to slowly feed liquid metal into it, preventing cavities from forming as the metal shrinks.
 
 
-#### Design Considerations for Shape and Mold {#sec-design-considerations}
+### Design Considerations for Shape and Mold {#sec-design-considerations}
 
 Designers must structure the geometry of the casting and the mold components to manage heat and metal flow.
 
-##### Shape and Section Size Changes
+#### Shape and Section Size Changes
 
 * **Hot Spots:** Increased thickness in material can create hot spots in cooling castings.
 * **Uniform Thickness:** Where possible, designing castings with uniform thickness is helpful.
@@ -455,12 +455,12 @@ knitr::include_graphics("images/metal-casting-volume-change.png")
 ```
 
 
-##### Junctions Between Sections
+#### Junctions Between Sections
 
 * **Volume Consistency:** Sharp angles where two or more sections meet can create a larger volume of metal (a hotspot) at the junction.
 * **Rounding Corners:** Designers can smooth these corners, rounding them away from sharp angles, to make the metal volume at the junction more consistent with the surrounding metal volumes.
 
-##### Mold Stability and Surface Finish
+#### Mold Stability and Surface Finish
 
 * **Mold Integrity:** The mold material must be able to withstand the metal's behavior (expansion, contraction, and off-gassing) while it cools, without fracturing or collapsing.
 * **Surface Finish Capability:** The molding method dictates the final surface finish.
@@ -468,7 +468,7 @@ knitr::include_graphics("images/metal-casting-volume-change.png")
     * For parts requiring precision finishes only in certain areas, the casting can be machined afterward, but the metal must be easily machinable.
     * While intensive molding processes yield smoother finishes and are often costly, for large objects, this can be less expensive than machining the entire surface.
 
-##### Other Mold Design Considerations
+#### Other Mold Design Considerations
 
 To achieve an excellent casting at a good price, the designer should try to minimize or eliminate deep drafts, expensive cores, and irregular parting.
 
@@ -493,7 +493,7 @@ knitr::include_graphics("images/Gemini_Generated_Image_67wz4x67wz4x67wz.png")
 
     * **Flash:** Metal may leak into the parting line, creating a thin, flat excess called flash, which requires removal after casting.
 
-##### Excellence in Casting Design {#sec-casting-excellence}
+#### Excellence in Casting Design {#sec-casting-excellence}
 
 Designing a superior product at the lowest price requires understanding the complex dependencies between materials and methods. The required mechanical properties of the final product determine the metal needed, and that metal's liquid, cooling, and solid behavior dictates the necessary mold features.
 
@@ -504,11 +504,11 @@ Experience and clear communication among designers, engineers, and metalworkers 
 
 ---
 
-### Defects in Casting {#sec-casting-defects}
+## Defects in Casting {#sec-casting-defects}
 
 Understanding common casting defects is essential for both designers and quality engineers. By recognizing these defects and their causes, designers can modify their designs to reduce the likelihood of problems, and quality personnel can identify root causes when defects occur.
 
-#### Classification of Casting Defects
+### Classification of Casting Defects
 
 Casting defects can be classified into several categories based on their origin:
 
@@ -548,7 +548,7 @@ ggplot(defects, aes(x = frequency, y = severity, color = category)) +
   ylim(3, 10)
 ```
 
-#### Gas-Related Defects
+### Gas-Related Defects
 
 **Porosity** occurs when gas becomes trapped in the solidifying metal, creating small voids throughout the casting.
 
@@ -565,7 +565,7 @@ ggplot(defects, aes(x = frequency, y = severity, color = category)) +
 **Think About It:** Why might aluminum castings be more susceptible to porosity than steel castings? (Hint: Consider the solubility of hydrogen in molten aluminum.)
 :::
 
-#### Shrinkage-Related Defects
+### Shrinkage-Related Defects
 
 **Shrinkage cavities** form when liquid metal solidifies and contracts, but there is insufficient feed metal to compensate.
 
@@ -618,7 +618,7 @@ ggplot() +
 - Taper sections toward risers (directional solidification)
 - Avoid isolated heavy sections
 
-#### Mold-Related Defects
+### Mold-Related Defects
 
 **Sand inclusions** occur when pieces of the mold break off and become embedded in the casting.
 
@@ -631,7 +631,7 @@ ggplot() +
 | Metal penetration | Metal forced into sand pores | Use finer sand, apply mold coating |
 | Mold shift | Cope/drag misalignment | Improve flask alignment, use locating pins |
 
-#### Metallurgical Defects
+### Metallurgical Defects
 
 **Cold shuts** form when two streams of metal meet but fail to fuse completely, creating a visible line or seam in the casting.
 
@@ -641,7 +641,7 @@ ggplot() +
 **Quick Check:** A casting shows a large void near the center of its thickest section. Is this more likely a gas porosity defect or a shrinkage cavity? How would you tell the difference?
 :::
 
-#### Defect Prevention Through Design
+### Defect Prevention Through Design
 
 The table below summarizes key design guidelines to prevent common casting defects:
 
@@ -660,9 +660,9 @@ The table below summarizes key design guidelines to prevent common casting defec
 
 ---
 
-### Try it yourself {#sec-casting-tryit}
+## Try it yourself {#sec-casting-tryit}
 
-#### Group the defects {#sec-tryit-defects}
+### Group the defects {#sec-tryit-defects}
 
 ```{r tryit-defect-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -689,7 +689,7 @@ tryit_sort(
 )
 ```
 
-#### Good or poor casting design? {#sec-tryit-casting-design}
+### Good or poor casting design? {#sec-tryit-casting-design}
 
 ```{r tryit-casting-design-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -724,7 +724,7 @@ tryit_sort(
 )
 ```
 
-#### Draft allowance {#sec-tryit-draft}
+### Draft allowance {#sec-tryit-draft}
 
 A foundry specifies a draft of $1.5^\circ$ per 25 mm of depth for the first 50 mm and $0.8^\circ$ per 25 mm of depth beyond that. A sand-cast housing wall is $150$ mm deep.
 
@@ -764,7 +764,7 @@ Over 150 mm the wall grows by $150 \tan(`r sprintf("%.1f", dr$total)`^\circ) = `
 
 </details>
 
-### Practice Problems {#sec-casting-practice}
+## Practice Problems {#sec-casting-practice}
 
 ::: {.question}
 **Problem 1:** A cylindrical aluminum casting (100 mm diameter, 200 mm height) exhibits shrinkage porosity at its center. Sketch the solidification pattern and propose two design modifications to eliminate this defect.
@@ -813,7 +813,7 @@ Sand casting would require complex cores and extensive machining, likely making 
 
 ---
 
-### Key Takeaways {#sec-casting-takeaways}
+## Key Takeaways {#sec-casting-takeaways}
 
 1. **Casting fundamentals:** All casting processes involve melting, pouring, solidification, and finishing—but the mold type and material handling vary significantly.
 
@@ -827,7 +827,7 @@ Sand casting would require complex cores and extensive machining, likely making 
 
 ---
 
-### Further Resources {#sec-casting-resources}
+## Further Resources {#sec-casting-resources}
 
 **Videos:**
 ```{r video-investment-casting, echo=FALSE, results='asis'}

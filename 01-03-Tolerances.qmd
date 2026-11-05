@@ -1,4 +1,4 @@
-## Tolerances in Mechanical Design {#tolerances}
+# Tolerances in Mechanical Design {#tolerances}
 
 ```{r setup-01-03, include=FALSE}
 # Include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,7 +7,7 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {-}
+## Learning Objectives {-}
 
 By the end of this chapter, you will be able to:
 
@@ -29,7 +29,7 @@ specify an acceptable range of variation. This chapter explores the fundamental
 concepts of tolerances, basic sizes, and allowances, as defined in standards
 such as ASME Y14.5 [@ASME_Y145_2018].
 
-### Fundamental Concepts
+## Fundamental Concepts
 
 To understand tolerancing, we must first define three key terms:
 
@@ -46,40 +46,40 @@ $$
 
 These concepts apply universally, whether designing a cylindrical shaft diameter, a slot width, or the overall length of a prismatic part.
 
-### Tolerancing Methods
+## Tolerancing Methods
 
 There are two primary methods used to express tolerances on technical drawings: **Limit Dimensions** and **Plus-Minus Tolerancing**.
 
-#### Limit Dimensions
+### Limit Dimensions
 
 In limit dimensioning, the high and low limits are specified directly. The machinist does not need to calculate the limits; they are explicitly stated.
 
 * **Example**: $\begin{matrix} 25.05 \\ 24.95 \end{matrix}$
 
-#### Plus-Minus Tolerancing
+### Plus-Minus Tolerancing
 
 This method uses a basic size followed by a permissible variance. This category is further divided based on how the variance is distributed relative to the basic size.
 
-##### Equal Bilateral Tolerance {-}
+#### Equal Bilateral Tolerance {-}
 The variation is permitted equally in both directions (plus and minus) from the basic size.
 
 > **Example**: $25.00 \pm 0.05$
 
-##### Unequal Bilateral Tolerance {-}
+#### Unequal Bilateral Tolerance {-}
 The variation is permitted in both directions, but the amount differs.
 
 > **Example**: $25.00 \,\, {}^{+0.05}_{-0.02}$
 
-##### Unilateral Tolerance {-}
+#### Unilateral Tolerance {-}
 The variation is permitted in only one direction (either positive or negative) from the basic size. The limit in the other direction is zero.
 
 > **Example**: $25.00 \,\, {}^{+0.05}_{-0.00}$
 
-### Specifying Limits in Tolerancing
+## Specifying Limits in Tolerancing
 
 When defining the permissible variation of a part, designers choose between specifying a range (two limits) or a single boundary (one limit) based on the functional requirements of the feature.
 
-#### Tolerance with Two Limits (Limit Dimensioning)
+### Tolerance with Two Limits (Limit Dimensioning)
 
 In this method, the maximum and minimum dimensions are specified directly on the drawing. The tolerance is the absolute difference between these two values. This is the most direct method for a machinist to read, as it eliminates the need for mental math to find the boundaries.
 
@@ -97,7 +97,7 @@ knitr::include_graphics("images/Allowances_TwoLimits.png")
 
 
 
-#### Tolerance with One Limit (Single Limit)
+### Tolerance with One Limit (Single Limit)
 
 Single-limit dimensioning is used when the dimension in one direction is not critical, or when the "other" limit is naturally constrained by the geometry or the manufacturing process. These are indicated by the suffixes **MAX** or **MIN**.
 
@@ -114,7 +114,7 @@ knitr::include_graphics("images/Allowances_SingleLimit.png")
 
 ---
 
-#### Comparison Summary
+### Comparison Summary
 
 | Method | Syntax | Primary Use Case |
 |:---|:---|:---|
@@ -123,7 +123,7 @@ knitr::include_graphics("images/Allowances_SingleLimit.png")
 | **One Limit (MIN)** | $.500 \text{ MIN}$ | Minimum engagement for fasteners or structural thickness. |
 
 
-#### Visualizing Tolerance Distributions
+### Visualizing Tolerance Distributions
 
 To better understand how manufactured parts align with these limits, we can visualize a production run. Figure @fig-tolerance-plot below simulates a batch of 1000 shafts manufactured with a target diameter of 25.0 mm and a tolerance of $\pm 0.05$ mm.
 
@@ -166,11 +166,11 @@ ggplot(parts_data, aes(x = diameter)) +
 
 As seen in Figure @fig-tolerance-plot, the dashed red lines represent the Upper Specification Limit (USL) and Lower Specification Limit (LSL). Parts falling outside these lines would be rejected.
 
-### Drawing Standards: Metric vs. Inch
+## Drawing Standards: Metric vs. Inch
 
 One of the most critical aspects of technical documentation is adhering to the specific syntax rules for Metric (SI) and Inch (Imperial) units. These rules differ significantly regarding zero suppression and decimal consistency.
 
-#### Metric Rules (SI)
+### Metric Rules (SI)
 
 When dimensioning in millimeters, the following rules apply:
 
@@ -182,7 +182,7 @@ When dimensioning in millimeters, the following rules apply:
 * **Unilateral Zero**: A zero in a unilateral tolerance is written as a single digit "0" without a plus or minus sign.
     * *Example*: $30 \,\, {}^{+0.1}_{0}$
 
-#### Inch Rules (Imperial)
+### Inch Rules (Imperial)
 
 When dimensioning in inches, the conventions are distinct:
 
@@ -204,11 +204,11 @@ without gaps that could harbor bacteria, yet still allow for disassembly during
 cleaning. This requires careful selection of clearance and interference fits.
 :::
 
-### Try it yourself {#sec-tryit-tolerances}
+## Try it yourself {#sec-tryit-tolerances}
 
 These use dimensions that are not in the examples above. Each exercise checks your answer and lets you try again.
 
-#### From deviations to limits {#sec-tryit-limits}
+### From deviations to limits {#sec-tryit-limits}
 
 ```{r tryit-limits-grid, echo=FALSE, results='asis'}
 tl <- data.frame(
@@ -249,7 +249,7 @@ Row 2 is a unilateral tolerance (the upper deviation is zero) and row 3 an equal
 
 </details>
 
-#### A shaft in a hole {#sec-tryit-allowance}
+### A shaft in a hole {#sec-tryit-allowance}
 
 A hole is specified as $25.000$ to $25.021$ mm and the mating shaft as $24.980$ to $24.993$ mm.
 
@@ -286,7 +286,7 @@ Allowance $= 25.000 - 24.993 = `r sprintf("%.3f", al$allowance)`$ mm; loosest fi
 
 </details>
 
-#### How is the tolerance written? {#sec-tryit-tol-styles}
+### How is the tolerance written? {#sec-tryit-tol-styles}
 
 ```{r tryit-tol-style-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -322,7 +322,7 @@ tryit_sort(
 )
 ```
 
-### Key Takeaways {-}
+## Key Takeaways {-}
 
 - Tolerances define the acceptable range of variation for manufactured parts
 - Limit dimensioning explicitly states upper and lower bounds

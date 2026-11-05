@@ -1,4 +1,4 @@
-## Power Transmission: Couplings and Clutches {#chap-12-couplings}
+# Power Transmission: Couplings and Clutches {#chap-12-couplings}
 
 ```{r setup-12, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -21,7 +21,7 @@ theme_coupling <- theme_minimal() +
   )
 ```
 
-### Learning Objectives {#sec-objectives-12}
+## Learning Objectives {#sec-objectives-12}
 
 By the end of this chapter, you will be able to:
 
@@ -35,13 +35,13 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Consider your car. The engine crankshaft must connect to the transmission input shaft—but you also need to disconnect them when shifting gears or stopping. What mechanisms allow both permanent connection and controlled engagement/disengagement?
 :::
 
-### Introduction to Couplings and Clutches {#sec-couplings-intro}
+## Introduction to Couplings and Clutches {#sec-couplings-intro}
 
 In mechanical power transmission systems, we often need to connect rotating shafts together or control when power is transmitted. **Couplings** provide permanent or semi-permanent connections between shafts, while **clutches** allow controlled engagement and disengagement of power transmission.
 
 > **Think About It:** Consider your car. The engine crankshaft must connect to the transmission input shaft—but you also need to disconnect them when shifting gears or stopping. The clutch pedal controls a friction clutch that engages and disengages this connection. Meanwhile, the driveshaft uses flexible couplings (universal joints) to transmit power while accommodating the suspension's movement.
 
-#### Why Are Couplings and Clutches Important?
+### Why Are Couplings and Clutches Important?
 
 | Component | Primary Function | Key Applications |
 | :--- | :--- | :--- |
@@ -57,11 +57,11 @@ Both components must handle:
 
 ---
 
-### Shaft Couplings {#sec-shaft-couplings}
+## Shaft Couplings {#sec-shaft-couplings}
 
 Shaft couplings are mechanical devices that connect two rotating shafts to transmit power. They are classified into two main categories: **rigid** and **flexible**.
 
-#### Types of Misalignment
+### Types of Misalignment
 
 Before selecting a coupling, it's essential to understand the types of shaft misalignment that may be present:
 
@@ -153,7 +153,7 @@ grid.arrange(p1, p2, p3, ncol = 3)
 
 ---
 
-### Rigid Couplings {#sec-rigid-couplings}
+## Rigid Couplings {#sec-rigid-couplings}
 
 Rigid couplings provide a solid connection between two shafts with **no allowance for misalignment**. They are used only when shafts are precisely aligned and remain so during operation.
 
@@ -246,7 +246,7 @@ p3 <- ggplot() +
 grid.arrange(p1, p2, p3, ncol = 3)
 ```
 
-#### Rigid Coupling Characteristics
+### Rigid Coupling Characteristics
 
 | Type | Torque Capacity | Installation | Cost | Use Case |
 | :--- | :---: | :--- | :---: | :--- |
@@ -258,11 +258,11 @@ grid.arrange(p1, p2, p3, ncol = 3)
 
 ---
 
-### 🔄 Flexible Couplings {-}
+## 🔄 Flexible Couplings {-}
 
 Flexible couplings accommodate misalignment while transmitting torque. They use various mechanisms to provide flexibility.
 
-#### Elastomeric Couplings
+### Elastomeric Couplings
 
 These couplings use rubber or polymer elements to provide flexibility and damping.
 
@@ -340,7 +340,7 @@ ggplot() +
 | **Sleeve** | Low | Moderate | Low | Light-duty drives |
 | **Disc** | Low | Low | Moderate | Precision machinery |
 
-#### Metallic Flexible Couplings
+### Metallic Flexible Couplings
 
 These use metal elements to provide flexibility through mechanical deflection rather than material deformation.
 
@@ -441,7 +441,7 @@ p3 <- ggplot() +
 grid.arrange(p1, p2, p3, ncol = 3)
 ```
 
-#### Metallic Coupling Comparison
+### Metallic Coupling Comparison
 
 | Type | Angular | Parallel | Axial | Torque | Speed | Notes |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
@@ -453,11 +453,11 @@ grid.arrange(p1, p2, p3, ncol = 3)
 
 ---
 
-### Coupling Selection Criteria {#sec-coupling-selection}
+## Coupling Selection Criteria {#sec-coupling-selection}
 
 Selecting the right coupling requires consideration of multiple factors:
 
-#### Torque Requirements
+### Torque Requirements
 
 The coupling must transmit the required torque with an appropriate safety factor:
 
@@ -472,7 +472,7 @@ Where the **Service Factor (SF)** accounts for load characteristics:
 | Moderate shock (machine tools) | 2.0 - 2.5 |
 | Heavy shock (crushers, mills) | 2.5 - 3.0+ |
 
-#### Speed Limitations
+### Speed Limitations
 
 Coupling maximum speed depends on:
 
@@ -480,7 +480,7 @@ Coupling maximum speed depends on:
 - Material strength (centrifugal forces)
 - Lubrication requirements (for gear couplings)
 
-#### Misalignment Capacity
+### Misalignment Capacity
 
 Select based on expected misalignment:
 
@@ -508,7 +508,7 @@ kable(misalign_df,
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
 ```
 
-#### Environmental Factors
+### Environmental Factors
 
 Consider operating conditions:
 
@@ -519,11 +519,11 @@ Consider operating conditions:
 
 ---
 
-### ⚡ Clutches {-}
+## ⚡ Clutches {-}
 
 Clutches are devices that connect and disconnect rotating shafts on demand. They allow controlled engagement of power transmission.
 
-#### Types of Clutches
+### Types of Clutches
 
 ```{r clutch-classification, echo=FALSE, fig.align='center', fig.cap="Classification of common clutch types", fig.width=10, fig.height=6}
 library(ggplot2)
@@ -603,11 +603,11 @@ ggplot() +
 
 ---
 
-### 🔴 Friction Clutches {-}
+## 🔴 Friction Clutches {-}
 
 Friction clutches transmit torque through friction between mating surfaces. They are the most common type, allowing smooth engagement and slip during startup.
 
-#### Single-Plate Disc Clutch
+### Single-Plate Disc Clutch
 
 The most common design in automotive applications:
 
@@ -685,7 +685,7 @@ ggplot() +
        subtitle = "Engaged position: spring force clamps friction disc between flywheel and pressure plate")
 ```
 
-#### Friction Clutch Torque Capacity
+### Friction Clutch Torque Capacity
 
 The torque transmitted by a friction clutch depends on the clamping force and friction coefficient:
 
@@ -712,7 +712,7 @@ $$r_m = \frac{r_o + r_i}{2}$$
 
 Where $r_o$ is the outer radius and $r_i$ is the inner radius of the friction surface.
 
-#### Friction Material Properties
+### Friction Material Properties
 
 ```{r friction-materials, echo=FALSE}
 library(knitr)
@@ -738,7 +738,7 @@ kable(friction_df,
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
 ```
 
-#### Multi-Plate Clutches
+### Multi-Plate Clutches
 
 When higher torque capacity is needed in a compact space, multiple friction discs are used:
 
@@ -750,11 +750,11 @@ Where $n$ = number of friction interfaces = (number of discs × 2) for alternati
 
 ---
 
-### 🔵 Positive Engagement Clutches {-}
+## 🔵 Positive Engagement Clutches {-}
 
 Positive engagement clutches use mechanical interlocking rather than friction. They cannot slip and require the shafts to be at rest or synchronized speed for engagement.
 
-#### Jaw Clutch
+### Jaw Clutch
 
 ```{r jaw-clutch, echo=FALSE, fig.align='center', fig.cap="Jaw clutch showing interlocking teeth", fig.width=10, fig.height=5}
 library(ggplot2)
@@ -815,7 +815,7 @@ ggplot() +
 
 ---
 
-### 🟢 Overrunning Clutches {-}
+## 🟢 Overrunning Clutches {-}
 
 Overrunning (one-way) clutches automatically engage in one direction and freewheel in the other. They require no external control.
 
@@ -899,7 +899,7 @@ p2 <- ggplot() +
 grid.arrange(p1, p2, ncol = 2)
 ```
 
-#### Overrunning Clutch Applications
+### Overrunning Clutch Applications
 
 | Application | Function |
 | :--- | :--- |
@@ -911,7 +911,7 @@ grid.arrange(p1, p2, ncol = 2)
 
 ---
 
-### 🧮 Worked Example: Clutch Torque Calculation {-}
+## 🧮 Worked Example: Clutch Torque Calculation {-}
 
 **Problem:** A single-plate automotive clutch has the following specifications:
 
@@ -952,9 +952,9 @@ $$T = 0.35 \times 4500 \times 0.1041 \times 2 = 328.0 \text{ N·m}$$
 
 ---
 
-### 🎯 Design Guidelines and Best Practices {-}
+## 🎯 Design Guidelines and Best Practices {-}
 
-#### Coupling Selection Guidelines
+### Coupling Selection Guidelines
 
 | Factor | Recommendation |
 | :--- | :--- |
@@ -965,7 +965,7 @@ $$T = 0.35 \times 4500 \times 0.1041 \times 2 = 328.0 \text{ N·m}$$
 | **Maintenance** | Elastomeric elements require periodic replacement |
 | **Cost** | Balance initial cost against lifecycle and downtime costs |
 
-#### Clutch Selection Guidelines
+### Clutch Selection Guidelines
 
 | Factor | Recommendation |
 | :--- | :--- |
@@ -975,7 +975,7 @@ $$T = 0.35 \times 4500 \times 0.1041 \times 2 = 328.0 \text{ N·m}$$
 | **Actuation** | Consider mechanical, hydraulic, pneumatic, or electromagnetic |
 | **Heat dissipation** | Size for thermal capacity during engagement |
 
-#### Common Problems and Solutions
+### Common Problems and Solutions
 
 | Problem | Likely Cause | Solution |
 | :--- | :--- | :--- |
@@ -987,7 +987,7 @@ $$T = 0.35 \times 4500 \times 0.1041 \times 2 = 328.0 \text{ N·m}$$
 
 ---
 
-### Related Topics {#sec-coupling-resources}
+## Related Topics {#sec-coupling-resources}
 
 Couplings and clutches work with other power transmission components:
 
@@ -998,7 +998,7 @@ Couplings and clutches work with other power transmission components:
 
 ---
 
-### 📚 Chapter Summary {-}
+## 📚 Chapter Summary {-}
 
 Couplings and clutches are essential power transmission components:
 
@@ -1018,11 +1018,11 @@ Couplings and clutches are essential power transmission components:
 
 ---
 
-### Try it yourself {#sec-coupling-tryit}
+## Try it yourself {#sec-coupling-tryit}
 
 These use drives that are not in the worked example. Each exercise checks your answer and lets you try again.
 
-#### Multi-plate clutch torque {#sec-tryit-clutch-torque}
+### Multi-plate clutch torque {#sec-tryit-clutch-torque}
 
 A multi-plate clutch has **three friction discs**, each lined on **both** faces, clamped between steel plates, so every lined face is a friction surface. The friction surface has $r_o = 120$ mm and $r_i = 70$ mm, $\mu = 0.35$, and the clamping force is $F = 3200$ N. It is fitted to a 15 kW motor at 1450 rpm and needs a service factor of 1.5.
 
@@ -1072,7 +1072,7 @@ The motor torque is $15000 / (2\pi \cdot 1450 / 60) = `r sprintf("%.1f", cl$T_mo
 
 </details>
 
-#### Misalignment and clutch types {#sec-tryit-coupling-sorts}
+### Misalignment and clutch types {#sec-tryit-coupling-sorts}
 
 ```{r tryit-misalign-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -1127,7 +1127,7 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-coupling-problems}
+## Practice Problems {#sec-coupling-problems}
 
 **Problem 1:** A jaw coupling connects a 15 kW motor running at 1450 rpm to a pump. If the service factor is 1.5, what minimum torque rating should the coupling have?
 

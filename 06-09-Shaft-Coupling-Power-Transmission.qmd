@@ -224,8 +224,8 @@ qwebr_calc_card(
     qwebr_calc_input("Kt", "Stress concentration factor Kt", value = 1.6, min = 1, max = 3, step = 0.05, type = "slider")
   ),
   goal = "Size a keyed shaft for 70 N·m or more with Kt = 2.0 or worse and a design factor of at least 3, using stock no larger than 24 mm.",
-  goal_test = "T >= 70 && Kt >= 2 && n_d >= 3 && d_upsized_mm <= 24 && n_18_with_key >= n_d"
-)
+  goal_test = "T >= 70 && Kt >= 2 && n_d >= 3 && d_upsized_mm <= 24 && n_18_with_key >= n_d",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -379,12 +379,12 @@ qwebr_calc_card(
   title = "Coupling Selection Decision Matrix",
   icon = "scale-balanced",
   inputs = list(
-    qwebr_calc_input("w_torque_margin", "Weight: torque margin", value = 0.2, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_misalignment", "Weight: misalignment tolerance", value = 0.25, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_shock", "Weight: shock absorption", value = 0.3, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_cost_maintenance", "Weight: cost and maintenance", value = 0.25, min = 0, max = 1, step = 0.05)
-  )
-)
+    qwebr_calc_input("w_torque_margin", "Weight: torque margin", value = 0.2, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_misalignment", "Weight: misalignment tolerance", value = 0.25, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_shock", "Weight: shock absorption", value = 0.3, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_cost_maintenance", "Weight: cost and maintenance", value = 0.25, min = 0, max = 1, step = 0.05, type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -558,15 +558,15 @@ qwebr_calc_card(
   title = "V-Belt Drive Sizing Calculator",
   icon = "gears",
   inputs = list(
-    qwebr_calc_input("P_motor_hp", "Motor power", value = 5, min = 0.5, max = 50, step = 0.5, suffix = "hp"),
-    qwebr_calc_input("n_motor", "Motor speed", value = 1750, min = 600, max = 3600, step = 10, suffix = "rpm"),
-    qwebr_calc_input("D_driver", "Driver sheave diameter", value = 100, min = 60, max = 400, step = 5, suffix = "mm"),
-    qwebr_calc_input("D_driven", "Driven sheave diameter", value = 500, min = 60, max = 800, step = 5, suffix = "mm"),
-    qwebr_calc_input("C", "Center distance", value = 600, min = 400, max = 2000, step = 10, suffix = "mm"),
-    qwebr_calc_input("SF", "Service factor", value = 1.4, min = 1, max = 2, step = 0.05),
-    qwebr_calc_input("P_rated_per_belt", "Rated power per belt", value = 3, min = 0.5, max = 15, step = 0.1, suffix = "kW")
-  )
-)
+    qwebr_calc_input("P_motor_hp", "Motor power", value = 5, min = 0.5, max = 50, step = 0.5, suffix = "hp", type = "slider"),
+    qwebr_calc_input("n_motor", "Motor speed", value = 1750, min = 600, max = 3600, step = 10, suffix = "rpm", type = "slider"),
+    qwebr_calc_input("D_driver", "Driver sheave diameter", value = 100, min = 60, max = 400, step = 5, suffix = "mm", type = "slider"),
+    qwebr_calc_input("D_driven", "Driven sheave diameter", value = 500, min = 60, max = 800, step = 5, suffix = "mm", type = "slider"),
+    qwebr_calc_input("C", "Center distance", value = 600, min = 400, max = 2000, step = 10, suffix = "mm", type = "slider"),
+    qwebr_calc_input("SF", "Service factor", value = 1.4, min = 1, max = 2, step = 0.05, type = "slider"),
+    qwebr_calc_input("P_rated_per_belt", "Rated power per belt", value = 3, min = 0.5, max = 15, step = 0.1, suffix = "kW", type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -715,8 +715,8 @@ qwebr_calc_card(
         qwebr_calc_col("weights_B", c(0.30, 0.20, 0.10, 0.15, 0.25), var = "weights_B", label = "Zone B weight", min = 0, max = 1, step = 0.05)),
       note = "Scores run from 1 (poor fit) to 5 (excellent fit). Each weight column should sum to 1.0.")
   ),
-  fig_width = 1000, fig_height = 600
-)
+  fig_width = 1000, fig_height = 600,
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">

@@ -236,13 +236,13 @@ qwebr_calc_card(
   title = "Inductive Sensor Derating Calculator",
   icon = "ruler",
   inputs = list(
-    qwebr_calc_input("Sn", "Rated sensing distance S<sub>n</sub>", value = 4, min = 1, max = 40, step = 0.5, suffix = "mm"),
-    qwebr_calc_input("d_reference", "Reference target side length", value = 12, min = 4, max = 60, step = 1, suffix = "mm"),
-    qwebr_calc_input("Cf_material", "Material correction factor", value = 0.7, min = 0.2, max = 1, step = 0.05),
-    qwebr_calc_input("d_target", "Actual target side length", value = 8, min = 2, max = 60, step = 1, suffix = "mm"),
+    qwebr_calc_input("Sn", "Rated sensing distance S<sub>n</sub>", value = 4, min = 1, max = 40, step = 0.5, suffix = "mm", type = "slider"),
+    qwebr_calc_input("d_reference", "Reference target side length", value = 12, min = 4, max = 60, step = 1, suffix = "mm", type = "slider"),
+    qwebr_calc_input("Cf_material", "Material correction factor", value = 0.7, min = 0.2, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("d_target", "Actual target side length", value = 8, min = 2, max = 60, step = 1, suffix = "mm", type = "slider"),
     qwebr_calc_input("mounting_gap", "Mounting gap (mm)", value = 3.5, min = 0.2, max = 10, step = 0.1, type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -394,8 +394,10 @@ qwebr_calc_card(
   inputs = list(
     qwebr_calc_input("output_type", "Sensor output type", value = "PNP", type = "select",
                      options = c("PNP", "NPN"))
-  )
-)
+  ),
+  goal = "Find the output type whose chafed-wire fault looks exactly like a real detection to the PLC.",
+  goal_test = "matches_active_state",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -519,12 +521,12 @@ qwebr_calc_card(
   title = "I/O Architecture Decision Matrix",
   icon = "scale-balanced",
   inputs = list(
-    qwebr_calc_input("w_diagnostics", "Weight: diagnostics", value = 0.4, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_wiring_cost", "Weight: wiring cost", value = 0.15, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_commissioning_speed", "Weight: commissioning speed", value = 0.2, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_scalability", "Weight: scalability", value = 0.25, min = 0, max = 1, step = 0.05)
-  )
-)
+    qwebr_calc_input("w_diagnostics", "Weight: diagnostics", value = 0.4, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_wiring_cost", "Weight: wiring cost", value = 0.15, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_commissioning_speed", "Weight: commissioning speed", value = 0.2, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_scalability", "Weight: scalability", value = 0.25, min = 0, max = 1, step = 0.05, type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -645,8 +647,10 @@ qwebr_calc_card(
     qwebr_calc_input("R_in", "Effective receiver input impedance", value = 500, min = 100, max = 1000000, step = 100, suffix = "Ω"),
     qwebr_calc_input("accuracy_spec_pct", "Required accuracy", value = 1, min = 0.05, max = 5, step = 0.05, suffix = "%"),
     qwebr_calc_input("L", "One-way cable length (m)", value = 180, min = 5, max = 1000, step = 5, type = "slider")
-  )
-)
+  ),
+  goal = "The panel meter stays tee'd in (receiver impedance 500 ohm) and the accuracy spec stays at 1 percent. What is the longest one-way run (nearest 5 m) that still passes?",
+  goal_test = "V_error_pct <= accuracy_spec_pct && L == 120 && R_in == 500 && accuracy_spec_pct == 1",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -765,8 +769,10 @@ qwebr_calc_card(
                                  "IP69K (independently rated stainless M12)")),
     qwebr_calc_input("seal_material", "Seal material", value = "Standard nitrile", type = "select",
                      options = c("Standard nitrile", "EPDM", "FKM/Viton"))
-  )
-)
+  ),
+  goal = "Specify a replacement sensor that passes the checklist in the direct-spray zone at 1500 psi. Which four choices have to change?",
+  goal_test = "!fails_checklist && in_direct_spray_zone && wash_pressure_psi == 1500",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -874,8 +880,10 @@ qwebr_calc_card(
     qwebr_calc_input("AI_total", "Analog inputs", value = 14, min = 0, max = 64, step = 1),
     qwebr_calc_input("AO_total", "Analog outputs", value = 4, min = 0, max = 64, step = 1),
     qwebr_calc_input("spare_margin", "Spare margin (fraction)", value = 0.15, min = 0, max = 0.5, step = 0.01, type = "slider")
-  )
-)
+  ),
+  goal = "The I/O budget allows 280 installed points. Get the total installed capacity down to 280 or fewer while keeping the 15 percent spare margin. Which input can you trim?",
+  goal_test = "DI$installed + DO$installed + AI$installed + AO$installed <= 280 && spare_margin >= 0.15",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -995,8 +1003,8 @@ qwebr_calc_card(
     qwebr_calc_input("L", "One-way cable length (m)", value = 950, min = 10, max = 3000, step = 10, type = "slider")
   ),
   goal = "Run a loop of 3000 m or more with a 14 V transmitter and a 250 ohm burden and pass the voltage budget, using a loop supply of no more than 30 V.",
-  goal_test = "L >= 3000 && V_transmitter_min >= 14 && R_burden >= 250 && V_supply_nominal <= 30 && margin_V >= 0"
-)
+  goal_test = "L >= 3000 && V_transmitter_min >= 14 && R_burden >= 250 && V_supply_nominal <= 30 && margin_V >= 0",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

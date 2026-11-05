@@ -8,7 +8,7 @@ webr:
     autorun: true
 ---
 
-## Four-Bar Linkages {#chap-09-linkages}
+# Four-Bar Linkages {#chap-09-linkages}
 
 ```{r setup-09, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -31,7 +31,7 @@ theme_linkage <- theme_minimal() +
   )
 ```
 
-### Learning Objectives {#sec-objectives-09}
+## Learning Objectives {#sec-objectives-09}
 
 By the end of this chapter, you will be able to:
 
@@ -45,7 +45,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** When you open a car hood, the hinges guide it through a specific path—rising up and forward—rather than just swinging in a simple arc. What mechanism might be hidden in the hinge to produce this carefully designed motion?
 :::
 
-### Introduction to Four-Bar Linkages {#sec-linkages-intro}
+## Introduction to Four-Bar Linkages {#sec-linkages-intro}
 
 The **four-bar linkage** is one of the most fundamental and versatile mechanisms in mechanical engineering. Despite its apparent simplicity—just four rigid links connected by four revolute (pin) joints—it can produce an extraordinary variety of motions. Four-bar linkages are found in countless applications, from automobile suspensions to robotic arms, from aircraft landing gear to simple hand tools.
 
@@ -61,7 +61,7 @@ A four-bar linkage converts **rotary motion** into complex **output motion** tha
 
 ***
 
-### Anatomy of a Four-Bar Linkage {-}
+## Anatomy of a Four-Bar Linkage {-}
 
 A four-bar linkage consists of four rigid members (links) connected in a closed loop by four revolute joints (pins).
 
@@ -172,11 +172,11 @@ ggplot() +
 
 ***
 
-### Grashof's Law {-}
+## Grashof's Law {-}
 
 **Grashof's Law** determines whether a four-bar linkage can achieve continuous rotation or is limited to oscillating (rocking) motion. This is the most fundamental criterion for classifying four-bar linkages.
 
-#### The Grashof Criterion {-}
+### The Grashof Criterion {-}
 
 For a four-bar linkage with link lengths $a$, $b$, $c$, and $g$:
 
@@ -193,7 +193,7 @@ $$S + L \leq P + Q$$
 
 ***
 
-#### Classification by Grashof Condition {-}
+### Classification by Grashof Condition {-}
 
 ```{r grashof-classification, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Classification of four-bar linkages based on Grashof's Law."}
 ggplot() +
@@ -263,7 +263,7 @@ ggplot() +
 
 ***
 
-#### Grashof Classification Summary {-}
+### Grashof Classification Summary {-}
 
 ```{r grashof-table, echo=FALSE, message=FALSE}
 grashof_types <- tribble(
@@ -286,9 +286,9 @@ grashof_types %>%
 
 ***
 
-### Types of Four-Bar Linkages {-}
+## Types of Four-Bar Linkages {-}
 
-#### Crank-Rocker Mechanism {-}
+### Crank-Rocker Mechanism {-}
 
 The **crank-rocker** is the most common four-bar linkage configuration. The input link (crank) rotates continuously while the output link (rocker) oscillates back and forth.
 
@@ -347,7 +347,7 @@ ggplot() +
 
 ***
 
-#### Double-Crank (Drag-Link) Mechanism {-}
+### Double-Crank (Drag-Link) Mechanism {-}
 
 In a **double-crank** or **drag-link** mechanism, both the input and output links can rotate continuously. This occurs when the **ground link is the shortest**.
 
@@ -405,7 +405,7 @@ ggplot() +
 
 ***
 
-#### Triple-Rocker (Non-Grashof) {-}
+### Triple-Rocker (Non-Grashof) {-}
 
 When the Grashof condition is **not satisfied** ($S + L > P + Q$), no link can complete a full revolution. All links are restricted to oscillating (rocking) motion.
 
@@ -456,11 +456,11 @@ ggplot() +
 
 ***
 
-### Position Analysis {-}
+## Position Analysis {-}
 
 Position analysis determines the configuration of a linkage for a given input angle. This is fundamental for understanding linkage motion and for design.
 
-#### Loop Closure Equation {-}
+### Loop Closure Equation {-}
 
 The four-bar linkage forms a closed vector loop:
 
@@ -542,7 +542,7 @@ ggplot() +
   theme_linkage
 ```
 
-#### Freudenstein's Equation {-}
+### Freudenstein's Equation {-}
 
 **Freudenstein's Equation** provides a relationship between input angle $\theta_2$ and output angle $\theta_4$:
 
@@ -556,7 +556,7 @@ This equation is particularly useful for **function generation** problems, where
 
 ***
 
-### Transmission Angle {-}
+## Transmission Angle {-}
 
 The **transmission angle** ($\mu$) is the angle between the coupler and the output link. It is a critical measure of linkage quality—how effectively force is transmitted through the mechanism.
 
@@ -611,7 +611,7 @@ ggplot() +
   theme_linkage
 ```
 
-#### Transmission Angle Formula {-}
+### Transmission Angle Formula {-}
 
 The transmission angle can be calculated using the **law of cosines**:
 
@@ -628,7 +628,7 @@ $$\cos\mu = \frac{b^2 + c^2 - (a^2 + g^2 - 2ag\cos\theta_2)}{2bc}$$
 
 ***
 
-### Coupler Curves {-}
+## Coupler Curves {-}
 
 One of the most powerful features of four-bar linkages is the ability to generate complex curves using a point attached to the coupler link. These **coupler curves** can approximate straight lines, circles, or other complex shapes.
 
@@ -720,7 +720,7 @@ ggplot() +
   theme_linkage
 ```
 
-#### Famous Coupler Curves {-}
+### Famous Coupler Curves {-}
 
 ```{r coupler-types-table, echo=FALSE, message=FALSE}
 coupler_types <- tribble(
@@ -743,10 +743,10 @@ coupler_types %>%
 
 \newpage
 
-### Applied Example: Grashof Classification {#linkage-example-1}
+## Applied Example: Grashof Classification {#linkage-example-1}
 
 ::: {.question}
-###### Problem Statement {-}
+##### Problem Statement {-}
 
 A four-bar linkage has the following link lengths:
 
@@ -764,7 +764,7 @@ Determine:
 :::
 
 ::: {.answer}
-###### Solution {-}
+##### Solution {-}
 
 
 ::: {.content-visible when-format="html"}
@@ -782,8 +782,8 @@ qwebr_calc_card(
     qwebr_calc_input("c", "Output link c", value = 60, min = 10, max = 300, step = 1, suffix = "mm")
   ),
   goal = "Turn the crank-rocker into a Grashof double-crank by changing only the ground link g (leave a = 40, b = 80 and c = 60 mm).",
-  goal_test = "mech_type == \"Double-Crank\" && SL < PQ && a == 40 && b == 80 && c == 60"
-)
+  goal_test = "mech_type == \"Double-Crank\" && SL < PQ && a == 40 && b == 80 && c == 60",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -928,7 +928,7 @@ results %>%
   row_spec(6, background = "#E3F2FD", bold = TRUE)
 ```
 
-###### Interpretation {-}
+##### Interpretation {-}
 
 - Since $S + L$ (`r SL` mm) is less than $P + Q$ (`r PQ` mm), this is a **Grashof linkage**.
 - The shortest link is the **input link (a = `r a` mm)**.
@@ -939,10 +939,10 @@ results %>%
 
 ***
 
-### Applied Example: Transmission Angle Analysis {#linkage-example-2}
+## Applied Example: Transmission Angle Analysis {#linkage-example-2}
 
 ::: {.question}
-###### Problem Statement {-}
+##### Problem Statement {-}
 
 
 For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), calculate the transmission angle when the input is at:
@@ -953,7 +953,7 @@ For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), ca
 :::
 
 ::: {.answer}
-###### Solution {-}
+##### Solution {-}
 
 
 ::: {.content-visible when-format="html"}
@@ -965,12 +965,12 @@ qwebr_calc_card(
   title = "Transmission Angle Calculator",
   icon = "gears",
   inputs = list(
-    qwebr_calc_input("a", "Input link a", value = 40, min = 10, max = 300, step = 1, suffix = "mm"),
-    qwebr_calc_input("b", "Coupler link b", value = 80, min = 10, max = 300, step = 1, suffix = "mm"),
-    qwebr_calc_input("c", "Output link c", value = 60, min = 10, max = 300, step = 1, suffix = "mm"),
-    qwebr_calc_input("g", "Ground link g", value = 100, min = 10, max = 300, step = 1, suffix = "mm")
-  )
-)
+    qwebr_calc_input("a", "Input link a", value = 40, min = 10, max = 300, step = 1, suffix = "mm", type = "slider"),
+    qwebr_calc_input("b", "Coupler link b", value = 80, min = 10, max = 300, step = 1, suffix = "mm", type = "slider"),
+    qwebr_calc_input("c", "Output link c", value = 60, min = 10, max = 300, step = 1, suffix = "mm", type = "slider"),
+    qwebr_calc_input("g", "Ground link g", value = 100, min = 10, max = 300, step = 1, suffix = "mm", type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -1100,7 +1100,7 @@ trans_results %>%
   row_spec(2, background = ifelse(mu_min > 40, "#E8F5E9", "#FFEBEE"), bold = TRUE)
 ```
 
-###### Quality Assessment {-}
+##### Quality Assessment {-}
 
 ```{r quality-assessment, echo=FALSE, message=FALSE}
 if (mu_min > 40) {
@@ -1126,11 +1126,11 @@ if (mu_min > 40) {
 
 ***
 
-### Try it yourself {#sec-tryit-fourbar}
+## Try it yourself {#sec-tryit-fourbar}
 
 These use linkages that are not in the worked examples. Each exercise checks your answer and lets you try again.
 
-#### Classify eight linkages {#sec-tryit-grashof-sort}
+### Classify eight linkages {#sec-tryit-grashof-sort}
 
 ```{r tryit-grashof-sort, echo=FALSE, results='asis'}
 gs <- data.frame(g = c(100, 30, 100, 100, 120, 100, 55, 90),
@@ -1171,7 +1171,7 @@ tryit_sort(
 )
 ```
 
-#### Transmission angle {#sec-tryit-trans-angle}
+### Transmission angle {#sec-tryit-trans-angle}
 
 A four-bar has input $a = 35$ mm, coupler $b = 85$ mm, output $c = 65$ mm and ground $g = 95$ mm. The input is at $\theta_2 = 75^\circ$.
 
@@ -1210,9 +1210,9 @@ That is within the "good" band (40 to 140 degrees) at this crank angle; the mini
 
 </details>
 
-### Design Guidelines {-}
+## Design Guidelines {-}
 
-#### Link Length Selection {-}
+### Link Length Selection {-}
 
 | Design Goal | Guideline |
 |:------------|:----------|
@@ -1222,7 +1222,7 @@ That is within the "good" band (40 to 140 degrees) at this crank angle; the mini
 | **Avoid toggle positions** | Transmission angle should not approach 0° or 180° |
 | **Symmetrical output** | Consider time ratio requirements |
 
-#### Time Ratio {-}
+### Time Ratio {-}
 
 The **time ratio** (TR) describes how the output motion is divided between forward and return strokes:
 
@@ -1234,16 +1234,16 @@ For a **quick-return mechanism**, TR > 1, meaning the return stroke is faster th
 
 ***
 
-### Summary Equations {-}
+## Summary Equations {-}
 
-#### Grashof Classification {-}
+### Grashof Classification {-}
 
 | Equation | Description |
 |:---------|:------------|
 | $S + L \leq P + Q$ | Grashof condition for continuous rotation |
 | $S$ = shortest, $L$ = longest | Identify extreme link lengths |
 
-#### Position Analysis {-}
+### Position Analysis {-}
 
 | Equation | Description |
 |:---------|:------------|
@@ -1251,7 +1251,7 @@ For a **quick-return mechanism**, TR > 1, meaning the return stroke is faster th
 | $a\sin\theta_2 + b\sin\theta_3 = c\sin\theta_4$ | Y-component loop closure |
 | $K_1\cos\theta_4 - K_2\cos\theta_2 + K_3 = \cos(\theta_2 - \theta_4)$ | Freudenstein's equation |
 
-#### Transmission Angle {-}
+### Transmission Angle {-}
 
 | Equation | Description |
 |:---------|:------------|
@@ -1260,7 +1260,7 @@ For a **quick-return mechanism**, TR > 1, meaning the return stroke is faster th
 
 ***
 
-### Design Checklist {-}
+## Design Checklist {-}
 
 **For Four-Bar Linkage Design:**
 
@@ -1277,7 +1277,7 @@ For a **quick-return mechanism**, TR > 1, meaning the return stroke is faster th
 
 ***
 
-### Common Applications {-}
+## Common Applications {-}
 
 ```{r applications-table, echo=FALSE, message=FALSE}
 applications <- tribble(

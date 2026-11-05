@@ -1,4 +1,4 @@
-## Planar Linkages {#chap-10-planar-linkages}
+# Planar Linkages {#chap-10-planar-linkages}
 
 ```{r setup-101, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -21,7 +21,7 @@ theme_linkage10 <- theme_minimal() +
   )
 ```
 
-### Learning Objectives {#sec-objectives-linkages}
+## Learning Objectives {#sec-objectives-linkages}
 
 By the end of this chapter, you will be able to:
 
@@ -39,7 +39,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** A car door opens and closes smoothly along a precise arc. A folding chair locks rigid under your weight but folds flat for storage. An excavator arm digs with enormous force and then repositions with surprising speed. All of these are *mechanisms* — assemblies of rigid bodies connected by joints. Before reading on, ask yourself: what makes one joint different from another, and how would you count how many ways a mechanism can move?
 :::
 
-### Introduction to Planar Linkages {#sec-linkages10-intro}
+## Introduction to Planar Linkages {#sec-linkages10-intro}
 
 A **mechanism** is an assembly of rigid bodies (**links**) connected by **joints** in such a way that a constrained, predictable motion is produced. When all links move in parallel planes, the mechanism is called a **planar linkage**. Planar linkages are by far the most common class of mechanism in engineering: four-bar linkages, slider-cranks, toggle clamps, windshield wipers, recliner chairs, and landing gear retractors are all examples.
 
@@ -54,7 +54,7 @@ Understanding planar linkages begins with two fundamental questions:
 
 ***
 
-### Types of Joints {#sec-joint-types-10}
+## Types of Joints {#sec-joint-types-10}
 
 A **joint** (also called a **kinematic pair**) is a connection between two links that permits relative motion while constraining other motions. Joints are classified into three families:
 
@@ -64,7 +64,7 @@ A **joint** (also called a **kinematic pair**) is a connection between two links
 
 The classification matters because each joint type removes a specific number of degrees of freedom from the connected pair of bodies.
 
-#### Lower Pair Joints {#sec-lower-pairs-10}
+### Lower Pair Joints {#sec-lower-pairs-10}
 
 Lower pairs have **surface-to-surface** contact. Because load is distributed over an area, lower pairs can transmit large forces and are preferred in heavy-duty applications. There are exactly **six** lower pair types.
 
@@ -110,7 +110,7 @@ A free rigid body in a plane has **3 DOF** — it can translate in x, translate 
 
 ***
 
-#### Higher Pair Joints {#sec-higher-pairs-10}
+### Higher Pair Joints {#sec-higher-pairs-10}
 
 Higher pairs have **point or line contact** between the two mating bodies. Because contact area is small, stress concentrations are high and higher pairs are typically used for force transmission over short distances (cams, gears) rather than structural support. The number of DOF a higher pair removes depends on the geometry of contact.
 
@@ -131,7 +131,7 @@ The two higher-pair types most common in planar mechanisms are:
 
 ***
 
-#### Compound Joints {#sec-compound-joints-10}
+### Compound Joints {#sec-compound-joints-10}
 
 A **compound joint** (also called a **multiple joint**) occurs when **three or more links** share the same joint location. This is common in complex linkages where multiple links pivot about the same point.
 
@@ -151,11 +151,11 @@ For example, if links 2, 3, and 4 all share a common revolute axis, that locatio
 
 ***
 
-### Schematic Representation of Planar Linkages {#sec-schematics-10}
+## Schematic Representation of Planar Linkages {#sec-schematics-10}
 
 Real mechanisms — water pumps, recliner chairs, robotic arms — are complex, three-dimensional objects. Before analysing them, engineers abstract them into **kinematic schematics**: simplified line diagrams that preserve the topology (what connects to what) and the joint types, but discard all shape, size, and material detail not needed for motion analysis.
 
-#### Link Shapes and Their Schematic Equivalents {#sec-link-shapes-10}
+### Link Shapes and Their Schematic Equivalents {#sec-link-shapes-10}
 
 The first step is recognising that physical link shapes reduce to simple schematic symbols:
 
@@ -182,7 +182,7 @@ knitr::include_graphics("images/linkage-practice-recliner-excavator.jpg")
 
 ***
 
-#### Joint Schematic Symbols {#sec-joint-symbols-10}
+### Joint Schematic Symbols {#sec-joint-symbols-10}
 
 In kinematic schematics:
 
@@ -191,7 +191,7 @@ In kinematic schematics:
 - A **fixed pivot** (joint attached to ground) uses **hatch marks** on the ground link
 - A **compound joint** is still drawn as one circle but *labelled* or counted accordingly
 
-#### Numbering Links and Joints {#sec-numbering-10}
+### Numbering Links and Joints {#sec-numbering-10}
 
 The standard engineering convention for numbering is:
 
@@ -218,9 +218,9 @@ The naming convention **RRRR** or **RRRP** describes the joint sequence around t
 
 ***
 
-### Degrees of Freedom and Mobility {#sec-dof-10}
+## Degrees of Freedom and Mobility {#sec-dof-10}
 
-#### The Concept of Degrees of Freedom {#sec-dof-concept-10}
+### The Concept of Degrees of Freedom {#sec-dof-concept-10}
 
 The **degree of freedom (DOF)** of a body is the number of **independent coordinates** needed to completely describe its position and orientation.
 
@@ -247,7 +247,7 @@ When bodies are connected by joints, DOF are *removed*. Each full joint (1 DOF p
 
 ***
 
-#### The Gruebler–Kutzbach Formula {#sec-gruebler-10}
+### The Gruebler–Kutzbach Formula {#sec-gruebler-10}
 
 The mobility of a **planar** mechanism is calculated using the **Gruebler–Kutzbach equation**:
 
@@ -305,22 +305,22 @@ ggplot() +
 
 ***
 
-### Calculating Mobility: Worked Examples {#sec-mobility-examples-10}
+## Calculating Mobility: Worked Examples {#sec-mobility-examples-10}
 
-#### Example 1: Simple Four-Bar Linkage {-}
+### Example 1: Simple Four-Bar Linkage {-}
 
 ```{r fig-ex1-fourbar-10, echo=FALSE, fig.cap="Example 1 — Simple planar four-bar linkage (RRRR). Link 1 is the ground (hatched). Links 2–4 are moving links. Four revolute joints connect them in a closed loop.", fig.align='center', out.width='70%'}
 knitr::include_graphics("images/linkage-ex1-fourbar-dof.jpg")
 ```
 
 ::: {.question}
-###### Problem Statement {-}
+##### Problem Statement {-}
 
 Determine the mobility of the planar four-bar linkage shown in Figure @fig-ex1-fourbar-10. All joints are revolute (pin) joints.
 :::
 
 ::: {.answer}
-###### Solution {-}
+##### Solution {-}
 
 **Step 1: Count links ($n$)**
 
@@ -373,20 +373,20 @@ ex1 %>%
 
 ***
 
-#### Example 2: Complex Multi-Link Mechanism {-}
+### Example 2: Complex Multi-Link Mechanism {-}
 
 ```{r fig-ex2-complex-10, echo=FALSE, fig.cap="Example 2 — Complex planar linkage with 7 links, 3 fixed pivots (ground joints), and 8 revolute joints total. All joints have connectivity 1 (full joints). Link numbering follows standard convention.", fig.align='center', out.width='75%'}
 knitr::include_graphics("images/linkage-ex2-complex-dof.jpg")
 ```
 
 ::: {.question}
-###### Problem Statement {-}
+##### Problem Statement {-}
 
 Determine the mobility of the planar linkage shown in Figure @fig-ex2-complex-10. The mechanism is planar and **all joints have connectivity 1**.
 :::
 
 ::: {.answer}
-###### Solution {-}
+##### Solution {-}
 
 **Step 1:** $n = 7$ (links 1 through 7, link 1 = ground)
 
@@ -422,20 +422,20 @@ ex2 %>%
 
 ***
 
-#### Example 3: Compound Joints (Coincident Links) {-}
+### Example 3: Compound Joints (Coincident Links) {-}
 
 ```{r fig-ex3-compound-10, echo=FALSE, fig.cap="Example 3 — Planar linkage where links 3, 4, and 5 all share the same revolute joint axis (compound joint). The right-hand detail shows the physical slider-pin arrangement. This compound joint counts as (3-1) = 2 full joints.", fig.align='center', out.width='90%'}
 knitr::include_graphics("images/linkage-ex3-compound-joints.jpg")
 ```
 
 ::: {.question}
-###### Problem Statement {-}
+##### Problem Statement {-}
 
 Determine the mobility of the planar linkage in Figure @fig-ex3-compound-10. All joints have connectivity 1. **Links 3, 4, and 5 are all connected at the same revolute joint axis** (compound joint).
 :::
 
 ::: {.answer}
-###### Solution {-}
+##### Solution {-}
 
 **Step 1:** $n = 6$ (links 1 through 6)
 
@@ -463,20 +463,20 @@ $$M = 3(6 - 1) - 2(7) - 0 = 15 - 14 = \boxed{1}$$
 
 ***
 
-#### Example 4: Mechanism Containing a Higher Pair {-}
+### Example 4: Mechanism Containing a Higher Pair {-}
 
 ```{r fig-ex4-higher-pair-10, echo=FALSE, fig.cap="Example 4 — Complex planar linkage with 11 links and a pin-in-slot joint (higher pair, fi = 2). The pin-in-slot allows both rotation and sliding between the connected links, so it removes only 1 DOF (half joint, j2 = 1).", fig.align='center', out.width='85%'}
 knitr::include_graphics("images/linkage-ex4-higher-pair.png")
 ```
 
 ::: {.question}
-###### Problem Statement {-}
+##### Problem Statement {-}
 
 Determine the mobility of the planar linkage shown in Figure @fig-ex4-higher-pair-10. The mechanism has 11 links and is planar. **One joint is a pin-in-slot** (labelled $f_i = 2$, meaning it permits 2 DOF, i.e. it is a half joint). All other joints are full revolute joints.
 :::
 
 ::: {.answer}
-###### Solution {-}
+##### Solution {-}
 
 **Step 1: Count links ($n$)**
 
@@ -524,7 +524,7 @@ ex4 %>%
 
 ***
 
-### Mobility Chart: Quick Reference {#sec-mobility-chart-10}
+## Mobility Chart: Quick Reference {#sec-mobility-chart-10}
 
 ```{r fig-mobility-chart-10, echo=FALSE, fig.width=10, fig.height=5.5, fig.align='center', fig.cap="Mobility values and their physical meaning. M = 1 is the target for most single-actuator mechanisms."}
 mob_data <- data.frame(
@@ -557,11 +557,11 @@ ggplot(mob_data, aes(x = factor(M), y = 1)) +
 
 ***
 
-### Common M = 1 Linkage Families {#sec-m1-families-10}
+## Common M = 1 Linkage Families {#sec-m1-families-10}
 
 Once you know how to calculate mobility, a natural next question is: *which combinations of links and joints give M = 1?* The Gruebler–Kutzbach formula rearranged for the M = 1 case shows that specific $(n, j_1)$ pairs satisfy this condition.
 
-#### Structural Numbers for M = 1 {#sec-structural-numbers-10}
+### Structural Numbers for M = 1 {#sec-structural-numbers-10}
 
 Setting $M = 1$ and $j_2 = 0$ in Equation @eq-gruebler-10 and solving gives the relationship $j_1 = \frac{3n - 4}{2}$, which requires $n$ to be even. Table @tbl-m1-solutions-10 lists valid combinations.
 
@@ -597,7 +597,7 @@ The key practical insight is that the **four-bar linkage** (n = 4, j₁ = 4) is 
 
 ***
 
-#### Four-Bar Linkage Variants {#sec-fourbar-variants-10}
+### Four-Bar Linkage Variants {#sec-fourbar-variants-10}
 
 The M = 1, n = 4 family includes both the RRRR and RRRP configurations:
 
@@ -609,7 +609,7 @@ These are the two building blocks of most simple single-actuator machines. The R
 
 ***
 
-#### Six-Bar Linkage Families {#sec-sixbar-10}
+### Six-Bar Linkage Families {#sec-sixbar-10}
 
 Moving to n = 6 gives two topologically distinct M = 1 chains, both with $j_1 = 7$:
 
@@ -626,7 +626,7 @@ knitr::include_graphics("images/linkage-watt-stephenson-chains.png")
 **Industry Application:** Six-bar Watt and Stephenson chains appear in stamping press feed mechanisms, where the additional link (versus a four-bar) allows independent control of both the stroke profile and the dwell period — something a four-bar alone cannot achieve.
 :::
 
-#### Linkages with Mixed Joint Types {#sec-mixed-joints-10}
+### Linkages with Mixed Joint Types {#sec-mixed-joints-10}
 
 When prismatic joints replace some revolute joints, new M = 1 families emerge with different motion characteristics:
 
@@ -645,13 +645,13 @@ These mixed-joint families are used in:
 
 ***
 
-### Linkage Inversions {#sec-inversions-10}
+## Linkage Inversions {#sec-inversions-10}
 
 A **kinematic inversion** is produced by **fixing a different link** of the same kinematic chain as the ground link. The relative motion between any two links remains unchanged — but which link appears to move and which appears fixed changes completely. This is a powerful design technique: one kinematic chain can produce multiple distinct machines.
 
 > Inversion does not change the motion of any pair of links relative to each other. It only changes which link is observed as fixed.
 
-#### Slider-Crank Inversions {#sec-slider-crank-inversions-10}
+### Slider-Crank Inversions {#sec-slider-crank-inversions-10}
 
 The RRRP slider-crank chain has **four possible inversions**, depending on which of the four links is fixed as ground:
 
@@ -670,7 +670,7 @@ knitr::include_graphics("images/linkage-slider-crank-inversions.png")
 **Industry Application (Defense):** The Whitworth quick-return mechanism (inversion c) was used in metal shaper machines to machine flat surfaces. The return stroke is faster than the cutting stroke, saving cycle time. In modern CNC machines, the same kinematic principle underlies asymmetric motion profiles programmed into servo controllers.
 :::
 
-#### Pin-in-Slot Inversions {#sec-pin-slot-inversions-10}
+### Pin-in-Slot Inversions {#sec-pin-slot-inversions-10}
 
 A pin-in-slot chain (which contains a higher pair) also yields multiple inversions with very different motion outputs:
 
@@ -684,7 +684,7 @@ knitr::include_graphics("images/linkage-pin-slot-inversions.png")
 
 ***
 
-### Industrial Case Study: Front-End Loader Bucket Linkage {#sec-frontend-loader-10}
+## Industrial Case Study: Front-End Loader Bucket Linkage {#sec-frontend-loader-10}
 
 The front-end loader is an excellent example of planar linkage analysis in a real machine. The bucket support system is a multi-link planar linkage that must:
 
@@ -701,7 +701,7 @@ knitr::include_graphics("images/linkage-frontend-loader-schematic.png")
 ```
 
 ::: {.question}
-###### Case Study Problem {-}
+##### Case Study Problem {-}
 
 From the schematic in Figure @fig-frontend-loader-schematic-10:
 
@@ -711,7 +711,7 @@ c) Explain why the real machine uses **parallel actuators** on both sides and wh
 :::
 
 ::: {.answer}
-###### Solution {-}
+##### Solution {-}
 
 **a) Count links and joints:**
 
@@ -736,7 +736,7 @@ This deliberate overconstrained design is common in heavy equipment and is a key
 
 ***
 
-### Summary of Key Formulas {#sec-summary-formulas-10}
+## Summary of Key Formulas {#sec-summary-formulas-10}
 
 | Formula | Equation | When to Use |
 |:--------|:---------|:------------|
@@ -749,7 +749,7 @@ This deliberate overconstrained design is common in heavy equipment and is a key
 
 ***
 
-### Design Checklist {#sec-checklist-10}
+## Design Checklist {#sec-checklist-10}
 
 **When analysing or designing a planar linkage:**
 
@@ -766,11 +766,11 @@ This deliberate overconstrained design is common in heavy equipment and is a key
 
 ***
 
-### Try it yourself {#sec-tryit-linkages}
+## Try it yourself {#sec-tryit-linkages}
 
 These use mechanisms that are not in the worked examples. Each exercise checks your answer and lets you try again.
 
-#### Mobility of six mechanisms {#sec-tryit-mobility}
+### Mobility of six mechanisms {#sec-tryit-mobility}
 
 Use the Gruebler-Kutzbach formula $M = 3(n - 1) - 2 j_1 - j_2$. A pin that joins three links counts as **two** joints, and a joint that joins two links counts as one.
 
@@ -819,7 +819,7 @@ The last row gives $M = 3(5) - 2(8) = -1$: it cannot move unless link lengths ha
 
 </details>
 
-#### Classify the joints {#sec-tryit-joint-classes}
+### Classify the joints {#sec-tryit-joint-classes}
 
 ```{r tryit-joint-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -850,10 +850,10 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-practice-10}
+## Practice Problems {#sec-practice-10}
 
 ::: {.question}
-###### Problem 1 {-}
+##### Problem 1 {-}
 
 A slider-crank mechanism (RRRP) consists of: a crank (link 2), a connecting rod (link 3), a slider/piston (link 4), and the engine block as ground (link 1). There are three revolute joints and one prismatic joint.
 
@@ -863,7 +863,7 @@ c) What does this mobility value tell you about the number of actuators needed?
 :::
 
 ::: {.answer}
-###### Solution 1 {-}
+##### Solution 1 {-}
 
 a) $n = 4$, $j_1 = 4$ (three R + one P, all full joints), $j_2 = 0$
 
@@ -873,7 +873,7 @@ c) $M = 1$ — exactly one motor drives the crankshaft, and the entire piston me
 :::
 
 ::: {.question}
-###### Problem 2 {-}
+##### Problem 2 {-}
 
 A folding chair mechanism has 5 links (including ground) and uses a pin-in-slot joint where the seat pin (a revolute joint on one link) rides in a slot (a prismatic guide) on another link. There are also 4 regular revolute joints.
 
@@ -883,7 +883,7 @@ c) Is this a valid single-actuator mechanism?
 :::
 
 ::: {.answer}
-###### Solution 2 {-}
+##### Solution 2 {-}
 
 a) $n = 5$, $j_1 = 4$ (four standard revolute joints), $j_2 = 1$ (the pin-in-slot = half joint)
 
@@ -893,7 +893,7 @@ c) No — $M = 3$ means the chair has three unconstrained DOF in this configurat
 :::
 
 ::: {.question}
-###### Problem 3 {-}
+##### Problem 3 {-}
 
 A Watt six-bar linkage has $n = 6$ links and $j_1 = 7$ full joints.
 
@@ -903,7 +903,7 @@ c) Name one industrial application of a Watt six-bar mechanism
 :::
 
 ::: {.answer}
-###### Solution 3 {-}
+##### Solution 3 {-}
 
 a) $M = 3(6-1) - 2(7) - 0 = 15 - 14 = 1$ ✓
 
@@ -913,7 +913,7 @@ c) Stamping press feeder, walking machine leg, variable-dwell mechanism.
 :::
 
 ::: {.question}
-###### Problem 4 (Challenge) {-}
+##### Problem 4 (Challenge) {-}
 
 An excavator arm (see Figure @fig-practice-links-10) has the following schematic: ground link + 4 moving links, 5 revolute joints, and 1 compound joint where 3 links share the same pin axis.
 
@@ -927,7 +927,7 @@ d) Name each inversion of a four-bar linkage and give one real-world application
 
 \newpage
 
-### Key Takeaways {#sec-takeaways-10}
+## Key Takeaways {#sec-takeaways-10}
 
 1. **Joint type determines constraint.** Lower pairs (surface contact) remove 2 DOF each (revolute, prismatic) or fewer; higher pairs (point/line contact) remove only 1 DOF. Compound joints count as $(m-1)$ full joints.
 

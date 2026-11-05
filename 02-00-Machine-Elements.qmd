@@ -21,7 +21,7 @@ In this section, you will learn to:
 **Before You Begin:** Think about a machine you use every day—perhaps a car, a bicycle, or even a power drill. How many different machine elements can you identify? How do they work together to accomplish the machine's function?
 :::
 
-### Why Machine Elements Matter
+## Why Machine Elements Matter
 
 Machine elements are the vocabulary of mechanical design. Just as a writer must understand words before constructing sentences, an engineer must understand machine elements before designing machines. Each element has:
 
@@ -30,7 +30,7 @@ Machine elements are the vocabulary of mechanical design. Just as a writer must 
 - **Known failure modes** that guide proper selection and application
 - **Catalog data** from manufacturers that simplifies selection
 
-### Chapters in This Section
+## Chapters in This Section
 
 | Chapter | Topic | Key Skills |
 |:--------|:------|:-----------|
@@ -42,7 +42,7 @@ Machine elements are the vocabulary of mechanical design. Just as a writer must 
 | 2.6 | Chain Drives | Sprocket selection, chain length |
 | 2.7 | Couplings and Clutches | Misalignment, friction clutch torque |
 
-### Industry Applications
+## Industry Applications
 
 The machine elements covered in this section are used across all industries where our students will work:
 

@@ -482,7 +482,11 @@
       input.addEventListener("input", function () {
         if (input.type === "range") {
           const readout = card.querySelector(`[data-readout-for="${input.id}"]`);
-          if (readout) readout.textContent = Number(input.value).toLocaleString();
+          if (readout) {
+            const n = Number(input.value).toLocaleString("en-US").replace(/,/g, " ");
+            const suf = readout.dataset.suffix;
+            readout.textContent = (readout.dataset.prefix || "") + n + (suf ? " " + suf : "");
+          }
         }
         run();
       });

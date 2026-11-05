@@ -1,4 +1,4 @@
-## Design for Welding {#chap-welding}
+# Design for Welding {#chap-welding}
 
 ```{r setup-06, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -20,7 +20,7 @@ theme_welding <- theme_minimal() +
   )
 ```
 
-### Learning Objectives {#sec-objectives-06}
+## Learning Objectives {#sec-objectives-06}
 
 By the end of this chapter, you will be able to:
 
@@ -34,7 +34,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Consider a bicycle frame, a ship's hull, and a skyscraper's steel structure. What do they all have in common? They all rely heavily on welded connections. Why do you think welding was chosen over bolting or riveting for these applications?
 :::
 
-### Introduction to Design for Welding {#sec-welding-intro}
+## Introduction to Design for Welding {#sec-welding-intro}
 
 Welding is the most widely used method for permanently joining metals in structural, mechanical, and industrial applications. Unlike mechanical fastening, welding creates a **metallurgical bond** between components, resulting in joints that can be as strong as—or stronger than—the base materials themselves.
 
@@ -46,11 +46,11 @@ Designing for welding requires careful consideration of joint geometry, material
 
 ---
 
-### The Welding Process Fundamentals {#sec-welding-fundamentals}
+## The Welding Process Fundamentals {#sec-welding-fundamentals}
 
 Welding joins materials by applying **heat**, **pressure**, or both, with or without filler material. The most common welding processes use heat to melt the base metals at the joint interface.
 
-#### Key Welding Terminology
+### Key Welding Terminology
 
 ```{r welding-terminology, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Cross-section of a typical fusion weld showing key zones and terminology."}
 ggplot() +
@@ -162,7 +162,7 @@ The HAZ is often the weakest part of a welded joint, which is why proper heat in
 
 ---
 
-### Types of Weld Joints {#sec-weld-joints}
+## Types of Weld Joints {#sec-weld-joints}
 
 A **weld joint** is the configuration of the parts to be joined. The five basic joint types can accommodate various types of welds.
 
@@ -220,7 +220,7 @@ ggplot() +
   theme_welding
 ```
 
-#### Joint Selection Guide
+### Joint Selection Guide
 
 | Joint Type | Typical Applications | Advantages | Limitations |
 |:-----------|:--------------------|:-----------|:------------|
@@ -250,11 +250,11 @@ A lap joint would introduce eccentricity and stress concentration, making it uns
 
 ---
 
-### Types of Welds {#sec-weld-types}
+## Types of Welds {#sec-weld-types}
 
 Within each joint type, different **weld types** can be applied. The two most common are fillet welds and groove welds.
 
-#### Fillet Welds
+### Fillet Welds
 
 **Fillet welds** are triangular in cross-section and are used to join surfaces at approximately right angles (T-joints, lap joints, corner joints).
 
@@ -348,7 +348,7 @@ The theoretical throat is **5.66 mm**.
 
 ---
 
-#### Groove Welds
+### Groove Welds
 
 **Groove welds** are made in a groove between the edges of the parts to be joined. They are used primarily for butt joints and provide full or partial penetration.
 
@@ -432,7 +432,7 @@ ggplot() +
   theme_welding
 ```
 
-#### Groove Weld Parameters
+### Groove Weld Parameters
 
 ```{r groove-parameters, echo=FALSE, fig.width=8, fig.height=6, fig.align='center', fig.cap="Key dimensions in groove weld preparation."}
 ggplot() +
@@ -505,7 +505,7 @@ The trade-off is that the plate must be flipped or welders must work from both s
 
 </details>
 
-#### Single vs. Double Weld Configurations
+### Single vs. Double Weld Configurations
 
 Figure @fig-weld-types-config-ref provides a comprehensive reference showing single and double configurations for various weld types.
 
@@ -529,7 +529,7 @@ knitr::include_graphics("images/C26_F05_pg212.jpg")
 
 ---
 
-### Welding Symbols {#sec-weld-symbols}
+## Welding Symbols {#sec-weld-symbols}
 
 Welding symbols provide a standardized way to communicate welding requirements on engineering drawings. Understanding these symbols is essential for both designers and fabricators.
 
@@ -537,7 +537,7 @@ Welding symbols provide a standardized way to communicate welding requirements o
 **Industry Application:** In automotive manufacturing at plants like Toyota and Ford, welding symbols on assembly drawings must be precisely interpreted by robotic welding systems and quality inspectors. A misread symbol can result in structural failures or costly rework.
 :::
 
-#### Standard Welding Symbol Elements
+### Standard Welding Symbol Elements
 
 Figure @fig-weld-symbol-elements-ref shows the standard location of elements in a welding symbol according to AWS (American Welding Society) standards.
 
@@ -557,7 +557,7 @@ knitr::include_graphics("images/C26_F03_pg211.jpg")
 **Important Rule:** Information placed **below** the reference line applies to the **arrow side** of the joint. Information **above** the reference line applies to the **other side** (opposite the arrow).
 :::
 
-#### Basic Weld Type Symbols
+### Basic Weld Type Symbols
 
 Figure @fig-basic-weld-symbols-ref shows the basic weld symbols for common weld types, organized by category.
 
@@ -630,7 +630,7 @@ ggplot() +
   theme_welding
 ```
 
-#### Common Weld Symbols
+### Common Weld Symbols
 
 ```{r weld-symbol-types, echo=FALSE, fig.width=12, fig.height=6, fig.align='center', fig.cap="Common weld type symbols."}
 ggplot() +
@@ -692,7 +692,7 @@ ggplot() +
   theme_welding
 ```
 
-#### Supplementary Symbols
+### Supplementary Symbols
 
 ```{r supplementary-symbols, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Supplementary welding symbols."}
 ggplot() +
@@ -771,7 +771,7 @@ This is an **intermittent fillet weld** pattern: 50 mm long welds spaced 100 mm 
 
 </details>
 
-#### Welding Process Designations
+### Welding Process Designations
 
 When a specific welding process is required, it is indicated in the tail of the welding symbol using standard letter designations. Figure @fig-process-designations-ref provides the complete AWS designation system.
 
@@ -798,7 +798,7 @@ knitr::include_graphics("images/C26_F08_pg214.jpg")
 **Automotive Industry:** In vehicle body assembly, spot welding (RSW) dominates with thousands of spot welds per vehicle. The welding symbol would show the RSW designation in the tail, along with any specification references like AWS D8.9 (Automotive Weld Quality standards).
 :::
 
-#### Multiple Reference Lines and Welding Sequence
+### Multiple Reference Lines and Welding Sequence
 
 When multiple welding operations are required at the same joint, multiple reference lines are used to indicate the sequence.
 
@@ -812,7 +812,7 @@ knitr::include_graphics("images/C26_F09_pg214.jpg")
 - Subsequent operations are read from bottom to top (or closest to farthest from arrow)
 - This is critical for back gouging, backing welds, and multi-pass procedures
 
-#### Reading Fillet Weld Specifications
+### Reading Fillet Weld Specifications
 
 Figure @fig-typical-fillet-welds-ref provides a comprehensive reference for interpreting fillet weld symbols with various dimension configurations.
 
@@ -849,7 +849,7 @@ Staggered intermittent welds provide:
 This is particularly important for long joints on thin materials where distortion is a concern.
 </details>
 
-#### Weld Length Location by Dimensions
+### Weld Length Location by Dimensions
 
 When welds don't extend the full length of a joint, dimensions on the drawing locate where the weld should be placed.
 
@@ -863,7 +863,7 @@ knitr::include_graphics("images/C26_F11_pg215.jpg")
 - Standard dimensioning practices locate the weld start/end points
 - This is common for gussets, brackets, and partial-length stiffeners
 
-#### When to Use All-Around Symbols
+### When to Use All-Around Symbols
 
 Figure @fig-all-around-examples-ref illustrates when the all-around symbol is required versus when it's not needed.
 
@@ -884,11 +884,11 @@ knitr::include_graphics("images/C26_F12_pg216.jpg")
 **Design Tip:** When in doubt, include the all-around symbol. It adds clarity and prevents misinterpretation, even if technically redundant for circular profiles.
 :::
 
-### Advanced Groove Weld Symbols {#sec-groove-weld-symbols}
+## Advanced Groove Weld Symbols {#sec-groove-weld-symbols}
 
 Groove welds require more detailed specifications than fillet welds because of the edge preparation involved. This section covers how to read and specify groove weld symbols properly.
 
-#### Arrow Break Convention for Bevel and J-Groove Welds
+### Arrow Break Convention for Bevel and J-Groove Welds
 
 For groove welds that require preparation on only one side (bevel, J-groove), the arrow must indicate which member receives the preparation.
 
@@ -906,7 +906,7 @@ knitr::include_graphics("images/C27_F01_pg219.jpg")
 **Common Error:** Misreading the arrow break direction can result in preparing the wrong member, wasting time and material. Always verify which member should be beveled before cutting!
 :::
 
-#### Groove Weld Combined Dimensions
+### Groove Weld Combined Dimensions
 
 Figure @fig-groove-combined-dims-ref shows how multiple dimensions are combined on groove weld symbols.
 
@@ -929,7 +929,7 @@ knitr::include_graphics("images/C27_F02_pg219.jpg")
 - `25°` is the groove angle on each side
 - The interpretation shows the actual joint geometry
 
-#### Complete Joint Penetration (CJP) Welds
+### Complete Joint Penetration (CJP) Welds
 
 Complete joint penetration welds extend through the full thickness of the joint, providing maximum strength. These are required for critical structural connections.
 
@@ -949,7 +949,7 @@ knitr::include_graphics("images/C27_F03_pg220.jpg")
 **Defense Industry:** In military vehicle armor welding, CJP welds are mandatory for ballistic performance. A partial penetration weld would create a weak point that could be exploited by projectile impact.
 :::
 
-#### Partial Joint Penetration (PJP) Welds
+### Partial Joint Penetration (PJP) Welds
 
 When full penetration is not required, partial joint penetration welds are more economical. The depth of penetration is specified on the symbol.
 
@@ -985,7 +985,7 @@ Penetration ratio = 0.50" / 0.75" = 67%
 The groove preparation extends 67% through the material thickness. The remaining 33% (0.25") remains unaffected by the groove and provides the root face that the weld must penetrate.
 </details>
 
-#### Double-Groove Welds
+### Double-Groove Welds
 
 For thick plates, double-groove welds (welded from both sides) are more efficient than single-groove welds.
 
@@ -1004,7 +1004,7 @@ knitr::include_graphics("images/C27_F05_pg221.jpg")
 **Design Trade-off:** Double-groove welds require access to both sides of the joint. In a closed box section or where one side is inaccessible, you must use single-groove with backing or back-gouging from one side.
 :::
 
-#### Combined Groove and Fillet Welds
+### Combined Groove and Fillet Welds
 
 In T-joints and corner joints requiring full strength, groove welds may be combined with reinforcing fillet welds.
 
@@ -1021,7 +1021,7 @@ knitr::include_graphics("images/C27_F06_pg221.jpg")
 
 The welding symbol shows both the groove and fillet symbols, with their respective dimensions.
 
-#### Flare Groove Welds
+### Flare Groove Welds
 
 Flare groove welds are used when joining round or curved members.
 
@@ -1038,7 +1038,7 @@ knitr::include_graphics("images/C27_F07_pg221.jpg")
 
 The effective throat of flare welds depends on the radius of curvature and penetration achieved. Standard formulas or welding codes specify how to calculate the effective throat.
 
-#### Back Welds and Backing Welds
+### Back Welds and Backing Welds
 
 Back welds and backing welds ensure complete penetration when access to both sides is possible.
 
@@ -1057,7 +1057,7 @@ knitr::include_graphics("images/C27_F08_pg222.jpg")
 **Sequence Matters:** The symbol itself is the same - the note "BACK WELD" or "BACKING WELD" clarifies the sequence. In the absence of a note, AWS convention treats it as a backing weld (made first).
 :::
 
-#### Melt-Through Symbols
+### Melt-Through Symbols
 
 The melt-through symbol indicates that complete joint penetration must be achieved with visible root reinforcement on the opposite side.
 
@@ -1083,9 +1083,9 @@ knitr::include_graphics("images/C27_F09_pg223.jpg")
 
 ---
 
-### 📏 Design Guidelines for Welded Joints {-}
+## 📏 Design Guidelines for Welded Joints {-}
 
-#### Joint Accessibility
+### Joint Accessibility
 
 The welder must have adequate access to create a quality weld. Poor accessibility leads to defects.
 
@@ -1150,7 +1150,7 @@ ggplot() +
 
 ---
 
-#### Weld Sizing
+### Weld Sizing
 
 Welds should be sized based on the loads they must carry—not too small (weak) and not too large (wasteful and causes distortion).
 
@@ -1223,7 +1223,7 @@ In practice, you might use 5 mm to provide a slight edge clearance and avoid bur
 
 ---
 
-#### Minimizing Distortion
+### Minimizing Distortion
 
 Welding introduces heat that causes expansion and contraction, leading to distortion and residual stresses.
 
@@ -1311,7 +1311,7 @@ ggplot() +
 
 ---
 
-#### Fatigue Considerations
+### Fatigue Considerations
 
 Welded joints are particularly susceptible to fatigue failure due to:
 
@@ -1377,11 +1377,11 @@ ggplot() +
 
 ---
 
-### Material Weldability {#sec-weld-materials}
+## Material Weldability {#sec-weld-materials}
 
 Not all materials weld equally well. **Weldability** is the ability of a material to be welded without defects and retain satisfactory mechanical properties.
 
-#### Carbon Steel Weldability
+### Carbon Steel Weldability
 
 The weldability of steel depends largely on its **carbon equivalent (CE)**:
 
@@ -1434,7 +1434,7 @@ ggplot(ce_data, aes(x = CE)) +
   )
 ```
 
-#### Weldability of Common Materials
+### Weldability of Common Materials
 
 | Material | Weldability | Key Considerations |
 |:---------|:------------|:-------------------|
@@ -1468,7 +1468,7 @@ With CE = 0.79 (in the "poor" weldability zone):
 
 ---
 
-### Common Weld Defects and Prevention {#sec-weld-defects}
+## Common Weld Defects and Prevention {#sec-weld-defects}
 
 Understanding weld defects helps designers specify requirements that prevent them.
 
@@ -1542,7 +1542,7 @@ ggplot() +
   theme_welding
 ```
 
-#### Defect Causes and Prevention
+### Defect Causes and Prevention
 
 | Defect | Causes | Prevention |
 |:-------|:-------|:-----------|
@@ -1555,34 +1555,34 @@ ggplot() +
 
 ---
 
-### 📋 Design Checklist for Welding {-}
+## 📋 Design Checklist for Welding {-}
 
-#### Joint Design
+### Joint Design
 - [ ] Selected appropriate joint type for loading conditions
 - [ ] Specified correct weld type (fillet, groove, etc.)
 - [ ] Weld size adequate for required strength
 - [ ] Weld access is adequate (15-20 mm minimum clearance)
 - [ ] Welding position considered (flat preferred)
 
-#### Material Considerations
+### Material Considerations
 - [ ] Base metal weldability verified
 - [ ] Filler metal compatibility confirmed
 - [ ] Preheat requirements determined (if needed)
 - [ ] Post-weld heat treatment specified (if needed)
 
-#### Distortion Control
+### Distortion Control
 - [ ] Welds balanced symmetrically where possible
 - [ ] Minimum weld size specified to reduce heat input
 - [ ] Welding sequence specified for critical assemblies
 - [ ] Allowance for shrinkage in dimensions
 
-#### Quality Requirements
+### Quality Requirements
 - [ ] Weld symbols correctly applied on drawings
 - [ ] Inspection requirements specified (visual, NDT)
 - [ ] Acceptance criteria defined
 - [ ] Welder qualification requirements stated
 
-#### Fatigue and Strength
+### Fatigue and Strength
 - [ ] Weld toe geometry specified for fatigue-critical joints
 - [ ] Full penetration specified where required
 - [ ] Stress concentrations minimized
@@ -1590,7 +1590,7 @@ ggplot() +
 
 ---
 
-### 🎯 Case Study: Welded Frame Design {-}
+## 🎯 Case Study: Welded Frame Design {-}
 
 **Design Requirements:**
 
@@ -1689,11 +1689,11 @@ ggplot() +
 
 ---
 
-### Worked Examples: Welding Symbol Interpretation {#sec-weld-worked-examples}
+## Worked Examples: Welding Symbol Interpretation {#sec-weld-worked-examples}
 
 The following examples demonstrate how to interpret welding symbols on actual engineering drawings.
 
-#### Worked Example 1: Fillet Weld Assembly (A-66)
+### Worked Example 1: Fillet Weld Assembly (A-66)
 
 Figure @fig-fillet-weld-assignment-ref shows a comprehensive fillet weld assignment with multiple weld configurations.
 
@@ -1741,7 +1741,7 @@ knitr::include_graphics("images/C26_A66_pg217.jpg")
 - The "ground flat" requirement on B indicates a flush contour for appearance or fit-up with mating parts
 </details>
 
-#### Worked Example 2: Shaft Support Weldment (A-67)
+### Worked Example 2: Shaft Support Weldment (A-67)
 
 Figure @fig-shaft-support-assignment-ref presents a more complex welded assembly with multiple components and weld specifications.
 
@@ -1783,9 +1783,9 @@ The vertical shaft likely experiences:
 
 ---
 
-### Try it yourself {#sec-weld-tryit}
+## Try it yourself {#sec-weld-tryit}
 
-#### Carbon equivalent of four steels {#sec-tryit-ce}
+### Carbon equivalent of four steels {#sec-tryit-ce}
 
 ```{r tryit-ce-grid, echo=FALSE, results='asis'}
 ce <- data.frame(
@@ -1850,7 +1850,7 @@ tryit_sort(
 )
 ```
 
-#### Fillet weld strength {#sec-tryit-fillet}
+### Fillet weld strength {#sec-tryit-fillet}
 
 A fillet weld with equal legs of $6$ mm and a length of $150$ mm carries $28$ kN in shear. The allowable shear stress in the throat is $60$ MPa.
 
@@ -1889,7 +1889,7 @@ The leg that would just meet 60 MPa is $\dfrac{28000/60}{150 \times 0.707} = `r 
 
 </details>
 
-#### Weld defects and their causes {#sec-tryit-weld-defects}
+### Weld defects and their causes {#sec-tryit-weld-defects}
 
 ```{r tryit-weld-defect-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -1920,7 +1920,7 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-weld-problems}
+## Practice Problems {#sec-weld-problems}
 
 **Problem 1:** A T-joint connects a 12 mm thick plate to a 8 mm thick plate using fillet welds on both sides. What is the maximum recommended fillet weld leg size?
 
@@ -1976,11 +1976,11 @@ With CE = **0.61**, this falls in the "Fair to Poor" weldability range.
 
 ---
 
-### Drawing Interpretation Assignments {#sec-weld-assignments}
+## Drawing Interpretation Assignments {#sec-weld-assignments}
 
 The following assignments provide comprehensive practice in reading welding drawings with multiple weld types and specifications.
 
-#### Assignment 1: Base Skid Assembly (A-68)
+### Assignment 1: Base Skid Assembly (A-68)
 
 Figure @fig-base-skid-assignment-ref shows a complex welded assembly with detailed dimensions and welding specifications.
 
@@ -2013,7 +2013,7 @@ knitr::include_graphics("images/C27_A68_pg224-25.jpg")
 
 ---
 
-#### Assignment 2: Groove Welds Interpretation (A-69)
+### Assignment 2: Groove Welds Interpretation (A-69)
 
 Figure @fig-groove-welds-assignment-ref presents three assemblies focusing on groove weld specifications.
 
@@ -2048,7 +2048,7 @@ On a grid sheet, make detailed sketches of the six welds shown in the circled ar
 
 ---
 
-### Further Reading {#sec-weld-resources}
+## Further Reading {#sec-weld-resources}
 
 [Lincoln Electric Welding Design Guide](https://www.lincolnelectric.com/en/support/welding-resources)
 
@@ -2060,21 +2060,21 @@ On a grid sheet, make detailed sketches of the six welds shown in the circled ar
 
 ---
 
-### 🎬 Supplemental Videos {-}
+## 🎬 Supplemental Videos {-}
 
-#### Understanding Welding Symbols
+### Understanding Welding Symbols
 
 ```{r video-welding-symbols, echo=FALSE, results='asis'}
 embed_youtube("Svoi1v_o5yI", "Understanding Welding Symbols")
 ```
 
-#### Weld Joint Types Explained
+### Weld Joint Types Explained
 
 ```{r video-weld-joint-types, echo=FALSE, results='asis'}
 embed_youtube("CpSWUSSDquk", "Weld Joint Types")
 ```
 
-#### Controlling Weld Distortion
+### Controlling Weld Distortion
 
 ```{r video-weld-distortion, echo=FALSE, results='asis'}
 embed_youtube("w_iqJDfbzMM", "Controlling Weld Distortion")
@@ -2082,7 +2082,7 @@ embed_youtube("w_iqJDfbzMM", "Controlling Weld Distortion")
 
 ---
 
-### 📖 References {-}
+## 📖 References {-}
 
 1. Blodgett, O. W. (1966). *Design of Welded Structures*. James F. Lincoln Arc Welding Foundation.
 

@@ -1,11 +1,11 @@
-## AI Tools for Manufacturing Engineering — Laboratory {#sec-chap-ml-lab}
+# AI Tools for Manufacturing Engineering — Laboratory {#sec-chap-ml-lab}
 
 ```{r setup-ml-lab, include=FALSE}
 source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-### Lab Overview {#sec-ml-lab-overview}
+## Lab Overview {#sec-ml-lab-overview}
 
 Each week of this module has two hours of classroom theory (Chapter @sec-chap-ml) followed by two hours of hands-on laboratory work. The six lab sessions build on each other progressively:
 
@@ -29,7 +29,7 @@ Each week of this module has two hours of classroom theory (Chapter @sec-chap-ml
 
 ***
 
-### The Course Narrative {#sec-ml-lab-narrative}
+## The Course Narrative {#sec-ml-lab-narrative}
 
 All six weeks of lab work are set in a consistent workplace context to make the work feel real.
 
@@ -47,15 +47,15 @@ By the end of Week 5, you will have a working web application at a public URL. T
 
 ***
 
-### Week 1 Lab — AI Literacy and Prompt Engineering {#sec-ml-lab-week1}
+## Week 1 Lab — AI Literacy and Prompt Engineering {#sec-ml-lab-week1}
 
-#### What You Will Learn {#sec-ml-lab-w1-objectives}
+### What You Will Learn {#sec-ml-lab-w1-objectives}
 
 - How an LLM responds to poorly structured vs. well-structured prompts
 - How to detect and document an LLM hallucination
 - How to generate Python code using an LLM and evaluate whether the output is trustworthy
 
-#### Setup (10 minutes) {#sec-ml-lab-w1-setup}
+### Setup (10 minutes) {#sec-ml-lab-w1-setup}
 
 1. Open [Claude.ai](https://claude.ai) or [chat.openai.com](https://chat.openai.com) (free tier is fine)
 2. Sign in or create an account if you do not have one
@@ -65,7 +65,7 @@ Create a new text file called `prompts.md` in your course folder. You will add t
 
 ***
 
-#### Exercise 1: Bad Prompt → Good Prompt (30 minutes) {#sec-ml-lab-w1-ex1}
+### Exercise 1: Bad Prompt → Good Prompt (30 minutes) {#sec-ml-lab-w1-ex1}
 
 The five prompts below were collected from real manufacturing engineers. All of them produced poor or unusable results. **Your task:** rewrite each one using the R-C-T-C-F pattern (Role, Context, Task, Constraints, Format), run both the original and your rewritten version, and compare the outputs.
 
@@ -95,7 +95,7 @@ Do this for all five prompts.
 
 ***
 
-#### Exercise 2: FMEA Summarization at Three Audiences (25 minutes) {#sec-ml-lab-w1-ex2}
+### Exercise 2: FMEA Summarization at Three Audiences (25 minutes) {#sec-ml-lab-w1-ex2}
 
 The FMEA below represents a real Failure Mode and Effects Analysis for CNC Cell 3 at Précitech. Three different people need to read this document, but each has completely different information needs.
 
@@ -130,7 +130,7 @@ Add your three R-C-T-C-F prompts and a 2-sentence reflection on the differences 
 
 ***
 
-#### Exercise 3: The Hallucination Hunt (20 minutes) {#sec-ml-lab-w1-ex3}
+### Exercise 3: The Hallucination Hunt (20 minutes) {#sec-ml-lab-w1-ex3}
 
 Your goal is to deliberately trick the LLM into fabricating something — and then verify that it is fabricated.
 
@@ -153,7 +153,7 @@ When the LLM confidently answers one of these, **document it in `prompts.md`:**
 
 ***
 
-#### Exercise 4: LLM-Assisted Python — Generate Your Week 2 Starter Code (30 minutes) {#sec-ml-lab-w1-ex4}
+### Exercise 4: LLM-Assisted Python — Generate Your Week 2 Starter Code (30 minutes) {#sec-ml-lab-w1-ex4}
 
 This exercise produces the code you will use as your starting point in Week 2. Write it carefully, because you will learn from its failures next week.
 
@@ -185,15 +185,15 @@ The code must:
 
 ***
 
-### Week 2 Lab — Manufacturing Data and Statistical Process Control {#sec-ml-lab-week2}
+## Week 2 Lab — Manufacturing Data and Statistical Process Control {#sec-ml-lab-week2}
 
-#### What You Will Learn {#sec-ml-lab-w2-objectives}
+### What You Will Learn {#sec-ml-lab-w2-objectives}
 
 - How LLM-generated code behaves on real (messy) industrial data
 - How to find and document data quality problems without silent data deletion
 - How to build an X-bar control chart in Python and identify out-of-control events
 
-#### Setup (10 minutes) {#sec-ml-lab-w2-setup}
+### Setup (10 minutes) {#sec-ml-lab-w2-setup}
 
 1. Open [Google Colab](https://colab.research.google.com)
 2. Upload `spc_data.csv` and `week2_lab.ipynb` from Brightspace to your Colab session
@@ -203,7 +203,7 @@ The `spc_data.csv` file contains 90 days of production data from CNC Cell 3 at P
 
 ***
 
-#### Task 1: Run Your Week 1 Code on Real Data (25 minutes) {#sec-ml-lab-w2-task1}
+### Task 1: Run Your Week 1 Code on Real Data (25 minutes) {#sec-ml-lab-w2-task1}
 
 Open `week2_lab.ipynb` and paste your `spc_starter.py` code into the first code cell. Run it.
 
@@ -223,7 +223,7 @@ This is normal and expected. Week 2 is about learning to make industrial data tr
 
 ***
 
-#### Task 2: Find and Fix Data Quality Issues (35 minutes) {#sec-ml-lab-w2-task2}
+### Task 2: Find and Fix Data Quality Issues (35 minutes) {#sec-ml-lab-w2-task2}
 
 The `spc_data.csv` dataset contains the following intentional problems. Your job is to find each one and document what you did with it.
 
@@ -263,7 +263,7 @@ print("Quality log entries:", len(quality_log))
 
 ***
 
-#### Task 3: Build an X-bar Control Chart (35 minutes) {#sec-ml-lab-w2-task3}
+### Task 3: Build an X-bar Control Chart (35 minutes) {#sec-ml-lab-w2-task3}
 
 Using the cleaned dataset, build an X-bar control chart for `diameter_mm` and identify the out-of-control event.
 
@@ -337,7 +337,7 @@ print(f"Cpk = {cpk:.3f}")
 
 ***
 
-#### Task 4: Reflection (15 minutes) {#sec-ml-lab-w2-task4}
+### Task 4: Reflection (15 minutes) {#sec-ml-lab-w2-task4}
 
 In a markdown cell, answer these three questions. Your answers do not need to be long — one to three sentences each. These questions set up Week 3.
 
@@ -351,15 +351,15 @@ In a markdown cell, answer these three questions. Your answers do not need to be
 
 ***
 
-### Week 3 Lab — Understanding the C-MAPSS Dataset {#sec-ml-lab-week3}
+## Week 3 Lab — Understanding the C-MAPSS Dataset {#sec-ml-lab-week3}
 
-#### What You Will Learn {#sec-ml-lab-w3-objectives}
+### What You Will Learn {#sec-ml-lab-w3-objectives}
 
 - How to load and explore industrial time-series run-to-failure data
 - How to compute a supervised learning label (RUL) from raw run-to-failure records
 - How to identify which sensors carry predictive information
 
-#### Setup (15 minutes) {#sec-ml-lab-w3-setup}
+### Setup (15 minutes) {#sec-ml-lab-w3-setup}
 
 1. Open [Google Colab](https://colab.research.google.com)
 2. Download `train_FD001.txt` from your instructor's Brightspace folder or from the [Kaggle mirror](https://www.kaggle.com/datasets/behrad3d/nasa-cmaps) (free account required)
@@ -368,7 +368,7 @@ In a markdown cell, answer these three questions. Your answers do not need to be
 
 ***
 
-#### Task 1: Load and Label the Data (20 minutes) {#sec-ml-lab-w3-task1}
+### Task 1: Load and Label the Data (20 minutes) {#sec-ml-lab-w3-task1}
 
 The C-MAPSS file has no column headers and uses space separators. The 26 columns are: unit number, time in cycles, 3 operating settings, 21 sensors, and 2 trailing empty columns (an artifact of the original NASA format that must be dropped).
 
@@ -415,7 +415,7 @@ print(f"Engine 1, cycle 1: RUL = {train.loc[(train.unit_number==1) & (train.time
 
 ***
 
-#### Task 2: Visualize One Engine's Life (30 minutes) {#sec-ml-lab-w3-task2}
+### Task 2: Visualize One Engine's Life (30 minutes) {#sec-ml-lab-w3-task2}
 
 Plot all 21 sensors for engine #1 over its entire operating life. You are looking for three categories:
 
@@ -457,7 +457,7 @@ Compare your list with a classmate. You should largely agree on the flat sensors
 
 ***
 
-#### Task 3: Identify Constant Sensors (20 minutes) {#sec-ml-lab-w3-task3}
+### Task 3: Identify Constant Sensors (20 minutes) {#sec-ml-lab-w3-task3}
 
 Sensors with near-zero standard deviation across the entire dataset carry zero predictive information for a model and should be removed before training.
 
@@ -484,7 +484,7 @@ print(f"Remaining useful sensors: {len(sensor_cols) - len(constant_sensors)}")
 
 ***
 
-#### Task 4: Correlation with RUL (20 minutes) {#sec-ml-lab-w3-task4}
+### Task 4: Correlation with RUL (20 minutes) {#sec-ml-lab-w3-task4}
 
 For the sensors you have not already dropped, compute the Pearson correlation coefficient between each sensor and RUL. Sensors with high absolute correlation (|r| > 0.5) are your most predictive raw features.
 
@@ -518,7 +518,7 @@ plt.show()
 
 ***
 
-#### Task 5: Reflection (15 minutes) {#sec-ml-lab-w3-task5}
+### Task 5: Reflection (15 minutes) {#sec-ml-lab-w3-task5}
 
 In a markdown cell in your notebook, answer these three questions:
 
@@ -532,22 +532,22 @@ In a markdown cell in your notebook, answer these three questions:
 
 ***
 
-### Week 4 Lab — Building the Predictive Maintenance Model {#sec-ml-lab-week4}
+## Week 4 Lab — Building the Predictive Maintenance Model {#sec-ml-lab-week4}
 
-#### What You Will Learn {#sec-ml-lab-w4-objectives}
+### What You Will Learn {#sec-ml-lab-w4-objectives}
 
 - How to engineer rolling-window features per engine without data leakage
 - How to perform a correct engine-wise train/validation split and verify it is clean
 - How to train, evaluate, and compare a Random Forest against a naive baseline
 - How to save a trained model for deployment
 
-#### Continuing in Your Notebook {#sec-ml-lab-w4-setup}
+### Continuing in Your Notebook {#sec-ml-lab-w4-setup}
 
 Continue from where you left off in `predictive_maintenance.ipynb`. Your notebook should already have the training data loaded, RUL computed, constant sensors identified, and the useful sensor list established from Week 3. Add new cells below the Week 3 section.
 
 ***
 
-#### Task 1: Rolling Features (25 minutes) {#sec-ml-lab-w4-task1}
+### Task 1: Rolling Features (25 minutes) {#sec-ml-lab-w4-task1}
 
 For each useful sensor, compute a rolling mean and rolling standard deviation with a window of 5 cycles, **grouped by engine**. This is the most important feature engineering step.
 
@@ -589,7 +589,7 @@ The rolling mean for engine #2 cycle 1 should be the same as `sensor_11` raw val
 
 ***
 
-#### Task 2: Clip RUL at 125 (10 minutes) {#sec-ml-lab-w4-task2}
+### Task 2: Clip RUL at 125 (10 minutes) {#sec-ml-lab-w4-task2}
 
 ```python
 # Clip RUL at 125: anything above 125 is "basically healthy"
@@ -614,7 +614,7 @@ print(f"Rows affected by clipping: {(train_fe['RUL'] > 125).sum()}")
 
 ***
 
-#### Task 3: Engine-Wise Train/Validation Split (15 minutes) {#sec-ml-lab-w4-task3}
+### Task 3: Engine-Wise Train/Validation Split (15 minutes) {#sec-ml-lab-w4-task3}
 
 Hold out 20 engines for validation. **Do not split rows randomly.** The assert at the end verifies there is no overlap between training and validation engines.
 
@@ -661,7 +661,7 @@ y_val   = val_data["RUL_clipped"]
 
 ***
 
-#### Task 4: Train the Random Forest (20 minutes) {#sec-ml-lab-w4-task4}
+### Task 4: Train the Random Forest (20 minutes) {#sec-ml-lab-w4-task4}
 
 ```python
 from sklearn.ensemble import RandomForestRegressor
@@ -682,7 +682,7 @@ Training should take 30–90 seconds in Colab depending on available resources.
 
 ***
 
-#### Task 5: Evaluate Against the Naive Baseline (20 minutes) {#sec-ml-lab-w4-task5}
+### Task 5: Evaluate Against the Naive Baseline (20 minutes) {#sec-ml-lab-w4-task5}
 
 ```python
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -726,7 +726,7 @@ In a markdown cell, describe the pattern you see: are predictions pulled toward 
 
 ***
 
-#### Task 6: Feature Importance (15 minutes) {#sec-ml-lab-w4-task6}
+### Task 6: Feature Importance (15 minutes) {#sec-ml-lab-w4-task6}
 
 ```python
 import pandas as pd
@@ -757,7 +757,7 @@ print(importances.tail(5).sort_values(ascending=False).to_string())
 
 ***
 
-#### Task 7: Save the Model (15 minutes) {#sec-ml-lab-w4-task7}
+### Task 7: Save the Model (15 minutes) {#sec-ml-lab-w4-task7}
 
 Save both the trained model and the feature column list. **You must save `feature_cols` as well as `model`** — the Streamlit app needs to know the exact feature names and order to align new data correctly at prediction time.
 
@@ -781,15 +781,15 @@ To download from Colab: click the folder icon in the left sidebar → right-clic
 
 ***
 
-### Week 5 Lab — Deploying the App {#sec-ml-lab-week5}
+## Week 5 Lab — Deploying the App {#sec-ml-lab-week5}
 
-#### What You Will Learn {#sec-ml-lab-w5-objectives}
+### What You Will Learn {#sec-ml-lab-w5-objectives}
 
 - How to wrap a trained ML model in a user-facing web application
 - How to deploy that application to the public internet for free
 - The difference between "works on my machine" and "deployed and accessible to others"
 
-#### Setup (15 minutes) {#sec-ml-lab-w5-setup}
+### Setup (15 minutes) {#sec-ml-lab-w5-setup}
 
 Before the lab session, complete these steps (they require a few minutes each):
 
@@ -799,7 +799,7 @@ Before the lab session, complete these steps (they require a few minutes each):
 
 ***
 
-#### Task 1: Run the Streamlit App Locally (40 minutes) {#sec-ml-lab-w5-task1}
+### Task 1: Run the Streamlit App Locally (40 minutes) {#sec-ml-lab-w5-task1}
 
 Download `streamlit_app.py` from Brightspace. This is your starter template — it has the skeleton of the app already written, with `TODO` comments marking the parts you need to complete.
 
@@ -853,7 +853,7 @@ This gives you a temporary public URL for testing. For your final submission you
 
 ***
 
-#### Task 2: Push to GitHub (15 minutes) {#sec-ml-lab-w5-task2}
+### Task 2: Push to GitHub (15 minutes) {#sec-ml-lab-w5-task2}
 
 Your repository needs these files:
 
@@ -891,7 +891,7 @@ git push -u origin main
 
 ***
 
-#### Task 3: Deploy to Streamlit Community Cloud (20 minutes) {#sec-ml-lab-w5-task3}
+### Task 3: Deploy to Streamlit Community Cloud (20 minutes) {#sec-ml-lab-w5-task3}
 
 1. Go to [share.streamlit.io](https://share.streamlit.io) and sign in
 2. Click **"New app"**
@@ -909,7 +909,7 @@ If deployment fails:
 
 ***
 
-#### Task 4: Polish the App (30 minutes) {#sec-ml-lab-w5-task4}
+### Task 4: Polish the App (30 minutes) {#sec-ml-lab-w5-task4}
 
 A working app is the minimum. A well-polished app is what gets the attention at a job interview. Spend this time on:
 
@@ -924,7 +924,7 @@ A working app is the minimum. A well-polished app is what gets the attention at 
 
 ***
 
-#### Task 5: Test with a Classmate (15 minutes) {#sec-ml-lab-w5-task5}
+### Task 5: Test with a Classmate (15 minutes) {#sec-ml-lab-w5-task5}
 
 Swap your public URL with a classmate. Try to:
 
@@ -942,13 +942,13 @@ Document **one bug you find in their app** and **one bug they find in yours**. N
 
 ***
 
-### Week 6 Lab — Capstone Presentations {#sec-ml-lab-week6}
+## Week 6 Lab — Capstone Presentations {#sec-ml-lab-week6}
 
-#### Format {#sec-ml-lab-w6-format}
+### Format {#sec-ml-lab-w6-format}
 
 Each student presents for **8–10 minutes** followed by **3–5 minutes of questions** from the class and instructor. No slides are required — your deployed Streamlit app is your presentation.
 
-#### What to Demo {#sec-ml-lab-w6-demo}
+### What to Demo {#sec-ml-lab-w6-demo}
 
 1. **Open your app live** from the public URL. Show that it loads and functions.
 2. **Upload the sample CSV** and show a prediction. Walk through what the colour coding means and how a maintenance planner would interpret the output.
@@ -959,7 +959,7 @@ Each student presents for **8–10 minutes** followed by **3–5 minutes of ques
    - What your feature importance chart shows about which sensors matter most
 4. **State one limitation honestly.** Something specific — not "it might not work on all data." Something like: "This model was trained on a simulation of one fault mode in one operating condition. Deploying it on a real CFM56 engine would require retraining on actual engine data and validating against known failure events."
 
-#### What the Instructor Will Ask {#sec-ml-lab-w6-questions}
+### What the Instructor Will Ask {#sec-ml-lab-w6-questions}
 
 Be prepared to answer questions such as:
 
@@ -972,11 +972,11 @@ If you do not know an answer, say so clearly and describe how you would find out
 
 ***
 
-### Capstone Evaluation Rubric {#sec-ml-rubric}
+## Capstone Evaluation Rubric {#sec-ml-rubric}
 
 The capstone (Weeks 3–6) is worth 40% of your course grade. Evaluation is split across five categories:
 
-#### Working Predictive Model (30 points) {#sec-ml-rubric-model}
+### Working Predictive Model (30 points) {#sec-ml-rubric-model}
 
 | Score | Criteria |
 |:------|:---------|
@@ -987,7 +987,7 @@ The capstone (Weeks 3–6) is worth 40% of your course grade. Evaluation is spli
 
 The most common reason for a score of 0–14 is using `train_test_split` from scikit-learn instead of a manual engine-wise split. The symptom is an RMSE of 5–8 cycles — suspiciously better than published results. If this happened to you, go back and fix it. It is more important that you understand and fix the mistake than that you submit a misleading score.
 
-#### Code Quality (20 points) {#sec-ml-rubric-code}
+### Code Quality (20 points) {#sec-ml-rubric-code}
 
 | Score | Criteria |
 |:------|:---------|
@@ -1000,7 +1000,7 @@ The most common reason for a score of 0–14 is using `train_test_split` from sc
 **LLM policy:** Using LLMs (Claude, ChatGPT, GitHub Copilot) to help write, debug, and understand code is explicitly permitted and encouraged. However: if during the Week 6 presentation you cannot explain a non-trivial code block you submitted, up to 20 points may be deducted across all categories. The policy is: you may use any tool to help you write code, but you are responsible for understanding every line you submit.
 :::
 
-#### Streamlit Application (25 points) {#sec-ml-rubric-app}
+### Streamlit Application (25 points) {#sec-ml-rubric-app}
 
 | Score | Criteria |
 |:------|:---------|
@@ -1009,7 +1009,7 @@ The most common reason for a score of 0–14 is using `train_test_split` from sc
 | 12–16 | App loads but predictions appear wrong or UI is confusing; sample data button does not work |
 | 0–11 | App does not deploy; or model fails to load; or predictions are nonsensical |
 
-#### Documentation and Honest Disclosure (15 points) {#sec-ml-rubric-docs}
+### Documentation and Honest Disclosure (15 points) {#sec-ml-rubric-docs}
 
 | Score | Criteria |
 |:------|:---------|
@@ -1018,7 +1018,7 @@ The most common reason for a score of 0–14 is using `train_test_split` from sc
 | 6–9 | Title and description present; no honest discussion of limitations |
 | 0–5 | No documentation; or overclaims accuracy or applicability |
 
-#### Week 6 Presentation (10 points) {#sec-ml-rubric-presentation}
+### Week 6 Presentation (10 points) {#sec-ml-rubric-presentation}
 
 | Score | Criteria |
 |:------|:---------|
@@ -1027,7 +1027,7 @@ The most common reason for a score of 0–14 is using `train_test_split` from sc
 | 5–6 | Demo works but student cannot explain technical decisions |
 | 0–4 | Demo does not work during presentation; or student cannot present their own work |
 
-#### Grade Summary {#sec-ml-rubric-summary}
+### Grade Summary {#sec-ml-rubric-summary}
 
 | Category | Maximum Points | Weight |
 |:---|:---:|:---:|
@@ -1040,7 +1040,7 @@ The most common reason for a score of 0–14 is using `train_test_split` from sc
 
 ***
 
-### Stretch Goals {#sec-ml-lab-stretch}
+## Stretch Goals {#sec-ml-lab-stretch}
 
 If you complete the core capstone and have time remaining, these optional extensions will deepen your understanding and improve your résumé entry:
 

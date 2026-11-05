@@ -178,12 +178,12 @@ qwebr_calc_card(
   title = "Gripper Valve Cv Sizing Calculator",
   icon = "wind",
   inputs = list(
-    qwebr_calc_input("bore", "Bore diameter", value = 32, min = 8, max = 200, step = 1, suffix = "mm"),
-    qwebr_calc_input("stroke_mm", "Stroke length", value = 60, min = 10, max = 1000, step = 5, suffix = "mm"),
-    qwebr_calc_input("dP_psi", "Valve pressure drop", value = 15, min = 2, max = 50, step = 1, suffix = "psi"),
+    qwebr_calc_input("bore", "Bore diameter", value = 32, min = 8, max = 200, step = 1, suffix = "mm", type = "slider"),
+    qwebr_calc_input("stroke_mm", "Stroke length", value = 60, min = 10, max = 1000, step = 5, suffix = "mm", type = "slider"),
+    qwebr_calc_input("dP_psi", "Valve pressure drop", value = 15, min = 2, max = 50, step = 1, suffix = "psi", type = "slider"),
     qwebr_calc_input("t_fill_s", "Extend-stroke fill time (s)", value = 0.12, min = 0.03, max = 1, step = 0.01, type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -245,8 +245,10 @@ qwebr_calc_card(
     qwebr_calc_input("rate_per_hr", "Throughput", value = 720, min = 60, max = 6000, step = 20, suffix = "parts/h"),
     qwebr_calc_input("v_belt", "Selected belt speed", value = 0.09, min = 0.02, max = 2, step = 0.01, suffix = "m/s"),
     qwebr_calc_input("eta_drive", "Drive efficiency", value = 0.85, min = 0.4, max = 1, step = 0.01)
-  )
-)
+  ),
+  goal = "Demand grows. With the 0.09 m/s belt, 0.35 m pick spacing and 25 percent surge margin, find the highest throughput (nearest 20 parts/h) the belt can still support.",
+  goal_test = "v_belt >= v_design && rate_per_hr == 740",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -339,12 +341,12 @@ qwebr_calc_card(
   title = "Servo vs. Induction + VFD Decision Matrix (Conveyor)",
   icon = "scale-balanced",
   inputs = list(
-    qwebr_calc_input("w_accuracy", "Weight: accuracy", value = 0.1, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_dynamic_response", "Weight: dynamic response", value = 0.1, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_cost", "Weight: cost", value = 0.4, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_complexity", "Weight: complexity", value = 0.4, min = 0, max = 1, step = 0.05)
-  )
-)
+    qwebr_calc_input("w_accuracy", "Weight: accuracy", value = 0.1, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_dynamic_response", "Weight: dynamic response", value = 0.1, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_cost", "Weight: cost", value = 0.4, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_complexity", "Weight: complexity", value = 0.4, min = 0, max = 1, step = 0.05, type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -396,8 +398,10 @@ qwebr_calc_card(
     qwebr_calc_input("m_fuse", "Time-delay fuse multiplier", value = 1.75, min = 1.25, max = 2.25, step = 0.05, suffix = "x FLA"),
     qwebr_calc_input("I_robot", "Robot controller nameplate current", value = 3.4, min = 0.5, max = 30, step = 0.1, suffix = "A"),
     qwebr_calc_input("required_sccr", "Required panel SCCR (kA)", value = 25, min = 5, max = 100, step = 5, type = "slider")
-  )
-)
+  ),
+  goal = "At what time-delay fuse multiplier (nearest 0.05) does the conveyor motor fuse first jump from 1.6 A to the next standard size, 2 A?",
+  goal_test = "I_OCPD_conveyor == 2 && FLA == 0.8",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -478,8 +482,10 @@ qwebr_calc_card(
     qwebr_calc_input("I_load", "Solenoid current", value = 0.4, min = 0.05, max = 10, step = 0.05, suffix = "A"),
     qwebr_calc_input("min_operating_V", "Minimum operating voltage", value = 20.4, min = 4, max = 48, step = 0.1, suffix = "V"),
     qwebr_calc_input("L_one_way_m", "One-way cable run (m)", value = 45, min = 5, max = 300, step = 5, type = "slider")
-  )
-)
+  ),
+  goal = "Keep the 24 VDC supply and the 0.4 A solenoid. Find the longest one-way run (nearest 5 m) for which 18 AWG still passes both checks.",
+  goal_test = "passes_both[1] && L_one_way_m == 35 && I_load == 0.4 && V_supply == 24 && min_operating_V == 20.4",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -545,8 +551,10 @@ qwebr_calc_card(
     qwebr_calc_input("BVR", "Bearing voltage ratio (BVR)", value = 0.04, min = 0.01, max = 0.1, step = 0.005),
     qwebr_calc_input("cable_length_m", "Transducer cable length", value = 12, min = 1, max = 300, step = 1, suffix = "m"),
     qwebr_calc_input("delta_V_ground", "Ground potential difference", value = 0.9, min = 0.1, max = 10, step = 0.1, suffix = "V")
-  )
-)
+  ),
+  goal = "The estimated bearing voltage exceeds film breakdown. Find the highest bearing voltage ratio (nearest 0.005) the motor can live with at 600 V, i.e. what mitigation must achieve.",
+  goal_test = "V_bearing <= V_film_breakdown && BVR == 0.02 && V_line_rms == 600",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -666,8 +674,8 @@ qwebr_calc_card(
     qwebr_calc_input("planned_distance", "Planned mounting distance (mm)", value = 1500, min = 500, max = 4000, step = 10, type = "slider")
   ),
   goal = "Make the guarding check pass with the light curtain mounted no more than 1400 mm from the hazard.",
-  goal_test = "planned_distance >= S_required && planned_distance <= 1400"
-)
+  goal_test = "planned_distance >= S_required && planned_distance <= 1400",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -738,8 +746,10 @@ qwebr_calc_card(
     qwebr_calc_input("dyn_factor", "Dynamic load factor", value = 1.2, min = 1, max = 3, step = 0.05),
     qwebr_calc_input("I_beam", "Second moment of area I", value = 2850000, min = 100000, max = 100000000, step = 50000, suffix = "mm⁴"),
     qwebr_calc_input("S_beam", "Section modulus S", value = 55900, min = 5000, max = 1000000, step = 100, suffix = "mm³")
-  )
-)
+  ),
+  goal = "The trench widens to 3000 mm. Keep the 185 kg robot and 1.2 dynamic factor and find the smallest second moment of area I (nearest 50 000 mm4) that still meets L/240.",
+  goal_test = "delta_max <= L240 && L == 3000 && I_beam <= 500000 && m_robot == 185 && dyn_factor == 1.2",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

@@ -193,11 +193,11 @@ qwebr_calc_card(
   title = "Conductor Ampacity Derating Calculator",
   icon = "bolt",
   inputs = list(
-    qwebr_calc_input("temp_corr", "Ambient temperature correction factor", value = 0.88, min = 0.4, max = 1.05, step = 0.01),
-    qwebr_calc_input("bundle_adj", "Bundling adjustment factor", value = 0.7, min = 0.35, max = 1, step = 0.05),
-    qwebr_calc_input("I_required", "Required ampacity", value = 72.5, min = 10, max = 150, step = 0.5, suffix = "A")
-  )
-)
+    qwebr_calc_input("temp_corr", "Ambient temperature correction factor", value = 0.88, min = 0.4, max = 1.05, step = 0.01, type = "slider"),
+    qwebr_calc_input("bundle_adj", "Bundling adjustment factor", value = 0.7, min = 0.35, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("I_required", "Required ampacity", value = 72.5, min = 10, max = 150, step = 0.5, suffix = "A", type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -338,8 +338,10 @@ qwebr_calc_card(
     qwebr_calc_input("I_load", "Load current", value = 0.35, min = 0.05, max = 10, step = 0.05, suffix = "A"),
     qwebr_calc_input("min_operating_V", "Minimum operating voltage", value = 20.4, min = 4, max = 48, step = 0.1, suffix = "V"),
     qwebr_calc_input("L_one_way_m", "One-way cable run (m)", value = 120, min = 5, max = 500, step = 5, type = "slider")
-  )
-)
+  ),
+  goal = "Keep the 24 VDC supply, 0.35 A load and 20.4 V floor. Find the longest one-way run (nearest 5 m) for which 14 AWG still passes both checks.",
+  goal_test = "passes_both[2] && L_one_way_m == 100 && V_supply == 24 && I_load == 0.35 && min_operating_V == 20.4",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -433,8 +435,8 @@ qwebr_calc_card(
     qwebr_calc_input("L_m", "One-way feeder length (m)", value = 70, min = 5, max = 500, step = 5, type = "slider")
   ),
   goal = "Move the motor 450 m from the MCC and still meet the 3% limit at 600 V and 78 A by choosing a conductor with lower resistance.",
-  goal_test = "L_m >= 450 && pct_drop <= 3 && V_system == 600 && I_FLA == 78"
-)
+  goal_test = "L_m >= 450 && pct_drop <= 3 && V_system == 600 && I_FLA == 78",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -614,8 +616,8 @@ qwebr_calc_card(
         qwebr_calc_col("washdown_or_chemical", c(FALSE, FALSE, FALSE, TRUE), type = "logical",
                        label = "Washdown / chemical?")),
       note = "A VFD output overrides everything else; a washdown or chemical environment adds a jacket and glanding requirement on top of the base cable.")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -763,8 +765,10 @@ qwebr_calc_card(
     qwebr_calc_input("I_upstream_fuse", "Upstream (main) fuse rating", value = 400, min = 15, max = 1200, step = 5, suffix = "A"),
     qwebr_calc_input("I_downstream_fuse", "Downstream (branch) fuse rating", value = 60, min = 1, max = 600, step = 1, suffix = "A"),
     qwebr_calc_input("I_fault_available", "Available fault current (A)", value = 42000, min = 5000, max = 120000, step = 1000, type = "slider")
-  )
-)
+  ),
+  goal = "At what available fault current (nearest kA) does the cheap standard breaker option first become acceptable? Find the highest value at which it still clears, with the ratings unchanged.",
+  goal_test = "breaker_passes && I_fault_available == 25000 && breaker_tested_SCCR == 25000 && fuse_tested_SCCR == 100000",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -900,8 +904,10 @@ qwebr_calc_card(
   icon = "bolt",
   inputs = list(
     qwebr_calc_input("I_fault", "Available fault current (A)", value = 3500, min = 500, max = 6000, step = 100, type = "slider")
-  )
-)
+  ),
+  goal = "Find the highest available fault current (nearest 100 A) at which both the fuse pair and the breaker pair are still coordinated.",
+  goal_test = "length(not_coordinated) == 0 && I_fault == 3100",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

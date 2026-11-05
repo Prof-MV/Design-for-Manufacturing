@@ -214,11 +214,11 @@ qwebr_calc_card(
   title = "IEC 62061 Class Score / SIL Estimator",
   icon = "shield-halved",
   inputs = list(
-    qwebr_calc_input("Se", "Severity score Se (1-4)", value = 4, min = 1, max = 4, step = 1),
-    qwebr_calc_input("Fr", "Frequency / duration score Fr (1-4)", value = 3, min = 1, max = 4, step = 1),
-    qwebr_calc_input("Pr", "Avoidance score Pr (1-4)", value = 2, min = 1, max = 4, step = 1)
-  )
-)
+    qwebr_calc_input("Se", "Severity score Se (1-4)", value = 4, min = 1, max = 4, step = 1, type = "slider"),
+    qwebr_calc_input("Fr", "Frequency / duration score Fr (1-4)", value = 3, min = 1, max = 4, step = 1, type = "slider"),
+    qwebr_calc_input("Pr", "Avoidance score Pr (1-4)", value = 2, min = 1, max = 4, step = 1, type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -378,8 +378,10 @@ qwebr_calc_card(
         qwebr_calc_col("max_pl", c("b", "b", "c", "d", "e"), type = "select", label = "Max achievable PL",
                        options = c("a", "b", "c", "d", "e"))),
       note = "The ceiling is the best PL each category can reach even with excellent components and diagnostics.")
-  )
-)
+  ),
+  goal = "Find the required performance level for which Category 2 is the lowest-complexity architecture that qualifies, without editing the ceiling table.",
+  goal_test = "selected == '2' && all(category_ceiling$max_pl == c('b', 'b', 'c', 'd', 'e'))",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -527,8 +529,10 @@ qwebr_calc_card(
     qwebr_calc_input("cost_per_function_relay", "Relay cost per safety function", value = 650, min = 400, max = 2000, step = 10, prefix = "$"),
     qwebr_calc_input("base_cost_plc", "Safety PLC base cost", value = 9500, min = 1000, max = 40000, step = 100, prefix = "$"),
     qwebr_calc_input("cost_per_point_plc", "Safety PLC cost per I/O point", value = 310, min = 50, max = 390, step = 10, prefix = "$")
-  )
-)
+  ),
+  goal = "Find the largest line (total safety functions) on which hardwired relays are still cheaper than a safety PLC, at the default prices.",
+  goal_test = "n_functions == 27 && cost_relay < cost_plc && cost_per_function_relay == 650 && base_cost_plc == 9500 && cost_per_point_plc == 310",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -649,8 +653,8 @@ qwebr_calc_card(
         qwebr_calc_col("hazard_severity_high", c(TRUE, FALSE), type = "logical", label = "High severity?"),
         qwebr_calc_col("needs_immediate_resume", c(FALSE, TRUE), type = "logical", label = "Needs immediate resume?")),
       note = "Category 1 needs both inertia and high severity; Category 2 needs low severity and a need to resume quickly; everything else is Category 0.")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -792,8 +796,10 @@ qwebr_calc_card(
                      options = c("low", "medium", "high")),
     qwebr_calc_input("required_pl", "Required performance level, PLr", value = "d", type = "select",
                      options = c("a", "b", "c", "d", "e"))
-  )
-)
+  ),
+  goal = "The machine now needs PLr e. Reach PL e while keeping DCavg at medium (no extra diagnostics). Which architecture does it take?",
+  goal_test = "required_pl == 'e' && pl_rank[achieved_pl] >= pl_rank[required_pl] && dc_avg_band == 'medium'",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -939,8 +945,8 @@ qwebr_calc_card(
     qwebr_calc_input("T_coast", "Coast-down / braking time (s)", value = 0.55, min = 0, max = 2, step = 0.01, type = "slider")
   ),
   goal = "Get the overall stopping time to 0.40 s or less while keeping the 30 ms light curtain and the 20 ms relay (only the contactors and the braking may change).",
-  goal_test = "T_total <= 0.40 && T_device == 0.03 && T_logic == 0.02"
-)
+  goal_test = "T_total <= 0.40 && T_device == 0.03 && T_logic == 0.02",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -1025,8 +1031,8 @@ qwebr_calc_card(
         qwebr_calc_col("present", c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE), type = "logical",
                        label = "Present?")),
       note = "The package is ready only when every record exists and is retrievable on demand.")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">

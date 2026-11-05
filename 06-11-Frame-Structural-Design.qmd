@@ -246,8 +246,8 @@ qwebr_calc_card(
     qwebr_calc_input("I_beam", "Beam second moment of area I", value = 9800000, min = 500000, max = 200000000, step = 100000, suffix = "mm⁴")
   ),
   goal = "Meet the deflection budget over a span of at least 3000 mm with a total tolerance of 0.1 mm, no more than 25% allocated to the frame, a 48 kg carriage and a beam of no more than 1e8 mm^4.",
-  goal_test = "L >= 3000 && T_total <= 0.1 && f_frame <= 0.25 && m_carriage >= 48 && I_beam <= 1e8 && delta_max <= delta_allow"
-)
+  goal_test = "L >= 3000 && T_total <= 0.1 && f_frame <= 0.25 && m_carriage >= 48 && I_beam <= 1e8 && delta_max <= delta_allow",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -389,8 +389,8 @@ qwebr_calc_card(
         qwebr_calc_col("weights_B", c(0.50, 0.05, 0.15, 0.10, 0.20), var = "weights_B", label = "Scenario B weight", min = 0, max = 1, step = 0.05)),
       note = "Scores run from 1 (poor fit) to 5 (excellent fit). Each weight column should sum to 1.0.")
   ),
-  fig_width = 1000, fig_height = 600
-)
+  fig_width = 1000, fig_height = 600,
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -516,13 +516,13 @@ qwebr_calc_card(
   title = "Slip-Critical Joint Clamp Force Calculator",
   icon = "bolt",
   inputs = list(
-    qwebr_calc_input("m_carriage", "Carriage mass", value = 48, min = 1, max = 1000, step = 1, suffix = "kg"),
-    qwebr_calc_input("a_axis", "Peak axis acceleration", value = 5, min = 0.5, max = 50, step = 0.5, suffix = "m/s²"),
-    qwebr_calc_input("mu", "Friction coefficient", value = 0.3, min = 0.05, max = 0.8, step = 0.01),
-    qwebr_calc_input("SF", "Safety factor", value = 1.5, min = 1, max = 5, step = 0.1),
+    qwebr_calc_input("m_carriage", "Carriage mass", value = 48, min = 1, max = 1000, step = 1, suffix = "kg", type = "slider"),
+    qwebr_calc_input("a_axis", "Peak axis acceleration", value = 5, min = 0.5, max = 50, step = 0.5, suffix = "m/s²", type = "slider"),
+    qwebr_calc_input("mu", "Friction coefficient", value = 0.3, min = 0.05, max = 0.8, step = 0.01, type = "slider"),
+    qwebr_calc_input("SF", "Safety factor", value = 1.5, min = 1, max = 5, step = 0.1, type = "slider"),
     qwebr_calc_input("n_bolts", "Number of bolts", value = 4, min = 1, max = 16, step = 1, type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -652,8 +652,10 @@ qwebr_calc_card(
     qwebr_calc_input("W", "Base footprint width", value = 0.9, min = 0.2, max = 5, step = 0.05, suffix = "m"),
     qwebr_calc_input("f_lat", "Lateral force fraction", value = 0.3, min = 0.05, max = 1, step = 0.05),
     qwebr_calc_input("h_cg", "CG height above the base (m)", value = 1.35, min = 0.1, max = 4, step = 0.05, type = "slider")
-  )
-)
+  ),
+  goal = "Leveling feet alone should be enough (SR 1.5 or more) without anchors. Keep the mass, CG height and lateral fraction, and widen only the base. How wide is enough (nearest 0.05 m)?",
+  goal_test = "SR >= SR_min && M_mass == 450 && h_cg == 1.35 && f_lat == 0.3",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -785,8 +787,10 @@ qwebr_calc_card(
     qwebr_calc_input("I_beam", "Beam second moment of area I", value = 9800000, min = 500000, max = 200000000, step = 100000, suffix = "mm⁴"),
     qwebr_calc_input("m_carriage", "Carriage mass", value = 48, min = 1, max = 1000, step = 1, suffix = "kg"),
     qwebr_calc_input("t_move", "Axis move time (s)", value = 0.25, min = 0.05, max = 2, step = 0.01, type = "slider")
-  )
-)
+  ),
+  goal = "Reach the preferred 5x separation without changing the beam or the carriage. Only the axis move time may change. How slow must the move be (nearest 0.01 s)?",
+  goal_test = "sep_ratio >= 5 && L == 2400 && I_beam == 9800000 && m_carriage == 48",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -847,8 +851,10 @@ qwebr_calc_card(
   inputs = list(
     qwebr_calc_input("I_required", "Stiffened beam second moment of area I", value = 47500000, min = 5000000, max = 200000000, step = 500000, suffix = "mm⁴"),
     qwebr_calc_input("m_eff", "Effective vibrating mass", value = 77.1, min = 10, max = 500, step = 0.1, suffix = "kg")
-  )
-)
+  ),
+  goal = "The stiffened section is heavier than it needs to be. Find the smallest second moment of area I (nearest 0.5 million mm4) that still gives the preferred 5x separation.",
+  goal_test = "sep_ratio_new >= 5 && I_required <= 16000000 && m_eff == 77.1",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

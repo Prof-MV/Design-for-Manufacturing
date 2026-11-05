@@ -1,4 +1,14 @@
-## Design for Machining {#chap-machining}
+---
+engine: knitr
+filters:
+  - webr
+webr:
+  show-startup-message: true
+  cell-options:
+    autorun: true
+---
+
+# Design for Machining {#chap-machining}
 
 ```{r setup-07, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,7 +17,7 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {#sec-objectives-07}
+## Learning Objectives {#sec-objectives-07}
 
 By the end of this chapter, you will be able to:
 
@@ -21,7 +31,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Why do you think DFM is particularly important in high-volume industries like automotive? Can you think of a part in your daily life that might have been designed poorly for machining?
 :::
 
-### Introduction to Design for Machining {#sec-machining-intro}
+## Introduction to Design for Machining {#sec-machining-intro}
 
 Design for Machining (DFM) helps engineers create parts that are easy and cost-effective to machine. DFM principles reduce manufacturing costs, improve quality, and speed up production time. In this chapter, we'll explore the fundamentals of DFM, with real-world examples from the automotive, food, and defense industries.
 
@@ -37,11 +47,11 @@ embed_youtube("rauL_J048sI", "Only Real Mechanical Engineers Can Spot These Desi
 
 ---
 
-### DFM Guidelines for Machined Parts {#sec-machining-guidelines}
+## DFM Guidelines for Machined Parts {#sec-machining-guidelines}
 
 Before diving into calculations, let's establish the fundamental design guidelines that make parts easier and cheaper to machine.
 
-#### Internal Corners and Fillets
+### Internal Corners and Fillets
 
 Sharp internal corners are impossible to machine with rotating cutters. Always specify **fillet radii** at internal corners.
 
@@ -77,7 +87,7 @@ ggplot() +
 
 **Guideline:** Internal fillet radius should be at least **1.5× the tool radius** to allow the tool to move smoothly without dwelling in corners.
 
-#### Standard Hole Sizes
+### Standard Hole Sizes
 
 Specifying standard drill sizes reduces tooling costs and setup time.
 
@@ -89,7 +99,7 @@ Specifying standard drill sizes reduces tooling costs and setup time.
 **Quick Check:** A designer specifies a 7.3 mm diameter hole. Why might this cause problems in manufacturing?
 :::
 
-#### Depth Limitations
+### Depth Limitations
 
 **Hole depth:** Standard drills can reliably produce holes up to **3× diameter** deep. Deeper holes require special tooling.
 
@@ -122,7 +132,7 @@ ggplot(depth_data, aes(x = feature, y = max_depth_ratio, fill = difficulty)) +
   ylim(0, 12)
 ```
 
-#### Wall Thickness
+### Wall Thickness
 
 Thin walls deflect under cutting forces, causing chatter and poor surface finish. Minimum wall thickness depends on material and wall height.
 
@@ -138,7 +148,7 @@ Thin walls deflect under cutting forces, causing chatter and poor surface finish
 
 ---
 
-### Theory and Calculations {#sec-machining-theory}
+## Theory and Calculations {#sec-machining-theory}
 
 Design for Machining involves considering the capabilities and limitations of machining processes like milling, turning, and drilling during the design phase. Key principles include minimizing material removal, avoiding deep pockets, using standard hole sizes, and ensuring adequate tolerances.
 
@@ -172,20 +182,69 @@ T <- L / (f * N)
 T  ## in minutes
 ```
 
-This shows a spindle speed of approximately `r round(N, 2)` RPM and machining time of about `r round(T, 3)` minutes. Adjust these parameters in your own code to see how they affect the results!
+This shows a spindle speed of approximately `r round(N, 2)` RPM and machining time of about `r round(T, 3)` minutes. Now try other values yourself.
+
+Teaching demo --- drag the sliders and watch the spindle speed and the machining time respond. Which parameter changes the time the most?
+
+```{r calc-machining-time-03-05, echo=FALSE, results='asis'}
+qwebr_calc_card(
+  label = "machining-time-03-05",
+  title = "Turning Time Calculator",
+  icon = "gears",
+  inputs = list(
+    qwebr_calc_input("v", "Cutting speed", value = 150, min = 50, max = 400, step = 10, suffix = "m/min", type = "slider"),
+    qwebr_calc_input("D", "Workpiece diameter", value = 20, min = 5, max = 100, step = 1, suffix = "mm", type = "slider"),
+    qwebr_calc_input("L", "Length of cut", value = 100, min = 10, max = 500, step = 5, suffix = "mm", type = "slider"),
+    qwebr_calc_input("f", "Feed", value = 0.2, min = 0.05, max = 0.5, step = 0.01, suffix = "mm/rev", type = "slider")
+  ),
+  mode = "demo"
+)
+```
+
+<details class="qwebr-calc-source">
+<summary>Show the live R code behind this calculator</summary>
+
+The card above re-runs this exact webR code every time you change an input. Edit the code directly and press **Run Code** to experiment further.
+
+```{webr-r}
+#| label: machining-time-03-05
+v <- 150   # cutting speed, m/min
+D <- 20    # workpiece diameter, mm
+L <- 100   # length of cut, mm
+f <- 0.2   # feed, mm/rev
+
+N <- (1000 * v) / (pi * D)    # spindle speed, rev/min
+t_min <- L / (f * N)          # machining time, min
+
+cat(sprintf("Machining time: %.3f min (%.1f s)\n", t_min, t_min * 60))
+cat(sprintf("  Spindle speed N       %.0f rev/min\n", N))
+cat(sprintf("  Feed rate f * N       %.0f mm/min\n", f * N))
+
+## Machining time against cutting speed for the current diameter, length and feed
+v_seq <- seq(50, 400, by = 5)
+t_seq <- L / (f * (1000 * v_seq) / (pi * D))
+par(mar = c(5, 5, 3, 1))
+plot(v_seq, t_seq, type = "l", lwd = 2, col = "steelblue", log = "y",
+     xlim = c(50, 400), ylim = c(0.005, 100),
+     xlab = "Cutting speed (m/min)", ylab = "Machining time (min)",
+     main = "Machining time vs cutting speed")
+points(v, t_min, pch = 19, cex = 1.8, col = "firebrick")
+```
+
+</details>
 
 In industries like defense, where precision is critical, tolerances must be tight but achievable. Overly tight tolerances increase costs exponentially.
 
-#### Challenge Questions
+### Challenge Questions
 
 1. Derive the formula for machining time if the feed rate changes with material hardness.
 2. How would you adjust the cutting speed for a food industry application using stainless steel?
 
-### Hands-on Examples
+## Hands-on Examples
 
 Now, let's apply DFM to specific industries using R for analysis and visualization.
 
-#### Automotive Industry
+### Automotive Industry
 
 In automotive, DFM is used for engine components like pistons and crankshafts. Using the built-in `mtcars` dataset, we can analyze how design parameters (e.g., horsepower and weight) relate to machined parts' performance. Imagine horsepower as a proxy for engine complexity, which affects machining time.
 
@@ -205,7 +264,7 @@ This scatter plot shows that heavier vehicles often require more powerful (and t
 
 
 
-#### Food Industry
+### Food Industry
 
 In the food industry, machined parts include conveyor rollers and mixing blades, often in food-grade stainless steel. Let's simulate data for machining costs vs. part complexity.
 
@@ -230,7 +289,7 @@ Higher complexity leads to higher costs—DFM aims to minimize this.
 
 
 
-#### Defense Industry
+### Defense Industry
 
 For defense, parts like aircraft fittings require high precision. Let's create an interactive plot of tolerance distributions using simulated data.
 
@@ -260,19 +319,19 @@ This interactive histogram allows you to hover over bins to see details—useful
 
 
 
-#### Challenge Questions
+### Challenge Questions
 
 1. Modify the automotive plot to filter for cars with more than 6 cylinders. What insights do you gain?
 2. In the food industry simulation, add a variable for material type and replot. How does it affect costs?
 3. For the defense plot, change the standard deviation to 0.005. How does tighter tolerance impact the distribution?
 
-### Interactive Exercises
+## Interactive Exercises
 
 Try modifying the R code chunks above! For example, change the parameters in the machining calculation and rerun. Think critically: How would DFM principles alter a design with sharp internal corners in an automotive bracket?
 
 ---
 
-### Tolerance and Surface Finish {#sec-machining-tolerances}
+## Tolerance and Surface Finish {#sec-machining-tolerances}
 
 Tolerances and surface finish specifications have a dramatic impact on machining cost. The relationship is exponential, not linear.
 
@@ -311,7 +370,7 @@ ggplot(tolerance_data, aes(x = tolerance_mm, y = relative_cost)) +
 
 ---
 
-### Common DFM Mistakes to Avoid {#sec-machining-mistakes}
+## Common DFM Mistakes to Avoid {#sec-machining-mistakes}
 
 | Mistake | Problem | Solution |
 |:--------|:--------|:---------|
@@ -329,9 +388,9 @@ ggplot(tolerance_data, aes(x = tolerance_mm, y = relative_cost)) +
 
 ---
 
-### Try it yourself {#sec-machining-tryit}
+## Try it yourself {#sec-machining-tryit}
 
-#### Spindle speed and turning time {#sec-tryit-spindle}
+### Spindle speed and turning time {#sec-tryit-spindle}
 
 A carbide tool turns a $32$ mm diameter steel shaft over a length of $240$ mm at a cutting speed of $180$ m/min with a feed of $0.25$ mm/rev. The same shaft in stainless steel is cut at $70$ m/min.
 
@@ -365,7 +424,7 @@ $N = \dfrac{1000 \times 180}{\pi \times 32} = `r sprintf("%.0f", sp$N)`$ rpm and
 
 </details>
 
-#### What does the tolerance cost? {#sec-tryit-tolerance-cost}
+### What does the tolerance cost? {#sec-tryit-tolerance-cost}
 
 Use the chapter's cost curve: relative cost 1 at $\pm 0.5$ mm, 1.5 at $\pm 0.25$, 2.5 at $\pm 0.1$, 4 at $\pm 0.05$, 7 at $\pm 0.025$, 15 at $\pm 0.01$ and 30 at $\pm 0.005$. A feature machined at $\pm 0.5$ mm costs \$12.
 
@@ -419,7 +478,7 @@ Total \$`r sprintf("%.0f", tc_total)`. Of that, the locating pin hole alone cost
 
 </details>
 
-#### Can the cutter make that corner? {#sec-tryit-corners}
+### Can the cutter make that corner? {#sec-tryit-corners}
 
 An end mill can only produce an internal corner radius of at least half its diameter.
 
@@ -441,7 +500,7 @@ tryit_sort(
 )
 ```
 
-### Check Your Understanding
+## Check Your Understanding
 
 ::: {.question}
 **Question 1:** What is the formula for spindle speed?
@@ -483,7 +542,7 @@ Tighter tolerances dramatically *increase* manufacturing costs. Each order of ma
 
 ---
 
-### Practice Problems {#sec-machining-practice}
+## Practice Problems {#sec-machining-practice}
 
 ::: {.question}
 **Problem 1:** Calculate the spindle speed and machining time for turning a 50 mm diameter shaft, 200 mm long. The material is aluminum with a recommended cutting speed of 300 m/min. Use a feed rate of 0.3 mm/rev.
@@ -539,7 +598,7 @@ Note: If Feature C could be relaxed to ±0.1 mm, the total would drop to $60—a
 
 ---
 
-### Key Takeaways {#sec-machining-takeaways}
+## Key Takeaways {#sec-machining-takeaways}
 
 1. **Design with standard tools in mind:** Use standard drill sizes, avoid sharp internal corners, and limit feature depths to standard tool capabilities.
 
@@ -553,7 +612,7 @@ Note: If Feature C could be relaxed to ±0.1 mm, the total would drop to $60—a
 
 ---
 
-### Further Resources {#sec-machining-resources}
+## Further Resources {#sec-machining-resources}
 
 **Videos:**
 ```{r video-machining-dfm, echo=FALSE, results='asis'}

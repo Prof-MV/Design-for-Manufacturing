@@ -1,4 +1,4 @@
-## Engineering Fits and Tolerances {#fits}
+# Engineering Fits and Tolerances {#fits}
 
 ```{r setup-01-05, include=FALSE}
 # Include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -7,7 +7,7 @@ source("R/helpers.R")
 source("R/required_packages.R")
 ```
 
-### Learning Objectives {-}
+## Learning Objectives {-}
 
 By the end of this chapter, you will be able to:
 
@@ -28,7 +28,7 @@ a hole and a shaft—is defined by the "fit." Understanding fits is crucial for
 ensuring that mechanical assemblies function correctly, whether they need to
 slide freely or be permanently locked together.
 
-### The Concept of Basis Systems
+## The Concept of Basis Systems
 
 Before diving into the types of fits, we must establish the reference point for the tolerance. In the imperial system, we generally use one of two approaches:
 
@@ -39,33 +39,33 @@ Before diving into the types of fits, we must establish the reference point for 
 
 ---
 
-### Imperial Fits {#sec-imperial-fits}
+## Imperial Fits {#sec-imperial-fits}
 
 Imperial fits are categorized by their function and the resulting "allowance" (the minimum clearance or maximum interference) between parts.
 
-#### a) Clearance Fits {-}
+### a) Clearance Fits {-}
 Clearance fits always provide a positive space between the hole and the shaft. This ensures the parts can move or rotate.
 
 * **Running or Sliding Fits (RC)**: Intended to provide a similar running performance with suitable lubrication allowance.
 * **Locational Clearance Fits (LC)**: Designed for parts that are normally stationary but can be freely assembled or disassembled.
 
-#### b) Interference Fits {-}
+### b) Interference Fits {-}
 Interference fits (or "press fits") occur when the shaft is intentionally larger than the hole.
 
 * **Force and Shrink Fits (FN)**: These require significant force or thermal expansion/contraction (e.g., heating the hole or freezing the shaft) to assemble. They are used for permanent attachments.
 
-#### c) Transition Fits (Locational) {-}
+### c) Transition Fits (Locational) {-}
 Transition fits (**LT**) are the middle ground. Depending on the actual size of the manufactured parts within their tolerance zones, the result could be either a slight clearance or a slight interference. These are used where accurate location is important, but a small amount of clearance or interference is permissible.
 
 ```{r, echo=FALSE, out.width="75%", fig.align="center", fig.cap="Fit Categories [@jensen2015interpreting]"}
 knitr::include_graphics("images/C20_F02_pg145.jpg")
 ```
 
-#### Description of Imperial Fits {#description-of-imperial-fits}
+### Description of Imperial Fits {#description-of-imperial-fits}
 
 The classes of fits are arranged in three general groups: running and sliding fits, locational fits, and force fits. These classifications ensure that mechanical components interact with the intended level of friction, precision, and permanence [@jensen2015interpreting].
 
-##### Running and Sliding Fits (RC) {#running-fits}
+#### Running and Sliding Fits (RC) {#running-fits}
 Running and sliding fits are intended to provide a similar running performance, with suitable lubrication allowance, throughout the range of sizes. The clearances for the first two classes, used chiefly as slide fits, increase more slowly with the diameter than for the other classes so that accurate location is maintained even at the expense of free relative motion.
 
 * **RC 1 Close sliding fits**: Intended for the accurate location of parts that must assemble without perceptible play.
@@ -85,7 +85,7 @@ knitr::include_graphics("images/ANSI_ASME_B41_RC5_9.png")
 
 ---
 
-##### Locational Fits (LC, LT, and LN) {#locational-fits}
+#### Locational Fits (LC, LT, and LN) {#locational-fits}
 Locational fits are intended to determine only the location of the mating parts; they may provide rigid or accurate location (as with interference fits) or provide some freedom of location (as with clearance fits).
 
 * **LC Locational clearance fits**: Intended for parts that are normally stationary but can be freely assembled or disassembled. They range from snug fits to looser fastener fits.
@@ -105,7 +105,7 @@ knitr::include_graphics("images/ANSI_ASME_B41_LT1_6.png")
 ```
 ---
 
-##### Force Fits (FN) {#force-fits}
+#### Force Fits (FN) {#force-fits}
 Force or shrink fits constitute a special type of interference fit, normally characterized by maintenance of constant bore pressures throughout the range of sizes. As shown in the mathematical section of Chapter @sec-imperial-fits, the interference varies almost directly with diameter.
 
 * **FN 1 Light drive fits**: Require light assembly pressures and produce more or less permanent assemblies. Suitable for thin sections or long fits.
@@ -127,18 +127,18 @@ knitr::include_graphics("images/ANSI_ASME_B41_FN1_5_big.png")
 
 ---
 
-### Metric Fits and the ISO Letter System {#metric-fits}
+## Metric Fits and the ISO Letter System {#metric-fits}
 
 In precision engineering, the relationship between two mating parts—typically a hole and a shaft—is defined by a "fit." The ISO system uses a specific alphanumeric code to define the tolerances of these parts, ensuring that components manufactured in different locations will assemble correctly according to [@ansi_b41].
 
-#### The Letter System: Holes vs. Shafts
+### The Letter System: Holes vs. Shafts
 
 The fundamental rule of the metric tolerance system is the distinction between internal and external features through the use of character casing:
 
 * **Capital Letters (A–ZC):** Used exclusively for **Internal Features** (e.g., Holes).
 * **Lower-case Letters (a–zc):** Used exclusively for **External Features** (e.g., Shafts).
 
-#### Alphabetical Progression and the "H" Pivot
+### Alphabetical Progression and the "H" Pivot
 
 The "H" (for holes) and "h" (for shafts) designations serve as the central pivot point of the metric system. In a standard hole-basis system, an **H** hole has a lower deviation of zero, meaning the hole is never smaller than the nominal "Basic Size." 
 
@@ -158,7 +158,7 @@ Please see a description of the preferred metric fits below. Select from those i
 knitr::include_graphics("images/DescriptionPreferredMetric.png")
 ```
 
-#### Metric Hole Basis Fits {#metric-fits-hole}
+### Metric Hole Basis Fits {#metric-fits-hole}
 
 In hole basis fits the hole always has the **H**. Preferred combinations of hole and shaft sizes can be found in this chart below.
 
@@ -169,7 +169,7 @@ knitr::include_graphics("images/PreferredHoleBasis_metric.png")
 
 Depending on the combination of the hole and shaft tolerance zones, fits are categorized into two primary types:
 
-#####  **Metric Clearance Fit:** 
+####  **Metric Clearance Fit:** 
 The shaft is always smaller than the hole. This allows for rotation or sliding.
 
 ```{r, echo=FALSE, out.width="75%", fig.align="center", fig.cap="[Metric Clearance Fits Hole Basis Part 1](images/ANSI_ASME_B41_metric_clearance1.png)"}
@@ -180,7 +180,7 @@ knitr::include_graphics("images/ANSI_ASME_B41_metric_clearance1.png")
 knitr::include_graphics("images/ANSI_ASME_B41_metric_clearance2.png")
 ```
 
-#####  **Metric Interference Fit:** 
+####  **Metric Interference Fit:** 
 The shaft is always larger than the hole. Assembly usually requires force, heat expansion, or cryo-shrinking.
 
 ```{r, echo=FALSE, out.width="75%", fig.align="center", fig.cap="[Metric Interference Fits Hole Basis Part 1](images/ANSI_ASME_B41_metric_transition1.png)"}
@@ -191,7 +191,7 @@ knitr::include_graphics("images/ANSI_ASME_B41_metric_transition1.png")
 knitr::include_graphics("images/ANSI_ASME_B41_metric_transition2.png")
 ```
 
-#### Metric Shaft Basis Fits {#metric-fits-shaft}
+### Metric Shaft Basis Fits {#metric-fits-shaft}
 
 In shaft basis fits the shaft always has the **h**. Preferred combinations of hole and shaft sizes can be found in this chart below.
 
@@ -202,7 +202,7 @@ knitr::include_graphics("images/PreferredShaftBasis_metric.png")
 
 Depending on the combination of the hole and shaft tolerance zones, fits are categorized into two primary types:
 
-#####  **Metric Clearance Fit:** 
+####  **Metric Clearance Fit:** 
 The shaft is always smaller than the hole. This allows for rotation or sliding.
 
 ```{r, echo=FALSE, out.width="75%", fig.align="center", fig.cap="[Metric Clearance Fits Shaft Basis Part 1](images/ANSI_ASME_B41_metric_clearance1S.png)"}
@@ -213,7 +213,7 @@ knitr::include_graphics("images/ANSI_ASME_B41_metric_clearance1S.png")
 knitr::include_graphics("images/ANSI_ASME_B41_metric_clearance2S.png")
 ```
 
-#####  **Metric Interference Fit:** 
+####  **Metric Interference Fit:** 
 The shaft is always larger than the hole. Assembly usually requires force, heat expansion, or cryo-shrinking.
 
 ```{r, echo=FALSE, out.width="75%", fig.align="center", fig.cap="[Metric Interference Fits Shaft Basis Part 1](images/ANSI_ASME_B41_metric_transition1S.png)"}
@@ -232,11 +232,11 @@ to the micrometer level, and incorrect fits can lead to premature bearing
 failure and warranty claims.
 :::
 
-### Try it yourself {#sec-tryit-fits}
+## Try it yourself {#sec-tryit-fits}
 
 These use fits that are not in the charts above. Each exercise checks your answer and lets you try again.
 
-#### Clearance of five shafts in an H7 hole {#sec-tryit-hole-basis}
+### Clearance of five shafts in an H7 hole {#sec-tryit-hole-basis}
 
 A $\varnothing 20$ mm hole is $\text{H7}$: limits $20.000$ to $20.021$ mm. The mating shaft limits (in mm, from the ISO tables for this size range) are:
 
@@ -282,7 +282,7 @@ A fit is a **clearance** fit when the minimum clearance is positive, an **interf
 
 </details>
 
-#### Classify the fits {#sec-tryit-fit-classes}
+### Classify the fits {#sec-tryit-fit-classes}
 
 ```{r tryit-fit-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -299,7 +299,7 @@ tryit_sort(
 )
 ```
 
-#### Which family of imperial fits? {#sec-tryit-fit-families}
+### Which family of imperial fits? {#sec-tryit-fit-families}
 
 ```{r tryit-fit-family-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -336,7 +336,7 @@ tryit_sort(
 )
 ```
 
-### Key Takeaways {-}
+## Key Takeaways {-}
 
 - Fits define the relationship between mating parts (hole and shaft)
 - Hole basis systems are more common because holes are easier to standardize

@@ -233,8 +233,8 @@ qwebr_calc_card(
     qwebr_calc_input("N", "Gear ratio N", value = 20, min = 1, max = 100, step = 1, type = "slider")
   ),
   goal = "Make the low-inertia Candidate A pass the 10:1 rule for the 1.6 kg·m² table by choosing a higher gear ratio.",
-  goal_test = "ratio_A <= 10 && J_load >= 1.6"
-)
+  goal_test = "ratio_A <= 10 && J_load >= 1.6",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -332,14 +332,14 @@ qwebr_calc_card(
   title = "RMS Torque Calculator",
   icon = "gauge-high",
   inputs = list(
-    qwebr_calc_input("T_friction_table", "Table friction torque", value = 4, min = 0, max = 30, step = 0.5, suffix = "N·m"),
-    qwebr_calc_input("T_dwell_hold", "Dwell holding torque", value = 0.3, min = 0, max = 3, step = 0.05, suffix = "N·m"),
-    qwebr_calc_input("t_move", "Move time", value = 0.5, min = 0.1, max = 3, step = 0.05, suffix = "s"),
-    qwebr_calc_input("T_rated_continuous", "Motor continuous rating", value = 2.4, min = 0.2, max = 20, step = 0.1, suffix = "N·m"),
-    qwebr_calc_input("T_peak_rated", "Motor peak rating", value = 7.2, min = 0.5, max = 60, step = 0.1, suffix = "N·m"),
+    qwebr_calc_input("T_friction_table", "Table friction torque", value = 4, min = 0, max = 30, step = 0.5, suffix = "N·m", type = "slider"),
+    qwebr_calc_input("T_dwell_hold", "Dwell holding torque", value = 0.3, min = 0, max = 3, step = 0.05, suffix = "N·m", type = "slider"),
+    qwebr_calc_input("t_move", "Move time", value = 0.5, min = 0.1, max = 3, step = 0.05, suffix = "s", type = "slider"),
+    qwebr_calc_input("T_rated_continuous", "Motor continuous rating", value = 2.4, min = 0.2, max = 20, step = 0.1, suffix = "N·m", type = "slider"),
+    qwebr_calc_input("T_peak_rated", "Motor peak rating", value = 7.2, min = 0.5, max = 60, step = 0.1, suffix = "N·m", type = "slider"),
     qwebr_calc_input("t_dwell", "Dwell time (s)", value = 2.5, min = 0, max = 10, step = 0.1, type = "slider")
-  )
-)
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -465,8 +465,10 @@ qwebr_calc_card(
     qwebr_calc_input("t_move", "Move time", value = 0.5, min = 0.1, max = 3, step = 0.05, suffix = "s"),
     qwebr_calc_input("t_dwell", "Dwell time", value = 2.5, min = 0, max = 10, step = 0.1, suffix = "s"),
     qwebr_calc_input("SF", "Service factor SF", value = 1.5, min = 1, max = 3, step = 0.05, type = "slider")
-  )
-)
+  ),
+  goal = "The catalog gearbox is rated 60 N.m. With SF = 1.5, the table load and friction unchanged, find the shortest move time (nearest 0.05 s) it can still handle.",
+  goal_test = "T_gearbox_required <= 60 && t_move == 0.4 && SF == 1.5 && J_load == 1.6 && T_friction_table == 4",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -570,12 +572,12 @@ qwebr_calc_card(
   title = "Servo vs. Induction + VFD Decision Matrix",
   icon = "scale-balanced",
   inputs = list(
-    qwebr_calc_input("w_accuracy", "Weight: accuracy", value = 0.3, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_dynamic_response", "Weight: dynamic response", value = 0.25, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_cost", "Weight: cost", value = 0.25, min = 0, max = 1, step = 0.05),
-    qwebr_calc_input("w_complexity", "Weight: complexity", value = 0.2, min = 0, max = 1, step = 0.05)
-  )
-)
+    qwebr_calc_input("w_accuracy", "Weight: accuracy", value = 0.3, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_dynamic_response", "Weight: dynamic response", value = 0.25, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_cost", "Weight: cost", value = 0.25, min = 0, max = 1, step = 0.05, type = "slider"),
+    qwebr_calc_input("w_complexity", "Weight: complexity", value = 0.2, min = 0, max = 1, step = 0.05, type = "slider")
+  ),
+  mode = "demo")
 ```
 
 <details class="qwebr-calc-source">
@@ -724,8 +726,10 @@ qwebr_calc_card(
     qwebr_calc_input("motor_FLA_460V", "Motor nameplate FLA", value = 2.8, min = 0.5, max = 30, step = 0.1, suffix = "A"),
     qwebr_calc_input("VFD_continuous_A", "VFD continuous rating", value = 3, min = 0.5, max = 40, step = 0.1, suffix = "A"),
     qwebr_calc_input("theta_deg", "Decline angle (deg)", value = 15, min = 0, max = 30, step = 0.5, type = "slider")
-  )
-)
+  ),
+  goal = "Find the steepest decline angle (nearest 0.5 degree) at which the conveyor no longer overhauls, so the motor has to drive it. Keep the rolling-resistance factor at 0.04.",
+  goal_test = "F_net <= 0 && theta_deg == 2 && mu_eff == 0.04",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -791,8 +795,10 @@ qwebr_calc_card(
     qwebr_calc_input("V_dc_trip", "Brake-chopper turn-on voltage", value = 780, min = 350, max = 1200, step = 10, suffix = "V"),
     qwebr_calc_input("I_chopper_max", "Chopper current limit", value = 8, min = 1, max = 50, step = 0.5, suffix = "A"),
     qwebr_calc_input("R_choice", "Selected resistor (ohm)", value = 120, min = 20, max = 300, step = 5, type = "slider")
-  )
-)
+  ),
+  goal = "The stores only has a 60 ohm resistor. What is the lowest chopper current limit (nearest 0.5 A) that accepts it?",
+  goal_test = "R_choice == 60 && I_at_trip <= I_chopper_max && I_chopper_max <= 13",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">
@@ -917,8 +923,10 @@ qwebr_calc_card(
     qwebr_calc_input("electricity_rate", "Electricity rate", value = 0.12, min = 0.03, max = 0.5, step = 0.01, prefix = "$", suffix = "/ kWh"),
     qwebr_calc_input("price_premium", "IE4 price premium", value = 60, min = 5, max = 5000, step = 5, prefix = "$"),
     qwebr_calc_input("hours_per_year", "Run hours per year", value = 4800, min = 500, max = 8760, step = 20, type = "slider")
-  )
-)
+  ),
+  goal = "Which duty makes the IE4 premium worth it? Reach a simple payback of 2 years or less on the 60 USD premium, with the motor and electricity price unchanged.",
+  goal_test = "payback_years <= 2 && price_premium == 60 && electricity_rate == 0.12 && eta_ie3 == 0.885 && eta_ie4 == 0.917 && P_out_kW == 0.746",
+  mode = "task")
 ```
 
 <details class="qwebr-calc-source">

@@ -1,4 +1,4 @@
-## Power Transmission: Belt and Pulley Systems {#chap-10-belts}
+# Power Transmission: Belt and Pulley Systems {#chap-10-belts}
 
 ```{r setup-107, include=FALSE}
 ## include the helpers.R file for pdf output of youtube on pdfs as a clickable link
@@ -21,7 +21,7 @@ theme_pulley <- theme_minimal() +
   )
 ```
 
-### Learning Objectives {#sec-objectives-belt}
+## Learning Objectives {#sec-objectives-belt}
 
 By the end of this chapter, you will be able to:
 
@@ -35,7 +35,7 @@ By the end of this chapter, you will be able to:
 **Before You Read:** Your car uses multiple belt drives—the serpentine belt powers the alternator, water pump, and air conditioning compressor. Why do engineers choose belts over direct gear connections in so many applications?
 :::
 
-### Introduction to Belt and Pulley Systems {#sec-belts-intro}
+## Introduction to Belt and Pulley Systems {#sec-belts-intro}
 
 Belt and pulley systems represent one of the oldest and most versatile methods of mechanical power transmission. From the spinning wheels of ancient civilizations to modern automotive engines and industrial machinery, belts have been transmitting power across distances for thousands of years.
 
@@ -52,9 +52,9 @@ The answer lies in the unique advantages belt drives offer:
 
 ---
 
-### Fundamental Belt Drive Concepts {#sec-belt-fundamentals}
+## Fundamental Belt Drive Concepts {#sec-belt-fundamentals}
 
-#### How Belt Drives Work
+### How Belt Drives Work
 
 A belt drive consists of at least two pulleys connected by a flexible belt. When the driving pulley (connected to the motor or power source) rotates, friction between the belt and pulley surface transmits the motion to the driven pulley.
 
@@ -144,7 +144,7 @@ ggplot() +
        subtitle = "Speed reduction configuration: large driven pulley reduces output speed while increasing torque")
 ```
 
-#### The Speed Ratio
+### The Speed Ratio
 
 The fundamental relationship in any belt drive is the **speed ratio** (also called the velocity ratio). Since the belt travels at a constant linear velocity around both pulleys:
 
@@ -168,7 +168,7 @@ Where:
 
 ---
 
-### Essential Belt Drive Terminology {#sec-belt-terminology}
+## Essential Belt Drive Terminology {#sec-belt-terminology}
 
 Understanding belt drive terminology is essential for proper selection and design.
 
@@ -263,7 +263,7 @@ ggplot() +
        subtitle = "The belt rides on the groove walls, not the bottom")
 ```
 
-#### Key Terminology Table
+### Key Terminology Table
 
 | Term | Definition |
 | :--- | :--- |
@@ -282,11 +282,11 @@ ggplot() +
 
 ---
 
-### Types of Belts {#sec-belt-types}
+## Types of Belts {#sec-belt-types}
 
 Different applications require different belt types. Each has distinct characteristics that make it suitable for specific uses.
 
-#### V-Belts
+### V-Belts
 
 V-belts are the most common type of power transmission belt. Their trapezoidal cross-section wedges into the pulley groove, creating a friction grip that increases with load.
 
@@ -366,7 +366,7 @@ ggplot() +
 - Limited speed ratio (typically up to 6:1)
 - Temperature sensitive
 
-#### Timing Belts (Synchronous Belts)
+### Timing Belts (Synchronous Belts)
 
 Timing belts have teeth that mesh with grooves in the pulley, providing positive engagement without slip. They are essential when precise speed ratios and synchronized motion are required.
 
@@ -474,7 +474,7 @@ ggplot() +
 - Robotics and automation
 - Conveyor systems requiring precise indexing
 
-#### Flat Belts
+### Flat Belts
 
 Flat belts are the simplest type, consisting of a rectangular cross-section. Modern flat belts often have a high-friction coating and can handle very high speeds.
 
@@ -489,7 +489,7 @@ Flat belts are the simplest type, consisting of a rectangular cross-section. Mod
 | Cost | Low |
 | Typical use | Light-duty, high-speed applications |
 
-#### Ribbed (Poly-V) Belts
+### Ribbed (Poly-V) Belts
 
 Ribbed belts combine the high-speed capability of flat belts with the grip of V-belts. Multiple small V-ribs run along the belt's inner surface.
 
@@ -522,9 +522,9 @@ kable(comparison_df,
 
 ---
 
-### Belt Drive Calculations {#sec-belt-calculations}
+## Belt Drive Calculations {#sec-belt-calculations}
 
-#### Speed Ratio and Output Speed
+### Speed Ratio and Output Speed
 
 The speed ratio is the fundamental calculation for any belt drive system:
 
@@ -538,7 +538,7 @@ $$n_2 = n_1 \times \frac{D_1}{D_2}$$
 >
 > $$n_2 = 1750 \times \frac{100}{250} = 700 \text{ rpm}$$
 
-#### Belt Length Calculation
+### Belt Length Calculation
 
 For an open belt drive (the most common configuration), the required belt pitch length is:
 
@@ -553,7 +553,7 @@ Where:
 | $D_1$ | Pitch diameter of smaller pulley | mm |
 | $D_2$ | Pitch diameter of larger pulley | mm |
 
-#### Center Distance from Belt Length
+### Center Distance from Belt Length
 
 If you have a standard belt length and need to calculate the center distance:
 
@@ -563,7 +563,7 @@ Where:
 
 $$B = 2L - \pi(D_1 + D_2)$$
 
-#### Arc of Contact
+### Arc of Contact
 
 The arc of contact (wrap angle) on the smaller pulley is critical for power transmission:
 
@@ -571,7 +571,7 @@ $$\theta_1 = 180° - 2\sin^{-1}\left(\frac{D_2 - D_1}{2C}\right)$$
 
 > **Design Rule:** The arc of contact on the smaller pulley should be at least 120° for adequate grip. Values below this require adjustment of center distance or use of an idler pulley.
 
-#### Belt Speed
+### Belt Speed
 
 The linear belt speed affects both power capacity and belt life:
 
@@ -587,7 +587,7 @@ Where:
 
 > **Design Rule:** For V-belts, optimal belt speed is typically 15-25 m/s. Speeds above 30 m/s cause excessive centrifugal force and reduce belt grip.
 
-#### Power Transmission
+### Power Transmission
 
 The power transmitted by a belt drive depends on the tension difference between tight and slack sides:
 
@@ -610,7 +610,7 @@ Where $\mu$ is the coefficient of friction between belt and pulley, and $\theta$
 
 ---
 
-### 🧮 Worked Example: Belt Drive Design {-}
+## 🧮 Worked Example: Belt Drive Design {-}
 
 **Problem:** Design a V-belt drive system to transmit 5 kW from a 1450 rpm electric motor to a machine shaft that must rotate at approximately 500 rpm. The center distance should be approximately 500 mm.
 
@@ -673,11 +673,11 @@ For 5 kW at 1450 rpm with a 100 mm pulley, referencing V-belt power rating table
 
 ---
 
-### ⚡ Belt Tensioning {-}
+## ⚡ Belt Tensioning {-}
 
 Proper belt tension is critical for reliable operation. Too little tension causes slip and rapid wear; too much tension damages bearings and shortens belt life.
 
-#### Tension Guidelines
+### Tension Guidelines
 
 | Belt Type | Tension Check Method | Acceptable Deflection |
 | :--- | :--- | :--- |
@@ -685,7 +685,7 @@ Proper belt tension is critical for reliable operation. Too little tension cause
 | Timing Belt | Frequency measurement | Specified Hz range |
 | Flat Belt | Visual/manual check | Minimal visible sag |
 
-#### Tensioning Methods
+### Tensioning Methods
 
 1. **Adjustable motor base** – Motor slides to adjust center distance
 2. **Idler pulley** – Additional pulley presses against slack side
@@ -763,9 +763,9 @@ ggplot() +
 
 ---
 
-### 🎯 Design Guidelines and Best Practices {-}
+## 🎯 Design Guidelines and Best Practices {-}
 
-#### Pulley Selection Guidelines
+### Pulley Selection Guidelines
 
 | Parameter | Recommendation |
 | :--- | :--- |
@@ -775,7 +775,7 @@ ggplot() +
 | Material | Cast iron or steel for most applications; aluminum for light duty |
 | Groove angle | 34° for light/medium loads; 38° for heavy loads |
 
-#### Installation Best Practices
+### Installation Best Practices
 
 1. **Alignment** – Pulleys must be parallel and in the same plane
 2. **Tension** – Set initial tension per manufacturer specifications
@@ -783,7 +783,7 @@ ggplot() +
 4. **Inspection** – Check belt condition and tension regularly
 5. **Replacement** – Replace all belts in a multi-belt drive together
 
-#### Common Problems and Solutions
+### Common Problems and Solutions
 
 | Problem | Likely Cause | Solution |
 | :--- | :--- | :--- |
@@ -795,7 +795,7 @@ ggplot() +
 
 ---
 
-### Related Topics {#sec-belt-resources}
+## Related Topics {#sec-belt-resources}
 
 Belt and pulley systems are one component of the broader field of power transmission. For related content, see:
 
@@ -805,7 +805,7 @@ Belt and pulley systems are one component of the broader field of power transmis
 
 ---
 
-### 📚 Chapter Summary {-}
+## 📚 Chapter Summary {-}
 
 Belt and pulley systems provide a versatile, economical method for transmitting rotational power. Key takeaways:
 
@@ -823,11 +823,11 @@ Belt and pulley systems provide a versatile, economical method for transmitting 
 
 ---
 
-### Try it yourself {#sec-belt-tryit}
+## Try it yourself {#sec-belt-tryit}
 
 These use drives that are not in the worked example. Each exercise checks your answer and lets you try again.
 
-#### Belt length, arc of contact and belt speed {#sec-tryit-belt-grid}
+### Belt length, arc of contact and belt speed {#sec-tryit-belt-grid}
 
 ```{r tryit-belt-grid, echo=FALSE, results='asis'}
 bd <- data.frame(
@@ -877,7 +877,7 @@ The compact drive's large pulley ratio at a short center distance leaves only `r
 
 </details>
 
-#### Tension in the belt {#sec-tryit-belt-tension}
+### Tension in the belt {#sec-tryit-belt-tension}
 
 A flat belt transmits $3.0$ kW at a belt speed of $14$ m/s over an arc of contact of $150^\circ$, with a friction coefficient $\mu = 0.30$.
 
@@ -917,7 +917,7 @@ $$T_2 = \frac{`r sprintf("%.1f", bt$dT)`}{`r sprintf("%.3f", bt$ratio)` - 1} = `
 
 </details>
 
-#### Which belt type? {#sec-tryit-belt-types}
+### Which belt type? {#sec-tryit-belt-types}
 
 ```{r tryit-belt-sort, echo=FALSE, results='asis'}
 tryit_sort(
@@ -953,7 +953,7 @@ tryit_sort(
 )
 ```
 
-### Practice Problems {#sec-belt-problems}
+## Practice Problems {#sec-belt-problems}
 
 **Problem 1:** A 2 HP motor runs at 1725 rpm and drives a fan through a V-belt drive. The fan must rotate at approximately 860 rpm. If the driver pulley is 4 inches in diameter, what size driven pulley is needed?
 
