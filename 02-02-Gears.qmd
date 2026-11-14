@@ -56,9 +56,11 @@ By the end of this chapter, you will be able to:
 4. **Apply** gear terminology including module, diametral pitch, and pressure angle
 5. **Analyze** simple, compound and planetary gear trains to determine overall speed ratios
 6. **Design** a gear train that meets a speed, torque and size requirement
+7. **Describe** how gears are made, measured and given the right amount of backlash
+8. **Recognize** the main gear failure modes (wear, scuffing, pitting, micropitting and tooth root fracture) from photographs, and relate each one to the load and speed that cause it
 
 ::: {.callout-think}
-**Before You Read:** Your car's engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this speed reduction, and why is it necessary?
+**Before You Read:** Your car's engine might spin at 6,000 RPM, but your wheels only turn at about 1,000 RPM at highway speed. How does the transmission accomplish this speed reduction, and why is it necessary? (@sec-why-transmission-13 in the drivetrains chapter answers the second question.)
 :::
 
 ## Introduction to Gears {#sec-gears-intro}
@@ -71,6 +73,91 @@ Gears serve four fundamental purposes:
 2. **Change rotational speed** (increase or decrease RPM)
 3. **Change torque** (increase or decrease turning force)
 4. **Change direction** of rotation or axis of rotation
+
+A few words are used loosely, so it helps to fix them early. A **gear** (or gearwheel, or toothed wheel) is a rotating part whose teeth mesh with the teeth of another gear. In a pair of meshing gears, the smaller one is called the **pinion** and the larger one the **gear** or **wheel**. A **cog** is a single tooth, and a **cogwheel** was originally a wheel with separate wooden pegs set into its rim as teeth. Two or more meshing gears form a **gear train**. A gear can also mesh with a **rack**, a straight toothed bar, which turns rotation into straight-line motion.
+
+Gears range in size from a few micrometres in micromachines, through a few millimetres in watches, to more than 10 m across in mining mills. Parts that look like gears but are not include the **sprocket**, which engages a link chain, and the **timing pulley**, which engages a toothed belt. These are covered in their own chapters (@sec-chains-intro and @sec-belts-intro).
+
+A gear pair behaves like a lever that keeps turning. When a small gear drives a large one, the torque goes up and the speed comes down in the ratio of the tooth counts, just as a long lever arm trades distance for force. When a large gear drives a small one, the opposite happens. That is why "first gear", "high gear" and "reverse" in a car gearbox name overall torque ratios, not particular gear wheels. The words are even used for continuously variable transmissions that contain no gears at all.
+
+## A Short History of Gears {#sec-gear-history}
+
+Gears are among the oldest machine elements still in everyday use. Knowing where they came from explains several things in this chapter: why we still talk about "cogs", why cycloidal tooth shapes survive in clocks, and why the involute tooth won.
+
+```{r}
+#| label: fig-gear-history-ancient
+#| echo: false
+#| out-width: "95%"
+#| layout-ncol: 2
+#| fig-cap: "Two of the oldest surviving geared objects. Images via Wikimedia Commons: (a) Gary Todd, [CC0](https://commons.wikimedia.org/wiki/File:Eastern_Zhou_Bronze_Ratchet_Gear.jpg); (b) Logg Tandy, [CC BY 4.0](https://commons.wikimedia.org/wiki/File:Antikythera_Fragment_A_(Front).webp)."
+#| fig-subcap:
+#|   - "Bronze ratchet gear from Luoyang, China, Warring States period (475–221 BC)."
+#|   - "The main fragment of the Antikythera mechanism (about 150–100 BC), with its bronze gear wheels visible."
+knitr::include_graphics(c("images/gears-wiki/history-bronze-ratchet-gear.jpg",
+                          "images/gears-wiki/history-antikythera.jpg"))
+```
+
+The main milestones are summarized below.
+
+| Date | Milestone |
+|:-----|:----------|
+| 4th century BC | The earliest surviving gears, made of bronze and iron in China during the Warring States period (@fig-gear-history-ancient a). |
+| about 330 BC | Aristotle describes gear wheels in windlasses and notes that one gear driving another reverses the direction of rotation. |
+| 3rd century BC | Greek engineers in Alexandria, including Archimedes and Philon of Byzantium, use gears in water-raising machines and other devices. |
+| 150–100 BC | The Antikythera mechanism: a hand-cranked bronze gear train that predicted the positions of the sun, moon and planets, and eclipses (@fig-gear-history-ancient b). |
+| about AD 250 | The Chinese engineer Ma Jun builds a south-pointing chariot. A differential gear train keeps a pointer facing the same direction as the chariot turns (@fig-gear-history-mills a). This is the same job the differential does in a car axle (@sec-bevel-gears). |
+| by AD 725 | Geared water clocks are built in China. |
+| 13th–14th century | The worm gear is invented on the Indian subcontinent, for roller cotton gins. |
+| 1386 | The Salisbury Cathedral clock, the oldest geared mechanical clock that still works. |
+| 1500s–1800s | Mills use large wooden cogwheels with replaceable pegs, usually of maple, driving cage or lantern pinions (@fig-gear-history-mills b). |
+| late 1800s | The involute tooth profile replaces the cycloidal profile for power transmission (@sec-tooth-profile). |
+| 1920s | Hypoid gears go into mass production in car rear axles (@sec-bevel-gears). |
+| 1957 | C. Walton Musser patents the strain-wave (harmonic) drive (@sec-harmonic-drives). |
+
+```{r}
+#| label: fig-gear-history-mills
+#| echo: false
+#| out-width: "95%"
+#| layout-ncol: 2
+#| fig-cap: "Early gear trains. Images via Wikimedia Commons: (a) Andy Dingley, [CC BY 3.0](https://commons.wikimedia.org/wiki/File:South-pointing_chariot_(Science_Museum_model).jpg); (b) Felix Haas, [CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Cog_Wheel_and_stone_spindle.jpg)."
+#| fig-subcap:
+#|   - "Science Museum model of a south-pointing chariot. Differential gears in the body keep the figure pointing the same way."
+#|   - "A wooden cogwheel with peg teeth driving a lantern pinion, the standard mill drive for centuries."
+knitr::include_graphics(c("images/gears-wiki/history-south-pointing-chariot.jpg",
+                          "images/gears-wiki/history-cogwheel-lantern-pinion.jpg"))
+```
+
+Wood was used for large gears until about two centuries ago because it was cheap and a worn peg was easy to replace. As late as 1967, a company in New Hampshire was still supplying tens of thousands of maple gear teeth a year to paper mills and grist mills. Cast iron, then steel, replaced wood. Steel is still the most common gear material because it is strong for its weight and inexpensive (@sec-gear-manufacture).
+
+::: {.callout-note title="Gears in nature"}
+For a long time gears were thought to be a purely human invention. In 2013, researchers at the University of Cambridge used high-speed video to show that the young nymphs of the planthopper *Issus coleoptratus* have a strip of 10 to 12 interlocking gear teeth on each hind leg (@fig-gear-issus). When the insect jumps, the two strips mesh and synchronize the legs to within about 30 microseconds, so the jump goes straight instead of twisting sideways. The teeth even have rounded fillets at their roots, which reduce the risk of the teeth shearing off, the same feature engineers design into gear teeth (@sec-gear-failure). The gears disappear when the insect moults into an adult.
+:::
+
+```{r}
+#| label: fig-gear-issus
+#| echo: false
+#| out-width: "35%"
+#| fig-align: center
+#| fig-cap: "An adult *Issus coleoptratus* planthopper. Its nymphs have meshing gear teeth on their hind legs. Image: Sarefo, [CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Issus.coleoptratus.1.jpg), via Wikimedia Commons."
+knitr::include_graphics("images/gears-wiki/nature-issus.jpg")
+```
+
+**History and more information:** [Gear: History](https://en.wikipedia.org/wiki/Gear#History) on Wikipedia
+
+## Gears Compared with Other Drives {#sec-gear-vs-other-drives}
+
+Belts, chains, friction wheels and hydraulic couplings can also transmit torque between shafts. Gears have advantages and limitations that decide when to choose them.
+
+| | Gears | Belts and chains (@sec-belts-intro, @sec-chains-intro) |
+|:--|:--|:--|
+| **Speed ratio** | Exact. Rigid teeth cannot slip, so the output tracks the input except for backlash. | Exact for chains and toothed belts, approximate for V-belts, which creep and slip. |
+| **Shaft arrangement** | Parallel, intersecting or skew shafts. Often the most compact and efficient way to connect non-parallel shafts. | Mainly parallel shafts. |
+| **Centre distance** | Fixed by the tooth counts and module and cannot be changed after the gears are made. | Long and adjustable. |
+| **Overload** | No slip. A jam is passed straight back to the motor and the other parts. | V-belts slip under overload, which can protect the drive. |
+| **Efficiency and life** | High efficiency, low wear and long life when properly lubricated. | Lower efficiency. Belts and chains stretch and wear out. |
+| **Cost and upkeep** | Expensive to make, usually need lubrication, and have more mass and inertia. | Cheaper, simpler and quieter. |
+
+Choose gears when the ratio must be exact, the space is tight, the shafts are not parallel, or the power is high. Choose belts or chains for long centre distances, low cost and some shock absorption.
 
 ## Fundamental Gear Concepts {#sec-gear-fundamentals}
 
@@ -126,15 +213,75 @@ ggplot() +
 
 For smooth, constant-velocity power transmission, the **common normal** at the point of contact between gear teeth must always pass through a fixed point called the **pitch point**. This is achieved through the **involute tooth profile**, which is the standard for most modern gears.
 
+### Tooth Profiles: From Pegs to Involutes {#sec-tooth-profile}
+
+The **tooth profile** is the shape of a tooth seen in a cut at right angles to the axis. It decides how smoothly the gears run and how quickly they wear.
+
+**Artisanal and cage gears.** Early gears were cut by hand from sheet metal with simple, roughly triangular teeth, as in the Antikythera mechanism, or had round pegs pushed into a wheel. With such shapes the speed ratio is not constant: it rises and falls a little as each tooth passes, which causes vibration, noise and fast wear. A **cage gear** (also called a lantern gear or lantern pinion) uses round rods held between two discs as its teeth (@fig-cage-gear). It can be made with nothing more than a drill. Dirt falls through between the rods instead of packing into the tooth spaces, so cage gears were popular in mills and dirty turret clocks. A cage gear should always be driven, never used as the driver.
+
+```{r}
+#| label: fig-cage-gear
+#| echo: false
+#| out-width: "60%"
+#| fig-align: center
+#| fig-cap: "A cage gear (lantern pinion) in the Pantigo Windmill, Long Island. The driving gearwheel is disengaged. Image: public domain, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Cage_Gear.png)."
+knitr::include_graphics("images/gears-wiki/history-cage-gear.png")
+```
+
+**Mathematical profiles.** A modern tooth is shaped so that the speed ratio stays exactly constant, which is the fundamental law of gearing above. Many curves could do this, but only two are widely used:
+
+- **Cycloidal teeth** are formed by a point on a circle rolling on another circle. They were the most common profile until the late 1800s and are still used in mechanical clocks and watches. They only work properly at exactly the right centre distance. The lobed disc of the cycloidal drive (@sec-cycloidal-drives) uses a related curve.
+- **Involute teeth** are formed by the end of a taut string as it unwinds from a circle, the **base circle** (@fig-involute a). The involute replaced the cycloid for power transmission for two reasons. First, it is easy to make: every involute gear of a given module and pressure angle can be cut by the same straight-sided rack-shaped tool, and that tool is the hob shown in @sec-gear-manufacture. Second, the ratio stays constant even if the centre distance is slightly wrong, so small errors in the housing do not affect smooth running.
+
+```{r}
+#| label: fig-involute
+#| echo: false
+#| out-width: "95%"
+#| layout-ncol: 2
+#| fig-cap: "The involute tooth profile. Images via Wikimedia Commons: (a) Claudio Rocchini, [CC BY 2.5](https://commons.wikimedia.org/wiki/File:Involute_wheel.gif); (b) M. D. Lebedev, [CC BY 4.0](https://commons.wikimedia.org/wiki/File:Involute_Spur_Gears_Meshing.gif)."
+#| fig-subcap:
+#|   - "An involute is traced by the end of a string unwinding from the base circle."
+#|   - "Two involute gears in mesh. The contact point always moves along one straight line, the line of action."
+if (knitr::is_html_output()) {
+  knitr::include_graphics(c("images/gears-wiki/involute-curve.gif", "images/gears-wiki/involute-meshing.gif"))
+} else {
+  knitr::include_graphics(c("images/gears-wiki/involute-curve.png", "images/gears-wiki/involute-meshing.png"))
+}
+```
+
+In an involute pair, the force between the teeth always acts along the same straight line, the **line of action**. That line is tangent to both base circles and passes through the pitch point (@fig-involute b). The angle between the line of action and the common tangent to the pitch circles is the **pressure angle**, which is 20° for most modern gears. Because this angle never changes, the load on the bearings does not change direction as the teeth roll through mesh.
+
+**History and more information:** [Involute gear](https://en.wikipedia.org/wiki/Involute_gear) and [Gear: Tooth profile](https://en.wikipedia.org/wiki/Gear#Tooth_profile) on Wikipedia
+
 ---
 
 ## Gear Terminology {#sec-gear-terminology}
 
 Understanding gear terminology is essential for specifying, designing, and manufacturing gears.
 
-```{r, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Thread Standards"}
+```{r, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Gear tooth terminology"}
 knitr::include_graphics("images/Gear-terminology-with-defination-4-1.png")
 ```
+
+@fig-gear-words shows the same terms on a 3D view of a few teeth. The most important ones are defined below.
+
+```{r}
+#| label: fig-gear-words
+#| echo: false
+#| out-width: "80%"
+#| fig-align: center
+#| fig-cap: "Gear nomenclature on a section of a spur gear: pitch circle, addendum, dedendum, circular pitch, tooth thickness, face width and fillet. Image via Wikimedia Commons, [CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Gear_words.png)."
+knitr::include_graphics("images/gears-wiki/gear-words.png")
+```
+
+- **Pitch circle:** The imaginary circle on which two meshing gears roll without slipping. Its diameter $d$ is the **pitch diameter**. The pitch circles of two meshing gears touch at the **pitch point**.
+- **Addendum** $a$: The radial height of the tooth above the pitch circle. **Dedendum** $b$: The radial depth of the tooth below the pitch circle. The **whole depth** is $a + b$.
+- **Clearance:** The gap between the tip of one tooth and the root of the space it enters, $b - a = 0.25\,m$ for standard teeth.
+- **Circular pitch** $p$: The distance from one tooth to the same point on the next tooth, measured along the pitch circle.
+- **Base circle:** The circle the involute unwinds from (@sec-tooth-profile). It is slightly smaller than the pitch circle.
+- **Face width:** The length of the tooth along the axis.
+- **Fillet:** The curved transition from the tooth flank into the root, where bending stress is highest (@sec-gear-failure).
+- **Interference:** Contact between tooth parts that were not designed to touch, for example the tip of one tooth digging into the fillet of the other.
 
 ### Essential Gear Formulas
 
@@ -270,13 +417,153 @@ $$p = \pi \times m = \pi \times 3 = 9.42 \text{ mm}$$
 
 </details>
 
+### Line of Action, Contact Zone and Contact Ratio {#sec-gear-contact}
+
+As a pair of involute teeth rolls through mesh, the point where they touch moves along the **line of action**, the straight line tangent to both base circles (@fig-gear-contact a). Contact starts where the line of action crosses the tip circle of the driven gear and ends where it crosses the tip circle of the driver. The distance between these two points is the **length of action**.
+
+```{r}
+#| label: fig-gear-contact
+#| echo: false
+#| out-width: "95%"
+#| layout-ncol: 3
+#| fig-cap: "How meshing teeth touch. Images: GearHeads at English Wikipedia, CC BY-SA 3.0, via Wikimedia Commons ([a](https://commons.wikimedia.org/wiki/File:Action_line.jpg), [b](https://commons.wikimedia.org/wiki/File:Action_zone.jpg), [c](https://commons.wikimedia.org/wiki/File:Contact_lines.jpg))."
+#| fig-subcap:
+#|   - "The line of action is tangent to both base circles."
+#|   - "The zone of action: the length of action times the face width."
+#|   - "On a helical tooth, the lines of contact run diagonally across the flank."
+knitr::include_graphics(c("images/gears-wiki/line-of-action.jpg",
+                          "images/gears-wiki/zone-of-action.jpg",
+                          "images/gears-wiki/contact-lines-helical.jpg"))
+```
+
+Multiply the length of action by the face width and you get the **zone of action**, the rectangle in which all contact takes place (@fig-gear-contact b). In a spur gear each contact is a straight line across the whole face. In a helical gear the contact lines run diagonally across the flank (@fig-gear-contact c), so a tooth pair starts touching at one corner and the contact spreads gradually. That is the reason helical gears run more quietly (@sec-helical-gears).
+
+The **contact ratio** is the average number of tooth pairs in contact at any moment:
+
+$$\varepsilon_\alpha = \frac{\text{length of action}}{\text{base pitch}}$$
+
+The **base pitch** is the distance between neighbouring teeth measured along the line of action, $p_b = p \cos\phi$, where $\phi$ is the pressure angle. A contact ratio of 1.0 means that the next pair of teeth takes up the load at exactly the moment the previous pair lets go. Any manufacturing error then causes a jolt. Spur gears are designed for $\varepsilon_\alpha \geq 1.2$, and typical values are 1.4 to 1.8. For a contact ratio of 1.6, two tooth pairs share the load 60% of the time and one pair carries it alone 40% of the time.
+
+A helical gear adds a **face contact ratio** $\varepsilon_\beta$, the face width divided by the axial pitch, because the diagonal teeth overlap along the face. The **total contact ratio** is $\varepsilon_\gamma = \varepsilon_\alpha + \varepsilon_\beta$, and values above 2 are common. This is the main reason a helical gear is stronger and quieter than a spur gear of the same size.
+
+### Pitch, Module and Standard Sizes {#sec-gear-module}
+
+Gears could be made with any tooth size, but standard sizes allow off-the-shelf gears and cutters to be used. **Pitch** in general is the distance from a point on one tooth to the corresponding point on the next. The word on its own is ambiguous, so always say which pitch you mean (@fig-gear-pitches):
+
+- **Circular pitch** $p$, measured along the pitch circle
+- **Base pitch** $p_b$, measured along the base circle or the line of action
+- **Normal pitch** $p_n$, measured at right angles to the teeth of a helical gear: $p_n = p \cos\psi$, where $\psi$ is the helix angle
+- **Axial pitch** $p_x$, measured parallel to the axis of a helical gear or worm
+
+```{r}
+#| label: fig-gear-pitches
+#| echo: false
+#| out-width: "45%"
+#| fig-align: center
+#| fig-cap: "Circular pitch, measured along the pitch circle, and base pitch, measured along the base circle. Image: GearHeads at English Wikipedia, [CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Principal_pitches.jpg), via Wikimedia Commons."
+knitr::include_graphics("images/gears-wiki/principal-pitches.jpg")
+```
+
+The circular pitch is always a multiple of $\pi$, which is awkward. The **module** removes the $\pi$:
+
+$$m = \frac{p}{\pi} = \frac{d}{N}$$
+
+The module is the pitch diameter in millimetres per tooth. A 20-tooth gear with a 40 mm pitch diameter has a module of 2. Imperial gears use the **diametral pitch** instead, the number of teeth per inch of pitch diameter, $P = N/d = 25.4/m$. The module is a size, so bigger means bigger teeth. The diametral pitch is the inverse, so bigger means smaller teeth.
+
+**Preferred modules (ISO 54, first choice), in mm:** 1, 1.25, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 16, 20, 25, 32, 40, 50. Below 1 mm, modules of 0.5, 0.6 and 0.8 are common for small gears, and 0.1 to 0.4 for instruments.
+
+**Common diametral pitches, in teeth per inch:** 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 48, 64, 72, 80, 96, 120.
+
+::: {.callout-tip title="Design tip: choose tooth counts with no common factor"}
+If the tooth counts of two meshing gears share no common factor (for example 16 and 25), each tooth of the pinion meets every tooth of the gear in turn before the pattern repeats. A small defect on one tooth is then spread over the whole gear instead of hammering the same few teeth every few turns, and wear is even. The extra tooth that breaks the pattern is called a **hunting tooth**. If you need an exact 1:1 ratio, put an idler with a coprime tooth count between the two gears. The idler keeps the ratio but reverses the direction (@sec-gear-ratios).
+:::
+
+### Tooth Thickness, Measurement and Undercut {#sec-gear-measurement}
+
+The pitch diameter cannot be measured directly because it is an imaginary circle. Inspectors therefore check the **tooth thickness**, which also sets the backlash (@sec-gear-backlash). The **circular tooth thickness** is the arc length of a tooth on the pitch circle. The **chordal thickness** is the straight-line chord across the same tooth, measured at the **chordal addendum** below the tip with a gear-tooth vernier (@fig-gear-thickness a). Two easier and more accurate methods are used in production:
+
+- **Span measurement** (Wildhaber method): A disc micrometer is closed over several teeth (@fig-gear-thickness b). On an involute gear, the parallel anvils touch the flanks along a line tangent to the base circle, so the reading does not depend on where exactly the anvils sit.
+- **Measurement over pins (or balls):** Precision pins are placed in opposite tooth spaces and the distance over them is measured (@fig-gear-thickness c). This is the standard method for internal gears and small pinions.
+
+```{r}
+#| label: fig-gear-thickness
+#| echo: false
+#| out-width: "95%"
+#| layout-ncol: 3
+#| fig-cap: "Checking tooth thickness. Images: GearHeads at English Wikipedia, CC BY-SA 3.0, via Wikimedia Commons ([a](https://commons.wikimedia.org/wiki/File:Tooth_thickness.jpg), [b](https://commons.wikimedia.org/wiki/File:Span_measurement.jpg), [c](https://commons.wikimedia.org/wiki/File:Pin_measurement.jpg))."
+#| fig-subcap:
+#|   - "Circular and chordal thickness and the chordal addendum."
+#|   - "Span measurement across several teeth."
+#|   - "Measurement over pins."
+knitr::include_graphics(c("images/gears-wiki/tooth-thickness.jpg",
+                          "images/gears-wiki/span-measurement.jpg",
+                          "images/gears-wiki/measurement-over-pins.jpg"))
+```
+
+**Undercut.** When a pinion with few teeth is generated by a rack-shaped cutter, the tip of the cutter can cut away the bottom of the involute flank. The fillet then cuts into the working profile instead of blending smoothly into it (@fig-gear-undercut). The undercut tooth is weaker at the root, which is where it carries the most bending stress, and the length of contact is shorter. For standard 20° teeth, undercut starts below about 17 teeth. The cure is a **profile shift**: the cutter is moved outwards by $x \cdot m$, where $x$ is the profile-shift coefficient. This gives a thicker, stronger root, but the gear then needs a slightly larger centre distance or a mating gear with the opposite shift.
+
+```{r}
+#| label: fig-gear-undercut
+#| echo: false
+#| out-width: "40%"
+#| fig-align: center
+#| fig-cap: "An undercut tooth. The fillet curve cuts into the working profile below the base circle, which weakens the root. Image: GearHeads, vectorized by Qef, [CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Undercuts.svg), via Wikimedia Commons."
+knitr::include_graphics("images/gears-wiki/undercut.png")
+```
+
+### Backlash {#sec-gear-backlash}
+
+**Backlash** is the play between meshing teeth: the gap between the back of a driving tooth and the tooth behind it on the driven gear. When the drive reverses, that gap must close before any torque is passed on, so the output briefly stands still. The word is used both for this effect and for the size of the gap, for example "0.1 mm of backlash".
+
+Gears are always given some backlash on purpose. Zero backlash would require perfect manufacture, identical thermal expansion of gears and housing, and no room for the oil film. Backlash is usually provided by making each tooth slightly thinner than half the circular pitch. In a pinion and gear pair, the full allowance is usually taken off the gear so that the small pinion keeps its full tooth strength. Backlash can also come from setting the gears slightly further apart. A typical allowance is 0.04 to 0.10 times the module.
+
+**Backlash adds up through a gear train.** The backlash at the output is the sum of the backlash of every mesh, each scaled by the ratio between that mesh and the output. In a long train it can become large. That matters wherever the drive reverses and position counts: machine-tool feeds, robot joints, gun turrets and instrument dials. Several designs reduce or remove it:
+
+- **Split (scissor) gears:** The gear is made in two halves side by side, one fixed to the shaft and one free to turn, with springs between them. The springs twist the halves apart so that the teeth fill the space in the mating gear.
+- **Tapered teeth:** The teeth are tapered along the axis, and the gear is pushed axially into mesh until the play is gone.
+- **Preloaded designs:** The rack yoke in car steering (@sec-rack-pinion) and the harmonic drive (@sec-harmonic-drives) remove backlash with an elastic preload.
+
+**History and more information:** [Gear: Nomenclature](https://en.wikipedia.org/wiki/Gear#Nomenclature), [Gear: Backlash](https://en.wikipedia.org/wiki/Gear#Backlash) and [List of gear nomenclature](https://en.wikipedia.org/wiki/List_of_gear_nomenclature) on Wikipedia
+
 ---
 
 ## Types of Gears {#sec-gear-types}
 
 Different gear types are designed for different applications based on shaft orientation, load capacity, speed, and noise requirements.
 
-### Spur Gears
+### Classifying Gears {#sec-gear-classification}
+
+The Wikipedia article on gears sorts them by three questions. Answering them in order narrows down the choice quickly.
+
+**1. How are the shafts arranged?**
+
+| Shaft arrangement | What it means | Gear types |
+|:------------------|:--------------|:-----------|
+| **Parallel** | The axes are parallel. External gears turn in opposite directions. | Spur, helical, herringbone, internal gears, planetary sets |
+| **Intersecting (crossed)** | The axes meet at a point, usually at 90°. | Straight and spiral bevel gears, crown gears |
+| **Skew** | The axes neither meet nor are parallel. | Hypoid gears, crossed helical gears, worm gears |
+| **Rotary to linear** | One member moves in a straight line. | Rack and pinion |
+
+**2. Do the teeth point outwards or inwards?** An **external gear** has its teeth on the outside. An **internal gear** (or ring gear) has its teeth on the inside of a ring (@fig-gear-internal-crown a). An internal gear and its pinion turn in the *same* direction, sit closer together, and have more teeth in contact. Only the larger gear of a pair can be internal. The ring gear of a planetary set (@sec-planetary-gears) is the most common example. A **crown gear** has its teeth on the face of the disc, at right angles to it (@fig-gear-internal-crown b). It meshes with a spur pinion on a shaft at 90°, and clock escapements also use crown wheels.
+
+```{r}
+#| label: fig-gear-internal-crown
+#| echo: false
+#| out-width: "70%"
+#| layout-ncol: 2
+#| fig-cap: "Two less common tooth orientations. Images via Wikimedia Commons, CC BY-SA 3.0: (a) [honaroog](https://commons.wikimedia.org/wiki/File:Inside_gear.png); (b) [Wikimedia Commons contributor](https://commons.wikimedia.org/wiki/File:Crown_gear.png)."
+#| fig-subcap:
+#|   - "Internal gear."
+#|   - "Crown gear."
+knitr::include_graphics(c("images/gears-wiki/internal-gear.png",
+                          "images/gears-wiki/crown-gear.png"))
+```
+
+**3. Which way do the teeth run across the face?** Straight teeth (spur and straight bevel), angled teeth (helical and spiral bevel), two opposite helices (herringbone), or a screw thread that wraps all the way round (worm). The sections that follow take each type in turn.
+
+**History and more information:** [Gear: Relative axis position](https://en.wikipedia.org/wiki/Gear#Relative_axis_position) on Wikipedia
+
+### Spur Gears {#sec-spur-gears}
 
 **Spur gears** have straight teeth parallel to the axis of rotation. They are the simplest, most common, and most economical type.
 
@@ -287,15 +574,24 @@ if (knitr::is_html_output()) {
   knitr::include_graphics("images/Animated_two_spur_gears_1_2.png")
 }
 ```
+
+Spur gears only mesh correctly on parallel shafts. Because the teeth are straight, the tooth load has no axial component, so no thrust bearing is needed. The disadvantage comes from the way the teeth meet: each new pair of teeth makes contact along the whole face width at once. The sudden change in load at every tooth produces a characteristic whine that grows with speed. Spur gears are therefore excellent at moderate speeds. Above a pitch-line velocity of about 25 m/s, which counts as high speed, helical gears are preferred.
+
 **Advantages:** Simple, Economical, High efficiency (98-99%)
 
 **Disadvantages:** Noisy at high speeds, Limited to parallel shafts, Moderate load capacity
 
 **Applications:** Gearboxes, conveyors, food processing equipment, clocks, printers
 
+::: {.callout-tip title="Typical application: the reverse idler gear in a manual car gearbox"}
+Many manual gearboxes use straight-cut spur gears for reverse, even though every forward gear is helical (@sec-manual-gearbox-13). Reverse is often engaged by sliding an idler gear sideways into mesh between two other gears. Straight teeth can slide into mesh this way, but helical teeth would have to twist as they slid in. Spur teeth also produce no axial thrust, so the sliding idler needs no thrust bearing. The usual drawback of spur gears, whine at speed, hardly matters here because reverse is only used briefly and at low speed. That whine is the familiar sound of a car reversing.
+:::
+
+**History and more information:** [Spur gear](https://en.wikipedia.org/wiki/Spur_gear) on Wikipedia
+
 ---
 
-### Helical Gears
+### Helical Gears {#sec-helical-gears}
 
 **Helical gears** have teeth cut at an angle (helix angle) to the shaft axis. This allows gradual tooth engagement, resulting in smoother, quieter operation.
 
@@ -306,11 +602,41 @@ if (knitr::is_html_output()) {
   knitr::include_graphics("images/Anim_engrenages_helicoidaux.png")
 }
 ```
-**Advantages:** Smoother, quieter, Higher load capacity, Can transmit power between non-parallel shafts
+
+With parallel helical gears, each pair of teeth first touches at a single point at one edge of the face. The contact then spreads into a diagonal line across the flank (@fig-gear-contact c) and shrinks again to a point at the other edge. The load builds up and falls away gradually instead of all at once, and more than one tooth pair is always in contact. Helical gears are therefore used for high speeds (pitch-line velocity above about 25 m/s), high power, and wherever noise matters.
+
+Two helical gears on **parallel** shafts must have equal helix angles of opposite hand: one right-handed and one left-handed. Helical gears can also connect **crossed** (skew) shafts (@fig-helical-crossed). The angle between the shafts is then
+
+$$\Sigma = \beta_1 + \beta_2 \text{ (same hand)} \qquad \Sigma = \beta_1 - \beta_2 \text{ (opposite hands)}$$
+
+where $\beta$ is the helix angle of each gear. Two right-hand 45° gears therefore connect shafts at 90°. Crossed helical gears touch only at a point instead of along a line, so they carry much less load. They are used in light drives such as distributor and oil-pump drives in older engines.
+
+```{r}
+#| label: fig-helical-crossed
+#| echo: false
+#| out-width: "50%"
+#| fig-align: center
+#| fig-cap: "Helical gears. Top: a pair on parallel shafts. Bottom: a pair on crossed shafts at 90°, with both gears of the same hand. Image: Arthur Clarke at English Wikipedia, public domain, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Helical_Gears.jpg)."
+knitr::include_graphics("images/gears-wiki/helical-parallel-crossed.jpg")
+```
+
+Helical gears have two drawbacks. The angled teeth push the gears apart along their axes, and that **axial thrust** must be carried by thrust bearings. There is also more sliding between the teeth, so the oil often contains extreme-pressure additives.
+
+**Advantages:** Smoother, quieter, Higher load capacity, Can transmit power between non-parallel shafts (crossed helical gears)
+
 **Disadvantages:** More complex to manufacture, Higher axial thrust, Slightly lower efficiency (97-99%)
+
 **Applications:** Automotive transmissions, industrial gearboxes, machine tools, elevators
 
-### Herringbone Gears
+::: {.callout-tip title="Typical application: the constant-mesh forward gears of a passenger-car manual gearbox"}
+The forward gears in a manual gearbox stay in mesh all the time and turn at engine speed for hours, so noise and durability matter most. Helical teeth engage gradually and more than one tooth pair shares the load at any instant. A helical pair is therefore quieter and stronger than a spur pair of the same size. Spur gears can slide into mesh and helical gears cannot, but that does not matter here: the driver selects a gear by moving a synchronizer, which locks a gear that is already in mesh to its shaft (@sec-manual-gearbox-13). The cost is axial thrust, which tapered roller or angular-contact bearings carry. The single-speed reduction gearbox of an electric car uses helical gears for the same reason (@sec-ev-single-13): there is no engine noise to mask gear whine, and the motor turns at over 10 000 rpm.
+:::
+
+**History and more information:** [Helical gears (section of the Gear article)](https://en.wikipedia.org/wiki/Gear#Helical) on Wikipedia
+
+---
+
+### Herringbone Gears {#sec-herringbone-gears}
 
 **Herringbone gears** are a special type of helical gear with two sets of teeth in a V-shaped pattern. This design cancels out axial thrust and allows for very high load capacity.
 
@@ -318,32 +644,66 @@ if (knitr::is_html_output()) {
 knitr::include_graphics("images/Herringbone_gears_(Bentley,_Sketches_of_Engine_and_Machine_Details).jpg")
 ```
 
+A double-helical gear works like two mirror-image helical gears side by side on one shaft. Each half pushes axially in the opposite direction, so the net thrust is zero and no thrust bearing is needed. A **herringbone** gear in the strict sense has the two halves joined in a V with no groove between them. A **double-helical** gear has a groove in the middle, which gives the cutting tool room to run out. The same idea has been used on bevel gears, for example in the final drive of the 1919 Citroën Type A. André Citroën's company made herringbone gears before it made cars, and the double chevron in the Citroën logo is a herringbone tooth.
+
+The direction of the V matters. In the **stable** arrangement, the axial forces of the two halves point towards the centre of the gear. If the gear is pushed slightly sideways, the forces become unequal and push it back to the centre. In the **unstable** arrangement they point outwards, and a small misalignment produces a net force that can push the gear train apart. Reversing the direction of rotation reverses the thrusts, so a stable arrangement becomes unstable. A stable double-helical gear can directly replace a spur gear without any change to the bearings.
+
 **Advantages:** No axial thrust, Very high load capacity, Smooth operation
 
 **Disadvantages:** Complex and expensive to manufacture, Large size
 
 **Applications:** Heavy machinery, marine transmissions, power plants, large industrial gearboxes
 
+::: {.callout-tip title="Typical application: the main reduction gearbox of a steam-turbine ship"}
+A marine steam turbine runs at several thousand rpm, but the propeller turns at around 100 rpm. The gearbox between them carries tens of megawatts. Gears this fast and this heavily loaded must be helical to run smoothly. A single-helical gear at this power, however, would push with a very large axial force, and the bearings and casing would have to resist it. The two opposite helices of a herringbone gear cancel that force inside the gear itself. Usually one gear is allowed to float axially so that both halves share the load equally. Spur gears would be too noisy, which on a warship also makes the ship easier to detect. The high manufacturing cost is acceptable when one gearbox drives the whole ship. Most modern units are *double-helical* gears with a groove between the two halves, which gives the hob room to run out. A true herringbone with no gap needs special shaping machines.
+:::
+
+**History and more information:** [Herringbone gear](https://en.wikipedia.org/wiki/Herringbone_gear) on Wikipedia
+
 ---
 
-### Bevel Gears
+### Bevel Gears {#sec-bevel-gears}
 
-**Bevel gears** transmit power between shafts that intersect, typically at 90°. The teeth are cut on a conical surface.
+**Bevel gears** transmit power between shafts that intersect, typically at 90°. The teeth are cut on a conical surface. Straight bevel teeth are cheap but noisy. **Spiral bevel** teeth are curved and engage gradually, just as helical teeth do. A **hypoid** gear is a spiral bevel gear whose pinion axis is offset from the gear axis, so the shafts no longer intersect.
 
 ```{r, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Bevel Gear"}
 knitr::include_graphics("images/Gear-kegelzahnrad.png")
 ```
 
-**Advantages:** Transmit power between intersecting shafts, Can achieve high reduction ratios, Smooth operation
+The pitch surface of a bevel gear is a cone whose tip lies where the two shaft axes meet. Two bevel gears with equal tooth counts and shafts at 90° are called **miter gears**. They change direction without changing speed. Straight bevel gears have the same weakness as spur gears, because each tooth comes into contact along its whole length at once. They are used only at low speeds: below about 5 m/s at the pitch line, or 1000 rpm for small gears.
 
-**Disadvantages:** More complex to design and manufacture, Higher cost, Moderate efficiency (97-99%)
+```{r}
+#| label: fig-bevel-hypoid
+#| echo: false
+#| out-width: "95%"
+#| layout-ncol: 2
+#| fig-cap: "Bevel and hypoid gears. Images via Wikimedia Commons: (a) Diego Delso, [CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Engranaje_c%C3%B3nico,_Nymphenburg,_M%C3%BAnich,_Alemania4.JPG); (b) Hapesoft, [public domain](https://commons.wikimedia.org/wiki/File:Sprocket35b.jpg)."
+#| fig-subcap:
+#|   - "A straight bevel gear set operating a canal lock gate at Nymphenburg, Munich."
+#|   - "A hypoid ring gear and pinion. The pinion axis is offset below the ring gear centre."
+knitr::include_graphics(c("images/gears-wiki/bevel-lock-gate.jpg",
+                          "images/gears-wiki/hypoid-gear.jpg"))
+```
+
+**Spiral bevel** teeth are curved and engage gradually, like helical teeth. Several tooth systems are named after the machine makers who developed them. Gleason teeth are circular arcs whose depth tapers along the tooth. Oerlikon and Klingelnberg Cyclo-Palloid teeth are epicycloids of constant depth. These tooth surfaces are not simple involutes, and making them takes dedicated bevel-gear generators or a 5-axis machining centre.
+
+**Hypoid gears** connect skew shafts, usually at 90°, with the pinion offset from the ring gear centre (@fig-bevel-hypoid b). Their pitch surfaces are hyperboloids, which is where the name comes from. Contact is even smoother than in a spiral bevel gear, and the pinion can have fewer teeth, so ratios of up to 60:1 are possible in a single hypoid set. The offset, however, makes the teeth slide along each other. That sliding squeezes the oil film out, so hypoid gears need a very viscous gear oil with extreme-pressure additives, labelled for hypoid use. Hypoid gears went into mass production in car rear axles in the 1920s and are now standard there because they are quieter than plain bevel gears.
+
+**Advantages:** Transmit power between intersecting shafts, Turn the drive through 90° in a single stage, Smooth operation (spiral bevel)
+
+**Disadvantages:** More complex to design and manufacture, Higher cost, Ratio limited to about 5:1 per stage, Hypoid versions are less efficient (about 95%) because the teeth slide
 
 **Applications:** Automotive differentials, hand tools, food mixers, rotorcraft transmissions
 
+::: {.callout-tip title="Typical application: the ring-and-pinion final drive of a rear-wheel-drive car"}
+The propshaft runs along the car and the axle shafts run across it, so the drive must turn through 90°. At the same point it needs a final reduction of about 3:1 to 4:1 (@sec-drivetrain-intro, @sec-rwd-13). The bevel ring gear carries the differential, whose small bevel gears let the two wheels turn at different speeds in a corner. Most cars use **hypoid** gears here. The pinion offset lowers the propshaft, which allows a lower cabin floor and a smaller tunnel. The offset also makes the pinion larger, so it is stronger and quieter. The price is sliding between the teeth, which costs a few percent of efficiency and calls for an extreme-pressure (EP) hypoid gear oil. A worm gear would also turn the drive through a right angle, but at 40-90% efficiency it would waste far too much power for vehicle propulsion. All-wheel-drive vehicles add a centre differential or coupling between the axles (@sec-awd-4wd-13).
+:::
+
+**History and more information:** [Bevel gear](https://en.wikipedia.org/wiki/Bevel_gear) on Wikipedia
 
 ---
 
-### Worm Gears
+### Worm Gears {#sec-worm-gears}
 
 **Worm gears** consist of a worm (screw-like) driving a worm wheel. They provide very high reduction ratios in a compact space and can be self-locking.
 
@@ -355,15 +715,34 @@ if (knitr::is_html_output()) {
 }
 ```
 
+A worm looks like a screw and meshes with a **worm wheel** that looks like a helical gear (@fig-worm-wheel). The worm really is a helical gear, but with a helix angle close to 90° and a long body. The difference between the two is simple: if at least one tooth wraps all the way around the body, the part is a worm; if not, it is a helical gear. A worm can have a single tooth (a **single-start** worm). A worm with several teeth is a **multi-start** worm, and the number of starts takes the place of the pinion tooth count in the gear ratio. Worms are specified by their **lead angle**, which is 90° minus the helix angle, and they can be right- or left-handed like screw threads.
+
+```{r}
+#| label: fig-worm-wheel
+#| echo: false
+#| out-width: "35%"
+#| fig-align: center
+#| fig-cap: "A brass worm and worm wheel. Image: Arthur Clarke at English Wikipedia, public domain, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Worm_Gear_and_Pinion.jpg)."
+knitr::include_graphics("images/gears-wiki/worm-and-wheel.jpg")
+```
+
+A worm set reaches 10:1 up to about 500:1 in one stage, where helical gears are normally limited to about 10:1 per stage. The cost is a large amount of sliding, and that means low efficiency. The worm can always drive the wheel. Whether the wheel can drive the worm depends on the lead angle: if it is small, friction locks the teeth and the drive is **self-locking**, which is useful in hoists and tuning pegs. In a music box the opposite is wanted: the wheel drives a steep, multi-start worm that spins the speed-governing fan. For high power, both members are made concave so they wrap around each other. This **double-enveloping** (or cone-drive) worm set has line contact instead of point contact.
+
 **Advantages:** Very high reduction ratios, Compact design, Self-locking capability, Quiet operation
 
 **Disadvantages:** Low efficiency (40-90%), High sliding friction, More wear, Limited to right-angle shafts
 
 **Applications:** Conveyor drives, elevator lifts, tuning mechanisms, steering systems
 
+::: {.callout-tip title="Typical application: the tuning machines on a steel-string guitar"}
+The string tension, around 700 N in total across six strings, must stay put when the player lets go of the tuning knob. A worm gear with a lead angle well below the friction angle is **self-locking**: the string cannot back-drive the worm. A ratio of about 14:1 to 18:1 in one tiny stage turns a comfortable twist of the knob into a very fine change in pitch. The worm axis is at right angles to the string post, which places the knob at the side of the headstock where the hand can reach it. The low efficiency is irrelevant because the power involved is tiny and only applied for a moment. A spur gear pair would need several stages to reach this ratio and would unwind under the string tension.
+:::
+
+**History and more information:** [Worm drive](https://en.wikipedia.org/wiki/Worm_drive) on Wikipedia
+
 ---
 
-### Rack and Pinion
+### Rack and Pinion {#sec-rack-pinion}
 
 **Rack and pinion** converts rotational motion to linear motion (or vice versa). The rack is essentially a gear with infinite radius.
 
@@ -374,23 +753,171 @@ if (knitr::is_html_output()) {
   knitr::include_graphics("images/Rack_and_pinion_animation.png")
 }
 ```
+
+A rack can be thought of as a gear whose radius has grown to infinity, so its pitch circle has become a straight pitch line and its involute teeth have become straight-sided. This makes the rack the basis of gear geometry. A tooth system, such as the standard 20° system, is defined by its **basic rack**, and the tooth shape of a gear of any size follows from it. The hob that cuts most gears is a basic rack wound into a screw (@sec-gear-manufacture). Besides steering and machine slides, racks drive **rack railways**, where a pinion under the locomotive climbs a toothed rail laid between the running rails.
 **Advantages:** Simple, Precise linear motion, Can achieve high forces, Compact
 
-**Disadvantages:** Limited to linear applications, Moderate efficiency (97-99%), Wear on rack teeth
+**Disadvantages:** Limited to linear applications, Long exposed racks collect dirt and are hard to lubricate, Wear on rack teeth
 
 **Applications:** Automotive steering, CNC machines, actuators, stairlifts
 
+::: {.callout-tip title="Typical application: rack-and-pinion steering in a passenger car"}
+Turning the steering wheel must move the tie rods from side to side. A rack and pinion does this conversion in one part, with no linkage in between. The pinion size sets the steering ratio, typically 2.5 to 3.5 turns of the wheel from lock to lock. A spring-loaded yoke presses the rack against the pinion and removes the backlash, which gives a precise feel around the straight-ahead position. The unit is light, compact and cheap, and an electric power-steering motor can be mounted directly on the column, the pinion or the rack. Heavy trucks still use recirculating-ball steering boxes instead, because those carry higher loads and isolate road shocks better.
+:::
+
+**History and more information:** [Rack and pinion](https://en.wikipedia.org/wiki/Rack_and_pinion) on Wikipedia
+
 ---
 
-### Gear Type Comparison
+The last two gear types in this section are not new tooth shapes. They are complete high-ratio reducers whose input and output share one axis, just like the planetary gear train in @sec-planetary-gears. You will meet them in robot joints, precision actuators and servo gearheads.
+
+### Cycloidal Drives {#sec-cycloidal-drives}
+
+A **cycloidal drive** has no involute teeth at all. Instead, a lobed disc rolls around a ring of pins, which produces a large speed reduction in a single stage. It has four main parts (@fig-cycloidal-drive):
+
+1. **Eccentric input:** The input shaft carries an eccentric (an off-centre bearing seat). As the shaft spins, it pushes the disc around a small circle, so the disc wobbles without being driven round directly.
+2. **Cycloidal disc:** The disc's outline is a cycloidal curve with $N_{disc}$ lobes, and it runs on the eccentric bearing.
+3. **Ring pins:** The housing carries $N_{pins} = N_{disc} + 1$ fixed pins, which are often rollers. Because there is one more pin than there are lobes, each turn of the eccentric forces the disc to roll back by one lobe. The disc therefore turns slowly in the opposite direction.
+4. **Output pins:** Pins (or rollers) on the output flange pass through oversized holes in the disc. Each hole is larger than its pin by twice the eccentricity. The pins follow the disc's slow rotation but ignore its wobble, so the output flange turns smoothly on the input axis.
+
+```{r fig-cycloidal-drive, echo=FALSE, out.width="60%", fig.align="center", fig.cap="Animation of a cycloidal drive. The eccentric bearing on the green input shaft makes the yellow cycloidal disc wobble around the fixed ring pins (grey). The purple output pins pass through holes in the disc and pick up its slow, reversed rotation. Image: Petteri Aimonen, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Cycloidal_drive.gif), public domain."}
+if (knitr::is_html_output()) {
+  knitr::include_graphics("images/Cycloidal_drive.gif")
+} else {
+  knitr::include_graphics("images/Cycloidal_drive.png")
+}
+```
+
+**Cycloidal drive ratio** (eccentric input, ring pins fixed, output pins as output):
+$$GR = \frac{N_{disc}}{N_{pins} - N_{disc}} = N_{disc}$$
+
+The output turns in the opposite direction to the input. For example, a disc with 29 lobes running in a ring of 30 pins gives 29:1.
+
+**Advantages:**
+
+- **High single-stage ratio:** about 6:1 to 120:1, and two stages in series reach several thousand to one
+- **High shock-load capacity:** Many lobes share the load at once (manufacturers quote up to two-thirds of them), and the contacts are rolling, compressive contacts. Industrial units are rated to survive momentary overloads of several times their rated torque.
+- **Low backlash:** Precision versions hold backlash below 1 arcminute, and the drive is torsionally stiff.
+- **Good efficiency:** about 85-93% per stage, because the pins and rollers roll rather than slide
+
+**Disadvantages and limits:**
+
+- The wobbling disc is out of balance. Most designs therefore use two discs, 180° apart, which adds parts, and the imbalance still limits the input speed.
+- The eccentric bearing carries a very high load and is often the part that limits service life.
+- The disc profile and the pins must be ground precisely, so precision units are expensive.
+- A cycloidal drive is heavier and larger in diameter than a harmonic drive with the same ratio.
+
+::: {.callout-tip title="Typical application: the base, shoulder and elbow joints of a heavy-payload six-axis industrial robot"}
+Axes 1 to 3 of a large industrial robot carry the whole arm plus its payload at full reach. These joints need high torque, high torsional stiffness so that the tool point does not sag or spring back, and low backlash so the robot returns to the same point every cycle. An emergency stop or a collision brakes the arm suddenly and puts a shock torque of several times the normal value through these joints. The cycloidal drive's many rolling, load-sharing contacts survive that. The standard part here is an "RV" reducer: a small planetary first stage followed by a two-disc cycloidal stage. A harmonic drive with the same torque rating would be less stiff, and its flexspline would risk fatigue or tooth skipping under the shock. Reaching the same ratio with a planetary train would take several stages and add backlash.
+:::
+
+**History and more information:** [Cycloidal drive](https://en.wikipedia.org/wiki/Cycloidal_drive) on Wikipedia
+
+---
+
+### Harmonic (Strain-Wave) Drives {#sec-harmonic-drives}
+
+A **harmonic drive**, also called a **strain-wave gear**, gets its very high ratio from a gear that deliberately flexes. It has three parts:
+
+1. **Wave generator:** An elliptical cam with a thin-race ball bearing pressed onto it. This is the input.
+2. **Flexspline:** A thin-walled, flexible steel cup with external teeth. The wave generator inside it deforms it into an ellipse, so its teeth mesh with the circular spline only at the two ends of the long axis.
+3. **Circular spline:** A rigid ring with internal teeth, usually **two more** teeth than the flexspline.
+
+As the wave generator turns, the two mesh zones travel around the circle. The flexspline has two fewer teeth than the circular spline, so after one full turn of the wave generator the flexspline has moved two teeth relative to the circular spline (@fig-harmonic-drive).
+
+```{r fig-harmonic-drive, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Animation of a harmonic (strain-wave) drive. The green elliptical wave generator deforms the red flexspline so that its teeth mesh with the blue circular spline in two opposite zones, and these zones travel around as the wave generator turns. Image: Jahobr, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:HarmonicDriveAni.gif), CC0."}
+if (knitr::is_html_output()) {
+  knitr::include_graphics("images/HarmonicDriveAni.gif")
+} else {
+  knitr::include_graphics("images/HarmonicDriveAni.png")
+}
+```
+
+**Harmonic drive ratio** (wave generator input, circular spline fixed, flexspline output):
+$$GR = \frac{N_{f}}{N_{c} - N_{f}}$$
+
+Where: $N_f$ = flexspline teeth, $N_c$ = circular spline teeth. The flexspline turns in the opposite direction to the wave generator.
+
+For example, a flexspline with 200 teeth inside a circular spline with 202 teeth gives $GR = 200 / (202 - 200) = 100:1$. If the flexspline is held fixed and the circular spline is the output instead, the ratio becomes $N_c / (N_c - N_f) = 101:1$, and the output turns in the same direction as the input.
+
+**Advantages:**
+
+- **Zero backlash:** The flexspline is elastically preloaded into the circular spline, and about 30% of the teeth are in contact at once. Lost motion is typically under 1 arcminute.
+- **High ratio in a compact size:** about 30:1 to 160:1 in a single stage, in a short, light package that often has a hollow centre for cables
+- **Few parts:** three main parts on one axis
+
+**Disadvantages and limits:**
+
+- **Flexspline fatigue:** The flexspline bends twice for every turn of the input, which adds up to billions of cycles over its life. It has unlimited life within its rated torque, but overloads shorten that life. A severe overload can make the teeth skip ("ratcheting"), which loses position and damages the teeth. Always size the drive for the peak torque, not just the average.
+- **Torsional stiffness:** The flexspline acts as a torsion spring. It is less stiff than a cycloidal drive or planetary gearhead of the same size, and its stiffness is lowest near zero torque. Under changing load the output can wind up by a few arcminutes, which limits servo bandwidth.
+- **Efficiency:** about 60-85%, lower at high ratios, low temperatures and light loads
+- **Cost:** The precision flexspline and the special wave-generator bearing make a harmonic drive more expensive than a planetary gearhead with a similar torque rating.
+
+::: {.callout-tip title="Typical application: the joints of a collaborative robot arm"}
+Each joint of a collaborative robot (cobot), such as the arms of the Universal Robots UR series, packs a motor, brake, encoder and gear reducer into one compact housing. Every joint is also part of the load carried by the joints below it, so it must be light and short. A harmonic drive gives about 100:1 in a single stage, so a small, high-speed servo motor can deliver the joint torque. With zero backlash, the motor encoder's position is the true arm position, which gives precise positioning. It also lets the controller detect a collision with a person from changes in motor current. The hollow centre lets cables pass straight through the joint. Cobot payloads are small (roughly 3-20 kg), so the drive's limits on stiffness and peak torque are acceptable. Heavier robots switch to cycloidal reducers in their main axes (@sec-cycloidal-drives).
+:::
+
+**History and more information:** [Strain wave gearing](https://en.wikipedia.org/wiki/Strain_wave_gearing) on Wikipedia
+
+---
+
+### Special Gears {#sec-special-gears}
+
+Most gears are round, have equal teeth and are rigid. A few special types break one of those rules on purpose.
+
+**Non-circular gears** have pitch curves that are not circles, so the speed ratio changes during each turn (@fig-special-gears a). Normal gears are designed for a constant ratio, minimum noise and maximum efficiency. A non-circular gear is designed to produce a particular variation in speed, for example a quick return stroke in a packaging machine, a variable feed in textile machinery, or a non-linear scale in an instrument.
+
+**Magnetic gears** transmit torque through magnetic fields, with no contact between the two members. The "teeth" are permanent magnets of alternating polarity. A magnetic gear cannot transmit as much torque as a steel gear of the same size. However, it does not wear, it is quiet, it needs no lubrication, and it slips harmlessly when overloaded. Because the field acts through a non-magnetic wall, a magnetic gear or coupling can drive a pump impeller or mixer inside a sealed vessel without a shaft seal that might leak. That is valuable in food and chemical plants.
+
+**Sun and planet gearing** is a historical example of epicyclic gearing (@fig-special-gears b). James Watt used it on his early rotative steam engines to turn the up-and-down motion of the beam into rotation without using a crank, which was patented by a rival. A planet gear fixed to the connecting rod orbits a sun gear on the flywheel shaft. With equal sun and planet gears, the flywheel turns twice for every up-and-down cycle of the beam. The faster flywheel stores more energy for its size, so a lighter one can be used.
+
+```{r}
+#| label: fig-special-gears
+#| echo: false
+#| out-width: "80%"
+#| layout-ncol: 2
+#| fig-cap: "Special gears. Images via Wikimedia Commons: (a) Igor Zarebski, [CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Non-circular_gear.PNG); (b) Emoscopes, [CC BY 2.5](https://commons.wikimedia.org/wiki/File:Sun_and_planet_gears.gif)."
+#| fig-subcap:
+#|   - "A pair of non-circular gears."
+#|   - "Watt's sun and planet gear: sun (yellow), planet (red), connecting rod (blue) and flywheel (green)."
+if (knitr::is_html_output()) {
+  knitr::include_graphics(c("images/gears-wiki/non-circular.png", "images/gears-wiki/sun-and-planet.gif"))
+} else {
+  knitr::include_graphics(c("images/gears-wiki/non-circular.png", "images/gears-wiki/sun-and-planet.png"))
+}
+```
+
+**History and more information:** [Non-circular gear](https://en.wikipedia.org/wiki/Non-circular_gear), [Magnetic gear](https://en.wikipedia.org/wiki/Magnetic_gear) and [Sun and planet gear](https://en.wikipedia.org/wiki/Sun_and_planet_gear) on Wikipedia
+
+---
+
+### Gear Type Comparison {#sec-gear-comparison}
 
 | Gear Type | Shaft Arrangement | Ratio Range | Efficiency | Noise Level | Cost |
 |:----------|:------------------|:------------|:-----------|:------------|:-----|
 | **Spur** | Parallel | 1:1 to 6:1 | 98-99% | High | Low |
 | **Helical** | Parallel | 1:1 to 10:1 | 97-99% | Low | Medium |
-| **Bevel** | Intersecting (90°) | 1:1 to 5:1 | 97-99% | Medium | High |
+| **Herringbone** | Parallel | 1:1 to 10:1 | 97-99% | Low | High |
+| **Bevel** | Intersecting (90°) | 1:1 to 5:1 | 97-99% (hypoid about 95%) | Medium | High |
 | **Worm** | Right angle (non-intersecting) | 5:1 to 100:1 | 40-90% | Low | Medium |
 | **Rack & Pinion** | Rotary to linear | N/A | 97-99% | Medium | Medium |
+| **Planetary** (one stage) | Coaxial | 3:1 to 10:1 | 95-98% | Medium | Medium |
+| **Cycloidal** | Coaxial | 6:1 to 120:1 | 85-93% | Low | High |
+| **Harmonic** | Coaxial | 30:1 to 160:1 | 60-85% | Low | High |
+
+**Typical applications at a glance:**
+
+| Gear Type | Typical Application | Why This Gear Type Is Chosen |
+|:----------|:--------------------|:-----------------------------|
+| **Spur** (@sec-spur-gears) | Reverse idler in a manual car gearbox | Straight teeth can slide into mesh and produce no axial thrust; noise is acceptable in a gear used briefly |
+| **Helical** (@sec-helical-gears) | Forward gears of a manual car gearbox | Quiet and strong in constant mesh at high speed; synchronizers remove the need to slide gears |
+| **Herringbone** (@sec-herringbone-gears) | Main reduction gearbox of a steam-turbine ship | Helical smoothness at very high power with the axial thrust cancelled inside the gear |
+| **Bevel / hypoid** (@sec-bevel-gears) | Ring-and-pinion final drive of a rear-wheel-drive car | Turns the drive 90° and reduces speed in one stage; hypoid offset lowers the propshaft |
+| **Worm** (@sec-worm-gears) | Guitar tuning machines | Self-locking holds string tension; high ratio in one tiny stage; right-angle knob |
+| **Rack & pinion** (@sec-rack-pinion) | Passenger-car steering | Direct rotary-to-linear conversion, low backlash, light and cheap |
+| **Planetary** (@sec-planetary-gears) | Automatic transmission | Coaxial, constant mesh, several ratios from one set by holding different members, load shared across planets |
+| **Cycloidal** (@sec-cycloidal-drives) | Base, shoulder and elbow axes of a heavy-payload industrial robot | Shock capacity, high stiffness and low backlash at high ratio |
+| **Harmonic** (@sec-harmonic-drives) | Joints of a collaborative robot arm | Zero backlash and about 100:1 in a light, short, hollow package |
 
 > **🤔 Design Decision:** A food packaging machine requires a 25:1 speed reduction in a compact space. The drive must be self-locking to prevent the load from back-driving the motor when power is off. Which gear type would you recommend?
 
@@ -800,9 +1327,19 @@ if (min(N1, N3) < 17) {
 
 ---
 
-### Planetary (Epicyclic) Gear Train
+### Planetary (Epicyclic) Gear Train {#sec-planetary-gears}
 
 **Planetary gear systems** are compact, high-ratio gear trains widely used in automatic transmissions, power tools, and aerospace applications.
+
+```{r fig-planetary-animation, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Animation of a planetary gear set with the ring gear held stationary. The orange sun gear (24 teeth) drives four blue planet gears (16 teeth), which roll inside the red ring gear (56 teeth) and carry the green carrier around with them. The carrier output turns at 1/(1 + 56/24), or 0.3 times the sun speed. Image: Jahobr, via [Wikimedia Commons](https://en.wikipedia.org/wiki/File:Epicyclic_Gearing_Stationary_Ring.gif), CC0."}
+if (knitr::is_html_output()) {
+  knitr::include_graphics("images/Epicyclic_Gearing_Stationary_Ring.gif")
+} else {
+  knitr::include_graphics("images/Epicyclic_Gearing_Stationary_Ring.png")
+}
+```
+
+@fig-planetary-animation shows the gear set in motion, and the diagram below names the parts and lists the ways the set can be operated.
 
 ```{r planetary-gear, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Planetary gear system components and arrangement."}
 ## Sun gear
@@ -867,8 +1404,8 @@ ggplot() +
   annotate("text", x = 8.7,  y = 3.2, label = "Input   Fixed   Output  Ratio",         size = 2.5 * diagram_text_scale, hjust = 0) +
   annotate("text", x = 8.7,  y = 2.7, label = "Sun     Ring    Carrier  Reduction",     size = 2.5 * diagram_text_scale, hjust = 0) +
   annotate("text", x = 8.7,  y = 2.2, label = "Carrier Ring    Sun     Increase",       size = 2.5 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 8.7,  y = 1.7, label = "Sun     Carrier Ring    Reduction",      size = 2.5 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 8.7,  y = 1.2, label = "Ring    Carrier Sun     Reverse",        size = 2.5 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 8.7,  y = 1.7, label = "Sun     Carrier Ring    Rev. reduction", size = 2.5 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 8.7,  y = 1.2, label = "Ring    Carrier Sun     Rev. increase",  size = 2.5 * diagram_text_scale, hjust = 0) +
   annotate("text", x = 8.7,  y = 0.7, label = "All connected: Direct (1:1)",            size = 2.5 * diagram_text_scale, hjust = 0) +
 
   ## Advantages
@@ -890,6 +1427,12 @@ $$GR = 1 + \frac{N_{ring}}{N_{sun}}$$
 - **Automotive:** Automatic transmissions, hybrid drives, transfer cases
 - **Aerospace:** Helicopter transmissions, jet engine gearboxes
 - **Industrial:** Wind turbines, conveyors, hoists
+
+::: {.callout-tip title="Typical application: the automatic transmission of a passenger car"}
+An eight-speed automatic such as the ZF 8HP gets all its ratios from planetary gear sets (@sec-planetary-gearset-13). Input and output lie on one axis, so the sets can be stacked in a long, slim case that fits the transmission tunnel. Every gear stays in constant mesh. A shift only applies one clutch or brake and releases another, so the drive to the wheels is never interrupted, unlike a sliding-gear or synchronizer gearbox. One set gives several ratios depending on which member is held. Three to five planets share the torque, which makes a planetary set much more compact than a layshaft gearbox carrying the same torque. A dual-clutch or manual gearbox built from helical pairs on parallel shafts can be more efficient, but it cannot shift under load as smoothly.
+:::
+
+**History and more information:** [Epicyclic gearing](https://en.wikipedia.org/wiki/Epicyclic_gearing) on Wikipedia
 
 ::: {.content-visible when-format="html"}
 *Live cell: change the sun and ring tooth counts. The planet gears fill the gap, so the ring minus the sun must be an even number.*
@@ -965,13 +1508,15 @@ cat(sprintf("  Carrier in at %g rpm, sun out    %.1f rpm (speed increase)\n", n_
 
 A typical 6-speed automatic uses 2-3 planetary gear sets with multiple clutches to achieve all forward gears plus reverse.
 
+The drivetrains chapter shows how the clutches and torque converter work around these gear sets (@sec-automatic-transmission-13). It also works out the reverse ratio of a set with the carrier held (@sec-planetary-gearset-13).
+
 </details>
 
 **From gear ratio to engine speed.** A vehicle's road speed ties the engine, the transmission, the final drive and the tyre together:
 
 $$n_{engine} = \frac{v}{2\pi r_{tyre}} \times 60 \times i_{gear} \times i_{final}$$
 
-where $v$ is in m/s, $r_{tyre}$ in m and $i$ are the ratios of the selected gear and the final drive.
+where $v$ is in m/s, $r_{tyre}$ in m and $i$ are the ratios of the selected gear and the final drive. @sec-manual-gearbox-13 applies the same relationship to every gear of a six-speed gearbox. @sec-why-transmission-13 explains why an engine needs several ratios while an electric motor manages with one.
 
 ::: {.content-visible when-format="html"}
 *Live cell: find the overdrive ratio that keeps the engine relaxed at motorway speed.*
@@ -1085,6 +1630,8 @@ ggplot() +
 | Transfer Case | Spur, chain/gear | 4WD/AWD power distribution |
 | Steering | Rack and pinion, recirculating ball | Convert rotation to linear |
 | Starter Motor | Spur, planetary | High reduction for cranking torque |
+
+The drivetrains chapter treats these gear sets as complete systems: the drivetrain components and the differential in @sec-drivetrain-intro, the manual gearbox in @sec-manual-gearbox-13, the automatic transmission in @sec-planetary-gearset-13, and the transfer case and centre differential in @sec-awd-4wd-13.
 
 ---
 
@@ -1280,7 +1827,7 @@ ggplot() +
 - **Extreme reliability** - Mission critical, no field repair
 - **High strength-to-weight ratio** - Often use aerospace-grade materials
 - **Environmental resistance** - Temperature extremes, dust, water
-- **Zero or minimal backlash** - Precision positioning systems
+- **Zero or minimal backlash** - Precision positioning systems such as the harmonic drive actuator above (@sec-harmonic-drives)
 - **Noise reduction** - Stealth requirements
 - **Shock loading capability** - Combat conditions
 
@@ -1288,7 +1835,37 @@ ggplot() +
 
 ## Gear Design Considerations {#sec-gear-design}
 
+### Manufacturing Gears {#sec-gear-manufacture}
+
+How a gear will be made should be decided together with its design, because the process sets the accuracy, the cost and which tooth shapes are possible. The common processes are:
+
+- **Net-shape molding:** Plastic injection molding, metal die casting and powder metallurgy (@sec-chap-sintering) produce the finished tooth shape in the mold. By one estimate, about 80% of all gears made worldwide in 2014 were molded. Powder-metal gears must be sintered after molding.
+- **Casting** (sand, investment or die casting): Cast gear blanks usually need their teeth cut or ground afterwards to reach the required accuracy.
+- **Blanking (fine blanking):** Thin gears for clocks, toys and small mechanisms are stamped from sheet in one press stroke.
+- **Gear cutting:** The most common method is **hobbing** (@fig-gear-hobbing). The hob is a basic rack wound into a screw (@sec-rack-pinion), with gashes that form cutting edges. The hob and the gear blank turn together as if they were a worm and its wheel, and the hob is slowly fed across the face. The teeth are *generated*: one hob cuts any number of teeth of the same module and pressure angle, and the involute shape follows from the rolling motion. Hobbing is fast and accurate, but it cannot cut internal gears or teeth next to a shoulder. **Gear shaping** handles those cases: a cutter shaped like a pinion reciprocates up and down while it rolls with the blank. **Milling** with a form cutter, one tooth space at a time, is used for one-off gears. **Broaching** cuts all the teeth of an internal gear or spline in one pass.
+- **Finishing:** After heat treatment, gears for high loads or low noise are **ground** or **honed** to remove the distortion caused by hardening.
+- **3D printing:** Useful for prototypes and very small batches. Printed gears are expensive, less accurate and relatively weak (@sec-3d-printing-intro).
+
+```{r}
+#| label: fig-gear-hobbing
+#| echo: false
+#| out-width: "95%"
+#| layout-ncol: 2
+#| fig-cap: "Gear hobbing. Images via Wikimedia Commons: (a) Dirk Gräfe, [CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:W%C3%A4lzfr%C3%A4ser_und_gefr%C3%A4ste_Verzahnung.JPG); (b) Affoltergroup, [CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Gear-hobbing-spur-gear-on-cnc-cutting-machine.jpg)."
+#| fig-subcap:
+#|   - "A hob (upper right) and a spur gear cut with it. The hob looks like a worm with gashes that form the cutting edges."
+#|   - "A CNC gear-hobbing machine cutting a spur gear."
+knitr::include_graphics(c("images/gears-wiki/hob-and-gear.jpg",
+                          "images/gears-wiki/hobbing-machine.jpg"))
+```
+
+**Heat treatment.** The teeth of gears for heavy duty, such as car and truck transmissions, are case hardened, usually by carburizing or induction hardening. Case hardening gives a hard, wear-resistant surface over a softer, tough core that resists shock. Large gears tend to warp during quenching, so they are clamped in a **quench press** while they cool.
+
+**History and more information:** [Gear: Manufacture](https://en.wikipedia.org/wiki/Gear#Manufacture), [Hobbing](https://en.wikipedia.org/wiki/Hobbing) and [Gear cutting](https://en.wikipedia.org/wiki/Gear_cutting) on Wikipedia
+
 ### Material Selection
+
+Steel is the most common gear material because it is strong for its weight and inexpensive. Aluminium is weaker for the same tooth size but lighter and easier to machine. Bronze, brass and tin alloys are still used in clocks and for worm wheels. Engineering plastics such as nylon and acetal now replace metal in many moderate-speed, moderate-torque drives. They are cheaper, can be injection molded in large numbers and often need no lubrication. A plastic gear can even be designed as the deliberate **weak link**: if the mechanism jams, the cheap plastic gear strips first and protects the motor and other expensive parts. This is a simple alternative to a slip clutch or a current-limited motor.
 
 | Material | Applications | Advantages | Limitations |
 |:---------|:-------------|:-----------|:------------|
@@ -1299,9 +1876,29 @@ ggplot() +
 | **Nylon/Acetal** | Light loads, quiet operation | Self-lubricating, quiet | Limited load, temperature |
 | **Stainless Steel** | Food, medical, marine | Corrosion resistant | Lower hardness possible |
 
-### Common Failure Modes
+### Gear Failure Mechanisms {#sec-gear-failure}
 
-```{r gear-failures, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Common gear failure modes."}
+Gears fail in several different ways, and more than one can happen at the same time. Which one ends a gear's life depends mainly on two things: the **load** (the torque, and therefore the tooth stress) and the **speed** at the pitch line. The underlying causes are friction, contact (Hertzian) stress with combined rolling and sliding, bending fatigue, and a lubricating film that is too thin. The main mechanisms are wear, scuffing, pitting, micropitting, tooth flank fracture and tooth root fatigue fracture. Their names and appearance are standardized in ISO 10825-1, so a failure photograph can be described in words everyone understands.
+
+The failure map in @fig-gear-failure-map shows where each mechanism limits the load a gear can carry:
+
+```{r}
+#| label: fig-gear-failure-map
+#| echo: false
+#| out-width: "60%"
+#| fig-align: center
+#| fig-cap: "Gear failure map: the torque (moment) a gear can carry, plotted against circumferential speed on a logarithmic scale. Each line is the limit set by one failure mechanism, and the gear is safe in the shaded area below all of them. After Niemann, Winter, Höhn and Stahl, *Maschinenelemente 1* (2019). Image: Loscimmio, public domain, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Gear_Failure_zone.png)."
+knitr::include_graphics("images/gears-wiki/failure-map.png")
+```
+
+- **Very low speed (below about 0.3 m/s): wear.** The gears turn too slowly to build up a load-carrying oil film, so the tooth surfaces rub directly and material is gradually removed.
+- **Low to medium speed: pitting and tooth breakage.** A full oil film forms and wear stops, so fatigue takes over. Pitting is the main flank failure at low speed, and the tooth-breakage limit caps the torque.
+- **Medium to high speed: micropitting.** Micropitting appears where the oil film is only just thick enough to separate the surfaces.
+- **High speed (above about 10 m/s): scuffing.** Sliding speeds and temperatures are high enough to break down the oil film, and the allowable torque falls steeply.
+
+The sketch below summarizes three of these mechanisms. The photographs that follow show what each one looks like on a real gear.
+
+```{r gear-failures, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Schematic of three common gear failure modes."}
 ggplot() +
   ## Bending Fatigue
   annotate("rect", xmin = 0.5, xmax = 3.5, ymin = 1, ymax = 4, fill = "white", color = "black", linewidth = 1) +
@@ -1340,20 +1937,122 @@ ggplot() +
   theme_gear
 ```
 
+#### Wear
+
+**Wear** is the gradual removal or deformation of material from the tooth surfaces. In gears it takes two main forms. **Abrasive wear** is caused by hard particles in the oil, such as dirt, wear debris or scale, which scratch the flanks. **Adhesive wear** occurs when the oil film is too thin and the surface peaks of the two teeth weld together and tear apart. Wear is the limiting mechanism at very low speeds, for example in slow conveyor drives, winches and open gears on kilns and mills. The teeth gradually become thinner, backlash grows, and the involute profile is lost, which makes the gears noisy.
+
+*Prevention:* Keep the oil clean with filtration and sealing. Use a higher-viscosity oil or one with anti-wear additives. Make the teeth harder, and give soft materials such as bronze a hard mating partner.
+
+#### Scuffing (Scoring)
+
+**Scuffing** is a sudden, severe form of adhesive damage. Under a combination of high load, high sliding speed and high temperature, the oil film collapses and the high spots of the two flanks weld together and are torn apart. The automotive industry calls this scuffing, and the aerospace industry calls it **scoring**. Scuffing marks are streaks or scratches with sharp bottoms and sides, running in the sliding direction, that is, up and down the tooth (@fig-gear-scuffing-pitting a). They often appear as bands of varying width and depth. Sliding is zero at the pitch point and greatest at the tooth tip and root, so the damage is usually worst there. Unlike pitting, scuffing can destroy a gear set within minutes.
+
+#### Pitting (Macropitting)
+
+**Pitting** is **contact fatigue** of the tooth surface. Where two curved teeth press together, the contact (Hertzian) stress reaches a maximum a short distance *below* the surface. Combined rolling and sliding moves this maximum towards the surface. After millions of load cycles, small cracks start near the surface, grow at a shallow angle, and finally release a piece of material, leaving a crater (@fig-gear-scuffing-pitting b). Pitting usually starts near or just below the pitch line, where only one tooth pair carries the load and the sliding changes direction. A few small pits that stop growing (initial pitting) can be acceptable. Pits that keep growing and joining up (progressive pitting) make the gear noisy and eventually lead to tooth fracture. Pitting is the main flank failure mode at low and medium speeds.
+
+```{r}
+#| label: fig-gear-scuffing-pitting
+#| echo: false
+#| out-width: "95%"
+#| layout-ncol: 2
+#| fig-cap: "Two kinds of surface damage on gear flanks. Images: Loscimmio, CC BY-SA 4.0, via Wikimedia Commons ([a](https://commons.wikimedia.org/wiki/File:Scuffing_on_gear_flank.jpg), cropped; [b](https://commons.wikimedia.org/wiki/File:Pitting_on_gear_flank.jpg))."
+#| fig-subcap:
+#|   - "Scuffing (detail): welded and torn bands running in the sliding direction, up and down the tooth."
+#|   - "Macropitting: a fatigue crater in the middle of the tooth flank."
+knitr::include_graphics(c("images/gears-wiki/failure-scuffing.jpg",
+                          "images/gears-wiki/failure-pitting.jpg"))
+```
+
+#### Micropitting (Grey Staining)
+
+**Micropitting** is the same contact-fatigue process on a much smaller scale. Pits only about 10 to 20 µm deep form in very large numbers, and to the eye they look like a dull, grey, frosted patch on the otherwise shiny flank (@fig-gear-micropitting). For this reason it is also called grey staining. It is typical of case-hardened, ground gears running with a thin oil film, as in wind-turbine and industrial gearboxes. Micropitting removes material and changes the tooth profile. That increases noise and dynamic load, and it can grow into macropitting.
+
+```{r}
+#| label: fig-gear-micropitting
+#| echo: false
+#| out-width: "60%"
+#| fig-align: center
+#| fig-cap: "Micropitting (grey staining) on the flanks of a large gear (module 22, 16 teeth). Image: G. Lützig, [CC BY-SA 3.0](https://commons.wikimedia.org/wiki/File:Micro_pitting_gear.jpg), via Wikimedia Commons."
+knitr::include_graphics("images/gears-wiki/failure-micropitting.jpg")
+```
+
+*Prevention of scuffing, pitting and micropitting:* All three are lubrication and surface problems. Use an oil with enough viscosity at the operating temperature and with extreme-pressure (EP) additives against scuffing. Cool the oil, which keeps its viscosity up. Use smoother surfaces, by grinding or superfinishing, and harder surfaces, by case hardening. Apply **profile modifications** (tip relief and crowning), which ease the load in and out of mesh and stop it concentrating at the edges of the face.
+
+#### Tooth Root Fatigue Fracture and Tooth Flank Fracture
+
+Each tooth acts as a short cantilever beam that is loaded once per revolution. The bending stress is highest at the **root fillet** on the loaded (tensile) side, and the fillet also concentrates stress. After enough load cycles a fatigue crack starts there, grows across the tooth root and finally breaks the whole tooth off (@fig-gear-root-fracture). The fracture surface usually shows the smooth, curved "beach marks" of slow fatigue growth, followed by a small, rough area of final overload fracture. A single severe overload, such as a jam or a shock load, can also break a tooth at once. That break is then rough all over. **Tooth flank fracture** is a related failure of large case-hardened gears. A fatigue crack starts *below* the hardened case, roughly halfway up the flank, and runs through the tooth.
+
+```{r}
+#| label: fig-gear-root-fracture
+#| echo: false
+#| out-width: "45%"
+#| fig-align: center
+#| fig-cap: "Tooth root fatigue fracture on a test gear. A whole tooth has broken off at the root. Image: Loscimmio, [CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Tooth_root_fatigue_fracture.jpg), via Wikimedia Commons."
+knitr::include_graphics("images/gears-wiki/failure-root-fracture.jpg")
+```
+
+*Prevention:* Use a larger module or a wider face. Use a generous, smooth root fillet; shot peening the fillet adds compressive residual stress, which slows crack growth. Avoid undercut (@sec-gear-measurement), and use positive profile shift on small pinions. Choose a material and heat treatment with a high bending-fatigue strength. Apply the right service factor for shock loads.
+
+#### Testing, Rating Standards and Condition Monitoring
+
+The two main gear-rating standards, **ISO 6336** and **AGMA 2001**, give calculation methods that check a gear against pitting (contact stress) and tooth root breakage (bending stress). There are also methods for scuffing and micropitting. The standards cannot cover every combination of geometry, material, heat treatment and lubricant, so they recommend confirming new designs by testing. Because several mechanisms can act at once, test gears and test rigs are designed to isolate one mechanism at a time:
+
+- **Pulsator test (single-tooth bending fatigue, STBF):** One or two teeth are clamped between two anvils and loaded in a fatigue machine until they crack (@fig-gear-pulsator). This tests root strength without the effects of a running mesh. The results differ slightly from those of running gears but are accepted for rating.
+- **Running back-to-back test rigs**, such as the FZG rig, run gears under controlled load, speed and oil temperature to test scuffing, pitting and micropitting, and to rate gear oils.
+
+```{r}
+#| label: fig-gear-pulsator
+#| echo: false
+#| out-width: "80%"
+#| fig-align: center
+#| fig-cap: "A Schenck pulsator set up for a single-tooth bending fatigue (STBF) test. The gear is clamped so that two anvils load one tooth near its tip. Image: Loscimmio, [CC BY-SA 4.0](https://commons.wikimedia.org/wiki/File:Schenk_pulsator.png), via Wikimedia Commons."
+knitr::include_graphics("images/gears-wiki/failure-pulsator.png")
+```
+
+In service, the start of pitting, micropitting or a root crack can be detected before the gear fails. **Vibration analysis** picks up the change in the tooth-mesh frequency and its sidebands, and **oil analysis** detects the growing number and size of wear particles. This is the basis of predictive maintenance for large gearboxes.
+
+**Summary of gear failure modes:**
+
+| Failure mode | What it looks like | Typical location | Main cause | Main remedy |
+|:-------------|:-------------------|:-----------------|:-----------|:------------|
+| **Wear** | Polished or scratched flanks, thinner teeth, growing backlash | Whole flank | Low speed, thin oil film, dirty oil | Clean oil, higher viscosity, harder surfaces |
+| **Scuffing (scoring)** | Torn, dull bands running up and down the tooth | Near tip and root, where sliding is highest | High speed, high load, oil film collapses | EP oil, cooling, smoother surfaces, tip relief |
+| **Macropitting** | Craters, from pinhead size upwards | Near and below the pitch line | Contact fatigue | Harder surface, larger gears, higher-viscosity oil |
+| **Micropitting** | Grey, frosted patches | Flank, often below the pitch line | Contact fatigue with a thin oil film | Smoother surfaces, suitable oil, profile modification |
+| **Tooth root fracture** | Tooth broken off at the root, with beach marks | Root fillet | Bending fatigue or overload | Larger module, better fillet, shot peening, service factor |
+
+::: {.callout-tip title="Check your understanding: diagnose the failure"}
+A gearbox on a slow bucket elevator (pitch-line speed 0.2 m/s) is opened after two years. The teeth are shiny but noticeably thinner, and the backlash has doubled. A second gearbox, driven by a high-speed motor through a heavily loaded helical stage, failed after one week. Its teeth show dull, torn bands running from tip to root. Which failure mode does each gearbox show, and what would you change?
+
+<details>
+<summary>Show the answer</summary>
+
+The slow elevator gearbox shows **wear**. At 0.2 m/s it is in the low-speed region of the failure map (@fig-gear-failure-map), where no full oil film forms. Use a higher-viscosity oil or one with anti-wear additives, keep the oil clean, and consider harder tooth surfaces.
+
+The high-speed gearbox shows **scuffing**. Bands running in the sliding direction, appearing quickly under high load and high speed, are the classic sign of oil-film collapse. Use an EP gear oil of the right viscosity, improve oil cooling, and consider ground teeth with tip relief.
+
+</details>
+:::
+
+**History and more information:** [Gear failure](https://en.wikipedia.org/wiki/Gear_failure), [Micropitting](https://en.wikipedia.org/wiki/Micropitting) and [Gear: Gear failure mechanism](https://en.wikipedia.org/wiki/Gear#Gear_failure_mechanism) on Wikipedia
+
 ### Design Guidelines
 
 1. **Minimum teeth:** To avoid undercut (20° pressure angle):
    - Minimum pinion teeth ≈ 17 for standard gears
    - Use profile shift for fewer teeth
 
-2. **Contact ratio:** Should be > 1.2 for smooth operation
-   $$\text{Contact Ratio} = \frac{\text{Arc of Action}}{\text{Circular Pitch}}$$
+2. **Contact ratio:** Should be > 1.2 for smooth operation (@sec-gear-contact)
+   $$\text{Contact Ratio} = \frac{\text{Arc of Action}}{\text{Circular Pitch}} = \frac{\text{Length of Action}}{\text{Base Pitch}}$$
 
 3. **Face width:** Typically 9-13 × module for spur gears
 
-4. **Backlash:** Small clearance between teeth (typically 0.04-0.10 × module)
+4. **Backlash:** Small clearance between teeth (typically 0.04-0.10 × module, @sec-gear-backlash)
 
-5. **Lubrication:** Critical for all enclosed gear systems
+5. **Tooth counts:** Choose tooth counts with no common factor (a hunting tooth) so that wear is spread evenly (@sec-gear-module)
+
+6. **Lubrication:** Critical for all enclosed gear systems. Choose the oil viscosity and additives to suit the speed range in the failure map (@fig-gear-failure-map)
 
 ---
 
@@ -1626,6 +2325,11 @@ tryit_sort(
 - Idlers change direction, not ratio. Compound trains multiply stage ratios in a compact space.
 - A planetary set with the ring fixed, sun input and carrier output gives $1 + N_{ring}/N_{sun}$.
 - Pick the gear type from the shaft arrangement, speed, noise and whether the drive must self-lock.
+- Cycloidal and harmonic drives give a high ratio in one coaxial stage with very low backlash. Cycloidal drives are chosen for shock capacity and stiffness, and harmonic drives for low weight and zero backlash.
+- The involute tooth replaced the cycloid because one rack-shaped tool can generate it and it tolerates small centre-distance errors. The contact ratio should be at least 1.2, and helical gears raise it by adding face overlap.
+- Backlash is designed in on purpose, and it adds up through a gear train. Tooth thickness is checked by span measurement or by measurement over pins.
+- Most gears are molded or hobbed. Heavily loaded steel gears are case hardened and then ground.
+- Gear failure depends on load and speed: wear at very low speed, pitting and root fracture at medium speed, scuffing at high speed. Learn to recognize each one from the flank surface.
 
 ## Practice Problems {#sec-gear-problems}
 
@@ -1744,6 +2448,16 @@ $$n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}$$
 
 [Machinery's Handbook - Gearing Section](https://www.industrialpress.com/)
 
+[Gear](https://en.wikipedia.org/wiki/Gear) on Wikipedia, which much of this chapter draws on for its structure and illustrations
+
+[Gear failure](https://en.wikipedia.org/wiki/Gear_failure) on Wikipedia
+
+[List of gear nomenclature](https://en.wikipedia.org/wiki/List_of_gear_nomenclature) on Wikipedia
+
+[Kinematic Models for Design Digital Library (KMODDL)](https://engineering.library.cornell.edu/kmoddl/): movies and photographs of hundreds of historic working mechanism models at Cornell University
+
+**Image credits:** Most photographs and diagrams in this chapter come from Wikimedia Commons. Each caption names the author and licence and links to the original file page. Images under CC BY-SA licences may be reused under the same licence.
+
 ---
 
 ## Supplemental Videos {-}
@@ -1766,11 +2480,15 @@ embed_youtube("ARd-Om2VyiE", "Planetary Gears Explained")
 embed_youtube("wCu9W9xNwtI", "Manual Transmission Explained")
 ```
 
+The manual gearbox, clutch and synchronizers are covered in @sec-manual-transmission-13.
+
 ### How Differentials Work
 
 ```{r video-differentials, echo=FALSE, results='asis'}
 embed_youtube("yYAw79386WI", "How Differentials Work")
 ```
+
+The bevel or hypoid final drive that carries the differential is described in @sec-bevel-gears. The differential's role in the drivetrain is covered in @sec-drivetrain-intro and @sec-awd-4wd-13.
 
 ---
 
@@ -1785,3 +2503,17 @@ embed_youtube("yYAw79386WI", "How Differentials Work")
 4. Radzevich, S. P. (2012). *Dudley's Handbook of Practical Gear Design and Manufacture* (2nd ed.). CRC Press.
 
 5. Jelaska, D. (2012). *Gears and Gear Drives*. Wiley.
+
+6. Niemann, G., Winter, H., Höhn, B.-R., & Stahl, K. (2019). *Maschinenelemente 1: Konstruktion und Berechnung von Verbindungen, Lagern, Wellen* (5th ed.). Springer.
+
+7. ISO. (2019). *ISO 6336: Calculation of load capacity of spur and helical gears* (Parts 1–6). International Organization for Standardization.
+
+8. ISO. (2022). *ISO 10825-1: Gears — Wear and damage to gear teeth — Part 1: Nomenclature and characteristics*. International Organization for Standardization.
+
+9. Alban, L. E. (1985). *Systematic Analysis of Gear Failures*. American Society for Metals.
+
+10. Totten, G. E. (Ed.). (2017). *ASM Handbook, Vol. 18: Friction, Lubrication, and Wear Technology*. ASM International.
+
+11. Burrows, M., & Sutton, G. (2013). Interacting gears synchronize propulsive leg movements in a jumping insect. *Science*, 341(6151), 1254–1256.
+
+12. Wikipedia contributors. *Gear* and *Gear failure*. Wikipedia, The Free Encyclopedia. Retrieved November 2026.
