@@ -30,11 +30,97 @@ engineering drawings. Proper dimensioning ensures that parts can be
 manufactured exactly as the designer intended.
 
 ::: {.callout-industry}
-**Industry Connection:** In the defense industry, improper dimensioning can
-have serious consequences. A famous example is the Mars Climate Orbiter, which
-was lost due to a unit conversion error. Clear dimensioning standards prevent
-such costly mistakes.
+**Industry Connection:** NASA's Mars Climate Orbiter was lost in 1999 because one team's software
+reported thruster impulse in pound-force seconds while the navigation software expected
+newton seconds. The same kind of unit mix-up happens on drawings: a dimension of 25 means
+something very different in millimetres and in inches. Stating the units, and following one set
+of dimensioning rules, prevents such costly mistakes.
 :::
+
+## Elements of a Dimension
+
+A dimension is made of a few standard line types, all drawn thin so that they do not compete with the visible outline of the part:
+
+* **Extension lines** carry a feature out of the view. They start with a small visible **gap** (about 1.5 mm) from the part and run about **3 mm past** the last dimension line.
+* **Dimension lines** run between the extension lines and end in **arrowheads** that touch the extension lines. The number sits in a break in the line (ASME) or above it (ISO).
+* **Leaders** connect a note or a size callout to a feature. A leader to a hole or arc is drawn radially, so that if extended it would pass through the **centre**. It starts with a short horizontal shoulder at the note.
+* **Centre lines** (long–short dashes) mark the axis of holes and cylinders. A centre line may be extended and used as an extension line; it does not need a gap.
+
+```{r fig-dimension-elements, echo=FALSE, fig.width=9, fig.height=5.6, fig.align='center', fig.cap="Elements of a dimension on a plate with one hole (mm): extension lines start with a small gap from the part and run a little past the dimension line; smaller dimensions sit closer to the part; the hole is located at its centre and sized with a leader in its circular view."}
+## Plate 80 x 50 with a Ø12 hole located 20 from the left edge and 25 from the bottom edge
+circ <- function(cx, cy, r, n = 120) { a <- seq(0, 2 * pi, length.out = n); data.frame(x = cx + r * cos(a), y = cy + r * sin(a)) }
+hc <- c(20, 25); hr <- 6
+gap <- 1.5; over <- 3
+arw <- arrow(length = unit(0.16, "cm"), ends = "both", type = "closed")
+arw1 <- arrow(length = unit(0.16, "cm"), type = "closed")
+lab_col <- "firebrick"
+ts <- 3.6 * diagram_text_scale
+ls <- 3.0 * diagram_text_scale
+## leader: radial line at 45 degrees that ends on the hole edge
+a45 <- pi / 4
+tip <- hc + hr * c(cos(a45), sin(a45))
+kne <- hc + 42 * c(cos(a45), sin(a45))
+
+ggplot() +
+  ## part outline and hole
+  geom_rect(aes(xmin = 0, xmax = 80, ymin = 0, ymax = 50), fill = "white", color = "black", linewidth = 1) +
+  geom_path(data = circ(hc[1], hc[2], hr), aes(x, y), color = "black", linewidth = 1) +
+  ## centre lines (the vertical one is extended to serve as an extension line)
+  geom_segment(aes(x = hc[1], xend = hc[1], y = hc[2] + hr + 3, yend = -10 - over), linetype = "F282", linewidth = 0.35) +
+  geom_segment(aes(x = hc[1] + hr + 3, xend = -10 - over, y = hc[2], yend = hc[2]), linetype = "F282", linewidth = 0.35) +
+  ## extension lines (gap at the part, run "over" past the outer dimension line)
+  geom_segment(aes(x = 0, xend = 0, y = -gap, yend = -20 - over), linewidth = 0.35) +
+  geom_segment(aes(x = 80, xend = 80, y = -gap, yend = -20 - over), linewidth = 0.35) +
+  geom_segment(aes(x = -gap, xend = -20 - over, y = 0, yend = 0), linewidth = 0.35) +
+  geom_segment(aes(x = -gap, xend = -20 - over, y = 50, yend = 50), linewidth = 0.35) +
+  ## dimension lines: small dimensions nearest the part, overall dimensions outside
+  geom_segment(aes(x = 0, xend = 20, y = -10, yend = -10), linewidth = 0.35, arrow = arw) +
+  geom_segment(aes(x = 0, xend = 80, y = -20, yend = -20), linewidth = 0.35, arrow = arw) +
+  geom_segment(aes(x = -10, xend = -10, y = 0, yend = 25), linewidth = 0.35, arrow = arw) +
+  geom_segment(aes(x = -20, xend = -20, y = 0, yend = 50), linewidth = 0.35, arrow = arw) +
+  annotate("label", x = 10, y = -10, label = "20", size = ts, fill = "white", linewidth = 0) +
+  annotate("label", x = 40, y = -20, label = "80", size = ts, fill = "white", linewidth = 0) +
+  annotate("label", x = -10, y = 12.5, label = "25", size = ts, fill = "white", linewidth = 0) +
+  annotate("label", x = -20, y = 25, label = "50", size = ts, fill = "white", linewidth = 0) +
+  ## leader with a short horizontal shoulder and the diameter note
+  geom_segment(aes(x = kne[1], xend = tip[1], y = kne[2], yend = tip[2]), linewidth = 0.35, arrow = arw1) +
+  geom_segment(aes(x = kne[1], xend = kne[1] + 5, y = kne[2], yend = kne[2]), linewidth = 0.35) +
+  annotate("text", x = kne[1] + 6, y = kne[2], label = "Ø12", hjust = 0, size = ts) +
+
+  ## ---- names of the elements (red) ----
+  annotate("text", x = 108, y = 60, label = "Leader\n(points at the centre)", color = lab_col, size = ls, fontface = "italic") +
+  geom_segment(aes(x = 97, xend = 42, y = 57, yend = 46.6), color = lab_col, linewidth = 0.4, arrow = arw1) +
+  annotate("text", x = 108, y = 22, label = "Extension line", color = lab_col, size = ls, fontface = "italic") +
+  geom_segment(aes(x = 98, xend = 80.7, y = 20, yend = -6), color = lab_col, linewidth = 0.4, arrow = arw1) +
+  annotate("text", x = 108, y = 5, label = "Visible gap\nat the part", color = lab_col, size = ls, fontface = "italic") +
+  geom_segment(aes(x = 98, xend = 81.2, y = 1, yend = -0.8), color = lab_col, linewidth = 0.4, arrow = arw1) +
+  annotate("text", x = 108, y = -28, label = "Dimension line\nwith arrowheads", color = lab_col, size = ls, fontface = "italic") +
+  geom_segment(aes(x = 96, xend = 62, y = -26, yend = -20.6), color = lab_col, linewidth = 0.4, arrow = arw1) +
+  annotate("text", x = 50, y = -33, label = "Extends ~3 mm past\nthe dimension line", color = lab_col, size = ls, fontface = "italic") +
+  geom_segment(aes(x = 66, xend = 79, y = -31, yend = -22.5), color = lab_col, linewidth = 0.4, arrow = arw1) +
+  annotate("text", x = -32, y = 62, label = "Centre line", color = lab_col, size = ls, fontface = "italic") +
+  geom_segment(aes(x = -24, xend = 19.5, y = 60, yend = 33), color = lab_col, linewidth = 0.4, arrow = arw1) +
+  annotate("text", x = 0, y = -33, label = "Centre line used\nas extension line", color = lab_col, size = ls, fontface = "italic") +
+  geom_segment(aes(x = 8, xend = 19.5, y = -30, yend = -12), color = lab_col, linewidth = 0.4, arrow = arw1) +
+
+  coord_fixed(xlim = c(-45, 122), ylim = c(-38, 68)) +
+  labs(title = "Elements of a Dimension") +
+  theme_void() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+```
+
+## Basic Dimensioning Rules (ASME Y14.5)
+
+1. **Dimension each feature once.** A dimension repeated in a second view will contradict the first one the day only one of them is revised.
+2. **Do not over-dimension.** In a chain of dimensions whose total is also given, leave one link out, or show it in parentheses as a *reference dimension*; otherwise the tolerances cannot all be met at once.
+3. **Dimension in the view that shows the shape most clearly** (the characteristic view): a hole's diameter in the view where it appears as a circle, a slot's width where its outline is seen.
+4. **Never dimension to hidden lines.** Use a visible edge, or add a section view that makes the feature visible.
+5. **Place dimensions outside the view** where possible, with the **smaller dimensions closest to the part** and the larger ones outside them. Then extension lines never cross dimension lines.
+6. **Dimension lines should not cross** each other or other lines. Extension lines may cross each other and visible lines when there is no other way.
+7. **Locate holes by their centres**, not by their edges, and give their size with a diameter symbol: Ø12. Arcs are sized with a radius: R8.
+8. **Choose dimensions from the part's function.** Measure from the surfaces that locate the part in the assembly (later, its datums), not from whatever edge was convenient to draw.
+9. **State the units.** A drawing is all millimetres or all inches, with a note in the title block. Metric values below 1 get a leading zero (0.5, not .5); inch values drop it (.50). The full zero and decimal-place rules are in the Tolerances chapter.
+10. **Use standard symbols and abbreviations** (Ø, R, ⌴ counterbore, ⌵ countersink, ↧ depth) so that anyone can read the drawing.
 
 ## Try it yourself {#sec-tryit-dimensioning}
 

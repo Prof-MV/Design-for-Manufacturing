@@ -62,20 +62,20 @@ There are many different standards related to technical drawings. The ISO standa
 
 Standard layouts of drawing sheets are specified by the various standards organizations.
 
-The figure below shows the layout of a typical sheet, showing the drawing frame, a typical title block, parts list (bill of materials), and revision table.
+The figure below shows the layout of a typical A-size sheet: the drawing frame with its zone letters and numbers, the title block in the lower right, and the revision table in the upper right. The circled numbers match the numbered entries in the list that follows. Assembly drawings also carry a parts list (bill of materials), usually placed directly above the title block; this single-part sheet has none.
 
-```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Title Block of Technical Drawing"}
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Layout of a drawing sheet: frame with zones, title block and revision table. The circled numbers are keyed to the list below."}
 knitr::include_graphics("images/7-2-1-1536x1192.png")
 ```
 
 ##### Title Block Components [@lorier2025blueprint]
 
-* **Part Title**: The title is a descriptive name given to the drawing, typically the largest box in the title block.
-* **Company Information**: The name of the company responsible for the drawing will also appear in a larger box in the title block. Often, a logo for the company will be displayed as well.
-* **Size**: The size block displays the letter of the sheet size of the print (e.g., A, B, C, or A4, A3).
-* **Drawing Number**: A numbering system the company uses to aid in filing and tracking the drawing.
-* **Part Number**: A part number may be used to identify a specific part, such as in an assembly parts list.
-* **Scale**: The scale displays the proportion of the drawing compared to the object. 
+* **Part Title** (1): The title is a descriptive name given to the drawing, typically the largest box in the title block.
+* **Company Information** (2): The name of the company responsible for the drawing will also appear in a larger box in the title block. Often, a logo for the company will be displayed as well.
+* **Size** (3): The size block displays the letter of the sheet size of the print (e.g., A, B, C, or A4, A3).
+* **Drawing Number** (4): A numbering system the company uses to aid in filing and tracking the drawing.
+* **Part Number** (5): A part number may be used to identify a specific part, such as in an assembly parts list.
+* **Scale** (6): The scale displays the proportion of the drawing compared to the object. 
     * **Reduction**: When the part is too large to fit on the sheet, the drawing may be reduced to $1/2, 1/4, 1/8$, etc.
     * **Enlargement**: When the part is smaller than the sheet, the drawing may be increased proportionally. 
     * **"DO" Scale**: The ratio is arranged as **Drawing:Object**. 
@@ -83,20 +83,20 @@ knitr::include_graphics("images/7-2-1-1536x1192.png")
         * A scale of **2:1** indicates the drawing is twice the size of the part. 
         * A scale of **1:1** or **"Full"** indicates they are the same size. 
     * **NTS**: Stands for "Not To Scale," used if the drawing does not follow a basic proportional size.
-* **Drawn**: Contains the name or initials of the drafter and the date of the drawing, as well as any other individuals involved (checkers, engineers).
-* **Projection**: Identifies whether the drawing is a **first-angle** or **third-angle** projection. This is typically indicated with a standard projection cone symbol.
+* **Drawn** (7): Contains the name or initials of the drafter and the date of the drawing, as well as any other individuals involved (checkers, engineers).
+* **Projection** (8): Identifies whether the drawing is a **first-angle** or **third-angle** projection. This is typically indicated with a standard projection cone symbol.
 
 
 
-* **Weight**: Used to indicate the weight of the finished part when required.
-* **Sheet**: Displays the current and total number of sheets in that drawing set (e.g., Sheet 1 of 3).
-* **Material**: Identifies the specific material requirements for the part.
-* **Finish**: Displays any part finish specifications. These may be indicated for specific regions using leader lines.
-* **Application**: Used to identify the assemblies on which the part is used.
+* **Weight** (9): Used to indicate the weight of the finished part when required.
+* **Sheet** (10): Displays the current and total number of sheets in that drawing set (e.g., Sheet 1 of 3).
+* **Material** (11): Identifies the specific material requirements for the part.
+* **Finish** (12): Displays any part finish specifications. These may be indicated for specific regions using leader lines.
+* **Application** (13): Used to identify the assemblies on which the part is used.
 
 ##### Default Tolerances
 
-**Default Tolerance Box**: Displays the amount of variation allowed on dimension values that do not have a specific tolerance attached to them. These are usually categorized by the number of decimal places.
+**Default Tolerance Box** (14): Displays the amount of variation allowed on dimension values that do not have a specific tolerance attached to them. These are usually categorized by the number of decimal places.
 
 ```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Default Tolerances"}
 knitr::include_graphics("images/7-3-768x508.png")
@@ -109,14 +109,14 @@ knitr::include_graphics("images/7-3-768x508.png")
 
 ##### Document Control and Layout
 
-* **Revision**: Revisions are changes made to the drawing after the original release to correct errors, improve design, or reduce manufacturing costs.
+* **Revision** (15): Revisions are changes made to the drawing after the original release to correct errors, improve design, or reduce manufacturing costs.
     * The **revision level** (letter or number) is located in the lower right.
     * The **revision history** is typically located in the upper right of the sheet.
     * A **dash (-)** or the letter **"A"** often indicates the initial release.
 
 
 
-* **Zones**: Sheet zones (using letters and numbers along the border) help locate
+* **Zones** (16): Sheet zones (using letters and numbers along the border) help locate
   particular details or views, which is especially beneficial on large-format
   drawings.
 
