@@ -53,7 +53,7 @@ Wire duct (also called wireway or raceway, depending on the region and the produ
 
 Conductors and cables also have a minimum bend radius, below which the insulation can crack, a shield can be damaged, or — for multi-conductor cable — the individual conductors inside can shift and stress their terminations. **Rule of thumb:** allow a minimum bend radius of about 4-6 times the cable's outside diameter (OD) for standard unshielded multi-conductor control cable, and 8-10 times OD for shielded cable, such as VFD output (motor) cable, where crushing or kinking the shield at a tight bend can compromise the very EMI shielding the cable was specified for in the first place. These are rules of thumb, not a substitute for the cable manufacturer's data sheet, which states the actual minimum bend radius for that specific product — and they break down for cable specifically designed for tight-radius applications (some drag-chain-rated cable is built to tolerate much tighter bends than a standard cable of the same OD), where following the generic multiplier would be needlessly conservative.
 
-Physical segregation matters as much as duct sizing: power wiring (motor leads, VFD output cable) and control/signal wiring (I/O, communication network cable, safety circuit wiring) should run in separate ducts or maintain a documented minimum separation where they must cross, because a VFD's switching-frequency output carries enough high-frequency noise to induce errors on a nearby low-level signal conductor. This segregation practice is covered in more depth in the bonding, grounding, and EMC design task elsewhere in this part; the layout habit starts here, at the duct-sizing stage. CEC Section 12 addresses conductor installation practices including bending, and CSA C22.2 No. 18.1 covers wireway construction; NEC Article 366 and UL 508A's wireway/wiring space requirements are the equivalent US references.
+Physical segregation matters as much as duct sizing: power wiring (motor leads, VFD output cable) and control/signal wiring (I/O, communication network cable, safety circuit wiring) should run in separate ducts or maintain a documented minimum separation where they must cross, because a VFD's switching-frequency output carries enough high-frequency noise to induce errors on a nearby low-level signal conductor. This segregation practice is covered in more depth in the bonding, grounding, and EMC design task elsewhere in this part; the layout habit starts here, at the duct-sizing stage. CEC Section 12 addresses conductor installation practices including bending, and CSA C22.2 No. 26 covers field-installed wireways and auxiliary gutters; NEC Articles 376 and 378 (metal and nonmetallic wireways) are the US equivalents. Slotted plastic wiring duct *inside* a control panel is governed by the panel standard itself — UL 508A or CSA C22.2 No. 286 — rather than by the wireway standards.
 
 ### Governing Calculation
 
@@ -115,7 +115,7 @@ ggplot(duct_options, aes(x = duct_size, y = fill_pct)) +
   labs(title = "Wire Duct Fill by Candidate Duct Size",
        x = "Duct size (nominal external dimensions)", y = "Fill (%)") +
   ylim(0, 55) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
@@ -215,27 +215,26 @@ NEMA enclosure ratings (from NEMA 250, the US National Electrical Manufacturers 
 ```{r tbl-06-03-nema-ip-crossref, echo=FALSE, message=FALSE}
 nema_ip <- tribble(
   ~NEMA_Type, ~Approx_IP_Equivalent, ~Typical_Environment, ~Example_Use,
-  "NEMA 1", "IP20", "Indoor, general purpose, no dust or water exposure expected", "Office-adjacent equipment rooms",
-  "NEMA 12", "IP54", "Indoor, dust, dirt, and light dripping non-corrosive liquids, no washdown", "General industrial floor panels (the automotive plant's main assembly area)",
-  "NEMA 3R", "~IP24", "Outdoor, rain and sleet, not dust-tight", "Outdoor disconnect switches, yard lighting panels",
+  "NEMA 1", "IP10", "Indoor, general purpose, no dust or water exposure expected", "Office-adjacent equipment rooms",
+  "NEMA 12", "IP52 (many NEMA 12 enclosures are also tested to IP54/IP55)", "Indoor, dust, dirt, and light dripping non-corrosive liquids, no washdown", "General industrial floor panels (the automotive plant's main assembly area)",
+  "NEMA 3R", "IP14", "Outdoor, rain and sleet, not dust-tight", "Outdoor disconnect switches, yard lighting panels",
   "NEMA 4", "IP66", "Indoor/outdoor, hosedown-rated, watertight, painted/mild steel", "Wash-down-adjacent equipment where corrosion resistance isn't the primary concern",
   "NEMA 4X", "IP66 + corrosion resistance", "Indoor/outdoor, hosedown-rated, corrosion-resistant material (stainless steel, fiberglass, or polycarbonate)", "Food/beverage plants, chemical-adjacent areas, marine/coastal sites",
-  "NEMA 12/IP54 (typical general panel default)", "IP54", "Baseline for most indoor industrial panels with no special exposure", "Machine control panels in a dry manufacturing area",
-  "No direct NEMA equivalent", "IP69K", "High-pressure, high-temperature washdown (per DIN 40050-9 test conditions)", "Direct food-contact-adjacent equipment in dairy, meat, and beverage processing"
+  "No direct NEMA equivalent", "IP69K (ISO 20653; IEC 60529 now has a similar IPX9)", "High-pressure, high-temperature washdown at close range", "Direct food-contact-adjacent equipment in dairy, meat, and beverage processing"
 )
 
 nema_ip %>%
-  kbl(caption = "Approximate NEMA-to-IP enclosure rating cross-reference and typical applications",
+  kbl(caption = "Approximate NEMA-to-IP enclosure rating cross-reference (after NEMA's own conversion table: a NEMA type meets or exceeds the IP code shown, but not the reverse) and typical applications",
       col.names = c("NEMA Type", "Approx. IP Equivalent", "Typical Environment", "Example Use")) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, background = "#2C3E50", color = "white")
 ```
 
-IP69K deserves special attention because it has **no direct NEMA equivalent at all** — it comes from a German standard (DIN 40050-9) originally written for the automotive industry's own high-pressure washdown testing, and it has since become the de facto requirement for any enclosure that sits in a high-pressure, high-temperature washdown zone: think hot water at high pressure, sprayed at close range, several times a day, for the life of the equipment. A food plant that specifies "NEMA 4X" alone, without also specifying IP69K, may receive a stainless enclosure that survives a garden-hose-style washdown (the NEMA 4/4X hosedown test) but degrades under the much more aggressive high-pressure, high-temperature spray a sanitation crew actually uses.
+IP69K deserves special attention because it has **no direct NEMA equivalent at all** — it comes from a German standard for road vehicles (DIN 40050-9, now replaced by ISO 20653), originally written for high-pressure cleaning of truck and vehicle components, and the 2013 amendment of IEC 60529 added a similar IPX9 code, and it has since become the de facto requirement for any enclosure that sits in a high-pressure, high-temperature washdown zone: think hot water at high pressure, sprayed at close range, several times a day, for the life of the equipment. A food plant that specifies "NEMA 4X" alone, without also specifying IP69K, may receive a stainless enclosure that survives a garden-hose-style washdown (the NEMA 4/4X hosedown test) but degrades under the much more aggressive high-pressure, high-temperature spray a sanitation crew actually uses.
 
 **Rule of thumb:** for washdown areas, specify **both** a NEMA type (for material/corrosion resistance) and an IP rating (for the specific ingress severity), rather than relying on one system alone — e.g., "NEMA 4X, IP69K" for a direct food-contact-adjacent panel, versus "NEMA 4X, IP66" for a food-plant panel that's corrosion-resistant but sits somewhere the high-pressure wand never directly reaches. This rule of thumb breaks down for indoor, dry, general-purpose panels, where specifying both systems is needless duplication — NEMA 12 alone (or IP54 alone) is the accepted shorthand almost everywhere in general industrial work, and asking a supplier to certify both for a panel that will never see water is just added cost for no benefit.
 
-CSA C22.2 No. 94.1 and No. 94.2 are the Canadian enclosure standards (harmonized with, but not textually identical to, NEMA 250 and IEC 60529); a Canadian-market panel should be specified and marked against the CSA standard, with NEMA/IP cited as the equivalent US/international reference where the customer's specification uses that language, which is extremely common on automotive OEM specifications written centrally in the US.
+CSA C22.2 No. 94.1 and No. 94.2 are the Canadian enclosure standards (harmonized with UL 50 and UL 50E, which use the same Type numbers as NEMA 250; IP codes come from the separate IEC 60529); a Canadian-market panel should be specified and marked against the CSA standard, with NEMA/IP cited as the equivalent US/international reference where the customer's specification uses that language, which is extremely common on automotive OEM specifications written centrally in the US.
 
 ### Governing Calculation (Decision Framework)
 
@@ -384,7 +383,7 @@ ggplot(heat_components, aes(x = component, y = loss_w)) +
   coord_flip(ylim = c(0, 780)) +
   labs(title = "Heat Load by Component Category",
        x = NULL, y = "Heat loss (W)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
@@ -545,7 +544,7 @@ conductor_t <- 2000 / mult^2.2
 curve_df <- data.frame(
   mult = rep(mult, 2),
   t = c(fuse_t, conductor_t),
-  curve = rep(c("Time-delay fuse melting curve", "Conductor damage (I2t) withstand"), each = length(mult))
+  curve = rep(c("Time-delay fuse melting curve", "Conductor damage (I²t) withstand"), each = length(mult))
 )
 
 start_point <- data.frame(mult = 3.47, t = 8)
@@ -557,14 +556,14 @@ ggplot(curve_df, aes(x = mult, y = t, color = curve)) +
   annotate("text", x = start_point$mult * 1.15, y = start_point$t * 0.3,
            label = "Motor starting:\nLRA ~ 3.5x fuse rating\nfor ~8 s",
            size = 2.9 * diagram_text_scale, hjust = 0) +
-  scale_x_log10() +
+  scale_x_log10(breaks = c(1, 2, 3, 5, 10)) +
   scale_y_log10() +
   scale_color_manual(values = c("Time-delay fuse melting curve" = "steelblue",
-                                 "Conductor damage (I2t) withstand" = "firebrick")) +
+                                 "Conductor damage (I²t) withstand" = "firebrick")) +
   labs(title = "Time-Current Coordination (Schematic)",
        x = "Current (multiples of fuse ampere rating, log scale)",
        y = "Time (s, log scale)", color = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
@@ -585,7 +584,7 @@ qwebr_calc_card(
   icon = "plug",
   inputs = list(
     qwebr_calc_input("FLA", "Motor full-load amps (FLA)", value = 32, min = 1, max = 50, step = 0.5, suffix = "A", type = "slider"),
-    qwebr_calc_input("conductor_ampacity_actual", "Selected conductor ampacity", value = 44, min = 10, max = 150, step = 1, suffix = "A", type = "slider"),
+    qwebr_calc_input("conductor_ampacity_actual", "Selected conductor ampacity", value = 50, min = 10, max = 150, step = 1, suffix = "A", type = "slider"),
     qwebr_calc_input("service_factor", "Motor service factor", value = 1.15, min = 1, max = 1.25, step = 0.05, type = "slider"),
     qwebr_calc_input("m_fuse", "Time-delay fuse multiplier", value = 1.75, min = 1.25, max = 2.25, step = 0.05, suffix = "x FLA", type = "slider"),
     qwebr_calc_input("LRA_multiplier", "Locked-rotor multiplier", value = 6.5, min = 4, max = 9, step = 0.5, suffix = "x FLA", type = "slider")
@@ -599,16 +598,16 @@ qwebr_calc_card(
 
 ```{webr-r}
 #| label: branch-protection-06-03
-## 30 hp, 600 V, three-phase motor -- representative tabulated/nameplate FLA
-## (as would be read from the motor nameplate or the applicable CEC ampacity
-## table for this horsepower/voltage combination)
+## 30 hp, 600 V, three-phase motor -- tabulated full-load current
+## (CEC Table 44 / NEC Table 430.250, 575-600 V column)
 FLA <- 32  # A
 
 ## Step 1: branch-circuit conductor ampacity (125% continuous-duty rule)
 conductor_ampacity_required <- 1.25 * FLA
 
-## Selected conductor: 8 AWG copper, 90C insulation
-conductor_ampacity_actual <- 44  # A, representative ampacity for this conductor/insulation
+## Selected conductor: 8 AWG copper, 90C insulation, but terminations rated
+## 75C, so use the 75C column (CEC Table 2 / NEC 310.16): 50 A
+conductor_ampacity_actual <- 50  # A
 
 ## Step 2: overload relay setting (protects the motor, separate from the
 ## branch OCPD below)
@@ -642,7 +641,7 @@ cat(sprintf("  Fuse rating as a multiple of LRA           %.2fx\n", I_OCPD / LRA
 
 </details>
 
-**Sanity check:** the selected fuse (60 A) sits at roughly 1.9x FLA, comfortably inside the range this chapter's rule of thumb predicts, and the overload relay (40 A) sits between FLA (32 A) and the conductor's ampacity (44 A) exactly where it should — protecting the motor from sustained overload well before the conductor itself is threatened, while the fuse stands by purely for short-circuit and ground-fault events. If the fuse rating had landed close to or above the conductor's ampacity, that would be a red flag worth double-checking, since it would mean the "short-circuit protection" device was no longer meaningfully protecting the conductor it shares a circuit with.
+**Sanity check:** the 175% multiplier gives 56 A, and the code lets you round up to the next standard size, so the selected fuse (60 A) ends up at about 1.9x FLA. The overload relay (40 A) sits between FLA (32 A) and the conductor's ampacity (50 A) exactly where it should — it protects both the motor and the conductor from sustained overload. Notice that the 60 A fuse is *larger* than the 50 A conductor ampacity. In a motor branch circuit that is normal and permitted (CEC Section 28, NEC 430.52): the overload relay protects the conductor against overload, so the fuse only has to protect it against short circuits and ground faults, which it clears in a fraction of a second. On an ordinary feeder with no overload relay, a fuse above the conductor ampacity would be a real error.
 
 ## Design Task 5: Panel Short-Circuit Current Rating (SCCR)
 
@@ -661,6 +660,10 @@ The fix is not automatically "buy every component individually rated at 65 kA," 
 **Rule of thumb:** for any panel with a customer-specified SCCR requirement, don't just check the main breaker — check *every* component in the fault current path (starters, contactors, terminal blocks, disconnects, VFDs, power supplies), because the weakest link is very often not the main breaker at all. This rule of thumb has essentially no failure mode worth noting other than the discipline to actually do the check on every device, since skipping even one low-rated component silently caps the entire panel's real SCCR regardless of what the nameplate says.
 
 **Rule of thumb:** automotive OEMs commonly specify 65 kA SCCR as a blanket requirement across an entire plant, even where the actual available fault current at a given panel's point of connection is considerably lower. This is a deliberate standardization choice, not a reflection of every panel's actual exposure — a plant with a single specification simplifies procurement, spare-parts stocking, and future relocations of equipment between service points with different available fault currents, at the cost of some components being rated well above what any individual panel strictly needs.
+
+```{r video-sccr-06-03, echo=FALSE, results='asis'}
+embed_youtube("r5Le5rO_66U", "Short-circuit current rating (SCCR) in industrial control panels (Siemens Knowledge Hub)")
+```
 
 ### Governing Calculation
 
@@ -819,13 +822,13 @@ Two panels are headed for the same Ontario plant in the same month. Panel A is b
 
 ### Design Guidelines and Rules of Thumb
 
-In Ontario, the *Electrical Safety Authority* (ESA), administering the OESC's adoption of the CEC, generally will not approve connection of electrical equipment that doesn't bear a recognized certification mark from an accredited certification body — a CSA mark, a cULus/cUL mark, an ETL mark, or an equivalent. For an industrial control panel specifically, that mark is most often earned one of two ways:
+In Ontario, the *Electrical Safety Authority* (ESA), administering the OESC's adoption of the CEC, generally will not approve connection of electrical equipment that doesn't bear a recognized certification mark from a certification body accredited by the Standards Council of Canada — a CSA mark, a cULus/cUL mark, a cETL mark, or an equivalent (the "c" indicates certification to the Canadian standard). For an industrial control panel specifically, that mark is most often earned one of two ways:
 
 **UL 508A Listed Panel Shop:** UL (Underwriters Laboratories) operates a program under which a panel-building company itself — not just individual components — is audited, certified, and enrolled in an ongoing Follow-Up Service. A shop holding this status is authorized to build panels according to its own filed procedures and **self-apply** the UL Listing mark directly to each panel it builds, without sending every individual panel out for third-party testing. This is why so many automotive OEM specifications simply require "UL 508A listed panel shop" — it's a fast, well-understood, US-centric certification path that most major machine builders and integrators already hold, and OEM specifications are frequently written centrally in the US and applied across all of a company's plants, including Canadian ones.
 
 **CSA C22.2 No. 286 Certified Panel Shop:** this is the direct Canadian equivalent — CSA's own standard for industrial control panels, with a parallel shop-certification and self-application program. A Canadian-market panel shop can hold a CSA C22.2 No. 286 certification, a UL 508A listing with Canadian ("C") coverage, or both, depending on which markets it serves; many shops serving cross-border automotive supply chains maintain dual coverage so the same panel design can ship to either country without a separate certification exercise.
 
-**ESA Field Evaluation:** not every panel a plant needs comes from a certified shop — a panel bundled with used equipment, a one-off panel built in-house by plant maintenance without a certified shop's program, or an older panel whose original certification can no longer be verified all fall outside the listed-shop path. For these cases, Ontario's Field Evaluation program (administered through the ESA in conjunction with accredited field evaluation agencies) provides an alternative: an accredited agency inspects the **specific physical unit** against the applicable standard (commonly CSA C22.2 No. 286 or an equivalent), and — once any deficiencies are corrected — applies a Special Inspection / field evaluation label directly to that unit. That label covers only the inspected unit itself, not the model in general or any future copies of it; a second, identical used panel bought from the same reseller would need its own separate field evaluation.
+**ESA Field Evaluation:** not every panel a plant needs comes from a certified shop — a panel bundled with used equipment, a one-off panel built in-house by plant maintenance without a certified shop's program, or an older panel whose original certification can no longer be verified all fall outside the listed-shop path. For these cases, Ontario's Field Evaluation program (administered through the ESA in conjunction with accredited field evaluation agencies) provides an alternative: an accredited agency inspects the **specific physical unit** following CSA SPE-1000 (Model Code for the Field Evaluation of Electrical Equipment), which points to the applicable product standard (commonly CSA C22.2 No. 286 for a control panel), and — once any deficiencies are corrected — applies a field evaluation label directly to that unit. That label covers only the inspected unit itself, not the model in general or any future copies of it; a second, identical used panel bought from the same reseller would need its own separate field evaluation.
 
 **Rule of thumb:** a plant should default to assuming any incoming panel needs a field evaluation unless a recognized, currently valid certification mark is physically visible on it and the panel has not been field-modified since it was listed (adding a component, changing a circuit, or altering the SCCR-relevant makeup of the panel after listing can itself invalidate the original mark and trigger the need for a field evaluation of just the modification). This rule of thumb rarely causes real harm when it "over-triggers" a review of a panel that turns out to be fine — the cost is a short delay, not a hazard — whereas skipping a needed field evaluation because "it's probably fine" risks connecting genuinely unverified equipment to the plant's electrical system.
 
@@ -1149,7 +1152,7 @@ A filtered intake/exhaust fan draws in ambient air and exhausts panel air direct
 <details>
 <summary>Task 4 (plug-in): A 20 hp, 600 V, three-phase motor has a representative FLA of 22 A. Using the same rules as the worked example (1.25x for conductor ampacity, 1.75x for the time-delay fuse calculation, standard fuse sizes from the same list), what conductor ampacity is required and what standard fuse size would be selected?</summary>
 
-Required conductor ampacity = 1.25 × 22 = 27.5 A (select a conductor with ampacity at or above this, e.g., a 10 AWG conductor with a representative 90°C ampacity around 30-35 A, which would pass).
+Required conductor ampacity = 1.25 × 22 = 27.5 A (select a conductor with ampacity at or above this, e.g., 10 AWG copper at 35 A in the 75°C column, which passes).
 
 Calculated max. fuse rating = 1.75 × 22 = 38.5 A
 

@@ -173,7 +173,7 @@ ggplot(budget_df, aes(x = Scenario, y = Current_A, fill = Load_Type)) +
            size = 3.6 * diagram_text_scale) +
   labs(title = "24VDC Bus Load: Average vs. Worst-Case Peak",
        x = NULL, y = "Current (A)", fill = "Load type") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
@@ -227,7 +227,7 @@ ggplot() +
            size = 3.2 * diagram_text_scale, fontface = "bold") +
   scale_x_continuous(limits = c(0, 135), breaks = seq(0, 120, 20)) +
   labs(x = "Loading (% of nameplate continuous rating)", y = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     axis.text.y = element_blank(),
     axis.title.x = element_text(size = 11 * chart_text_scale),
@@ -304,7 +304,7 @@ for (i in seq_along(catalog_A)) {
 
 </details>
 
-**Sanity check:** the 5A supply fails outright (loading over 100% on the *average* load alone, before any inrush is even considered), and the 20A supply would sit at a wasteful 32% loading. The 10A supply is the only standard size that both clears the load and stays reasonably close to the target band — a good example of how the rule of thumb narrows a catalog search to essentially one right answer, rather than leaving the designer to guess.
+**Sanity check:** the 5A supply fails outright (loading over 100% on the *average* load alone, before any inrush is even considered), and the 20A supply would sit at a wasteful 32% loading. The 10A supply is the only standard size that both clears the load and stays reasonably close to the target band — a good example of how the rule of thumb narrows a catalog search to essentially one right answer, rather than leaving the designer to guess. Keep the worst-case coincident peak from Design Task 1 in mind, though: 12.87 A is above the 10A continuous rating, so the 10A supply is only correct because the control program never holds all 14 valves and the clutch on together for more than a moment. If the process could genuinely hold that state for seconds or longer, the 20A supply would be the right choice.
 
 <details>
 <summary>Industry connection: why "just order a bigger one" isn't free</summary>
@@ -442,8 +442,11 @@ if (I_surge_fault <= I_surge_rated) {
 ```{r fig-06-13-inrush-timeline, echo=FALSE, fig.cap="Instantaneous 24VDC bus current during the planned start event (left) and an all-valves fault condition (right). The planned event clears the supply's surge rating; the fault event does not.", fig.align='center', fig.width=11, fig.height=5.5}
 t_seq <- seq(-50, 300, by = 1)
 
-I_planned <- ifelse(t_seq < 0, 4.23, ifelse(t_seq < 50, 12.42, 7.29))
-I_fault   <- ifelse(t_seq < 0, 4.23, ifelse(t_seq < 50, 21.42, 10.89))
+## Piecewise steps: background before t = 0, pull-in for 50 ms, holding after
+pull_in <- (t_seq >= 0) & (t_seq < 50)
+holding <- t_seq >= 50
+I_planned <- 4.23 + pull_in * (12.42 - 4.23) + holding * (7.29 - 4.23)
+I_fault   <- 4.23 + pull_in * (21.42 - 4.23) + holding * (10.89 - 4.23)
 
 timeline_df <- rbind(
   data.frame(t_ms = t_seq, I_A = I_planned, scenario = "Planned start (6 valves, 4 contactors)"),
@@ -461,7 +464,7 @@ ggplot(timeline_df, aes(x = t_ms, y = I_A)) +
   labs(title = "24VDC Bus Current During a Start Event",
        subtitle = "Dotted line: 10A continuous rating. Dashed red line: 15A surge rating (150% for 1 s).",
        x = "Time from pushbutton press (ms)", y = "Bus current (A)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
     plot.subtitle = element_text(size = 9.5 * chart_text_scale),
@@ -471,7 +474,7 @@ ggplot(timeline_df, aes(x = t_ms, y = I_A)) +
   )
 ```
 
-**Sanity check:** the planned event (12.42 A) clears the 15 A surge rating with a healthy 17% margin, well inside the 1-second surge window for a transient that only lasts about 50 ms — a comfortable pass. The fault scenario (21.42 A) blows straight through the surge rating, and the figure shows why: it's not a subtle miss, it's a clear failure that would trip the supply's protection every time the fault condition occurs. Worth noting too: if all 14 valves stayed energized for more than the brief pull-in window (a stuck fault, not a transient), their *combined holding current alone* (6.3 A) added to the background load would push the sustained draw close to the supply's 10A continuous rating — a second, separate problem from the surge check, and one more reason the fix belongs in the PLC logic, not in a bigger supply.
+**Sanity check:** the planned event (12.42 A) clears the 15 A surge rating with a healthy 17% margin, well inside the 1-second surge window for a transient that only lasts about 50 ms — a comfortable pass. The fault scenario (21.42 A) blows straight through the surge rating, and the figure shows why: it's not a subtle miss, it's a clear failure that would trip the supply's protection every time the fault condition occurs. Worth noting too: if all 14 valves stayed energized for more than the brief pull-in window (a stuck fault, not a transient), their *combined holding current alone* (6.3 A) plus the four contactors and the background load would hold the sustained draw at 10.9 A — above the supply's 10A continuous rating, a second, separate problem from the surge check, and one more reason the fix belongs in the PLC logic, not in a bigger supply.
 
 ## Design Task 4: Battery Capacity Sizing for a UPS-Backed Control System
 
@@ -487,11 +490,13 @@ Sizing a backup battery starts from the same place as any other capacity calcula
 
 **Temperature derating.** A lead-acid battery's available capacity drops at low temperature — the electrochemical reaction that delivers current simply runs slower in the cold — and this is a genuine, not a paperwork, consideration for equipment that lives somewhere other than a climate-controlled server room: an unheated plant mezzanine in an Ontario winter, or a defense shelter's equipment bay before its own environmental control has stabilized after a cold start. Battery manufacturers publish a capacity-vs-temperature curve for exactly this reason; a battery rated for a given Ah at 25°C delivers meaningfully less at 0°C, and less still below that.
 
-**Rule of thumb:** for a standby/UPS battery, use no more than about 80% DoD and derate the manufacturer's rated capacity according to the coldest ambient temperature the battery will realistically see in service — not the plant's average temperature, and not the temperature at the equipment's normal indoor location if the actual installation point (a mezzanine, an unheated enclosure, a field shelter before its HVAC stabilizes) runs colder. This breaks down for lithium-based standby batteries, which tolerate deeper discharge and hold capacity better in moderately cold conditions than lead-acid chemistries — but lithium standby batteries bring their own considerations (a battery management system, different charging profile, and typically a higher unit cost) that are outside this chapter's scope; confirm the actual DoD and temperature derating from the specific battery's datasheet regardless of chemistry, rather than assuming the lead-acid figures used here transfer directly.
+**Discharge rate.** A lead-acid battery's nameplate Ah figure is measured at a slow, 20-hour discharge. Drawn down in half an hour, the same battery delivers only about half that capacity, because the plates cannot react fast enough at high current (the Peukert effect). The battery manufacturer's constant-current discharge table gives the real figure for each runtime; as representative values for a VRLA/AGM battery, expect roughly 40-45% of the 20-hour rating for a 15-minute discharge, about 50% for 30 minutes, about 55% for 45 minutes and about 60-65% for one hour. This is often the largest single correction in a short-runtime UPS calculation, and the easiest to forget.
+
+**Rule of thumb:** for a standby/UPS battery, use no more than about 80% DoD (the same margin IEEE 485 builds in with its 1.25 aging factor), read the capacity at the actual discharge time from the manufacturer's table, and derate the manufacturer's rated capacity according to the coldest ambient temperature the battery will realistically see in service — not the plant's average temperature, and not the temperature at the equipment's normal indoor location if the actual installation point (a mezzanine, an unheated enclosure, a field shelter before its HVAC stabilizes) runs colder. This breaks down for lithium-based standby batteries, which tolerate deeper discharge and hold capacity better in moderately cold conditions than lead-acid chemistries — but lithium standby batteries bring their own considerations (a battery management system, different charging profile, and typically a higher unit cost) that are outside this chapter's scope; confirm the actual DoD and temperature derating from the specific battery's datasheet regardless of chemistry, rather than assuming the lead-acid figures used here transfer directly.
 
 ```{r fig-06-13-battery-derate, echo=FALSE, fig.cap="Illustrative AGM battery capacity retention versus temperature. At 0 degrees C, roughly 75% of the 25 degrees C rated capacity is available -- the derating factor used in the worked example for a shelter mezzanine in winter.", fig.align='center', fig.width=9, fig.height=5.5}
 T_seq <- seq(-20, 40, by = 1)
-retention_pct <- ifelse(T_seq < 25, 100 - 1.0 * (25 - T_seq), 100 + 0.3 * (T_seq - 25))
+retention_pct <- 100 - 1.0 * pmax(25 - T_seq, 0) + 0.3 * pmax(T_seq - 25, 0)
 derate_df <- data.frame(Temp_C = T_seq, Retention = retention_pct)
 
 ggplot(derate_df, aes(x = Temp_C, y = Retention)) +
@@ -503,7 +508,7 @@ ggplot(derate_df, aes(x = Temp_C, y = Retention)) +
            color = "#E74C3C", size = 3 * diagram_text_scale, hjust = 1) +
   labs(title = "Battery Capacity vs. Temperature (Illustrative AGM)",
        x = "Temperature (degrees C)", y = "Capacity retention (% of 25C rated capacity)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
     axis.title = element_text(size = 11 * chart_text_scale),
@@ -516,7 +521,7 @@ The Canadian and international reference points for this kind of sizing exercise
 ### Governing Calculation
 
 $$
-C_{required} = \frac{I_{backup} \times t_{backup}}{DoD \times f_{temp}}
+C_{required} = \frac{I_{backup} \times t_{backup}}{DoD \times f_{temp} \times f_{rate}}
 $$
 
 | Symbol | Definition | Units |
@@ -525,7 +530,8 @@ $$
 | $t_{backup}$ | Required backup runtime | h |
 | $DoD$ | Maximum allowable depth of discharge (fraction of rated capacity) | dimensionless (0-1) |
 | $f_{temp}$ | Capacity derating factor at the coldest expected service temperature | dimensionless (0-1) |
-| $C_{required}$ | Minimum acceptable battery nameplate (25C rated) capacity | Ah |
+| $f_{rate}$ | Fraction of the 20-hour rated capacity available at the actual discharge time | dimensionless (0-1) |
+| $C_{required}$ | Minimum acceptable battery nameplate (20-hour, 25°C) capacity | Ah |
 
 ### Worked Example
 
@@ -541,10 +547,11 @@ qwebr_calc_card(
     qwebr_calc_input("t_backup", "Required runtime", value = 0.5, min = 0.1, max = 8, step = 0.1, suffix = "h"),
     qwebr_calc_input("DoD", "Depth-of-discharge limit", value = 0.8, min = 0.3, max = 1, step = 0.05),
     qwebr_calc_input("f_temp", "Capacity retention at temperature", value = 0.75, min = 0.4, max = 1, step = 0.05),
-    qwebr_calc_input("C_candidate", "Candidate battery capacity (Ah)", value = 20, min = 5, max = 200, step = 1, type = "slider")
+    qwebr_calc_input("f_rate", "Capacity at this discharge time (fraction of 20 h rating)", value = 0.5, min = 0.3, max = 1, step = 0.05),
+    qwebr_calc_input("C_candidate", "Candidate battery capacity (Ah)", value = 33, min = 5, max = 200, step = 1, type = "slider")
   ),
   goal = "The shelter now drops to -20 C and capacity retention falls to 0.50. Find the smallest battery capacity (nearest 1 Ah) that still holds the 30-minute contract.",
-  goal_test = "t_available >= t_backup && f_temp == 0.5 && C_candidate == 23 && DoD == 0.8 && I_backup == 18 && t_backup == 0.5",
+  goal_test = "t_available >= t_backup && f_temp == 0.5 && C_candidate == 45 && DoD == 0.8 && f_rate == 0.5 && I_backup == 18 && t_backup == 0.5",
   mode = "task")
 ```
 
@@ -560,13 +567,15 @@ t_backup <- 0.5    # h -- 30-minute contract requirement
 
 DoD        <- 0.80  # standby AGM, recommended maximum depth of discharge
 f_temp     <- 0.75  # capacity retention at 0C shelter minimum winter temperature
+f_rate     <- 0.50  # capacity available in a 30-minute discharge, as a fraction
+                    # of the 20-hour rating (from the battery's discharge table)
 
-C_required <- (I_backup * t_backup) / (DoD * f_temp)
+C_required <- (I_backup * t_backup) / (DoD * f_temp * f_rate)
 
 ## Candidate: two 12V AGM batteries in series for a 24V pack
-C_candidate <- 20   # Ah, catalog size
+C_candidate <- 33   # Ah (20-hour rating), catalog size
 
-usable_Ah    <- C_candidate * DoD * f_temp
+usable_Ah    <- C_candidate * DoD * f_temp * f_rate
 t_available  <- usable_Ah / I_backup
 
 if (t_available * 60 >= t_backup * 60) {
@@ -577,15 +586,15 @@ if (t_available * 60 >= t_backup * 60) {
 }
 cat(sprintf("  Runtime requirement                    %.0f minutes\n", t_backup * 60))
 cat(sprintf("  Usable energy needed                   %.1f Ah (%g A for %g h)\n", I_backup * t_backup, I_backup, t_backup))
-cat(sprintf("  Required nameplate (25C) capacity      %.1f Ah\n", C_required))
+cat(sprintf("  Required nameplate (20 h, 25C) capacity  %.1f Ah\n", C_required))
 cat(sprintf("  Candidate pack (two 12V in series)     %g Ah nameplate\n", C_candidate))
-cat(sprintf("  Candidate usable capacity              %.1f Ah (%.0f%% DoD, %.0f%% temperature retention)\n",
-            usable_Ah, DoD * 100, f_temp * 100))
+cat(sprintf("  Candidate usable capacity              %.1f Ah (%.0f%% DoD, %.0f%% temperature, %.0f%% rate)\n",
+            usable_Ah, DoD * 100, f_temp * 100, f_rate * 100))
 ```
 
 </details>
 
-**Sanity check:** the required nameplate capacity (15 Ah) and the selected standard catalog pack (20 Ah) aren't the same number, and that's expected — catalog batteries come in discrete sizes, so the candidate is checked directly against the runtime requirement (40 minutes delivered vs. 30 minutes required) rather than just compared to the raw Ah figure. A battery sized only against the 25°C nameplate rating, with no DoD or temperature derating applied, would have looked like it had nearly double the needed capacity (20 Ah nameplate vs. 9 Ah of raw energy needed) — and would have delivered barely half its expected runtime in service, discovered only when the generator swap took longer than 20 minutes on a cold morning.
+**Sanity check:** the required nameplate capacity (30 Ah) and the selected standard catalog pack (33 Ah) aren't the same number, and that's expected — catalog batteries come in discrete sizes, so the candidate is checked directly against the runtime requirement (33 minutes delivered vs. 30 minutes required) rather than just compared to the raw Ah figure. The three derating factors multiply to 0.30, so the pack has to be more than three times the 9 Ah of raw energy the load needs. A designer who bought a 10 Ah pack against that raw 9 Ah figure would get about 10 minutes of runtime on a cold morning (10 Ah x 0.30 = 3 Ah at 18 A), not 30 — and the shortfall would only be discovered the first time a generator swap took longer than that.
 
 <details>
 <summary>Industry connection: why this calculation has to be on file, not just in someone's head</summary>
@@ -630,15 +639,15 @@ ggplot() +
            size = 2.6 * diagram_text_scale) +
   annotate("segment", x = 6.3, xend = 9.5, y = 4.0, yend = 4.0, linewidth = 2.2, color = "#2C3E50") +
   annotate("text", x = 7.9, y = 4.4, label = "Common 24VDC bus", size = 3 * diagram_text_scale, fontface = "bold") +
-  annotate("segment", x = 7.0, xend = 7.0, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
-  annotate("rect", xmin = 6.4, xmax = 7.6, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
-  annotate("text", x = 7.0, y = 2.45, label = "PLC / I/O", size = 2.6 * diagram_text_scale) +
-  annotate("segment", x = 8.3, xend = 8.3, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
-  annotate("rect", xmin = 7.7, xmax = 8.9, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
-  annotate("text", x = 8.3, y = 2.45, label = "Valves,\nsensors", size = 2.5 * diagram_text_scale) +
-  annotate("segment", x = 9.2, xend = 9.2, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
-  annotate("rect", xmin = 8.9, xmax = 9.9, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
-  annotate("text", x = 9.4, y = 2.45, label = "HMI,\nswitch", size = 2.5 * diagram_text_scale) +
+  annotate("segment", x = 6.85, xend = 6.85, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
+  annotate("rect", xmin = 6.3, xmax = 7.4, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
+  annotate("text", x = 6.85, y = 2.45, label = "PLC / I/O", size = 2.6 * diagram_text_scale) +
+  annotate("segment", x = 8.15, xend = 8.15, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
+  annotate("rect", xmin = 7.6, xmax = 8.7, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
+  annotate("text", x = 8.15, y = 2.45, label = "Valves,\nsensors", size = 2.5 * diagram_text_scale) +
+  annotate("segment", x = 9.45, xend = 9.45, y = 4.0, yend = 3.0, arrow = arrow(length = unit(0.15, "cm"), type = "closed"), linewidth = 0.9) +
+  annotate("rect", xmin = 8.9, xmax = 10.0, ymin = 1.9, ymax = 3.0, fill = "#F39C12", color = "black") +
+  annotate("text", x = 9.45, y = 2.45, label = "HMI,\nswitch", size = 2.5 * diagram_text_scale) +
   coord_cartesian(xlim = c(0, 10), ylim = c(1, 7)) +
   theme_void() +
   labs(title = "N+1 Redundant Supply with Diode-OR Combining") +
@@ -654,8 +663,10 @@ $$
 $$
 
 $$
-P_{fail,yr} = \frac{8760\ \text{h/yr}}{MTBF}
+P_{fail,yr} \approx \frac{8760\ \text{h/yr}}{MTBF}
 $$
+
+(the exact value is $1 - e^{-8760/MTBF}$; the simple ratio is accurate whenever it comes out small, as it does here)
 
 | Symbol | Definition | Units |
 |:-------|:-----------|:------|
@@ -833,10 +844,11 @@ cat(sprintf("  Sum of branch fuse ratings                    %.1f A (may exceed 
             sum(branches$fuse_A)))
 
 ## Why the valve manifold branch uses a time-delay fuse: its startup event
-## pulls roughly 6.75 A of pull-in current for ~50 ms (Design Task 3). A 4A
-## fast-blow fuse would nuisance-trip on that transient every single start;
-## a 4A time-delay fuse rides through the brief pull-in surge while still
-## opening promptly on a sustained downstream short.
+## pulls roughly 6.75 A of pull-in current for ~50 ms (Design Task 3), about
+## 1.7x a 4A rating. A fast-acting fuse would usually survive one such pulse,
+## but repeated pulses every start fatigue its element and shorten its life
+## (fuse makers derate for pulse cycling); a 4A time-delay fuse rides through
+## the pull-in comfortably while still opening on a sustained short.
 ```
 
 </details>
@@ -855,6 +867,7 @@ ggplot() +
   annotate("rect", xmin = 2.6, xmax = 3.6, ymin = 5.75, ymax = 6.65, fill = "#2C3E50", color = "black") +
   annotate("text", x = 3.1, y = 6.2, label = "Main\nfuse\n12A", color = "white",
            size = 2.4 * diagram_text_scale) +
+  annotate("segment", x = 2.2, xend = 2.6, y = 6.2, yend = 6.2, linewidth = 1) +
   annotate("segment", x = 3.6, xend = 3.6, y = 6.2, yend = 5.0, linewidth = 1) +
   annotate("segment", x = 0.5, xend = 10.5, y = 5.0, yend = 5.0, linewidth = 2.4, color = "#2C3E50") +
   annotate("text", x = 5.5, y = 5.35, label = "24VDC DIN-rail fused terminal block (distribution bus)",
@@ -897,8 +910,8 @@ summary_df <- tribble(
   "Size continuous nameplate rating so the average load is 70-80% of it; landing below the band on a standard catalog size is fine.",
   "3. Inrush and surge allowance", "$I_{surge,req} = I_{run} + \\sum I_{inrush,k}$",
   "Sum only the loads the control program actually energizes simultaneously; revisit the check if the program's sequencing changes.",
-  "4. Battery capacity sizing", "$C_{req} = \\dfrac{I_{backup} \\times t_{backup}}{DoD \\times f_{temp}}$",
-  "Use no more than ~80% DoD and derate for the coldest realistic service temperature, not the room's average temperature.",
+  "4. Battery capacity sizing", "$C_{req} = \\dfrac{I_{backup} \\times t_{backup}}{DoD \\times f_{temp} \\times f_{rate}}$",
+  "Use no more than ~80% DoD, read the capacity at the actual discharge time, and derate for the coldest realistic service temperature.",
   "5. Redundant supplies / diode-OR", "Expected loss $= P_{fail,yr} \\times t_{repair} \\times C_{downtime}$",
   "Redundancy is about consequence, not just probability -- justify it for processes that cannot tolerate any interruption.",
   "6. Selective branch fusing", "$I_{fuse,branch} \\leq \\min(0.5\\,I_{main},\\, I_{ampacity})$",
@@ -974,11 +987,11 @@ $I_{avg} = `r sprintf("%.2f", pb_avg)`$ A, $I_{peak} = `r sprintf("%.2f", pb_pea
 
 ### Battery for a UPS {#sec-tryit-battery-06-13}
 
-An essential control load of $12$ A must stay up for $45$ min after a power failure. Use a depth-of-discharge limit of $0.80$ and a capacity retention of $0.70$ at the coldest service temperature. Standard battery sizes: 7, 12, 18, 26, 40 Ah.
+An essential control load of $12$ A must stay up for $45$ min after a power failure. Use a depth-of-discharge limit of $0.80$, a capacity retention of $0.70$ at the coldest service temperature, and $f_{rate} = 0.55$ (the fraction of the 20-hour rating available in a 45-minute discharge). Standard battery sizes: 7, 12, 18, 26, 40 Ah.
 
 ```{r tryit-battery-number-06-13, echo=FALSE, results='asis'}
-bt <- list(I = 12, t = 45 / 60, DoD = 0.80, ft = 0.70, sizes = c(7, 12, 18, 26, 40))
-bt$C_req  <- bt$I * bt$t / (bt$DoD * bt$ft)
+bt <- list(I = 12, t = 45 / 60, DoD = 0.80, ft = 0.70, fr = 0.55, sizes = c(7, 12, 18, 26, 40))
+bt$C_req  <- bt$I * bt$t / (bt$DoD * bt$ft * bt$fr)
 bt$C_sel  <- min(bt$sizes[bt$sizes >= bt$C_req])
 bt$margin <- (bt$C_sel / bt$C_req - 1) * 100
 
@@ -989,7 +1002,7 @@ tryit_number(
     tryit_answer("Backup energy in amp-hours (I x t)", bt$I * bt$t, tol = 0.05, suffix = "Ah",
                  hint = "45 minutes is 0.75 h."),
     tryit_answer("Required nameplate capacity", bt$C_req, tol = 0.1, suffix = "Ah",
-                 hint = "Divide by both the depth-of-discharge limit and the temperature retention."),
+                 hint = "Divide by the depth-of-discharge limit, the temperature retention and the rate factor."),
     tryit_answer("Standard size selected", bt$C_sel, tol = 0.01, suffix = "Ah",
                  hint = "The smallest standard size at or above the requirement."),
     tryit_answer("Margin of the selected size over the requirement", bt$margin, tol = 1, suffix = "%",
@@ -997,8 +1010,8 @@ tryit_number(
   ),
   intro = "Give capacities to one decimal.",
   question = paste0(
-    "<p>An essential load of 12 A must run for 45 minutes on battery. C_required = (I x t) / (DoD x f_temp) with a depth-of-discharge limit ",
-    "of 0.80 and a capacity retention of 0.70 at the coldest service temperature. Standard sizes: 7, 12, 18, 26 and 40 Ah. ",
+    "<p>An essential load of 12 A must run for 45 minutes on battery. C_required = (I x t) / (DoD x f_temp x f_rate) with a depth-of-discharge limit ",
+    "of 0.80, a capacity retention of 0.70 at the coldest service temperature and f_rate = 0.55 for a 45-minute discharge. Standard sizes: 7, 12, 18, 26 and 40 Ah. ",
     "Choose the smallest size at or above the requirement.</p>")
 )
 ```
@@ -1006,9 +1019,9 @@ tryit_number(
 <details class="tryit-solution">
 <summary>Show the worked solution</summary>
 
-$$C_{required} = \frac{12 \times 0.75}{0.80 \times 0.70} = `r sprintf("%.1f", bt$C_req)` \text{ Ah} \Rightarrow `r bt$C_sel` \text{ Ah standard size}, \text{ a margin of } `r sprintf("%.0f", bt$margin)`\%$$
+$$C_{required} = \frac{12 \times 0.75}{0.80 \times 0.70 \times 0.55} = `r sprintf("%.1f", bt$C_req)` \text{ Ah} \Rightarrow `r bt$C_sel` \text{ Ah standard size}, \text{ a margin of } `r sprintf("%.0f", bt$margin)`\%$$
 
-Sizing to the room temperature rating alone would have called for only `r sprintf("%.1f", bt$I * bt$t / bt$DoD)` Ah: the cold-temperature retention is what pushes this to the next size.
+Ignoring the cold would have called for `r sprintf("%.1f", bt$I * bt$t / (bt$DoD * bt$fr))` Ah, and ignoring the discharge rate as well only `r sprintf("%.1f", bt$I * bt$t / bt$DoD)` Ah: both corrections are needed to reach the right size.
 
 </details>
 
@@ -1075,16 +1088,16 @@ Buying a larger continuous-rated supply (say, a 20A unit with a correspondingly 
 </details>
 
 <details>
-<summary>Task 4 (plug-in): A backup load is 8 A, required runtime is 1 hour, DoD is 0.80, and temperature derating is 0.70. What nameplate battery capacity is required?</summary>
+<summary>Task 4 (plug-in): A backup load is 8 A, required runtime is 1 hour, DoD is 0.80, temperature derating is 0.70, and the battery delivers 62% of its 20-hour rating in a one-hour discharge. What nameplate battery capacity is required?</summary>
 
-$C_{required} = \dfrac{8 \times 1}{0.80 \times 0.70} = \dfrac{8}{0.56}$ = **14.3 Ah**
+$C_{required} = \dfrac{8 \times 1}{0.80 \times 0.70 \times 0.62} = \dfrac{8}{0.347}$ = **23.0 Ah**
 
 </details>
 
 <details>
-<summary>Task 4 (design decision): The shelter's actual winter deployment site turns out to run colder than assumed — down to -15 degrees C instead of 0 degrees C — pushing the temperature derating factor down to roughly 0.55. The battery originally selected (20 Ah nameplate) no longer meets the 30-minute requirement. What are the options, and which would you recommend for a defense field application?</summary>
+<summary>Task 4 (design decision): The shelter's actual winter deployment site turns out to run colder than assumed — down to -15 degrees C instead of 0 degrees C — pushing the temperature derating factor down to roughly 0.55. The battery originally selected (33 Ah nameplate) no longer meets the 30-minute requirement. What are the options, and which would you recommend for a defense field application?</summary>
 
-Recalculating usable capacity at the colder derating: 20 Ah x 0.80 DoD x 0.55 temp = 8.8 Ah usable, giving only 8.8/18 = 0.49 h (29.3 minutes) — just under the 30-minute requirement, a near-miss rather than a large shortfall. Options include: (1) upsize the battery pack (a 24 Ah or 26 Ah catalog size would restore the margin at the colder derating with minimal cost or space impact); (2) add battery heating (a small thermostatically-controlled heater pad or heat-traced enclosure to keep the battery above its coldest-derating range, common on field-deployable equipment, at the cost of added power draw and complexity); (3) reduce the essential backup load itself (shed a non-critical actuator from the safe-shutdown sequence to lower I_backup). For a defense field application where the technical data package's 30-minute figure is a contractual commitment, the recommended approach is the battery upsize first — it's the simplest, most easily verified fix, and it directly restores margin without adding a heater subsystem that itself needs its own reliability and power budget. Battery heating is worth adding only if the deployment envelope is expected to go meaningfully colder still, where even a larger battery's derated capacity would eventually run out of headroom.
+Recalculating usable capacity at the colder derating: 33 Ah x 0.80 DoD x 0.55 temp x 0.50 rate = 7.3 Ah usable, giving only 7.3/18 = 0.40 h (24 minutes) — a real shortfall against the 30-minute requirement. Options include: (1) upsize the battery pack (the requirement becomes 9 / (0.80 x 0.55 x 0.50) = 40.9 Ah, so a 45 Ah catalog pack restores the margin); (2) add battery heating (a small thermostatically-controlled heater pad or heat-traced enclosure to keep the battery above its coldest-derating range, common on field-deployable equipment, at the cost of added power draw and complexity); (3) reduce the essential backup load itself (shed a non-critical actuator from the safe-shutdown sequence to lower I_backup). For a defense field application where the technical data package's 30-minute figure is a contractual commitment, the recommended approach is the battery upsize first — it's the simplest, most easily verified fix, and it directly restores margin without adding a heater subsystem that itself needs its own reliability and power budget. Battery heating is worth adding only if the deployment envelope is expected to go meaningfully colder still, where even a larger battery's derated capacity would eventually run out of headroom.
 
 </details>
 
@@ -1135,7 +1148,7 @@ You are the electrical designer releasing a new control panel for a food-process
 - **Intermittent loads:** 10 pneumatic pilot valves at 0.42 A each (duty cycle 35%, since this line's pneumatics cycle faster than the welding cell example), and 5 interposing relays at 0.10 A each (duty cycle 55%).
 - **Standard catalog supply sizes available:** 5A, 10A, 20A, all at 24VDC.
 - **Startup event:** the line's reset sequence energizes 5 of the 10 pilot valves and 3 of the 5 relays simultaneously; assume the same pull-in factors used in this chapter's worked example (valves 2.5x holding, relays/contactors 4x holding).
-- **Backup requirement:** the food safety program requires the line's PLC and traceability network gear (essential load: 4.5 A) to stay powered for at least 15 minutes on loss of incoming power, so an in-progress batch's traceability records aren't lost mid-write. The panel sits in a processing area held at a controlled 10°C — assume a temperature derating factor of 0.90 at that temperature, and use the same 80% DoD assumption as this chapter's worked example.
+- **Backup requirement:** the food safety program requires the line's PLC and traceability network gear (essential load: 4.5 A) to stay powered for at least 15 minutes on loss of incoming power, so an in-progress batch's traceability records aren't lost mid-write. The panel sits in a processing area held at a controlled 10°C — assume a temperature derating factor of 0.90 at that temperature, a rate factor of 0.45 for a 15-minute discharge, and the same 80% DoD assumption as this chapter's worked example.
 - **Redundancy question:** this line feeds a single continuous cooking tunnel with no buffer capacity between case-packing and the tunnel infeed — the plant's engineering manager wants to know whether a second supply and diode-OR module are justified, using the same supply cost, MTBF, and downtime-cost assumptions as this chapter's worked example (adjust downtime cost to $5,500/h for this smaller line).
 - **Branch fusing:** the panel will distribute power to five branches — Sensors, Valve manifold, HMI/switch, PLC/RIO, and Relay bank — off a DIN-rail fused terminal block fed from the main supply you select.
 

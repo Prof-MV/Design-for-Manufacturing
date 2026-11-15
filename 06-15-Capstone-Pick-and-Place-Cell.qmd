@@ -53,39 +53,44 @@ Every number carried from one section into the next is tracked explicitly — th
 
 ## 1. System Overview
 
-```{r fig-06-15-cell-layout, echo=FALSE, fig.cap="Plan view of the pick-and-place cell: parts arrive on the infeed conveyor, the six-axis robot picks from the discharge end and places into the fixture tray, a light curtain guards the operator loading point, and the control panel sits at the cell's perimeter.", fig.align='center', fig.width=11, fig.height=7}
-robot_base <- data.frame(x0 = 2.0, y0 = 1.2, r = 1.05)
+```{r fig-06-15-cell-layout, echo=FALSE, fig.cap="Plan view of the pick-and-place cell: parts arrive on the infeed conveyor, the six-axis robot picks from the discharge end and places into the fixture tray, a light curtain guards the operator loading side at the planned 1.5 m from the reach envelope, and the control panel sits at the cell's perimeter.", fig.align='center', fig.width=11, fig.height=7}
+robot_base <- data.frame(x0 = 2.2, y0 = 0.85, r = 1.05)
+env_left <- robot_base$x0 - robot_base$r   # closest point of the reach envelope to the curtain
+x_curtain <- env_left - 1.5                # planned 1.5 m mounting distance
 
 ggplot() +
-  ## Infeed conveyor
-  annotate("rect", xmin = -0.2, xmax = 2.5, ymin = -0.35, ymax = 0.35, fill = "grey55", color = "black") +
-  annotate("text", x = 1.15, y = 0.0, label = "Infeed conveyor (2.5 m, level)",
+  ## Infeed conveyor (2.5 m), pick point near the discharge end
+  annotate("rect", xmin = -0.2, xmax = 2.3, ymin = -0.35, ymax = 0.35, fill = "grey55", color = "black") +
+  annotate("text", x = 0.75, y = 0.0, label = "Infeed conveyor (2.5 m, level)",
            size = 2.9 * diagram_text_scale, color = "white") +
-  annotate("segment", x = -0.2, xend = 2.3, y = -0.55, yend = -0.55,
+  annotate("segment", x = -0.2, xend = 2.1, y = -0.55, yend = -0.55,
            arrow = arrow(length = unit(0.15, "cm"), type = "closed"), color = "black", linewidth = 0.6) +
-  annotate("text", x = 1.0, y = -0.75, label = "part travel", size = 2.4 * diagram_text_scale) +
-  ## Light curtain at the operator loading point
-  annotate("segment", x = -0.9, xend = -0.9, y = -0.9, yend = 0.9, linewidth = 2, color = "steelblue") +
-  annotate("text", x = -0.9, y = 1.2, label = "Light curtain\n(operator loading point)",
+  annotate("text", x = 0.95, y = -0.75, label = "part travel", size = 2.4 * diagram_text_scale) +
+  ## Light curtain on the operator loading side
+  annotate("segment", x = x_curtain, xend = x_curtain, y = -0.9, yend = 1.25, linewidth = 2, color = "steelblue") +
+  annotate("text", x = x_curtain, y = 1.6, label = "Light curtain\n(operator loading side)",
            size = 2.7 * diagram_text_scale, color = "steelblue") +
+  annotate("segment", x = x_curtain, xend = env_left, y = 0.85, yend = 0.85,
+           arrow = arrow(length = unit(0.15, "cm"), ends = "both", type = "closed"), linewidth = 0.6) +
+  annotate("label", x = (x_curtain + env_left) / 2, y = 0.85, label = "planned 1.5 m",
+           size = 2.5 * diagram_text_scale, fill = "white", linewidth = 0) +
   ## Robot reach envelope and base
   geom_circle(data = robot_base, aes(x0 = x0, y0 = y0, r = r),
               color = "#2ECC71", linetype = "dashed", linewidth = 1, fill = NA) +
-  annotate("rect", xmin = 1.75, xmax = 2.25, ymin = 0.95, ymax = 1.45, fill = "#34495E", color = "black") +
-  annotate("text", x = 2.0, y = 1.2, label = "6-axis\nrobot", size = 2.6 * diagram_text_scale, color = "white") +
-  annotate("text", x = 2.0, y = 2.45, label = "Reach envelope (~1.05 m)",
+  annotate("rect", xmin = 1.95, xmax = 2.45, ymin = 0.6, ymax = 1.1, fill = "#34495E", color = "black") +
+  annotate("text", x = 2.2, y = 0.85, label = "6-axis\nrobot", size = 2.6 * diagram_text_scale, color = "white") +
+  annotate("text", x = 2.2, y = 2.1, label = "Reach envelope (~1.05 m)",
            size = 2.5 * diagram_text_scale, color = "#2ECC71") +
-  ## Fixture tray
-  annotate("rect", xmin = 3.0, xmax = 3.6, ymin = 1.5, ymax = 2.0, fill = "#E67E22", color = "black") +
-  annotate("text", x = 3.3, y = 1.75, label = "Fixture\ntray", size = 2.5 * diagram_text_scale, color = "white") +
+  ## Fixture tray (inside the reach envelope)
+  annotate("rect", xmin = 2.75, xmax = 3.25, ymin = 0.95, ymax = 1.45, fill = "#E67E22", color = "black") +
+  annotate("text", x = 3.0, y = 1.2, label = "Fixture\ntray", size = 2.5 * diagram_text_scale, color = "white") +
   ## Control panel
   annotate("rect", xmin = 3.5, xmax = 4.1, ymin = -0.7, ymax = -0.1, fill = "#7F8C8D", color = "black") +
   annotate("text", x = 3.8, y = -0.4, label = "Control\npanel", size = 2.5 * diagram_text_scale, color = "white") +
   ## Pedestal beam callout
-  annotate("segment", x = 2.0, xend = 2.0, y = 0.95, yend = 0.55,
-           arrow = arrow(length = unit(0.15, "cm"), type = "closed"), color = "#9B59B6", linewidth = 0.9) +
-  annotate("text", x = 2.55, y = 0.65, label = "Pedestal beam\n(bridges floor trench)",
-           size = 2.4 * diagram_text_scale, color = "#9B59B6") +
+  annotate("segment", x = 2.45, xend = 3.45, y = 0.7, yend = 0.45, color = "#9B59B6", linewidth = 0.6) +
+  annotate("label", x = 3.85, y = 0.45, label = "Pedestal beam\n(bridges floor trench)",
+           size = 2.4 * diagram_text_scale, color = "#9B59B6", fill = "white", linewidth = 0) +
   coord_fixed() +
   xlim(-1.6, 4.6) + ylim(-1.2, 2.9) +
   theme_void() +
@@ -95,7 +100,7 @@ ggplot() +
         plot.subtitle = element_text(size = 10 * chart_text_scale, hjust = 0.5))
 ```
 
-The cell's throughput target — 720 brackets/hour, a 5.0 s cycle — is the single number every subsystem in this chapter has to agree with. It sets the fill-time requirement for the gripper's lift cylinder (Section 2), the minimum belt speed for the infeed conveyor (Section 3), and, indirectly, the duty expected of every branch circuit feeding the cell (Section 4). Seven things have to be sized before this cell can be quoted and built:
+The cell's throughput target — 720 brackets/hour, a 5.0 s cycle — is the single number every subsystem in this chapter has to agree with. It sets the fill-time requirement for the gripper's lift cylinder (Section 2), the minimum belt speed for the infeed conveyor (Section 3), and, indirectly, the duty expected of every branch circuit feeding the cell (Section 4). Six things have to be sized before this cell can be quoted and built:
 
 1. The gripper's pneumatic lift cylinder and its control valve, sized for the bracket's weight and the cycle's fill-time budget.
 2. The infeed conveyor's motor, drive, and gearbox, sized for the belt pull this throughput demands.
@@ -329,7 +334,7 @@ cat(sprintf("  Reflected motor-shaft torque             %.5f N.m\n", T_motor))
 
 </details>
 
-**Sanity check:** the calculated motor power (under 2 W) and reflected torque (a few thousandths of a N·m) are, on paper, almost nothing — and that's a genuine, useful finding, not an error. At this scale, the governing constraint on motor selection isn't the calculated running load at all; it's the smallest standard gearmotor frame a manufacturer actually catalogs, combined with the [Conveyor Design](06-10-Conveyor-Design.qmd) chapter's own rule of thumb of sizing starting torque at roughly 150% of running torque to cover breakaway friction. In practice, this conveyor gets specified with the smallest available fractional-horsepower gearmotor frame in the supplier's line — a real design outcome, not a rounding artifact, and worth flagging explicitly: on a small enough machine, "big enough to exist as a catalog part" replaces "big enough for the calculated load" as the actual sizing constraint. The large gear ratio (roughly 80:1) driving toward a worm gearbox is consistent with that: slow, light conveyors like this one routinely end up on worm-reduction gearmotors precisely because the load itself demands so little.
+**Sanity check:** the calculated motor power (under 2 W) and reflected torque (about a hundredth of a N·m) are, on paper, almost nothing — and that's a genuine, useful finding, not an error. At this scale, the governing constraint on motor selection isn't the calculated running load at all; it's the smallest standard gearmotor frame a manufacturer actually catalogs, combined with the [Conveyor Design](06-10-Conveyor-Design.qmd) chapter's own rule of thumb of sizing starting torque at roughly 150% of running torque to cover breakaway friction. In practice, this conveyor gets specified with the smallest available fractional-horsepower gearmotor frame in the supplier's line — a real design outcome, not a rounding artifact, and worth flagging explicitly: on a small enough machine, "big enough to exist as a catalog part" replaces "big enough for the calculated load" as the actual sizing constraint. The large gear ratio (roughly 80:1) driving toward a worm gearbox is consistent with that: slow, light conveyors like this one routinely end up on worm-reduction gearmotors precisely because the load itself demands so little.
 
 That leaves one open question the [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd) chapter's Design Task 5 framework answers directly: servo or induction motor + VFD? This conveyor runs continuously at a fixed speed feeding parts to a robot that does its own vision-guided picking — it never needs to index to a stop-and-settle position the way the index table in that chapter's running example did.
 
@@ -384,7 +389,7 @@ for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm]
 
 ## 4. Panel, Protection, and Wiring
 
-The panel has to protect three genuinely different loads: the conveyor gearmotor sized in Section 3, the six-axis robot's own controller (which carries its servo drives internally and is supplied as a single branch per the manufacturer's documented supply-circuit data — consistent with how the CEC treats industrial machinery under Section 42, and the NEC under Article 670, rather than recalculating it with the single-motor formula in CEC Section 28/NEC Article 430), and the gripper valve's 24VDC control power supply.
+The panel has to protect three genuinely different loads: the conveyor gearmotor sized in Section 3, the six-axis robot's own controller (which carries its servo drives internally and is supplied as a single branch per the manufacturer's documented supply-circuit data — consistent with how industrial machinery built to CSA C22.2 No. 301 / NFPA 79 is supplied in practice, and with NEC Article 670 in the US, rather than recalculating it with the single-motor rules of CEC Section 28/NEC Article 430), and the gripper valve's 24VDC control power supply.
 
 Live cell — try a different conveyor motor FLA, fuse multiplier, robot nameplate current, or required SCCR and see how the branch sizing and the weakest-link check respond.
 
@@ -565,9 +570,11 @@ qwebr_calc_card(
 #| label: bonding-grounding-06-15
 ## --- (a) Equipment bonding conductor sizing: sized from the upstream
 ## OCPD rating, not the connected load's FLA ---
-ocpd_breakpoints <- c(20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200)
-bond_awg <- c("12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG",
-              "3 AWG", "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG")
+## Same breakpoints as the Bonding, Grounding, and EMC chapter (CEC Table 16 /
+## NEC Table 250.122; check the edition in force)
+ocpd_breakpoints <- c(15, 20, 30, 60, 100, 200, 300, 400, 500, 600, 800, 1000, 1200)
+bond_awg <- c("14 AWG", "12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG", "4 AWG",
+              "3 AWG", "2 AWG", "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG")
 lookup_bonding_size <- function(ocpd_rating) {
   idx <- min(which(ocpd_breakpoints >= ocpd_rating))
   bond_awg[idx]
@@ -647,8 +654,13 @@ ggplot(t_components, aes(x = component, y = seconds, fill = component)) +
   labs(title = "Overall Stopping Time T: Pick-and-Place Cell",
        subtitle = "Total T = 0.025 + 0.015 + 0.040 + 0.450 = 0.53 s",
        x = NULL, y = "Time (s)", fill = NULL) +
+  scale_x_discrete(labels = function(x) parse(text = c(
+    "Device response\n(T_device)" = 'atop("Device response", (T[device]))',
+    "Logic/relay processing\n(T_logic)" = 'atop("Logic/relay processing", (T[logic]))',
+    "Final control element\n(T_fce)" = 'atop("Final control element", (T[fce]))',
+    "Mechanical coast-down\n(T_coast)" = 'atop("Mechanical coast-down", (T[coast]))')[x])) +
   coord_flip() +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     plot.subtitle = element_text(size = 10.5 * chart_text_scale, hjust = 0.5),
@@ -670,7 +682,7 @@ qwebr_calc_card(
     qwebr_calc_input("T_logic", "Logic (safety relay) time", value = 0.015, min = 0, max = 0.5, step = 0.005, suffix = "s"),
     qwebr_calc_input("T_fce", "Final control element time", value = 0.04, min = 0, max = 0.5, step = 0.005, suffix = "s"),
     qwebr_calc_input("T_coast", "Coast-down time", value = 0.45, min = 0, max = 2, step = 0.01, suffix = "s"),
-    qwebr_calc_input("C", "Intrusion allowance C", value = 750, min = 0, max = 1200, step = 10, suffix = "mm"),
+    qwebr_calc_input("d_res", "Light curtain resolution d", value = 50, min = 14, max = 90, step = 2, suffix = "mm"),
     qwebr_calc_input("planned_distance", "Planned mounting distance (mm)", value = 1500, min = 500, max = 4000, step = 10, type = "slider")
   ),
   goal = "Make the guarding check pass with the light curtain mounted no more than 1400 mm from the hazard.",
@@ -695,11 +707,24 @@ T_coast  <- 0.450    # s, mechanical coast-down for this smaller robot
 T_total <- T_device + T_logic + T_fce + T_coast
 
 ## ISO 13855 minimum safe distance, per the Robot Cell Design chapter's
-## S = K x T + C
-K <- 1600   # mm/s, ISO 13855 approach speed constant
-C <- 750     # mm, intrusion-depth allowance for the selected light curtain resolution
+## S = K x T + C, for a light curtain approached at right angles
+d_res <- 50   # mm, light curtain resolution (detection capability)
 
-S_required <- K * T_total + C
+iso13855_S <- function(T_total, d) {
+  if (d <= 40) {
+    C <- 8 * (d - 14)                       # mm, hand-detecting curtain
+    K <- 2000                               # mm/s, hand/arm speed first ...
+    S <- max(100, K * T_total + C)
+    if (S > 500) { K <- 1600; S <- max(500, K * T_total + C) }   # ... then 1600 mm/s
+  } else {
+    C <- 850; K <- 1600                     # coarse curtain: arm reach, walking speed
+    S <- K * T_total + C
+  }
+  list(S = S, K = K, C = C)
+}
+
+res <- iso13855_S(T_total, d_res)
+S_required <- res$S; K <- res$K; C <- res$C
 
 planned_distance <- 1500   # mm, distance the cell layout currently plans
 
@@ -711,23 +736,23 @@ if (planned_distance >= S_required) {
 cat(sprintf("  Overall stopping time T          %.3f s (= %.3f + %.3f + %.3f + %.3f)\n",
             T_total, T_device, T_logic, T_fce, T_coast))
 cat(sprintf("  Approach speed K                 %g mm/s\n", K))
-cat(sprintf("  Intrusion allowance C            %g mm\n", C))
+cat(sprintf("  Intrusion allowance C           %g mm (resolution d = %g mm)\n", C, d_res))
 cat(sprintf("  Planned mounting distance        %g mm\n", planned_distance))
 
 if (planned_distance < S_required) {
   shortfall <- S_required - planned_distance
   cat(sprintf("  Shortfall                        %.0f mm\n", shortfall))
 
-  C_fine <- 600   # mm, finer-resolution light curtain
-  S_fine <- K * T_total + C_fine
-  cat(sprintf("  Option - finer-resolution curtain (C = %g mm)  new S = %.0f mm - %s\n", C_fine, S_fine,
+  fine <- iso13855_S(T_total, 30)   # option: a 30 mm resolution curtain
+  S_fine <- fine$S
+  cat(sprintf("  Option - 30 mm curtain (C = %g mm)  new S = %.0f mm - %s\n", fine$C, S_fine,
               ifelse(planned_distance >= S_fine, "passes without moving the curtain", "still fails")))
 }
 ```
 
 </details>
 
-**Sanity check:** at 0.53 s, this cell's overall stopping time is meaningfully faster than the 0.65 s the Machine Safety Circuit Design chapter's own door-panel welding cell needed — consistent with a smaller, lower-inertia robot, and coast-down is still the dominant term at roughly 85% of the total, so the same "attack $T_{coast}$ first" rule of thumb applies here too. The resulting 1.60 m minimum separation sits right at the low end of the 1.5-3 m band the Robot Cell Design chapter's own rule of thumb predicts for a sub-second stopping time — a useful check that nothing was mistyped, and a direct illustration of why the faster stop matters: it buys back just enough distance that a tighter, more realistic floor-space allocation (1.5 m planned) comes up 98 mm short rather than badly short. A finer-resolution light curtain closes that gap without moving the curtain at all, exactly the kind of trade the Robot Cell Design chapter's guidance recommends reaching for before arguing down $K$.
+**Sanity check:** at 0.53 s, this cell's overall stopping time is meaningfully faster than the 0.65 s the Machine Safety Circuit Design chapter's own door-panel welding cell needed — consistent with a smaller, lower-inertia robot, and coast-down is still the dominant term at roughly 85% of the total, so the same "attack $T_{coast}$ first" rule of thumb applies here too. With the planned 50 mm resolution curtain ($d > 40$ mm, so $C$ = 850 mm and $K$ = 1600 mm/s), the required separation is $S$ = 1600 × 0.53 + 850 ≈ 1.70 m, inside the 1-3 m range the Robot Cell Design chapter's rule of thumb predicts for a sub-second stopping time — a useful check that nothing was mistyped. The planned 1.5 m mounting distance comes up about 200 mm short. Half of $S$ is the 850 mm arm-reach allowance: a 30 mm curtain ($C$ = 8(30 − 14) = 128 mm; 2000 × 0.53 + 128 > 500 mm, so $K$ drops to 1600 mm/s) needs only about 0.98 m and passes at the planned 1.5 m without moving the curtain, exactly the kind of trade the Robot Cell Design chapter's guidance recommends reaching for before arguing down $K$.
 
 ## 7. Frame Deflection Check
 
@@ -836,8 +861,8 @@ summary_df <- data.frame(
     "32 mm bore / 12 mm rod cylinder (3.4% actual margin); valve Cv >= 0.2",
     "0.09 m/s belt speed; smallest standard gearmotor frame (~80:1 worm gearbox); induction + VFD",
     "1.6 A fuse (conveyor), 15 A breaker (robot); panel SCCR = 25 kA with CL-fuse combinations",
-    "12 AWG bonding conductors (both branches); bearing voltage at risk without shielded VFD cable; one-end shield ground",
-    "T = 0.53 s; S = 1.60 m (vs. 1.50 m planned -- needs a finer-resolution curtain or relocation)",
+    "14 AWG bonding conductors (both branches); bearing voltage at risk without shielded VFD cable; one-end shield ground",
+    "T = 0.53 s; S = 1.70 m with a 50 mm curtain (vs. 1.50 m planned); a 30 mm curtain cuts S to 0.98 m",
     "Pedestal beam deflection 0.058 mm vs. L/240 = 3.75 mm -- passes with large margin"
   ),
   `Method Source` = c(
@@ -878,7 +903,7 @@ This touches more sections than it might first appear. The conveyor's constructi
 <details>
 <summary>Identify every place this design would need to change if the robot were reclassified as collaborative.</summary>
 
-This is the biggest single change a reclassification could trigger, because it touches the entire premise of Section 6. If the robot genuinely operates in a collaborative mode under ISO/TS 15066 power-and-force limiting (the framework introduced in the Robot Cell Design chapter's Design Task 6), the light curtain guarding the operator loading point could potentially be reduced or eliminated for that specific interaction — but only if the robot's actual contact forces, at the speeds and payloads used in this cell, are verified against the standard's biomechanical limits for the relevant body regions, which is a real engineering verification, not an assumption that "collaborative" automatically means "no guarding needed." If the guarding *is* relaxed, Section 6's entire stopping-time-and-separation-distance calculation may no longer be the controlling safety requirement for that access point at all, though the safety circuit itself (Section 6's $T$ derivation) may still be needed for other hazards in the cell — the pneumatic gripper's pinch points, for instance, don't become safe just because the robot's arm motion does. The risk assessment underlying the whole guarding decision (the Robot Cell Design chapter's Design Task 5 framework) would need to be redone from scratch for this specific cell's specific hazards, not inherited from the non-collaborative baseline this chapter used. Everything in Sections 2 through 5 and 7 — the cylinder, the conveyor, the panel, the bonding scheme, the pedestal beam — stays exactly as calculated, because none of it depends on how the robot's motion is safeguarded.
+This is the biggest single change a reclassification could trigger, because it touches the entire premise of Section 6. If the robot genuinely operates in a collaborative application with power-and-force limiting (ISO 10218-2:2025, which absorbed ISO/TS 15066; the framework introduced in the Robot Cell Design chapter's Design Task 6), the light curtain guarding the operator loading point could potentially be reduced or eliminated for that specific interaction — but only if the robot's actual contact forces, at the speeds and payloads used in this cell, are verified against the standard's biomechanical limits for the relevant body regions, which is a real engineering verification, not an assumption that "collaborative" automatically means "no guarding needed." If the guarding *is* relaxed, Section 6's entire stopping-time-and-separation-distance calculation may no longer be the controlling safety requirement for that access point at all, though the safety circuit itself (Section 6's $T$ derivation) may still be needed for other hazards in the cell — the pneumatic gripper's pinch points, for instance, don't become safe just because the robot's arm motion does. The risk assessment underlying the whole guarding decision (the Machine Safety Circuit Design chapter's Design Task 1 framework, with the guarding choice from the Robot Cell Design chapter's Design Task 5) would need to be redone from scratch for this specific cell's specific hazards, not inherited from the non-collaborative baseline this chapter used. Everything in Sections 2 through 5 and 7 — the cylinder, the conveyor, the panel, the bonding scheme, the pedestal beam — stays exactly as calculated, because none of it depends on how the robot's motion is safeguarded.
 
 </details>
 

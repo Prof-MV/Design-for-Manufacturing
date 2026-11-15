@@ -49,7 +49,7 @@ A Tier-1 automotive stamping supplier producing structural door-hinge reinforcem
 
 The plant runs its pneumatic distribution at a standard shop pressure of 6 bar gauge (600 kPa, about 87 psi) — a typical line pressure for North American manufacturing plants, chosen to balance actuator force density against compressor energy cost (Design Task 6 returns to why that trade-off matters). The mechanical designer's job now: pick a bore size.
 
-```{r fig-06-07-pnp-schematic, echo=FALSE, fig.cap="Vertical pick-and-place lift cylinder over a press discharge conveyor. The extend stroke lowers the gripper to pick the part; the retract stroke lifts the gripper and part clear.", fig.align='center', fig.width=10, fig.height=7}
+```{r fig-06-07-pnp-schematic, echo=FALSE, fig.cap="Vertical pick-and-place lift cylinder over a press discharge conveyor. The double-acting cylinder is fed at both ports: air at the cap end extends it to lower the gripper onto the part; air at the rod end retracts it to lift the gripper and part clear.", fig.align='center', fig.width=10, fig.height=7}
 library(ggplot2)
 
 ggplot() +
@@ -78,8 +78,12 @@ ggplot() +
   # FRL + valve block
   annotate("rect", xmin = -3, xmax = -0.8, ymin = 4.4, ymax = 6.4, fill = "#95A5A6", color = "black") +
   annotate("text", x = -1.9, y = 5.4, label = "FRL +\ndirectional\nvalve", size = 2.6 * diagram_text_scale, color = "white") +
-  annotate("segment", x = -0.8, xend = 1.3, y = 5.5, yend = 5.5,
+  annotate("segment", x = -0.8, xend = 1.3, y = 6.2, yend = 6.2,
            arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1) +
+  annotate("text", x = 0.25, y = 6.45, label = "cap-end port (extend)", size = 2.6 * diagram_text_scale) +
+  annotate("segment", x = -0.8, xend = 1.3, y = 4.5, yend = 4.5,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1) +
+  annotate("text", x = 0.25, y = 4.25, label = "rod-end port (retract)", size = 2.6 * diagram_text_scale) +
   coord_fixed() + xlim(-3.5, 7.5) + ylim(-0.5, 7.2) +
   theme_void() +
   labs(title = "Pick-and-Place Lift Cylinder — Vertical Mount, Rod Down") +
@@ -96,7 +100,7 @@ Once the correct governing area is identified, the next step accounts for the ga
 
 **Rule of thumb:** oversize the cylinder's bore so that its theoretical force capability (on the governing stroke) is 25-50% greater than the calculated requirement. This margin absorbs seal friction, pressure drop between the FRL/valve and the cylinder, and sag in line pressure under flow — all of which reduce actual delivered force below the P x A theoretical value (quantified explicitly in Design Task 2). A tighter margin (toward 25%) is appropriate when the system has short, well-sized tubing runs, a generously sized valve, and a well-maintained compressor system with minimal pressure sag under load — in other words, when you have good reason to believe losses will be modest. A looser margin (toward 50% or occasionally more) is appropriate for long tubing runs, older or poorly maintained compressor systems with significant pressure droop during peak demand, small-bore cylinders (where seal friction is a larger fraction of total force, as Design Task 2 shows), or applications where an intermittent force shortfall would cause a safety or quality problem, not just a nuisance stoppage. This guideline also runs into the practical reality of standard bore sizes: ISO 15552 profile cylinders come in fixed bore increments (32, 40, 50, 63, 80 mm, and so on), and the jump between adjacent standard sizes doesn't always land neatly inside the 25-50% window — the worked example below shows exactly this happening, and how to make the call when it does.
 
-Ontario and Canadian practice for pneumatic fluid power systems generally follows **ISO 4414** (General rules relating to pneumatic systems), with no separate CSA-specific pneumatic actuator sizing standard; the compressed air distribution piping and receiver tank itself falls under **CSA B51** (Boiler, Pressure Vessel, and Pressure Piping Code) as administered in Ontario by the **Technical Standards and Safety Authority (TSSA)**. Cylinder bore/rod/port dimensional standardization — which is what makes "select a standard 50 mm bore" a meaningful, multi-vendor-interchangeable choice — comes from **ISO 15552** (metric series, profile cylinders, previously known by the VDMA 24562 designation it superseded).
+Ontario and Canadian practice for pneumatic fluid power systems generally follows **ISO 4414** (General rules relating to pneumatic systems), with no separate CSA-specific pneumatic actuator sizing standard; the compressed air distribution piping and receiver tank itself falls under **CSA B51** (Boiler, Pressure Vessel, and Pressure Piping Code) as administered in Ontario by the **Technical Standards and Safety Authority (TSSA)**. Cylinder bore/rod/port dimensional standardization — which is what makes "select a standard 50 mm bore" a meaningful, multi-vendor-interchangeable choice — comes from **ISO 15552** (metric series, profile cylinders; it replaced ISO 6431 and the older VDMA 24562 designation).
 
 ### Governing Calculation
 
@@ -150,9 +154,9 @@ ggplot(candidates, aes(x = reorder(label, bore), y = margin_pct, fill = selected
             size = 3.3 * diagram_text_scale) +
   scale_fill_manual(values = c("Selected" = "#2ECC71", "Not selected" = "#BDC3C7")) +
   labs(title = "Annulus-Area Oversize Margin vs. Standard Bore/Rod Combination",
-       subtitle = "Retract-stroke requirement: 550 N at 6 bar (A_min = 917 mm²)",
-       x = "Bore / rod (mm)", y = "Oversize margin over A_min (%)", fill = NULL) +
-  theme_minimal() +
+       subtitle = expression("Retract-stroke requirement: 550 N at 6 bar ("*A[min] == 917~mm^2*")"),
+       x = "Bore / rod (mm)", y = expression("Oversize margin over "*A[min]*" (%)"), fill = NULL) +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
@@ -257,7 +261,7 @@ ggplot(force_df, aes(x = type, y = force, fill = type)) +
   labs(title = "Theoretical vs. Actual Force by Stroke",
        subtitle = "Dashed red line = required force for that stroke",
        x = NULL, y = "Force (N)", fill = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
@@ -383,7 +387,7 @@ ggplot(df_rate, aes(x = rate, y = Q_SCFM)) +
   labs(title = "Free-Air Consumption vs. Cycle Rate",
        subtitle = "50 mm bore / 20 mm rod, 100 mm stroke, 6 bar line pressure",
        x = "Cycle rate (cycles/min)", y = "Free-air flow (SCFM)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale),
@@ -391,6 +395,10 @@ ggplot(df_rate, aes(x = rate, y = Q_SCFM)) +
 ```
 
 ### Worked Example
+
+```{r video-air-consumption-06-07, echo=FALSE, results='asis'}
+embed_youtube("Fbw3QlP2hTM", "Basic theory of pneumatic cylinder air consumption and required air flow capacity (Ms. Pneumatic)")
+```
 
 Live cell — drag the cycle rate, or change the stroke length, cylinder size, or pressure, and see how consumption scales.
 
@@ -447,13 +455,13 @@ cat(sprintf("  Free-air volume per cycle          %.4f L\n", V_free_L))
 
 </details>
 
-**Sanity check:** roughly 1.7 SCFM per cylinder sounds small in isolation, and it is — a single small pick-and-place cylinder is not what strains a plant's compressor capacity. The reason this number matters is that it never appears alone: a plant this size might have dozens of similar stations running simultaneously, plus larger clamp cylinders, tooling cylinders, and blow-off nozzles, all drawing from the same header. Design Task 6 picks this exact number back up to show how a seemingly trivial per-cylinder inefficiency compounds into a real annual cost once it's multiplied across a plant-wide fleet.
+**Sanity check:** roughly 2.65 SCFM (75 NL/min) per cylinder sounds small in isolation, and it is — a single small pick-and-place cylinder is not what strains a plant's compressor capacity. The reason this number matters is that it never appears alone: a plant this size might have dozens of similar stations running simultaneously, plus larger clamp cylinders, tooling cylinders, and blow-off nozzles, all drawing from the same header. Design Task 6 picks this exact number back up to show how a seemingly trivial per-cylinder inefficiency compounds into a real annual cost once it's multiplied across a plant-wide fleet.
 
 ## Design Task 4: Valve Flow Coefficient (Cv) Selection
 
 ### Scenario
 
-Air consumption (Design Task 3) tells the utilities engineer about steady, cycle-averaged demand — but it says nothing about whether the directional control valve feeding this cylinder is big enough to fill it *fast*. The process engineer has specified that the extend (lower) stroke must fill and complete within **0.15 s**, so the transfer robot downstream isn't kept waiting. That's a much more demanding, momentary flow requirement than the cycle-averaged 1.7 SCFM from Design Task 3 — filling a chamber in a fraction of a second means moving that same volume of air at a far higher instantaneous rate. Sizing the valve against the average consumption number would produce a valve that's badly undersized for the actual fill-time requirement.
+Air consumption (Design Task 3) tells the utilities engineer about steady, cycle-averaged demand — but it says nothing about whether the directional control valve feeding this cylinder is big enough to fill it *fast*. The process engineer has specified that the extend (lower) stroke must fill and complete within **0.15 s**, so the transfer robot downstream isn't kept waiting. That's a much more demanding, momentary flow requirement than the cycle-averaged 2.65 SCFM from Design Task 3 — filling a chamber in a fraction of a second means moving that same volume of air at a far higher instantaneous rate. Sizing the valve against the average consumption number would produce a valve that's badly undersized for the actual fill-time requirement.
 
 ### Design Guidelines and Rules of Thumb
 
@@ -512,7 +520,7 @@ ggplot(df_cv, aes(x = t_fill, y = Cv)) +
   labs(title = "Required Valve Cv vs. Target Fill Time",
        subtitle = "Extend-stroke fill, 50 mm bore, 100 mm stroke, 6 bar supply, 15 psi valve pressure drop",
        x = "Target fill time (s)", y = "Required Cv") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale),
@@ -577,7 +585,7 @@ cat(sprintf("  Select a catalog valve rated              Cv >= %.2f (round up fo
 
 </details>
 
-**Sanity check:** a required Cv of about 0.55 corresponds to a compact, standard 1/4" or 3/8" NPT solenoid directional valve in essentially every major manufacturer's catalog — physically consistent with a small pick-and-place cylinder, which is a useful order-of-magnitude cross-check. Note this burst-flow-derived Cv (0.55) is a very different number from what a naive average-consumption approach would suggest: the cycle-averaged flow from Design Task 3 (1.7 SCFM) is over an order of magnitude lower than the 19.2 SCFM burst flow this fill-time requirement actually demands. Sizing the valve off the average number would have produced a valve roughly a third the required capacity — a common and costly mistake.
+**Sanity check:** a required Cv of about 0.55 corresponds to a compact, standard 1/4" or 3/8" NPT solenoid directional valve in essentially every major manufacturer's catalog — physically consistent with a small pick-and-place cylinder, which is a useful order-of-magnitude cross-check. Note this burst-flow-derived Cv (0.55) is a very different number from what a naive average-consumption approach would suggest: the cycle-averaged flow from Design Task 3 (2.65 SCFM) is about seven times lower than the 19.2 SCFM burst flow this fill-time requirement actually demands. Sizing the valve off the average number would have produced a valve with roughly a seventh of the required capacity — a common and costly mistake.
 
 ## Design Task 5: FRL (Filter-Regulator-Lubricator) Sizing
 
@@ -768,7 +776,7 @@ ggplot(cost_df, aes(x = scenario, y = cost, fill = scenario)) +
   labs(title = "Annual Compressed-Air Cost Comparison",
        subtitle = "At an illustrative industry rule-of-thumb rate of $0.28 per 1,000 SCF, 4 000 operating h/yr",
        x = NULL, y = "Annual cost") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text.x = element_text(size = 9 * chart_text_scale),
@@ -916,7 +924,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Option)) +
   labs(title = "Electric vs. Pneumatic Linear Actuation — Illustrative Comparison",
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — actual scores are application-specific",
        x = NULL, y = "Relative rating (1-5)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
@@ -991,7 +999,7 @@ for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm]
 
 </details>
 
-**Sanity check:** with precision and multi-position flexibility weighted most heavily — the correct priority for a four-position, ±0.1 mm assembly cell — electric wins decisively (3.85 vs. 2.35). Try dropping the precision and multi-position weights and raising purchase cost and robustness instead, closer to what this chapter's own pick-and-place and portioning-station examples actually needed: the recommendation flips to pneumatic, confirming that Design Tasks 1 through 6 were solving the right problem for those applications, not defaulting to pneumatics out of habit.
+**Sanity check:** with precision and multi-position flexibility weighted most heavily — the correct priority for a four-position, ±0.1 mm assembly cell — electric wins decisively (4.25 vs. 2.55). Try dropping the precision and multi-position weights and raising purchase cost and robustness instead, closer to what this chapter's own pick-and-place and portioning-station examples actually needed: the recommendation flips to pneumatic, confirming that Design Tasks 1 through 6 were solving the right problem for those applications, not defaulting to pneumatics out of habit.
 
 ## Chapter Summary
 
@@ -1202,9 +1210,9 @@ $$Q_{NL/min} = 2.5012 \times 45 = 112.6\ \text{NL/min} \qquad Q_{SCFM} = \frac{1
 <details>
 <summary>Design Task 3, Problem 2 (design decision): compressor capacity check</summary>
 
-The plant's existing compressor has 15 SCFM of uncommitted spare capacity. Engineering wants to add six more pick-and-place stations identical to this chapter's example (1.70 SCFM average each, from the chapter's worked example), each cycling continuously. Does the spare capacity cover it, and what should the engineer check beyond the raw SCFM sum?
+The plant's existing compressor has 15 SCFM of uncommitted spare capacity. Engineering wants to add six more pick-and-place stations identical to this chapter's example (2.65 SCFM average each, from the chapter's worked example), each cycling continuously. Does the spare capacity cover it, and what should the engineer check beyond the raw SCFM sum?
 
-**Answer:** Six stations at 1.70 SCFM average each sum to 10.2 SCFM, which is under the 15 SCFM spare capacity on paper — but average consumption alone isn't the whole picture. The engineer should also check: (1) whether these six stations' cycles are likely to overlap in time (if they're on a synchronized line, their peak/burst demand — the Cv-driving flow from Design Task 4, not the average — could spike well above the average sum, briefly starving other equipment on the same header even though the time-averaged number fits); (2) whether the "spare capacity" figure already accounts for existing leaks and inefficiencies in the current system (Design Task 6) — spare capacity calculated against a leaky baseline overstates what's actually available; (3) whether adding this load pushes the compressor's duty cycle high enough to affect its service life or trigger more frequent lead/lag staging in a multi-compressor plant. A comfortable-looking average-SCFM margin is a starting point, not a final answer.
+**Answer:** Six stations at 2.65 SCFM average each sum to 15.9 SCFM, which already exceeds the 15 SCFM spare capacity — so the answer is no, even before peak demand is considered. Fixing the existing leaks (Design Task 6) or adding compressor capacity has to come first; five stations (13.3 SCFM) would fit on paper. Even when the average fits, it isn't the whole picture. The engineer should also check: (1) whether these six stations' cycles are likely to overlap in time (if they're on a synchronized line, their peak/burst demand — the Cv-driving flow from Design Task 4, not the average — could spike well above the average sum, briefly starving other equipment on the same header even though the time-averaged number fits); (2) whether the "spare capacity" figure already accounts for existing leaks and inefficiencies in the current system (Design Task 6) — spare capacity calculated against a leaky baseline overstates what's actually available; (3) whether adding this load pushes the compressor's duty cycle high enough to affect its service life or trigger more frequent lead/lag staging in a multi-compressor plant. A comfortable-looking average-SCFM margin is a starting point, not a final answer.
 
 </details>
 
@@ -1217,7 +1225,7 @@ Using the same 50 mm bore extend-stroke fill (free-air volume 1.3593 L = 0.04800
 
 $$Q_{burst} = \frac{0.04800}{0.08/60} = 36.0\ \text{SCFM}$$
 
-$$C_v = \frac{36.0}{22.48}\sqrt{\frac{1.0 \times 530}{15 \times 86.7}} = 1.602 \times 0.6398 = 1.02$$
+$$C_v = \frac{36.0}{22.48}\sqrt{\frac{1.0 \times 530}{15 \times 86.7}} = 1.601 \times 0.6384 = 1.02$$
 
 Roughly double the Cv found for the 0.15 s requirement, consistent with the inverse relationship between fill time and required flow.
 
@@ -1283,9 +1291,9 @@ Using the same electric/pneumatic scores as the worked example, but with weights
 
 **Solution:**
 
-$$Score_{electric} = 0.10(5)+0.05(5)+0.10(5)+0.15(4)+0.35(2)+0.25(3) = 3.10$$
+$$Score_{electric} = 0.10(5)+0.05(5)+0.10(5)+0.15(4)+0.35(2)+0.25(3) = 3.30$$
 
-$$Score_{pneumatic} = 0.10(2)+0.05(1)+0.10(2)+0.15(2)+0.35(5)+0.25(5) = 3.80$$
+$$Score_{pneumatic} = 0.10(2)+0.05(1)+0.10(2)+0.15(2)+0.35(5)+0.25(5) = 3.75$$
 
 Pneumatic wins under these cost/robustness-weighted priorities — consistent with this chapter's own clamp and pick-and-place examples.
 

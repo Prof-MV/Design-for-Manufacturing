@@ -202,7 +202,7 @@ if (N_req <= margin_threshold) {
 
 **Sanity check:** the 32 mm candidate's raw check looks fine — 2400 rpm required against a 2828 rpm critical speed is a comfortable-looking 15% margin. It's only the 80% rule of thumb that catches the real problem: 2400 rpm is *above* 80% of 2828 rpm (2262 rpm), meaning this screw would be run closer to resonance than good practice allows, with no cushion for bearing wear or housing compliance over the life of the machine. Stepping up to the 40 mm screw family raises the critical speed enough that the required 2400 rpm now sits comfortably below the 80% threshold. This chapter continues to check the *original* 32 mm candidate in Design Tasks 2 and 3 as well — a real design review runs every check against the candidate part before deciding what changes, rather than stopping at the first failure — but keep in mind that the final selected screw is the 40 mm family, and every other check below only gets easier to pass on the larger shaft.
 
-```{r fig-06-08-critical-speed-curve, echo=FALSE, fig.cap="Critical speed falls off with the square of the unsupported span. The fixed-supported curve (this axis's end condition) is compared against fixed-free and fixed-fixed alternatives; the operating point sits above the 80% margin line at L = 1.35 m for the 32 mm candidate.", fig.align='center', fig.width=10, fig.height=6}
+```{r fig-06-08-critical-speed-curve, echo=FALSE, fig.cap="Critical speed falls off with the square of the unsupported span. The fixed-supported curve (this axis's end condition) is compared against fixed-free and fixed-fixed alternatives for the 32 mm candidate (d_r = 27.4 mm). At L = 1.35 m the required 2400 rpm is below the critical speed (2828 rpm) but above the 80% line (2262 rpm), so the 32 mm screw fails the margin rule.", fig.align='center', fig.width=10, fig.height=6}
 E_fig <- 205e9
 rho_fig <- 7850
 d_r_fig <- 0.0274
@@ -218,32 +218,46 @@ curve_df <- data.frame(
   N_cr = c(compute_ncr(L_seq, 3.855), compute_ncr(L_seq, 0.879), compute_ncr(L_seq, 5.593)),
   condition = rep(c("Fixed-Supported (this axis)", "Fixed-Free", "Fixed-Fixed"), each = length(L_seq))
 )
+margin_df <- data.frame(L = L_seq, N = 0.8 * compute_ncr(L_seq, 3.855))
 
 req_speed <- 2400
+Ncr_op <- compute_ncr(1.35, 3.855)
 
 ggplot(curve_df, aes(x = L, y = N_cr, color = condition)) +
   geom_line(linewidth = 1.2) +
+  geom_line(data = margin_df, aes(x = L, y = N), inherit.aes = FALSE,
+            color = "steelblue", linetype = "dotted", linewidth = 1) +
+  annotate("label", x = 0.75, y = 0.8 * compute_ncr(0.75, 3.855) - 900, hjust = 0,
+           label = "'80% of fixed-supported '*N[cr]", parse = TRUE, color = "steelblue",
+           size = 3 * diagram_text_scale, fill = "white", linewidth = 0) +
   annotate("segment", x = 0.6, xend = 2.2, y = req_speed, yend = req_speed,
            linetype = "dashed", color = "grey30", linewidth = 0.8) +
-  annotate("text", x = 1.85, y = req_speed + 1100, hjust = 0.5, label = "Required speed (2400 rpm)",
-           size = 3 * diagram_text_scale, color = "grey30") +
-  annotate("point", x = 1.35, y = compute_ncr(1.35, 3.855), size = 4, shape = 4,
-           stroke = 1.5, color = "black") +
-  annotate("text", x = 1.55, y = 6500, hjust = 0,
-           label = "Operating point\n(L = 1.35 m)", size = 2.9 * diagram_text_scale) +
-  annotate("segment", x = 1.49, xend = 1.36, y = 6000, yend = compute_ncr(1.35, 3.855) + 150, color = "grey40", linewidth = 0.4) +
+  annotate("label", x = 1.95, y = req_speed + 650, hjust = 0.5, label = "Required speed (2400 rpm)",
+           size = 3 * diagram_text_scale, color = "grey30", fill = "white", linewidth = 0) +
+  annotate("segment", x = 1.35, xend = 1.35, y = 0, yend = Ncr_op, color = "grey60", linetype = "dotted") +
+  annotate("point", x = 1.35, y = Ncr_op, size = 3, color = "steelblue") +
+  annotate("point", x = 1.35, y = req_speed, size = 4, shape = 4, stroke = 1.5, color = "firebrick") +
+  annotate("label", x = 1.42, y = 6200, hjust = 0, size = 2.9 * diagram_text_scale, fill = "white", linewidth = 0,
+           label = sprintf("At L = 1.35 m:\nN_cr = %.0f rpm, 80%% = %.0f rpm\nrequired 2400 rpm (x) > 80%%", Ncr_op, floor(0.8 * Ncr_op))) +
+  annotate("segment", x = 1.42, xend = 1.36, y = 5400, yend = Ncr_op + 120, color = "grey40", linewidth = 0.4) +
   scale_color_manual(values = c("Fixed-Supported (this axis)" = "steelblue",
                                  "Fixed-Free" = "firebrick", "Fixed-Fixed" = "#2ECC71")) +
+  coord_cartesian(ylim = c(0, 13000)) +
   labs(title = "Critical Speed vs. Unsupported Span", x = "Span, L (m)",
        y = "Critical speed (rpm)", color = "End condition") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
     axis.text = element_text(size = 10 * chart_text_scale),
     legend.text = element_text(size = 10 * chart_text_scale),
-    legend.title = element_text(size = 10.5 * chart_text_scale)
+    legend.title = element_text(size = 10.5 * chart_text_scale),
+    legend.position = "bottom"
   )
+```
+
+```{r video-ballscrew-06-08, echo=FALSE, results='asis'}
+embed_youtube("iMGqYyn7BMY", "Tech Tips: Ten Essential Steps for Selecting the Optimal Ball Screw (Thomson Industries)")
 ```
 
 ## Design Task 2: Ball Screw Column Buckling
@@ -364,7 +378,7 @@ cat(sprintf("  Span at which SF would fall to 3     %.2f m\n", L_at_SF3))
 
 **Sanity check:** a safety factor around 180 is not a rounding artifact — it is the honest result of a stocky, short-span screw carrying a modest thrust load. Buckling essentially never governs this axis; the length at which the safety factor would erode to the 3x minimum is nearly 9 metres, and long before a single-span ball screw ever reaches that length, critical speed and cost (Design Tasks 1 and 5) have already ruled it out. The lesson is not "skip the buckling check" — it is that buckling only becomes the *controlling* failure mode on long, slender, or heavily thrust-loaded screws, such as a tall vertical Z-axis or a screw carrying a pressing/clamping force, and the only way to know which situation you're in is to run the check.
 
-```{r fig-06-08-buckling-curve, echo=FALSE, fig.cap="Euler buckling load falls off with the square of the loaded span. Even at the operating span of 1.15 m, the buckling load (86.6 kN) dwarfs the actual thrust load (482 N); the safety factor only erodes to the 3x minimum near an 8.9 m span.", fig.align='center', fig.width=10, fig.height=6}
+```{r fig-06-08-buckling-curve, echo=FALSE, fig.cap="Euler buckling load falls off with the square of the loaded span. Even at the operating span of 1.15 m, the buckling load (86.6 kN) dwarfs the actual thrust load (482 N); the safety factor only erodes to the 3x minimum near an 8.9 m span. Log scale on the load axis.", fig.align='center', fig.width=10, fig.height=6}
 E_fig <- 205e9
 d_r_fig <- 0.0274
 Ke_fig <- 0.699
@@ -379,7 +393,7 @@ ggplot(buckling_df, aes(x = L, y = Pcr)) +
   geom_line(color = "steelblue", linewidth = 1.2) +
   annotate("segment", x = 0.5, xend = 10, y = 3 * Fa_fig / 1000, yend = 3 * Fa_fig / 1000,
            linetype = "dashed", color = "firebrick", linewidth = 0.8) +
-  annotate("text", x = 7, y = 3 * Fa_fig / 1000 + 30, label = "3x actual thrust (minimum SF line)",
+  annotate("text", x = 3.2, y = 3 * Fa_fig / 1000 * 1.35, label = "3x actual thrust (minimum SF line)",
            size = 2.9 * diagram_text_scale, color = "firebrick") +
   annotate("point", x = 1.15, y = pi^2 * E_fig * I_fig / (Ke_fig * 1.15)^2 / 1000,
            size = 4, shape = 4, stroke = 1.5, color = "black") +
@@ -388,10 +402,13 @@ ggplot(buckling_df, aes(x = L, y = Pcr)) +
            yend = 220, linewidth = 0.5, color = "grey40", linetype = "dotted") +
   annotate("text", x = 3.1, y = 220,
            label = "Operating point\n(1.15 m, 86.6 kN)", size = 2.9 * diagram_text_scale, hjust = 0) +
-  scale_y_continuous(labels = scales::label_comma(big.mark = " ")) +
+  annotate("point", x = 8.9, y = 3 * Fa_fig / 1000, size = 3, color = "firebrick") +
+  annotate("text", x = 8.9, y = 3 * Fa_fig / 1000 / 1.8, label = "SF = 3 at L = 8.9 m",
+           size = 2.9 * diagram_text_scale, color = "firebrick") +
+  scale_y_log10(labels = scales::label_comma(big.mark = " ")) +
   labs(title = "Euler Buckling Load vs. Loaded Span", x = "Loaded span, L (m)",
-       y = "Critical buckling load (kN)") +
-  theme_minimal() +
+       y = "Critical buckling load (kN, log scale)") +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
@@ -436,8 +453,8 @@ $$
 ```{r tbl-06-08-duty-cycle, echo=FALSE, message=FALSE}
 duty_cycle <- tribble(
   ~Segment, ~Distance_mm, ~Mean_Axial_Load_N, ~Notes,
-  "Forward (dispense) pass", 900, 850, "Controlled speed; includes adhesive back-pressure reaction",
-  "Return (rapid) pass", 900, 400, "Faster move; carriage inertia and friction only, no process load"
+  "Forward (dispense) pass", 900, 320, "Controlled speed; preload/wiper/guide drag (180 N) plus the 50 N adhesive back-pressure reaction, with acceleration at the ends of the pass",
+  "Return (rapid) pass", 900, 260, "Faster move; drag plus carriage inertia during the ramps, no process load"
 )
 
 duty_cycle %>%
@@ -459,13 +476,13 @@ qwebr_calc_card(
   inputs = list(
     qwebr_calc_input("Ca", "Dynamic axial load capacity C<sub>a</sub>", value = 24500, min = 2000, max = 100000, step = 500, suffix = "N"),
     qwebr_calc_input("lead", "Screw lead", value = 10, min = 2, max = 50, step = 1, suffix = "mm/rev"),
-    qwebr_calc_input("F1", "Forward (loaded) pass load", value = 850, min = 50, max = 20000, step = 50, suffix = "N"),
-    qwebr_calc_input("F2", "Return pass load", value = 400, min = 50, max = 20000, step = 50, suffix = "N"),
+    qwebr_calc_input("F1", "Forward (loaded) pass load", value = 320, min = 50, max = 20000, step = 10, suffix = "N"),
+    qwebr_calc_input("F2", "Return pass load", value = 260, min = 50, max = 20000, step = 10, suffix = "N"),
     qwebr_calc_input("jph", "Production rate", value = 40, min = 1, max = 200, step = 1, suffix = "jobs/h"),
     qwebr_calc_input("target_km", "Target L10 life", value = 25000, min = 1000, max = 500000, step = 1000, suffix = "km")
   ),
-  goal = "A heavier dispensing head raises the forward load. Find the largest forward load F1 (nearest 50 N) at which the screw still meets the 25 000 km target, within 5 percent. Keep the screw, the lead and the 400 N return load.",
-  goal_test = "L10_km >= target_km && L10_km <= 1.05 * target_km && Ca == 24500 && target_km == 25000 && lead == 10 && F2 == 400",
+  goal = "A press-fit process added to the forward pass raises its load. Find the largest forward load F1 (nearest 50 N) at which the screw still meets the 25 000 km target, within 5 percent. Keep the screw, the lead and the 260 N return load.",
+  goal_test = "L10_km >= target_km && L10_km <= 1.05 * target_km && F1 %% 50 == 0 && Ca == 24500 && target_km == 25000 && lead == 10 && F2 == 260",
   mode = "task")
 ```
 
@@ -480,9 +497,9 @@ Ca <- 24500   # N
 lead <- 10    # mm/rev
 
 ## Duty cycle: forward (loaded) pass and return (unloaded) pass
-F1 <- 850     # N - forward dispense pass
+F1 <- 320     # N - forward dispense pass (drag + process reaction + accel)
 d1 <- 900     # mm
-F2 <- 400     # N - return pass
+F2 <- 260     # N - return pass (drag + accel)
 d2 <- 900     # mm
 
 ## Distance-weighted cubic mean load
@@ -524,7 +541,7 @@ cat(sprintf("  L10 life at this duty cycle       about %s years\n", fmt(implied_
 
 </details>
 
-**Sanity check:** the calculated life clears the 25,000 km target by more than 17x, and translated into years at the plant's actual duty cycle, it works out to roughly 1,500 years. That number is not a mistake — it is the direct, honest consequence of a cube-law life formula applied to a screw whose rated capacity (24.5 kN) is more than 30 times the mean applied load (about 700 N). No one is designing this screw to actually run for 1,500 years; the number's real value is confirming that classical ball fatigue is definitively *not* the constraint on this axis's service life. The plant's actual preventive maintenance plan for this screw should be built around inspection intervals for backlash growth, preload loss, and seal/wiper condition — not around a calculated fatigue date that will never be reached.
+**Sanity check:** the calculated life clears the 25,000 km target by more than 200x, and translated into years at the plant's actual duty cycle, it works out to roughly 20,000 years. That number is not a mistake — it is the direct, honest consequence of a cube-law life formula applied to a screw whose rated capacity (24.5 kN) is more than 80 times the mean applied load (about 290 N, consistent with the thrust worked out in Design Task 2). No one is designing this screw to actually run for 20,000 years; the number's real value is confirming that classical ball fatigue is definitively *not* the constraint on this axis's service life. The plant's actual preventive maintenance plan for this screw should be built around inspection intervals for backlash growth, preload loss, and seal/wiper condition — not around a calculated fatigue date that will never be reached.
 
 ## Design Task 4: Linear Guide L10 Life and Moment Loading
 
@@ -596,7 +613,8 @@ ggplot() +
            fill = NA, color = "#2C3E50", linewidth = 1, linetype = "dashed") +
 
   ## Blocks, each labeled outward from the pattern (away from the centroid)
-  geom_point(data = blocks, aes(x = x, y = y), size = 6, shape = 15, color = "#2C3E50") +
+  geom_rect(data = blocks, aes(xmin = x - 0.05, xmax = x + 0.05, ymin = y - 0.035, ymax = y + 0.035),
+            fill = "#2C3E50") +
   geom_text(data = blocks, aes(x = x, y = label_y, label = label, hjust = hj),
             size = 2.6 * diagram_text_scale) +
 
@@ -616,10 +634,10 @@ ggplot() +
   ## Lever arm dimensions
   annotate("segment", x = -lx/2, xend = lx/2, y = -ly/2 - 0.28, yend = -ly/2 - 0.28,
            arrow = arrow(length = unit(0.12, "cm"), ends = "both", type = "closed"), linewidth = 0.6) +
-  annotate("text", x = 0, y = -ly/2 - 0.35, label = "l_x = 0.42 m", size = 2.7 * diagram_text_scale) +
+  annotate("text", x = 0, y = -ly/2 - 0.35, label = "l[x] == 0.42~m", parse = TRUE, size = 3 * diagram_text_scale) +
   annotate("segment", x = lx/2 + 0.22, xend = lx/2 + 0.22, y = ly/2, yend = -ly/2,
            arrow = arrow(length = unit(0.12, "cm"), ends = "both", type = "closed"), linewidth = 0.6) +
-  annotate("text", x = lx/2 + 0.38, y = 0, label = "l_y =\n0.34 m", size = 2.7 * diagram_text_scale) +
+  annotate("text", x = lx/2 + 0.42, y = 0, label = "l[y] == 0.34~m", parse = TRUE, size = 3 * diagram_text_scale) +
 
   coord_fixed(xlim = c(-1.1, 1.1), ylim = c(-0.75, 0.6)) +
   theme_void() +
@@ -637,15 +655,15 @@ qwebr_calc_card(
   title = "Linear Guide Life Calculator",
   icon = "gears",
   inputs = list(
-    qwebr_calc_input("mass_total", "Total moving mass", value = 15, min = 1, max = 500, step = 1, suffix = "kg"),
+    qwebr_calc_input("mass_total", "Total moving mass", value = 42, min = 1, max = 500, step = 1, suffix = "kg"),
     qwebr_calc_input("M_pitch", "Pitch moment", value = 22, min = 0, max = 500, step = 1, suffix = "N·m"),
     qwebr_calc_input("M_roll", "Roll moment", value = 9, min = 0, max = 500, step = 1, suffix = "N·m"),
     qwebr_calc_input("M_yaw", "Yaw moment", value = 4, min = 0, max = 500, step = 1, suffix = "N·m"),
     qwebr_calc_input("fw", "Service factor f<sub>w</sub>", value = 1.2, min = 1, max = 3, step = 0.05),
-    qwebr_calc_input("C_candidate", "Guide dynamic capacity C (N)", value = 1450, min = 500, max = 6000, step = 50, type = "slider")
+    qwebr_calc_input("C_candidate", "Guide dynamic capacity C (N)", value = 2600, min = 500, max = 8000, step = 50, type = "slider")
   ),
-  goal = "The 1450 N block misses the 250 000 km target. Without changing the block, the mass or the service factor, get it to pass by changing only the pitch moment. How low must it go?",
-  goal_test = "L10_km >= target_km && C_candidate == 1450 && mass_total == 15 && fw == 1.2 && M_roll == 9 && M_yaw == 4",
+  goal = "The 2600 N block misses the 250 000 km target. Without changing the block, the mass or the service factor, get it to pass by changing only the pitch moment. How low must it go?",
+  goal_test = "L10_km >= target_km && C_candidate == 2600 && mass_total == 42 && fw == 1.2 && M_roll == 9 && M_yaw == 4",
   mode = "task")
 ```
 
@@ -661,11 +679,12 @@ ly <- 0.34   # m, rail-to-rail spacing
 n_blocks <- 4
 
 ## Total moving weight: carriage plate + nut flange + dispensing head + hoses
-mass_total <- 15  # kg
+mass_total <- 42  # kg, same moving mass as the buckling check in Design Task 2
 W_total <- mass_total * 9.81
 F_direct <- W_total / n_blocks
 
 ## Applied moments about the block pattern centroid, from CAD mass properties
+## (only the offset dispensing head contributes; the carriage plate is centred)
 M_pitch <- 22  # N.m
 M_roll <- 9    # N.m
 M_yaw <- 4     # N.m
@@ -682,7 +701,7 @@ P_eq <- fw * F_eq
 P_naive <- fw * F_direct   # what a direct-load-only (wrong) check would use
 
 ## First-pass candidate guide block
-C_candidate <- 1450  # N, rated dynamic load capacity
+C_candidate <- 2600  # N, rated dynamic load capacity
 L10_km <- (C_candidate / P_eq)^3 * 50
 L10_naive_km <- (C_candidate / P_naive)^3 * 50
 
@@ -705,7 +724,7 @@ cat(sprintf("  Design load P (f_w = %.2f)           %.1f N\n", fw, P_eq))
 
 if (L10_km < target_km) {
   ## Corrective action: upsize to the next guide block size
-  C_upsized <- 2600  # N
+  C_upsized <- 3500  # N
   L10_upsized_km <- (C_upsized / P_eq)^3 * 50
   cat(sprintf("  Upsized to a %g N-rated block       %s km - %s\n", C_upsized, fmt(L10_upsized_km),
               ifelse(L10_upsized_km >= target_km, "PASSES", "!!still FAILS!!")))
@@ -714,7 +733,7 @@ if (L10_km < target_km) {
 
 </details>
 
-**Sanity check:** the moment contributions more than double the equivalent load on the worst-loaded block (from about 37 N direct to about 81 N once pitch, roll, and yaw are included) — and that difference is exactly what separates a first-pass candidate that looks like it clears the target by 7x (the naive check) from one that actually falls short by a third (the real check). This is precisely the same trap as the robot end-effector CG-offset payload check: the nameplate/direct-load number understates the true demand, and the moment loading is what closes the gap. Upsizing to the next guide block size restores a comfortable margin above the 250,000 km target.
+**Sanity check:** the moment contributions add more than 40% to the equivalent load on the worst-loaded block (from about 103 N direct to about 147 N once pitch, roll, and yaw are included) — and that difference is exactly what separates a first-pass candidate that looks like it clears the target by almost 2x (the naive check) from one that actually falls short by more than a third (the real check). Because life goes with the cube of the load, a 43% load increase cuts life to about a third. This is precisely the same trap as the robot end-effector CG-offset payload check: the nameplate/direct-load number understates the true demand, and the moment loading is what closes the gap. Upsizing to the next guide block size restores a comfortable margin above the 250,000 km target.
 
 ## Design Task 5: Lead Screw vs. Ball Screw vs. Belt Drive vs. Rack-and-Pinion Selection
 
@@ -775,7 +794,7 @@ $$
 \phi = \arctan(\mu)
 $$
 
-Self-locking occurs when $\mu \geq \tan\lambda$ (equivalently, when $\eta < 50\%$, a useful quick cross-check).
+Self-locking occurs when $\mu \geq \tan\lambda$ (the friction angle is at least the lead angle). A self-locking thread always has $\eta < 50\%$, which makes efficiency a useful quick cross-check, but the reverse is not true: a thread below 50% efficiency is not automatically self-locking, so always check $\mu \geq \tan\lambda$ directly.
 
 | Symbol | Definition | Units |
 |:-------|:-----------|:------|
@@ -840,12 +859,12 @@ cat(sprintf("  Preloaded ball screw, for comparison  about %g%% - far too effici
 
 </details>
 
-**Sanity check:** at a 5 mm lead on a 19 mm mean diameter, the thread's lead angle is under 5 degrees, well inside the friction angle for a lightly lubricated Acme thread (efficiency comes out to about 35%, comfortably under the 50% self-locking rule-of-thumb threshold). The ball screw's ~90% efficiency, by contrast, isn't a design flaw — it's the entire reason ball screws dominate wherever speed and precision matter — but it means a ball screw can never provide fail-safe holding on its own.
+**Sanity check:** at a 5 mm lead on a 19 mm mean diameter, the thread's lead angle is under 5 degrees, well inside the friction angle for a lightly lubricated Acme thread (efficiency comes out to about 35%, consistent with the fact that every self-locking thread is below 50% efficient). The ball screw's ~90% efficiency, by contrast, isn't a design flaw — it's the entire reason ball screws dominate wherever speed and precision matter — but it means a ball screw can never provide fail-safe holding on its own.
 
 ```{r tbl-06-08-scenario-recommendations, echo=FALSE, message=FALSE}
 recommendations <- tribble(
   ~Axis, ~Dominant_Requirement, ~Recommendation, ~Reasoning,
-  "1. Dispensing gantry traverse", "Precision dispensing path, 900 mm span, validated in Tasks 1-4",
+  "1. Dispensing gantry traverse", "Precision dispensing path, 900 mm travel on a 1.35 m bearing span, validated in Tasks 1-4",
   "Ball screw (as designed)",
   "Span is well inside the practical ball screw range; precision and speed both favour rolling contact over sliding friction",
   "2. 3.5 m panel transfer axis", "Long span, heavy payload, loose tolerance, fast cycle",
@@ -977,7 +996,7 @@ tryit_number(
 <details class="tryit-solution">
 <summary>Show the worked solution</summary>
 
-$I = \pi (0.020)^4 / 64 = `r sprintf("%.3e", bk$I)`$ m$^4$ (`r sprintf("%.0f", bk$I * 1e12)` mm$^4$ $\times$ 1000 after dividing by 1000 is the figure asked for).
+$I = \pi (0.020)^4 / 64 = `r sprintf("%.3e", bk$I)`$ m$^4$ $=$ `r sprintf("%.0f", bk$I * 1e12)` mm$^4$ (1 m$^4$ = 10$^{12}$ mm$^4$).
 
 $$P_{cr} = \frac{\pi^2 (205 \times 10^9)(`r sprintf("%.3e", bk$I)`)}{(2.0 \times 0.8)^2} = `r sprintf("%.0f", bk$Pcr)` \text{ N}, \qquad SF = \frac{`r sprintf("%.0f", bk$Pcr)`}{1800} = `r sprintf("%.2f", bk$SF)`$$
 
@@ -1060,11 +1079,11 @@ Option 3 should be rejected outright, and it's riskier here specifically because
 <details>
 <summary>Task 3 (plug-in): A screw has Ca = 18,000 N and a duty cycle of F1 = 600 N over 500 mm and F2 = 250 N over 500 mm. What is the cubic mean load, and the L10 life in revolutions?</summary>
 
-$F_m = \left(\frac{600^3 \times 500 + 250^3 \times 500}{1000}\right)^{1/3} = \left(\frac{108{,}000{,}000{,}000 + 7{,}812{,}500{,}000}{1000}\right)^{1/3} \approx 487.7 \text{ N}$
+$F_m = \left(\frac{600^3 \times 500 + 250^3 \times 500}{1000}\right)^{1/3} = \left(\frac{108{,}000{,}000{,}000 + 7{,}812{,}500{,}000}{1000}\right)^{1/3} \approx 487.4 \text{ N}$
 
-Working the arithmetic: $600^3 = 216{,}000{,}000$; $250^3 = 15{,}625{,}000$. Weighted equally (500/500): mean of cubes $= (216{,}000{,}000 + 15{,}625{,}000)/2 = 115{,}812{,}500$. $F_m = 115{,}812{,}500^{1/3} \approx 487.7$ N.
+Working the arithmetic: $600^3 = 216{,}000{,}000$; $250^3 = 15{,}625{,}000$. Weighted equally (500/500): mean of cubes $= (216{,}000{,}000 + 15{,}625{,}000)/2 = 115{,}812{,}500$. $F_m = 115{,}812{,}500^{1/3} \approx 487.4$ N.
 
-$L_{10} = (18000/487.7)^3 \times 10^6 = (36.91)^3 \times 10^6 \approx 50{,}280 \times 10^6 \approx 5.03 \times 10^{10}$ revolutions.
+$L_{10} = (18000/487.4)^3 \times 10^6 = (36.93)^3 \times 10^6 \approx 50{,}370 \times 10^6 \approx 5.04 \times 10^{10}$ revolutions.
 
 </details>
 
@@ -1120,8 +1139,8 @@ You are the mechanical designer responsible for releasing the battery-tray dispe
 
 - **Candidate screw:** 32 mm nominal, 10 mm lead, root diameter 27.4 mm, fixed-supported span 1.35 m, required traverse speed 0.4 m/s.
 - **Buckling:** loaded span 1.15 m, carriage mass 42 kg, acceleration 4.5 m/s², friction/preload drag 180 N, process reaction 50 N, 15% uncertainty pad.
-- **Ball screw life:** Ca = 24,500 N, forward pass 850 N over 900 mm, return pass 400 N over 900 mm, 40 JPH, 2-shift/5-day/50-week operation, 25,000 km target.
-- **Linear guide life:** block pattern 420 mm x 340 mm, 15 kg moving mass, moments M_pitch = 22 N·m, M_roll = 9 N·m, M_yaw = 4 N·m, service factor 1.2, 250,000 km target, first-pass candidate C = 1,450 N.
+- **Ball screw life:** Ca = 24,500 N, forward pass 320 N over 900 mm, return pass 260 N over 900 mm, 40 JPH, 2-shift/5-day/50-week operation, 25,000 km target.
+- **Linear guide life:** block pattern 420 mm x 340 mm, 42 kg moving mass, moments M_pitch = 22 N·m, M_roll = 9 N·m, M_yaw = 4 N·m, service factor 1.2, 250,000 km target, first-pass candidate C = 2,600 N.
 - **A cost-cutting proposal:** the program manager, trying to hold the tooling budget, asks whether the plant could skip the 40 mm screw upsize from Design Task 1 and instead just run the traverse move slower, and separately asks whether the linear guide upsize from Design Task 4 is really necessary given how comfortably the ball screw life and buckling checks passed.
 
 Work through all five design tasks and reach a clear conclusion for each: does the candidate hardware pass, and if not, what specific change do you make? Then answer the program manager's two questions directly, using the numbers from your own analysis rather than intuition -- does slowing the traverse move actually solve the critical speed problem without a hardware change, and does the ball screw's enormous life margin have any bearing on whether the linear guide needs its own upsize? Finally, write two or three sentences on why the two structural findings in this chapter -- critical speed collapsing with span, and buckling capacity remaining enormous at the same span -- point toward *different* upper limits for how long a single ball screw axis can practically be, and how Design Task 5's ~3-4 m rule of thumb reconciles them.

@@ -34,9 +34,9 @@ By the end of this chapter, you will be able to:
 
 ## Introduction
 
-The [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd) chapter finished with a servo motor and a 20:1 planetary gearbox selected for an automotive Tier-1 supplier's rotary index table. That gearbox has an output shaft sticking out of its housing, rated for roughly 40 N·m of continuous output torque. Sizing the motor and gearbox answers "how much torque and speed does this job need," but it does not answer the next question a mechanical designer actually has to solve on the shop floor: **how does that torque physically get from the gearbox's output shaft into the machine it's driving, without the shaft twisting off, the coupling walking apart, or a belt slipping under load?**
+The [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd) chapter finished with a servo motor and a 20:1 planetary gearbox selected for an automotive Tier-1 supplier's rotary index table. That gearbox has an output shaft sticking out of its housing and a catalog rating of 45 N·m nominal output torque. Sizing the motor and gearbox answers "how much torque and speed does this job need," but it does not answer the next question a mechanical designer actually has to solve on the shop floor: **how does that torque physically get from the gearbox's output shaft into the machine it's driving, without the shaft twisting off, the coupling walking apart, or a belt slipping under load?**
 
-This chapter picks up exactly where that question starts. The same Tier-1 plant, standardizing on a small number of catalog gearmotors to keep its spares crib manageable, uses that identical 40 N·m / 20:1 gearbox on a second machine a few bays over: a short accumulation conveyor feeding parts into the next cell, running at a steady 45 rpm on its head pulley shaft. Between the gearbox's output flange and the conveyor's head pulley sits a length of shaft, a flexible coupling, and — on other machines in the same plant — belt and chain drives doing the same fundamental job under different constraints. Five design tasks build that connection from the shaft outward: sizing the shaft itself against torsional shear, accounting for the strength penalty a keyway introduces, choosing the right coupling architecture, and then stepping outside this specific machine to size belt and chain drives more generally, including when to reach for one over the other.
+This chapter picks up exactly where that question starts. The same Tier-1 plant, standardizing on a small number of catalog gearmotors to keep its spares crib manageable, uses that identical 20:1 gearbox on a second machine a few bays over: a short accumulation conveyor feeding parts into the next cell, running at a steady 45 rpm on its head pulley shaft and drawing 40 N·m continuously. Between the gearbox's output flange and the conveyor's head pulley sits a length of shaft, a flexible coupling, and — on other machines in the same plant — belt and chain drives doing the same fundamental job under different constraints. Five design tasks build that connection from the shaft outward: sizing the shaft itself against torsional shear, accounting for the strength penalty a keyway introduces, choosing the right coupling architecture, and then stepping outside this specific machine to size belt and chain drives more generally, including when to reach for one over the other.
 
 A note on scope: this chapter is about *sizing the connection hardware* — shaft, coupling, belt, chain — once a torque and speed are already known at both ends. It does not re-derive motor/gearbox sizing (that's [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd)) or full CEMA-style conveyor belt tension across a belt's whole length (that's the [Conveyor Design](06-10-Conveyor-Design.qmd) chapter later in this part). It also isn't a repeat of the general mechanical-elements coverage of belts, chains, and couplings found earlier in this book — this chapter is narrower and more applied: given a real torque and speed at a real gearbox output flange, what specific shaft, coupling, belt, or chain actually goes in this machine, and why.
 
@@ -44,14 +44,14 @@ A note on scope: this chapter is about *sizing the connection hardware* — shaf
 
 ### Scenario
 
-The mechanical designer on the accumulation-conveyor project has the gearbox's nameplate data in hand: 40 N·m continuous output torque, 45 rpm output speed, delivered through a keyed output shaft stub. Between that stub and the conveyor's head pulley shaft, a short length of intermediate shaft (sometimes called a stub shaft or line shaft) needs to be specified — either a separate machined shaft coupling the two, or, in this case, simply confirming the gearbox's own output shaft stub is adequate to carry a jaw coupling hub without yielding. Either way, the underlying question is the same: **what is the minimum shaft diameter that safely carries 40 N·m, continuously, all shift long?**
+The mechanical designer on the accumulation-conveyor project has the drive data in hand: 40 N·m continuous torque at the gearbox output, 45 rpm output speed, delivered through a keyed output shaft stub. Between that stub and the conveyor's head pulley shaft, a short length of intermediate shaft (sometimes called a stub shaft or line shaft) needs to be specified — either a separate machined shaft coupling the two, or, in this case, simply confirming the gearbox's own output shaft stub is adequate to carry a jaw coupling hub without yielding. Either way, the underlying question is the same: **what is the minimum shaft diameter that safely carries 40 N·m, continuously, all shift long?**
 
 ```{r fig-06-09-drivetrain, echo=FALSE, fig.cap="Drivetrain layout between the gearbox output flange and the conveyor head pulley: output shaft, flexible coupling, and head pulley shaft.", fig.align='center', fig.width=12, fig.height=5.5}
 library(ggplot2)
 library(ggforce)
 
 pulley_df <- data.frame(x0 = 750, y0 = 0, r = 90, label = "Head pulley")
-product_df <- data.frame(x = c(430, 560, 700), y = rep(90, 3))
+product_df <- data.frame(x = c(850, 950, 1040), y = rep(90, 3))
 
 ggplot() +
   # gearbox housing
@@ -74,14 +74,16 @@ ggplot() +
   geom_circle(data = pulley_df, aes(x0 = x0, y0 = y0, r = r), fill = "#3498DB", color = "black", linewidth = 1) +
   annotate("text", x = 750, y = 0, label = "Head\npulley", size = 2.8 * diagram_text_scale, color = "white") +
   # belt loop over the pulley
-  annotate("segment", x = 750, xend = 950, y = 90, yend = 90, linewidth = 1.3, color = "grey20") +
-  annotate("segment", x = 750, xend = 950, y = -90, yend = -90, linewidth = 1.3, color = "grey20") +
-  annotate("segment", x = 840, xend = 890, y = 90, yend = 90,
-           arrow = arrow(length = unit(0.22, "cm"), type = "closed"), color = "#2ECC71", linewidth = 1.5) +
+  annotate("segment", x = 750, xend = 1080, y = 90, yend = 90, linewidth = 1.3, color = "grey20") +
+  annotate("segment", x = 750, xend = 1080, y = -90, yend = -90, linewidth = 1.3, color = "grey20") +
+  annotate("segment", x = 1000, xend = 880, y = 165, yend = 165,
+           arrow = arrow(length = unit(0.22, "cm"), type = "closed"), color = "darkgreen", linewidth = 1.2) +
+  annotate("text", x = 940, y = 190, label = "parts travel to the head pulley",
+           size = 2.8 * diagram_text_scale, color = "darkgreen") +
   # a few conveyed parts (real per-row layer: 3 rows of positions from product_df)
   geom_rect(data = product_df, aes(xmin = x - 25, xmax = x + 25, ymin = y, ymax = y + 45),
             fill = "#95A5A6", color = "black") +
-  coord_fixed() + xlim(-120, 1080) + ylim(-160, 200) +
+  coord_fixed(xlim = c(-120, 1100), ylim = c(-160, 210)) +
   theme_void() +
   labs(title = "Accumulation Conveyor Drivetrain",
        subtitle = "Same catalog gearbox as the index table (06-06), standardized for plant spares commonality") +
@@ -155,38 +157,42 @@ Standard key sizing is proportional to shaft diameter, not a fixed size: a small
 
 Cutting that slot into an otherwise round shaft does two things structurally: it removes cross-sectional material (a small effect for a shallow keyway), and — the dominant effect — it creates two sharp internal corners at the base of the slot where stress concentrates sharply, well above the nominal stress the plain-shaft formula predicts. That concentration is captured by a stress concentration factor $K_t$, applied directly to the nominal torsional stress.
 
-**Rule of thumb:** for a first-pass, pure-torque shaft sizing, assume $K_t \approx 1.6-2.0$ for a standard profiled keyway (values commonly tabulated in stress-concentration references such as Peterson's *Stress Concentration Factors*, based on the fillet radius at the base of the slot — a more generous fillet lowers $K_t$ toward the low end of that range, a sharp-cornered keyway pushes it toward the high end). This breaks down once the same shaft also carries meaningful **bending** — an overhung pulley or sprocket load, for instance, which Design Task 4's belt drive introduces directly onto a shaft. A keyway concentrates bending stress by a similar factor to torsional stress, and a shaft under combined bending and torsion needs a combined-stress equation (not the pure-torsion formula used here) with the stress concentration applied to *both* the bending and torsion terms — treating only the torsional component, as this design task does for a coupling-only connection with negligible bending, would under-predict the required diameter on a shaft that also carries a side load.
+**Rule of thumb:** for a first-pass, pure-torque shaft sizing, assume $K_t \approx 1.6-2.0$ for a keyway with a generous root fillet (a sled-runner keyseat, or a profiled keyseat with a fillet radius of a few percent of the shaft diameter), from stress-concentration references such as Peterson's *Stress Concentration Factors*. A sharp-cornered, end-milled keyseat is worse: Shigley's first-iteration estimate for it in torsion is $K_{ts} \approx 3$. Note also that for a *steady* torque on a ductile steel, local yielding at the corner relieves the concentration, so $K_t$ matters most when the torque fluctuates and fatigue governs — applying it to a static check, as this design task does, is the conservative choice. This breaks down once the same shaft also carries meaningful **bending** — an overhung pulley or sprocket load, for instance, which Design Task 4's belt drive introduces directly onto a shaft. A keyway concentrates bending stress by a similar factor to torsional stress, and a shaft under combined bending and torsion needs a combined-stress equation (not the pure-torsion formula used here) with the stress concentration applied to *both* the bending and torsion terms — treating only the torsional component, as this design task does for a coupling-only connection with negligible bending, would under-predict the required diameter on a shaft that also carries a side load.
 
 There are two legitimate ways to recover the lost margin: increase the shaft diameter locally at the keyway (the more common shop practice, since it only affects one section of the shaft), or accept the full-length diameter increase and skip a local step, or — less commonly — simply carry a higher design factor everywhere and accept the keyway's stress concentration as already priced in. This chapter works the diameter-increase approach, since it's the one a machinist can act on directly from a drawing.
 
 ```{r fig-06-09-keyway-section, echo=FALSE, fig.cap="Shaft cross-section with a standard keyway. The two sharp corners at the base of the slot are where the stress concentration factor applies.", fig.align='center', fig.width=9, fig.height=7}
 library(ggplot2)
-library(ggforce)
 
-shaft_df <- data.frame(x0 = 0, y0 = 0, r = 9)   # 18 mm shaft, per the worked example below
+r_s <- 9            # 18 mm shaft, per the worked example below
+w2  <- 2.25         # half keyway width (w = d / 4)
+y_root <- 6.7       # keyway root (depth about 2.3 mm)
+a0 <- asin(w2 / r_s)                       # half-angle where the slot meets the OD
+th <- seq(pi / 2 - a0, -3 * pi / 2 + a0, length.out = 200)   # clockwise round the shaft
+## Outline: around the shaft OD from the right edge of the slot to the left
+## edge, then down into the slot and across its root; the polygon closes itself
+shaft_poly <- rbind(
+  data.frame(x = r_s * cos(th), y = r_s * sin(th)),
+  data.frame(x = c(-w2, w2), y = c(y_root, y_root))
+)
 
 ggplot() +
-  geom_circle(data = shaft_df, aes(x0 = x0, y0 = y0, r = r),
-              fill = "grey75", color = "black", linewidth = 1.1) +
-  # keyway notch cut into the top of the shaft (single fixed shape -> annotate)
-  # ymax only slightly above the shaft OD (r = 9) so the notch reads as flush
-  # with the surface rather than a tab sticking out above the circle
-  annotate("rect", xmin = -2.25, xmax = 2.25, ymin = 6.7, ymax = 9.4,
-           fill = "white", color = "black", linewidth = 1.1) +
-  # stress concentration highlight at the two keyway root fillets
-  annotate("point", x = -2.25, y = 6.7, color = "#E74C3C", size = 4) +
-  annotate("point", x = 2.25, y = 6.7, color = "#E74C3C", size = 4) +
-  annotate("text", x = 6, y = 13.5, label = "Stress concentrates\nat these fillets\nKt ≈ 1.6 - 2.0",
+  geom_polygon(data = shaft_poly, aes(x = x, y = y), fill = "lightsteelblue", color = "steelblue", linewidth = 1.1) +
+  # stress concentration highlight at the two keyway root corners
+  annotate("point", x = c(-w2, w2), y = y_root, color = "#E74C3C", size = 3.5) +
+  annotate("segment", x = w2 + 0.3, xend = 6.5, y = y_root + 0.2, yend = 12.6, color = "#E74C3C", linewidth = 0.4) +
+  annotate("text", x = 6.7, y = 13.5, label = "Stress concentrates\nat the root corners\nKt ≈ 1.6 - 3",
            size = 3 * diagram_text_scale, color = "#E74C3C", hjust = 0) +
   # key width dimension
-  annotate("segment", x = -2.25, xend = 2.25, y = 11, yend = 11,
+  annotate("segment", x = -w2, xend = w2, y = 11, yend = 11,
            arrow = arrow(length = unit(0.15, "cm"), ends = "both"), linewidth = 0.8) +
-  annotate("text", x = 0, y = 12, label = "key width w ≈ d / 4", size = 2.9 * diagram_text_scale) +
+  annotate("segment", x = c(-w2, w2), xend = c(-w2, w2), y = 9, yend = 11.5, color = "grey50", linewidth = 0.4) +
+  annotate("text", x = 0, y = 12.2, label = "key width w ≈ d / 4", size = 2.9 * diagram_text_scale) +
   # shaft diameter dimension
-  annotate("segment", x = -9, xend = 9, y = -12, yend = -12,
+  annotate("segment", x = -r_s, xend = r_s, y = -12, yend = -12,
            arrow = arrow(length = unit(0.15, "cm"), ends = "both"), linewidth = 0.8) +
   annotate("text", x = 0, y = -13.5, label = "shaft diameter d", size = 2.9 * diagram_text_scale) +
-  coord_fixed() + xlim(-11, 18) + ylim(-16, 16) +
+  coord_fixed(xlim = c(-11, 18), ylim = c(-16, 16)) +
   theme_void() +
   labs(title = "Keyway Cross-Section and Stress Concentration") +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"))
@@ -345,7 +351,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Coupling)) +
   labs(title = "Coupling Family Comparison — Illustrative Scores",
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — actual capability varies by manufacturer and size",
        x = NULL, y = "Relative rating (1-5)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
@@ -370,6 +376,10 @@ $$Score_{option} = \sum_i w_i \times s_{i,option}$$
 | $Score_{option}$ | Total weighted score for that coupling family | dimensionless |
 
 ### Worked Example
+
+```{r video-coupling-06-09, echo=FALSE, results='asis'}
+embed_youtube("GNPmjaejq-g", "Shaft Coupling Selection Factors (Ruland Manufacturing)")
+```
 
 Live cell — try different weights (what matters most on *your* drive?) and see whether the recommendation changes. The weights are rescaled to total 100%; the scores can be edited in the code underneath.
 
@@ -496,7 +506,7 @@ P2l <- c(C + r2 * cos(phi_l_rad), r2 * sin(phi_l_rad))
 tangent_df <- data.frame(x = c(P1u[1], P1l[1]), y = c(P1u[2], P1l[2]),
                           xend = c(P2u[1], P2l[1]), yend = c(P2u[2], P2l[2]))
 
-arc_theta_deg <- seq(phi_u, phi_l, length.out = 100)
+arc_theta_deg <- seq(phi_u, 360 + phi_l, length.out = 100)   # through 180 deg: the side away from the driven sheave
 arc_theta_rad <- arc_theta_deg * pi / 180
 arc_df <- data.frame(x = r1 * cos(arc_theta_rad), y = r1 * sin(arc_theta_rad))
 
@@ -611,7 +621,7 @@ cat(sprintf("  Wrap angle at driver sheave     %.1f deg (C_theta = %.2f)\n", the
 
 </details>
 
-**Sanity check:** the exact belt count (1.94) rounds up to 2 — a single belt would be running at 97% of its wrap-angle-corrected capacity with zero margin for the jam shock the service factor was supposed to cover, so rounding down would defeat the purpose of applying a service factor in the first place. Note the wrap-angle correction alone knocked more than 10% off the belt's nominal rating (C_theta = 0.89) before the service factor was even applied — exactly the effect the rule of thumb above warns not to skip on a high-ratio drive like this one.
+**Sanity check:** the exact belt count (1.95) rounds up to 2, and even then each of the two belts carries about 97% of its wrap-angle-corrected rating — the service factor is the only margin left for the jam shock it was meant to cover. Rounding down to one belt would load it to nearly twice its rating, which defeats the purpose of applying a service factor in the first place. Note the wrap-angle correction alone knocked more than 10% off the belt's nominal rating (C_theta = 0.89) before the service factor was even applied — exactly the effect the rule of thumb above warns not to skip on a high-ratio drive like this one.
 
 ## Design Task 5: Chain Drive Basics and Chain vs. Belt Selection
 
@@ -623,7 +633,7 @@ A food processing plant runs a dough-handling line: an auger conveyor moves proo
 
 A chain drive transmits torque through positive mechanical engagement — hardened steel rollers seated in the teeth of a sprocket — rather than friction, which gives it two properties a belt fundamentally cannot match: **zero slip** (the driven shaft's speed is locked to the driver's by the chain's pitch and the sprocket tooth count, with no creep over time the way a friction belt very slightly stretches and slips under load) and substantially higher torque capacity for a given size, because it isn't relying on friction against a smooth surface to transmit load. That makes chain the natural choice for high-torque, low-speed, positive-drive applications — augers, positive-displacement pumps, indexing conveyors that need to stay in exact mechanical sync over long runs — exactly the auger conveyor's profile.
 
-The relevant standard is **ANSI/ASA B29.1** (Precision Power Transmission Roller Chains, Attachments, and Sprockets) in North America, cross-referenced internationally against **ISO 606** (short-pitch transmission precision roller chains and chain wheels); there is no separate Canadian chain-drive design standard, and both are used directly in Canadian practice.
+The relevant standard is **ASME B29.1** (Precision Power Transmission Roller Chains, Attachments, and Sprockets) in North America, cross-referenced internationally against **ISO 606** (short-pitch transmission precision roller chains and chain wheels); there is no separate Canadian chain-drive design standard, and both are used directly in Canadian practice.
 
 Chain's real cost is what belts don't need at all: **lubrication.** Every pin-and-bushing joint in a roller chain needs oil (or grease, for slower/heavier chains) to control wear between the pin and bushing as the chain articulates around the sprockets; run a standard chain dry and it wears rapidly, stretches, and eventually skips teeth or fails outright. That's a direct conflict with a washdown, direct-product-contact food zone: an open, oil-lubricated chain is both a contamination risk (lubricant migrating onto product or the surrounding surfaces) and something that gets aggressively hosed clean of its own lubricant every shift, right when it needs that lubricant to survive. A well-sealed, lubrication-free belt has no equivalent problem — nothing on it needs periodic oiling, and washdown water and sanitizer don't strip away anything the drive depends on.
 
@@ -673,7 +683,7 @@ ggplot(cb_long, aes(x = Criterion, y = Score, fill = Drive)) +
   labs(title = "Chain vs. Belt Drive — Illustrative Comparison",
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — a standard (non-washdown, non-self-lubricating) chain assumed",
        x = NULL, y = "Relative rating (1-5)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9 * chart_text_scale),
         legend.position = "bottom",
@@ -785,7 +795,7 @@ summary_df <- data.frame(
                             "$N_{belts} = \\lceil P_{design}/(P_{rated}C_\\theta)\\rceil$",
                             "$Score = \\sum_i w_i s_{i,option}$"),
   `Key Rule of Thumb` = c("Design factor $n_d \\approx 2.5-4$ for well-characterized static loads",
-                           "$K_t \\approx 1.6-2.0$ for a standard keyway in torsion",
+                           "$K_t \\approx 1.6-2.0$ for a generously filleted keyway in torsion; about 3 for a sharp end-milled keyseat",
                            "Default to jaw couplings unless precision or heavy shock demands otherwise",
                            "Always apply the wrap-angle correction on high-ratio drives, not rated power alone",
                            "Chain wins on torque/no-slip; its lubrication need can lose that in a washdown zone"),
@@ -955,7 +965,7 @@ A gearmotor delivers 65 N·m continuous torque. Using the same 1018 CD steel ($S
 
 A vendor quotes two options for a shaft that must carry 40 N·m: (a) 16 mm diameter in 1018 CD steel ($S_y = 370$ MPa), or (b) 14 mm diameter in a higher-strength alloy steel ($S_y = 700$ MPa), both claiming the same design factor. Which would you choose, and what would make you hesitate about option (b)?
 
-**Answer:** Option (b) checks out on paper — $S_{sy}$ scales with $S_y$, so a smaller diameter can hit the same $n_d$ against shear yield. The hesitation: a smaller-diameter shaft is *more* sensitive to the same absolute keyway depth (the keyway removes a larger fraction of a smaller shaft's cross-section and the stress concentration factor is applied to a smaller base stress capacity margin), it's stiffer to source and machine as a special order versus common 1018 stock, and alloy steel buys strength this application doesn't obviously need — a shaft is rarely the limiting component in a drivetrain, so paying for exotic material to shrink it further is often solving a problem (space) that doesn't exist here. Choose (a) unless there's a genuine space constraint driving the decision.
+**Answer:** Option (b) checks out on paper — $S_{sy}$ scales with $S_y$, so a smaller diameter can hit the same $n_d$ against shear yield. The hesitation: a smaller-diameter shaft is *more* sensitive to the same absolute keyway depth (the keyway removes a larger fraction of a smaller shaft's cross-section and the stress concentration factor is applied to a smaller base stress capacity margin), it's harder to source and machine as a special order versus common 1018 stock, and alloy steel buys strength this application doesn't obviously need — a shaft is rarely the limiting component in a drivetrain, so paying for exotic material to shrink it further is often solving a problem (space) that doesn't exist here. Choose (a) unless there's a genuine space constraint driving the decision.
 
 </details>
 

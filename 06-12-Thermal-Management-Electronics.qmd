@@ -46,14 +46,15 @@ This chapter builds the toolkit both of those engineers need, in five design tas
 
 ### Scenario
 
-A Tier-1 automotive stamping supplier has a 40 hp VFD driving a scrap-conveyor motor, mounted in a control panel on the mezzanine above the press line. The panel builder measured worst-case internal air temperature near the drive's heatsink at 50°C during a July heat-soak test — hot mezzanine air, plus the drive's own accumulated internal heat, plus a run of adjacent panels all radiating warmth into a shared electrical room. The drive's output stage uses an IGBT power module dissipating 78 W of combined conduction and switching losses at its rated full-load output current. The panel builder's quality engineer needs to know, in writing, whether that IGBT's junction temperature stays within its rated limits under this specific installation's worst-case conditions — not "the drive is rated for the application" as a general statement, but an actual number with margin attached.
+A Tier-1 automotive stamping supplier has a 100 A-frame VFD driving a scrap-conveyor motor, mounted in a control panel on the mezzanine above the press line. The panel builder measured worst-case internal air temperature near the drive's heatsink at 50°C during a July heat-soak test — hot mezzanine air, plus the drive's own accumulated internal heat, plus a run of adjacent panels all radiating warmth into a shared electrical room. The most heavily loaded IGBT switch in the drive's output stage dissipates 78 W of combined conduction and switching losses at the drive's rated full-load output current. The panel builder's quality engineer needs to know, in writing, whether that IGBT's junction temperature stays within its rated limits under this specific installation's worst-case conditions — not "the drive is rated for the application" as a general statement, but an actual number with margin attached.
 
 ```{r fig-06-12-thermal-chain, echo=FALSE, fig.cap="The junction-to-ambient thermal resistance chain: heat generated at the semiconductor die flows through three series thermal resistances to reach ambient air, exactly like current flowing through three series electrical resistors.", fig.align='center', fig.width=11, fig.height=5}
 library(ggplot2)
 
 nodes_df <- data.frame(
   x = c(0.5, 3, 5.5, 8.5),
-  label = c("T_J\n(Junction)", "T_C\n(Case)", "T_S\n(Sink)", "T_A\n(Ambient)"),
+  label = c("T[J]", "T[C]", "T[S]", "T[A]"),
+  sub   = c("Junction", "Case", "Sink", "Ambient"),
   color = c("#E74C3C", "#F39C12", "#3498DB", "#2ECC71")
 )
 
@@ -74,8 +75,10 @@ ggplot() +
   annotate("text", x = (resistors_df$x_start + resistors_df$x_end) / 2, y = 0.55,
            label = resistors_df$sub, size = 2.9 * diagram_text_scale, color = "grey40") +
   annotate("point", x = nodes_df$x, y = 1, size = 6, color = nodes_df$color) +
-  annotate("text", x = nodes_df$x, y = 1.42, label = nodes_df$label,
-           size = 3.6 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = nodes_df$x, y = 1.55, label = nodes_df$label, parse = TRUE,
+           size = 4 * diagram_text_scale) +
+  annotate("text", x = nodes_df$x, y = 1.3, label = nodes_df$sub,
+           size = 3 * diagram_text_scale) +
   annotate("segment", x = 0.5, xend = 9.6, y = -0.35, yend = -0.35,
            arrow = arrow(length = unit(0.25, "cm"), type = "closed"), linewidth = 1) +
   annotate("text", x = 5, y = -0.65, label = "Direction of heat flow (analogous to current I)",
@@ -84,7 +87,7 @@ ggplot() +
   xlim(0, 10) + ylim(-1, 1.9) +
   theme_void() +
   labs(title = "Junction-to-Ambient Thermal Resistance Chain",
-       subtitle = "Power dissipation P_D plays the role of current; temperature difference plays the role of voltage") +
+       subtitle = expression("Power dissipation "*P[D]*" plays the role of current; temperature difference plays the role of voltage")) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale))
 ```
@@ -206,8 +209,8 @@ ggplot(heatsink_curve, aes(x = L_mm, y = R_theta_SA, color = condition)) +
            linetype = "dashed", color = "grey30", linewidth = 0.9) +
   annotate("point", x = 450, y = 53.6 * 450^-0.899, size = 3.5, color = "black", shape = 17) +
   annotate("point", x = 300, y = 0.65 * 53.6 * 300^-0.899, size = 3.5, color = "black", shape = 15) +
-  annotate("text", x = 320, y = 0.86, label = "Required R_theta-SA = 0.257 C/W (dashed line)",
-           size = 2.9 * diagram_text_scale, color = "grey30", hjust = 0) +
+  annotate("text", x = 320, y = 0.86, label = "'Required '*R[theta*SA] == '0.257 °C/W (dashed line)'", parse = TRUE,
+           size = 3 * diagram_text_scale, color = "grey30", hjust = 0) +
   annotate("text", x = 320, y = 0.78, label = "▲ Selected: 450 mm, natural convection",
            size = 2.9 * diagram_text_scale, hjust = 0) +
   annotate("text", x = 320, y = 0.70, label = "■ Selected: 300 mm, forced air ~2 m/s",
@@ -216,9 +219,9 @@ ggplot(heatsink_curve, aes(x = L_mm, y = R_theta_SA, color = condition)) +
                                  "Forced air, ~2 m/s" = "#F39C12",
                                  "Forced air, ~4 m/s" = "#E74C3C")) +
   labs(title = "Heatsink Thermal Resistance vs. Extrusion Length",
-       subtitle = "Representative extruded-aluminum finned heatsink; dashed line is this design's required R_theta-SA",
-       x = "Heatsink length (mm)", y = "R_theta-SA (C/W)", color = NULL) +
-  theme_minimal() +
+       subtitle = "Representative extruded-aluminum finned heatsink; dashed line is this design's requirement",
+       x = "Heatsink length (mm)", y = expression(R[theta*SA]~"(°C/W)"), color = NULL) +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
@@ -245,6 +248,10 @@ $$R_{\theta SA,required} = \frac{T_{S,allow} - T_A}{Q_{total}}$$
 | $R_{\theta SA,required}$ | Maximum allowable heatsink thermal resistance | °C/W |
 
 ### Worked Example
+
+```{r video-heatsink-06-12, echo=FALSE, results='asis'}
+embed_youtube("8ruFVmxf0zs", "EEVblog 105 - Electronics Thermal Heatsink Design Tutorial (EEVblog)")
+```
 
 Live cell — drag the design ambient, or change the total heat load or hottest-device dissipation, and see how the required heatsink rating and selected length respond.
 
@@ -450,7 +457,7 @@ ggplot() +
               fill = "#2ECC71", alpha = 0.25) +
   geom_ribbon(data = zone_df, aes(x = dT, ymin = Q_natural_limit, ymax = Q_forced_limit),
               fill = "#F39C12", alpha = 0.25) +
-  geom_ribbon(data = zone_df, aes(x = dT, ymin = Q_forced_limit, ymax = 500),
+  geom_ribbon(data = zone_df, aes(x = dT, ymin = pmin(Q_forced_limit, 500), ymax = 500),
               fill = "#E74C3C", alpha = 0.20) +
   geom_line(data = zone_df, aes(x = dT, y = Q_natural_limit), color = "#27AE60", linewidth = 1.1) +
   geom_line(data = zone_df, aes(x = dT, y = Q_forced_limit), color = "#D35400", linewidth = 1.1) +
@@ -464,9 +471,9 @@ ggplot() +
   scale_y_continuous(labels = scales::label_comma(big.mark = " ")) +
   coord_cartesian(ylim = c(0, 500)) +
   labs(title = "Cooling Method Selection: Heat Load vs. Allowable Temperature Rise",
-       subtitle = "800 x 600 x 300 mm wall-mounted enclosure, A_eff = 1.14 m^2, U_natural = 5.5 W/(m^2*C)",
-       x = "Allowable internal temperature rise, delta-T (C)", y = "Total internal heat load (W)") +
-  theme_minimal() +
+       subtitle = "800 x 600 x 300 mm wall-mounted enclosure, effective area 1.14 m², U = 5.5 W/(m²·°C)",
+       x = expression("Allowable internal temperature rise, "*Delta*T~"(°C)"), y = "Total internal heat load (W)") +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale),
@@ -554,7 +561,7 @@ for (i in seq_len(nrow(scenarios))) {
 
 </details>
 
-**Sanity check:** the small PLC panel lands right at about 90% of the *already-margined* natural-convection budget — a genuine pass, but not a comfortable one, and a useful reminder that the 80% design-margin factor is meant to be the real ceiling, not a number to design right up against; a slightly larger enclosure or a lower internal load would give this panel more breathing room. Even so, it can stay fully sealed, which is exactly what a food-plant washdown environment wants, since a sealed cabinet can carry an IP66 or IP69K rating (per NEMA 250 or the equivalent IEC 60529 IP classification) with no added vent hardware to compromise. The automotive VFD panel, in the identical enclosure, needs roughly seven times that same budget — nowhere close to what natural convection can deliver, confirming the forced-air design already assumed in Design Task 3. Note what this comparison does *not* show: it doesn't mean the VFD panel's forced-air fix is automatically fine everywhere — Gate 2's ambient-margin check still applies, and if this same drive were relocated to an unconditioned equipment bay where incoming air already ran close to the drive's maximum rated ambient, forced air alone would stop being a viable answer regardless of fan size, and the design would move to Gate 3.
+**Sanity check:** the small PLC panel lands right at about 90% of the *already-margined* natural-convection budget — a genuine pass, but not a comfortable one, and a useful reminder that the 80% design-margin factor is meant to be the real ceiling, not a number to design right up against; a slightly larger enclosure or a lower internal load would give this panel more breathing room. Even so, it can stay fully sealed, which is exactly what a food-plant washdown environment wants, since a sealed cabinet can carry an IP66 rating (IEC 60529) or IP69K rating (ISO 20653), or a NEMA 4X type (NEMA 250), with no added vent hardware to compromise. The automotive VFD panel, in the identical enclosure, needs roughly seven times that same budget — nowhere close to what natural convection can deliver, confirming the forced-air design already assumed in Design Task 3. Note what this comparison does *not* show: it doesn't mean the VFD panel's forced-air fix is automatically fine everywhere — Gate 2's ambient-margin check still applies, and if this same drive were relocated to an unconditioned equipment bay where incoming air already ran close to the drive's maximum rated ambient, forced air alone would stop being a viable answer regardless of fan size, and the design would move to Gate 3.
 
 ## Design Task 5: Derating Electronics at Elevated Ambient
 
@@ -906,7 +913,7 @@ A free-standing floor-mount enclosure (not wall-mounted, so front, back, top, an
 $$A_{eff} = 2(2.0 \times 0.8) + 2(2.0 \times 0.5) + (0.8 \times 0.5) = 3.2 + 2.0 + 0.4 = 5.6\ \text{m}^2$$
 $$Q_{max,natural} = 5.5 \times 5.6 \times 12 = 369.6\ \text{W}$$
 
-A free-standing enclosure this size has roughly six times the effective cooling area of the chapter's wall-mounted example, so it can carry a substantially larger heat load on natural convection alone — a useful reminder that enclosure *size and mounting*, not just heat load, drive this decision.
+A free-standing enclosure this size has roughly five times the effective cooling area of the chapter's wall-mounted example (5.6 m² vs. 1.14 m²), so it can carry a substantially larger heat load on natural convection alone — a useful reminder that enclosure *size and mounting*, not just heat load, drive this decision.
 
 </details>
 

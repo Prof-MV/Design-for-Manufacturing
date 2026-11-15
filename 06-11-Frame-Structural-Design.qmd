@@ -53,10 +53,11 @@ library(ggplot2)
 
 L_fig <- 2.4  # m, drawn to the same span as the worked example
 
+## Elastic curve for a midspan point load, symmetric about midspan:
+## y is proportional to a (3L^2 - 4a^2), with a the distance to the nearer support
 defl_shape <- function(x, L) {
-  ifelse(x <= L / 2,
-         x * (3 * L^2 - 4 * x^2),
-         (L - x) * (3 * L^2 - 4 * (L - x)^2))
+  a <- pmin(x, L - x)
+  a * (3 * L^2 - 4 * a^2)
 }
 x_seq <- seq(0, L_fig, length.out = 200)
 raw <- defl_shape(x_seq, L_fig)
@@ -205,7 +206,7 @@ ggplot(budget_df, aes(x = category, y = deflection_mm, color = category)) +
   labs(title = "Deflection Limit vs. Actual Deflection vs. Precision Budget",
        subtitle = "The beam clears L/240 by ~100x, yet still exceeds a precision-axis deflection budget derived from its actual job",
        x = NULL, y = "Deflection (mm, log scale)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "none",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
@@ -349,7 +350,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Construction)) +
   labs(title = "Aluminum Extrusion vs. Welded Steel — Illustrative Criterion Scores",
        subtitle = "1 (poor fit) to 5 (excellent fit); actual scores depend on the specific application and scale",
        x = NULL, y = "Relative rating (1-5)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
@@ -452,7 +453,7 @@ A properly designed bolted structural joint resists shear primarily through **fr
 
 This chapter's treatment here is intentionally light — it's the friction-grip concept applied specifically to a frame assembly joint. For the full mechanics of bolt preload, torque-tension relationships, and joint stiffness (including what actually happens inside the joint as the applied load increases toward separation), see the [Bolted Joint Calculations](02-01-Bolt-Joint-Calculations.qmd) chapter.
 
-**Rule of thumb:** use a coefficient of friction of about 0.3 for clean, dry, as-fabricated steel-to-steel or steel-to-aluminum faying surfaces (unpainted, not specially prepared) when estimating clamp force for a general machine-frame joint. This is conservative relative to specially prepared slip-critical surfaces (e.g., blasted or galvanized faying surfaces used in structural steel connections per CSA S16/AISC 360 and the RCSC slip-critical bolting specification, referenced directly in Canadian practice much like AGMA is for gearing), which can exceed 0.4-0.5 — but it breaks down badly in the other direction for painted, oily, or otherwise contaminated faying surfaces, where the effective friction coefficient can drop well below 0.3 and should be verified, not assumed, for any joint carrying meaningful shear.
+**Rule of thumb:** use a coefficient of friction of about 0.3 for clean, dry, as-fabricated steel-to-steel or steel-to-aluminum faying surfaces (unpainted, not specially prepared) when estimating clamp force for a general machine-frame joint. This matches the Class A value (clean mill scale, about 0.30-0.33) used for slip-critical structural connections per CSA S16/AISC 360 and the RCSC bolting specification, and is conservative relative to specially prepared blast-cleaned (Class B) faying surfaces, which reach about 0.5; hot-dip galvanized surfaces are *not* better unless they are roughened, and can be lower — but it breaks down badly in the other direction for painted, oily, or otherwise contaminated faying surfaces, where the effective friction coefficient can drop well below 0.3 and should be verified, not assumed, for any joint carrying meaningful shear.
 
 Bolt grade selection determines how much clamp force a given bolt size can safely deliver. Metric machine bolts are graded by **ISO 898-1** property class (8.8, 10.9, 12.9, in increasing strength), with **SAE J429** grades (Grade 5, Grade 8) as the equivalent imperial classification.
 
@@ -473,14 +474,15 @@ ggplot() +
            arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1) +
   annotate("text", x = -0.6, y = 1.12, label = "Clamp force\n(bolt preload)",
            size = 2.8 * diagram_text_scale, color = "#E74C3C") +
-  annotate("segment", x = 0.5, xend = 1.7, y = 0.18, yend = 0.18,
-           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#2ECC71", linewidth = 1.2) +
-  annotate("text", x = 1.1, y = 0.68, label = "Applied shear\n(axis accel. reaction)",
-           size = 2.8 * diagram_text_scale, color = "#2ECC71") +
-  annotate("segment", x = 1.7, xend = 0.85, y = -0.18, yend = -0.18,
+  annotate("segment", x = 0.5, xend = 1.7, y = 0.28, yend = 0.28,
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "darkgreen", linewidth = 1.2) +
+  annotate("text", x = 1.1, y = 0.68, label = "Applied shear on the upper plate\n(axis accel. reaction)",
+           size = 2.8 * diagram_text_scale, color = "darkgreen") +
+  annotate("segment", x = 1.7, xend = 0.85, y = 0.06, yend = 0.06,
            arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "#3498DB", linewidth = 1.2) +
-  annotate("text", x = 1.2, y = -0.68, label = "Friction resistance\n(clamp force x mu)",
+  annotate("text", x = 1.25, y = -0.62, label = "Friction at the faying surface\nopposes it: clamp force × μ",
            size = 2.8 * diagram_text_scale, color = "#3498DB") +
+  annotate("segment", x = 1.25, xend = 1.25, y = -0.45, yend = 0.03, color = "#3498DB", linewidth = 0.4) +
   coord_fixed() +
   xlim(-1.6, 2.2) + ylim(-1.3, 1.35) +
   theme_void() +
@@ -565,7 +567,7 @@ cat(sprintf("  Target preload / required clamp force  %.1fx\n", F_target_preload
 <details>
 <summary>Industry connection: fastener selection in a washdown food-processing environment</summary>
 
-A food-plant machine frame operating in a washdown area typically specifies 18-8 or 316 stainless steel fasteners for corrosion resistance, consistent with CFIA sanitary design expectations for food-contact-adjacent equipment — but stainless fasteners have meaningfully lower strength than alloy steel grades (commonly comparable only to ISO 898-1 class A2-70, well below an 8.8 alloy-steel bolt), so a washdown-rated frame's bolted joints may need a larger bolt diameter or more fasteners per joint to hit the same clamp-force target that a smaller alloy-steel bolt would achieve — the corrosion-resistance decision has a direct, calculable structural sizing consequence, not just a material substitution.
+A food-plant machine frame operating in a washdown area typically specifies 18-8 or 316 stainless steel fasteners for corrosion resistance, consistent with CFIA sanitary design expectations for food-contact-adjacent equipment — but stainless fasteners have meaningfully lower strength than alloy steel grades (commonly property class A2-70 or A4-70 under ISO 3506-1, with a proof strength around 450 MPa, well below the 580-640 MPa of an ISO 898-1 class 8.8 bolt), so a washdown-rated frame's bolted joints may need a larger bolt diameter or more fasteners per joint to hit the same clamp-force target that a smaller alloy-steel bolt would achieve — the corrosion-resistance decision has a direct, calculable structural sizing consequence, not just a material substitution.
 
 </details>
 
@@ -600,8 +602,10 @@ ggplot() +
   annotate("text", x = 0.45, y = -0.16, label = "Pivot\n(leading edge)", size = 2.6 * diagram_text_scale) +
   annotate("segment", x = -0.15, xend = 0.55, y = 1.35, yend = 1.35,
            arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1.2) +
-  annotate("text", x = 0.62, y = 1.62, label = "F_lateral\n(at h_cg = 1.35 m)", hjust = 0,
-           size = 2.8 * diagram_text_scale, color = "#E74C3C") +
+  annotate("text", x = 0.62, y = 1.68, label = "F[lateral]", parse = TRUE, hjust = 0,
+           size = 3.2 * diagram_text_scale, color = "#E74C3C") +
+  annotate("text", x = 0.62, y = 1.5, label = "at~h[cg] == 1.35~m", parse = TRUE, hjust = 0,
+           size = 2.9 * diagram_text_scale, color = "#E74C3C") +
   annotate("segment", x = -0.45, xend = -0.45, y = 0, yend = -0.32, linewidth = 2.5, color = "#F39C12") +
   annotate("text", x = -0.45, y = -0.5, label = "Anchor\nbolt(s)", size = 2.6 * diagram_text_scale, color = "#F39C12") +
   annotate("segment", x = -0.45, xend = 0.45, y = -0.75, yend = -0.75,
@@ -698,7 +702,7 @@ if (SR < SR_min) {
 
 </details>
 
-**Sanity check:** this fixture's stability ratio (about 1.11) falls short of the 1.5 minimum — its height-to-base proportions put it in genuinely tippy territory before any anchoring is added, which is exactly the kind of installation where "it feels solid enough" is not a reliable judgment. The anchor tension force needed to close the gap (roughly 386 N per anchor, using two anchors) is modest compared to the pull-out and shear capacity of a typical concrete wedge or epoxy anchor of ordinary size — the calculation isn't demanding on the anchor hardware itself, but it does establish that anchoring is required at all, which is the decision that actually matters here. A real installation still needs the specific anchor selected and embedded per the manufacturer's published capacity tables for the floor slab's actual concrete strength and thickness — governed in Canada by **CSA A23.3** (design of concrete structures, including anchorage design in its Annex D), with **ACI 318 Appendix D** and **ACI 355** as the US equivalents.
+**Sanity check:** this fixture's stability ratio (about 1.11) falls short of the 1.5 minimum — its height-to-base proportions put it in genuinely tippy territory before any anchoring is added, which is exactly the kind of installation where "it feels solid enough" is not a reliable judgment. The anchor tension force needed to close the gap (roughly 386 N per anchor, using two anchors) is modest compared to the pull-out and shear capacity of a typical concrete wedge or epoxy anchor of ordinary size — the calculation isn't demanding on the anchor hardware itself, but it does establish that anchoring is required at all, which is the decision that actually matters here. A real installation still needs the specific anchor selected and embedded per the manufacturer's published capacity tables for the floor slab's actual concrete strength and thickness — governed in Canada by **CSA A23.3** (design of concrete structures, including anchorage design in its Annex D), with **ACI 318 Chapter 17** (Appendix D in editions before 2014) and **ACI 355.2** (anchor qualification) as the US equivalents.
 
 <details>
 <summary>Industry connection: audit-ready anchoring records in defense manufacturing</summary>
@@ -721,7 +725,7 @@ Every structure has one or more **natural frequencies** — frequencies at which
 
 **Rule of thumb:** keep the frame's natural frequency at least 3x the highest significant excitation frequency the axis's move profile generates, and prefer 5x or more where precision settling time matters. Below about 3x separation, resonant amplification becomes a real risk; between 3x and 5x, the structure will generally behave but with less margin than a precision application deserves. This breaks down for heavily damped structures (a frame with substantial internal or added damping tolerates closer frequency separation than a lightly-damped welded steel or extrusion structure with almost no inherent damping) and for move profiles dominated by very low accelerations (a slow, gentle profile generates little high-frequency content in the first place, loosening the requirement).
 
-Vibration severity, once a machine is built and running, is evaluated in practice against **ISO 10816** (mechanical vibration — evaluation of machine vibration by measurements on non-rotating parts), used directly in Canadian practice with no separate CSA equivalent — the same way AGMA gear-rating standards are used directly, as noted elsewhere in this book. That standard is a *measurement and acceptance* tool for a finished machine; the natural-frequency separation check in this design task is the *design-stage* prediction that a well-designed frame shouldn't need much correction once ISO 10816 measurements are taken in the field.
+Vibration severity, once a machine is built and running, is evaluated in practice against **ISO 20816** (mechanical vibration — measurement and evaluation of machine vibration; it replaces the older ISO 10816 series, which is still widely quoted), used directly in Canadian practice with no separate CSA equivalent — the same way AGMA gear-rating standards are used directly, as noted elsewhere in this book. That standard is a *measurement and acceptance* tool for a finished machine; the natural-frequency separation check in this design task is the *design-stage* prediction that a well-designed frame shouldn't need much correction once ISO 20816 measurements are taken in the field.
 
 A simplified beam-and-mass model treats the beam as a spring, using the same stiffness relationship as the static deflection calculation ($k = P/\delta$, giving $k = 48EI/L^3$ for the point-load-at-midspan case), combined with an effective mass at the point of interest. That effective mass isn't just the carriage — the beam itself has mass, and some of it participates in the vibration.
 
@@ -731,9 +735,9 @@ A simplified beam-and-mass model treats the beam as a spring, using the same sti
 library(ggplot2)
 
 freq_df <- data.frame(
-  case = factor(c("Axis excitation\n(1 / t_accel)", "Natural frequency\n(baseline beam)",
+  case = factor(c("Axis excitation\n(1 / ramp time)", "Natural frequency\n(baseline beam)",
                   "Natural frequency\n(stiffened beam)"),
-                levels = c("Axis excitation\n(1 / t_accel)", "Natural frequency\n(baseline beam)",
+                levels = c("Axis excitation\n(1 / ramp time)", "Natural frequency\n(baseline beam)",
                            "Natural frequency\n(stiffened beam)")),
   freq_hz = c(12.0, 47.3, 104.1)
 )
@@ -744,14 +748,14 @@ ggplot(freq_df, aes(x = case, y = freq_hz, fill = case)) +
   geom_text(aes(label = sprintf("%.1f Hz", freq_hz)), vjust = -0.4, size = 3.2 * diagram_text_scale) +
   annotate("text", x = 0.65, y = 33.5, label = "Risk zone (< 3x excitation)",
            size = 2.6 * diagram_text_scale, color = "#E74C3C", hjust = 0) +
-  scale_fill_manual(values = c("Axis excitation\n(1 / t_accel)" = "#F39C12",
+  scale_fill_manual(values = c("Axis excitation\n(1 / ramp time)" = "#F39C12",
                                 "Natural frequency\n(baseline beam)" = "#3498DB",
                                 "Natural frequency\n(stiffened beam)" = "#2ECC71")) +
   ylim(0, 120) +
   labs(title = "Structural Natural Frequency vs. Axis Excitation Frequency",
        subtitle = "Baseline beam separation: 3.9x (narrow). Stiffened beam separation: 8.7x (comfortable).",
        x = NULL, y = "Frequency (Hz)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "none",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
@@ -1077,7 +1081,7 @@ A pick-and-place gantry beam spans 1.2 m, carrying a 15 kg carriage assembly wit
 **Solution:**
 
 $$P = 15 \times 9.81 \times 1.4 = 206.0\ \text{N}$$
-$$\delta_{max} = \frac{206.0 \times 1200^3}{48 \times 69000 \times 2.1\times10^6} = 0.206\ \text{mm}$$
+$$\delta_{max} = \frac{206.0 \times 1200^3}{48 \times 69000 \times 2.1\times10^6} = 0.051\ \text{mm}$$
 $$L/240 = 1200/240 = 5.0\ \text{mm} \rightarrow \textbf{PASSES}$$
 $$M_{max} = \frac{206.0 \times 1200}{4} = 61{,}800\ \text{N·mm} \qquad \sigma = \frac{61{,}800}{42{,}000} = 1.47\ \text{MPa} \approx 0.6\%\ \text{of yield}$$
 

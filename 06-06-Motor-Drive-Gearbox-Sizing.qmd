@@ -204,13 +204,15 @@ ggplot(df_inertia, aes(x = N, y = J_reflected_kgcm2)) +
   annotate("text", x = 6.3, y = 17, label = "10:1 limit, low-inertia motor (J = 1.2 kg·cm²)",
            size = 2.9 * diagram_text_scale, color = "#9B59B6", hjust = 0) +
   annotate("point", x = 20, y = (J_load / 20^2) * 1e4, color = "#E74C3C", size = 4) +
-  annotate("text", x = 21, y = 130, label = "Chosen N = 20\nJ_reflected = 40 kg·cm²",
+  annotate("text", x = 21, y = 150, label = "Chosen N = 20",
+           size = 3.3 * diagram_text_scale, color = "#E74C3C", hjust = 0) +
+  annotate("text", x = 21, y = 105, label = "J[reflected] == 40~kg %.% cm^2", parse = TRUE,
            size = 3.3 * diagram_text_scale, color = "#E74C3C", hjust = 0) +
   scale_y_log10(labels = scales::label_comma(big.mark = " ")) +
   labs(title = "Reflected Load Inertia vs. Gear Ratio",
-       subtitle = "J_load = 1.6 kg·m² at the table; log scale on reflected inertia",
+       subtitle = expression(J[load] == 1.6~kg %.% m^2~"at the table; log scale on reflected inertia"),
        x = "Gear ratio N", y = "Reflected inertia (kg·cm², log scale)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale),
@@ -218,6 +220,10 @@ ggplot(df_inertia, aes(x = N, y = J_reflected_kgcm2)) +
 ```
 
 ### Worked Example
+
+```{r video-servo-sizing-06-06, echo=FALSE, results='asis'}
+embed_youtube("4MaGqSQfYOk", "Servo Motor Sizing Basics Part 1 - Core Concepts (Yaskawa America)")
+```
 
 Live cell — drag the gear ratio N, or change the motor candidate inertias, and see which frame passes.
 
@@ -307,14 +313,14 @@ ggplot(segments_df) +
   geom_rect(aes(xmin = t_start, xmax = t_end, ymin = 0, ymax = torque, fill = phase), color = "black") +
   annotate("segment", x = 0, xend = 3.0, y = 0.508, yend = 0.508,
            linetype = "dashed", color = "#E74C3C", linewidth = 1) +
-  annotate("text", x = 2.3, y = 0.65, label = "T_rms = 0.51 N·m",
+  annotate("text", x = 2.3, y = 0.65, label = "T[rms] == 0.51~N %.% m", parse = TRUE,
            size = 3.5 * diagram_text_scale, color = "#E74C3C") +
   scale_fill_manual(values = c("Accelerate" = "#3498DB", "Constant Velocity" = "#2ECC71",
                                 "Decelerate" = "#F39C12", "Dwell" = "#95A5A6")) +
   labs(title = "Motor Torque Over One Indexing Cycle",
        subtitle = "8-station table, 0.5 s index move + 2.5 s dwell (3.0 s cycle)",
        x = "Time (s)", y = "Motor torque (N·m)", fill = "Phase") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         legend.position = "bottom",
         axis.title = element_text(size = 11 * chart_text_scale),
@@ -431,7 +437,7 @@ kable(sf_df, caption = "Illustrative gearbox service factor guidance (representa
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
 ```
 
-**Rule of thumb:** for a smooth-profile servo application with a very high starts/hour count (like our index table at 1200 cycles/hour), select from the upper end of the "moderate shock" band even though the load itself isn't shocky — the sheer cycle count, not the shock severity, is what's driving the selection. This breaks down for genuinely high-precision, long-life applications (metrology equipment, semiconductor handling): at very high cycle counts over a multi-year service life, a single lookup-table service factor stops being adequate, and the gearbox manufacturer's L10-life calculation software (which computes an actual fatigue life estimate from load spectrum and cycle count, the way a bearing L10 life is calculated) should be used instead.
+**Rule of thumb:** for a smooth-profile servo application with a very high starts/hour count (like our index table at 1200 cycles/hour, far beyond the 300 starts/hour boundary in the table), move up into the top band even though the load itself isn't shocky — the sheer cycle count, not the shock severity, is what's driving the selection — but take the bottom of that band (about 1.6), since there are no impacts or reversals under load. This breaks down for genuinely high-precision, long-life applications (metrology equipment, semiconductor handling): at very high cycle counts over a multi-year service life, a single lookup-table service factor stops being adequate, and the gearbox manufacturer's L10-life calculation software (which computes an actual fatigue life estimate from load spectrum and cycle count, the way a bearing L10 life is calculated) should be used instead.
 
 <details>
 <summary>Industry connection: precision indexing beyond automotive</summary>
@@ -464,10 +470,10 @@ qwebr_calc_card(
     qwebr_calc_input("T_friction_table", "Table friction torque", value = 4, min = 0, max = 30, step = 0.5, suffix = "N·m"),
     qwebr_calc_input("t_move", "Move time", value = 0.5, min = 0.1, max = 3, step = 0.05, suffix = "s"),
     qwebr_calc_input("t_dwell", "Dwell time", value = 2.5, min = 0, max = 10, step = 0.1, suffix = "s"),
-    qwebr_calc_input("SF", "Service factor SF", value = 1.5, min = 1, max = 3, step = 0.05, type = "slider")
+    qwebr_calc_input("SF", "Service factor SF", value = 1.6, min = 1, max = 3, step = 0.05, type = "slider")
   ),
-  goal = "The catalog gearbox is rated 60 N.m. With SF = 1.5, the table load and friction unchanged, find the shortest move time (nearest 0.05 s) it can still handle.",
-  goal_test = "T_gearbox_required <= 60 && t_move == 0.4 && SF == 1.5 && J_load == 1.6 && T_friction_table == 4",
+  goal = "The catalog gearbox is rated 60 N.m. With SF = 1.6, the table load and friction unchanged, find the shortest move time (nearest 0.05 s) it can still handle.",
+  goal_test = "T_gearbox_required <= 60 && t_move == 0.45 && SF == 1.6 && J_load == 1.6 && T_friction_table == 4",
   mode = "task")
 ```
 
@@ -489,7 +495,7 @@ T_friction_table <- 4
 T_table_peak <- J_load * alpha_table + T_friction_table
 starts_per_hour <- 3600 / t_cycle
 
-SF <- 1.5   # selected from the shock/starts classification above
+SF <- 1.6   # > 300 starts/hour band, bottom of the band (smooth profile, no impacts)
 T_gearbox_required <- SF * T_table_peak
 
 cat(sprintf("Minimum gearbox nominal output torque rating: %.1f N.m\n", T_gearbox_required))
@@ -502,7 +508,7 @@ cat(sprintf("  Select a catalog gearbox rated  >= %.0f N.m nominal output torque
 
 </details>
 
-**Sanity check:** 1200 starts/hour (20 per minute) is at the extreme high end of the starts/hour scale, which is exactly why the upper end of the moderate-shock service factor band was chosen despite the load itself being a smooth servo-generated profile with no impacts. The resulting requirement (about 40 N·m nominal) corresponds to a compact, roughly 60-90 mm flange-size single-stage planetary gearbox in most manufacturers' catalogs — physically consistent with a table this size, which is a useful cross-check that nothing upstream in the calculation has gone wrong by an order of magnitude.
+**Sanity check:** 1200 starts/hour (20 per minute) is at the extreme high end of the starts/hour scale, which is exactly why the top service factor band was used despite the load itself being a smooth servo-generated profile with no impacts. The resulting requirement (about 43 N·m nominal) corresponds to a compact, roughly 60-90 mm flange-size single-stage planetary gearbox in most manufacturers' catalogs — physically consistent with a table this size, which is a useful cross-check that nothing upstream in the calculation has gone wrong by an order of magnitude.
 
 ## Design Task 5: Servo Motor vs. Induction Motor + VFD — A Selection Framework
 
@@ -542,7 +548,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Option)) +
   labs(title = "Servo vs. Induction Motor + VFD — Illustrative Comparison",
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — actual scores are application-specific",
        x = NULL, y = "Relative rating (1-5)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
@@ -620,29 +626,60 @@ A food processing plant runs a case-packing line on its second-floor mezzanine a
 
 The electrical designer's first question is deceptively simple: does this conveyor's motor drive the belt, or does the belt drive the motor?
 
-```{r fig-06-06-conveyor-forces, echo=FALSE, fig.cap="Force balance along the decline conveyor: the gravity component of the moving mass exceeds the friction resistance, so the belt overhauls the motor.", fig.align='center', fig.width=12, fig.height=6}
+```{r fig-06-06-conveyor-forces, echo=FALSE, fig.cap="Force balance on a carton on the 15° decline conveyor: the down-slope component of its weight (mg sin θ) exceeds the rolling resistance (μ mg cos θ), so the belt overhauls the motor.", fig.align='center', fig.width=12, fig.height=6}
 library(ggplot2)
 
 theta <- 15 * pi / 180
 L <- 10
-incline_df <- data.frame(x = c(0, L), y = c(0, -L * tan(theta)))
+u <- c(cos(theta), -sin(theta))      # unit vector down the slope
+n <- c(sin(theta), cos(theta))       # unit normal, pointing away from the belt
+belt <- data.frame(x = c(0, L * u[1]), y = c(0, L * u[2]))
+
+## Carton: 1.4 long x 0.9 high, sitting on the belt at s = 5
+s0 <- 5; cw <- 1.4; ch <- 0.9
+corner <- function(a, b) s0 * u + a * u + b * n
+box <- do.call(rbind, lapply(list(c(-cw / 2, 0), c(cw / 2, 0), c(cw / 2, ch), c(-cw / 2, ch)),
+                             function(p) corner(p[1], p[2])))
+box <- data.frame(x = box[, 1], y = box[, 2])
+cg <- s0 * u + (ch / 2) * n
+
+## Force arrows from the carton's centre of gravity (lengths to scale: 1 unit = mg)
+mg_len <- 2.2
+w_end   <- cg + c(0, -mg_len)                          # weight, vertical
+gs_end  <- cg + mg_len * sin(theta) * 3 * u            # down-slope component (x3 for legibility)
+fr_end  <- cg - mg_len * 0.04 * cos(theta) * 3 * u     # rolling resistance, same x3 scale
+
+## Angle arc at the top of the belt between horizontal and the belt
+arc_t <- seq(0, -theta, length.out = 30)
+arc <- data.frame(x = 2.2 * cos(arc_t), y = 2.2 * sin(arc_t))
 
 ggplot() +
-  geom_line(data = incline_df, aes(x = x, y = y), linewidth = 2, color = "grey30") +
-  annotate("point", x = 5, y = -5 * tan(theta), size = 5, color = "#3498DB") +
-  annotate("segment", x = 5, y = -5 * tan(theta), xend = 5 + 2 * cos(theta), yend = -5 * tan(theta) - 2 * sin(theta),
-           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#2ECC71", linewidth = 1.2) +
-  annotate("text", x = 5 + 2.6 * cos(theta), y = -5 * tan(theta) - 2.6 * sin(theta) + 0.4,
-           label = "Gravity component\n(down-slope)", size = 3 * diagram_text_scale, color = "#2ECC71") +
-  annotate("segment", x = 5, y = -5 * tan(theta), xend = 5 - 1 * cos(theta), yend = -5 * tan(theta) + 1 * sin(theta),
+  geom_segment(aes(x = 0, y = 0, xend = 3, yend = 0), linetype = "dashed", color = "grey50") +
+  geom_path(data = arc, aes(x = x, y = y), color = "grey30") +
+  annotate("text", x = 2.6, y = -0.3, label = "θ == 15*degree", parse = TRUE, size = 3.5 * diagram_text_scale) +
+  geom_line(data = belt, aes(x = x, y = y), linewidth = 2, color = "grey30") +
+  geom_polygon(data = box, aes(x = x, y = y), fill = "lightsteelblue", color = "steelblue") +
+  annotate("segment", x = cg[1], y = cg[2], xend = w_end[1], yend = w_end[2],
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "grey20", linewidth = 1) +
+  annotate("text", x = w_end[1] + 0.25, y = w_end[2] + 0.2, label = "mg", hjust = 0,
+           size = 3.5 * diagram_text_scale) +
+  annotate("segment", x = cg[1], y = cg[2], xend = gs_end[1], yend = gs_end[2],
            arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1.2) +
-  annotate("text", x = 5 - 1.8 * cos(theta), y = -5 * tan(theta) + 1.8 * sin(theta) + 0.3,
-           label = "Friction\n(up-slope)", size = 3 * diagram_text_scale, color = "#E74C3C") +
-  annotate("text", x = 1, y = -1.5, label = "15° decline", size = 3.5 * diagram_text_scale) +
-  coord_fixed() +
+  annotate("label", x = gs_end[1] + 0.2, y = gs_end[2] + 0.6, label = "mg~sin~theta~~'(down-slope)'",
+           parse = TRUE, size = 3.4 * diagram_text_scale, color = "#E74C3C", fill = "white", linewidth = 0) +
+  annotate("segment", x = cg[1], y = cg[2], xend = fr_end[1], yend = fr_end[2],
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "darkgreen", linewidth = 1.2) +
+  annotate("segment", x = fr_end[1], y = fr_end[2], xend = cg[1] - 0.6, yend = cg[2] + 1.05, color = "darkgreen", linewidth = 0.4) +
+  annotate("label", x = cg[1] - 0.6, y = cg[2] + 1.15, hjust = 1, label = "mu~mg~cos~theta~~'(rolling resistance, up-slope)'",
+           parse = TRUE, size = 3.4 * diagram_text_scale, color = "darkgreen", fill = "white", linewidth = 0) +
+  annotate("text", x = 8.2, y = -1.0, label = "belt moves down-slope",
+           size = 3.2 * diagram_text_scale, color = "grey30") +
+  annotate("segment", x = 7.4, y = -1.45, xend = 9.2, yend = -1.45 - 1.8 * tan(theta),
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "grey30") +
+  coord_fixed(xlim = c(-0.5, 10.5), ylim = c(-4.3, 2.4)) +
   theme_void() +
   labs(title = "Decline Conveyor Force Balance",
-       subtitle = "Gravity exceeds friction: the belt overhauls the motor and needs regenerative braking") +
+       subtitle = "Down-slope force shown at 3× scale for legibility; with μ = 0.04 it is still about 7× the rolling resistance") +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale))
 ```
@@ -689,7 +726,7 @@ library(ggplot2)
 
 t_seq <- seq(0, 60, by = 0.5)
 conveyor_power <- rep(650, length(t_seq))
-hoist_power <- ifelse((t_seq %% 20) < 3, 4000, 0)
+hoist_power <- 4000 * ((t_seq %% 20) < 3)
 df_duty <- data.frame(t = rep(t_seq, 2), power = c(conveyor_power, hoist_power),
                        system = rep(c("Decline conveyor (continuous)", "Hoist lowering (intermittent)"),
                                     each = length(t_seq)))
@@ -701,7 +738,7 @@ ggplot(df_duty, aes(x = t, y = power, color = system)) +
   labs(title = "Regenerative Braking Duty Cycle: Continuous vs. Intermittent Loads",
        subtitle = "Continuous braking needs a continuous-duty (100% ED) resistor; brief pulses do not",
        x = "Time (s)", y = "Regenerated power (W)", color = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 10 * chart_text_scale),
         legend.position = "bottom",
@@ -723,7 +760,7 @@ qwebr_calc_card(
     qwebr_calc_input("carton_mass", "Carton mass", value = 20, min = 1, max = 60, step = 1, suffix = "kg"),
     qwebr_calc_input("rate_per_hr", "Throughput", value = 1200, min = 100, max = 4000, step = 50, suffix = "cartons/h"),
     qwebr_calc_input("mu_eff", "Rolling-resistance factor", value = 0.04, min = 0.01, max = 0.3, step = 0.005),
-    qwebr_calc_input("motor_FLA_460V", "Motor nameplate FLA", value = 2.8, min = 0.5, max = 30, step = 0.1, suffix = "A"),
+    qwebr_calc_input("motor_FLA_460V", "Motor nameplate FLA", value = 2.4, min = 0.5, max = 30, step = 0.1, suffix = "A"),
     qwebr_calc_input("VFD_continuous_A", "VFD continuous rating", value = 3, min = 0.5, max = 40, step = 0.1, suffix = "A"),
     qwebr_calc_input("theta_deg", "Decline angle (deg)", value = 15, min = 0, max = 30, step = 0.5, type = "slider")
   ),
@@ -760,7 +797,7 @@ F_net <- F_gravity - F_friction
 P_brake_mech <- F_net * v_belt
 
 # Motor and VFD candidates
-motor_FLA_460V <- 2.8      # A, selected 1 HP (0.75 kW) washdown motor's nameplate FLA
+motor_FLA_460V <- 2.4      # A, selected 1.5 HP (1.1 kW) washdown motor's nameplate FLA
 VFD_continuous_A <- 3.0    # A, selected drive's continuous output rating
 VFD_overload_pct <- 150    # %, 60 s overload rating ("Heavy Duty" rating)
 VFD_overload_A <- VFD_continuous_A * VFD_overload_pct / 100
@@ -867,19 +904,19 @@ library(ggplot2)
 eff_df <- data.frame(
   class = factor(c("IE1 (Standard)", "IE2 (High)", "IE3 (Premium)", "IE4 (Super Premium)"),
                   levels = c("IE1 (Standard)", "IE2 (High)", "IE3 (Premium)", "IE4 (Super Premium)")),
-  relative_losses = c(100, 75, 55, 40),
+  relative_losses = c(100, 80, 64, 51),
   nrcan_status = c("Non-compliant", "Legacy stock only", "NRCan minimum\n(most sizes)", "Voluntary upgrade")
 )
 
 ggplot(eff_df, aes(x = class, y = relative_losses, fill = class)) +
   geom_col() +
-  geom_text(aes(label = nrcan_status), vjust = -0.3, size = 2.8 * diagram_text_scale) +
+  geom_text(aes(label = nrcan_status), vjust = -0.3, size = 3.2 * diagram_text_scale) +
   scale_fill_manual(values = c("#95A5A6", "#F39C12", "#3498DB", "#2ECC71")) +
   ylim(0, 130) +
   labs(title = "Motor Efficiency Classes — Relative Losses (Illustrative)",
-       subtitle = "Lower bars = lower full-load energy loss; certified values are set by IEC 60034-30-1 / NEMA MG 1",
+       subtitle = "Each class cuts full-load losses by very roughly 15-20%; certified values are set by IEC 60034-30-1 / NEMA MG 1",
        x = NULL, y = "Relative full-load losses (illustrative index, IE1 = 100)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "none",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
@@ -918,14 +955,14 @@ qwebr_calc_card(
   icon = "dollar-sign",
   inputs = list(
     qwebr_calc_input("P_out_kW", "Shaft output power", value = 0.746, min = 0.1, max = 150, step = 0.001, suffix = "kW"),
-    qwebr_calc_input("eta_ie3", "IE3 motor efficiency", value = 0.885, min = 0.7, max = 0.97, step = 0.001),
-    qwebr_calc_input("eta_ie4", "IE4 motor efficiency", value = 0.917, min = 0.7, max = 0.98, step = 0.001),
+    qwebr_calc_input("eta_ie3", "IE3 motor efficiency", value = 0.855, min = 0.7, max = 0.97, step = 0.001),
+    qwebr_calc_input("eta_ie4", "IE4 motor efficiency", value = 0.875, min = 0.7, max = 0.98, step = 0.001),
     qwebr_calc_input("electricity_rate", "Electricity rate", value = 0.12, min = 0.03, max = 0.5, step = 0.01, prefix = "$", suffix = "/ kWh"),
     qwebr_calc_input("price_premium", "IE4 price premium", value = 60, min = 5, max = 5000, step = 5, prefix = "$"),
     qwebr_calc_input("hours_per_year", "Run hours per year", value = 4800, min = 500, max = 8760, step = 20, type = "slider")
   ),
-  goal = "Which duty makes the IE4 premium worth it? Reach a simple payback of 2 years or less on the 60 USD premium, with the motor and electricity price unchanged.",
-  goal_test = "payback_years <= 2 && price_premium == 60 && electricity_rate == 0.12 && eta_ie3 == 0.885 && eta_ie4 == 0.917 && P_out_kW == 0.746",
+  goal = "Which duty makes the IE4 premium worth it on this small motor? Reach a simple payback of 3 years or less on the 60 dollar premium, with the motor and electricity price unchanged.",
+  goal_test = "payback_years <= 3 && price_premium == 60 && electricity_rate == 0.12 && eta_ie3 == 0.855 && eta_ie4 == 0.875 && P_out_kW == 0.746",
   mode = "task")
 ```
 
@@ -937,8 +974,8 @@ qwebr_calc_card(
 #| label: efficiency-payback-06-06
 ## Given: two catalog nameplate options for a 1 HP class general-purpose motor
 P_out_kW <- 0.746          # 1 HP shaft output
-eta_ie3 <- 0.885            # nameplate efficiency, catalog Motor A (NEMA Premium / IE3, NRCan-minimum)
-eta_ie4 <- 0.917            # nameplate efficiency, catalog Motor B (IE4 / Super Premium, voluntary upgrade)
+eta_ie3 <- 0.855            # nameplate efficiency, catalog Motor A (NEMA Premium / IE3 minimum, 1 HP 4-pole)
+eta_ie4 <- 0.875            # nameplate efficiency, catalog Motor B (IE4 / Super Premium, voluntary upgrade)
 hours_per_year <- 4800      # 16 h/day, 300 days/yr - a continuously-running utility pump motor
 electricity_rate <- 0.12    # $/kWh, illustrative industrial rate
 price_premium <- 60         # $, extra catalog cost of the IE4 motor over the IE3 motor
@@ -958,7 +995,7 @@ cat(sprintf("  Cost saved                               $%.2f/year\n", cost_save
 
 </details>
 
-**Sanity check:** roughly a 3.5-year payback on a small 1 HP motor running nearly around the clock is a plausible, if unremarkable, result — and it illustrates why NRCan's mandatory minimum sits at IE3/NEMA Premium rather than IE4: for the *average* motor and duty cycle across the whole regulated population, IE3 already captures most of the accessible savings at reasonable cost, while pushing everyone to IE4 would impose a cost premium that doesn't pay back for a large share of applications (short run-hours, standby service, intermittent duty). For a *specific* high-run-hour, high-power application, though, the IE4 upgrade math often looks a great deal better than this small-motor example — try increasing `P_out_kW` in the cell above to see the payback improve sharply as motor size grows.
+**Sanity check:** roughly a 5-year payback on a small 1 HP motor running 16 hours a day is a plausible, if unremarkable, result — and it illustrates why NRCan's mandatory minimum sits at IE3/NEMA Premium rather than IE4: for the *average* motor and duty cycle across the whole regulated population, IE3 already captures most of the accessible savings at reasonable cost, while pushing everyone to IE4 would impose a cost premium that doesn't pay back for a large share of applications (short run-hours, standby service, intermittent duty). For a *specific* high-run-hour, high-power application, though, the IE4 upgrade math often looks a great deal better than this small-motor example — try increasing `P_out_kW` in the cell above to see the payback improve sharply as motor size grows.
 
 ## Summary
 
@@ -1203,7 +1240,7 @@ A motor's calculated RMS torque is comfortably under its continuous rating (good
 <details>
 <summary>Design Task 4, Problem 1 (plug-in): service factor and required gearbox rating</summary>
 
-A gearbox sees a peak output torque of 15 N·m, with 400 starts/hour and a moderate-shock classification. Using a service factor of 1.4, what's the minimum required gearbox nominal torque rating?
+A gearbox sees a peak output torque of 15 N·m, with 200 starts/hour and a moderate-shock classification. Using a service factor of 1.4 (inside the 1.2-1.6 band for that duty), what's the minimum required gearbox nominal torque rating?
 
 **Solution:**
 
@@ -1269,13 +1306,13 @@ Three conveyors are being specified: an **incline** conveyor carrying product up
 <details>
 <summary>Design Task 7, Problem 1 (plug-in): payback with different run-hours</summary>
 
-Using the same two motors as the worked example (IE3 at 88.5% and IE4 at 91.7% efficiency, 1 HP output), but running only 2000 h/year and a $90 price premium, find the simple payback.
+Using the same two motors as the worked example (IE3 at 85.5% and IE4 at 87.5% efficiency, 1 HP output), but running only 2000 h/year and a $90 price premium, find the simple payback.
 
 **Solution:**
 
-$$P_{in,IE3} = 0.746/0.885 = 0.843\ \text{kW} \qquad P_{in,IE4} = 0.746/0.917 = 0.814\ \text{kW}$$
-$$\text{Energy saved} = (0.843-0.814)(2000) = 58.8\ \text{kWh/yr} \qquad \text{Cost saved} = 58.8(0.12) = \$7.06/\text{yr}$$
-$$\text{Payback} = 90/7.06 \approx 12.7\ \text{years}$$
+$$P_{in,IE3} = 0.746/0.855 = 0.8725\ \text{kW} \qquad P_{in,IE4} = 0.746/0.875 = 0.8526\ \text{kW}$$
+$$\text{Energy saved} = (0.8725-0.8526)(2000) = 39.9\ \text{kWh/yr} \qquad \text{Cost saved} = 39.9(0.12) = \$4.79/\text{yr}$$
+$$\text{Payback} = 90/4.79 \approx 18.8\ \text{years}$$
 
 This is a long payback — reinforcing that low-run-hour applications rarely justify a voluntary efficiency upgrade above the regulated minimum on cost grounds alone.
 

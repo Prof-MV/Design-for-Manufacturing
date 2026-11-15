@@ -155,7 +155,7 @@ for (i in seq_len(nrow(points))) {
 
 ### Scenario
 
-A process engineer at the same plant has specified an M12 shielded inductive proximity sensor, rated $S_n = 4$ mm for the standard mild steel reference target, to detect a stainless steel (304) shift fork tab as it passes through a fixture. The tab itself measures only 8 mm x 8 mm — smaller than the sensor's reference target size. The sensor is mounted with an 3.5 mm operating gap to the tab at its closest approach. Before the fixture drawing is released, the engineer needs to know whether this sensor will actually detect this specific target reliably, or whether the 4 mm rating on the datasheet is misleading for this application.
+A process engineer at the same plant has specified an M12 shielded inductive proximity sensor, rated $S_n = 4$ mm for the standard mild steel reference target, to detect a stainless steel (304) shift fork tab as it passes through a fixture. The tab itself measures only 8 mm x 8 mm — smaller than the sensor's reference target size. The sensor is mounted with a 3.5 mm operating gap to the tab at its closest approach. Before the fixture drawing is released, the engineer needs to know whether this sensor will actually detect this specific target reliably, or whether the 4 mm rating on the datasheet is misleading for this application.
 
 ### Design Guidelines and Rules of Thumb
 
@@ -176,13 +176,13 @@ ggplot(mat_df, aes(x = material, y = correction_factor, fill = material)) +
            linetype = "dashed", color = "grey30", linewidth = 0.8) +
   annotate("text", x = 4.6, y = 1.06, label = "Reference (mild steel)",
            size = 3 * diagram_text_scale, color = "grey30") +
-  geom_text(aes(label = sprintf("%.1f", correction_factor)), vjust = -0.6,
-            size = 3.4 * diagram_text_scale) +
+  geom_label(aes(label = sprintf("%.1f", correction_factor)), vjust = -0.35,
+             size = 3.4 * diagram_text_scale, fill = "white", linewidth = 0) +
   scale_fill_manual(values = c("#7F8C8D", "#3498DB", "#F39C12", "#95A5A6", "#E67E22")) +
   labs(title = "Inductive Sensor Correction Factor by Target Material",
        x = NULL, y = "Correction factor (relative to mild steel)") +
   ylim(0, 1.15) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         axis.title = element_text(size = 11 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale))
@@ -280,8 +280,8 @@ if (mounting_gap > Sr_usable) {
   cat(sprintf("  Option 1 - reduce the mounting gap     to no more than %.2f mm\n", Sr_usable))
 
   ## Option: a larger sensor (bigger reference target, bigger Sn)
-  Sn_larger <- 8       # mm, M18 shielded sensor
-  d_reference_larger <- 18
+  Sn_larger <- 5       # mm, M18 shielded sensor (standard range)
+  d_reference_larger <- max(18, 3 * Sn_larger)   # reference side: diameter or 3 x Sn, whichever is larger
   Cf_size_larger <- min(1, d_target / d_reference_larger)
   Sr_eff_larger <- Sn_larger * Cf_material * Cf_size_larger
   Sr_usable_larger <- 0.8 * Sr_eff_larger
@@ -307,7 +307,7 @@ A three-wire DC sensor always has a supply (+V, commonly brown), a common (0V, c
 A **PNP (sourcing)** output connects the load's supply-side terminal to +V when the sensor is active — the sensor sources current *out* to the load, and the load's other terminal returns to 0V. An **NPN (sinking)** output does the opposite: the load's supply-side terminal is permanently wired to +V, and the sensor's output transistor connects the load's other terminal down to 0V when active — the sensor sinks current *in* from the load. Both wiring schemes turn the load on and off identically under normal operation; the difference only shows up in a fault.
 
 ```{r fig-06-14-pnp-npn-wiring, echo=FALSE, fig.cap="Sourcing (PNP) vs. sinking (NPN) sensor output wiring, with a chafed-wire-to-grounded-frame fault marked on each. The PNP fault pulls the signal line low (reads OFF); the NPN fault pulls the signal line low in a way that mimics the sensor being active (can read ON).", fig.align='center', fig.width=13, fig.height=7}
-build_wiring_panel <- function(panel_title, out_switches_high, subtitle_result) {
+build_wiring_panel <- function(panel_title, out_switches_high, subtitle_result, subtitle_color) {
   p <- ggplot() +
     ## +24V and 0V rails
     annotate("segment", x = 0, xend = 5, y = 5, yend = 5, linewidth = 1.3, color = "#C0392B") +
@@ -326,12 +326,8 @@ build_wiring_panel <- function(panel_title, out_switches_high, subtitle_result) 
       annotate("rect", xmin = 3.4, xmax = 4.6, ymin = 2.6, ymax = 3.9, fill = "#D5B27F", color = "black") +
       annotate("text", x = 4.0, y = 3.25, label = "Load", size = 3 * diagram_text_scale) +
       annotate("segment", x = 4.0, xend = 4.0, y = 2.6, yend = 0.3, linewidth = 1) +
-      annotate("text", x = 2.45, y = 3.7, label = "OUT (switches +24V to load when active)",
-               size = 2.5 * diagram_text_scale, color = "#8E44AD") +
-      annotate("point", x = 2.45, y = 3.25, shape = 4, size = 5, stroke = 1.6, color = "red") +
-      annotate("segment", x = 2.45, xend = 2.45, y = 3.25, yend = 1.5, linetype = "dashed", color = "red", linewidth = 0.8) +
-      annotate("rect", xmin = 2.0, xmax = 2.9, ymin = 0.9, ymax = 1.5, fill = "grey60", color = "black") +
-      annotate("text", x = 2.45, y = 1.2, label = "Grounded\nframe", size = 2.5 * diagram_text_scale)
+      annotate("label", x = 2.45, y = 4.45, label = "OUT: switches +24 V to the load when active",
+               size = 2.7 * diagram_text_scale, color = "#8E44AD", fill = "white", linewidth = 0)
   } else {
     ## NPN: load on the left (tied to +24V), sensor on the right, switched wire carries 0V when active
     p <- p +
@@ -343,33 +339,43 @@ build_wiring_panel <- function(panel_title, out_switches_high, subtitle_result) 
       annotate("text", x = 4.0, y = 3.25, label = "NPN\nSensor", size = 3 * diagram_text_scale, color = "white") +
       annotate("segment", x = 4.3, xend = 4.3, y = 5, yend = 3.9, linewidth = 1) +
       annotate("segment", x = 3.7, xend = 3.7, y = 2.6, yend = 0.3, linewidth = 1) +
-      annotate("text", x = 2.45, y = 3.7, label = "OUT (switches to 0V when active)",
-               size = 2.5 * diagram_text_scale, color = "#8E44AD") +
-      annotate("point", x = 2.45, y = 3.25, shape = 4, size = 5, stroke = 1.6, color = "red") +
-      annotate("segment", x = 2.45, xend = 2.45, y = 3.25, yend = 1.5, linetype = "dashed", color = "red", linewidth = 0.8) +
-      annotate("rect", xmin = 2.0, xmax = 2.9, ymin = 0.9, ymax = 1.5, fill = "grey60", color = "black") +
-      annotate("text", x = 2.45, y = 1.2, label = "Grounded\nframe", size = 2.5 * diagram_text_scale)
+      annotate("label", x = 2.45, y = 4.45, label = "OUT: pulls the load to 0 V when active",
+               size = 2.7 * diagram_text_scale, color = "#8E44AD", fill = "white", linewidth = 0)
   }
+
+  ## Chafe fault: X on the output wire, dashed short to the grounded frame
+  p <- p +
+    annotate("segment", x = 2.3, xend = 2.6, y = 3.1, yend = 3.4, color = "red", linewidth = 1.4) +
+    annotate("segment", x = 2.3, xend = 2.6, y = 3.4, yend = 3.1, color = "red", linewidth = 1.4) +
+    annotate("segment", x = 2.45, xend = 2.45, y = 3.1, yend = 1.5, linetype = "dashed", color = "red", linewidth = 0.8) +
+    annotate("text", x = 2.6, y = 2.3, label = "Chafed wire\nshorts to frame", hjust = 0,
+             size = 2.6 * diagram_text_scale, color = "red") +
+    annotate("rect", xmin = 2.0, xmax = 2.9, ymin = 0.9, ymax = 1.5, fill = "grey60", color = "black") +
+    annotate("text", x = 2.45, y = 1.2, label = "Grounded\nframe", size = 2.5 * diagram_text_scale)
 
   p +
     coord_fixed(xlim = c(-1.1, 5.3), ylim = c(0, 5.6)) +
     theme_void() +
     labs(title = panel_title, subtitle = subtitle_result) +
     theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
-          plot.subtitle = element_text(size = 9.5 * chart_text_scale, hjust = 0.5, color = "#27AE60"))
+          plot.subtitle = element_text(size = 9.5 * chart_text_scale, hjust = 0.5, color = subtitle_color))
 }
 
 pnp_panel <- build_wiring_panel("PNP (Sourcing)", TRUE,
-                                 "Fault pulls signal LOW -> reads OFF (fails to a detectable, safe state)")
+                                 "Fault pulls signal LOW → reads OFF (a detectable, safe state)", "darkgreen")
 npn_panel <- build_wiring_panel("NPN (Sinking)", FALSE,
-                                 "Fault pulls signal LOW -> mimics sensor ACTIVE (can read ON unexpectedly)")
+                                 "Fault pulls signal LOW → mimics sensor ACTIVE (can read ON)", "red")
 
 gridExtra::grid.arrange(pnp_panel, npn_panel, ncol = 2)
 ```
 
+```{r video-06-14-pnp-npn, echo=FALSE, results='asis'}
+embed_youtube("2pdvvqkguA4", "How to Wire Discrete DC Sensors to PLC, Part 2 (RealPars)")
+```
+
 Now consider a wire's insulation chafing through against the machine's grounded, bonded metal frame — a genuinely common failure mode in a cable track or drag chain after years of flexing. On the PNP wiring, the switched wire normally sits at +24V when active and floats near 0V (through the load) when inactive; a short to the grounded frame pulls that wire to 0V regardless of the sensor's actual state. The downstream logic sees "signal low," which is indistinguishable from the sensor simply being off — a nuisance fault, easy to diagnose, and critically, it never makes the load turn on when it shouldn't. On the NPN wiring, the switched wire normally sits near +24V (through the load) when inactive and gets pulled to 0V by the sensor's transistor when active; a short to the grounded frame *also* pulls that wire to 0V — which is exactly what the sensor does on purpose when it's genuinely detecting the target. The fault is indistinguishable from a legitimate "target present" signal, and depending on what that signal drives, the result can be an unintended actuation, not just a nuisance stop.
 
-This is the practical reasoning behind North America's default preference for PNP sensors, wired to sinking-type PLC input cards: with grounded, bonded machine frames being the norm under Canadian and US electrical practice (bonding requirements under the CEC, and the equivalent NEC Article 250 in the US), a wire-to-frame fault is a far more common real-world failure than a wire-to-supply fault, and PNP wiring's failure mode for that specific fault is the safer of the two in most common circuit configurations. European practice has historically leaned toward NPN sensors in some legacy contexts (older PLC families and some European OEM standards defaulted to sinking-output field devices paired with sourcing-type input cards), but the North American convention of PNP-out-to-sinking-input is now the dominant specification on new machinery built for the North American market, including machinery imported from Europe for a North American plant.
+This is the practical reasoning behind North America's default preference for PNP sensors, wired to sinking-type PLC input cards: with grounded, bonded machine frames being the norm under Canadian and US electrical practice (bonding requirements under the CEC, and the equivalent NEC Article 250 in the US), a wire-to-frame fault is a far more common real-world failure than a wire-to-supply fault, and PNP wiring's failure mode for that specific fault is the safer of the two in most common circuit configurations. European practice is also PNP-based. NPN sensors are the historical default in Asia, Japan in particular, where many PLC families paired sinking-output field devices with sourcing-type input cards, so machinery imported from Asia is where an NPN fleet most often turns up. On new machinery built for the North American market, PNP-out-to-sinking-input is the dominant specification.
 
 **Rule of thumb:** in North America, specify PNP output sensors paired with sinking-type digital input cards as the default for new machine designs, and treat NPN as the exception that needs a specific justification (matching an existing NPN fleet, a supplier constraint, or a legacy PLC platform that only supports sourcing inputs). This default breaks down inside a safety-rated circuit, where the actual failure-mode analysis is done formally per the safety function's category and architecture (covered in the [Machine Safety Circuits](06-02-Machine-Safety-Circuits.qmd) chapter) rather than by this general PNP/NPN heuristic — a safety input's fault behavior is verified explicitly, not assumed from a wiring convention.
 
@@ -448,7 +454,7 @@ if (matches_active_state) {
 
 ### Scenario
 
-An automotive body-in-white integrator is architecting the I/O for a five-station respot welding cell — roughly 180 discrete and analog points across the cell's sensors, clamps, and interlocks. Line uptime is the customer's top priority: this cell feeds a paint line downstream, and every minute of unplanned stoppage cascades. The integrator has to decide, point by point and zone by zone, whether to run traditional hardwired discrete I/O back to a remote terminal block, IO-Link point-to-point smart sensor connections into an IO-Link master, or full fieldbus/industrial Ethernet distributed I/O nodes at each station.
+An automotive body-in-white integrator is architecting the I/O for a five-station respot welding cell — roughly 210 discrete and analog points across the cell's sensors, clamps, and interlocks. Line uptime is the customer's top priority: this cell feeds a paint line downstream, and every minute of unplanned stoppage cascades. The integrator has to decide, point by point and zone by zone, whether to run traditional hardwired discrete I/O back to a remote terminal block, IO-Link point-to-point smart sensor connections into an IO-Link master, or full fieldbus/industrial Ethernet distributed I/O nodes at each station.
 
 ### Design Guidelines and Rules of Thumb
 
@@ -465,7 +471,7 @@ io_arch_table <- tribble(
   "Highest -- one home-run cable per point", "Simple per point, but slow in aggregate on a high point-count cell",
   "Small cells, simple machines, or any point where the extra cost of smart wiring genuinely isn't justified",
   "IO-Link", "Rich per-device diagnostics (signal margin, health, counters) over the same cable as the switched signal",
-  "Same point-to-point topology as hardwired, but standard cheap unshielded cable and simpler termination",
+  "Same point-to-point topology as hardwired, on standard unshielded M12 sensor cable (20 m maximum per port)",
   "Fast -- auto-parameter download and hot-swap replacement without reprogramming",
   "Sensor-dense cells needing fast fault diagnosis and quick sensor swaps without a controls tech's involvement",
   "Fieldbus / Industrial Ethernet distributed I/O", "Best -- full device and network diagnostics, remote access from an engineering workstation",
@@ -501,7 +507,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Architecture)) +
   labs(title = "I/O Architecture Comparison -- Illustrative Scoring",
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) -- actual scores are installation-specific",
        x = NULL, y = "Relative rating (1-5)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
@@ -565,7 +571,7 @@ for (nm in names(weights)) cat(sprintf("  Weight: %s  %.0f%%\n", nm, weights[nm]
 
 </details>
 
-**Sanity check:** with diagnostics and scalability weighted most heavily — the right call for a high-uptime, multi-station automotive cell feeding a downstream process — fieldbus/industrial Ethernet wins, matching the design guidance above. Try dropping the diagnostics weight and raising wiring cost instead (closer to a small standalone machine's priorities): the recommendation shifts, which is exactly the point of a weighted framework — it should be traceable to the specific installation's priorities, not a single "always correct" answer.
+**Sanity check:** with diagnostics and scalability weighted most heavily — the right call for a high-uptime, multi-station automotive cell feeding a downstream process — fieldbus/industrial Ethernet wins, matching the design guidance above. Try dropping the diagnostics weight and raising wiring cost instead (closer to a small standalone machine's priorities): the recommendation shifts, which is exactly the point of a weighted framework — it should be traceable to the specific installation's priorities, not a single "always correct" answer. Notice, though, that with these illustrative scores hardwired can never win: IO-Link scores higher on every criterion. The matrix has no column for device and master hardware cost, which is where hardwired I/O wins on a small machine (plain switching sensors on a standard input card, no IO-Link master or IO-Link sensors). Add that criterion before using the matrix to choose between hardwired and IO-Link.
 
 ## Design Task 5: Analog Signal Selection — 4-20 mA vs. 0-10V
 
@@ -598,15 +604,27 @@ signal_df$scenario <- factor(signal_df$scenario,
                               levels = c("0-10V, 500 ohm effective load", "0-10V, 100 kohm input impedance",
                                          "4-20 mA current loop"))
 
-ggplot(signal_df, aes(x = length_m, y = error_pct, color = scenario)) +
+ggplot(signal_df, aes(x = length_m, y = error_pct, color = scenario, linetype = scenario)) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "grey40", linewidth = 0.6) +
+  annotate("label", x = 20, y = 1.12, label = "1% accuracy spec", hjust = 0,
+           size = 3 * diagram_text_scale, color = "grey30", fill = "white", linewidth = 0) +
+  annotate("segment", x = 120.5, xend = 120.5, y = 0, yend = 1, linetype = "dotted", color = "grey30") +
+  annotate("label", x = 124, y = 0.55, label = "500 ohm load reaches\n1% at about 120 m", hjust = 0,
+           size = 3 * diagram_text_scale, color = "grey30", fill = "white", linewidth = 0) +
   geom_line(linewidth = 1.2) +
+  annotate("label", x = 300, y = 0.2, hjust = 1,
+           label = "100 kohm input: 0.015% at 300 m,\ndrawn under the dashed current-loop line",
+           size = 3 * diagram_text_scale, color = "#B9770E", fill = "white", linewidth = 0) +
   scale_color_manual(values = c("0-10V, 500 ohm effective load" = "#E74C3C",
                                  "0-10V, 100 kohm input impedance" = "#F39C12",
                                  "4-20 mA current loop" = "#27AE60")) +
+  scale_linetype_manual(values = c("0-10V, 500 ohm effective load" = "solid",
+                                    "0-10V, 100 kohm input impedance" = "solid",
+                                    "4-20 mA current loop" = "22")) +
   labs(title = "Signal Error vs. Cable Length",
        subtitle = "18 AWG copper, round-trip wire resistance -- current loop error stays at zero",
-       x = "One-way cable length (m)", y = "Signal error (%)", color = NULL) +
-  theme_minimal() +
+       x = "One-way cable length (m)", y = "Signal error (%)", color = NULL, linetype = NULL) +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
@@ -702,34 +720,38 @@ A poultry processing plant near Kitchener, Ontario runs a caustic, high-pressure
 
 IP ratings (from IEC 60529) describe ingress protection against two separate hazards — solids (the first digit) and water (the second digit) — and the water test associated with **IP67** is immersion: the device is submerged up to 1 m of depth for 30 minutes, under static (non-pressurized) conditions. That's a real, meaningful test, and it's exactly the wrong test for what a washdown hose actually does to a sensor. A hand-held washdown gun delivers water at high velocity and pressure, directed at close range, often angled directly at seams, threads, and connector faces — conditions the IP67 immersion test never subjects the device to at all.
 
-**IP69K** is a separate rating, defined by ISO 20653 (which absorbed the German DIN 40050-9 standard that originated the IP69K designation), specifically for high-pressure, high-temperature close-range spray: hot water (around 80°C) at high pressure, sprayed from multiple angles at close range (roughly 10-15 cm) with a rotating nozzle. A sensor rated IP69K has actually been tested against something resembling a real washdown gun; a sensor rated only IP67, no matter how well-built otherwise, has not.
+**IP69K** is a separate rating, defined by ISO 20653 (which absorbed the German DIN 40050-9 standard that originated the IP69K designation), specifically for high-pressure, high-temperature close-range spray: 80°C water at 80-100 bar (14-16 L/min), sprayed from 10-15 cm at 0°, 30°, 60° and 90° for 30 s at each angle while the test piece turns on a turntable. A sensor rated IP69K has actually been tested against something resembling a real washdown gun; a sensor rated only IP67, no matter how well-built otherwise, has not.
 
 ```{r fig-06-14-ip-test-compare, echo=FALSE, fig.cap="IP67's immersion test uses essentially static hydrostatic pressure; IP69K's close-range hot spray test uses roughly three orders of magnitude more pressure. This is why an IP67-rated sensor can still fail in a real washdown even though the rating 'sounds' adequate.", fig.align='center', fig.width=9, fig.height=5.5}
 ip_pressure_df <- data.frame(
-  rating = factor(c("IP67\n(1 m static immersion)", "IP69K\n(close-range hot spray)"),
-                   levels = c("IP67\n(1 m static immersion)", "IP69K\n(close-range hot spray)")),
-  test_pressure_bar = c(0.098, 90)
+  x = 1:2,
+  rating = c("IP67\n(1 m static immersion)", "IP69K\n(close-range hot spray)"),
+  test_pressure_bar = c(0.098, 90),
+  lab = c("about 0.1 bar\n(1 m water head)", "80-100 bar")
 )
 
-ggplot(ip_pressure_df, aes(x = rating, y = test_pressure_bar, fill = rating)) +
-  geom_col(show.legend = FALSE, width = 0.55) +
-  geom_text(aes(label = sprintf("%.2g bar", test_pressure_bar)), vjust = -0.6,
+ggplot(ip_pressure_df) +
+  geom_rect(aes(xmin = x - 0.275, xmax = x + 0.275, ymin = 0.01, ymax = test_pressure_bar, fill = rating),
+            show.legend = FALSE) +
+  geom_text(aes(x = x, y = test_pressure_bar * 1.4, label = lab), vjust = 0,
             size = 3.6 * diagram_text_scale) +
   scale_fill_manual(values = c("#95A5A6", "#C0392B")) +
-  scale_y_log10() +
+  scale_x_continuous(breaks = 1:2, labels = ip_pressure_df$rating, limits = c(0.5, 2.5)) +
+  scale_y_log10(limits = c(0.01, 1000), breaks = c(0.01, 0.1, 1, 10, 100, 1000),
+                labels = c("0.01", "0.1", "1", "10", "100", "1000")) +
   labs(title = "Approximate Test Water Pressure: IP67 vs. IP69K",
        subtitle = "Log scale -- IP69K's test pressure is roughly three orders of magnitude higher",
        x = NULL, y = "Approximate test pressure (bar, log scale)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.title = element_text(size = 11 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale))
 ```
 
-The seal being tested against the right pressure and temperature is only half the specification. A washdown-duty sensor also needs a **housing material** that survives the plant's cleaning chemistry (caustic and acid cleaners routinely used in food plants attack many plastics and coatings over time; 316 stainless steel is the standard washdown housing material for a reason), **seal materials** rated for the wash temperature (a standard nitrile O-ring can hardenand lose sealing force at repeated 80°C exposure; FKM/Viton compounds hold up far better), and a **connector** genuinely rated for the same spray conditions as the housing — a stainless M12 connector with a continuous, properly seated O-ring, not a cost-reduced plastic quick-disconnect that happens to carry an IP67 label on its own datasheet. A sensor body rated IP69K with a connector that isn't is only as good as its weakest sealed joint.
+The seal being tested against the right pressure and temperature is only half the specification. A washdown-duty sensor also needs a **housing material** that survives the plant's cleaning chemistry (caustic and acid cleaners routinely used in food plants attack many plastics and coatings over time; 316 stainless steel is the standard washdown housing material for a reason), **seal materials** rated for the wash temperature (a standard nitrile O-ring can harden and lose sealing force at repeated 80°C exposure; FKM/Viton compounds hold up far better), and a **connector** genuinely rated for the same spray conditions as the housing — a stainless M12 connector with a continuous, properly seated O-ring, not a cost-reduced plastic quick-disconnect that happens to carry an IP67 label on its own datasheet. A sensor body rated IP69K with a connector that isn't is only as good as its weakest sealed joint.
 
-Sanitary mounting matters as much as the sensor itself in a federally registered food plant: fixtures should be designed to shed water and cleaning solution rather than trap it, avoiding horizontal ledges, dead-leg gaps, and unsealed threaded holes that harbor residue between wash cycles. In Canada, this falls under the Canadian Food Inspection Agency's requirements for federally registered establishments; the equivalent US and international references are the 3-A Sanitary Standards and NSF/ANSI 169, which many manufacturers design washdown-duty equipment to meet even outside a formal 3-A certification process.
+Sanitary mounting matters as much as the sensor itself in a federally registered food plant: fixtures should be designed to shed water and cleaning solution rather than trap it, avoiding horizontal ledges, dead-leg gaps, and unsealed threaded holes that harbor residue between wash cycles. In Canada, the Safe Food for Canadians Regulations (enforced by the Canadian Food Inspection Agency) require licensed food businesses to keep equipment and its surroundings cleanable and sanitary; the design references most equipment makers work to are the 3-A Sanitary Standards, NSF/ANSI/3-A 14159-1 (hygiene requirements for meat and poultry processing equipment) and NSF/ANSI 169, which many manufacturers design washdown-duty equipment to meet even outside a formal certification process.
 
 **Rule of thumb:** in any zone that receives direct hand-held washdown spray (not just incidental splash), specify stainless steel housings, FKM seals, and IP69K-rated connectors as the default, and treat a plastic-body IP67 sensor as appropriate only for splash-zone or indirect-exposure locations well outside the direct spray path. This breaks down for genuinely dry, non-washdown areas of the same plant (an upstream dry-ingredient area, an electrical room) — over-specifying stainless/IP69K everywhere adds real cost for zones that never see a hose at all, so the wash zone boundary itself needs to be mapped on the layout drawing, not assumed.
 
@@ -827,7 +849,7 @@ if (fails_checklist) {
 
 </details>
 
-**Sanity check:** the plant's actual wash conditions (1500 psi, 80°C, direct spray) sit well inside what the IP69K test protocol is specifically designed to replicate, and nowhere near what the IP67 immersion test represents — the failing sensors in the scenario weren't defective, they were simply never tested against anything resembling their actual service environment. This is the recurring lesson of this design task: an IP rating is only meaningful in the context of the specific test it certifies, not as a generic "waterproof" label.
+**Sanity check:** the plant's actual wash conditions (1500 psi, about 103 bar, at 80°C, direct spray) match the IP69K test protocol (80-100 bar, 80°C, 10-15 cm) closely, sitting at the top of its pressure range, so the replacement should be qualified at or above the plant's own numbers — and they are nowhere near what the IP67 immersion test represents — the failing sensors in the scenario weren't defective, they were simply never tested against anything resembling their actual service environment. This is the recurring lesson of this design task: an IP rating is only meaningful in the context of the specific test it certifies, not as a generic "waterproof" label.
 
 <details>
 <summary>Industry connection: defense-sector environmental qualification</summary>
@@ -929,25 +951,29 @@ cat(DI$row); cat(DO$row); cat(AI$row); cat(AO$row)
 
 </details>
 
-```{r fig-06-14-io-count-spare, echo=FALSE, fig.cap="Tallied I/O count vs. installed capacity after applying the spare-capacity margin and rounding to standard module sizes. Note how the small analog counts land on a much larger actual spare percentage -- module granularity, not the percentage target, dominates at low point counts.", fig.align='center', fig.width=10, fig.height=6}
+```{r fig-06-14-io-count-spare, echo=FALSE, fig.cap="Tallied I/O count, the count with the 15% spare margin, and the installed capacity after rounding up to standard module sizes. Note how the small analog counts land on a much larger actual spare percentage -- module granularity, not the percentage target, dominates at low point counts.", fig.align='center', fig.width=10, fig.height=6}
+tallied <- c(118, 76, 14, 4)
+pts_per_module <- c(32, 16, 4, 4)
+with_spare <- tallied * 1.15
+installed <- ceiling(with_spare / pts_per_module) * pts_per_module
+kinds <- c("Tallied", "With 15% spare", "Installed (whole modules)")
 io_summary_df <- data.frame(
-  io_type = rep(c("DI", "DO", "AI", "AO"), 2),
-  count = c(118, 76, 14, 4, 160, 96, 20, 8),
-  kind = rep(c("Tallied (+ 15% spare need)", "Installed (rounded to module size)"), each = 4)
+  io_type = rep(c("DI", "DO", "AI", "AO"), 3),
+  count = c(tallied, with_spare, installed),
+  kind = rep(kinds, each = 4)
 )
 io_summary_df$io_type <- factor(io_summary_df$io_type, levels = c("DI", "DO", "AI", "AO"))
-io_summary_df$kind <- factor(io_summary_df$kind,
-                              levels = c("Tallied (+ 15% spare need)", "Installed (rounded to module size)"))
+io_summary_df$kind <- factor(io_summary_df$kind, levels = kinds)
 
 ggplot(io_summary_df, aes(x = io_type, y = count, fill = kind)) +
   geom_col(position = "dodge") +
-  geom_text(aes(label = format(count, big.mark = " ")), position = position_dodge(width = 0.9),
+  geom_text(aes(label = sprintf("%g", round(count, 1))), position = position_dodge(width = 0.9),
             vjust = -0.5, size = 3.2 * diagram_text_scale) +
-  scale_fill_manual(values = c("Tallied (+ 15% spare need)" = "#3498DB",
-                                "Installed (rounded to module size)" = "#27AE60")) +
+  scale_fill_manual(values = c("Tallied" = "#3498DB", "With 15% spare" = "#F39C12",
+                                "Installed (whole modules)" = "#27AE60")) +
   labs(title = "I/O Count: Tallied Need vs. Installed Capacity",
        x = NULL, y = "I/O points", fill = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         legend.position = "bottom",
         axis.title = element_text(size = 11 * chart_text_scale),
@@ -1090,7 +1116,7 @@ Correction factors for the target material (relative to mild steel) are: stainle
 ```{r tryit-derate-grid-06-14, echo=FALSE, results='asis'}
 dr <- data.frame(
   `Sensor` = c("M18", "M12", "M30", "M8"),
-  `S_n (mm)` = c(8, 4, 15, 2),
+  `S_n (mm)` = c(5, 4, 10, 2),
   `Reference side (mm)` = c(18, 12, 30, 8),
   `Target material` = c("Aluminum", "Brass", "Stainless 304", "Copper"),
   `C_f material` = c(0.4, 0.5, 0.7, 0.3),
@@ -1115,8 +1141,8 @@ tryit_grid(
   question = paste0(
     "<p>Four inductive sensors detect non-mild-steel targets. C_f,material is given; C_f,size = min(1, d_target / d_reference); ",
     "S_r,eff = S_n x C_f,material x C_f,size; and the usable, reliable distance is 80% of S_r,eff. ",
-    "Rows: M18 (S_n 8 mm, reference 18 mm) on a 12 mm aluminum target, C_f = 0.4; M12 (S_n 4 mm, reference 12 mm) on a 12 mm brass target, C_f = 0.5; ",
-    "M30 (S_n 15 mm, reference 30 mm) on a 20 mm stainless 304 target, C_f = 0.7; M8 (S_n 2 mm, reference 8 mm) on a 10 mm copper target, C_f = 0.3.</p>")
+    "Rows: M18 (S_n 5 mm, reference 18 mm) on a 12 mm aluminum target, C_f = 0.4; M12 (S_n 4 mm, reference 12 mm) on a 12 mm brass target, C_f = 0.5; ",
+    "M30 (S_n 10 mm, reference 30 mm) on a 20 mm stainless 304 target, C_f = 0.7; M8 (S_n 2 mm, reference 8 mm) on a 10 mm copper target, C_f = 0.3.</p>")
 )
 ```
 
@@ -1189,11 +1215,11 @@ tryit_sort(
     text = c(
       "Confirm that a steel clamp is closed in an oily machining cell, at 5 mm range",
       "Sense powder level through the plastic wall of a hopper",
-      "Count cartons crossing a conveyor 8 m wide with a through-beam sensor",
+      "Count cartons passing through an 8 m wide dock door with a through-beam sensor",
       "Detect clear plastic bottles on a conveyor regardless of colour or transparency",
       "Detect tooling position on a metal fixture where dust and coolant are present",
       "Detect a wooden block at close range, where metal sensors will not respond",
-      "Sense bulk level in a silo where dust makes no difference to the signal",
+      "Measure the fill height of dark, matte granules in an open bin from 2 m above",
       "Detect label and web edges at high speed"
     ),
     bin = c("Inductive", "Capacitive", "Photoelectric", "Ultrasonic",
@@ -1205,7 +1231,7 @@ tryit_sort(
       "Ultrasonic sensors are independent of colour and clarity.",
       "Inductive sensors are unaffected by oil, dust and debris.",
       "Capacitive sensors detect non-metal targets.",
-      "Ultrasonic sensors measure bulk level from the surface echo.",
+      "Ultrasonic sensors measure level from the surface echo, whatever the colour or finish.",
       "Label and edge detection is a standard photoelectric use."
     )
   ),
@@ -1231,24 +1257,24 @@ Simplifying spares is a real, legitimate benefit, but capacitive sensing is the 
 </details>
 
 <details>
-<summary>Task 2 (plug-in): An M18 shielded inductive sensor is rated Sn = 8 mm for the mild steel reference target (18 x 18 mm). It needs to detect an aluminum target measuring 14 x 14 mm at a mounting gap of 2.0 mm. Does this pass?</summary>
+<summary>Task 2 (plug-in): An M18 shielded inductive sensor is rated Sn = 5 mm for the mild steel reference target (18 x 18 mm). It needs to detect an aluminum target measuring 14 x 14 mm at a mounting gap of 1.25 mm. Does this pass?</summary>
 
 Cf_material (aluminum) = 0.4
 
 Cf_size = min(1, 14/18) = 0.778
 
-Sr_eff = 8 x 0.4 x 0.778 = 2.49 mm
+Sr_eff = 5 x 0.4 x 0.778 = 1.56 mm
 
-Sr_usable = 0.8 x 2.49 = 1.99 mm
+Sr_usable = 0.8 x 1.56 = 1.24 mm
 
-Mounting gap (2.0 mm) is essentially equal to the usable range (1.99 mm) — this is a marginal **FAIL** (or, at best, a pass with zero margin, which should be treated as a fail for a production application). The gap should be reduced, or a larger sensor selected.
+Mounting gap (1.25 mm) is essentially equal to the usable range (1.24 mm) — this is a marginal **FAIL** (or, at best, a pass with zero margin, which should be treated as a fail for a production application). The gap should be reduced, or a larger sensor selected.
 
 </details>
 
 <details>
 <summary>Task 2 (design decision): The fixture designer proposes solving the Design Task 2 worked example's failure by welding a small mild steel "flag" tab onto the stainless steel shift fork, sized to fill the sensor's full 12 x 12 mm reference target, rather than changing the sensor or the mounting gap. Is this a reasonable fix? What would you want to verify before accepting it?</summary>
 
-This is a genuinely common and often excellent fix — it directly attacks both derating factors at once: the flag is mild steel (Cf_material = 1.0 instead of 0.7) and sized to the full reference target (Cf_size = 1.0 instead of 0.67), which would restore the sensor's full 4 mm rated distance (usable = 0.8 x 4 = 3.2 mm), comfortably clearing the 3.5 mm gap... except it doesn't quite, which is exactly the kind of check that has to actually be run rather than assumed — 3.2 mm is still less than the 3.5 mm gap, so even the "ideal" flag target doesn't fully pass without also tightening the gap slightly. Beyond the arithmetic, real concerns to verify before accepting a welded-on flag: does adding a welded tab affect the shift fork's fatigue life or balance in a moving assembly, is the weld process and location compatible with the part's existing heat-treatment and finish requirements, and is the tab's position repeatable enough shot-to-shot that the 3.5 mm gap assumption actually holds in production, not just on the first sample part. A fix that solves the sensing problem but introduces a part-quality or fatigue risk isn't actually a good fix.
+This is a genuinely common and often excellent fix — it directly attacks both derating factors at once: the flag is mild steel (Cf_material = 1.0 instead of 0.7) and sized to the full reference target (Cf_size = 1.0 instead of 0.67), which would restore the sensor's full 4 mm rated distance (usable = 0.8 x 4 = 3.2 mm). That is still less than the 3.5 mm gap, so even the ideal flag target does not pass on its own; the gap also has to close to about 3 mm. This is exactly the kind of check that has to be run rather than assumed. Beyond the arithmetic, real concerns to verify before accepting a welded-on flag: does adding a welded tab affect the shift fork's fatigue life or balance in a moving assembly, is the weld process and location compatible with the part's existing heat-treatment and finish requirements, and is the tab's position repeatable enough shot-to-shot that the 3.5 mm gap assumption actually holds in production, not just on the first sample part. A fix that solves the sensing problem but introduces a part-quality or fatigue risk isn't actually a good fix.
 
 </details>
 
@@ -1282,7 +1308,7 @@ Fieldbus/Ethernet = 0.15(5) + 0.35(3) + 0.30(3) + 0.20(5) = 0.75 + 1.05 + 0.90 +
 <details>
 <summary>Task 4 (design decision): A plant standard mandates fieldbus/industrial Ethernet I/O on every new machine, regardless of size, to keep the entire plant on one diagnostic and spare-parts platform. A small single-station deburring machine, with only 18 total I/O points, is being built under this standard. Is the plant standard the right call here, and what's the trade-off being accepted?</summary>
 
-A plant-wide standard trades away per-machine optimization for fleet-wide consistency — and that trade-off is often worth it deliberately, not just a mistake: a single diagnostic platform, a single spare-parts strategy for network components, and controls technicians who only need to be trained on one architecture across the whole plant are real, ongoing operational benefits that a machine-by-machine "optimal" choice doesn't capture. For an 18-point machine specifically, the weighted-matrix comparison in the plug-in problem above would recommend IO-Link or even hardwired on a standalone basis — so the plant standard is accepting a real, quantifiable cost premium (network hardware and commissioning overhead for a machine that doesn't strictly need it) in exchange for fleet-wide consistency. Whether that's the right call depends on factors outside this one machine: how many machines the plant is adding per year (amortizing the standard's overhead), how much the plant already has invested in fieldbus/Ethernet diagnostic tooling and trained staff, and whether a documented exception process exists for machines small enough that the standard's overhead is genuinely disproportionate. The engineer's job here isn't to override the plant standard unilaterally based on one machine's numbers — it's to flag the trade-off explicitly if the premium seems large, and let whoever owns the standard make an informed call.
+A plant-wide standard trades away per-machine optimization for fleet-wide consistency — and that trade-off is often worth it deliberately, not just a mistake: a single diagnostic platform, a single spare-parts strategy for network components, and controls technicians who only need to be trained on one architecture across the whole plant are real, ongoing operational benefits that a machine-by-machine "optimal" choice doesn't capture. For an 18-point machine specifically, the weighted-matrix comparison in the plug-in problem above would recommend IO-Link on a standalone basis (and hardwired, once device and master hardware cost is added as a criterion) — so the plant standard is accepting a real, quantifiable cost premium (network hardware and commissioning overhead for a machine that doesn't strictly need it) in exchange for fleet-wide consistency. Whether that's the right call depends on factors outside this one machine: how many machines the plant is adding per year (amortizing the standard's overhead), how much the plant already has invested in fieldbus/Ethernet diagnostic tooling and trained staff, and whether a documented exception process exists for machines small enough that the standard's overhead is genuinely disproportionate. The engineer's job here isn't to override the plant standard unilaterally based on one machine's numbers — it's to flag the trade-off explicitly if the premium seems large, and let whoever owns the standard make an informed call.
 
 </details>
 

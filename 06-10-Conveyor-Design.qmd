@@ -59,9 +59,16 @@ theta <- theta_deg * pi / 180
 L_draw <- 10  # illustrative drawing length, not the literal 11.5 m path length
 rise_draw <- L_draw * sin(theta)
 run_draw  <- L_draw * cos(theta)
+u <- c(cos(theta), sin(theta))      # up-slope unit vector
+n <- c(-sin(theta), cos(theta))     # normal to the belt, pointing up
 
+## Totes as rectangles sitting on the belt (0.8 long x 0.5 high in drawing units)
 tote_d <- seq(1.5, 8.5, by = 1.75)
-totes_df <- data.frame(x = tote_d * cos(theta), y = tote_d * sin(theta))
+totes_df <- do.call(rbind, lapply(seq_along(tote_d), function(i) {
+  c0 <- tote_d[i] * u
+  pts <- rbind(c0 - 0.4 * u, c0 + 0.4 * u, c0 + 0.4 * u + 0.5 * n, c0 - 0.4 * u + 0.5 * n)
+  data.frame(x = pts[, 1], y = pts[, 2], id = i)
+}))
 
 ggplot() +
   annotate("rect", xmin = -1.5, xmax = 1.2, ymin = -0.5, ymax = 0, fill = "grey70", color = "black") +
@@ -71,23 +78,24 @@ ggplot() +
   annotate("text", x = run_draw + 0.15, y = rise_draw + 0.9, label = "2nd floor\n(case-pick mezzanine)",
            size = 2.8 * diagram_text_scale) +
   annotate("segment", x = 0, y = 0, xend = run_draw, yend = rise_draw, linewidth = 2, color = "grey30") +
-  geom_point(data = totes_df, aes(x = x, y = y), shape = 22, size = 5, fill = "#F39C12", color = "black") +
-  ## Friction/gravity arrow (down-slope, resisting), with its label offset
-  ## perpendicular to the belt line so it clears both the belt and the totes
-  annotate("segment", x = 3.0*cos(theta), y = 3.0*sin(theta),
-           xend = 1.8*cos(theta), yend = 1.8*sin(theta),
+  geom_polygon(data = totes_df, aes(x = x, y = y, group = id), fill = "#F39C12", color = "black") +
+  ## Friction/gravity arrow (down-slope, resisting), label offset below the belt
+  annotate("segment", x = 3.0 * u[1] - 0.5 * n[1], y = 3.0 * u[2] - 0.5 * n[2],
+           xend = 1.8 * u[1] - 0.5 * n[1], yend = 1.8 * u[2] - 0.5 * n[2],
            arrow = arrow(length = unit(0.22, "cm"), type = "closed"), color = "#E74C3C", linewidth = 1.1) +
-  annotate("text", x = 2.4*cos(theta) + 1.5*sin(theta), y = 2.4*sin(theta) - 1.5*cos(theta),
-           label = "Gravity + friction\n(resist motion, T_x + T_y + T_z)", size = 2.8 * diagram_text_scale, color = "#E74C3C") +
-  ## Effective tension arrow (up-slope, required), label offset to the other side
-  annotate("segment", x = 6.5*cos(theta), y = 6.5*sin(theta),
-           xend = 7.7*cos(theta), yend = 7.7*sin(theta),
-           arrow = arrow(length = unit(0.22, "cm"), type = "closed"), color = "#2ECC71", linewidth = 1.1) +
-  annotate("text", x = 7.1*cos(theta) - 1.6*sin(theta), y = 7.1*sin(theta) + 1.6*cos(theta),
-           label = "Effective tension T_e\n(required, up-slope)", size = 2.8 * diagram_text_scale, color = "#2ECC71") +
+  annotate("text", x = 2.4 * u[1] - 1.6 * n[1], y = 2.4 * u[2] - 1.6 * n[2],
+           label = "Gravity + friction resist motion", size = 2.8 * diagram_text_scale, color = "#E74C3C") +
+  annotate("text", x = 2.4 * u[1] - 2.1 * n[1], y = 2.4 * u[2] - 2.1 * n[2],
+           label = "T[x] + T[y] + T[z]", parse = TRUE, size = 3 * diagram_text_scale, color = "#E74C3C") +
+  ## Effective tension arrow (up-slope, required), label above the belt
+  annotate("segment", x = 6.2 * u[1] + 1.0 * n[1], y = 6.2 * u[2] + 1.0 * n[2],
+           xend = 7.6 * u[1] + 1.0 * n[1], yend = 7.6 * u[2] + 1.0 * n[2],
+           arrow = arrow(length = unit(0.22, "cm"), type = "closed"), color = "darkgreen", linewidth = 1.1) +
+  annotate("text", x = 6.6 * u[1] + 1.8 * n[1], y = 6.6 * u[2] + 1.8 * n[2],
+           label = "'Effective tension '*T[e]*' (up-slope)'", parse = TRUE,
+           size = 3 * diagram_text_scale, color = "darkgreen") +
   annotate("text", x = 2, y = -1.6, label = paste0(theta_deg, "° incline"), size = 3.3 * diagram_text_scale) +
-  coord_fixed() +
-  xlim(-2.5, run_draw + 3) + ylim(-2, rise_draw + 2) +
+  coord_fixed(xlim = c(-2.5, run_draw + 3), ylim = c(-2, rise_draw + 2)) +
   theme_void() +
   labs(title = "Inclined Tote Conveyor: Force Balance",
        subtitle = "22-degree incline, roller-bed belt conveyor, 0.5 m/s design speed") +
@@ -187,8 +195,8 @@ cat(sprintf("T_e,design (+%.0f%% contingency): %.1f N\n", contingency * 100, T_e
 library(ggplot2)
 
 te_df <- data.frame(
-  component = factor(c("Belt/idler\nfriction (T_x)", "Load\nfriction (T_y)", "Gravity/\nelevation (T_z)"),
-                      levels = c("Belt/idler\nfriction (T_x)", "Load\nfriction (T_y)", "Gravity/\nelevation (T_z)")),
+  component = factor(c("Belt/idler friction", "Load friction", "Gravity/elevation"),
+                      levels = c("Belt/idler friction", "Load friction", "Gravity/elevation")),
   force_N = c(43.93, 131.80, 1521.40)
 )
 
@@ -196,11 +204,13 @@ ggplot(te_df, aes(x = component, y = force_N, fill = component)) +
   geom_col() +
   geom_text(aes(label = sprintf("%.0f N", force_N)), vjust = -0.4, size = 3.4 * diagram_text_scale) +
   scale_fill_manual(values = c("#3498DB", "#F39C12", "#E74C3C")) +
+  scale_x_discrete(labels = parse(text = c("'Belt/idler friction '*T[x]", "'Load friction '*T[y]",
+                                           "'Gravity/elevation '*T[z]"))) +
   ylim(0, 1750) +
   labs(title = "Effective Tension Breakdown",
        subtitle = "22-degree incline tote conveyor at design load (before contingency)",
        x = NULL, y = "Force contribution (N)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "none",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
@@ -250,6 +260,10 @@ $$
 This $T_{pulley}$ and $\omega_{pulley}$ (or the equivalent pulley rpm) pair is exactly the $T_{load}$ and $\omega_{load}$ that the [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd) chapter's Design Task 1 reflects through a gear ratio to the motor shaft — from here, the rest of that chapter's method (gear ratio selection, VFD sizing for an induction motor drive like this one, and gearbox service factor selection from its Design Task 4) applies directly, without needing to be re-derived.
 
 ### Worked Example
+
+```{r video-conveyor-power-06-10, echo=FALSE, results='asis'}
+embed_youtube("0-Vz5GrFYs4", "Webinar 102: How to Calculate Required Conveyor Power (Rulmeca Corporation)")
+```
 
 Live cell — drag the belt speed, or change the pulley diameter or drive efficiency, and see how power and torque respond.
 
@@ -321,12 +335,12 @@ ggplot(df_p, aes(x = v, y = P / 1000)) +
   geom_line(color = "#3498DB", linewidth = 1.2) +
   annotate("point", x = 0.5, y = P_design_pt, color = "#E74C3C", size = 4) +
   annotate("text", x = 0.55, y = P_design_pt - 0.25,
-           label = sprintf("Design point:\n0.5 m/s -> %.2f kW", P_design_pt),
+           label = sprintf("Design point:\n0.5 m/s, %.2f kW", P_design_pt),
            size = 3 * diagram_text_scale, hjust = 0, color = "#E74C3C") +
   labs(title = "Required Motor Power vs. Belt Speed",
        subtitle = "Effective tension held constant at 1867 N (Design Task 1 result)",
        x = "Belt speed (m/s)", y = "Motor power (kW)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text = element_text(size = 10.5 * chart_text_scale),
@@ -435,7 +449,7 @@ df_v <- do.call(rbind, lapply(spacing_vals, function(s) {
 ggplot(df_v, aes(x = R, y = v_min, color = s)) +
   geom_line(linewidth = 1.1) +
   annotate("point", x = 45, y = 0.375, color = "black", size = 3.5) +
-  annotate("text", x = 47, y = 0.30, label = "Design case:\n45 totes/min, s = 0.5 m\n-> v_min = 0.375 m/s",
+  annotate("label", x = 47, y = 0.235, fill = "white", linewidth = 0, label = "Design case:\n45 totes/min, s = 0.5 m\nminimum speed 0.375 m/s",
            size = 2.8 * diagram_text_scale, hjust = 0) +
   annotate("segment", x = 10, xend = 70, y = 0.5, yend = 0.5, linetype = "dashed", color = "grey40") +
   annotate("text", x = 12, y = 0.535, label = "Specified running speed (0.5 m/s)",
@@ -444,7 +458,7 @@ ggplot(df_v, aes(x = R, y = v_min, color = s)) +
   labs(title = "Minimum Belt Speed vs. Required Throughput",
        subtitle = "Three minimum tote center-to-center spacings",
        x = "Required throughput (totes/min)", y = "Minimum belt speed (m/s)", color = "Spacing") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         axis.text = element_text(size = 10.5 * chart_text_scale),
@@ -587,7 +601,7 @@ ggplot(compare_long, aes(x = Criterion, y = Score, fill = Type)) +
   labs(title = "Conveyor Technology Comparison — Case-Packing Transfer",
        subtitle = "Relative rating, 1 (poor fit) to 5 (excellent fit) — application-specific",
        x = NULL, y = "Relative rating (1-5)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
         legend.position = "bottom",
@@ -610,7 +624,7 @@ Before any of this chapter's conveyors gets a purchase order, the distribution c
 - **Open frame construction.** Round or square tube, not C-channel or angle iron, wherever the frame is exposed to washdown or product residue. A C-channel's flat top flange is a horizontal ledge — precisely the feature the next rule prohibits — while a round tube presents no flat surface for anything to sit on.
 - **No horizontal ledges.** Any flat, horizontal surface on a food-zone conveyor is a place for water, product debris, and eventually biofilm to accumulate, out of easy sight and often out of reach of a normal cleaning routine. Structural members, brackets, and even conduit runs should be mounted on a slope or eliminated in favor of a shape that sheds water.
 - **Accessible, tool-minimal fasteners.** Blind or threaded holes, especially ones a fastener doesn't fully occupy, trap moisture and are difficult to clean and inspect. Sanitary designs favor open, quick-release, or tool-less fasteners wherever a component needs regular removal for cleaning.
-- **IP-rated components in the washdown path.** Motors, sensors, junction boxes, and any other electrical component exposed to direct washdown need an enclosure rating suited to that exposure — the international **IP69K** rating (per **IEC 60529**, the international ingress-protection standard) specifically covers high-pressure, high-temperature washdown, and is the de facto standard callout for food-industry washdown motors and sensors. Components rated only for dust and light spray (IP54/IP55) are appropriate in dry, non-washdown zones but not in a direct hose-down path.
+- **IP-rated components in the washdown path.** Motors, sensors, junction boxes, and any other electrical component exposed to direct washdown need an enclosure rating suited to that exposure — the **IP69K** rating (defined in **ISO 20653**, which replaced the German DIN 40050-9; **IEC 60529**, the general ingress-protection standard, now has a similar IPX9) specifically covers high-pressure, high-temperature washdown, and is the de facto standard callout for food-industry washdown motors and sensors. Components rated only for dust and light spray (IP54/IP55) are appropriate in dry, non-washdown zones but not in a direct hose-down path.
 
 ```{r fig-06-10-sanitary, echo=FALSE, fig.cap="Sanitary frame cross-sections: a C-channel's flat top flange forms a horizontal ledge that traps water and product debris, while an open round-tube frame with sloped mounts sheds water and leaves nowhere for debris to collect.", fig.align='center', fig.width=11, fig.height=6.5}
 library(ggplot2)
@@ -1017,7 +1031,7 @@ Using the same scores as the worked example (roller: sanitation 3, accumulation 
 
 $$Score_{roller} = 0.05(3)+0.30(5)+0.10(2)+0.40(3)+0.15(2) = 3.35$$
 $$Score_{belt} = 0.05(3)+0.30(2)+0.10(2)+0.40(4)+0.15(5) = 3.30$$
-$$Score_{tabletop} = 0.05(5)+0.30(4)+0.10(5)+0.40(2)+0.15(2) = 2.85$$
+$$Score_{tabletop} = 0.05(5)+0.30(4)+0.10(5)+0.40(2)+0.15(2) = 3.05$$
 
 Roller conveyor wins narrowly under these cost- and accumulation-weighted priorities — matching the automotive pallet/skid transfer example described in this design task's guidelines.
 
@@ -1048,7 +1062,7 @@ Direct product contact (unpackaged produce) with periodic rinse frequency (not d
 
 A project is over budget, and someone proposes downgrading the raw poultry evisceration takeaway conveyor (this chapter's daily-hosedown, direct-raw-protein-contact zone) from 316L to 304 stainless steel to save cost. What's the engineering case against it, and is there a legitimate lower-cost alternative worth proposing instead?
 
-**Answer:** The engineering case against the downgrade is specific, not generic caution: 316L's added molybdenum content exists specifically to resist chloride attack, and this zone combines two of the strongest chloride sources a food plant has — daily caustic/chlorine-based sanitizer and raw protein processing residue. Downgrading to 304 in exactly the zone where chloride exposure is highest is the one place in the facility where that substitution is most likely to cause visible corrosion (pitting, especially at welds) within a a normal service life, not a marginal, defensible risk. A more legitimate way to respond to budget pressure is to make sure the 316L specification is scoped precisely — confirm it's applied only to the components genuinely exposed to washdown and direct contact (frame, product-contact surfaces, fasteners in the wash zone), rather than over-specified onto structural elements or drive components mounted outside the direct spray pattern, which may reasonably use a lower-cost enclosure or mounting arrangement without compromising the sanitary zones that actually need 316L. That's a real cost reduction lever; substituting a lower corrosion grade in the zone with the highest chloride exposure in the building is not.
+**Answer:** The engineering case against the downgrade is specific, not generic caution: 316L's added molybdenum content exists specifically to resist chloride attack, and this zone combines two of the strongest chloride sources a food plant has — daily chlorinated sanitizer and raw protein processing residue. Downgrading to 304 in exactly the zone where chloride exposure is highest is the one place in the facility where that substitution is most likely to cause visible corrosion (pitting, especially at welds) within a normal service life, not a marginal, defensible risk. A more legitimate way to respond to budget pressure is to make sure the 316L specification is scoped precisely — confirm it's applied only to the components genuinely exposed to washdown and direct contact (frame, product-contact surfaces, fasteners in the wash zone), rather than over-specified onto structural elements or drive components mounted outside the direct spray pattern, which may reasonably use a lower-cost enclosure or mounting arrangement without compromising the sanitary zones that actually need 316L. That's a real cost reduction lever; substituting a lower corrosion grade in the zone with the highest chloride exposure in the building is not.
 
 </details>
 

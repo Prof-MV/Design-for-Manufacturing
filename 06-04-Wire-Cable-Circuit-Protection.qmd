@@ -48,11 +48,11 @@ The pretreatment line's new immersion heater bank draws a steady 58 A, three-pha
 
 ### Design Guidelines and Rules of Thumb
 
-An **ampacity table** is the source of record for how much continuous current a given conductor size can carry without exceeding its insulation's rated temperature. In Canada, that source is **CEC Table 2** (Ampacities of copper conductors, rated 0-2000 V, based on a 30°C ambient, for not more than three current-carrying conductors in a raceway or cable) as adopted by the OESC; the widely-used US equivalent is **NEC Table 310.16**. Both tables are organized the same conceptual way: conductor size (AWG or kcmil) down one axis, insulation temperature rating (60°C, 75°C, 90°C are the common columns) across the other, with the ampacity for each combination read directly out of the cell — no calculation is involved in this base lookup, only correct table entry. This chapter does not reproduce either table's actual numeric entries; the worked examples below use realistic, representative ampacity values in the spirit of those tables, and any real design must go to the current edition of CEC Table 2 (or NEC Table 310.16) directly.
+An **ampacity table** is the source of record for how much continuous current a given conductor size can carry without exceeding its insulation's rated temperature. In Canada, that source is **CEC Table 2** (Ampacities of copper conductors, rated 0-2000 V, based on a 30°C ambient, for not more than three current-carrying conductors in a raceway or cable) as adopted by the OESC; the widely-used US equivalent is **NEC Table 310.16**. Both tables are organized the same conceptual way: conductor size (AWG or kcmil) down one axis, insulation temperature rating (60°C, 75°C, 90°C are the common columns) across the other, with the ampacity for each combination read directly out of the cell — no calculation is involved in this base lookup, only correct table entry. The worked examples below use the familiar 75°C copper values (50 A for 8 AWG up to 150 A for 1/0), which agree with both tables for these sizes; any real design must still go to the current edition of CEC Table 2 (or NEC Table 310.16) directly.
 
 Two things determine which column of the table applies before a designer even looks at conductor size: the conductor's **insulation temperature rating** (marked on the cable jacket — common industrial types like RW90 or THHN/THWN-2 are 90°C-rated, but many designers conservatively use the 75°C column even for 90°C-rated conductors, because the *terminations* — breakers, lugs, motor terminals — are very often only rated for 75°C, and the ampacity has to respect the lowest-rated point in the circuit, not just the cable itself); and the conductor **material** (copper vs. aluminum have different ampacities at the same size, and this chapter uses copper throughout, the default for most industrial control and branch power wiring in this size range).
 
-Before comparing the load current to the table, the load current itself often needs an adjustment. A load that runs continuously (conventionally, for three hours or more at a stretch) is treated more conservatively than an intermittent one, because sustained full-current operation is exactly the condition the ampacity table's thermal limit is protecting against. In the CEC, this shows up through **Rule 8-104** (conductor ampacity selection) together with **Rule 8-106** (maximum circuit loading), which together limit how much of a conductor's and an overcurrent device's rating can be continuously loaded; the NEC equivalent is more explicit about the arithmetic, requiring a minimum conductor ampacity of **125% of the continuous load** plus 100% of any noncontinuous portion (NEC 210.19(A) for branch circuits, 215.2(A) for feeders). Both approaches land in the same place in practice for a purely continuous load like this heater bank: **size the conductor for 125% of the continuous current**, not the bare nameplate current.
+Before comparing the load current to the table, the load current itself often needs an adjustment. A load that runs continuously (conventionally, for three hours or more at a stretch) is treated more conservatively than an intermittent one, because sustained full-current operation is exactly the condition the ampacity table's thermal limit is protecting against. In the CEC, this shows up through **Rule 8-104** (maximum circuit loading), which limits a continuous load to 80% of the conductor ampacity and of the overcurrent device rating (100% where the equipment is marked for continuous operation at 100%); the NEC equivalent is more explicit about the arithmetic, requiring a minimum conductor ampacity of **125% of the continuous load** plus 100% of any noncontinuous portion (NEC 210.19(A) for branch circuits, 215.2(A) for feeders). Both approaches land in the same place in practice for a purely continuous load like this heater bank: **size the conductor for 125% of the continuous current**, not the bare nameplate current.
 
 **Rule of thumb:** for a genuinely continuous industrial load (an oven, a heater bank, a pump that runs all shift), size the conductor to 125% of the actual running current before consulting the ampacity table. This rule of thumb breaks down for loads that are clearly *not* continuous by the three-hour convention — a hoist, a press, a robot weld gun — where sizing at 125% needlessly oversizes the conductor for a duty the circuit will never actually see; for those, the applicable rule shifts toward the equipment's own duty-cycle rating, which is a different (and often more forgiving) calculation than this straight continuous-load factor.
 
@@ -67,11 +67,11 @@ $$I_{table}(\text{AWG}) \geq I_{required}$$
 | Symbol | Definition | Units |
 |:-------|:-----------|:------|
 | $I_{load}$ | Actual running current of the load | A |
-| $CLF$ | Continuous load factor (1.25 for a continuous load per Rule 8-106 / NEC 210.19(A); 1.0 for a non-continuous load) | dimensionless |
+| $CLF$ | Continuous load factor (1.25 for a continuous load, the inverse of CEC Rule 8-104's 80% limit / NEC 210.19(A); 1.0 for a non-continuous load) | dimensionless |
 | $I_{required}$ | Minimum ampacity the selected conductor must meet or exceed | A |
 | $I_{table}(\text{AWG})$ | Table ampacity for a given AWG size, at the applicable insulation temperature rating and base (30°C, ≤3 current-carrying conductors) conditions | A |
 
-```{r fig-06-04-ampacity-bar, echo=FALSE, fig.cap="Representative copper conductor ampacity by AWG size (75C insulation, base 30C ambient, three or fewer current-carrying conductors) — illustrative values in the spirit of CEC Table 2 / NEC Table 310.16, not reproduced from either table. The dashed line marks this circuit's required ampacity after the 125% continuous-load factor.", fig.align='center', fig.width=10, fig.height=6}
+```{r fig-06-04-ampacity-bar, echo=FALSE, fig.cap="Copper conductor ampacity by AWG size (75°C column, base 30°C ambient, three or fewer current-carrying conductors), as in CEC Table 2 / NEC Table 310.16. The dashed line marks this circuit's required ampacity after the 125% continuous-load factor.", fig.align='center', fig.width=10, fig.height=6}
 awg_levels <- c("8", "6", "4", "3", "2", "1", "1/0")
 amp_df <- data.frame(
   awg = factor(awg_levels, levels = awg_levels),
@@ -90,9 +90,9 @@ ggplot(amp_df, aes(x = awg, y = ampacity, fill = status)) +
   scale_fill_manual(values = c("Meets or exceeds required ampacity" = "#2ECC71",
                                 "Below required ampacity" = "#BDC3C7")) +
   labs(title = "Representative Copper Conductor Ampacity by AWG Size",
-       subtitle = "75C insulation, illustrative values in the spirit of CEC Table 2 / NEC Table 310.16",
+       subtitle = "75°C column, 30°C ambient (CEC Table 2 / NEC Table 310.16)",
        x = "Conductor size (AWG)", y = "Base ampacity (A)", fill = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "bottom",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
@@ -104,9 +104,8 @@ ggplot(amp_df, aes(x = awg, y = ampacity, fill = status)) +
 ### Worked Example
 
 ```{r ampacity-selection-06-04, echo=TRUE}
-## Representative base ampacity table: copper, 75C insulation, 30C ambient,
-## <=3 current-carrying conductors -- illustrative values in the spirit of
-## CEC Table 2 / NEC Table 310.16, NOT reproduced from either table.
+## Base ampacity: copper, 75C column, 30C ambient, <=3 current-carrying
+## conductors (values as in CEC Table 2 / NEC Table 310.16 for these sizes)
 awg_table <- data.frame(
   awg = c("8", "6", "4", "3", "2", "1", "1/0"),
   ampacity_75C = c(50, 65, 85, 100, 115, 130, 150)
@@ -160,7 +159,7 @@ $$I_{allowable} = I_{base} \times CF_{ambient} \times CF_{bundling}$$
 
 A design passes when $I_{allowable} \geq I_{required}$, using the same $I_{required}$ computed in Design Task 1.
 
-```{r fig-06-04-derating, echo=FALSE, fig.cap="Derated ampacity by conductor size at the actual installed conditions (40C ambient, nine current-carrying conductors bundled in one tray). AWG 4, selected under base conditions in Design Task 1, no longer clears the required ampacity once both derating factors are applied.", fig.align='center', fig.width=10, fig.height=6}
+```{r fig-06-04-derating, echo=FALSE, fig.cap="Derated ampacity by conductor size at the actual installed conditions (40°C ambient, nine current-carrying conductors bundled in one tray). AWG 4, selected under base conditions in Design Task 1, no longer clears the required ampacity once both derating factors are applied.", fig.align='center', fig.width=10, fig.height=6}
 derate_df <- data.frame(
   awg = factor(c("4", "3", "2", "1", "1/0"), levels = c("4", "3", "2", "1", "1/0")),
   derated = c(52.36, 61.60, 70.84, 80.08, 92.40)
@@ -174,9 +173,9 @@ ggplot(derate_df, aes(x = awg, y = derated)) +
   annotate("text", x = 1.1, y = I_required_fig + 4, label = "Required ampacity (72.5 A)",
            color = "firebrick", size = 3.2 * diagram_text_scale, hjust = 0) +
   labs(title = "Derated Ampacity vs. Conductor Size",
-       subtitle = "40C ambient (CF = 0.88) x 9 bundled conductors (CF = 0.70), applied to Task 1's base table values",
+       subtitle = "40°C ambient (CF = 0.88) × 9 bundled conductors (CF = 0.70), applied to Task 1's 75°C values",
        x = "Conductor size (AWG)", y = "Derated allowable ampacity (A)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9 * chart_text_scale),
         axis.text = element_text(size = 10 * chart_text_scale),
@@ -249,6 +248,8 @@ for (i in seq_len(nrow(awg_candidates))) {
 
 **Sanity check:** the combined derating factor here is 0.88 × 0.70 ≈ 0.62 — squarely inside the 0.55-0.75 rule-of-thumb band for a busy industrial tray, a useful confirmation that nothing was mistyped. AWG 4, which comfortably passed Task 1's base-condition check with 17% margin, now derates to just 52.4 A — barely 72% of the 72.5 A requirement — and the circuit has to jump all the way to AWG 1 to pass. This is precisely the trap the rule of thumb above warns against: checking only ambient (AWG 4 at 0.88 alone gives 74.8 A, which still *looks* like a pass) or only bundling (AWG 4 at 0.70 alone gives 59.5 A, an obvious fail) each tells an incomplete story; only the combined check catches the real answer.
 
+One refinement is worth knowing. If the conductor is 90°C-rated (RW90, THHN/THWN-2), both codes let you apply the derating factors to the **90°C** ampacity, as long as the result is not higher than the 75°C ampacity the terminations allow. AWG 2 copper is 130 A in the 90°C column and its 40°C correction is 0.91, so 130 × 0.91 × 0.70 = 82.8 A, which clears 72.5 A (and is below its 115 A termination limit). Using the insulation's real rating saves a size here: AWG 2 instead of AWG 1.
+
 ## Design Task 3: Voltage Drop Calculations
 
 ### Scenario
@@ -309,15 +310,15 @@ ggplot(vdrop_df, aes(x = L, y = pct, color = gauge)) +
   geom_line(linewidth = 1.2) +
   annotate("segment", x = 10, xend = 200, y = 3, yend = 3,
            linetype = "dashed", color = "grey30", linewidth = 0.9) +
-  annotate("text", x = 135, y = 3.7, label = "3% rule-of-thumb limit",
-           color = "grey30", size = 3 * diagram_text_scale) +
+  annotate("label", x = 12, y = 3.6, label = "3% rule-of-thumb limit", hjust = 0,
+           color = "grey30", size = 3 * diagram_text_scale, fill = "white", linewidth = 0) +
   annotate("point", x = mark_L, y = mark_pct_18, color = "black", size = 3, shape = 4, stroke = 1.5) +
-  annotate("text", x = mark_L + 5, y = mark_pct_18 + 0.6, label = "18 AWG @ 120 m",
-           size = 2.8 * diagram_text_scale, hjust = 0) +
+  annotate("label", x = mark_L - 4, y = mark_pct_18 + 1.6, label = sprintf("18 AWG @ 120 m: %.1f%%", mark_pct_18),
+           size = 3 * diagram_text_scale, hjust = 1, fill = "white", linewidth = 0) +
   labs(title = "24 VDC Circuit Voltage Drop vs. Run Length",
        subtitle = "0.35 A solenoid load, round-trip resistive drop",
        x = "One-way cable run length (m)", y = "Voltage drop (% of 24 V)", color = "Conductor size") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "bottom",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
@@ -412,7 +413,7 @@ ggplot(compare_df, aes(x = system, y = pct, fill = system)) +
   ylim(0, 1.6) +
   labs(title = "Same Motor, Same Feeder: Voltage Class Effect on Percent Drop",
        x = NULL, y = "Voltage drop (% of system voltage)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "none",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         axis.text = element_text(size = 10 * chart_text_scale),
@@ -453,9 +454,9 @@ I_FLA <- 78        # A, motor nameplate full-load amps
 L_m <- 70           # m, one-way feeder length, MCC to motor
 pf <- 0.87          # motor power factor at rated load
 
-## Representative conductor resistance/reactance (illustrative, consistent
-## with the order of magnitude in CEC Table 4 / NEC Chapter 9 Table 9 for a
-## 2/0 AWG copper conductor in steel conduit)
+## Representative AC resistance/reactance for AWG 1 copper, three conductors
+## in one cable (order of magnitude of NEC Chapter 9 Table 9; check the
+## table for the actual raceway type)
 R_ohm_km <- 0.525
 X_ohm_km <- 0.135
 
@@ -500,11 +501,11 @@ Four cable constructions cover the large majority of industrial power and contro
 
 **AC90** is a related interlocked-armor cable, standardized under **CSA C22.2 No. 51**, but built for a gentler duty: it has no overall outer jacket (the armor itself is the outer surface), which keeps it lighter and less expensive but restricts it to indoor, dry locations — concealed or exposed wiring in commercial and light industrial buildings. It is not rated for wet locations or direct burial, and using it as a cost-saving substitute for TECK90 anywhere with moisture, washdown, or outdoor exposure is a straightforward code violation, not a judgment call.
 
-**Tray cable** is a multiconductor cable (typically with an overall jacket, no metallic armor) specifically rated to be supported in a cable tray system without conduit. It's a common, cost-effective choice for control and instrumentation wiring runs in a process plant that already has tray infrastructure in place — lighter and cheaper than TECK90 per meter, since it isn't carrying armor's mechanical-protection cost, but it also isn't offering that protection: physical protection against impact comes only from the tray's own routing and covers, not from the cable itself, and some jurisdictions restrict tray cable for power circuits above certain voltage or conductor-size thresholds without additional engineering justification.
+**Tray cable** (Type TC, CSA C22.2 No. 230 in Canada) is a multiconductor cable (typically with an overall jacket, no metallic armor) specifically rated to be supported in a cable tray system without conduit. It's a common, cost-effective choice for control and instrumentation wiring runs in a process plant that already has tray infrastructure in place — lighter and cheaper than TECK90 per meter, since it isn't carrying armor's mechanical-protection cost, but it also isn't offering that protection: physical protection against impact comes only from the tray's own routing and covers, not from the cable itself, and some jurisdictions restrict tray cable for power circuits above certain voltage or conductor-size thresholds without additional engineering justification.
 
 **VFD cable** is built to solve a problem none of the other three constructions address at all: a variable frequency drive's PWM output waveform has very fast voltage rise times (high dv/dt), and a standard three-conductor power cable running that waveform to a motor can produce reflected-wave voltage spikes at the motor terminals, common-mode electrical noise that couples into nearby signal wiring, and elevated shaft currents that erode motor bearings over time. VFD cable addresses this with a distinctive **symmetrical construction**: three phase conductors plus three equally-sized, symmetrically-placed ground conductors (rather than one undersized ground), typically under an overall shield or braid, all under a common jacket. The symmetry and shielding give the return current a low-impedance, geometrically balanced path back to the drive, which is what actually controls the reflected-wave and common-mode effects — a standard TC or AC90 cable with a single small ground conductor does not provide this, no matter how correctly it's otherwise sized for the motor's current.
 
-```{r fig-06-04-cable-cross-section, echo=FALSE, fig.cap="Schematic cross-sections: TECK90 (interlocked armor, PVC jacket, standard ground) vs. VFD cable (shielded, symmetrical ground conductors interleaved with the phase conductors). Schematic, not to scale.", fig.align='center', fig.width=11, fig.height=6}
+```{r fig-06-04-cable-cross-section, echo=FALSE, fig.cap="Schematic cross-sections: TECK90 (interlocked armor, PVC jacket, a single bonding conductor G) vs. VFD cable (shielded, symmetrical ground conductors interleaved with the phase conductors). Schematic, not to scale.", fig.align='center', fig.width=11, fig.height=6}
 teck_cx <- -4; teck_cy <- 0
 vfd_cx <- 4; vfd_cy <- 0
 
@@ -518,6 +519,7 @@ teck_armor  <- data.frame(x0 = teck_cx, y0 = teck_cy, r = 2.3)
 teck_cond <- trigonal_pos(teck_cx, teck_cy, 1.1)
 teck_cond$r <- 0.75
 teck_cond$label <- c("L1", "L2", "L3")
+teck_gnd <- data.frame(x0 = teck_cx, y0 = teck_cy, r = 0.3, label = "G")
 
 vfd_jacket <- data.frame(x0 = vfd_cx, y0 = vfd_cy, r = 2.6)
 vfd_shield <- data.frame(x0 = vfd_cx, y0 = vfd_cy, r = 2.3)
@@ -533,6 +535,8 @@ ggplot() +
   geom_circle(data = teck_armor, aes(x0 = x0, y0 = y0, r = r), color = "grey50", linetype = "dashed", linewidth = 0.8) +
   geom_circle(data = teck_cond, aes(x0 = x0, y0 = y0, r = r), fill = "#F39C12", color = "black") +
   geom_text(data = teck_cond, aes(x = x0, y = y0, label = label), size = 3 * diagram_text_scale) +
+  geom_circle(data = teck_gnd, aes(x0 = x0, y0 = y0, r = r), fill = "#95A5A6", color = "black") +
+  geom_text(data = teck_gnd, aes(x = x0, y = y0, label = label), size = 2.4 * diagram_text_scale) +
   annotate("text", x = teck_cx, y = -3.3, label = "TECK90\n(interlocked armor + PVC jacket)",
            size = 3.2 * diagram_text_scale, fontface = "bold") +
   geom_circle(data = vfd_jacket, aes(x0 = x0, y0 = y0, r = r), color = "grey30", linewidth = 1.1) +
@@ -547,7 +551,7 @@ ggplot() +
   theme_void()
 ```
 
-The US/NEC equivalents track closely: TECK90 corresponds most closely to Type MC (metal-clad) cable (NEC Article 330, product-listed to UL 1569); AC90 corresponds to Type AC (armored) cable (NEC Article 320); tray cable corresponds to Type TC cable (NEC Article 336, product-listed to UL 1277); VFD cable has no single dedicated NEC article, but is commonly product-listed to UL 2277 and specified against NEMA motor-drive application guidance.
+The US/NEC equivalents track closely: TECK90 corresponds most closely to Type MC (metal-clad) cable (NEC Article 330, product-listed to UL 1569); AC90 corresponds to Type AC (armored) cable (NEC Article 320); tray cable corresponds to Type TC cable (NEC Article 336, product-listed to UL 1277); VFD cable has no single dedicated NEC article; most products are listed as Type TC-ER (UL 1277) in the US and to the tray-cable or armoured-cable standards (CSA C22.2 No. 230 or No. 131) in Canada, with the symmetrical construction and shield as manufacturer features, and are applied against NEMA MG 1 Part 31 guidance on inverter-fed motors.
 
 <details>
 <summary>Industry connection: washdown-rated jacketing in a food plant</summary>
@@ -701,9 +705,8 @@ Governing device standards, cited by name and number rather than reproduced: in 
 I_avail_kA <- seq(1, 100, by = 1)
 breaker_let_through <- 2.3 * I_avail_kA
 fuse_threshold <- 6   # kA, illustrative current-limiting threshold for this fuse rating
-fuse_let_through <- ifelse(I_avail_kA <= fuse_threshold,
-                            2.3 * I_avail_kA,
-                            2.3 * fuse_threshold + (I_avail_kA - fuse_threshold) * 0.15)
+fuse_let_through <- 2.3 * pmin(I_avail_kA, fuse_threshold) +
+  0.15 * pmax(I_avail_kA - fuse_threshold, 0)
 
 lt_df <- data.frame(
   I = rep(I_avail_kA, 2),
@@ -722,13 +725,13 @@ ggplot(lt_df, aes(x = I, y = peak, color = type)) +
   annotate("point", x = mark_I, y = mark_fuse, color = "black", size = 3) +
   annotate("segment", x = mark_I, xend = mark_I, y = 0, yend = mark_breaker,
            linetype = "dotted", color = "grey40") +
-  annotate("text", x = mark_I + 2, y = mark_breaker + 5, label = "42 kA available\n(this panel's fault study)",
-           size = 2.8 * diagram_text_scale, hjust = 0) +
+  annotate("label", x = mark_I + 2, y = 55, label = "42 kA available\n(this panel's fault study)",
+           size = 3 * diagram_text_scale, hjust = 0, fill = "white", linewidth = 0) +
   scale_color_manual(values = c("Standard molded-case breaker (not current-limiting)" = "#E74C3C",
                                  "Current-limiting fuse" = "#2ECC71")) +
   labs(title = "Peak Let-Through Current vs. Available Fault Current (Illustrative)",
        x = "Available fault current, RMS symmetrical (kA)", y = "Peak let-through current (kA)", color = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "bottom",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         axis.text = element_text(size = 10 * chart_text_scale),
@@ -839,7 +842,7 @@ Why this matters beyond a single line's uptime: in a multi-cell automotive plant
 
 **Rule of thumb:** as a first-pass check without overlaying full manufacturer time-current curves, look for a clearing-time **margin of at least 2:1** (upstream time divided by downstream time) at the highest fault current the pair could realistically see. This breaks down at the exact boundary of an instantaneous trip region — a margin that looks comfortable at a moderate fault current can collapse to nearly 1:1 (or worse) once the fault current climbs high enough to push both devices into their instantaneous bands, which is exactly the failure mode illustrated below; a genuine coordination study checks the margin across the *entire* current range, not just at one assumed fault level.
 
-CEC Section 14 (Overcurrent Protection) expects protective devices to be applied so that a fault is cleared by the nearest upstream device — general good coordination practice rather than a single explicit numeric mandate for most circuits — and Canadian emergency-power system design under **CSA C282** expects reliable, selective operation for life-safety loads specifically. The NEC is more explicit: **NEC 240.12** formally defines "selective coordination," and **Articles 700, 701, and 708** (emergency systems, legally required standby systems, and critical operations power systems, respectively) make full selective coordination a mandatory requirement, not just good practice, for those specific system types.
+CEC Section 14 (Overcurrent Protection) expects protective devices to be applied so that a fault is cleared by the nearest upstream device — general good coordination practice rather than a single explicit numeric mandate for most circuits — and Canadian emergency-power system design under **CSA C282** expects reliable, selective operation for life-safety loads specifically. The NEC is more explicit: **Article 100** formally defines "selective coordination," **240.12** permits coordination for orderly shutdown of industrial processes, and **Articles 700, 701, and 708** (emergency systems, legally required standby systems, and critical operations power systems, respectively) — plus Article 620 for elevators — make full selective coordination a mandatory requirement, not just good practice, for those specific system types.
 
 ```{r fig-06-04-coordination, echo=FALSE, fig.cap="Illustrative time-current comparison: a coordinated fuse pair stays clearly separated across the whole plotted range, while an uncoordinated breaker pair's curves converge and nearly overlap once both devices reach their instantaneous trip regions. Representative shape only, not manufacturer curve data.", fig.align='center', fig.width=11, fig.height=6}
 fuse_downstream <- data.frame(I = c(100, 200, 500, 1000, 3500, 6000),
@@ -873,7 +876,7 @@ ggplot(curve_df, aes(x = I, y = t, color = device, linetype = pair)) +
   facet_wrap(~pair) +
   labs(title = "Selective Coordination: Time-Current Comparison (Illustrative)",
        x = "Fault current (A, log scale)", y = "Clearing time (s, log scale)", color = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "bottom",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         axis.text = element_text(size = 9 * chart_text_scale),
@@ -894,6 +897,10 @@ $$\text{Coordinated at } I \iff t_{downstream}(I) < t_{upstream}(I), \quad \frac
 | $M$ | Margin threshold applied as a rule-of-thumb confidence check (2, as above) | dimensionless |
 
 ### Worked Example
+
+```{r video-coordination-06-04, echo=FALSE, results='asis'}
+embed_youtube("vDQ5uuidDxE", "Bussmann series Fuseology - Selective coordination, Module 9 (Eaton)")
+```
 
 Live cell — drag the fault current and see whether each pair stays coordinated (the curve points can be edited in the code underneath).
 
@@ -1170,7 +1177,7 @@ A derating calculation like the one above fails. Two fixes are on the table: ups
 </details>
 
 <details>
-<summary>Design Task 3, Problem 1 (plug-in): a shorter 24VDC run at higher current</summary>
+<summary>Design Task 3, Problem 1 (plug-in): a shorter, lower-current 24VDC run</summary>
 
 A 24 VDC photoelectric sensor draws 0.12 A over a 45 m one-way run of 18 AWG cable (R = 25.7 Ω/km). Find the voltage drop and percent drop.
 
@@ -1266,7 +1273,7 @@ You are the electrical designer responsible for a new clean-in-place (CIP) skid 
 Work through this chapter's six design tasks for this installation:
 
 1. Select a base conductor size for the heater bank feeder (Design Task 1), then derate it for the actual 42°C/6-conductor tray conditions (Design Task 2). Does the base selection still hold up?
-2. Check voltage drop on the VFD's output feeder to the pump motor (Design Task 3b) — does it clear the 3% rule of thumb, and if the pump's VFD keyway/analog speed reference signal ran on a separate 24 VDC pair alongside it, would you apply the same tolerance to that signal circuit?
+2. Check voltage drop on the VFD's output feeder to the pump motor (Design Task 3b) — does it clear the 3% rule of thumb, and if the pump's VFD analog speed reference signal ran on a separate 24 VDC pair alongside it, would you apply the same tolerance to that signal circuit?
 3. Select the appropriate cable construction for each of the three runs described above (Design Task 4), including any jacket/glanding requirements the washdown-exposed run needs.
 4. Using the 28 kA available fault current, evaluate whether a fuse or a breaker is the right choice for the VFD branch circuit's overcurrent protection (Design Task 5) — state what additional information (equipment SCCR ratings) you would need from the VFD manufacturer to finish this check.
 5. Given the 400 A shared main and the 70 A VFD branch device, describe what you would need to verify to confirm selective coordination (Design Task 6), and explain in your own words what happens to the other two CIP skids on that shared main if coordination fails.

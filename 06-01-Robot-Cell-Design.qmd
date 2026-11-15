@@ -54,7 +54,7 @@ The rated maximum reach is also not a hard wall. Near the outer edge of the enve
 
 **Rule of thumb:** design to a reach margin of at least 10% below the manufacturer's rated maximum reach for any point that requires a specific tool orientation, not just a bare touch. This margin degrades quickly for tasks that need a wide range of approach angles at the same point (e.g., a gun that has to swing through several orientations to clear a flange) — for those, a full CAD reach study with the actual tool model is worth doing even when the straight-line distance check passes comfortably.
 
-CSA Z434 (the Canadian standard for industrial robots and robot systems) expects the work envelope to be documented as part of the cell's layout and risk assessment; ISO 10218 and ANSI RIA R15.06 are the international and US equivalents.
+CSA Z434 (the Canadian standard for industrial robots, robot applications, and robot cells) expects the work envelope to be documented as part of the cell's layout and risk assessment. The current edition, CSA Z434:26, adopts ISO 10218-1:2025 and ISO 10218-2:2025 with Canadian deviations; ANSI/A3 R15.06-2025 is the US adoption of the same ISO pair.
 
 ### Governing Calculation
 
@@ -134,47 +134,50 @@ if (margin_pct >= 10) {
 
 **Sanity check:** the required reach (about 2.49 m) is still comfortably less than the rated maximum reach (2.655 m) — a naive check that just compares required reach to $R_{max}$ would say this cell passes. It's only the 10% margin rule of thumb that catches the problem: this point sits right at the edge of the dexterous envelope, where wrist orientation flexibility is limited. Moving the pedestal 300 mm closer restores a comfortable margin without changing the robot model or the fixture design.
 
-```{r fig-06-01-cell-layout, echo=FALSE, fig.cap="Plan view of a spot-welding robot cell: rated reach envelope (dashed), a 10% margin band (dotted), and the five required weld points, with the farthest point (P5) driving the reach check. Schematic, not to scale.", fig.align='center', fig.width=9, fig.height=7}
+```{r fig-06-01-cell-layout, echo=FALSE, fig.cap="Plan view of a spot-welding robot cell: rated reach envelope (dashed), the 90% line that marks the 10% margin band (dotted), and the five required weld points. The farthest point, P5, needs 94% of the rated reach once the gun length is added, so it sits inside the margin band and drives the reach check. Schematic, not to scale.", fig.align='center', fig.width=9, fig.height=7}
 base_x <- 0
 base_y <- 0
 r_max  <- 4.2
 
+## Radii are expressed as a fraction of R_max (required reach incl. tool):
+## P5 = 0.938, the worked example's 2490.7 / 2655; the others sit well inside.
 targets <- data.frame(
-  x = c(3.6, 2.0, -1.6, 0.6, 3.35),
-  y = c(1.55, -2.35, 2.55, -3.05, -0.55),
+  frac  = c(0.78, 0.70, 0.74, 0.66, 0.938),
+  ang   = c(30, -55, 125, -95, -10) * pi / 180,
   label = c("P1", "P2", "P3", "P4", "P5 (farthest)")
 )
+targets$x <- base_x + targets$frac * r_max * cos(targets$ang)
+targets$y <- base_y + targets$frac * r_max * sin(targets$ang)
 worst <- targets[5, ]
 
-## Envelope and margin-band circles: geom_circle() (not annotate()) because
-## ggforce's circle geom relies on a stat transform (x0/y0/r -> x/y path)
-## that annotate()'s forced stat="identity" bypasses
-envelope_circles <- data.frame(
-  x0 = c(base_x, base_x),
-  y0 = c(base_y, base_y),
-  r = c(r_max, r_max * 0.9),
-  kind = c("envelope", "margin")
-)
+circ <- function(r, kind) {
+  th <- seq(0, 2 * pi, length.out = 361)
+  data.frame(x = base_x + r * cos(th), y = base_y + r * sin(th), kind = kind)
+}
+circles <- rbind(circ(r_max, "envelope"), circ(0.9 * r_max, "margin"))
+mk <- 0.09   # half-size of the target cross markers
 
 ggplot() +
-  geom_circle(data = envelope_circles, aes(x0 = x0, y0 = y0, r = r, linetype = kind, color = kind),
-              linewidth = 1, fill = NA, show.legend = FALSE) +
+  geom_path(data = circles, aes(x = x, y = y, linetype = kind, color = kind, group = kind),
+            linewidth = 1, show.legend = FALSE) +
   scale_linetype_manual(values = c(envelope = "dashed", margin = "dotted")) +
-  scale_color_manual(values = c(envelope = "steelblue", margin = "grey55")) +
+  scale_color_manual(values = c(envelope = "steelblue", margin = "grey45")) +
   annotate("rect", xmin = base_x - 0.35, xmax = base_x + 0.35,
            ymin = base_y - 0.35, ymax = base_y + 0.35, fill = "grey30") +
-  annotate("text", x = base_x, y = base_y - 0.75, label = "Robot base\n(pedestal mount)",
+  annotate("text", x = base_x, y = base_y - 0.85, label = "Robot base\n(pedestal mount)",
            size = 3.2 * diagram_text_scale) +
   annotate("segment", x = base_x, xend = worst$x, y = base_y, yend = worst$y,
            linewidth = 0.9, color = "firebrick", linetype = "dashed") +
-  geom_point(data = targets, aes(x = x, y = y), size = 3, color = "black") +
-  geom_text(data = targets, aes(x = x, y = y, label = label), vjust = -1.1,
-            size = 3.2 * diagram_text_scale) +
-  annotate("text", x = r_max * 0.62, y = r_max * 0.62, label = "R_max (rated reach)",
-           color = "steelblue", size = 3 * diagram_text_scale) +
-  annotate("text", x = -r_max * 0.55, y = r_max * 0.78, label = "10% margin band",
-           color = "grey45", size = 2.7 * diagram_text_scale) +
-  coord_fixed() +
+  geom_segment(data = targets, aes(x = x - mk, xend = x + mk, y = y - mk, yend = y + mk), linewidth = 1) +
+  geom_segment(data = targets, aes(x = x - mk, xend = x + mk, y = y + mk, yend = y - mk), linewidth = 1) +
+  geom_label(data = targets, aes(x = x, y = y + 0.35, label = label),
+             size = 3.2 * diagram_text_scale, fill = "white", linewidth = 0,
+             label.padding = unit(0.1, "lines")) +
+  annotate("label", x = r_max * 0.74, y = r_max * 0.74, label = "R[max]~(rated~reach)", parse = TRUE,
+           color = "steelblue", size = 3.2 * diagram_text_scale, fill = "white", linewidth = 0) +
+  annotate("label", x = -r_max * 0.62, y = -r_max * 0.70, label = "'90% of '*R[max]*' (10% margin line)'",
+           parse = TRUE, color = "grey35", size = 2.9 * diagram_text_scale, fill = "white", linewidth = 0) +
+  coord_fixed(xlim = c(-4.6, 4.6), ylim = c(-4.5, 4.5)) +
   theme_void() +
   labs(title = "Reach Envelope and Weld Points") +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
@@ -218,10 +221,14 @@ $$
 | $L$ | Actual combined CG offset of end-effector + workpiece from the flange centerline | mm |
 | $Payload_{max}(L)$ | Maximum allowable total carried mass at offset $L$ | kg |
 
-```{r fig-06-01-cg-schematic, echo=FALSE, fig.cap="Side-view schematic of an offset end-effector: the combined center of gravity of gripper and workpiece sits a horizontal distance L from the wrist flange centerline, creating an overturning moment about the wrist. Schematic, not to scale.", fig.align='center', fig.width=9, fig.height=5}
+```{r fig-06-01-cg-schematic, echo=FALSE, fig.cap="Side-view schematic of an offset end-effector: the combined center of gravity of gripper and workpiece sits a horizontal distance L from the wrist flange centerline, so the weight W creates an overturning moment W × L about the wrist. Schematic, not to scale.", fig.align='center', fig.width=9, fig.height=5}
+## Moment arc drawn around the flange centre, turning the same way W does
+## (clockwise in this view, since W hangs to the right of the flange)
+th <- seq(200, 80, length.out = 60) * pi / 180
+moment_arc <- data.frame(x = 0 + 0.75 * cos(th), y = 3.9 + 0.75 * sin(th))
 ggplot() +
   annotate("rect", xmin = -0.3, xmax = 0.3, ymin = 3.6, ymax = 4.2, fill = "grey30") +
-  annotate("text", x = 0, y = 4.55, label = "Wrist flange", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = 0, y = 4.95, label = "Wrist flange", size = 3.2 * diagram_text_scale) +
   annotate("segment", x = 0, xend = 0, y = 3.6, yend = 0.2, linetype = "dashed",
            color = "grey50", linewidth = 0.6) +
   annotate("segment", x = 0, xend = 2.4, y = 3.6, yend = 3.0, linewidth = 3, color = "steelblue") +
@@ -235,35 +242,44 @@ ggplot() +
   annotate("segment", x = 0, xend = 2.4, y = -0.3, yend = -0.3,
            arrow = arrow(length = unit(0.15, "cm"), ends = "both", type = "closed"), linewidth = 0.8) +
   annotate("text", x = 1.2, y = -0.65, label = "L (CG offset)", size = 3.2 * diagram_text_scale) +
-  annotate("curve", x = -0.6, xend = -0.4, y = 3.0, yend = 3.5, curvature = -0.5,
-           color = "darkorange", linewidth = 1) +
-  annotate("text", x = -1.05, y = 3.2, label = "Overturning\nmoment", color = "darkorange",
+  geom_path(data = moment_arc, aes(x = x, y = y), color = "darkorange", linewidth = 1,
+            arrow = arrow(length = unit(0.2, "cm"), type = "closed")) +
+  annotate("text", x = -1.3, y = 3.4, label = "Overturning\nmoment W × L", color = "darkorange",
            size = 2.8 * diagram_text_scale) +
-  coord_fixed(xlim = c(-1.7, 3.4), ylim = c(-1, 5)) +
+  coord_fixed(xlim = c(-2.1, 3.4), ylim = c(-1, 5.2)) +
   theme_void()
 ```
 
-```{r fig-06-01-payload-curve, echo=FALSE, fig.cap="Illustrative payload-vs-CG-offset derating curve: rated payload holds at W_max0 out to L0, then falls off sharply. The marked point is the gripper's actual combined mass and CG offset, which lies above (outside) the allowable curve.", fig.align='center', fig.width=9, fig.height=6}
+```{r fig-06-01-payload-curve, echo=FALSE, fig.cap="Illustrative payload-vs-CG-offset derating curve: rated payload holds at W_max0 out to L0, then falls off as M_cap / L. The marked point is the gripper's actual combined mass and CG offset (44 kg at 210 mm), which lies above the 37.1 kg allowed at that offset.", fig.align='center', fig.width=9, fig.height=6}
 W_max0 <- 130   # kg, rated payload for offsets at/below L0
 L0     <- 60    # mm, flat region boundary
 M_cap  <- W_max0 * L0  # kg*mm, constant allowable mass-moment beyond L0
 
-L_seq <- seq(5, 400, by = 5)
-payload_max <- ifelse(L_seq <= L0, W_max0, M_cap / L_seq)
-curve_df <- data.frame(L = L_seq, payload = payload_max)
+L_seq <- seq(5, 400, by = 1)
+curve_df <- data.frame(L = L_seq, payload = pmin(W_max0, M_cap / L_seq))
 
 actual_L <- 210
 actual_W <- 44
+allow_W  <- M_cap / actual_L
 
 ggplot(curve_df, aes(x = L, y = payload)) +
+  geom_vline(xintercept = L0, linetype = "dotted", color = "grey50") +
   geom_line(color = "steelblue", linewidth = 1.2) +
+  annotate("segment", x = actual_L, xend = actual_L, y = allow_W, yend = actual_W,
+           color = "firebrick", linewidth = 0.6) +
   annotate("point", x = actual_L, y = actual_W, color = "firebrick", size = 4, shape = 4, stroke = 1.5) +
-  annotate("text", x = actual_L + 15, y = actual_W + 10,
+  annotate("point", x = actual_L, y = allow_W, color = "steelblue", size = 3) +
+  annotate("text", x = actual_L + 12, y = actual_W + 12,
            label = "Actual: 44 kg at\nL = 210 mm (FAILS)", color = "firebrick",
-           size = 3 * diagram_text_scale, hjust = 0) +
+           size = 3.2 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = actual_L - 8, y = allow_W - 9,
+           label = sprintf("Allowed: %.1f kg", allow_W), color = "steelblue",
+           size = 3.2 * diagram_text_scale, hjust = 1) +
+  annotate("label", x = L0 + 6, y = 20, label = "L[0] == 60~mm", parse = TRUE, hjust = 0,
+           size = 3.2 * diagram_text_scale, fill = "white", linewidth = 0, color = "grey35") +
   labs(title = "Payload vs. CG Offset (Illustrative)",
        x = "Horizontal CG offset, L (mm)", y = "Maximum allowable payload (kg)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
@@ -383,7 +399,7 @@ $$
 | $t_{dwell}$ | Process/dwell time at a point (weld, dispense, handshake, etc.) | s |
 | $t_{cycle}$ | Total cell cycle time | s |
 
-```{r fig-06-01-velocity-profile, echo=FALSE, fig.cap="Trapezoidal velocity profile for a single point-to-point robot move: acceleration, constant-velocity, and deceleration phases. Move time is simply the sum of the three phase durations.", fig.align='center', fig.width=9, fig.height=5}
+```{r fig-06-01-velocity-profile, echo=FALSE, fig.cap="Trapezoidal velocity profile for a single 800 mm point-to-point robot move at 1200 mm/s and 4000 mm/s²: acceleration, constant-velocity, and deceleration phases. Move time is the sum of the three phase durations.", fig.align='center', fig.width=9, fig.height=5}
 d_ex <- 800      # mm
 v_max_ex <- 1200 # mm/s
 a_ex <- 4000     # mm/s^2
@@ -394,11 +410,7 @@ t_const_ex <- (d_ex - 2 * d_accel_ex) / v_max_ex
 t_total_ex <- 2 * t_accel_ex + t_const_ex
 
 t_seq <- seq(0, t_total_ex, length.out = 300)
-v_seq <- ifelse(
-  t_seq <= t_accel_ex, a_ex * t_seq,
-  ifelse(t_seq <= t_accel_ex + t_const_ex, v_max_ex,
-         v_max_ex - a_ex * (t_seq - t_accel_ex - t_const_ex))
-)
+v_seq <- pmax(0, pmin(a_ex * t_seq, v_max_ex, a_ex * (t_total_ex - t_seq)))
 profile_df <- data.frame(t = t_seq, v = v_seq)
 
 ggplot(profile_df, aes(x = t, y = v)) +
@@ -408,15 +420,15 @@ ggplot(profile_df, aes(x = t, y = v)) +
            linetype = "dotted", color = "grey40") +
   annotate("segment", x = t_accel_ex + t_const_ex, xend = t_accel_ex + t_const_ex,
            y = 0, yend = v_max_ex, linetype = "dotted", color = "grey40") +
-  annotate("text", x = t_accel_ex / 2, y = v_max_ex * 0.4, label = "Accel",
-           size = 3.2 * diagram_text_scale) +
-  annotate("text", x = t_accel_ex + t_const_ex / 2, y = v_max_ex * 1.06,
-           label = "Constant velocity", size = 3.2 * diagram_text_scale) +
-  annotate("text", x = t_accel_ex + t_const_ex + (t_total_ex - t_accel_ex - t_const_ex) / 2,
-           y = v_max_ex * 0.4, label = "Decel", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = t_accel_ex * 0.7, y = v_max_ex * 0.25,
+           label = sprintf("Accel\n%.2f s", t_accel_ex), size = 3.2 * diagram_text_scale) +
+  annotate("text", x = t_accel_ex + t_const_ex / 2, y = v_max_ex * 0.5,
+           label = sprintf("Constant velocity\n%.2f s", t_const_ex), size = 3.2 * diagram_text_scale) +
+  annotate("text", x = t_total_ex - t_accel_ex * 0.7, y = v_max_ex * 0.25,
+           label = sprintf("Decel\n%.2f s", t_accel_ex), size = 3.2 * diagram_text_scale) +
   labs(title = "Trapezoidal Point-to-Point Velocity Profile",
        x = "Time (s)", y = "TCP speed (mm/s)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(
     plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5),
     axis.title = element_text(size = 11 * chart_text_scale),
@@ -512,13 +524,13 @@ The door-panel cell's operator access point needs a safety light curtain, and th
 
 ### Design Guidelines and Rules of Thumb
 
-The logic behind the minimum safe distance is simple even though the standard's presentation can look intimidating: a guard has to be far enough from the hazard that, by the time a person crosses the detection plane, the machine has *completely* stopped before that person's body (or the fastest-moving part of it) can reach the hazard. The distance a person can cover during the response comes from an approach speed, and the standard specifies that speed rather than leaving it to the designer to guess — this chapter uses ISO 13855's specified value directly rather than treating it as a rule of thumb.
+The logic behind the minimum safe distance is simple even though the standard's presentation can look intimidating: a guard has to be far enough from the hazard that, by the time a person crosses the detection plane, the machine has *completely* stopped before that person's body (or the fastest-moving part of it) can reach the hazard. The distance a person can cover during the response comes from an approach speed, and the standard specifies that speed rather than leaving it to the designer to guess: 2000 mm/s for a hand or arm reaching toward the hazard, and 1600 mm/s for a walking approach of the whole body. This chapter uses ISO 13855's specified values directly rather than treating them as rules of thumb. (ISO 13855:2024 is the current edition; it keeps these approach speeds but adds supplements for some cases, such as hazards that move after the person is detected, so check it before a final design.)
 
 The stopping time input, $T$, is not something this chapter calculates — it comes out of the safety circuit design covered in the Machine Safety Circuits chapter: the robot's own braking/stop-category response time, plus the response time of the detection device itself (a light curtain's own signal processing time, for instance), plus any additional safety relay or safety PLC processing time in the chain. Every one of those pieces adds directly to $T$, and $T$ is multiplied by the approach speed, so shaving milliseconds off the safety circuit's response time has an outsized effect on how much floor space the guarding needs.
 
-The additional distance $C$ accounts for something the pure speed-times-time term doesn't: a coarse-resolution detection device (an area scanner tuned to detect a torso-sized object, say) can miss a hand or arm reaching through its detection field before triggering a stop. ISO 13855 defines this intrusion-depth allowance based on the detection capability (resolution) of the specific guarding device — a fine-resolution light curtain typically requires a smaller $C$ than a coarse-resolution area scanner, because it catches a smaller intrusion closer to the detection plane. The exact value is read from a table in the standard, keyed to the device's detection resolution; this chapter does not reproduce that table, only the relationship it expresses.
+The additional distance $C$ accounts for something the pure speed-times-time term doesn't: a coarse-resolution detection device (an area scanner tuned to detect a torso-sized object, say) can miss a hand or arm reaching through its detection field before triggering a stop. ISO 13855 defines this intrusion-depth allowance based on the detection capability (resolution) $d$ of the specific guarding device. For a light curtain approached at right angles, the long-standing relationships are $C = 8(d - 14)$ mm for a finger- or hand-detecting curtain ($d \le 40$ mm), and a fixed $C = 850$ mm (an adult's arm reach) for a coarser curtain or multi-beam device ($d > 40$ mm). A 30 mm curtain therefore needs $C = 128$ mm, while a 50 mm curtain needs 850 mm. A fine-resolution curtain catches the hand at the plane, so it can stand much closer. Area scanners approached parallel to the floor use $C = 1200 - 0.4H$ mm (not less than 850 mm), where $H$ is the height of the detection plane. Check the current edition for the exact conditions attached to each case.
 
-**Rule of thumb:** as a rough sanity check, expect $S$ to land somewhere in the 1.5-3 m range for a typical light-curtain-guarded cell with a sub-second overall stopping time. If a calculated $S$ comes out under a meter, double-check units before trusting it — the most common error here is mixing millimeters and meters somewhere in the calculation, not an error in the physics.
+**Rule of thumb:** as a rough sanity check, expect $S$ to land somewhere in the 1-3 m range for a typical light-curtain-guarded robot cell with a sub-second overall stopping time. If a calculated $S$ comes out under a meter, double-check units before trusting it — the most common error here is mixing millimeters and meters somewhere in the calculation, not an error in the physics.
 
 **Rule of thumb:** if the calculated $S$ doesn't fit in the available floor space, fix it by shortening $T$ (a faster stop category, or a faster-responding detection device) or by choosing a finer-resolution device to shrink $C$ — not by trying to argue down $K$, which is fixed by the standard and not a design variable.
 
@@ -531,39 +543,42 @@ $$
 | Symbol | Definition | Units |
 |:-------|:-----------|:------|
 | $S$ | Minimum safe separation distance from the detection plane to the hazard | mm |
-| $K$ | Approach speed constant specified by ISO 13855 (1600 mm/s for whole-body approach) | mm/s |
+| $K$ | Approach speed specified by ISO 13855: 2000 mm/s for a hand/arm approach to a curtain with $d \le 40$ mm (if that gives $S > 500$ mm, recalculate with 1600 mm/s, but not below 500 mm); 1600 mm/s for coarser devices and whole-body approach | mm/s |
 | $T$ | Overall system stopping time: robot stop time + detection device response time + any additional safety-logic processing time | s |
-| $C$ | Additional intrusion-depth distance, dependent on the detection capability (resolution) of the guarding device, per ISO 13855 | mm |
+| $C$ | Additional intrusion-depth distance from the detection capability $d$ of the device: $8(d - 14)$ for $d \le 40$ mm, 850 mm for $d > 40$ mm (light curtains, per ISO 13855) | mm |
 
-```{r fig-06-01-s-kt-c-schematic, echo=FALSE, fig.cap="ISO 13855 minimum separation distance: the guard must stand back far enough that a person can be detected and the robot fully stopped before reach reaches the hazard, plus an added intrusion-depth allowance C. Schematic, not to scale.", fig.align='center', fig.width=10, fig.height=4.5}
+```{r fig-06-01-s-kt-c-schematic, echo=FALSE, fig.cap="ISO 13855 minimum separation distance: the guard must stand far enough back that the robot has fully stopped before a person who has just crossed the detection plane can reach the hazard, plus an added intrusion-depth allowance C that depends on the device's detection capability. Schematic, not to scale.", fig.align='center', fig.width=10, fig.height=4.5}
 ggplot() +
   annotate("rect", xmin = 7.5, xmax = 9.5, ymin = 0.3, ymax = 2.3, fill = "mistyrose", color = "firebrick") +
-  annotate("text", x = 8.5, y = 2.6, label = "Hazard zone\n(robot reach envelope)",
+  annotate("text", x = 8.5, y = 2.75, label = "Hazard zone\n(robot reach envelope)",
            size = 3 * diagram_text_scale, color = "firebrick") +
   annotate("segment", x = 2.0, xend = 2.0, y = 0.1, yend = 2.5, linewidth = 2, color = "steelblue") +
-  annotate("text", x = 2.0, y = 2.8, label = "Light curtain\ndetection plane",
+  annotate("text", x = 2.0, y = 2.9, label = "Light curtain\ndetection plane",
            size = 3 * diagram_text_scale, color = "steelblue") +
   annotate("segment", x = 2.0, xend = 7.5, y = -0.4, yend = -0.4,
            arrow = arrow(length = unit(0.15, "cm"), ends = "both", type = "closed"), linewidth = 0.8) +
-  annotate("text", x = 4.75, y = -0.8, label = "S = K x T + C",
+  annotate("text", x = 4.75, y = -0.8, label = "S = K × T + C",
            size = 3.4 * diagram_text_scale, fontface = "bold") +
   annotate("segment", x = 2.0, xend = 5.6, y = 0.0, yend = 0.0,
            arrow = arrow(length = unit(0.12, "cm"), ends = "both", type = "closed"),
            linewidth = 0.6, color = "grey40") +
-  annotate("text", x = 3.8, y = 0.35, label = "K x T\n(distance covered while\nstopping + detecting)",
-           size = 2.6 * diagram_text_scale, color = "grey30") +
+  annotate("text", x = 3.8, y = 0.45, label = "K × T\n(distance covered while\nthe system detects and stops)",
+           size = 2.8 * diagram_text_scale, color = "grey30") +
   annotate("segment", x = 5.6, xend = 7.5, y = 0.0, yend = 0.0,
            arrow = arrow(length = unit(0.12, "cm"), ends = "both", type = "closed"),
            linewidth = 0.6, color = "darkorange") +
-  annotate("text", x = 6.55, y = 0.35, label = "C\n(intrusion\nallowance)",
-           size = 2.6 * diagram_text_scale, color = "darkorange") +
-  annotate("point", x = 0.8, y = 1.2, size = 5, color = "grey20") +
-  annotate("segment", x = 0.8, xend = 1.9, y = 1.2, yend = 1.2,
-           arrow = arrow(length = unit(0.15, "cm"), type = "closed"),
+  annotate("text", x = 6.55, y = 0.45, label = "C\n(intrusion\nallowance)",
+           size = 2.8 * diagram_text_scale, color = "darkorange") +
+  annotate("segment", x = 0.5, xend = 1.9, y = 1.2, yend = 1.2,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
            linewidth = 0.8, color = "grey20", linetype = "dashed") +
-  annotate("text", x = 1.3, y = 1.55, label = "approach", size = 2.6 * diagram_text_scale) +
-  coord_fixed(xlim = c(0, 10), ylim = c(-1.1, 3.2)) +
+  annotate("text", x = 1.15, y = 1.55, label = "person\napproaching", size = 2.8 * diagram_text_scale) +
+  coord_fixed(xlim = c(0, 10), ylim = c(-1.1, 3.3)) +
   theme_void()
+```
+
+```{r video-iso13855-06-01, echo=FALSE, results='asis'}
+embed_youtube("42-21G916Cw", "Understanding ISO 13855 & Safe Distances (Machinery Safety Academy - Pilz UK)")
 ```
 
 ### Worked Example
@@ -576,8 +591,8 @@ qwebr_calc_card(
   title = "ISO 13855 Minimum Separation Distance Calculator",
   icon = "shield-halved",
   inputs = list(
-    qwebr_calc_input("T_robot", "Robot stopping time", value = 0.65, min = 0.05, max = 2, step = 0.01, suffix = "s"),
-    qwebr_calc_input("T_device", "Light curtain response time", value = 0.04, min = 0, max = 0.5, step = 0.005, suffix = "s"),
+    qwebr_calc_input("T_robot", "Robot stopping time", value = 0.62, min = 0.05, max = 2, step = 0.01, suffix = "s"),
+    qwebr_calc_input("T_device", "Light curtain response time", value = 0.03, min = 0, max = 0.5, step = 0.005, suffix = "s"),
     qwebr_calc_input("C", "Intrusion allowance C", value = 850, min = 0, max = 1200, step = 10, suffix = "mm"),
     qwebr_calc_input("planned_distance", "Planned mounting distance (mm)", value = 1800, min = 500, max = 4000, step = 10, type = "slider")
   ),
@@ -595,16 +610,17 @@ qwebr_calc_card(
 ## Overall system stopping time T = robot stop time + detection device response time
 ## (robot stop time comes from the safety circuit design -- see the Machine Safety
 ## Circuits chapter -- and is treated as a given input here)
-T_robot <- 0.65   # s, safety-rated monitored stop time for this cell
-T_device <- 0.04  # s, light curtain response time (typical Type 4 device)
+T_robot <- 0.62   # s, logic + contactors + braking to rest (stop category 1)
+T_device <- 0.03  # s, light curtain response time (typical Type 4 device)
 T_total <- T_robot + T_device
 
-## ISO 13855 approach speed constant (standard-specified, not a rule of thumb)
+## ISO 13855 approach speed (standard-specified, not a rule of thumb).
+## 1600 mm/s applies to the coarse curtain below. For a fine curtain
+## (d <= 40 mm) start with 2000 mm/s and drop to 1600 mm/s only if S > 500 mm.
 K <- 1600  # mm/s
 
-## Intrusion-depth allowance for a light curtain with 30 mm detection
-## resolution (illustrative value -- consult the current edition of
-## ISO 13855's intrusion-distance table for the exact figure for a given device)
+## Intrusion allowance for a 50 mm resolution light curtain: d > 40 mm, so
+## C = 850 mm (a 30 mm curtain would give C = 8 x (30 - 14) = 128 mm)
 C <- 850   # mm
 
 S_required <- K * T_total + C
@@ -630,17 +646,18 @@ if (planned_distance < S_required) {
   ## Option A: move the light curtain out
   cat(sprintf("  Option A - move the curtain out to at least  %s mm\n", fmt(ceiling(S_required / 50) * 50)))
 
-  ## Option B: switch to a finer-resolution light curtain with a smaller C
-  C_fine <- 650  # mm, illustrative value for a finer-resolution device
-  S_fine <- K * T_total + C_fine
-  cat(sprintf("  Option B - finer-resolution curtain (C = %d mm)  new S = %s mm - %s\n", C_fine, fmt(S_fine),
+  ## Option B: switch to a 30 mm resolution light curtain, C = 8 x (30 - 14)
+  C_fine <- 8 * (30 - 14)                   # 128 mm
+  S_fine <- 2000 * T_total + C_fine         # hand speed first ...
+  if (S_fine > 500) S_fine <- max(500, 1600 * T_total + C_fine)  # ... then 1600 mm/s
+  cat(sprintf("  Option B - 30 mm curtain (C = %d mm)  new S = %s mm - %s\n", C_fine, fmt(S_fine),
               ifelse(planned_distance >= S_fine, "passes without moving the curtain", "still fails")))
 }
 ```
 
 </details>
 
-**Sanity check:** the required distance (about 1.95 m) falls squarely in the 1.5-3 m range the rule of thumb above predicts for a sub-second stopping time — a useful check that no units got mixed up. The planned 1.8 m mounting distance falls just short, by less than 10%, which is exactly the kind of near-miss that a rushed layout review can wave through if the calculation isn't done explicitly.
+**Sanity check:** the required distance (about 1.89 m) falls squarely in the 1-3 m range the rule of thumb above predicts for a sub-second stopping time — a useful check that no units got mixed up. The planned 1.8 m mounting distance falls just short, by less than 10%, which is exactly the kind of near-miss that a rushed layout review can wave through if the calculation isn't done explicitly. Notice how much of $S$ is the 850 mm allowance of the coarse 50 mm curtain: a 30 mm curtain ($C$ = 128 mm) brings $S$ down to about 1.17 m.
 
 ## Design Task 5: Guarding Technology Selection
 
@@ -656,7 +673,7 @@ Fixed fencing still needs interlocked access doors wherever people cross it rout
 
 **Rule of thumb:** default to fixed fencing for any boundary segment without a routine access need, and only reach for a light curtain or area scanner where fencing genuinely can't do the job — access frequency, aisle geometry, or a need for graduated (warn-then-stop) response. This default breaks down where floor space is tight enough that fencing's larger footprint (posts, base plates, swing clearance on gates) is itself the constraint — in a cramped cell, a scanner's small footprint can be worth its higher cost even at a rarely-used boundary.
 
-CSA Z434 is the primary Canadian reference for guarding selection on industrial robot systems; ISO 10218 and ANSI RIA R15.06 are the international and US equivalents.
+CSA Z434 is the primary Canadian reference for guarding selection on industrial robot systems; ISO 10218-2 and ANSI/A3 R15.06 are the international and US equivalents, and ISO 13855 sets the separation distances.
 
 ```{r tbl-06-01-guarding-tradeoff, echo=FALSE, message=FALSE}
 guarding_options <- tribble(
@@ -760,7 +777,7 @@ A plant manager, trying to avoid the cost of fencing and light curtains altogeth
 
 ### Design Guidelines and Rules of Thumb
 
-ISO/TS 15066 recognizes four distinct techniques for collaborative robot operation, and a given application typically relies on one or a combination of them — not just "the robot is collaborative" as a blanket property.
+ISO/TS 15066 recognizes four distinct techniques for collaborative robot operation, and a given application typically relies on one or a combination of them — not just "the robot is collaborative" as a blanket property. The 2025 editions of ISO 10218-1 and -2 fold most of ISO/TS 15066's requirements, including the power-and-force-limiting body-region limits, into the robot standards themselves, and rename "safety-rated monitored stop" as "monitored standstill"; the TS is still the reference most cobot datasheets and older risk assessments cite.
 
 ```{r tbl-06-01-collab-techniques, echo=FALSE, message=FALSE}
 collab_modes <- tribble(
@@ -772,7 +789,7 @@ collab_modes <- tribble(
 )
 
 collab_modes %>%
-  kbl(caption = "The four collaborative operation techniques recognized in ISO 10218 / ISO/TS 15066") %>%
+  kbl(caption = "The four collaborative operation techniques recognized in ISO/TS 15066 and ISO 10218-2") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, background = "#2C3E50", color = "white")
 ```
@@ -781,7 +798,7 @@ Here is the misconception that this design task exists to correct: a robot being
 
 **Rule of thumb:** treat a vendor's "collaborative" or "cobot" label as necessary, never sufficient. It tells you the arm passed a bare-arm certification test; it does not tell you the application-specific risk assessment has been done, or that it would pass. This holds regardless of price point or reputation — the label describes a test condition, not a guarantee about your specific tooling and task.
 
-CSA Z434 incorporates collaborative robot requirements in the Canadian context by reference to ISO 10218-1/-2 and ISO/TS 15066; there is no separate Canadian-specific collaborative-robot standard.
+In Canada, collaborative applications are covered by CSA Z434, whose 2026 edition adopts ISO 10218-1/-2:2025 (and with them the collaborative requirements that came from ISO/TS 15066); there is no separate Canadian-specific collaborative-robot standard.
 
 ### Worked Example
 
@@ -860,48 +877,49 @@ Where a PSR is required, a **Professional Engineer (P.Eng.)** licensed to practi
 
 **Rule of thumb:** if you're asking whether a given change needs a PSR, the safe working answer is *yes, assume it does* until a P.Eng. reviews the specific change and says otherwise. This rule of thumb never really "breaks down" in the sense of becoming wrong to follow — the honest failure mode is the opposite direction, skipping a PSR that was actually required, and the cost of an unnecessary review is far smaller than the liability (and, more importantly, the safety exposure) of skipping one that wasn't.
 
-PSR is a distinctly Ontario mechanism; other Canadian provinces and US jurisdictions have their own pre-startup or acceptance-inspection requirements (some US states, for instance, require documented machine-guarding compliance reviews under their own OSHA state-plan rules), but there is no single ANSI or federal OSHA equivalent to a mandatory, professional-engineer-led PSR — a project team working across the border should not assume a US sister plant's sign-off process satisfies Ontario's requirement, or vice versa.
+PSR is a distinctly Ontario mechanism. In the US, the employer is responsible for guarding under OSHA's general machine-guarding rule (29 CFR 1910.212) and normally shows compliance with its own risk assessment to ANSI B11.0 and ANSI/A3 R15.06, but there is no federal OSHA or ANSI equivalent to a mandatory, professional-engineer-led PSR — a project team working across the border should not assume a US sister plant's sign-off process satisfies Ontario's requirement, or vice versa.
 
 ```{r fig-06-01-psr-flowchart, echo=FALSE, fig.cap="Simplified decision flow for whether a new robot cell triggers an Ontario Pre-Start Health and Safety Review under O. Reg. 851. Consult a P.Eng. for the definitive answer on a specific project.", fig.align='center', fig.width=10, fig.height=6.5}
 nodes <- data.frame(
-  id = 1:5,
   label = c("New or modified\nrobot cell installed?",
             "Guards, barriers, or\nprotective devices\nare part of the change?",
-            "Is it identical\n(like-for-like)\nreplacement?",
+            "Is it an identical\n(like-for-like)\nreplacement?",
             "PSR required:\nengage a P.Eng.,\nprepare documentation",
-            "PSR not required\n(document the\ndecision anyway)"),
-  x = c(5, 5, 5, 8, 2),
-  y = c(9, 6.5, 4, 1.5, 1.5),
+            "PSR not triggered by\nthis change alone\n(document the decision)"),
+  x = c(5.5, 5.5, 5.5, 8.5, 1.8),
+  y = c(9, 6.6, 4.2, 1.5, 1.5),
   kind = c("Question", "Question", "Question", "Required", "NotRequired")
 )
 
-edges <- data.frame(
-  x = c(5, 5, 5, 5),
-  y = c(8.4, 5.9, 3.4, 3.4),
-  xend = c(5, 5, 8, 2),
-  yend = c(7.1, 4.6, 1.9, 1.9)
+## Orthogonal connectors. "No" answers to Q1/Q2 and "Yes" to Q3 run left to a
+## trunk at x = 1.8 that drops into the "not triggered" box; "Yes" answers run
+## down the centre; Q3 "No" runs right and drops into the "required" box.
+arr <- arrow(length = unit(0.22, "cm"), type = "closed")
+links <- data.frame(
+  x    = c(5.5, 5.5, 4.7, 4.6, 4.8, 6.2, 1.8, 8.5),
+  y    = c(8.6, 6.05, 9, 6.6, 4.2, 4.2, 9, 4.2),
+  xend = c(5.5, 5.5, 1.8, 1.8, 1.8, 8.5, 1.8, 8.5),
+  yend = c(7.15, 4.75, 9, 6.6, 4.2, 4.2, 2.05, 2.05),
+  head = c(TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE)
 )
-
-edge_labels <- data.frame(
-  x = c(5.6, 5.6, 6.5, 3.5),
-  y = c(7.7, 5.2, 2.5, 2.5),
-  label = c("Yes", "Yes", "No", "Yes")
+link_labels <- data.frame(
+  x = c(5.85, 5.85, 3.0, 3.0, 3.0, 7.65),
+  y = c(7.9, 5.4, 9.25, 6.85, 4.45, 4.45),
+  label = c("Yes", "Yes", "No", "No", "Yes", "No")
 )
 
 ggplot() +
-  geom_segment(data = edges, aes(x = x, y = y, xend = xend, yend = yend),
-               arrow = arrow(length = unit(0.2, "cm")), color = "grey50", linewidth = 0.7) +
+  geom_segment(data = links[!links$head, ], aes(x = x, y = y, xend = xend, yend = yend),
+               color = "grey40", linewidth = 0.7) +
+  geom_segment(data = links[links$head, ], aes(x = x, y = y, xend = xend, yend = yend),
+               color = "grey40", linewidth = 0.7, arrow = arr) +
   geom_label(data = nodes, aes(x = x, y = y, label = label, fill = kind),
              size = 3 * diagram_text_scale, label.padding = unit(0.3, "lines")) +
-  geom_text(data = edge_labels, aes(x = x, y = y, label = label),
-            size = 2.7 * diagram_text_scale, fontface = "italic") +
-  annotate("text", x = 1.9, y = 8.6, label = "No -> PSR not\nrequired for this\nchange alone",
-           size = 2.4 * diagram_text_scale, color = "grey40", fontface = "italic") +
-  annotate("text", x = 1.9, y = 6.2, label = "No -> PSR not\nrequired for this\nchange alone",
-           size = 2.4 * diagram_text_scale, color = "grey40", fontface = "italic") +
+  geom_text(data = link_labels, aes(x = x, y = y, label = label),
+            size = 2.9 * diagram_text_scale, fontface = "italic") +
   scale_fill_manual(values = c("Question" = "#FADBD8", "Required" = "#D5F5E3",
                                 "NotRequired" = "#FCF3CF"), guide = "none") +
-  xlim(0, 10) + ylim(0.5, 9.8) +
+  coord_cartesian(xlim = c(0.3, 10), ylim = c(0.6, 9.8)) +
   theme_void() +
   labs(title = "Does This Robot Cell Need a Pre-Start Health and Safety Review?") +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
@@ -1164,7 +1182,7 @@ This clears the 10% rule-of-thumb threshold comfortably — **PASS**.
 </details>
 
 <details>
-<summary>Task 1 (design decision): The integrator offers two robot options for this cell: Robot A has R_max = 2655 mm and costs $48,000; Robot B has R_max = 2200 mm and costs $39,000. Both pass the straight reach check for the farthest point (required reach 2490.7 mm from the original worked example), but which would you choose, and why?</summary>
+<summary>Task 1 (design decision): The integrator offers two robot options for this cell: Robot A has R_max = 2655 mm and costs $48,000; Robot B has R_max = 2200 mm and costs $39,000. The farthest point needs a required reach of 2490.7 mm (from the original worked example). Which would you choose, and why?</summary>
 
 Robot B fails outright — its rated reach (2200 mm) is less than the required reach (2490.7 mm) even before applying the margin rule of thumb, so it cannot physically complete the task from this pedestal location without relocating it or accepting an unreachable point. Robot A passes the raw reach check but, as the worked example showed, only with a 6.2% margin — below the 10% threshold this chapter recommends. The right choice is neither robot as originally proposed: either select Robot A and relocate the pedestal (as the worked example did, restoring margin to over 16%), or specify a robot with reach comfortably above 2490.7 mm from the current pedestal location. Choosing on cost alone (Robot B) without checking reach first would produce a cell that cannot do its job.
 
@@ -1220,9 +1238,17 @@ S = K × T + C = 1600 × 0.45 + 1200 = 720 + 1200 = 1920 mm
 </details>
 
 <details>
-<summary>Task 4 (design decision): A calculated S comes out to 3.4 m for a cell where the plant only has 2.1 m of floor space available at that boundary. The safety engineer is considering either a faster-stopping safety circuit (reducing T_robot from 0.65 s to 0.30 s) or switching from an area scanner (C = 1200 mm) to a finer-resolution light curtain (C = 700 mm). Which change has the bigger effect here, and is either one enough on its own?</summary>
+<summary>Task 4 (design decision): A large palletizing robot has T_robot = 1.40 s and is guarded by a floor-level area scanner (response time 0.10 s, C = 1200 mm). The plant only has 2.1 m of floor space available at that boundary. The safety engineer is considering either a faster-stopping safety circuit (reducing T_robot to 0.70 s) or switching to a 30 mm resolution vertical light curtain (response time 0.02 s, C = 8(30 - 14) = 128 mm). Which change has the bigger effect here, and is either one enough on its own?</summary>
 
-Reducing T_robot from 0.65 s to 0.30 s (assuming T_device stays around 0.04-0.05 s, so T drops from about 0.69 s to about 0.35 s) reduces the K×T term from roughly 1104 mm to about 552 mm — a reduction of about 552 mm. Switching from C = 1200 mm to C = 700 mm reduces the C term by 500 mm directly. The two changes are similar in magnitude here, but neither one alone closes a gap of roughly 1.3 m (3.4 m required vs. 2.1 m available assuming the original inputs implied something close to that). This is a case where both changes are likely needed together: a faster stop category *and* a finer-resolution device, and even then the design should be rechecked with the actual updated numbers rather than assumed to pass — floor space this tight is also a signal to reconsider the cell's overall layout, not just the guarding technology.
+As designed: T = 1.40 + 0.10 = 1.50 s, so S = 1600 × 1.50 + 1200 = 3600 mm, which does not fit in 2.1 m.
+
+Faster stop only: T = 0.70 + 0.10 = 0.80 s, so S = 1600 × 0.80 + 1200 = 2480 mm. That is a 1120 mm reduction, but it still does not fit.
+
+30 mm curtain only: T = 1.40 + 0.02 = 1.42 s. The hand-speed check gives 2000 × 1.42 + 128 = 2968 mm, which is more than 500 mm, so recalculate with K = 1600: S = 1600 × 1.42 + 128 = 2400 mm. That is a 1200 mm reduction, slightly bigger than the faster stop, but it still does not fit.
+
+Both together: T = 0.72 s, so S = 1600 × 0.72 + 128 = 1280 mm, which fits with margin to spare.
+
+Neither change is enough on its own, so both are needed: a faster stop *and* a fine-resolution device. Recheck the design with the measured stopping time once the new circuit is commissioned rather than assuming it passes. Floor space this tight is also a signal to reconsider the cell's overall layout, not just the guarding technology.
 
 </details>
 
@@ -1278,7 +1304,7 @@ You are the layout engineer responsible for releasing the door subassembly weldi
 - The robot is mounted on a pedestal at (1200, 0, 300) mm in cell coordinates. Five weld points are specified on the door inner panel, with the farthest at (3100, 850, 650) mm. The spot-welding gun is 380 mm long. The candidate robot has a rated reach of 2655 mm.
 - The gun assembly (including the transformer pack) has a mass of 92 kg and a combined CG offset of 240 mm from the wrist flange. The candidate robot's rated payload at zero offset is 165 kg, with a flat region out to 70 mm offset.
 - The weld sequence requires six moves (home to P1 through P5, then back to home) with distances of 480, 550, 620, 400, 710, and 850 mm, a commanded speed of 1400 mm/s, and acceleration of 4500 mm/s². Each weld takes 0.4 s, and the cell PLC handshake adds 0.25 s. The station's overall target is 58 jobs per hour, and this robot's operations are allotted 40% of that cycle time.
-- The safety circuit design (from the Machine Safety Circuits chapter) specifies a robot stopping time of 0.55 s. The planned light curtain has a response time of 0.03 s and a resolution that corresponds to a 750 mm intrusion allowance (C).
+- The safety circuit design (from the Machine Safety Circuits chapter) specifies a robot stopping time of 0.55 s. The planned light curtain has a response time of 0.03 s and a 50 mm resolution, so $C$ = 850 mm.
 - The cell perimeter has three access types: the operator load station (every cycle), a rarely-used maintenance panel, and a side aisle shared with a tugger cart delivering panel racks a few times per shift.
 - A supplier has pitched a "collaborative" version of this robot as an option to eliminate the guarding budget entirely.
 - This is the plant's first robot cell of this specific design, though the plant has other robot cells of different designs already running.

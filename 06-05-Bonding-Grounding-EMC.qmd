@@ -63,6 +63,15 @@ Four distinct electrical functions get called "ground" in everyday plant-floor l
 CSA C22.1 (the Canadian Electrical Code, Part I, as amended by the Ontario Electrical Safety Code) addresses grounding and bonding in Section 10, and CSA C22.2 No. 0.4 (Bonding of Electrical Equipment) covers the equipment-bonding function specifically. NEC Article 250 (Grounding and Bonding) is the corresponding US reference. IEEE 1100 (the "Emerald Book," Recommended Practice for Powering and Grounding Electronic Equipment) is a widely used industry reference for exactly the functional-grounding-vs-safety-bonding distinction this design task is built around.
 
 ```{r fig-06-05-ground-bond-shield-map, echo=FALSE, fig.cap="Four conductive paths that all get called \"ground\" on a plant floor. Each has a distinct purpose, required impedance, and governing code rule -- treating any two of them as interchangeable is where real problems start.", fig.align='center', fig.width=11, fig.height=7.5}
+## Earth (ground) symbol drawn from segments: stem plus three shrinking bars
+gnd_symbol <- function(x, y, w = 0.45, col = "black") {
+  data.frame(x = c(x, x - w / 2, x - w / 3, x - w / 6),
+             xend = c(x, x + w / 2, x + w / 3, x + w / 6),
+             y = c(y, y - 0.25, y - 0.37, y - 0.49),
+             yend = c(y - 0.25, y - 0.25, y - 0.37, y - 0.49), col = col)
+}
+sym <- rbind(gnd_symbol(0.9, 6.1, col = "#1E8449"),     # system grounding electrode
+             gnd_symbol(7.6, 3.95, col = "#9B59B6"))    # shield drain at the PLC end
 ggplot() +
   # Utility transformer
   annotate("rect", xmin = 0.3, xmax = 2.8, ymin = 7.0, ymax = 8.5,
@@ -78,19 +87,19 @@ ggplot() +
            color = "grey20", linewidth = 1.2,
            arrow = arrow(length = unit(0.2, "cm"), type = "closed")) +
   annotate("text", x = 3.7, y = 8.15, label = "3-phase supply",
-           size = 2.6 * diagram_text_scale) +
-  # Grounding electrode
-  annotate("segment", x = 0.9, xend = 0.9, y = 7.0, yend = 5.75,
-           color = "#2ECC71", linewidth = 1.1, linetype = "dashed") +
-  annotate("point", x = 0.9, y = 5.6, shape = 17, size = 5, color = "#2ECC71") +
-  annotate("text", x = 0.9, y = 5.15, label = "Grounding\nelectrode (rod)",
-           size = 2.7 * diagram_text_scale, color = "#2ECC71") +
+           size = 2.8 * diagram_text_scale) +
+  # System grounding: transformer neutral to the grounding electrode
+  annotate("segment", x = 0.9, xend = 0.9, y = 7.0, yend = 6.1,
+           color = "#1E8449", linewidth = 1.1, linetype = "dashed") +
+  geom_segment(data = sym, aes(x = x, xend = xend, y = y, yend = yend, color = I(col)), linewidth = 1.1) +
+  annotate("text", x = 1.05, y = 5.25, label = "Grounding\nelectrode (rod)",
+           size = 2.8 * diagram_text_scale, color = "#1E8449", hjust = 0) +
   # Motor frame
   annotate("rect", xmin = 0.3, xmax = 2.6, ymin = 3.3, ymax = 4.6,
            fill = "#E74C3C", color = "black") +
   annotate("text", x = 1.45, y = 3.95, label = "Motor\nFrame",
            color = "white", size = 3 * diagram_text_scale, fontface = "bold") +
-  annotate("segment", x = 5.3, xend = 1.45, y = 7.0, yend = 4.6,
+  annotate("segment", x = 5.3, xend = 2.0, y = 7.0, yend = 4.6,
            color = "#2ECC71", linewidth = 1.6) +
   # PLC enclosure
   annotate("rect", xmin = 4.7, xmax = 7.3, ymin = 3.3, ymax = 4.6,
@@ -101,30 +110,37 @@ ggplot() +
            color = "#2ECC71", linewidth = 1.6) +
   annotate("segment", x = 6.3, xend = 6.6, y = 7.0, yend = 4.6,
            color = "#3498DB", linewidth = 1.2, linetype = "dashed") +
-  # Sensor + shielded cable
+  # Sensor + shielded cable: shield drained at the PLC end only
   annotate("rect", xmin = 9.4, xmax = 12.4, ymin = 3.3, ymax = 4.6,
            fill = "#9B59B6", color = "black") +
-  annotate("text", x = 10.9, y = 3.95, label = "Field Sensor +\nShielded Cable",
+  annotate("text", x = 10.9, y = 3.95, label = "Field Sensor",
            color = "white", size = 3 * diagram_text_scale, fontface = "bold") +
-  annotate("segment", x = 7.3, xend = 9.4, y = 3.95, yend = 3.95,
-           color = "#9B59B6", linewidth = 1.3) +
-  annotate("point", x = 9.4, y = 3.95, shape = 4, size = 4, stroke = 1.4, color = "#9B59B6") +
-  annotate("text", x = 9.4, y = 2.95, label = "shield floats\nat far end",
-           size = 2.6 * diagram_text_scale, color = "#9B59B6") +
+  annotate("segment", x = 7.3, xend = 9.4, y = 4.2, yend = 4.2,
+           color = "#9B59B6", linewidth = 1.3, linetype = "dashed") +
+  annotate("segment", x = 7.6, xend = 7.6, y = 4.2, yend = 3.95,
+           color = "#9B59B6", linewidth = 1) +
+  annotate("text", x = 8.35, y = 4.55, label = "cable shield",
+           size = 2.8 * diagram_text_scale, color = "#9B59B6") +
+  annotate("segment", x = 9.15, xend = 9.35, y = 4.0, yend = 4.4, color = "#9B59B6", linewidth = 1.2) +
+  annotate("segment", x = 9.15, xend = 9.35, y = 4.4, yend = 4.0, color = "#9B59B6", linewidth = 1.2) +
+  annotate("text", x = 9.25, y = 2.95, label = "shield not connected\nat the sensor end",
+           size = 2.7 * diagram_text_scale, color = "#9B59B6") +
+  annotate("text", x = 7.6, y = 3.0, label = "drained at\nPLC end only",
+           size = 2.7 * diagram_text_scale, color = "#9B59B6") +
   # Legend
-  annotate("point", x = 0.5, y = 2.0, shape = 15, size = 4, color = "#2ECC71") +
-  annotate("text", x = 0.85, y = 2.0, hjust = 0, size = 2.7 * diagram_text_scale,
+  annotate("segment", x = 0.3, xend = 0.7, y = 2.0, yend = 2.0, color = "#2ECC71", linewidth = 1.6) +
+  annotate("text", x = 0.85, y = 2.0, hjust = 0, size = 2.8 * diagram_text_scale,
            label = "Equipment bonding -- low-impedance fault-current path (CEC Sec. 10 / NEC Art. 250)") +
-  annotate("point", x = 0.5, y = 1.5, shape = 15, size = 4, color = "#3498DB") +
-  annotate("text", x = 0.85, y = 1.5, hjust = 0, size = 2.7 * diagram_text_scale,
+  annotate("segment", x = 0.3, xend = 0.7, y = 1.5, yend = 1.5, color = "#3498DB", linewidth = 1.2, linetype = "dashed") +
+  annotate("text", x = 0.85, y = 1.5, hjust = 0, size = 2.8 * diagram_text_scale,
            label = "Functional / signal ground -- reference only, NOT a fault-current path") +
-  annotate("point", x = 0.5, y = 1.0, shape = 15, size = 4, color = "#9B59B6") +
-  annotate("text", x = 0.85, y = 1.0, hjust = 0, size = 2.7 * diagram_text_scale,
+  annotate("segment", x = 0.3, xend = 0.7, y = 1.0, yend = 1.0, color = "#9B59B6", linewidth = 1.3, linetype = "dashed") +
+  annotate("text", x = 0.85, y = 1.0, hjust = 0, size = 2.8 * diagram_text_scale,
            label = "Cable shield -- grounded at ONE end only (low-frequency instrumentation)") +
-  annotate("point", x = 0.5, y = 0.5, shape = 17, size = 4, color = "#2ECC71") +
-  annotate("text", x = 0.85, y = 0.5, hjust = 0, size = 2.7 * diagram_text_scale,
-           label = "System grounding electrode -- voltage reference / lightning-surge path to earth") +
-  xlim(-0.3, 13) + ylim(0, 9.2) +
+  annotate("segment", x = 0.3, xend = 0.7, y = 0.5, yend = 0.5, color = "#1E8449", linewidth = 1.1, linetype = "dashed") +
+  annotate("text", x = 0.85, y = 0.5, hjust = 0, size = 2.8 * diagram_text_scale,
+           label = "System grounding -- neutral to electrode: voltage reference / surge path to earth") +
+  coord_cartesian(xlim = c(-0.3, 13), ylim = c(0, 9.2)) +
   theme_void() +
   labs(title = "Four Conductive Paths, One Confusing Name",
        subtitle = "Equipment bonding, system grounding, functional/signal ground, and shield each serve a different purpose") +
@@ -193,7 +209,7 @@ Translating a US-drawn document into CEC terms is a procedure, not a formula:
 
 ### Worked Example
 
-The packaging machine's drawings specify a "10 AWG equipment grounding conductor" bonding the main control panel to the machine frame, sized per a note referencing "NEC Table 250.122" for the machine's 60 A branch circuit protective device. Following the procedure: step 1 identifies this as a fault-current path (it bonds a frame, sized off an OCPD rating, not a voltage reference) — so per Design Task 1's framework, this is functionally CEC's **bonding conductor**, not a grounding-electrode connection. Step 2 confirms the CEC term to use in the compliance report is "bonding conductor," sized per **CEC Table 16**, not "grounding conductor." Step 3 is the step that actually matters for sign-off: the integrator pulls CEC Table 16 independently and checks the minimum bonding conductor size for a 60 A branch circuit OCPD under CEC rules, rather than assuming the NEC-derived 10 AWG figure on the drawing is automatically correct for a CEC installation (in this case, per Design Task 3's illustrative table, 10 AWG is in fact consistent with a 60 A OCPD — but that has to be checked, not assumed). Step 4 produces a one-line note for the ESA submission package: "Machine's NEC-labeled 10 AWG EGC verified equivalent to and compliant with CEC Table 16 bonding conductor requirement for the installed 60 A branch OCPD." That's a documented, defensible translation — not a guess.
+The packaging machine's drawings specify a "10 AWG equipment grounding conductor" bonding the main control panel to the machine frame, sized per a note referencing "NEC Table 250.122" for the machine's 60 A branch circuit protective device. Following the procedure: step 1 identifies this as a fault-current path (it bonds a frame, sized off an OCPD rating, not a voltage reference) — so per Design Task 1's framework, this is functionally CEC's **bonding conductor**, not a grounding-electrode connection. Step 2 confirms the CEC term to use in the compliance report is "bonding conductor," sized per **CEC Table 16**, not "grounding conductor." Step 3 is the step that actually matters for sign-off: the integrator pulls CEC Table 16 independently and checks the minimum bonding conductor size for a 60 A branch circuit OCPD under CEC rules, rather than assuming the NEC-derived 10 AWG figure on the drawing is automatically correct for a CEC installation (in this case, per Design Task 3's table, 10 AWG is in fact consistent with a 60 A OCPD — but that has to be checked, not assumed). Step 4 produces a one-line note for the ESA submission package: "Machine's NEC-labeled 10 AWG EGC verified equivalent to and compliant with CEC Table 16 bonding conductor requirement for the installed 60 A branch OCPD." That's a documented, defensible translation — not a guess.
 
 <details>
 <summary>Industry connection: why this matters for imported automation equipment</summary>
@@ -206,7 +222,7 @@ Automotive and food-processing plants in Ontario routinely install robot cells, 
 
 ### Scenario
 
-A food processing plant is adding a washdown-rated VFD-driven conveyor to move sealed product cartons from a filling line to a case packer. The conveyor's 11 kW motor is protected by a 60 A fused disconnect. Downstream, the same plant's electrical room feeds an entire motor control centre (MCC) lineup — several conveyor and pump motors together — through a single 400 A feeder breaker. The electrician on the job needs to size the equipment bonding conductor for both circuits, and the branch-circuit motor's relatively small full-load current is tempting him to reason "small motor, small bonding wire." That reasoning is wrong, and understanding *why* it's wrong is this design task's entire point.
+A food processing plant is adding a washdown-rated VFD-driven conveyor to move sealed product cartons from a filling line to a case packer. The conveyor's 11 kW motor is protected by 30 A time-delay fuses in a 60 A fused disconnect (175% of its 15.4 A FLA, rounded up; it is the fuse rating, not the switch rating, that the bonding conductor is sized from). Downstream, the same plant's electrical room feeds an entire motor control centre (MCC) lineup — several conveyor and pump motors together — through a single 400 A feeder breaker. The electrician on the job needs to size the equipment bonding conductor for both circuits, and the branch-circuit motor's relatively small full-load current is tempting him to reason "small motor, small bonding wire." That reasoning is wrong, and understanding *why* it's wrong is this design task's entire point.
 
 ### Design Guidelines and Rules of Thumb
 
@@ -214,49 +230,50 @@ An equipment bonding conductor is not sized like an ordinary current-carrying co
 
 $$A_{bond} = \text{Table}(I_{OCPD})$$
 
-This relationship is a monotonically non-decreasing step function of the upstream OCPD rating — CEC Table 16 on the Canadian side, NEC Table 250.122 as the US equivalent — and it is deliberately *not* proportional to the actual connected load. A washdown conveyor motor drawing 15 A on a 60 A-protected branch and a much larger motor drawing 55 A on the same 60 A-protected branch both need the *identical* bonding conductor size, because both circuits are protected by, and depend on, the same 60 A device tripping under fault conditions. The table below is an **illustrative, representative summary** of the general shape of this relationship — always pull the actual CEC Table 16 or NEC Table 250.122 value for a real installation; these are not the published table values.
+This relationship is a monotonically non-decreasing step function of the upstream OCPD rating — CEC Table 16 on the Canadian side, NEC Table 250.122 as the US equivalent — and it is deliberately *not* proportional to the actual connected load. A 15 A washdown conveyor motor on 30 A branch fuses and a 34 A motor on 60 A branch fuses both need the *identical* 10 AWG bonding conductor, because both OCPD ratings fall in the same step of the table; the load current plays no part. The table below lists copper sizes at the breakpoints the two codes have in common — always pull the actual CEC Table 16 or NEC Table 250.122 value from the edition in force for a real installation (CEC Table 16 has a few extra rows, such as 30 A and 40 A, that NEC Table 250.122 does not).
 
 ```{r tbl-06-05-bonding-illustrative, echo=FALSE}
 bond_illus <- data.frame(
-  `OCPD Rating, Not Exceeding (A)` = c(20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200),
-  `Min. Copper Bonding Conductor (illustrative)` = c("12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG",
-                                                       "3 AWG", "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG"),
+  `OCPD Rating, Not Exceeding (A)` = c(15, 20, 30, 60, 100, 200, 300, 400, 500, 600, 800, 1000, 1200),
+  `Min. Copper Bonding Conductor` = c("14 AWG", "12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG", "4 AWG",
+                                      "3 AWG", "2 AWG", "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG"),
   check.names = FALSE
 )
 
 kable(bond_illus,
-      caption = "Illustrative bonding conductor sizing (representative shape only -- consult CEC Table 16 or NEC Table 250.122 for actual values)",
+      caption = "Copper bonding conductor size by upstream OCPD rating, at breakpoints common to CEC Table 16 and NEC Table 250.122 (check the edition in force before using it on a real job)",
       format.args = list(big.mark = " ")) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
                 full_width = knitr::is_html_output()) %>%
   row_spec(0, bold = TRUE, background = "#4a86c7", color = "white")
 ```
 
-**Rule of thumb:** always round up to the next standard conductor size listed in the table — never interpolate down to save copper — and re-check the bonding conductor size any time the upstream OCPD rating changes, even if the connected load and the branch conductor's own ampacity haven't changed at all. This breaks down at the extreme high end of both tables: beyond their largest listed OCPD breakpoint, CEC Table 16 and NEC Table 250.122 both shift to a different rule entirely — sizing the bonding conductor as a percentage of the circular mil (or mm²) area of the largest ungrounded phase conductor in the same circuit, rather than continuing the simple OCPD lookup. That transition point is exactly the kind of detail worth re-verifying against the actual table for a large-feeder job, not assuming from a smaller-circuit rule of thumb.
+**Rule of thumb:** always round up to the next standard conductor size listed in the table — never interpolate down to save copper — and re-check the bonding conductor size any time the upstream OCPD rating changes, even if the connected load and the branch conductor's own ampacity haven't changed at all. This breaks down in two places where the simple OCPD lookup is not the whole rule. First, if the phase conductors have been upsized beyond what the OCPD needs (for voltage drop on a long run, say), the NEC requires the bonding conductor to be increased in proportion to the phase conductors' circular-mil area (NEC 250.122(B)), and the CEC applies a similar principle. Second, on the supply side of a service, where there is no upstream OCPD, the bonding jumper is sized from the service conductors themselves. Both are worth checking against the actual code text on a large-feeder or long-run job.
 
-```{r fig-06-05-bonding-size-steps, echo=FALSE, fig.cap="Bonding conductor size tracks the upstream OCPD rating in discrete steps -- not a smooth, proportional function of either the OCPD rating or the actual connected load current.", fig.align='center', fig.width=10, fig.height=6}
+```{r fig-06-05-bonding-size-steps, echo=FALSE, fig.cap="Bonding conductor size tracks the upstream OCPD rating in discrete steps -- not a smooth, proportional function of either the OCPD rating or the actual connected load current. Each step applies to every OCPD rating above the previous row, up to and including its own row.", fig.align='center', fig.width=10, fig.height=6}
 bond_table <- data.frame(
-  ocpd_A = c(20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200),
-  area_mm2 = c(3.31, 5.26, 5.26, 8.37, 13.3, 26.7, 42.4, 53.5, 67.4, 85.0)
+  ocpd_A = c(15, 20, 30, 60, 100, 200, 300, 400, 500, 600, 800, 1000, 1200),
+  area_mm2 = c(2.08, 3.31, 5.26, 5.26, 8.37, 13.3, 21.2, 26.7, 33.6, 42.4, 53.5, 67.4, 85.0)
 )
-
+## "Not exceeding" table: the size listed for row i covers ratings above row i-1
+## up to row i, so the step rises just after the previous breakpoint ("vh").
 ggplot(bond_table, aes(x = ocpd_A, y = area_mm2)) +
-  geom_step(color = "#3498DB", linewidth = 1.2, direction = "hv") +
+  geom_step(color = "#3498DB", linewidth = 1.2, direction = "vh") +
   geom_point(color = "#3498DB", size = 2.5) +
-  annotate("segment", x = 60, xend = 60, y = 0, yend = 5.26,
-           linetype = "dashed", color = "#2ECC71", linewidth = 0.9) +
-  annotate("text", x = 60, y = 15, label = "60 A branch:\n10 AWG (5.3 mm^2)\nmotor FLA only 15.4 A",
-           size = 2.8 * diagram_text_scale, color = "#2ECC71", hjust = 0.5) +
+  annotate("segment", x = 30, xend = 30, y = 0, yend = 5.26,
+           linetype = "dashed", color = "#1E8449", linewidth = 0.9) +
+  annotate("label", x = 30, y = 17, label = "30 A branch fuse:\n10 AWG (5.3 mm²)\nmotor FLA only 15.4 A",
+           size = 3 * diagram_text_scale, color = "#1E8449", fill = "white", linewidth = 0) +
   annotate("segment", x = 400, xend = 400, y = 0, yend = 26.7,
            linetype = "dashed", color = "#E74C3C", linewidth = 0.9) +
-  annotate("text", x = 400, y = 45, label = "400 A feeder:\n3 AWG (26.7 mm^2)\nconnected load 180 A",
-           size = 2.8 * diagram_text_scale, color = "#E74C3C", hjust = 0.5) +
+  annotate("label", x = 400, y = 50, label = "400 A feeder:\n3 AWG (26.7 mm²)\nconnected load 180 A",
+           size = 3 * diagram_text_scale, color = "#E74C3C", fill = "white", linewidth = 0) +
   scale_x_log10(labels = scales::label_comma(big.mark = " ")) +
   labs(title = "Bonding Conductor Size Tracks the OCPD Rating, Not the Load Current",
-       subtitle = "Illustrative step relationship -- consult CEC Table 16 / NEC Table 250.122 for actual values",
+       subtitle = "Copper, at the common CEC Table 16 / NEC Table 250.122 breakpoints -- check the edition in force",
        x = "Upstream overcurrent device rating (A, log scale)",
-       y = "Min. copper bonding conductor area (mm^2)") +
-  theme_minimal() +
+       y = expression("Min. copper bonding conductor area (mm"^2*")")) +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9 * chart_text_scale),
         axis.title = element_text(size = 10.5 * chart_text_scale),
@@ -266,11 +283,11 @@ ggplot(bond_table, aes(x = ocpd_A, y = area_mm2)) +
 ### Worked Example
 
 ```{r bonding-sizing-06-05, echo=TRUE}
-## Illustrative bonding conductor lookup table (representative shape only --
-## consult CEC Table 16 / NEC Table 250.122 for the actual published values)
-ocpd_breakpoints <- c(20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200)
-bond_awg         <- c("12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG",
-                       "3 AWG", "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG")
+## Copper bonding conductor by OCPD rating, at the breakpoints common to
+## CEC Table 16 / NEC Table 250.122 (check the edition in force)
+ocpd_breakpoints <- c(15, 20, 30, 60, 100, 200, 300, 400, 500, 600, 800, 1000, 1200)
+bond_awg         <- c("14 AWG", "12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG", "4 AWG",
+                       "3 AWG", "2 AWG", "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG")
 
 lookup_bonding_size <- function(ocpd_rating) {
   idx <- min(which(ocpd_breakpoints >= ocpd_rating))
@@ -278,7 +295,7 @@ lookup_bonding_size <- function(ocpd_rating) {
 }
 
 ## Case 1: washdown conveyor motor branch circuit, food processing plant
-ocpd_branch <- 60          # A, fused disconnect protecting the branch
+ocpd_branch <- 30          # A, time-delay fuses (175% x 15.4 A, rounded up)
 motor_FLA   <- 15.4        # A, nameplate FLA of the 11 kW washdown motor
 
 ## Case 2: MCC feeder serving several such motors, same plant
@@ -304,7 +321,7 @@ cat("Bonding conductor size followed the OCPD step table, not a direct\n")
 cat("proportional scaling of either the OCPD ratio or the load-current ratio.\n")
 ```
 
-**Sanity check:** the branch circuit's motor uses only 26% of its 60 A OCPD's rating, and the feeder's connected load uses only 45% of its 400 A OCPD's rating — in both cases the bonding conductor was sized entirely off the OCPD, with the actual load current playing no role in the lookup at all. That's the concept this design task exists to teach: an electrician who tried to "right-size" the bonding conductor to the 15.4 A motor FLA instead of the 60 A OCPD rating would undersize it dramatically, leaving too little fault-current capacity for the very event — a short circuit — the conductor exists to handle.
+**Sanity check:** the branch circuit's motor uses only about half of its 30 A fuse rating, and the feeder's connected load uses only 45% of its 400 A OCPD's rating — in both cases the bonding conductor was sized entirely off the OCPD, with the actual load current playing no role in the lookup at all. That's the concept this design task exists to teach: an electrician who tried to "right-size" the bonding conductor to the 15.4 A motor FLA instead of the 30 A fuse rating would undersize it, leaving too little fault-current capacity for the very event — a short circuit — the conductor exists to handle.
 
 <details>
 <summary>Industry connection: washdown bonding hardware in food processing</summary>
@@ -328,6 +345,16 @@ At VFD and drive frequencies, the physics that makes the one-end rule correct st
 **Rule of thumb:** ground low-level analog and instrumentation cable shields at one end only; ground VFD (and other high-frequency drive) cable shields with a 360° low-impedance termination at both ends. This breaks down at the boundary between the two regimes — a cable carrying both low-level analog signals and running near high-frequency switching noise sometimes needs a hybrid approach (a shield grounded at one end for the fundamental signal, with a separate high-frequency bypass capacitor at the far end to shunt only the high-frequency noise to ground without closing a low-frequency loop) — a detail worth escalating to an EMC specialist rather than guessing on a mixed-frequency cable.
 
 ```{r fig-06-05-shield-ground-loop, echo=FALSE, fig.cap="Low-frequency instrumentation shielding: grounding the shield at both ends closes a loop that a small ground-potential difference can drive current through; grounding at one end only leaves the loop open.", fig.align='center', fig.width=11, fig.height=6}
+gnd_symbol <- function(x, y, w = 0.4) {
+  data.frame(x = c(x, x - w / 2, x - w / 3, x - w / 6),
+             xend = c(x, x + w / 2, x + w / 3, x + w / 6),
+             y = c(y, y - 0.3, y - 0.42, y - 0.54),
+             yend = c(y - 0.3, y - 0.3, y - 0.42, y - 0.54))
+}
+gnds <- rbind(gnd_symbol(4.5, 3.15), gnd_symbol(8.3, 3.15), gnd_symbol(11.3, 3.15))
+## Circulating-current arc between the two earthed ends, drawn as a path
+th <- seq(pi * 0.92, pi * 0.08, length.out = 60)
+loop_arc <- data.frame(x = 9.8 + 1.62 * cos(th), y = 2.35 - 0.55 * sin(th))
 ggplot() +
   # LEFT: correct, single-end grounded
   annotate("rect", xmin = 0.2, xmax = 1.6, ymin = 3.2, ymax = 4.2, fill = "#2ECC71", color = "black") +
@@ -336,14 +363,13 @@ ggplot() +
   annotate("text", x = 5.1, y = 3.7, label = "PLC AI\ncard", color = "white", size = 2.8 * diagram_text_scale) +
   annotate("segment", x = 1.6, xend = 4.4, y = 3.95, yend = 3.95, color = "black", linewidth = 0.8) +
   annotate("segment", x = 1.6, xend = 4.4, y = 3.45, yend = 3.45, color = "black", linewidth = 0.8) +
-  annotate("rect", xmin = 1.5, xmax = 4.5, ymin = 3.15, ymax = 4.25, fill = NA,
+  annotate("rect", xmin = 1.75, xmax = 4.25, ymin = 3.3, ymax = 4.1, fill = NA,
            color = "#9B59B6", linewidth = 1, linetype = "dashed") +
-  annotate("point", x = 1.5, y = 2.7, shape = 4, size = 4, stroke = 1.4, color = "#9B59B6") +
-  annotate("text", x = 1.5, y = 2.25, label = "shield floats\n(no connection)", size = 2.4 * diagram_text_scale, color = "#9B59B6") +
-  annotate("point", x = 4.5, y = 2.7, shape = 17, size = 5, color = "#9B59B6") +
-  annotate("text", x = 4.5, y = 2.25, label = "shield grounded\n(one end)", size = 2.4 * diagram_text_scale, color = "#9B59B6") +
+  annotate("segment", x = 4.25, xend = 4.5, y = 3.3, yend = 3.15, color = "#9B59B6", linewidth = 1) +
+  annotate("text", x = 1.75, y = 2.55, label = "shield floats\n(no connection)", size = 2.7 * diagram_text_scale, color = "#9B59B6") +
+  annotate("text", x = 4.5, y = 2.2, label = "shield grounded\n(one end)", size = 2.7 * diagram_text_scale, color = "#9B59B6") +
   annotate("text", x = 3.0, y = 5.15, label = "CORRECT (low frequency):\nloop is open, no current can circulate",
-           size = 2.85 * diagram_text_scale, color = "#2ECC71", fontface = "bold") +
+           size = 3 * diagram_text_scale, color = "darkgreen", fontface = "bold") +
   # RIGHT: incorrect, both ends grounded
   annotate("rect", xmin = 7.0, xmax = 8.4, ymin = 3.2, ymax = 4.2, fill = "#E74C3C", color = "black") +
   annotate("text", x = 7.7, y = 3.7, label = "Transmitter", color = "white", size = 2.8 * diagram_text_scale) +
@@ -351,19 +377,18 @@ ggplot() +
   annotate("text", x = 11.9, y = 3.7, label = "PLC AI\ncard", color = "white", size = 2.8 * diagram_text_scale) +
   annotate("segment", x = 8.4, xend = 11.2, y = 3.95, yend = 3.95, color = "black", linewidth = 0.8) +
   annotate("segment", x = 8.4, xend = 11.2, y = 3.45, yend = 3.45, color = "black", linewidth = 0.8) +
-  annotate("rect", xmin = 8.3, xmax = 11.3, ymin = 3.15, ymax = 4.25, fill = NA,
+  annotate("rect", xmin = 8.55, xmax = 11.05, ymin = 3.3, ymax = 4.1, fill = NA,
            color = "#9B59B6", linewidth = 1, linetype = "dashed") +
-  annotate("point", x = 8.3, y = 2.7, shape = 17, size = 5, color = "#9B59B6") +
-  annotate("text", x = 8.3, y = 2.25, label = "shield grounded", size = 2.4 * diagram_text_scale, color = "#9B59B6") +
-  annotate("point", x = 11.3, y = 2.7, shape = 17, size = 5, color = "#9B59B6") +
-  annotate("text", x = 11.3, y = 2.25, label = "shield grounded\n(both ends!)", size = 2.4 * diagram_text_scale, color = "#9B59B6") +
-  annotate("curve", x = 8.3, y = 2.05, xend = 11.3, yend = 2.05, curvature = 0.35,
-           arrow = arrow(length = unit(0.2, "cm"), ends = "both"), color = "#E74C3C", linewidth = 1) +
-  annotate("text", x = 9.8, y = 1.55, label = "circulating current from ground\npotential difference between the two ends",
-           size = 2.5 * diagram_text_scale, color = "#E74C3C") +
+  annotate("segment", x = 8.55, xend = 8.3, y = 3.3, yend = 3.15, color = "#9B59B6", linewidth = 1) +
+  annotate("segment", x = 11.05, xend = 11.3, y = 3.3, yend = 3.15, color = "#9B59B6", linewidth = 1) +
+  geom_segment(data = gnds, aes(x = x, xend = xend, y = y, yend = yend), color = "#9B59B6", linewidth = 1) +
+  geom_path(data = loop_arc, aes(x = x, y = y), color = "#E74C3C", linewidth = 1,
+            arrow = arrow(length = unit(0.2, "cm"), ends = "both", type = "closed")) +
+  annotate("text", x = 9.8, y = 1.4, label = "circulating current driven by the ground\npotential difference between the two ends",
+           size = 2.7 * diagram_text_scale, color = "#E74C3C") +
   annotate("text", x = 9.8, y = 5.15, label = "INCORRECT (low frequency):\nboth-ends ground closes the loop",
-           size = 2.85 * diagram_text_scale, color = "#E74C3C", fontface = "bold") +
-  xlim(0, 13) + ylim(1.0, 5.7) +
+           size = 3 * diagram_text_scale, color = "#E74C3C", fontface = "bold") +
+  coord_cartesian(xlim = c(0, 13), ylim = c(1.0, 5.7)) +
   theme_void()
 ```
 
@@ -516,49 +541,52 @@ Once a common-mode voltage is present, controlling where its current actually fl
 
 A secondary, common-mode-independent mitigation is a dedicated **shaft grounding ring or brush**, which provides a very low-impedance path from the rotating shaft directly to the motor frame — bypassing the bearing entirely, so discharge current takes that path instead of arcing through the bearing film. An **insulated bearing** at the non-drive end (a ceramic-coated or ceramic-ball bearing) works by the opposite mechanism: instead of giving current an easy path, it blocks the circulating bearing-current loop from closing through that bearing at all. A **common-mode choke** on the drive's output reduces $V_{cm}$ itself at the source, lowering the common-mode voltage available to couple into the bearing in the first place — which the worked example below quantifies directly.
 
-```{r fig-06-05-bearing-current-path, echo=FALSE, fig.cap="Common-mode current from a VFD's switching has to return to the drive somehow. A low-impedance shield path (top) gives it a harmless route; without one, it finds its way through the motor's bearings (bottom).", fig.align='center', fig.width=11, fig.height=6.5}
+```{r fig-06-05-bearing-current-path, echo=FALSE, fig.cap="Common-mode current from a VFD's switching has to return to the drive somehow. A low-impedance, 360°-bonded cable shield (top) gives it a harmless route; with an unshielded or poorly bonded cable (bottom) it returns through the motor's bearings and the plant's structural steel.", fig.align='center', fig.width=11, fig.height=6.5}
+th <- seq(0, 2 * pi, length.out = 60)
+brg <- data.frame(x = 9.6 + 0.22 * cos(th), y = 4.45 + 0.22 * sin(th))
 ggplot() +
-  # VFD box
-  annotate("rect", xmin = 0.3, xmax = 2.2, ymin = 4.6, ymax = 6.0, fill = "#34495E", color = "black") +
+  # VFD and motor
+  annotate("rect", xmin = 0.3, xmax = 2.2, ymin = 4.0, ymax = 6.0, fill = "#34495E", color = "black") +
   annotate("text", x = 1.25, y = 5.3, label = "VFD", color = "white", size = 3.4 * diagram_text_scale, fontface = "bold") +
-  # Motor box
-  annotate("rect", xmin = 8.6, xmax = 10.6, ymin = 4.6, ymax = 6.0, fill = "#E74C3C", color = "black") +
+  annotate("rect", xmin = 8.6, xmax = 10.6, ymin = 4.0, ymax = 6.0, fill = "#E74C3C", color = "black") +
   annotate("text", x = 9.6, y = 5.3, label = "Motor", color = "white", size = 3.4 * diagram_text_scale, fontface = "bold") +
+  geom_polygon(data = brg, aes(x = x, y = y), fill = "white", color = "black") +
+  annotate("text", x = 9.6, y = 4.45, label = "brg", size = 2.6 * diagram_text_scale) +
   # Good path: 360-degree bonded shield, top
-  annotate("segment", x = 2.2, xend = 8.6, y = 6.2, yend = 6.2, color = "#2ECC71", linewidth = 2.2) +
-  annotate("point", x = 2.4, y = 6.2, shape = 15, size = 4, color = "#2ECC71") +
-  annotate("point", x = 8.4, y = 6.2, shape = 15, size = 4, color = "#2ECC71") +
-  annotate("text", x = 5.4, y = 6.6, label = "Symmetrical shielded cable, 360-degree bond BOTH ends",
-           size = 2.8 * diagram_text_scale, color = "#2ECC71", fontface = "bold") +
-  annotate("text", x = 5.4, y = 5.85, label = "Low-impedance path -- common-mode current returns here harmlessly",
-           size = 2.5 * diagram_text_scale, color = "#2ECC71") +
-  # Bad path: through frame, bearing, ground
-  annotate("segment", x = 2.2, xend = 8.6, y = 3.4, yend = 3.4, color = "grey50", linewidth = 1, linetype = "dashed") +
-  annotate("text", x = 5.4, y = 3.75, label = "unshielded / poorly bonded cable run",
-           size = 2.5 * diagram_text_scale, color = "grey50") +
-  annotate("point", x = 9.6, y = 4.0, shape = 21, size = 6, fill = "white", color = "#E74C3C", stroke = 1.4) +
-  annotate("text", x = 9.6, y = 4.0, label = "brg", size = 2.2 * diagram_text_scale, color = "#E74C3C") +
-  annotate("segment", x = 9.6, xend = 9.6, y = 3.9, yend = 2.6, color = "#E74C3C", linewidth = 1.4,
+  annotate("segment", x = 2.2, xend = 8.6, y = 5.7, yend = 5.7, color = "#2ECC71", linewidth = 2.2) +
+  annotate("text", x = 5.4, y = 6.25, label = "Symmetrical shielded cable, 360° bond at BOTH ends",
+           size = 3 * diagram_text_scale, color = "darkgreen", fontface = "bold") +
+  annotate("text", x = 5.4, y = 5.3, label = "low-impedance shield: common-mode current returns here harmlessly",
+           size = 2.8 * diagram_text_scale, color = "darkgreen") +
+  # Bad path: unshielded / poorly bonded cable
+  annotate("segment", x = 2.2, xend = 8.6, y = 4.4, yend = 4.4, color = "grey50", linewidth = 1, linetype = "dashed") +
+  annotate("text", x = 5.4, y = 4.7, label = "unshielded / poorly bonded cable run",
+           size = 2.8 * diagram_text_scale, color = "grey40") +
+  annotate("segment", x = 9.6, xend = 9.6, y = 4.23, yend = 2.6, color = "#E74C3C", linewidth = 1.4,
            arrow = arrow(length = unit(0.2, "cm"), type = "closed")) +
-  annotate("text", x = 10.4, y = 3.1, label = "discharge current\nthrough bearing film\n(fluting damage)",
-           size = 2.5 * diagram_text_scale, color = "#E74C3C") +
+  annotate("text", x = 8.2, y = 3.3, label = "discharge current\nthrough bearing film\n(fluting damage)",
+           size = 2.8 * diagram_text_scale, color = "#E74C3C") +
   annotate("segment", x = 9.6, xend = 1.25, y = 2.6, yend = 2.6, color = "#E74C3C", linewidth = 1, linetype = "dotted") +
-  annotate("segment", x = 1.25, xend = 1.25, y = 2.6, yend = 4.6, color = "#E74C3C", linewidth = 1, linetype = "dotted") +
+  annotate("segment", x = 1.25, xend = 1.25, y = 2.6, yend = 4.0, color = "#E74C3C", linewidth = 1, linetype = "dotted",
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed")) +
   annotate("text", x = 5.4, y = 2.25, label = "...finds its own way back through frame / structural steel",
-           size = 2.4 * diagram_text_scale, color = "#E74C3C") +
-  # Mitigation: shaft grounding ring, offset clear of the motor box and bearing circle
-  annotate("segment", x = 9.75, xend = 10.15, y = 4.0, yend = 4.0,
-           color = "#F39C12", linewidth = 1, linetype = "dashed") +
-  annotate("point", x = 10.3, y = 4.0, shape = 15, size = 4, color = "#F39C12") +
-  annotate("text", x = 10.5, y = 4.0, label = "Shaft grounding ring\n(bypasses bearing)",
-           size = 2.3 * diagram_text_scale, color = "#F39C12", hjust = 0) +
-  xlim(-0.2, 12.6) + ylim(2.0, 7.0) +
+           size = 2.8 * diagram_text_scale, color = "#E74C3C") +
+  # Mitigation: shaft grounding ring bypasses the bearing
+  annotate("segment", x = 9.82, xend = 10.9, y = 4.45, yend = 4.45,
+           color = "#F39C12", linewidth = 1.2, linetype = "dashed") +
+  annotate("text", x = 11.0, y = 4.45, label = "Shaft grounding ring\n(bypasses bearing)",
+           size = 2.8 * diagram_text_scale, color = "#D68910", hjust = 0) +
+  coord_cartesian(xlim = c(-0.2, 12.8), ylim = c(2.0, 6.6)) +
   theme_void() +
   labs(title = "Where Does the Common-Mode Current Go?") +
   theme(plot.title = element_text(size = 12 * chart_text_scale, face = "bold", hjust = 0.5))
 ```
 
 ### Worked Example
+
+```{r video-bearing-currents-06-05, echo=FALSE, results='asis'}
+embed_youtube("wPAIEiazg30", "What are shaft currents and how to protect my AC motor (ABB Motors and Drives U.S.)")
+```
 
 Live cell — try a different line voltage, BVR, or choke reduction percentage and see how the bearing voltage estimate responds.
 
@@ -644,7 +672,7 @@ Routing power and signal wiring too close together for too long a parallel run l
 | Digital / communication (Level 2) | Fieldbus, Ethernet, discrete digital I/O | 150 mm (6 in) |
 | Power / motor leads (Level 3-4) | VFD output, motor feeders, welding circuits | reference class — not itself derated |
 
-**Rule of thumb:** keep at least 150-300 mm (6-12 in) of separation between power wiring and signal wiring for parallel runs in the same tray or panel, using the larger figure for the most sensitive analog circuits and VFD output cable specifically, and cross at 90° wherever a crossing is unavoidable — a perpendicular crossing needs essentially no extra separation, since the coupling effect is dominated by parallel run length, not by a brief crossing point. This breaks down for very short parallel runs (a few hundred mm) even at close spacing, where the coupled noise energy is often too small to matter regardless of the listed separation — and it also breaks down in the other direction for very high-current or very long parallel runs (a welding feeder, a large VFD output cable run over tens of metres), where even the "sensitive analog" separation figure may not be enough and a dedicated, separately routed conduit is worth the extra cost. IEEE 518 (Guide for the Installation of Electrical Equipment to Minimize Electrical Noise Inputs to Controllers from External Sources) is the standard reference for this kind of wiring-class separation guidance.
+**Rule of thumb:** keep at least 150-300 mm (6-12 in) of separation between power wiring and signal wiring for parallel runs in the same tray or panel, using the larger figure for the most sensitive analog circuits and VFD output cable specifically, and cross at 90° wherever a crossing is unavoidable — a perpendicular crossing needs essentially no extra separation, since the coupling effect is dominated by parallel run length, not by a brief crossing point. This breaks down for very short parallel runs (a few hundred mm) even at close spacing, where the coupled noise energy is often too small to matter regardless of the listed separation — and it also breaks down in the other direction for very high-current or very long parallel runs (a welding feeder, a large VFD output cable run over tens of metres), where even the "sensitive analog" separation figure may not be enough and a dedicated, separately routed conduit is worth the extra cost. IEEE 518 (Guide for the Installation of Electrical Equipment to Minimize Electrical Noise Inputs to Controllers from External Sources) is the classic reference for this kind of wiring-class separation guidance; it has since been withdrawn by IEEE but is still widely cited, alongside drive manufacturers' own installation manuals.
 
 The second layout decision is grounding **topology**: how the bonding/reference connections of multiple enclosures relate to each other. A **star (single-point) topology** ties every enclosure's reference back to one common point, with no other conductive path between enclosures — this avoids ground loops between enclosures entirely, which is exactly what a small panel full of sensitive, low-frequency analog instrumentation wants. A **mesh (multi-point grid) topology** bonds every enclosure to its neighbours and to a common grid at multiple points, deliberately creating many parallel low-impedance paths — which is exactly what a large, high-frequency-noise-heavy installation wants, because at high frequencies a single-point star topology's connecting conductors become significant inductive impedances (the same pigtail-inductance effect from Design Task 4), and only a low-impedance grid keeps the whole system at a consistent reference across a wide frequency range.
 
@@ -671,7 +699,8 @@ kable(sep_df, caption = "Illustrative power/signal separation guidance (represen
 star_nodes <- data.frame(
   x = c(2.0, 0.6, 1.4, 2.6, 3.4),
   y = c(4.4, 3.2, 2.2, 2.2, 3.2),
-  label = c("Common\nGround Point", "Panel A", "Panel B", "Panel C", "Panel D")
+  label = c("Common\nground point", "Panel A", "Panel B", "Panel C", "Panel D"),
+  ly = c(4.85, 2.8, 1.8, 1.8, 2.8)
 )
 star_edges <- data.frame(
   x = rep(2.0, 4), y = rep(4.4, 4),
@@ -681,7 +710,9 @@ star_edges <- data.frame(
 mesh_nodes <- data.frame(
   x = c(8.4, 7.4, 9.4, 7.4, 9.4),
   y = c(4.0, 3.2, 3.2, 2.2, 2.2),
-  label = c("Panel A", "Panel B", "Panel C", "Panel D", "Panel E")
+  label = c("Panel A", "Panel B", "Panel C", "Panel D", "Panel E"),
+  lx = c(8.4, 6.85, 9.95, 7.4, 9.4),
+  ly = c(4.35, 3.2, 3.2, 1.8, 1.8)
 )
 mesh_pairs <- rbind(
   data.frame(x = 8.4, y = 4.0, xend = 7.4, yend = 3.2),
@@ -698,19 +729,18 @@ ggplot() +
   geom_segment(data = star_edges, aes(x = x, y = y, xend = xend, yend = yend),
                color = "#3498DB", linewidth = 1.3) +
   geom_point(data = star_nodes, aes(x = x, y = y), size = 5, color = "#2ECC71") +
-  geom_label(data = star_nodes, aes(x = x, y = y - 0.42, label = label),
-             size = 2.5 * diagram_text_scale, linewidth = 0) +
-  annotate("text", x = 2.0, y = 5.1, label = "STAR (single-point)",
-           size = 3.4 * diagram_text_scale, fontface = "bold", color = "#2ECC71") +
+  geom_label(data = star_nodes, aes(x = x, y = ly, label = label),
+             size = 2.9 * diagram_text_scale, linewidth = 0, fill = "white") +
+  annotate("text", x = 2.0, y = 5.35, label = "STAR (single-point)",
+           size = 3.4 * diagram_text_scale, fontface = "bold", color = "#1E8449") +
   geom_segment(data = mesh_pairs, aes(x = x, y = y, xend = xend, yend = yend),
                color = "#E74C3C", linewidth = 1.1) +
   geom_point(data = mesh_nodes, aes(x = x, y = y), size = 5, color = "#F39C12") +
-  geom_label(data = mesh_nodes, aes(x = x, y = y - 0.42, label = label),
-             size = 2.5 * diagram_text_scale, linewidth = 0) +
-  annotate("text", x = 8.4, y = 4.75, label = "MESH (multi-point grid)",
+  geom_label(data = mesh_nodes, aes(x = lx, y = ly, label = label),
+             size = 2.9 * diagram_text_scale, linewidth = 0, fill = "white") +
+  annotate("text", x = 8.4, y = 4.85, label = "MESH (multi-point grid)",
            size = 3.4 * diagram_text_scale, fontface = "bold", color = "#E74C3C") +
-  xlim(-0.2, 10.3) + ylim(1.3, 5.4) +
-  coord_fixed() +
+  coord_fixed(xlim = c(-0.2, 10.6), ylim = c(1.4, 5.6)) +
   theme_void()
 ```
 
@@ -858,7 +888,7 @@ cat(sprintf("  Case B (rods only): body current if touched  %.0f mA (dry skin, %
 
 ```{r fig-06-05-touch-voltage-compare, echo=FALSE, fig.cap="Fault current for a properly bonded circuit versus one relying only on driven ground rods, against the 20 A breaker's rating and its instantaneous trip threshold. The bonded case clears in a few cycles; the rod-only case never trips at all.", fig.align='center', fig.width=10, fig.height=6}
 fault_cases <- data.frame(
-  case = c("Properly Bonded\n(Z = 0.35 ohm)", "Rod Only, No Bonding\n(Z = 50 ohm)"),
+  case = c("Properly Bonded\n(Z = 0.35 Ω)", "Rod Only, No Bonding\n(Z = 50 Ω)"),
   fault_current = c(347 / 0.35, 347 / 50)
 )
 fault_cases$case <- factor(fault_cases$case, levels = fault_cases$case)
@@ -882,7 +912,7 @@ ggplot(fault_cases, aes(x = case, y = fault_current, fill = case)) +
   labs(title = "Fault Current: Properly Bonded vs. Rod Only",
        subtitle = "347 V phase-to-ground fault, 20 A branch breaker",
        x = NULL, y = "Fault current (A)") +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "none",
         plot.title = element_text(size = 12 * chart_text_scale, face = "bold"),
         plot.subtitle = element_text(size = 9.5 * chart_text_scale),
@@ -983,8 +1013,9 @@ tryit_sort(
 ### Size the bonding conductor {#sec-tryit-bonding-06-05}
 
 ```{r tryit-bonding-grid-06-05, echo=FALSE, results='asis'}
-bt_rows <- c(20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200)
-bt_awg  <- c("12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG", "3 AWG", "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG")
+bt_rows <- c(15, 20, 30, 60, 100, 200, 300, 400, 500, 600, 800, 1000, 1200)
+bt_awg  <- c("14 AWG", "12 AWG", "10 AWG", "10 AWG", "8 AWG", "6 AWG", "4 AWG", "3 AWG", "2 AWG",
+             "1 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG")
 bd <- data.frame(
   `Circuit` = c("Small conveyor", "Packaging motor", "Press feeder", "Mixer drive", "Panel feeder", "Oven supply"),
   `Upstream OCPD (A)` = c(15, 45, 90, 250, 350, 700),
@@ -1001,10 +1032,10 @@ tryit_grid(
   tol = c(`Table row used (A)` = 0.5),
   hints = c(`Table row used (A)` = "Never interpolate down: use the first table row whose OCPD rating is at least the actual device rating."),
   digits = 0,
-  intro = "Use the chapter's illustrative table rows: 20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200 A.",
+  intro = "Use the chapter's table rows: 15, 20, 30, 60, 100, 200, 300, 400, 500, 600, 800, 1000, 1200 A.",
   question = paste0(
     "<p>The bonding conductor is sized from the upstream overcurrent device, rounded up to the next row of the table ",
-    "(20, 30, 60, 100, 200, 400, 600, 800, 1000, 1200 A). For each circuit give the table row to use.</p>")
+    "(15, 20, 30, 60, 100, 200, 300, 400, 500, 600, 800, 1000, 1200 A). For each circuit give the table row to use.</p>")
 )
 ```
 
@@ -1013,7 +1044,7 @@ tryit_grid(
 
 ```{r tryit-bonding-solution-06-05, echo=FALSE}
 bd_show <- bd
-bd_show[["Bonding conductor (illustrative)"]] <- bd_awg
+bd_show[["Bonding conductor"]] <- bd_awg
 knitr::kable(bd_show, align = "c")
 ```
 
@@ -1107,9 +1138,9 @@ An integrator reviewing an imported machine's US-drawn schematic sees a note sta
 <details>
 <summary>Design Task 3, Problem 1 (plug-in): size a bonding conductor</summary>
 
-Using the illustrative table from this design task, what minimum copper bonding conductor size is required for a branch circuit protected by a 100 A breaker, regardless of whether the connected motor draws 22 A or 85 A?
+Using the table from this design task, what minimum copper bonding conductor size is required for a branch circuit protected by a 100 A breaker, regardless of whether the connected motor draws 22 A or 85 A?
 
-**Solution:** Looking up 100 A in the illustrative table gives **8 AWG**, identical for both motors — the bonding conductor size is a function of the 100 A OCPD rating alone, not of either motor's actual current draw.
+**Solution:** Looking up 100 A in the table gives **8 AWG**, identical for both motors — the bonding conductor size is a function of the 100 A OCPD rating alone, not of either motor's actual current draw.
 
 </details>
 
@@ -1187,12 +1218,12 @@ The food-plant conveyor skid from this design task's scenario — one washdown p
 <details>
 <summary>Design Task 7, Problem 1 (plug-in): recompute with a different rod resistance</summary>
 
-Using the same 347 V system and 20 A breaker, but with a poorly performing single ground rod tested at 60 Ω (soil-resistance dependent, well above the code's typical 25 Ω supplemental-electrode threshold) as the equipment-side path, and the same 25 Ω source electrode, find the fault current and touch voltage if no bonding conductor is present.
+Using the same 347 V system and 20 A breaker, but with a poorly performing single ground rod tested at 60 Ω (soil-resistance dependent, well above the 25 Ω single-rod threshold of NEC 250.53, beyond which a supplemental electrode is required) as the equipment-side path, and the same 25 Ω source electrode, find the fault current and touch voltage if no bonding conductor is present.
 
 **Solution:**
 
 $$Z_{loop} = 60 + 25 = 85\ \Omega \qquad I_{fault} = 347/85 = 4.08\ \text{A}$$
-$$V_{touch} = 4.08 \times 60 = 244.7\ \text{V}$$
+$$V_{touch} = 4.08 \times 60 = 244.9\ \text{V}$$
 
 Worse than the worked example's 25 Ω case in both respects — even lower fault current (further from tripping the breaker) and a higher sustained touch voltage. Poor soil conditions make the rod-only approach even more dangerous, not less.
 

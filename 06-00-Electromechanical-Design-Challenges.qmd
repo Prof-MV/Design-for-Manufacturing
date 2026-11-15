@@ -21,7 +21,7 @@ This part of the book collects fourteen design challenges that show up constantl
 You are training for work in **automotive manufacturing**, **food and beverage processing**, or **defense manufacturing** — three of Ontario's largest advanced manufacturing sectors. Each imposes its own flavour on electromechanical design:
 
 - **Automotive** plants demand short cycle times, tight cost control, and machines that can be serviced by a plant electrician at 2 a.m. Panels are commonly specified to a 65 kA short-circuit current rating (SCCR) because they sit on a stiff utility feed shared with dozens of other cells, and control networks are segregated from the plant's business network for both safety and cybersecurity reasons.
-- **Food and beverage processing** plants demand washdown-rated equipment (IP69K, CFIA-compliant sanitary construction), corrosion-resistant materials, and a documented sanitary design rationale, because a machine that cannot be hosed down and dried is a bacterial growth site waiting to happen.
+- **Food and beverage processing** plants demand washdown-rated equipment (IP69K) built to a sanitary design standard such as NSF/ANSI/3-A 14159-1, so the plant can meet the CFIA's cleanable-equipment requirements under the *Safe Food for Canadians Regulations*, corrosion-resistant materials, and a documented sanitary design rationale, because a machine that cannot be hosed down and dried is a bacterial growth site waiting to happen.
 - **Defense manufacturing** demands traceable, auditable documentation at every step — drawings, calculations, and material certifications that can survive a customer or Controlled Goods Program audit — because the parts being made may be subject to export control and the customer's quality requirements often exceed commercial norms.
 
 You'll see all three sectors referenced throughout this part, usually with a concrete example rather than a general statement, because "food-safe" or "SCCR-rated" means nothing to a designer until it's attached to an actual specification.
@@ -37,11 +37,11 @@ Standards are cited **by name and number only**. This book does not reproduce st
 
 ## A Note on Rules of Thumb
 
-Experienced designers rely on rules of thumb constantly — a 25% cylinder oversize allowance, a 3% voltage drop limit, a 10:1 servo inertia ratio. They exist because they compress years of field experience into a number you can apply in five seconds, and most of the time they get you into the right neighbourhood fast. But every rule of thumb is a shortcut around a real calculation, and shortcuts have edges. This part flags every rule of thumb explicitly as a rule of thumb, and tells you where it breaks down — because the difference between a competent designer and a dangerous one is often just knowing when the shortcut stops working.
+Experienced designers rely on rules of thumb constantly — a 25–50% cylinder bore oversize margin, a 3% voltage drop limit, a 10:1 servo inertia ratio. They exist because they compress years of field experience into a number you can apply in five seconds, and most of the time they get you into the right neighbourhood fast. But every rule of thumb is a shortcut around a real calculation, and shortcuts have edges. This part flags every rule of thumb explicitly as a rule of thumb, and tells you where it breaks down — because the difference between a competent designer and a dangerous one is often just knowing when the shortcut stops working.
 
 ## How the Chapters Fit Together
 
-```{r fig-part-06-roadmap, echo=FALSE, fig.cap="How the fourteen design challenges in this part connect to one another. Arrows show the most common flow of information between design tasks.", fig.align='center', fig.width=11, fig.height=7}
+```{r fig-part-06-roadmap, echo=FALSE, fig.cap="How the fourteen design challenges in this part connect to one another (numbers are the order of the chapters within this part). Each arrow points from the chapter that supplies a result to the chapter that uses it.", fig.align='center', fig.width=11, fig.height=7}
 library(ggplot2)
 
 nodes <- data.frame(
@@ -49,37 +49,45 @@ nodes <- data.frame(
   label = c("1. Robot Cell", "2. Machine Safety\nCircuits", "3. Control Panel",
             "4. Wire & Cable\nProtection", "5. Bonding,\nGrounding, EMC",
             "6. Motor, Drive,\nGearbox Sizing", "7. Pneumatic\nSystems",
-            "8. Linear Motion", "9. Shaft &\nCoupling", "10. Conveyor Design",
+            "8. Linear Motion", "9. Shaft &\nCoupling", "10. Conveyor\nDesign",
             "11. Frame &\nStructure", "12. Thermal\nManagement",
             "13. Power Supply,\nUPS, Battery", "14. Sensor &\nI/O Architecture"),
-  x = c(1, 2, 3, 4, 5, 2.5, 1, 2, 3, 1.5, 4, 5, 5, 4),
-  y = c(4, 4, 4, 4, 4, 2.5, 1, 1, 1, 2.5, 2.5, 2.5, 4, 1),
+  x = c(0.75, 1.5, 6.6, 6.6, 5.2, 3.8, 2.3, 9.2, 2.3, 3.4, 9.2, 8.7, 8.4, 5.2),
+  y = c(3.8, 5.4, 3.8, 2.2, 5.4, 3.8, 3.8, 5.4, 2.2, 0.8, 3.8, 2.2, 0.8, 0.8),
   group = c("Safety & Cell", "Safety & Cell", "Electrical", "Electrical", "Electrical",
             "Mechanical/Drive", "Mechanical/Drive", "Mechanical/Drive", "Mechanical/Drive",
             "Mechanical/Drive", "Structural", "Electrical", "Electrical", "Sensing")
 )
+## Approximate half-width / half-height of each label box in data units,
+## so arrows can stop at the box edge instead of disappearing under it.
+lines_of <- strsplit(nodes$label, "\n")
+nodes$hw <- 0.032 * sapply(lines_of, function(s) max(nchar(s))) + 0.12
+nodes$hh <- 0.085 * lengths(lines_of) + 0.08
 
-## Edges are (from_id, to_id) pairs taken directly from the cross-chapter
-## references actually made in the text (e.g. "the stopping time used here
-## comes from ... Machine Safety Circuits" in Robot Cell Design == 2 -> 1).
-## Coordinates are looked up from `nodes` rather than hardcoded, so an edge
-## can never point off the node grid the way two mismatched coordinate
-## lists could.
+## Edges are (from, to) pairs taken from the cross-chapter references the
+## chapters actually make, e.g. Robot Cell Design takes its stopping time from
+## Machine Safety Circuits (2 -> 1); Power Supply sizes its 24 VDC branch fuses
+## with the selective-coordination rules of Wire & Cable Protection (4 -> 13).
 edge_pairs <- data.frame(
-  from = c(2, 6, 6, 5, 5, 6, 6, 9, 8, 3, 5, 4, 2),
-  to   = c(1, 3, 4, 3, 6, 9, 10, 10, 11, 12, 14, 14, 7)
+  from = c(2, 2, 5, 5, 5, 6, 6, 6, 6, 9, 4, 4, 3, 8),
+  to   = c(1, 7, 3, 6, 14, 3, 4, 9, 10, 10, 14, 13, 12, 11)
 )
-
-edges <- edge_pairs %>%
-  left_join(nodes, by = c("from" = "id")) %>%
-  left_join(nodes, by = c("to" = "id"), suffix = c("", "_end")) %>%
-  transmute(x = x, y = y, xend = x_end, yend = y_end)
+a <- nodes[edge_pairs$from, ]
+b <- nodes[edge_pairs$to, ]
+dx <- b$x - a$x; dy <- b$y - a$y
+## fraction of the centre-to-centre vector that lies inside each box
+t_a <- pmin(a$hw / pmax(abs(dx), 1e-9), a$hh / pmax(abs(dy), 1e-9))
+t_b <- pmin(b$hw / pmax(abs(dx), 1e-9), b$hh / pmax(abs(dy), 1e-9))
+edges <- data.frame(x = a$x + t_a * dx, y = a$y + t_a * dy,
+                    xend = b$x - t_b * dx, yend = b$y - t_b * dy)
 
 ggplot() +
   geom_segment(data = edges, aes(x = x, y = y, xend = xend, yend = yend),
-               arrow = arrow(length = unit(0.2, "cm")), color = "grey55", linewidth = 0.6) +
+               arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
+               color = "grey40", linewidth = 0.6) +
   geom_label(data = nodes, aes(x = x, y = y, label = label, fill = group),
-             size = 3.2 * diagram_text_scale, label.padding = unit(0.25, "lines")) +
+             size = 3.2 * diagram_text_scale, label.padding = unit(0.25, "lines"),
+             key_glyph = "rect") +
   scale_fill_manual(values = c("Safety & Cell" = "#E74C3C", "Electrical" = "#3498DB",
                                 "Mechanical/Drive" = "#2ECC71", "Structural" = "#F39C12",
                                 "Sensing" = "#9B59B6")) +
@@ -91,15 +99,15 @@ ggplot() +
     legend.text = element_text(size = 9 * chart_text_scale),
     legend.title = element_text(size = 10 * chart_text_scale)
   ) +
-  xlim(0.5, 5.5) + ylim(0.5, 4.5)
+  coord_cartesian(xlim = c(0, 10.2), ylim = c(0.3, 5.9))
 ```
 
 A few dependencies worth noting before you start:
 
-- The **stopping time** you calculate in Chapter 2 (Machine Safety Circuits) is a direct input to the **minimum safe distance** formula in Chapter 1 (Robot Cell Design). You cannot finish the Chapter 1 guarding calculation without Chapter 2.
-- The **motor and drive sizing** in Chapter 6 feeds directly into Chapter 9 (Shaft and Coupling), Chapter 10 (Conveyor Design), and the branch circuit protection sizing in Chapter 3 (Control Panel Design) and Chapter 4 (Wire and Cable Protection).
-- **Grounding and bonding** (Chapter 5) is not a standalone topic — it shows up again inside Chapter 3's panel layout, Chapter 6's VFD installation practice, and Chapter 14's analog sensor wiring.
-- **Thermal management** (Chapter 12) is Chapter 3's enclosure heat dissipation calculation applied one level down, at the component level.
+- The **stopping time** you work with in [Machine Safety Circuits](06-02-Machine-Safety-Circuits.qmd) is a direct input to the **minimum safe distance** formula in [Robot Cell Design](06-01-Robot-Cell-Design.qmd). You cannot finish the robot cell's guarding calculation without it.
+- The **motor and drive sizing** in [Motor, Drive, and Gearbox Sizing](06-06-Motor-Drive-Gearbox-Sizing.qmd) feeds directly into [Shaft, Coupling, and Power Transmission Design](06-09-Shaft-Coupling-Power-Transmission.qmd), [Conveyor Design](06-10-Conveyor-Design.qmd), and the branch circuit protection sizing in [Control Panel Design](06-03-Control-Panel-Design.qmd) and [Wire, Cable, and Circuit Protection](06-04-Wire-Cable-Circuit-Protection.qmd).
+- **Grounding and bonding** ([Bonding, Grounding, and EMC](06-05-Bonding-Grounding-EMC.qmd)) is not a standalone topic — it shows up again in the control panel layout, in the VFD installation practice of the motor and drive chapter, and in the analog sensor wiring of [Sensor Selection and Machine I/O Architecture](06-14-Sensor-Selection-IO-Architecture.qmd).
+- **Thermal management** ([Thermal Management of Electronics](06-12-Thermal-Management-Electronics.qmd)) is the control panel chapter's enclosure heat dissipation calculation applied one level down, at the component level.
 
 The part closes with a **capstone design scenario**: a complete pneumatic pick-and-place cell built around a small six-axis robot, where you'll size the cylinder and valve, select the infeed conveyor's motor and drive, size the control panel and wiring, design the bonding and grounding scheme, calculate the safety distance from the robot's stopping time, and check the frame deflection — pulling together at least six of the fourteen chapters into one design.
 
