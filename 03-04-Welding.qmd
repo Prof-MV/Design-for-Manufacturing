@@ -53,72 +53,69 @@ Welding joins materials by applying **heat**, **pressure**, or both, with or wit
 ### Key Welding Terminology
 
 ```{r welding-terminology, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Cross-section of a typical fusion weld showing key zones and terminology."}
+## Single-V butt weld: plates, HAZ band outside the fusion line, weld metal with cap and root reinforcement
+cap_x  <- seq(3.5, 6.5, length.out = 40)
+cap_y  <- 3 + 0.45 * (1 - ((cap_x - 5) / 1.5)^2)
+root_x <- seq(5.3, 4.7, length.out = 20)
+root_y <- -0.3 * (1 - ((root_x - 5) / 0.3)^2)
+weld_df <- data.frame(x = c(4.7, cap_x, 5.3, root_x), y = c(0, cap_y, 0, root_y))
+
 ggplot() +
-  ## Base metal (left)
-  geom_rect(aes(xmin = 0, xmax = 3.5, ymin = 0, ymax = 3), fill = "steelblue", color = "black", linewidth = 1) +
+  ## Base metal (both plates)
+  geom_rect(aes(xmin = 0, xmax = 10, ymin = 0, ymax = 3), fill = "steelblue", color = "black", linewidth = 1) +
 
-  ## Base metal (right)
-  geom_rect(aes(xmin = 6.5, xmax = 10, ymin = 0, ymax = 3), fill = "steelblue", color = "black", linewidth = 1) +
+  ## Heat Affected Zone (HAZ): band just outside the fusion line on each side
+  geom_polygon(aes(x = c(4.0, 2.8, 3.5, 4.7), y = c(0, 3, 3, 0)), fill = "lightblue", color = "black", linewidth = 0.5) +
+  geom_polygon(aes(x = c(6.0, 7.2, 6.5, 5.3), y = c(0, 3, 3, 0)), fill = "lightblue", color = "black", linewidth = 0.5) +
 
-  ## Heat Affected Zone (HAZ) - left
-  geom_rect(aes(xmin = 3.5, xmax = 4.3, ymin = 0, ymax = 3), fill = "lightblue", color = "black", linewidth = 0.5) +
+  ## Weld metal (fusion zone) incl. face reinforcement and root reinforcement
+  geom_polygon(data = weld_df, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 1) +
 
-  ## Heat Affected Zone (HAZ) - right
-  geom_rect(aes(xmin = 5.7, xmax = 6.5, ymin = 0, ymax = 3), fill = "lightblue", color = "black", linewidth = 0.5) +
+  ## Original plate surfaces (reinforcement is the metal outside these lines)
+  geom_segment(aes(x = 3.5, xend = 6.5, y = 3, yend = 3), linetype = "dotted", color = "gray30") +
+  geom_segment(aes(x = 4.7, xend = 5.3, y = 0, yend = 0), linetype = "dotted", color = "gray30") +
 
-  ## Weld metal (fusion zone)
-  geom_polygon(aes(x = c(4.3, 5, 5.7, 5.7, 5, 4.3),
-                   y = c(0, 0.3, 0, 3, 3.8, 3)),
-               fill = "orange", color = "black", linewidth = 1) +
+  ## Fusion lines (weld metal / HAZ boundary)
+  geom_segment(aes(x = 4.7, xend = 3.5, y = 0, yend = 3), linetype = "dashed", color = "darkred", linewidth = 1) +
+  geom_segment(aes(x = 5.3, xend = 6.5, y = 0, yend = 3), linetype = "dashed", color = "darkred", linewidth = 1) +
 
-  ## Weld reinforcement (cap)
-  geom_polygon(aes(x = c(4, 5, 6, 5.7, 5, 4.3),
-                   y = c(3, 3.8, 3, 3, 3.8, 3)),
-               fill = "darkorange", color = "black", linewidth = 1) +
+  ## Base metal labels
+  annotate("text", x = 1.4, y = 1.5, label = "Base\nMetal", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = 8.6, y = 1.5, label = "Base\nMetal", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
 
-  ## Root
-  geom_polygon(aes(x = c(4.5, 5, 5.5, 5.3, 5, 4.7),
-                   y = c(0, -0.3, 0, 0, -0.2, 0)),
-               fill = "darkorange", color = "black", linewidth = 0.5) +
-
-  ## Labels with leader lines
-  ## Base metal
-  annotate("text", x = 1.5, y = 1.5, label = "Base\nMetal", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
-  annotate("text", x = 8.5, y = 1.5, label = "Base\nMetal", color = "white", fontface = "bold", size = 4 * diagram_text_scale) +
-
-  ## HAZ labels
-  geom_segment(aes(x = 3.9, xend = 3, y = 4.5, yend = 3.5),
+  ## HAZ label
+  geom_segment(aes(x = 2.0, xend = 3.5, y = 4.6, yend = 2.0),
                arrow = arrow(length = unit(0.15, "cm")), color = "blue") +
-  annotate("text", x = 3.9, y = 4.8, label = "Heat Affected\nZone (HAZ)", color = "blue", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 1.7, y = 5.0, label = "Heat Affected\nZone (HAZ)", color = "blue", size = 3.5 * diagram_text_scale) +
 
-  ## Fusion zone label
-  geom_segment(aes(x = 5, xend = 5, y = 5.2, yend = 4),
-               arrow = arrow(length = unit(0.15, "cm")), color = "darkorange") +
-  annotate("text", x = 5, y = 5.5, label = "Weld Metal\n(Fusion Zone)", color = "darkorange", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  ## Weld metal label
+  geom_segment(aes(x = 5, xend = 5, y = 5.1, yend = 1.6),
+               arrow = arrow(length = unit(0.15, "cm")), color = "darkorange3") +
+  annotate("text", x = 5, y = 5.5, label = "Weld Metal\n(Fusion Zone)", color = "darkorange3", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
   ## Reinforcement label
-  geom_segment(aes(x = 6.8, xend = 5.8, y = 4, yend = 3.5),
+  geom_segment(aes(x = 7.3, xend = 5.9, y = 4.4, yend = 3.32),
                arrow = arrow(length = unit(0.15, "cm")), color = "black") +
-  annotate("text", x = 7.9, y = 4.7, label = "Weld\nReinforcement", size = 3 * diagram_text_scale) +
+  annotate("text", x = 8.1, y = 4.7, label = "Weld\nReinforcement", size = 3 * diagram_text_scale) +
 
   ## Root label
-  geom_segment(aes(x = 5, xend = 5, y = -1, yend = -0.4),
+  geom_segment(aes(x = 5, xend = 5, y = -1, yend = -0.35),
                arrow = arrow(length = unit(0.15, "cm")), color = "black") +
   annotate("text", x = 5, y = -1.3, label = "Root", size = 3.5 * diagram_text_scale) +
 
-  ## Toe labels
-  geom_point(aes(x = c(4, 6), y = c(3, 3)), size = 3, color = "red") +
-  geom_segment(aes(x = 2.6, xend = 3.9, y = 3.45, yend = 2.9),
+  ## Weld toes: where the weld face meets the base metal surface
+  geom_point(aes(x = c(3.5, 6.5), y = c(3, 3)), size = 3, color = "red") +
+  geom_segment(aes(x = 1.9, xend = 3.42, y = 3.5, yend = 3.05),
                arrow = arrow(length = unit(0.15, "cm")), color = "red") +
-  annotate("text", x = 1.9, y = 3.7, label = "Weld Toe", color = "red", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 1.2, y = 3.6, label = "Weld Toe", color = "red", size = 3.5 * diagram_text_scale) +
 
-  ## Fusion line
-  geom_segment(aes(x = 4.3, xend = 4.3, y = 0, yend = 3),
-               linetype = "dashed", color = "yellow", linewidth = 1) +
-  annotate("text", x = 3.2, y = -0.8, label = "Fusion\nLine", color = "goldenrod", size = 3 * diagram_text_scale) +
+  ## Fusion line label
+  geom_segment(aes(x = 7.3, xend = 5.9, y = -0.6, yend = 1.4),
+               arrow = arrow(length = unit(0.15, "cm")), color = "darkred") +
+  annotate("text", x = 7.9, y = -0.85, label = "Fusion\nLine", color = "darkred", size = 3 * diagram_text_scale) +
 
   coord_fixed(ratio = 1, xlim = c(-0.5, 10.5), ylim = c(-2, 6)) +
-  labs(title = "Anatomy of a Fusion Weld") +
+  labs(title = "Anatomy of a Fusion Weld (Single-V Butt Weld)") +
   theme_welding
 ```
 
@@ -178,16 +175,16 @@ ggplot() +
   annotate("text", x = 2, y = 7.5, label = "BUTT JOINT", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 0.5, xmax = 1.9, ymin = 6, ymax = 7), fill = "steelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 2.1, xmax = 3.5, ymin = 6, ymax = 7), fill = "steelblue", color = "black", linewidth = 1) +
-  geom_rect(aes(xmin = 1.9, xmax = 2.1, ymin = 5.8, ymax = 7.2), fill = "orange", color = "black") +
+  geom_rect(aes(xmin = 1.9, xmax = 2.1, ymin = 5.85, ymax = 7.15), fill = "orange", color = "black") +
   annotate("text", x = 2, y = 5.3, label = "Parts aligned\nin same plane", size = 3 * diagram_text_scale, fontface = "italic") +
 
-  ## LAP JOINT
+  ## LAP JOINT: fillet welds sit on the surface of one plate against the edge of the other
   annotate("text", x = 6, y = 7.5, label = "LAP JOINT", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 4.5, xmax = 7, ymin = 6.3, ymax = 7), fill = "steelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 5, xmax = 7.5, ymin = 5.6, ymax = 6.3), fill = "lightsteelblue", color = "black", linewidth = 1) +
-  geom_polygon(aes(x = c(5, 5, 5.5), y = c(6.3, 7, 6.3)), fill = "orange", color = "black") +
-  geom_polygon(aes(x = c(7, 7, 6.5), y = c(5.6, 6.3, 6.3)), fill = "orange", color = "black") +
-  annotate("text", x = 6, y = 5.3, label = "Overlapping\nparts", size = 3 * diagram_text_scale, fontface = "italic") +
+  geom_polygon(aes(x = c(7, 7, 7.5), y = c(6.3, 6.8, 6.3)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(5, 4.5, 5), y = c(6.3, 6.3, 5.8)), fill = "orange", color = "black") +
+  annotate("text", x = 6, y = 5.1, label = "Overlapping\nparts", size = 3 * diagram_text_scale, fontface = "italic") +
 
   ## T-JOINT
   annotate("text", x = 10, y = 8.1, label = "T-JOINT", fontface = "bold", size = 4 * diagram_text_scale) +
@@ -195,24 +192,22 @@ ggplot() +
   geom_rect(aes(xmin = 9.7, xmax = 10.3, ymin = 6.3, ymax = 7.8), fill = "lightsteelblue", color = "black", linewidth = 1) +
   geom_polygon(aes(x = c(9.7, 9.7, 9.2), y = c(6.3, 6.8, 6.3)), fill = "orange", color = "black") +
   geom_polygon(aes(x = c(10.3, 10.3, 10.8), y = c(6.3, 6.8, 6.3)), fill = "orange", color = "black") +
-  annotate("text", x = 10, y = 5.3, label = "Parts at 90°\n(T-shape)", size = 3 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 10, y = 5.1, label = "Parts at 90°\n(T-shape)", size = 3 * diagram_text_scale, fontface = "italic") +
 
-  ## CORNER JOINT
+  ## CORNER JOINT: fillet weld in the inside corner
   annotate("text", x = 3, y = 3.5, label = "CORNER JOINT", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 1.5, xmax = 4, ymin = 1.5, ymax = 2.2), fill = "steelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 3.3, xmax = 4, ymin = 2.2, ymax = 3.2), fill = "lightsteelblue", color = "black", linewidth = 1) +
-  geom_polygon(aes(x = c(3.3, 4, 4), y = c(2.2, 2.2, 2.7)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(3.3, 3.3, 2.8), y = c(2.2, 2.7, 2.2)), fill = "orange", color = "black") +
   annotate("text", x = 3, y = 1, label = "Parts at 90°\n(L-shape)", size = 3 * diagram_text_scale, fontface = "italic") +
 
-  ## EDGE JOINT
+  ## EDGE JOINT: weld bead melted across the flush edges
   annotate("text", x = 8, y = 3.5, label = "EDGE JOINT", fontface = "bold", size = 4 * diagram_text_scale) +
-  geom_polygon(aes(x = c(6.5, 6.5, 9.5, 9.5, 9, 7),
-                   y = c(1.5, 2.2, 2.2, 1.5, 1.5, 1.5)),
-               fill = "steelblue", color = "black", linewidth = 1) +
-  geom_polygon(aes(x = c(6.5, 6.5, 9.5, 9.5, 9, 7),
-                   y = c(2.9, 2.2, 2.2, 2.9, 2.9, 2.9)),
-               fill = "lightsteelblue", color = "black", linewidth = 1) +
-  geom_polygon(aes(x = c(6.5, 7, 6.5), y = c(2.2, 2.55, 2.9)), fill = "orange", color = "black") +
+  geom_rect(aes(xmin = 6.5, xmax = 9.5, ymin = 1.5, ymax = 2.2), fill = "steelblue", color = "black", linewidth = 1) +
+  geom_rect(aes(xmin = 6.5, xmax = 9.5, ymin = 2.2, ymax = 2.9), fill = "lightsteelblue", color = "black", linewidth = 1) +
+  geom_polygon(aes(x = 6.6 + 0.4 * cos(seq(pi / 2, 3 * pi / 2, length.out = 30)),
+                   y = 2.2 + 0.5 * sin(seq(pi / 2, 3 * pi / 2, length.out = 30))),
+               fill = "orange", color = "black") +
   annotate("text", x = 8, y = 1, label = "Parallel edges\nadjacent", size = 3 * diagram_text_scale, fontface = "italic") +
 
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.5, 8.5)) +
@@ -274,22 +269,22 @@ ggplot() +
   geom_polygon(aes(x = c(3.5, 3.5, 4.5), y = c(1.5, 2.5, 1.5)),
                fill = "orange", color = "black", linewidth = 1) +
 
-  ## Leg dimension (left)
+  ## Leg dimension (vertical)
   geom_segment(aes(x = 1.3, xend = 1.3, y = 1.5, yend = 2.5),
                arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
   annotate("text", x = 0.9, y = 2, label = "Leg\n(L)", size = 3 * diagram_text_scale) +
 
-  ## Leg dimension (bottom)
+  ## Leg dimension (horizontal)
   geom_segment(aes(x = 1.5, xend = 2.5, y = 1.3, yend = 1.3),
                arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
   annotate("text", x = 2, y = 1, label = "Leg (L)", size = 3 * diagram_text_scale) +
 
-  ## Throat dimension
+  ## Throat: from the root perpendicular to the face
   geom_segment(aes(x = 2.5, xend = 2, y = 1.5, yend = 2),
                linetype = "dashed", color = "red", linewidth = 1) +
-  geom_segment(aes(x = 2.25, xend = 1.7, y = 1.75, yend = 2.2),
+  geom_segment(aes(x = 1.1, xend = 1.95, y = 3.0, yend = 2.05),
                arrow = arrow(length = unit(0.1, "cm")), color = "red") +
-  annotate("text", x = 0.8, y = 3.1, label = "Throat (t)", color = "red", size = 3.5 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = 0.8, y = 3.25, label = "Throat (t)", color = "red", size = 3.5 * diagram_text_scale, fontface = "bold") +
 
   ## Size callout (right side detail)
   annotate("text", x = 7, y = 4.5, label = "Fillet Weld Sizing", fontface = "bold", size = 4 * diagram_text_scale) +
@@ -305,24 +300,25 @@ ggplot() +
   ## Leg labels on detail
   geom_segment(aes(x = 5.7, xend = 5.7, y = 1, yend = 4),
                arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
-  annotate("text", x = 5.15, y = 2.5, label = "L", size = 4 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = 5.4, y = 2.5, label = "L", size = 4 * diagram_text_scale, fontface = "bold") +
 
   geom_segment(aes(x = 6, xend = 9, y = 0.7, yend = 0.7),
                arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
-  annotate("text", x = 7.5, y = 0.3, label = "L", size = 4 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = 7.5, y = 0.35, label = "L", size = 4 * diagram_text_scale, fontface = "bold") +
 
   ## Throat formula
   annotate("text", x = 8.6, y = 3.3, label = "t = 0.707 × L", color = "red", size = 4 * diagram_text_scale, fontface = "bold") +
   annotate("text", x = 8.6, y = 2.85, label = "(for equal legs)", color = "red", size = 3 * diagram_text_scale) +
 
-  ## Face and root labels
-  geom_segment(aes(x = 3.5, xend = 4.3, y = 2, yend = 2.3),
+  ## Weld face: the exposed hypotenuse of the fillet
+  geom_segment(aes(x = 4.7, xend = 4.05, y = 3.0, yend = 2.05),
                arrow = arrow(length = unit(0.1, "cm")), color = "black") +
-  annotate("text", x = 4.6, y = 3.2, label = "Weld Face", size = 3 * diagram_text_scale) +
+  annotate("text", x = 4.9, y = 3.25, label = "Weld Face", size = 3 * diagram_text_scale) +
 
-  geom_segment(aes(x = 3.5, xend = 4, y = 1.5, yend = 1.2),
+  ## Weld root: the corner where the two members meet
+  geom_segment(aes(x = 4.4, xend = 3.55, y = 0.3, yend = 1.45),
                arrow = arrow(length = unit(0.1, "cm")), color = "black") +
-  annotate("text", x = 4.5, y = 1, label = "Weld Root", size = 3 * diagram_text_scale) +
+  annotate("text", x = 4.75, y = 0.12, label = "Weld Root", size = 3 * diagram_text_scale) +
 
   coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(-0.2, 5.5)) +
   labs(title = "Fillet Weld Anatomy") +
@@ -353,79 +349,113 @@ The theoretical throat is **5.66 mm**.
 **Groove welds** are made in a groove between the edges of the parts to be joined. They are used primarily for butt joints and provide full or partial penetration.
 
 ```{r groove-welds, echo=FALSE, fig.width=12, fig.height=8, fig.align='center', fig.cap="Common groove weld preparations."}
+## Helpers: a parabolic arc between two points (bulge h, + = up) and a weld polygon
+## built from the left and right fusion faces (bottom to top) with face and root reinforcement.
+arc_pts <- function(x1, x2, y, h, n = 15) {
+  xs <- seq(x1, x2, length.out = n)
+  data.frame(x = xs, y = y + h * (1 - ((xs - (x1 + x2) / 2) / ((x2 - x1) / 2))^2))
+}
+weld_poly <- function(lx, ly, rx, ry, cap = 0.15, root = 0.08) {
+  top <- arc_pts(tail(lx, 1), tail(rx, 1), tail(ly, 1), cap)
+  bot <- arc_pts(rx[1], lx[1], ry[1], -root)
+  data.frame(x = c(lx, top$x, rev(rx), bot$x), y = c(ly, top$y, rev(ry), bot$y))
+}
+## U/J profile of one plate face, bottom to top (side = -1 left plate, +1 right plate)
+uj_face <- function(cx, g, y0, rf, r, top, flare, side) {
+  a  <- acos(g / (2 * r))
+  yc <- y0 + rf + r * sin(a)
+  th <- seq(pi + a, pi, length.out = 12)
+  data.frame(x = c(cx + side * g / 2, cx - side * r * cos(th), cx + side * (r + flare)),
+             y = c(y0, yc + r * sin(th), top))
+}
+T0 <- 1.5; W <- 1.2; g <- 0.1; rf <- 0.25
+row1 <- 5.5; row2 <- 2
+
+## SQUARE
+sq_cx <- 1.5
+## SINGLE-V
+v_cx <- 4.5; v_w <- 0.65
+## DOUBLE-V
+dv_cx <- 7.5; dv_w <- 0.5; dv_mid <- row1 + T0 / 2
+## SINGLE-U
+u_cx <- 10.5
+u_l <- uj_face(u_cx, g, row1, rf, 0.3, row1 + T0, 0.2, -1)
+u_r <- uj_face(u_cx, g, row1, rf, 0.3, row1 + T0, 0.2, +1)
+## SINGLE-BEVEL (right plate prepared)
+b_cx <- 2; b_w <- 0.8
+## SINGLE-J (right plate prepared)
+j_cx <- 5.5
+j_r <- uj_face(j_cx, g, row2, rf, 0.35, row2 + T0, 0.25, +1)
+## FLARE-V (two round bars)
+f_cx <- 9; f_R <- 0.6; f_yc <- row2 + 0.7
+circ <- function(x0, y0, r) { t <- seq(0, 2 * pi, length.out = 60); data.frame(x = x0 + r * cos(t), y = y0 + r * sin(t)) }
+phi <- seq(0, 55, length.out = 12) * pi / 180
+
 ggplot() +
   ## SQUARE GROOVE
-  annotate("text", x = 1.5, y = 7.8, label = "SQUARE", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_rect(aes(xmin = 0.3, xmax = 1.3, ymin = 5.5, ymax = 7), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 1.7, xmax = 2.7, ymin = 5.5, ymax = 7), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 1.3, xmax = 1.7, ymin = 5.3, ymax = 7.2), fill = "orange", color = "black") +
-  annotate("text", x = 1.5, y = 5, label = "Thin\nmaterial", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = sq_cx, y = 7.8, label = "SQUARE", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  geom_rect(aes(xmin = sq_cx - W, xmax = sq_cx - g, ymin = row1, ymax = row1 + T0), fill = "steelblue", color = "black") +
+  geom_rect(aes(xmin = sq_cx + g, xmax = sq_cx + W, ymin = row1, ymax = row1 + T0), fill = "steelblue", color = "black") +
+  geom_polygon(data = weld_poly(c(sq_cx - g, sq_cx - g), c(row1, row1 + T0), c(sq_cx + g, sq_cx + g), c(row1, row1 + T0), cap = 0.12, root = 0.08),
+               aes(x, y), fill = "orange", color = "black") +
+  annotate("text", x = sq_cx, y = 4.9, label = "Thin\nmaterial", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
   ## SINGLE-V GROOVE
-  annotate("text", x = 4.5, y = 7.8, label = "SINGLE-V", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_polygon(aes(x = c(3.3, 3.3, 4.3, 4.3), y = c(5.5, 7, 7, 5.8)),
-               fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(5.7, 5.7, 4.7, 4.7), y = c(5.5, 7, 7, 5.8)),
-               fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(4.3, 4.5, 4.7, 4.7, 4.5, 4.3),
-                   y = c(5.8, 5.5, 5.8, 7.3, 7.3, 7.3)),
-               fill = "orange", color = "black") +
-  annotate("text", x = 4.5, y = 5, label = "Most\ncommon", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = v_cx, y = 7.8, label = "SINGLE-V", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  geom_polygon(aes(x = c(v_cx - W - 0.3, v_cx - g / 2, v_cx - g / 2, v_cx - v_w, v_cx - W - 0.3),
+                   y = c(row1, row1, row1 + rf, row1 + T0, row1 + T0)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(v_cx + W + 0.3, v_cx + g / 2, v_cx + g / 2, v_cx + v_w, v_cx + W + 0.3),
+                   y = c(row1, row1, row1 + rf, row1 + T0, row1 + T0)), fill = "steelblue", color = "black") +
+  geom_polygon(data = weld_poly(c(v_cx - g / 2, v_cx - g / 2, v_cx - v_w), c(row1, row1 + rf, row1 + T0),
+                                c(v_cx + g / 2, v_cx + g / 2, v_cx + v_w), c(row1, row1 + rf, row1 + T0)),
+               aes(x, y), fill = "orange", color = "black") +
+  annotate("text", x = v_cx, y = 4.9, label = "Most\ncommon", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
-  ## DOUBLE-V GROOVE
-  annotate("text", x = 7.5, y = 7.8, label = "DOUBLE-V", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_polygon(aes(x = c(6.3, 6.3, 7.3, 7.3), y = c(5.5, 7, 7, 6.1)),
-               fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(8.7, 8.7, 7.7, 7.7), y = c(5.5, 7, 7, 6.1)),
-               fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(7.3, 7.5, 7.7), y = c(6.1, 5.5, 6.1)),
-               fill = "orange", color = "black") +
-  geom_polygon(aes(x = c(7.3, 7.5, 7.7), y = c(6.4, 7.2, 6.4)),
-               fill = "orange", color = "black") +
-  geom_rect(aes(xmin = 7.3, xmax = 7.7, ymin = 6.1, ymax = 6.4), fill = "orange", color = "black") +
-  annotate("text", x = 7.5, y = 5, label = "Thick\nmaterial", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  ## DOUBLE-V GROOVE (welded from both faces)
+  annotate("text", x = dv_cx, y = 7.8, label = "DOUBLE-V", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  geom_polygon(aes(x = c(dv_cx - W, dv_cx - dv_w, dv_cx - g / 2, dv_cx - g / 2, dv_cx - dv_w, dv_cx - W),
+                   y = c(row1, row1, dv_mid - 0.1, dv_mid + 0.1, row1 + T0, row1 + T0)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(dv_cx + W, dv_cx + dv_w, dv_cx + g / 2, dv_cx + g / 2, dv_cx + dv_w, dv_cx + W),
+                   y = c(row1, row1, dv_mid - 0.1, dv_mid + 0.1, row1 + T0, row1 + T0)), fill = "steelblue", color = "black") +
+  geom_polygon(data = weld_poly(c(dv_cx - dv_w, dv_cx - g / 2, dv_cx - g / 2, dv_cx - dv_w), c(row1, dv_mid - 0.1, dv_mid + 0.1, row1 + T0),
+                                c(dv_cx + dv_w, dv_cx + g / 2, dv_cx + g / 2, dv_cx + dv_w), c(row1, dv_mid - 0.1, dv_mid + 0.1, row1 + T0),
+                                cap = 0.12, root = 0.12),
+               aes(x, y), fill = "orange", color = "black") +
+  annotate("text", x = dv_cx, y = 4.9, label = "Thick\nmaterial", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
-  ## SINGLE-U GROOVE
-  annotate("text", x = 10.5, y = 7.8, label = "SINGLE-U", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_rect(aes(xmin = 9.3, xmax = 10.2, ymin = 5.5, ymax = 7), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 10.8, xmax = 11.7, ymin = 5.5, ymax = 7), fill = "steelblue", color = "black") +
-  ## U-groove shape approximation
-  geom_polygon(aes(x = c(10.2, 10.2, 10.35, 10.5, 10.65, 10.8, 10.8, 10.5),
-                   y = c(7, 6.2, 5.7, 5.5, 5.7, 6.2, 7, 7.3)),
-               fill = "orange", color = "black") +
-  annotate("text", x = 10.5, y = 5, label = "Less filler\nneeded", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  ## SINGLE-U GROOVE (J-shaped preparation on both plates)
+  annotate("text", x = u_cx, y = 7.8, label = "SINGLE-U", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  geom_polygon(aes(x = c(u_cx - W, u_l$x, u_cx - W), y = c(row1, u_l$y, row1 + T0)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(u_cx + W, u_r$x, u_cx + W), y = c(row1, u_r$y, row1 + T0)), fill = "steelblue", color = "black") +
+  geom_polygon(data = weld_poly(u_l$x, u_l$y, u_r$x, u_r$y), aes(x, y), fill = "orange", color = "black") +
+  annotate("text", x = u_cx, y = 4.9, label = "Less filler\non thick plate", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
-  ## SINGLE-BEVEL
-  annotate("text", x = 2, y = 3.8, label = "SINGLE-BEVEL", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_rect(aes(xmin = 0.8, xmax = 1.8, ymin = 2, ymax = 3.5), fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(3.2, 3.2, 2.2, 2.2), y = c(2, 3.5, 3.5, 2.3)),
-               fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(1.8, 2, 2.2, 2.2, 2, 1.8),
-                   y = c(2, 2, 2.3, 3.7, 3.7, 3.5)),
-               fill = "orange", color = "black") +
-  annotate("text", x = 2, y = 1.5, label = "One side\nprepared", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  ## SINGLE-BEVEL (only the right plate is prepared)
+  annotate("text", x = b_cx, y = 3.8, label = "SINGLE-BEVEL", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  geom_rect(aes(xmin = b_cx - W, xmax = b_cx - g / 2, ymin = row2, ymax = row2 + T0), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(b_cx + W + 0.3, b_cx + g / 2, b_cx + g / 2, b_cx + b_w, b_cx + W + 0.3),
+                   y = c(row2, row2, row2 + rf, row2 + T0, row2 + T0)), fill = "steelblue", color = "black") +
+  geom_polygon(data = weld_poly(c(b_cx - g / 2, b_cx - g / 2), c(row2, row2 + T0),
+                                c(b_cx + g / 2, b_cx + g / 2, b_cx + b_w), c(row2, row2 + rf, row2 + T0)),
+               aes(x, y), fill = "orange", color = "black") +
+  annotate("text", x = b_cx, y = 1.4, label = "One side\nprepared", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
-  ## SINGLE-J
-  annotate("text", x = 5.5, y = 3.8, label = "SINGLE-J", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_rect(aes(xmin = 4.3, xmax = 5.3, ymin = 2, ymax = 3.5), fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(6.7, 6.7, 5.7, 5.7, 5.85, 6),
-                   y = c(2, 3.5, 3.5, 2.5, 2.2, 2)),
-               fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(5.3, 5.5, 5.7, 5.85, 6, 6, 5.5, 5.3),
-                   y = c(2, 2, 2.5, 2.2, 2, 3.7, 3.7, 3.5)),
-               fill = "orange", color = "black") +
-  annotate("text", x = 5.5, y = 1.5, label = "Curved\npreparation", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  ## SINGLE-J (only the right plate is prepared, with a radius at the root)
+  annotate("text", x = j_cx, y = 3.8, label = "SINGLE-J", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  geom_rect(aes(xmin = j_cx - W, xmax = j_cx - g / 2, ymin = row2, ymax = row2 + T0), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(j_cx + W + 0.3, j_r$x, j_cx + W + 0.3), y = c(row2, j_r$y, row2 + T0)), fill = "steelblue", color = "black") +
+  geom_polygon(data = weld_poly(c(j_cx - g / 2, j_cx - g / 2), c(row2, row2 + T0), j_r$x, j_r$y),
+               aes(x, y), fill = "orange", color = "black") +
+  annotate("text", x = j_cx, y = 1.4, label = "Curved\npreparation", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
-  ## FLARE-V
-  annotate("text", x = 9, y = 3.8, label = "FLARE-V", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  ## Curved members
-  geom_curve(aes(x = 8, xend = 8.7, y = 2, yend = 3.5), curvature = 0.3,
-             linewidth = 8, color = "steelblue") +
-  geom_curve(aes(x = 10, xend = 9.3, y = 2, yend = 3.5), curvature = -0.3,
-             linewidth = 8, color = "steelblue") +
-  geom_polygon(aes(x = c(8.5, 9, 9.5, 9, 9), y = c(2.3, 2, 2.3, 3, 2.5)),
+  ## FLARE-V (weld fills the valley between two round members)
+  annotate("text", x = f_cx, y = 3.8, label = "FLARE-V", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  geom_polygon(data = circ(f_cx - f_R, f_yc, f_R), aes(x, y), fill = "steelblue", color = "black") +
+  geom_polygon(data = circ(f_cx + f_R, f_yc, f_R), aes(x, y), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(f_cx - f_R + f_R * cos(phi), rev(f_cx + f_R - f_R * cos(phi))),
+                   y = c(f_yc + f_R * sin(phi), rev(f_yc + f_R * sin(phi)))),
                fill = "orange", color = "black") +
-  annotate("text", x = 9, y = 1.5, label = "Round\nmembers", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = f_cx, y = 1.4, label = "Round\nmembers", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
   coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(1, 8.3)) +
   labs(title = "Common Groove Weld Preparations") +
@@ -435,54 +465,63 @@ ggplot() +
 ### Groove Weld Parameters
 
 ```{r groove-parameters, echo=FALSE, fig.width=8, fig.height=6, fig.align='center', fig.cap="Key dimensions in groove weld preparation."}
+## Single-V preparation: 30° bevel on each plate (60° groove angle), root face and root opening
+bev <- 30 * pi / 180
+yrf <- 1.8                      # top of root face
+xl  <- 3.7; xr <- 4.3           # root faces (root opening = xr - xl)
+xtl <- xl - (5 - yrf) * tan(bev); xtr <- xr + (5 - yrf) * tan(bev)
+apex_y <- yrf - (xr - xl) / 2 / tan(bev)   # where the two bevel faces would meet
+th_g <- seq(60, 120, length.out = 30) * pi / 180
+th_b <- seq(90, 120, length.out = 20) * pi / 180
+
 ggplot() +
-  ## Left plate
-  geom_polygon(aes(x = c(1, 1, 4, 3.5), y = c(1, 5, 5, 1)),
+  ## Left plate (beveled)
+  geom_polygon(aes(x = c(0.5, xl, xl, xtl, 0.5), y = c(1, 1, yrf, 5, 5)),
                fill = "steelblue", color = "black", linewidth = 1) +
 
-  ## Right plate
-  geom_polygon(aes(x = c(7, 7, 4, 4.5), y = c(1, 5, 5, 1)),
+  ## Right plate (beveled)
+  geom_polygon(aes(x = c(7.5, xr, xr, xtr, 7.5), y = c(1, 1, yrf, 5, 5)),
                fill = "steelblue", color = "black", linewidth = 1) +
 
-  ## Root face
-  geom_rect(aes(xmin = 3.5, xmax = 4.5, ymin = 1, ymax = 1.8),
-            fill = "steelblue4", color = "black", linewidth = 1) +
+  ## Groove angle: included angle between the two bevel faces
+  geom_path(aes(x = 4 + 2.6 * cos(th_g), y = apex_y + 2.6 * sin(th_g)),
+            color = "red", linewidth = 0.6, arrow = arrow(length = unit(0.12, "cm"), ends = "both")) +
+  annotate("text", x = 4, y = 4.4, label = "Groove\nAngle", color = "red", size = 3.5 * diagram_text_scale, fontface = "bold") +
 
-  ## Groove angle dimension
-  geom_curve(aes(x = 4, xend = 3.2, y = 3, yend = 3.8), curvature = 0.3,
-             linewidth = 0.5, color = "red") +
-  geom_curve(aes(x = 4, xend = 4.8, y = 3, yend = 3.8), curvature = -0.3,
-             linewidth = 0.5, color = "red") +
-  annotate("text", x = 5.9, y = 3.6, label = "Groove Angle", color = "red", size = 3.5 * diagram_text_scale, fontface = "bold") +
+  ## Bevel angle: between the bevel face and the plate's vertical root face line
+  geom_segment(aes(x = xl, xend = xl, y = yrf, yend = 4.2), linetype = "dashed", color = "blue") +
+  geom_path(aes(x = xl + 1.6 * cos(th_b), y = yrf + 1.6 * sin(th_b)),
+            color = "blue", linewidth = 0.6, arrow = arrow(length = unit(0.12, "cm"), ends = "both")) +
+  geom_segment(aes(x = 2.2, xend = 3.3, y = 5.6, yend = 3.35), color = "blue",
+               arrow = arrow(length = unit(0.1, "cm"))) +
+  annotate("text", x = 2.0, y = 5.95, label = "Bevel Angle", color = "blue", size = 3 * diagram_text_scale) +
 
-  ## Bevel angle
-  geom_curve(aes(x = 3.5, xend = 3, y = 2.5, yend = 3.2), curvature = 0.3,
-             linewidth = 0.5, color = "blue") +
-  annotate("text", x = 2.3, y = 3, label = "Bevel\nAngle", color = "blue", size = 3 * diagram_text_scale) +
-
-  ## Root opening
-  geom_segment(aes(x = 3.5, xend = 4.5, y = 0.7, yend = 0.7),
+  ## Root opening (gap between the plates)
+  geom_segment(aes(x = xl, xend = xl, y = 1, yend = 0.55), linewidth = 0.3) +
+  geom_segment(aes(x = xr, xend = xr, y = 1, yend = 0.55), linewidth = 0.3) +
+  geom_segment(aes(x = xl, xend = xr, y = 0.7, yend = 0.7),
                arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
   annotate("text", x = 4, y = 0.3, label = "Root Opening (Gap)", size = 3.5 * diagram_text_scale) +
 
-  ## Root face dimension
-  geom_segment(aes(x = 3.2, xend = 3.2, y = 1, yend = 1.8),
-               arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
-  annotate("text", x = 2.5, y = 1.4, label = "Root\nFace", size = 3 * diagram_text_scale) +
+  ## Root face (the unbeveled land on each plate)
+  geom_segment(aes(x = xl - 0.25, xend = xl - 0.25, y = 1, yend = yrf),
+               arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5, color = "white") +
+  annotate("text", x = 2.75, y = 1.4, label = "Root\nFace", size = 3 * diagram_text_scale, color = "white", fontface = "bold") +
 
   ## Plate thickness
-  geom_segment(aes(x = 0.7, xend = 0.7, y = 1, yend = 5),
+  geom_segment(aes(x = 0.2, xend = 0.2, y = 1, yend = 5),
                arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
-  annotate("text", x = 0.3, y = 3, label = "t", size = 4 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = -0.1, y = 3, label = "t", size = 4 * diagram_text_scale, fontface = "bold") +
 
   ## Typical values box
-  geom_rect(aes(xmin = 5, xmax = 8.5, ymin = 5.5, ymax = 7.5), fill = "lightyellow", color = "black") +
-  annotate("text", x = 6.75, y = 7.2, label = "Typical Values:", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  annotate("text", x = 6.75, y = 6.7, label = "Groove Angle: 60° - 90°", size = 3 * diagram_text_scale) +
-  annotate("text", x = 6.75, y = 6.2, label = "Root Opening: 0 - 3 mm", size = 3 * diagram_text_scale) +
-  annotate("text", x = 6.75, y = 5.7, label = "Root Face: 1 - 3 mm", size = 3 * diagram_text_scale) +
+  geom_rect(aes(xmin = 5, xmax = 8.7, ymin = 5.3, ymax = 7.7), fill = "lightyellow", color = "black") +
+  annotate("text", x = 6.85, y = 7.4, label = "Typical Values:", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 6.85, y = 6.95, label = "Groove Angle: 60° - 90°", size = 3 * diagram_text_scale) +
+  annotate("text", x = 6.85, y = 6.55, label = "Bevel Angle: 30° - 45°", size = 3 * diagram_text_scale) +
+  annotate("text", x = 6.85, y = 6.15, label = "Root Opening: 0 - 3 mm", size = 3 * diagram_text_scale) +
+  annotate("text", x = 6.85, y = 5.75, label = "Root Face: 1 - 3 mm", size = 3 * diagram_text_scale) +
 
-  coord_fixed(ratio = 1, xlim = c(0, 9), ylim = c(-0.2, 8)) +
+  coord_fixed(ratio = 1, xlim = c(-0.3, 9), ylim = c(-0.2, 8)) +
   labs(title = "Groove Weld Preparation Dimensions") +
   theme_welding
 ```
@@ -577,47 +616,50 @@ ggplot() +
   ## Reference line (horizontal)
   geom_segment(aes(x = 2, xend = 9, y = 4, yend = 4), linewidth = 1.5, color = "black") +
 
-  ## Arrow
-  geom_segment(aes(x = 2, xend = 1, y = 4, yend = 2.5), linewidth = 1, color = "black") +
-  geom_segment(aes(x = 1, xend = 1.3, y = 2.5, yend = 2.8), linewidth = 1, color = "black") +
-  geom_segment(aes(x = 1, xend = 0.8, y = 2.5, yend = 2.9), linewidth = 1, color = "black") +
+  ## Arrow (from the reference line to the joint)
+  geom_segment(aes(x = 2, xend = 1, y = 4, yend = 2.5), linewidth = 1, color = "black",
+               arrow = arrow(length = unit(0.35, "cm"), type = "closed")) +
 
-  ## Fillet weld symbol (arrow side)
-  geom_polygon(aes(x = c(4, 4, 4.5), y = c(4, 3.5, 4)), fill = "black") +
+  ## Fillet weld symbol on the arrow side: open triangle, perpendicular leg on the left
+  geom_polygon(aes(x = c(4, 4, 4.6), y = c(4, 3.4, 4)), fill = "white", color = "black", linewidth = 1) +
+
+  ## Example dimensions: size left of the symbol, length-pitch right of it
+  annotate("text", x = 3.65, y = 3.72, label = "6", size = 4 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = 5.35, y = 3.72, label = "50-100", size = 4 * diagram_text_scale, fontface = "bold") +
 
   ## Tail (optional)
-  geom_segment(aes(x = 9, xend = 10, y = 4, yend = 4.3), linewidth = 1, color = "black") +
-  geom_segment(aes(x = 9, xend = 10, y = 4, yend = 3.7), linewidth = 1, color = "black") +
+  geom_segment(aes(x = 9, xend = 9.8, y = 4, yend = 4.4), linewidth = 1, color = "black") +
+  geom_segment(aes(x = 9, xend = 9.8, y = 4, yend = 3.6), linewidth = 1, color = "black") +
+  annotate("text", x = 10.45, y = 4, label = "GMAW", size = 3.5 * diagram_text_scale, fontface = "bold") +
 
   ## Labels with leader lines
   ## Reference line
-  geom_segment(aes(x = 5.5, xend = 5.5, y = 5.5, yend = 4.2),
+  geom_segment(aes(x = 7.8, xend = 7.8, y = 5.5, yend = 4.15),
                arrow = arrow(length = unit(0.15, "cm")), color = "blue") +
   annotate("text", x = 7.8, y = 5.8, label = "Reference Line", color = "blue", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
   ## Arrow
-  geom_segment(aes(x = 0.3, xend = 0.9, y = 2, yend = 2.4),
+  geom_segment(aes(x = 0.4, xend = 0.9, y = 2.0, yend = 2.4),
                arrow = arrow(length = unit(0.15, "cm")), color = "red") +
   annotate("text", x = 0.3, y = 1.6, label = "Arrow\n(points to joint)", color = "red", size = 3 * diagram_text_scale) +
 
   ## Weld symbol
-  geom_segment(aes(x = 4.25, xend = 4.25, y = 2.8, yend = 3.4),
+  geom_segment(aes(x = 4.2, xend = 4.2, y = 2.6, yend = 3.45),
                arrow = arrow(length = unit(0.15, "cm")), color = "darkgreen") +
-  annotate("text", x = 4.25, y = 2.4, label = "Weld Symbol\n(type of weld)", color = "darkgreen", size = 3 * diagram_text_scale) +
+  annotate("text", x = 4.2, y = 2.2, label = "Weld Symbol\n(type of weld)", color = "darkgreen", size = 3 * diagram_text_scale) +
 
   ## Tail
-  geom_segment(aes(x = 10.5, xend = 10.1, y = 4.5, yend = 4.1),
+  geom_segment(aes(x = 10.6, xend = 9.9, y = 5.0, yend = 4.4),
                arrow = arrow(length = unit(0.15, "cm")), color = "purple") +
-  annotate("text", x = 10.8, y = 4.8, label = "Tail\n(specifications)", color = "purple", size = 3 * diagram_text_scale) +
+  annotate("text", x = 10.8, y = 5.3, label = "Tail\n(process, specification)", color = "purple", size = 3 * diagram_text_scale) +
 
   ## Arrow side / Other side explanation
-  annotate("text", x = 5.5, y = 3.3, label = "Arrow Side", size = 3 * diagram_text_scale, fontface = "italic") +
-  annotate("text", x = 5.5, y = 4.9, label = "Other Side", size = 3 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 6.6, y = 3.55, label = "Arrow Side (below)", size = 3 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 6.6, y = 4.45, label = "Other Side (above)", size = 3 * diagram_text_scale, fontface = "italic") +
 
   ## Dimension locations
-  annotate("text", x = 3.3, y = 3.5, label = "Size", size = 2.8 * diagram_text_scale, color = "gray40") +
-  annotate("text", x = 6.5, y = 3.5, label = "Length", size = 2.8 * diagram_text_scale, color = "gray40") +
-  annotate("text", x = 7.5, y = 3.5, label = "Pitch", size = 2.8 * diagram_text_scale, color = "gray40") +
+  annotate("text", x = 3.65, y = 3.25, label = "Size", size = 2.8 * diagram_text_scale, color = "gray40") +
+  annotate("text", x = 5.35, y = 3.25, label = "Length-Pitch", size = 2.8 * diagram_text_scale, color = "gray40") +
 
   ## Rule box
   geom_rect(aes(xmin = 0.5, xmax = 6, ymin = 6.5, ymax = 8.2), fill = "lightyellow", color = "black") +
@@ -625,59 +667,62 @@ ggplot() +
   annotate("text", x = 3.25, y = 7.4, label = "Symbol BELOW reference line = Arrow Side", size = 3 * diagram_text_scale) +
   annotate("text", x = 3.25, y = 6.9, label = "Symbol ABOVE reference line = Other Side", size = 3 * diagram_text_scale) +
 
-  coord_fixed(ratio = 1, xlim = c(-0.5, 11.5), ylim = c(1, 8.5)) +
-  labs(title = "Basic Welding Symbol Structure") +
+  coord_fixed(ratio = 1, xlim = c(-0.5, 11.8), ylim = c(1, 8.5)) +
+  labs(title = "Basic Welding Symbol Structure",
+       subtitle = "Example: 6 mm fillet weld, arrow side, 50 mm long segments at 100 mm pitch, made by GMAW") +
   theme_welding
 ```
 
 ### Common Weld Symbols
 
 ```{r weld-symbol-types, echo=FALSE, fig.width=12, fig.height=6, fig.align='center', fig.cap="Common weld type symbols."}
+## Symbols drawn in the arrow-side position: below the reference line, root of the symbol on the line
+s <- 0.45   # symbol height
 ggplot() +
   ## Column headers
   annotate("text", x = 2, y = 5.5, label = "WELD TYPE", fontface = "bold", size = 4 * diagram_text_scale) +
-  annotate("text", x = 5.5, y = 5.5, label = "SYMBOL", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = 5.75, y = 5.5, label = "SYMBOL (arrow side)", fontface = "bold", size = 4 * diagram_text_scale) +
   annotate("text", x = 9.5, y = 5.5, label = "CROSS-SECTION", fontface = "bold", size = 4 * diagram_text_scale) +
 
   ## Horizontal divider
   geom_segment(aes(x = 0.5, xend = 11.5, y = 5.2, yend = 5.2), linewidth = 0.5) +
 
-  ## FILLET
+  ## Reference lines for every row
+  geom_segment(aes(x = 4.75, xend = 6.75, y = c(4.75, 3.75, 2.75, 1.75), yend = c(4.75, 3.75, 2.75, 1.75)), linewidth = 1) +
+
+  ## FILLET: open right triangle, perpendicular leg always on the left
   annotate("text", x = 2, y = 4.5, label = "Fillet", size = 3.5 * diagram_text_scale) +
-  ## Fillet symbol
-  geom_polygon(aes(x = c(5, 5, 6), y = c(4.7, 4.2, 4.7)), fill = "black") +
+  geom_polygon(aes(x = c(5.5, 5.5, 5.5 + s), y = c(4.75, 4.75 - s, 4.75)), fill = "white", color = "black", linewidth = 1) +
   ## Fillet cross-section
-  geom_rect(aes(xmin = 8.5, xmax = 10.5, ymin = 4, ymax = 4.5), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 9.2, xmax = 9.8, ymin = 4.5, ymax = 5.3), fill = "lightsteelblue", color = "black") +
-  geom_polygon(aes(x = c(9.2, 9.2, 8.7), y = c(4.5, 5, 4.5)), fill = "orange", color = "black") +
+  geom_rect(aes(xmin = 8.5, xmax = 10.5, ymin = 4.1, ymax = 4.45), fill = "steelblue", color = "black") +
+  geom_rect(aes(xmin = 9.25, xmax = 9.75, ymin = 4.45, ymax = 5.0), fill = "lightsteelblue", color = "black") +
+  geom_polygon(aes(x = c(9.25, 9.25, 8.9), y = c(4.45, 4.8, 4.45)), fill = "orange", color = "black") +
 
-  ## GROOVE (V)
+  ## V-GROOVE: root (vertex) on the reference line, opening away from it
   annotate("text", x = 2, y = 3.5, label = "V-Groove", size = 3.5 * diagram_text_scale) +
-  ## V-groove symbol
-  geom_polygon(aes(x = c(5, 5.5, 6), y = c(3.7, 3.2, 3.7)), fill = NA, color = "black", linewidth = 1) +
+  geom_path(aes(x = c(5.75 - s, 5.75, 5.75 + s), y = c(3.75 - s, 3.75, 3.75 - s)), linewidth = 1) +
   ## V-groove cross-section
-  geom_polygon(aes(x = c(8.5, 8.5, 9.3), y = c(3, 3.8, 3.8)), fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(10.5, 10.5, 9.7), y = c(3, 3.8, 3.8)), fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(9.3, 9.5, 9.7, 9.7, 9.5, 9.3), y = c(3.8, 3, 3.8, 4, 4, 4)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(8.5, 9.45, 9.45, 9.2, 8.5), y = c(3.1, 3.1, 3.2, 3.6, 3.6)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(10.5, 9.55, 9.55, 9.8, 10.5), y = c(3.1, 3.1, 3.2, 3.6, 3.6)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(9.45, 9.55, 9.55, 9.8, 9.65, 9.5, 9.35, 9.2, 9.45),
+                   y = c(3.1, 3.1, 3.2, 3.6, 3.68, 3.7, 3.68, 3.6, 3.2)), fill = "orange", color = "black") +
 
-  ## SQUARE GROOVE
+  ## SQUARE GROOVE: two parallel lines perpendicular to the reference line
   annotate("text", x = 2, y = 2.5, label = "Square", size = 3.5 * diagram_text_scale) +
-  ## Square groove symbol
-  geom_rect(aes(xmin = 5.2, xmax = 5.8, ymin = 2.2, ymax = 2.7), fill = NA, color = "black", linewidth = 1) +
-  ## Square cross-section
-  geom_rect(aes(xmin = 8.5, xmax = 9.4, ymin = 2, ymax = 2.8), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 9.6, xmax = 10.5, ymin = 2, ymax = 2.8), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 9.4, xmax = 9.6, ymin = 1.9, ymax = 2.9), fill = "orange", color = "black") +
+  geom_segment(aes(x = c(5.62, 5.88), xend = c(5.62, 5.88), y = 2.75, yend = 2.75 - s), linewidth = 1) +
+  ## Square groove cross-section
+  geom_rect(aes(xmin = 8.5, xmax = 9.45, ymin = 2.1, ymax = 2.6), fill = "steelblue", color = "black") +
+  geom_rect(aes(xmin = 9.55, xmax = 10.5, ymin = 2.1, ymax = 2.6), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(9.45, 9.55, 9.58, 9.5, 9.42), y = c(2.1, 2.1, 2.66, 2.7, 2.66)), fill = "orange", color = "black") +
 
-  ## BEVEL
+  ## BEVEL: perpendicular leg on the left plus a 45° leg, both starting at the reference line
   annotate("text", x = 2, y = 1.5, label = "Bevel", size = 3.5 * diagram_text_scale) +
-  ## Bevel symbol
-  geom_polygon(aes(x = c(5, 5, 6), y = c(1.7, 1.2, 1.7)), fill = NA, color = "black", linewidth = 1) +
-  geom_segment(aes(x = 5, xend = 5, y = 1.2, yend = 1.7), linewidth = 1) +
-  ## Bevel cross-section
-  geom_rect(aes(xmin = 8.5, xmax = 9.4, ymin = 1, ymax = 1.8), fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(10.5, 10.5, 9.6, 9.6), y = c(1, 1.8, 1.8, 1.2)), fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(9.4, 9.5, 9.6, 9.6, 9.5, 9.4), y = c(1, 1, 1.2, 2, 2, 1.8)), fill = "orange", color = "black") +
+  geom_segment(aes(x = 5.55, xend = 5.55, y = 1.75, yend = 1.75 - s), linewidth = 1) +
+  geom_segment(aes(x = 5.55, xend = 5.55 + s, y = 1.75, yend = 1.75 - s), linewidth = 1) +
+  ## Bevel cross-section (right plate prepared)
+  geom_rect(aes(xmin = 8.5, xmax = 9.45, ymin = 1.1, ymax = 1.6), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(10.5, 9.55, 9.55, 9.85, 10.5), y = c(1.1, 1.1, 1.2, 1.6, 1.6)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(9.45, 9.55, 9.55, 9.85, 9.65, 9.45), y = c(1.1, 1.1, 1.2, 1.6, 1.68, 1.6)), fill = "orange", color = "black") +
 
   ## Row dividers
   geom_segment(aes(x = 0.5, xend = 11.5, y = c(4, 3, 2), yend = c(4, 3, 2)),
@@ -687,7 +732,10 @@ ggplot() +
   geom_segment(aes(x = c(4, 7.5), xend = c(4, 7.5), y = 0.8, yend = 5.2),
                linetype = "dotted", color = "gray70") +
 
-  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.5, 6)) +
+  annotate("text", x = 6, y = 0.55, label = "On the other side the same symbol is mirrored above the reference line.",
+           size = 2.8 * diagram_text_scale, fontface = "italic", color = "gray30") +
+
+  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.3, 6)) +
   labs(title = "Common Weld Type Symbols") +
   theme_welding
 ```
@@ -695,51 +743,65 @@ ggplot() +
 ### Supplementary Symbols
 
 ```{r supplementary-symbols, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Supplementary welding symbols."}
+## Each example: reference line with arrow, an arrow-side fillet symbol (h x h), and the supplementary symbol.
+h <- 0.7
+base_sym <- function(jx, jy) {
+  list(
+    geom_segment(aes(x = jx, xend = jx + 1.6, y = jy, yend = jy), linewidth = 1),
+    geom_segment(aes(x = jx, xend = jx - 0.9, y = jy, yend = jy - 0.9), linewidth = 1,
+                 arrow = arrow(length = unit(0.25, "cm"), type = "closed"))
+  )
+}
+fillet_sym <- function(sx, jy) {
+  geom_polygon(aes(x = c(sx, sx, sx + h), y = c(jy, jy - h, jy)), fill = "white", color = "black", linewidth = 1)
+}
+## Contour symbol drawn parallel to the fillet face (hypotenuse), just outside it.
+## bulge > 0: convex (bows away from the weld), bulge < 0: concave (bows toward the weld), 0: flush
+contour_pts <- function(sx, jy, bulge, d = 0.1) {
+  t  <- seq(0.15, 0.85, length.out = 25)
+  tt <- (t - 0.15) / 0.7
+  arc <- 4 * tt * (1 - tt)
+  off <- d + if (bulge >= 0) bulge * arc else abs(bulge) * (1 - arc)
+  data.frame(x = sx + t * h + off / sqrt(2), y = (jy - h) + t * h - off / sqrt(2))
+}
+circ <- function(x0, y0, r) { t <- seq(0, 2 * pi, length.out = 60); data.frame(x = x0 + r * cos(t), y = y0 + r * sin(t)) }
+
 ggplot() +
-  ## WELD ALL AROUND
-  annotate("text", x = 1.5, y = 4.5, label = "Weld All\nAround", fontface = "bold", size = 3 * diagram_text_scale) +
-  ## Circle at junction
-  geom_point(aes(x = 1.5, y = 3), size = 15, shape = 1, stroke = 1.5) +
-  geom_segment(aes(x = 1.5, xend = 3, y = 3, yend = 3), linewidth = 1) +
-  geom_segment(aes(x = 1.5, xend = 0.5, y = 3, yend = 2), linewidth = 1) +
+  ## WELD ALL AROUND: circle at the arrow / reference line junction
+  annotate("text", x = 1.8, y = 4.6, label = "Weld All\nAround", fontface = "bold", size = 3 * diagram_text_scale) +
+  base_sym(1.5, 3) + fillet_sym(2.2, 3) +
+  geom_path(data = circ(1.5, 3, 0.2), aes(x, y), linewidth = 1) +
 
-  ## FIELD WELD
-  annotate("text", x = 5, y = 4.5, label = "Field Weld\n(on site)", fontface = "bold", size = 3 * diagram_text_scale) +
-  ## Flag at junction
-  geom_polygon(aes(x = c(5, 5, 5.4), y = c(3, 3.4, 3.2)), fill = "black") +
-  geom_segment(aes(x = 5, xend = 6.5, y = 3, yend = 3), linewidth = 1) +
-  geom_segment(aes(x = 5, xend = 4, y = 3, yend = 2), linewidth = 1) +
+  ## FIELD WELD: filled flag on a staff at the junction, pointing toward the tail
+  annotate("text", x = 5.3, y = 4.6, label = "Field Weld\n(on site)", fontface = "bold", size = 3 * diagram_text_scale) +
+  base_sym(5, 3) + fillet_sym(5.7, 3) +
+  geom_segment(aes(x = 5, xend = 5, y = 3, yend = 3.75), linewidth = 1) +
+  geom_polygon(aes(x = c(5, 5, 5.45), y = c(3.75, 3.4, 3.575)), fill = "black") +
 
-  ## CONTOUR - FLUSH
-  annotate("text", x = 8.5, y = 4.5, label = "Flush\nContour", fontface = "bold", size = 3 * diagram_text_scale) +
-  geom_segment(aes(x = 8.5, xend = 10, y = 3, yend = 3), linewidth = 1) +
-  geom_segment(aes(x = 8.5, xend = 7.5, y = 3, yend = 2), linewidth = 1) +
-  geom_polygon(aes(x = c(8.8, 8.8, 9.3), y = c(3, 2.5, 3)), fill = "black") +
-  geom_segment(aes(x = 8.8, xend = 9.3, y = 2.5, yend = 2.5), linewidth = 1) +
+  ## CONTOUR - FLUSH: straight line parallel to the weld face
+  annotate("text", x = 8.8, y = 4.6, label = "Flush (Flat)\nContour", fontface = "bold", size = 3 * diagram_text_scale) +
+  base_sym(8.5, 3) + fillet_sym(9.2, 3) +
+  geom_path(data = contour_pts(9.2, 3, 0)[c(1, 25), ], aes(x, y), linewidth = 1) +
 
-  ## CONTOUR - CONVEX
-  annotate("text", x = 2, y = 1.8, label = "Convex\nContour", fontface = "bold", size = 3 * diagram_text_scale) +
-  geom_segment(aes(x = 2, xend = 3.5, y = 1, yend = 1), linewidth = 1) +
-  geom_segment(aes(x = 2, xend = 1, y = 1, yend = 0), linewidth = 1) +
-  geom_polygon(aes(x = c(2.3, 2.3, 2.8), y = c(1, 0.5, 1)), fill = "black") +
-  geom_curve(aes(x = 2.3, xend = 2.8, y = 0.5, yend = 0.5), curvature = -0.5, linewidth = 1) +
+  ## CONTOUR - CONVEX: arc bowing away from the weld
+  annotate("text", x = 1.8, y = 1.6, label = "Convex\nContour", fontface = "bold", size = 3 * diagram_text_scale) +
+  base_sym(1.5, 0) + fillet_sym(2.2, 0) +
+  geom_path(data = contour_pts(2.2, 0, 0.1), aes(x, y), linewidth = 1) +
 
-  ## CONTOUR - CONCAVE
-  annotate("text", x = 6, y = 1.8, label = "Concave\nContour", fontface = "bold", size = 3 * diagram_text_scale) +
-  geom_segment(aes(x = 6, xend = 7.5, y = 1, yend = 1), linewidth = 1) +
-  geom_segment(aes(x = 6, xend = 5, y = 1, yend = 0), linewidth = 1) +
-  geom_polygon(aes(x = c(6.3, 6.3, 6.8), y = c(1, 0.5, 1)), fill = "black") +
-  geom_curve(aes(x = 6.3, xend = 6.8, y = 0.5, yend = 0.5), curvature = 0.5, linewidth = 1) +
+  ## CONTOUR - CONCAVE: arc bowing toward the weld
+  annotate("text", x = 5.3, y = 1.6, label = "Concave\nContour", fontface = "bold", size = 3 * diagram_text_scale) +
+  base_sym(5, 0) + fillet_sym(5.7, 0) +
+  geom_path(data = contour_pts(5.7, 0, -0.1), aes(x, y), linewidth = 1) +
 
-  ## BACKING
-  annotate("text", x = 10, y = 1.8, label = "Backing\nBar", fontface = "bold", size = 3 * diagram_text_scale) +
-  geom_segment(aes(x = 10, xend = 11.5, y = 1, yend = 1), linewidth = 1) +
-  geom_segment(aes(x = 10, xend = 9, y = 1, yend = 0), linewidth = 1) +
-  ## Backing symbol (rectangle)
-  geom_rect(aes(xmin = 10.2, xmax = 10.8, ymin = 1, ymax = 1.3), fill = NA, color = "black", linewidth = 1) +
+  ## BACKING: rectangle on the side opposite the groove weld symbol (V-groove on arrow side)
+  annotate("text", x = 8.8, y = 1.6, label = "Backing\n(opposite the groove)", fontface = "bold", size = 3 * diagram_text_scale) +
+  base_sym(8.5, 0) +
+  geom_path(aes(x = c(9.6 - 0.35, 9.6, 9.6 + 0.35), y = c(-0.45, 0, -0.45)), linewidth = 1) +
+  geom_rect(aes(xmin = 9.35, xmax = 9.85, ymin = 0, ymax = 0.25), fill = "white", color = "black", linewidth = 1) +
 
-  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(-0.5, 5)) +
-  labs(title = "Supplementary Welding Symbols") +
+  coord_fixed(ratio = 1, xlim = c(0, 11), ylim = c(-1.2, 5)) +
+  labs(title = "Supplementary Welding Symbols",
+       subtitle = "Shown with an arrow-side fillet (or V-groove) weld symbol") +
   theme_welding
 ```
 
@@ -910,7 +972,7 @@ knitr::include_graphics("images/C27_F01_pg219.jpg")
 
 Figure @fig-groove-combined-dims-ref shows how multiple dimensions are combined on groove weld symbols.
 
-```{r fig-groove-combined-dims-ref, echo=FALSE, fig.cap="Groove weld symbol showing use of combined dimensions. The depth of preparation (S) is shown in parentheses, while the weld size/effective throat (E) is shown without parentheses. Both sides of a double-groove weld are fully specified. Adapted from Jensen (2016).", fig.align='center', out.width='80%'}
+```{r fig-groove-combined-dims-ref, echo=FALSE, fig.cap="Groove weld symbol showing use of combined dimensions. The depth of preparation (S) is shown without parentheses, while the groove weld size/effective throat (E) is shown in parentheses. Both sides of a double-groove weld are fully specified. Adapted from Jensen (2016).", fig.align='center', out.width='80%'}
 knitr::include_graphics("images/C27_F02_pg219.jpg")
 ```
 
@@ -918,14 +980,14 @@ knitr::include_graphics("images/C27_F02_pg219.jpg")
 
 | Element | Position | Meaning |
 |:--------|:---------|:--------|
-| Depth of preparation (S) | In parentheses before weld symbol | How deep to cut the groove |
-| Weld size (E) | Without parentheses | Effective throat or penetration depth |
-| Groove angle | Above/beside the symbol | Included angle of the groove |
+| Depth of preparation (S) | Left of the weld symbol, **without** parentheses | How deep to cut the groove |
+| Groove weld size (E) | Left of the weld symbol, **in** parentheses, after S | Effective throat or penetration depth |
+| Groove angle | Outside the weld symbol (below it for arrow side, above it for other side) | Included angle of the groove |
 | Root opening | Inside the weld symbol | Gap at the root before welding |
 
 **Example from Figure @fig-groove-combined-dims-ref:**
 
-- `.31 (.38)` means: 0.31" weld size (effective throat), 0.38" depth of groove preparation
+- `.31 (.38)` means: 0.31" depth of groove preparation (S), 0.38" groove weld size (E). E is larger than S here because the weld penetrates beyond the prepared groove into the root.
 - `25°` is the groove angle on each side
 - The interpretation shows the actual joint geometry
 
@@ -953,7 +1015,7 @@ knitr::include_graphics("images/C27_F03_pg220.jpg")
 
 When full penetration is not required, partial joint penetration welds are more economical. The depth of penetration is specified on the symbol.
 
-```{r fig-pjp-welds-ref, echo=FALSE, fig.cap="Single-groove welds with partial joint penetration (PJP). The dimension in parentheses indicates the depth of groove preparation, while the dimension without parentheses indicates the effective throat (weld size). Adapted from Jensen (2016).", fig.align='center', out.width='65%'}
+```{r fig-pjp-welds-ref, echo=FALSE, fig.cap="Single-groove welds with partial joint penetration (PJP). The dimension in parentheses is the groove weld size (effective throat, E); a dimension without parentheses would give the depth of groove preparation (S). Adapted from Jensen (2016).", fig.align='center', out.width='65%'}
 knitr::include_graphics("images/C27_F04_pg220.jpg")
 ```
 
@@ -969,12 +1031,12 @@ knitr::include_graphics("images/C27_F04_pg220.jpg")
 
 **Reading PJP symbols from Figure @fig-pjp-welds-ref:**
 
-- `(.75)` - depth of groove preparation is 0.75"
-- `(.50)` with groove angle - specifies both depth and geometry
+- `(.75)` on the square groove - groove weld size (effective throat) of 0.75"; a square groove has no preparation, so no S is given
+- `(.50)` with `0` and `60°` on the V-groove - 0.50" weld size, zero root opening, 60° groove angle
 - The weld doesn't extend all the way through the material
 
 ::: {.callout-check}
-**Quick Check:** A V-groove symbol shows "(.50)" with a 60° groove angle. If the material is 0.75" thick, what percentage of the thickness is penetrated by the weld preparation?
+**Quick Check:** A V-groove symbol shows "(.50)" with a 60° groove angle. If the material is 0.75" thick, what percentage of the thickness does the weld penetrate?
 :::
 
 <details>
@@ -982,7 +1044,7 @@ knitr::include_graphics("images/C27_F04_pg220.jpg")
 
 Penetration ratio = 0.50" / 0.75" = 67%
 
-The groove preparation extends 67% through the material thickness. The remaining 33% (0.25") remains unaffected by the groove and provides the root face that the weld must penetrate.
+The number in parentheses is the groove weld size (E), so the weld penetrates 67% of the material thickness. The remaining 33% (0.25") stays unwelded at the root. That is why this is a partial joint penetration weld.
 </details>
 
 ### Double-Groove Welds
@@ -1054,7 +1116,7 @@ knitr::include_graphics("images/C27_F08_pg222.jpg")
 | **Backing Weld** | Opposite side of groove symbol | Made **before** groove weld | Provides support during main weld |
 
 ::: {.callout-note}
-**Sequence Matters:** The symbol itself is the same - the note "BACK WELD" or "BACKING WELD" clarifies the sequence. In the absence of a note, AWS convention treats it as a backing weld (made first).
+**Sequence Matters:** The symbol itself is the same. The sequence must be shown separately, with a note in the tail ("BACK WELD" or "BACKING WELD") or with multiple reference lines. Don't assume a default: a symbol without this information is incomplete.
 :::
 
 ### Melt-Through Symbols
@@ -1122,6 +1184,10 @@ ggplot() +
   geom_rect(aes(xmin = 6, xmax = 6.6, ymin = 1.8, ymax = 3.5), fill = "gray60", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 8.4, xmax = 9, ymin = 1.8, ymax = 3.5), fill = "gray60", color = "black", linewidth = 1) +
 
+  ## Required fillet welds (dashed outline: the welder cannot reach them)
+  geom_polygon(aes(x = c(7.2, 7.2, 6.75), y = c(1.8, 2.25, 1.8)), fill = NA, color = "darkorange", linetype = "dashed", linewidth = 1) +
+  geom_polygon(aes(x = c(7.8, 7.8, 8.25), y = c(1.8, 2.25, 1.8)), fill = NA, color = "darkorange", linetype = "dashed", linewidth = 1) +
+
   ## Blocked access indicators
   geom_segment(aes(x = 6.2, xend = 6.8, y = 2.8, yend = 2.2),
                linewidth = 1, color = "red") +
@@ -1161,8 +1227,9 @@ ggplot() +
 
   geom_rect(aes(xmin = 0.5, xmax = 2.5, ymin = 1.5, ymax = 2.3), fill = "steelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 1.2, xmax = 1.8, ymin = 2.3, ymax = 4), fill = "lightsteelblue", color = "black", linewidth = 1) +
-  ## Small weld
-  geom_polygon(aes(x = c(1.2, 1.2, 1), y = c(2.3, 2.6, 2.3)), fill = "orange", color = "black") +
+  ## Small welds
+  geom_polygon(aes(x = c(1.2, 1.2, 1), y = c(2.3, 2.5, 2.3)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(1.8, 1.8, 2), y = c(2.3, 2.5, 2.3)), fill = "orange", color = "black") +
 
   annotate("text", x = 1.5, y = 1, label = "Insufficient\nstrength", size = 3 * diagram_text_scale, color = "red") +
   geom_point(aes(x = 1.5, y = 0.5), shape = 4, size = 6, color = "red", stroke = 2) +
@@ -1182,7 +1249,7 @@ ggplot() +
   ## OVERSIZED (right)
   annotate("text", x = 8.5, y = 4.5, label = "OVERSIZED", fontface = "bold", size = 4 * diagram_text_scale, color = "red") +
 
-  geom_rect(aes(xmin = 7.5, xmax = 9.5, ymin = 1.5, ymax = 2.3), fill = "steelblue", color = "black", linewidth = 1) +
+  geom_rect(aes(xmin = 7.2, xmax = 9.8, ymin = 1.5, ymax = 2.3), fill = "steelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 8.2, xmax = 8.8, ymin = 2.3, ymax = 4), fill = "lightsteelblue", color = "black", linewidth = 1) +
   ## Large weld
   geom_polygon(aes(x = c(8.2, 8.2, 7.3), y = c(2.3, 3.2, 2.3)), fill = "orange", color = "black") +
@@ -1203,21 +1270,19 @@ ggplot() +
 
 | Rule | Guideline |
 |:-----|:----------|
-| **Minimum leg size** | ≥ thickness of thinner member (for structural welds) |
-| **Maximum leg size** | ≤ thickness of thinner member |
-| **For lap joints** | Leg size ≤ 0.75 × thickness of thinner plate |
-| **Intermittent welds** | Length ≥ 4 × leg size; pitch ≤ 16 × thinner plate thickness |
+| **Minimum leg size** (AWS D1.1) | Set by the thinner part joined: 3 mm (T ≤ 6 mm), 5 mm (6–12 mm), 6 mm (12–20 mm), 8 mm (> 20 mm). Use the thicker part if a non-low-hydrogen process is used without preheat |
+| **Maximum leg along a plate edge** (lap joints) | Leg = T for plates thinner than 6 mm; leg ≤ T − 2 mm for plates 6 mm and thicker, so the edge is not melted away |
+| **Full-strength double fillet** (T-joints) | A leg of about 0.75 × the attached plate thickness on both sides develops the plate; larger welds only add cost and distortion |
+| **Intermittent welds** | Segment length ≥ 4 × leg size and ≥ 40 mm |
 
-> **❓ Sizing Problem:** Two plates are being joined with a fillet weld. The plates are 10 mm and 6 mm thick. What should be the maximum fillet weld leg size?
+> **❓ Sizing Problem:** In a lap joint, a 6 mm plate is fillet welded along its edge to a 10 mm plate. What are the minimum and maximum fillet weld leg sizes?
 
 <details>
 <summary>Click to reveal solution</summary>
 
-The maximum leg size is limited by the **thinner plate**:
+**Minimum:** the thinner part joined is 6 mm (T ≤ 6 mm), so the minimum leg is **3 mm**.
 
-Maximum leg size = 6 mm (thickness of thinner plate)
-
-In practice, you might use 5 mm to provide a slight edge clearance and avoid burning through the thinner plate.
+**Maximum:** the weld runs along the edge of the 6 mm plate. Because that plate is 6 mm or thicker, the maximum leg is T − 2 mm = 6 − 2 = **4 mm**. If the weld were made to the full 6 mm, the top corner of the edge would melt away. The inspector could then no longer measure the leg.
 
 </details>
 
@@ -1228,67 +1293,70 @@ In practice, you might use 5 mm to provide a slight edge clearance and avoid bur
 Welding introduces heat that causes expansion and contraction, leading to distortion and residual stresses.
 
 ```{r distortion-types, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Common types of weld distortion."}
+th_a <- seq(0, 15, length.out = 20) * pi / 180
 ggplot() +
-  ## LONGITUDINAL SHRINKAGE
+  ## LONGITUDINAL SHRINKAGE (plan view: the weld runs along the plate length)
   annotate("text", x = 2, y = 4.5, label = "LONGITUDINAL\nSHRINKAGE", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
   ## Before
   geom_rect(aes(xmin = 0.5, xmax = 3.5, ymin = 2.8, ymax = 3.5),
             fill = "lightsteelblue", color = "black", linetype = "dashed") +
-  annotate("text", x = 2, y = 3.15, label = "Before", size = 2.5 * diagram_text_scale, color = "gray50") +
+  annotate("text", x = 2, y = 3.15, label = "Before", size = 2.5 * diagram_text_scale, color = "gray30") +
 
-  ## After (shortened)
+  ## After (shortened along the weld)
   geom_rect(aes(xmin = 0.7, xmax = 3.3, ymin = 1.5, ymax = 2.2), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 1.8, xmax = 2.2, ymin = 1.3, ymax = 2.4), fill = "orange", color = "black") +
-  annotate("text", x = 2, y = 1.85, label = "After", size = 2.5 * diagram_text_scale, color = "white") +
+  geom_rect(aes(xmin = 0.7, xmax = 3.3, ymin = 1.78, ymax = 1.92), fill = "orange", color = "black") +
+  annotate("text", x = 2, y = 2.4, label = "After (weld along length)", size = 2.5 * diagram_text_scale, color = "gray30") +
 
   ## Shrinkage arrows
-  geom_segment(aes(x = 0.5, xend = 0.7, y = 1.85, yend = 1.85),
+  geom_segment(aes(x = 0.35, xend = 0.65, y = 1.85, yend = 1.85),
                arrow = arrow(length = unit(0.15, "cm"), type = "closed"), color = "red", linewidth = 1) +
-  geom_segment(aes(x = 3.5, xend = 3.3, y = 1.85, yend = 1.85),
+  geom_segment(aes(x = 3.65, xend = 3.35, y = 1.85, yend = 1.85),
                arrow = arrow(length = unit(0.15, "cm"), type = "closed"), color = "red", linewidth = 1) +
 
   annotate("text", x = 2, y = 0.8, label = "Weld contracts\nalong its length", size = 2.5 * diagram_text_scale) +
 
-  ## TRANSVERSE SHRINKAGE
+  ## TRANSVERSE SHRINKAGE (weld across the joint)
   annotate("text", x = 6, y = 4.5, label = "TRANSVERSE\nSHRINKAGE", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
   ## Before
-  geom_rect(aes(xmin = 4.8, xmax = 5.7, ymin = 2.8, ymax = 3.8),
+  geom_rect(aes(xmin = 4.8, xmax = 5.8, ymin = 2.8, ymax = 3.8),
             fill = "lightsteelblue", color = "black", linetype = "dashed") +
-  geom_rect(aes(xmin = 6.3, xmax = 7.2, ymin = 2.8, ymax = 3.8),
+  geom_rect(aes(xmin = 6.2, xmax = 7.2, ymin = 2.8, ymax = 3.8),
             fill = "lightsteelblue", color = "black", linetype = "dashed") +
 
   ## After (pulled together)
-  geom_rect(aes(xmin = 5, xmax = 5.8, ymin = 1.5, ymax = 2.5), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 6.2, xmax = 7, ymin = 1.5, ymax = 2.5), fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 5.8, xmax = 6.2, ymin = 1.3, ymax = 2.7), fill = "orange", color = "black") +
+  geom_rect(aes(xmin = 5, xmax = 5.85, ymin = 1.5, ymax = 2.5), fill = "steelblue", color = "black") +
+  geom_rect(aes(xmin = 6.15, xmax = 7, ymin = 1.5, ymax = 2.5), fill = "steelblue", color = "black") +
+  geom_rect(aes(xmin = 5.85, xmax = 6.15, ymin = 1.5, ymax = 2.5), fill = "orange", color = "black") +
 
   ## Shrinkage arrows
-  geom_segment(aes(x = 4.8, xend = 5, y = 2, yend = 2),
+  geom_segment(aes(x = 4.7, xend = 4.95, y = 2, yend = 2),
                arrow = arrow(length = unit(0.15, "cm"), type = "closed"), color = "red", linewidth = 1) +
-  geom_segment(aes(x = 7.2, xend = 7, y = 2, yend = 2),
+  geom_segment(aes(x = 7.3, xend = 7.05, y = 2, yend = 2),
                arrow = arrow(length = unit(0.15, "cm"), type = "closed"), color = "red", linewidth = 1) +
 
-  annotate("text", x = 6, y = 0.8, label = "Plates pulled\ntogether", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 6, y = 0.8, label = "Plates pulled\ntogether across weld", size = 2.5 * diagram_text_scale) +
 
-  ## ANGULAR DISTORTION
+  ## ANGULAR DISTORTION (cross-section: single-V weld from the top face)
   annotate("text", x = 10, y = 4.5, label = "ANGULAR\nDISTORTION", fontface = "bold", size = 3.5 * diagram_text_scale) +
 
-  ## Before (flat)
-  geom_segment(aes(x = 8.5, xend = 11.5, y = 3.3, yend = 3.3),
-               color = "gray50", linetype = "dashed", linewidth = 2) +
+  ## Before (flat plates)
+  geom_rect(aes(xmin = 8.5, xmax = 11.5, ymin = 3.05, ymax = 3.3),
+            fill = "lightsteelblue", color = "black", linetype = "dashed") +
+  annotate("text", x = 10, y = 3.55, label = "Before", size = 2.5 * diagram_text_scale, color = "gray30") +
 
-  ## After (bent up)
-  geom_polygon(aes(x = c(8.5, 9.8, 10, 10.2, 11.5, 11.5, 10, 8.5),
-                   y = c(2.3, 1.7, 1.6, 1.7, 2.3, 2.5, 1.8, 2.5)),
-               fill = "steelblue", color = "black") +
-  geom_rect(aes(xmin = 9.8, xmax = 10.2, ymin = 1.5, ymax = 2), fill = "orange", color = "black") +
+  ## After: both plates rotate up toward the weld face
+  geom_polygon(aes(x = c(8.5, 9.9, 9.9, 8.55), y = c(1.98, 1.6, 1.85, 2.22)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(11.5, 10.1, 10.1, 11.45), y = c(1.98, 1.6, 1.85, 2.22)), fill = "steelblue", color = "black") +
+  ## Weld on the top face (the face that shrinks most)
+  geom_polygon(aes(x = c(9.9, 10.1, 10.25, 10, 9.75), y = c(1.6, 1.6, 1.89, 1.98, 1.89)), fill = "orange", color = "black") +
 
-  ## Angle indicators
-  geom_curve(aes(x = 9, xend = 9.5, y = 2.4, yend = 2),
-             curvature = -0.3, color = "red", linewidth = 1,
-             arrow = arrow(length = unit(0.1, "cm"), ends = "both")) +
+  ## Rotation angle
+  geom_segment(aes(x = 10.1, xend = 11.5, y = 1.6, yend = 1.6), linetype = "dashed", color = "gray40") +
+  geom_path(aes(x = 10.1 + 1.25 * cos(th_a), y = 1.6 + 1.25 * sin(th_a)), color = "red", linewidth = 0.8,
+            arrow = arrow(length = unit(0.1, "cm"))) +
+  annotate("text", x = 11.55, y = 1.75, label = "θ", color = "red", size = 3.5 * diagram_text_scale, fontface = "bold") +
 
   annotate("text", x = 10, y = 0.8, label = "Single-side weld\ncauses bending", size = 2.5 * diagram_text_scale) +
 
@@ -1320,44 +1388,50 @@ Welded joints are particularly susceptible to fatigue failure due to:
 - Potential defects (porosity, lack of fusion)
 
 ```{r fatigue-improvement, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Design improvements for fatigue resistance."}
-ggplot() +
-  ## POOR FATIGUE DESIGN (left)
-  annotate("text", x = 2, y = 4.5, label = "POOR FATIGUE\nRESISTANCE", fontface = "bold", size = 3.5 * diagram_text_scale, color = "red") +
+## Fillet face points between the toe and the top of the vertical leg.
+## bulge > 0 bows away from the corner (convex), bulge < 0 bows into the corner (concave).
+face_pts <- function(toe_x, toe_y, top_x, top_y, bulge, n = 20) {
+  t <- seq(0, 1, length.out = n)
+  dx <- top_x - toe_x; dy <- top_y - toe_y; L <- sqrt(dx^2 + dy^2)
+  nx <- -dy / L; ny <- dx / L                         # unit normal (left of toe -> top)
+  if (sign(nx) == sign(top_x - toe_x)) { nx <- -nx; ny <- -ny }  # point away from the corner
+  b <- bulge * 4 * t * (1 - t)
+  data.frame(x = toe_x + t * dx + b * nx, y = toe_y + t * dy + b * ny)
+}
+fillet_shape <- function(root_x, root_y, toe_x, top_y, bulge) {
+  f <- face_pts(toe_x, root_y, root_x, top_y, bulge)
+  data.frame(x = c(root_x, f$x), y = c(root_y, f$y))
+}
 
-  ## Sharp weld toe
+ggplot() +
+  ## POOR FATIGUE DESIGN (left): convex fillets meeting the plate at a sharp toe angle
+  annotate("text", x = 2, y = 4.5, label = "POOR FATIGUE\nRESISTANCE", fontface = "bold", size = 3.5 * diagram_text_scale, color = "red") +
   geom_rect(aes(xmin = 0.5, xmax = 3.5, ymin = 1.5, ymax = 2.3), fill = "steelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 1.7, xmax = 2.3, ymin = 2.3, ymax = 4), fill = "lightsteelblue", color = "black", linewidth = 1) +
-  ## Sharp profile weld
-  geom_polygon(aes(x = c(1.7, 1.7, 1), y = c(2.3, 3, 2.3)), fill = "orange", color = "black", linewidth = 1) +
+  geom_polygon(data = fillet_shape(1.7, 2.3, 1.1, 2.9, 0.18), aes(x, y), fill = "orange", color = "black", linewidth = 1) +
+  geom_polygon(data = fillet_shape(2.3, 2.3, 2.9, 2.9, 0.18), aes(x, y), fill = "orange", color = "black", linewidth = 1) +
 
-  ## Stress concentration indicator
-  geom_point(aes(x = 1, y = 2.3), color = "red", size = 4) +
-  annotate("text", x = 0.5, y = 2.8, label = "Stress\nconcentration!", color = "red", size = 2.5 * diagram_text_scale) +
+  ## Stress concentration at the toes
+  geom_point(aes(x = c(1.1, 2.9), y = c(2.3, 2.3)), color = "red", size = 4) +
+  geom_segment(aes(x = 0.75, xend = 1.05, y = 3.1, yend = 2.4), color = "red",
+               arrow = arrow(length = unit(0.1, "cm"))) +
+  annotate("text", x = 0.7, y = 3.4, label = "Stress\nconcentration\nat sharp toe", color = "red", size = 2.5 * diagram_text_scale) +
 
-  ## Sharp angle indicator
-  geom_curve(aes(x = 1.3, xend = 0.9, y = 2.5, yend = 2.3), curvature = 0.3, color = "red") +
-  annotate("text", x = 1.2, y = 3.6, label = "Sharp\nangle", color = "red", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 2, y = 1, label = "Convex profile, abrupt toe\nHigh reinforcement", size = 2.5 * diagram_text_scale, color = "red") +
 
-  annotate("text", x = 2, y = 1, label = "Sharp toe angle\nHigh reinforcement", size = 2.5 * diagram_text_scale, color = "red") +
-
-  ## GOOD FATIGUE DESIGN (right)
+  ## GOOD FATIGUE DESIGN (right): concave fillets blending smoothly into the plate
   annotate("text", x = 7.5, y = 4.5, label = "GOOD FATIGUE\nRESISTANCE", fontface = "bold", size = 3.5 * diagram_text_scale, color = "darkgreen") +
-
-  ## Smooth weld profile
   geom_rect(aes(xmin = 6, xmax = 9, ymin = 1.5, ymax = 2.3), fill = "steelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 7.2, xmax = 7.8, ymin = 2.3, ymax = 4), fill = "lightsteelblue", color = "black", linewidth = 1) +
-
-  ## Smooth profile weld (concave)
-  geom_curve(aes(x = 7.2, xend = 6.5, y = 2.6, yend = 2.3), curvature = 0.3,
-             linewidth = 8, color = "orange") +
-  geom_curve(aes(x = 7.8, xend = 8.5, y = 2.6, yend = 2.3), curvature = -0.3,
-             linewidth = 8, color = "orange") +
+  geom_polygon(data = fillet_shape(7.2, 2.3, 6.4, 3.0, -0.18), aes(x, y), fill = "orange", color = "black", linewidth = 1) +
+  geom_polygon(data = fillet_shape(7.8, 2.3, 8.6, 3.0, -0.18), aes(x, y), fill = "orange", color = "black", linewidth = 1) +
 
   ## Smooth transition indicator
-  geom_curve(aes(x = 6.2, xend = 6.6, y = 2.5, yend = 2.3), curvature = 0.3, color = "darkgreen") +
-  annotate("text", x = 6, y = 2.8, label = "Smooth\ntransition", color = "darkgreen", size = 2.5 * diagram_text_scale) +
+  geom_segment(aes(x = 6.1, xend = 6.42, y = 3.0, yend = 2.38), color = "darkgreen",
+               arrow = arrow(length = unit(0.1, "cm"))) +
+  annotate("text", x = 6.0, y = 3.3, label = "Smooth\ntransition", color = "darkgreen", size = 2.5 * diagram_text_scale) +
 
-  annotate("text", x = 7.5, y = 1, label = "Smooth toe blend\nLow reinforcement", size = 2.5 * diagram_text_scale, color = "darkgreen") +
+  annotate("text", x = 7.5, y = 1, label = "Concave profile, toe blended\nLow reinforcement", size = 2.5 * diagram_text_scale, color = "darkgreen") +
 
   ## Dividing line
   geom_vline(xintercept = 4.5, linetype = "dashed", color = "gray50") +
@@ -1389,7 +1463,7 @@ $$CE = C + \frac{Mn}{6} + \frac{Cr + Mo + V}{5} + \frac{Ni + Cu}{15}$$
 
 ```{r carbon-equivalent, echo=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="Weldability zones based on carbon equivalent."}
 ce_data <- data.frame(
-  CE = seq(0, 0.7, 0.01)
+  CE = seq(0, 0.8, 0.01)
 )
 
 ggplot(ce_data, aes(x = CE)) +
@@ -1406,8 +1480,8 @@ ggplot(ce_data, aes(x = CE)) +
   annotate("text", x = 0.5, y = 0.5, label = "FAIR\n\nPreheat\nrequired", size = 3 * diagram_text_scale, fontface = "bold") +
 
   ## Poor zone
-  annotate("rect", xmin = 0.55, xmax = 0.7, ymin = 0, ymax = 1, fill = "red", alpha = 0.3) +
-  annotate("text", x = 0.625, y = 0.5, label = "POOR\n\nHigh preheat\n& PWHT", size = 3 * diagram_text_scale, fontface = "bold") +
+  annotate("rect", xmin = 0.55, xmax = 0.8, ymin = 0, ymax = 1, fill = "red", alpha = 0.3) +
+  annotate("text", x = 0.65, y = 0.5, label = "POOR\n\nHigh preheat\n& PWHT", size = 3 * diagram_text_scale, fontface = "bold") +
 
   ## Zone boundaries
   geom_vline(xintercept = c(0.35, 0.45, 0.55), linetype = "dashed", color = "black") +
@@ -1416,9 +1490,13 @@ ggplot(ce_data, aes(x = CE)) +
   annotate("text", x = 0.15, y = 0.1, label = "Mild Steel", size = 2.5 * diagram_text_scale, fontface = "italic") +
   annotate("text", x = 0.38, y = 0.1, label = "Medium\nCarbon", size = 2.5 * diagram_text_scale, fontface = "italic") +
   annotate("text", x = 0.5, y = 0.1, label = "High\nStrength", size = 2.5 * diagram_text_scale, fontface = "italic") +
-  annotate("text", x = 0.63, y = 0.1, label = "Tool\nSteel", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 0.65, y = 0.1, label = "Alloy &\nTool Steel", size = 2.5 * diagram_text_scale, fontface = "italic") +
 
-  scale_x_continuous(breaks = seq(0, 0.7, 0.1),
+  ## Worked example: AISI 4140 (CE = 0.79)
+  annotate("segment", x = 0.79, xend = 0.79, y = 0.2, yend = 0.85, color = "darkred", linewidth = 1) +
+  annotate("text", x = 0.79, y = 0.92, label = "AISI 4140\n(0.79)", color = "darkred", size = 2.5 * diagram_text_scale, fontface = "bold") +
+
+  scale_x_continuous(breaks = seq(0, 0.8, 0.1),
                      labels = scales::number_format(accuracy = 0.1)) +
 
   labs(title = "Steel Weldability Based on Carbon Equivalent",
@@ -1473,6 +1551,7 @@ With CE = 0.79 (in the "poor" weldability zone):
 Understanding weld defects helps designers specify requirements that prevent them.
 
 ```{r weld-defects, echo=FALSE, fig.width=12, fig.height=8, fig.align='center', fig.cap="Common weld defects and their appearance."}
+ux <- seq(4.82, 5.12, length.out = 15)
 ggplot() +
   ## POROSITY
   annotate("text", x = 2, y = 7.75, label = "POROSITY", fontface = "bold", size = 4 * diagram_text_scale) +
@@ -1484,60 +1563,64 @@ ggplot() +
   ## Pores
   geom_point(aes(x = c(1.8, 2.1, 2.3, 1.9, 2.2), y = c(5.8, 6.2, 5.9, 6.5, 6.7)),
              size = 3, color = "black", shape = 16) +
-  annotate("text", x = 2, y = 5, label = "Gas pockets\ntrapped in weld", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 2, y = 4.9, label = "Gas pockets\ntrapped in weld", size = 2.5 * diagram_text_scale) +
 
-  ## UNDERCUT
+  ## UNDERCUT: groove melted into the base metal just beyond the weld toe
   annotate("text", x = 6, y = 7.75, label = "UNDERCUT", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 4.5, xmax = 7.5, ymin = 5.5, ymax = 6.3), fill = "steelblue", color = "black") +
   geom_rect(aes(xmin = 5.7, xmax = 6.3, ymin = 6.3, ymax = 7.5), fill = "lightsteelblue", color = "black") +
-  geom_polygon(aes(x = c(5.7, 5.7, 5.2), y = c(6.3, 6.9, 6.3)), fill = "orange", color = "black") +
-  ## Undercut notch
-  geom_curve(aes(x = 5.2, xend = 5.5, y = 6.3, yend = 6.1), curvature = 0.5, linewidth = 2, color = "steelblue") +
-  geom_point(aes(x = 5.2, y = 6.2), color = "red", size = 3) +
-  annotate("text", x = 4.8, y = 5.9, label = "Notch", color = "red", size = 2.5 * diagram_text_scale) +
-  annotate("text", x = 6, y = 5, label = "Groove melted into\nbase metal at toe", size = 2.5 * diagram_text_scale) +
+  geom_polygon(aes(x = c(5.7, 5.7, 5.12), y = c(6.3, 6.9, 6.3)), fill = "orange", color = "black") +
+  ## Undercut notch (cut into the plate surface)
+  geom_polygon(aes(x = ux, y = 6.3 - 0.13 * sin(pi * (ux - 4.82) / 0.3)), fill = "white", color = "black") +
+  geom_segment(aes(x = 4.75, xend = 4.95, y = 6.75, yend = 6.25), color = "red",
+               arrow = arrow(length = unit(0.1, "cm"))) +
+  annotate("text", x = 4.7, y = 6.9, label = "Notch", color = "red", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 6, y = 4.9, label = "Groove melted into\nbase metal at toe", size = 2.5 * diagram_text_scale) +
 
-  ## LACK OF FUSION
+  ## LACK OF FUSION: weld metal not bonded to the vertical member face
   annotate("text", x = 10, y = 7.75, label = "LACK OF FUSION", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 8.5, xmax = 11.5, ymin = 5.5, ymax = 6.3), fill = "steelblue", color = "black") +
   geom_rect(aes(xmin = 9.7, xmax = 10.3, ymin = 6.3, ymax = 7.5), fill = "lightsteelblue", color = "black") +
   geom_polygon(aes(x = c(9.7, 9.7, 9.2), y = c(6.3, 6.9, 6.3)), fill = "orange", color = "black") +
   ## Lack of fusion line
-  geom_segment(aes(x = 9.7, xend = 9.7, y = 6.3, yend = 6.8), linewidth = 2, color = "black") +
-  annotate("text", x = 9.2, y = 6.6, label = "No bond!", color = "red", size = 2.5 * diagram_text_scale) +
-  annotate("text", x = 10, y = 5, label = "Weld metal doesn't\nfuse with base", size = 2.5 * diagram_text_scale) +
+  geom_segment(aes(x = 9.7, xend = 9.7, y = 6.35, yend = 6.85), linewidth = 2, color = "black") +
+  geom_segment(aes(x = 9.0, xend = 9.62, y = 7.05, yend = 6.7), color = "red",
+               arrow = arrow(length = unit(0.1, "cm"))) +
+  annotate("text", x = 8.8, y = 7.2, label = "No bond!", color = "red", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 10, y = 4.9, label = "Weld metal doesn't\nfuse with base", size = 2.5 * diagram_text_scale) +
 
-  ## INCOMPLETE PENETRATION
+  ## INCOMPLETE PENETRATION: single-V weld that stops short of the root
   annotate("text", x = 2, y = 3.8, label = "INCOMPLETE\nPENETRATION", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_polygon(aes(x = c(0.5, 0.5, 1.8, 1.8), y = c(1.5, 3, 3, 1.8)), fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(3.5, 3.5, 2.2, 2.2), y = c(1.5, 3, 3, 1.8)), fill = "steelblue", color = "black") +
-  geom_polygon(aes(x = c(1.8, 2, 2.2, 2.2, 2, 1.8), y = c(1.8, 1.6, 1.8, 3.2, 3.5, 3.2)),
+  geom_polygon(aes(x = c(0.5, 1.92, 1.92, 1.4, 0.5), y = c(1.5, 1.5, 2.1, 3, 3)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(3.5, 2.08, 2.08, 2.6, 3.5), y = c(1.5, 1.5, 2.1, 3, 3)), fill = "steelblue", color = "black") +
+  geom_polygon(aes(x = c(1.92, 2.08, 2.08, 2.6, 2.3, 2, 1.7, 1.4, 1.92),
+                   y = c(2.05, 2.05, 2.1, 3, 3.15, 3.2, 3.15, 3, 2.1)),
                fill = "orange", color = "black") +
-  ## Gap at root
-  geom_rect(aes(xmin = 1.8, xmax = 2.2, ymin = 1.5, ymax = 1.8), fill = "black") +
-  annotate("text", x = 2, y = 1.2, label = "Root not\nfused", color = "red", size = 2.5 * diagram_text_scale) +
+  ## Unfused root faces
+  geom_rect(aes(xmin = 1.86, xmax = 2.14, ymin = 1.45, ymax = 2.05), fill = NA, color = "red", linewidth = 1) +
+  annotate("text", x = 2, y = 1.05, label = "Root not\nfused", color = "red", size = 2.5 * diagram_text_scale) +
 
-  ## CRACK
+  ## CRACK: centerline crack running from the root through the throat
   annotate("text", x = 6, y = 3.8, label = "CRACK", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 4.5, xmax = 7.5, ymin = 1.5, ymax = 2.3), fill = "steelblue", color = "black") +
   geom_rect(aes(xmin = 5.7, xmax = 6.3, ymin = 2.3, ymax = 3.5), fill = "lightsteelblue", color = "black") +
-  geom_polygon(aes(x = c(5.7, 5.7, 5.2), y = c(2.3, 2.9, 2.3)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(5.7, 5.7, 5.1), y = c(2.3, 2.9, 2.3)), fill = "orange", color = "black") +
   ## Crack line
-  geom_path(aes(x = c(5.5, 5.6, 5.4, 5.55, 5.45), y = c(2.3, 2.5, 2.65, 2.8, 2.95)),
-            linewidth = 1.5, color = "red") +
-  annotate("text", x = 6, y = 1.2, label = "Most serious\ndefect", color = "red", size = 2.5 * diagram_text_scale) +
+  geom_path(aes(x = c(5.7, 5.6, 5.63, 5.52, 5.54, 5.42), y = c(2.3, 2.38, 2.46, 2.5, 2.58, 2.6)),
+            linewidth = 1.2, color = "red") +
+  annotate("text", x = 6, y = 1.05, label = "Most serious\ndefect", color = "red", size = 2.5 * diagram_text_scale) +
 
-  ## SPATTER
+  ## SPATTER: droplets stuck to the plate and member surfaces next to the weld
   annotate("text", x = 10, y = 3.8, label = "SPATTER", fontface = "bold", size = 4 * diagram_text_scale) +
   geom_rect(aes(xmin = 8.5, xmax = 11.5, ymin = 1.5, ymax = 2.3), fill = "steelblue", color = "black") +
   geom_rect(aes(xmin = 9.7, xmax = 10.3, ymin = 2.3, ymax = 3.5), fill = "lightsteelblue", color = "black") +
   geom_polygon(aes(x = c(9.7, 9.7, 9.2), y = c(2.3, 2.9, 2.3)), fill = "orange", color = "black") +
   ## Spatter droplets
-  geom_point(aes(x = c(8.8, 9.1, 8.9, 11, 11.2, 10.9), y = c(2.4, 2.6, 2.1, 2.5, 2.2, 2.7)),
-             size = 2, color = "orange") +
-  annotate("text", x = 10, y = 1.2, label = "Metal droplets\non surface", size = 2.5 * diagram_text_scale) +
+  geom_point(aes(x = c(8.7, 8.95, 9.1, 10.6, 10.95, 11.25, 9.65), y = c(2.35, 2.35, 2.35, 2.35, 2.35, 2.35, 3.2)),
+             size = 2, color = "darkorange3") +
+  annotate("text", x = 10, y = 1.05, label = "Metal droplets\non surface", size = 2.5 * diagram_text_scale) +
 
-  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.8, 8.2)) +
+  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.6, 8.2)) +
   labs(title = "Common Weld Defects") +
   theme_welding
 ```
@@ -1603,58 +1686,57 @@ A machine frame must be fabricated from structural steel tubes (50 mm × 50 mm �
 
 ```{r frame-case-study, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="Welded frame design with potential improvements highlighted."}
 ggplot() +
-  ## Frame outline
   ## Vertical members
   geom_rect(aes(xmin = 1, xmax = 1.6, ymin = 1, ymax = 5), fill = "steelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 7.4, xmax = 8, ymin = 1, ymax = 5), fill = "steelblue", color = "black", linewidth = 1) +
 
-  ## Horizontal members
+  ## Horizontal members (between the verticals)
   geom_rect(aes(xmin = 1.6, xmax = 7.4, ymin = 4.4, ymax = 5), fill = "lightsteelblue", color = "black", linewidth = 1) +
   geom_rect(aes(xmin = 1.6, xmax = 7.4, ymin = 1, ymax = 1.6), fill = "lightsteelblue", color = "black", linewidth = 1) +
 
-  ## Cross brace
-  geom_polygon(aes(x = c(1.6, 7.4, 7.4, 1.6), y = c(1.6, 4.4, 4.1, 1.9)),
+  ## Diagonal brace from the bottom-left to the top-right inside corner
+  geom_polygon(aes(x = c(1.6, 1.6, 7.0, 7.4, 7.4, 2.0), y = c(1.6, 2.0, 4.4, 4.4, 4.0, 1.6)),
                fill = "gray70", color = "black", linewidth = 1) +
 
-  ## Corner welds (shown as triangles)
-  ## Top left
-  geom_polygon(aes(x = c(1.6, 1.6, 2.1), y = c(4.4, 4.9, 4.4)), fill = "orange", color = "black") +
-  ## Top right
-  geom_polygon(aes(x = c(7.4, 7.4, 6.9), y = c(4.4, 4.9, 4.4)), fill = "orange", color = "black") +
-  ## Bottom left
-  geom_polygon(aes(x = c(1.6, 1.6, 2.1), y = c(1.6, 1.1, 1.6)), fill = "orange", color = "black") +
-  ## Bottom right
-  geom_polygon(aes(x = c(7.4, 7.4, 6.9), y = c(1.6, 1.1, 1.6)), fill = "orange", color = "black") +
+  ## Fillet welds in the open inside corners (top-left, bottom-right)
+  geom_polygon(aes(x = c(1.6, 2.0, 1.6), y = c(4.4, 4.4, 4.0)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(7.4, 7.0, 7.4), y = c(1.6, 1.6, 2.0)), fill = "orange", color = "black") +
+
+  ## Fillet welds where the brace meets the frame (both brace edges at each end)
+  geom_polygon(aes(x = c(1.6, 1.6, 1.9), y = c(2.0, 2.3, 2.144)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(2.0, 2.4, 2.4), y = c(1.6, 1.6, 1.792)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(7.0, 6.6, 6.6), y = c(4.4, 4.4, 4.208)), fill = "orange", color = "black") +
+  geom_polygon(aes(x = c(7.4, 7.4, 7.1), y = c(4.0, 3.7, 3.856)), fill = "orange", color = "black") +
 
   ## Issue callouts
-  ## Issue 1: Single-sided welds
-  geom_rect(aes(xmin = 1.3, xmax = 2.4, ymin = 4.2, ymax = 5.2), fill = NA, color = "red", linewidth = 1.5) +
-  geom_segment(aes(x = 0.5, xend = 1.3, y = 5.5, yend = 4.9),
+  ## Issue 1: Single-sided welds at the corners
+  geom_rect(aes(xmin = 1.3, xmax = 2.4, ymin = 3.8, ymax = 5.2), fill = NA, color = "red", linewidth = 1.5) +
+  geom_segment(aes(x = 0.8, xend = 1.3, y = 5.5, yend = 5.0),
                arrow = arrow(length = unit(0.15, "cm")), color = "red") +
-  annotate("text", x = 0.5, y = 5.9, label = "Issue 1:\nSingle-sided\nfillet only", color = "red", size = 2.8 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = -0.3, y = 6.0, label = "Issue 1:\nSingle-sided\nfillet only", color = "red", size = 2.8 * diagram_text_scale, hjust = 0) +
 
   ## Issue 2: No stiffener at load point
-  geom_segment(aes(x = 4.5, xend = 4.5, y = 6.5, yend = 5.2),
+  geom_segment(aes(x = 4.5, xend = 4.5, y = 6.5, yend = 5.05),
                arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "darkgreen", linewidth = 1.5) +
   annotate("text", x = 4.5, y = 6.8, label = "Load: 10 kN", color = "darkgreen", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_rect(aes(xmin = 4, xmax = 5, ymin = 4.4, ymax = 5.2), fill = NA, color = "red", linewidth = 1.5, linetype = "dashed") +
+  geom_rect(aes(xmin = 4, xmax = 5, ymin = 4.3, ymax = 5.2), fill = NA, color = "red", linewidth = 1.5, linetype = "dashed") +
   annotate("text", x = 5.5, y = 5.8, label = "Issue 2:\nNo stiffener\nat load point", color = "red", size = 2.8 * diagram_text_scale, hjust = 0) +
 
-  ## Issue 3: Sharp corner at brace
-  geom_rect(aes(xmin = 1.4, xmax = 2.2, ymin = 1.4, ymax = 2.2), fill = NA, color = "red", linewidth = 1.5) +
-  geom_segment(aes(x = 0.5, xend = 1.5, y = 0.3, yend = 1.4),
+  ## Issue 3: Sharp (acute) corner where the brace meets the frame
+  geom_rect(aes(xmin = 1.4, xmax = 2.6, ymin = 1.4, ymax = 2.45), fill = NA, color = "red", linewidth = 1.5) +
+  geom_segment(aes(x = 0.6, xend = 1.4, y = 0.75, yend = 1.45),
                arrow = arrow(length = unit(0.15, "cm")), color = "red") +
-  annotate("text", x = -0.3, y = 1.0, label = "Issue 3:\nSharp corner\n(fatigue risk)", color = "red", size = 2.8 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = -0.4, y = 0.35, label = "Issue 3:\nSharp corner\n(fatigue risk)", color = "red", size = 2.8 * diagram_text_scale, hjust = 0) +
 
   ## Dimension annotations
-  geom_segment(aes(x = 1, xend = 8, y = 0.3, yend = 0.3),
+  geom_segment(aes(x = 1, xend = 8, y = -0.1, yend = -0.1),
                arrow = arrow(length = unit(0.1, "cm"), ends = "both"), linewidth = 0.5) +
-  annotate("text", x = 5.5, y = 0.2, label = "Frame width", size = 3 * diagram_text_scale) +
+  annotate("text", x = 4.5, y = -0.35, label = "Frame width", size = 3 * diagram_text_scale) +
 
   ## Title
   annotate("text", x = 4.5, y = 7.5, label = "Welded Frame - Initial Design Review", fontface = "bold", size = 4 * diagram_text_scale) +
 
-  coord_fixed(ratio = 1, xlim = c(-0.5, 9.5), ylim = c(-0.5, 8)) +
+  coord_fixed(ratio = 1, xlim = c(-0.5, 9.5), ylim = c(-0.6, 8)) +
   theme_welding
 ```
 
@@ -1703,22 +1785,23 @@ knitr::include_graphics("images/C26_A66_pg217.jpg")
 
 **Analysis of Assembly A:**
 
-- The symbol shows `.25` fillet welds with a flush contour symbol
-- "Weld A to be ground flat" indicates postweld finishing required
-- Process specified: Gas Metal-Arc Welding (GMAW)
-- The interpretation shows both dimension callout and final appearance
+The left column of the sheet shows the desired weld; the student draws the welding symbol on the right.
+
+- Weld A is an **unequal-leg fillet**, `.25` × `.50`, on one side of the T-joint only, so the symbol has a single fillet on the side the arrow points to, sized `.25 × .50`
+- "Weld A to be ground flat": a **flush contour** symbol with the finishing letter **G** (grinding)
+- "Gas metal-arc welding process to be used": **GMAW** in the tail
 
 **Analysis of Assembly B:**
 
-- Intermittent fillet welds: `.50` leg size
-- Pattern: `5.00` length with `10.00` pitch (center-to-center)
-- Welds on both sides with `3.00` spacing between
-- Concave contour specified (no postweld finishing needed)
+- `.50` fillet welds on **both** sides of the joint, in **staggered intermittent** segments (the upper and lower welds are offset)
+- Each segment is `3.00` long. Segments on the same side are `10.00` apart center-to-center (pitch), and the `5.00` dimension shows the half-pitch offset between the two sides
+- Callout: `.50 3.00-10.00` on both sides of the reference line with the fillet symbols offset (staggered)
+- "Welds approx. concave without postweld finishing": **concave contour** symbol, no finishing letter
 
 **Analysis of Assembly C:**
 
-- `.38` fillet weld, both sides
-- Dimensions `20.00` × `10.00` define the welded region
+- `.38` fillet weld on **both sides** of the T-joint
+- The weld is `20.00` long (the length goes to the right of the symbol), and it starts `10.00` from the end of the part. The `10.00` locates the weld with an ordinary dimension on the drawing; it does not go in the welding symbol
 - This demonstrates dimensional location of welds
 
 ::: {.callout-activity}
@@ -1737,8 +1820,9 @@ knitr::include_graphics("images/C26_A66_pg217.jpg")
 - A = .38 Carbon-Arc Weld
 - B = .31 Weld ground flat
 - C = .38 Carbon-Arc Weld
-- All three welds are fillet welds on a corner joint configuration
-- The "ground flat" requirement on B indicates a flush contour for appearance or fit-up with mating parts
+- All three are fillet welds. A and C run along the edges where the cover plate laps over the base plate, and B is a fillet weld around the inside of the hole (weld all around)
+- Carbon-arc welding is shown as **CAW** in the tail for A and C
+- The "ground flat" requirement on B is a **flush contour** symbol with finishing letter **G**, for appearance or fit-up with mating parts
 </details>
 
 ### Worked Example 2: Shaft Support Weldment (A-67)
@@ -1751,15 +1835,15 @@ knitr::include_graphics("images/C26_A67_pg218.jpg")
 
 **Component Identification:**
 
-- **Ribs** - Provide stiffening for the horizontal shafts
-- **Horizontal Shafts** - Main structural members
-- **Arms** - Connect horizontal shafts to base
-- **Vertical Shaft** - Center support element
-- **Base** - Foundation plate
+- **Ribs** - Triangular gussets that brace the arms against the base
+- **Horizontal Shafts** - Short shafts carried through the holes at the top of each arm
+- **Arms** - Upright lugs that carry the horizontal shafts and stand on the base
+- **Vertical Shaft** - Round post welded to the underside of the base
+- **Base** - Plate that ties the arms and the vertical shaft together
 
 **Weld Specifications (from the assignment notes):**
 
-1. Horizontal shafts welded both sides to arms: `.25` fillet welds on outside, `.19` fillet welds inside, flat finish (no postweld finishing)
+1. Horizontal shafts welded both sides to arms: `.25` fillet welds on outside, `.19` fillet welds inside, flat (flush) contour achieved without postweld finishing (flush contour symbol, no finishing letter)
 2. Arms welded both sides to base: `.19` fillet welds
 3. Ribs welded both sides to base and arms: `.12` fillet welds
 4. Vertical shaft welded to base: `.25` fillet weld, ground concave
@@ -1767,7 +1851,7 @@ knitr::include_graphics("images/C26_A67_pg218.jpg")
 **Process:** Carbon Arc Welding (CAW) specified for all welds
 
 ::: {.callout-discussion}
-**Group Discussion:** Why might the vertical shaft weld require a concave contour (ground concave) while other welds don't specify finishing? Consider the loading conditions on each joint.
+**Group Discussion:** Why might the vertical shaft weld require a concave contour produced by grinding, when the only other contour requirement (the flat shaft-to-arm welds) needs no finishing? Consider the loading conditions on each joint.
 :::
 
 <details>
@@ -1922,16 +2006,16 @@ tryit_sort(
 
 ## Practice Problems {#sec-weld-problems}
 
-**Problem 1:** A T-joint connects a 12 mm thick plate to a 8 mm thick plate using fillet welds on both sides. What is the maximum recommended fillet weld leg size?
+**Problem 1:** A T-joint connects an 8 mm thick stiffener to a 12 mm thick plate using fillet welds on both sides. What range of fillet weld leg size would you specify?
 
 <details>
 <summary>Click for solution</summary>
 
-Maximum leg size is limited by the **thinner plate** (8 mm).
+**Minimum (AWS D1.1):** the thinner part joined is 8 mm (6–12 mm band), so the minimum leg is **5 mm**.
 
-Maximum fillet leg size = **8 mm**
+**Upper sensible size:** with matching filler metal, double fillets with a leg of about 0.75 × 8 mm = **6 mm** develop the full strength of the 8 mm stiffener. A T-joint has no plate edge to melt away, so the edge limit does not apply. Welds bigger than 6 mm add no strength to the joint, because the stiffener is then the weak part. They only add filler metal, heat input and distortion.
 
-However, for practical edge clearance, **6-7 mm** would be commonly specified.
+Specify **5–6 mm** fillets on both sides.
 
 </details>
 
@@ -1968,7 +2052,7 @@ $$CE = 0.25 + \frac{1.2}{6} + \frac{0.5 + 0.3 + 0}{5} + \frac{0 + 0}{15}$$
 
 $$CE = 0.25 + 0.20 + 0.16 + 0 = 0.61$$
 
-With CE = **0.61**, this falls in the "Fair to Poor" weldability range.
+With CE = **0.61** (above 0.55), this falls in the "Poor" weldability zone.
 
 **Preheating IS required** - typically 150-200°C minimum. Low-hydrogen electrodes should be used, and post-weld heat treatment may be advisable.
 
