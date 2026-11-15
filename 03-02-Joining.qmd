@@ -248,7 +248,7 @@ Adhesive bonding uses chemical compounds that cure to form a bond between surfac
 
 ## Mechanical Fastening {#sec-mechanical-fastening}
 
-Most mechanical fasteners provide non-permanent joining that allows for disassembly (rivets are the permanent exception). For detailed coverage of bolted joints, see Chapter @sec-chap-03-bolts.
+Most mechanical fasteners provide non-permanent joining that allows for disassembly (rivets are the permanent exception). For detailed coverage of bolted joints, see @sec-chap-03-bolts.
 
 ### Categories of Mechanical Fasteners
 

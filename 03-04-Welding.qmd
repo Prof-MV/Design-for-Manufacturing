@@ -130,14 +130,14 @@ ggplot() +
 | **Weld Root** | The points at which the back of the weld intersects the base metal |
 | **Reinforcement** | Weld metal in excess of the quantity required to fill the joint |
 
-Figure @fig-basic-weld-terms-ref provides a professional reference showing these key terms in context for both fillet and groove weld configurations.
+@fig-basic-weld-terms-ref provides a professional reference showing these key terms in context for both fillet and groove weld configurations.
 
 ```{r fig-basic-weld-terms-ref, echo=FALSE, fig.cap="Basic welding terms showing fillet weld and groove weld anatomy with key dimensions labeled. Adapted from Jensen (2016).", fig.align='center', out.width='90%'}
 knitr::include_graphics("images/C26_F01_pg210.jpg")
 ```
 
 ::: {.callout-check}
-**Quick Check:** Looking at Figure @fig-basic-weld-terms-ref, can you identify the difference between the "weld size (leg)" on a fillet weld versus the "throat" dimension? Why is the throat dimension critical for weld strength calculations?
+**Quick Check:** Looking at @fig-basic-weld-terms-ref, can you identify the difference between the "weld size (leg)" on a fillet weld versus the "throat" dimension? Why is the throat dimension critical for weld strength calculations?
 :::
 
 > **❓ Quick Question:** Why might the Heat Affected Zone (HAZ) be a concern in welded structures, even though the metal there never actually melted?
@@ -167,7 +167,7 @@ A **weld joint** is the configuration of the parts to be joined. The five basic 
 knitr::include_graphics("images/C26_F02_pg211.jpg")
 ```
 
-Figure @fig-basic-joint-types-ref shows these five fundamental joint configurations as 3D representations. Each joint type has specific applications based on the geometry of the parts being joined and the loading conditions.
+@fig-basic-joint-types-ref shows these five fundamental joint configurations as 3D representations. Each joint type has specific applications based on the geometry of the parts being joined and the loading conditions.
 
 ```{r joint-types, echo=FALSE, fig.width=12, fig.height=8, fig.align='center', fig.cap="The five basic types of weld joints with schematic cross-sections."}
 ggplot() +
@@ -546,7 +546,7 @@ The trade-off is that the plate must be flipped or welders must work from both s
 
 ### Single vs. Double Weld Configurations
 
-Figure @fig-weld-types-config-ref provides a comprehensive reference showing single and double configurations for various weld types.
+@fig-weld-types-config-ref provides a comprehensive reference showing single and double configurations for various weld types.
 
 ```{r fig-weld-types-config-ref, echo=FALSE, fig.cap="Types of welds showing single and double configurations for fillet, square groove, bevel groove, V-groove, J-groove, and U-groove welds. Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
 knitr::include_graphics("images/C26_F05_pg212.jpg")
@@ -578,13 +578,13 @@ Welding symbols provide a standardized way to communicate welding requirements o
 
 ### Standard Welding Symbol Elements
 
-Figure @fig-weld-symbol-elements-ref shows the standard location of elements in a welding symbol according to AWS (American Welding Society) standards.
+@fig-weld-symbol-elements-ref shows the standard location of elements in a welding symbol according to AWS (American Welding Society) standards.
 
 ```{r fig-weld-symbol-elements-ref, echo=FALSE, fig.cap="Standard location of elements of a welding symbol showing all possible positions for size, length, pitch, groove angle, and supplementary symbols. Adapted from Jensen (2016).", fig.align='center', out.width='85%'}
 knitr::include_graphics("images/C26_F03_pg211.jpg")
 ```
 
-**Key points from Figure @fig-weld-symbol-elements-ref:**
+**Key points from @fig-weld-symbol-elements-ref:**
 
 - **Reference line** - The horizontal line to which all symbol elements are attached
 - **Arrow** - Points to the joint location; the arrow side vs. other side convention determines weld placement
@@ -598,7 +598,7 @@ knitr::include_graphics("images/C26_F03_pg211.jpg")
 
 ### Basic Weld Type Symbols
 
-Figure @fig-basic-weld-symbols-ref shows the basic weld symbols for common weld types, organized by category.
+@fig-basic-weld-symbols-ref shows the basic weld symbols for common weld types, organized by category.
 
 ```{r fig-basic-weld-symbols-ref, echo=FALSE, fig.cap="Basic weld symbols shown on the reference line, including fillet, plug/slot, spot, seam, and various groove weld symbols. Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
 knitr::include_graphics("images/C26_F04_pg212.jpg")
@@ -805,7 +805,7 @@ ggplot() +
   theme_welding
 ```
 
-Figure @fig-supplementary-symbols-ref provides the standard AWS supplementary symbols as a quick reference.
+@fig-supplementary-symbols-ref provides the standard AWS supplementary symbols as a quick reference.
 
 ```{r fig-supplementary-symbols-ref, echo=FALSE, fig.cap="Supplementary welding symbols including weld all around, field weld, melt-thru, backing/spacer material, consumable insert, and contour symbols (flush, convex, concave). Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
 knitr::include_graphics("images/C26_F06_pg213.jpg")
@@ -835,7 +835,7 @@ This is an **intermittent fillet weld** pattern: 50 mm long welds spaced 100 mm 
 
 ### Welding Process Designations
 
-When a specific welding process is required, it is indicated in the tail of the welding symbol using standard letter designations. Figure @fig-process-designations-ref provides the complete AWS designation system.
+When a specific welding process is required, it is indicated in the tail of the welding symbol using standard letter designations. @fig-process-designations-ref provides the complete AWS designation system.
 
 ```{r fig-process-designations-ref, echo=FALSE, fig.cap="Designation of welding processes by letters according to AWS standards. Includes brazing, oxyfuel gas welding, resistance welding, arc welding, and other specialized processes. Adapted from Jensen (2016).", fig.align='center', out.width='70%'}
 knitr::include_graphics("images/C26_F07_pg213.jpg")
@@ -876,13 +876,13 @@ knitr::include_graphics("images/C26_F09_pg214.jpg")
 
 ### Reading Fillet Weld Specifications
 
-Figure @fig-typical-fillet-welds-ref provides a comprehensive reference for interpreting fillet weld symbols with various dimension configurations.
+@fig-typical-fillet-welds-ref provides a comprehensive reference for interpreting fillet weld symbols with various dimension configurations.
 
 ```{r fig-typical-fillet-welds-ref, echo=FALSE, fig.cap="Typical fillet weld symbol configurations showing: (1) arrow side, (2) other side, (3) both sides with different sizes, (4) weld all around, (5) contour symbol, (6) postweld finishing, (7-9) intermittent weld patterns. Adapted from Jensen (2016).", fig.align='center', out.width='60%'}
 knitr::include_graphics("images/C26_F10_pg214.jpg")
 ```
 
-**Key interpretations from Figure @fig-typical-fillet-welds-ref:**
+**Key interpretations from @fig-typical-fillet-welds-ref:**
 
 1. **Arrow side only:** Symbol below the reference line - weld on the side the arrow points to
 2. **Other side only:** Symbol above the reference line - weld on the opposite side
@@ -895,7 +895,7 @@ knitr::include_graphics("images/C26_F10_pg214.jpg")
 9. **Staggered intermittent:** Welds offset between sides for better stress distribution
 
 ::: {.callout-check}
-**Quick Check:** Looking at row 9 in Figure @fig-typical-fillet-welds-ref, why might an engineer specify staggered intermittent welds rather than aligned intermittent welds?
+**Quick Check:** Looking at row 9 in @fig-typical-fillet-welds-ref, why might an engineer specify staggered intermittent welds rather than aligned intermittent welds?
 :::
 
 <details>
@@ -927,7 +927,7 @@ knitr::include_graphics("images/C26_F11_pg215.jpg")
 
 ### When to Use All-Around Symbols
 
-Figure @fig-all-around-examples-ref illustrates when the all-around symbol is required versus when it's not needed.
+@fig-all-around-examples-ref illustrates when the all-around symbol is required versus when it's not needed.
 
 ```{r fig-all-around-examples-ref, echo=FALSE, fig.cap="The use of all-around symbols. Examples 1-2 show when all-around IS required (non-circular profiles). Examples 3-4 show when all-around is NOT required (circular profiles that inherently require continuous welding). Adapted from Jensen (2016).", fig.align='center', out.width='70%'}
 knitr::include_graphics("images/C26_F12_pg216.jpg")
@@ -970,7 +970,7 @@ knitr::include_graphics("images/C27_F01_pg219.jpg")
 
 ### Groove Weld Combined Dimensions
 
-Figure @fig-groove-combined-dims-ref shows how multiple dimensions are combined on groove weld symbols.
+@fig-groove-combined-dims-ref shows how multiple dimensions are combined on groove weld symbols.
 
 ```{r fig-groove-combined-dims-ref, echo=FALSE, fig.cap="Groove weld symbol showing use of combined dimensions. The depth of preparation (S) is shown without parentheses, while the groove weld size/effective throat (E) is shown in parentheses. Both sides of a double-groove weld are fully specified. Adapted from Jensen (2016).", fig.align='center', out.width='80%'}
 knitr::include_graphics("images/C27_F02_pg219.jpg")
@@ -985,7 +985,7 @@ knitr::include_graphics("images/C27_F02_pg219.jpg")
 | Groove angle | Outside the weld symbol (below it for arrow side, above it for other side) | Included angle of the groove |
 | Root opening | Inside the weld symbol | Gap at the root before welding |
 
-**Example from Figure @fig-groove-combined-dims-ref:**
+**Example from @fig-groove-combined-dims-ref:**
 
 - `.31 (.38)` means: 0.31" depth of groove preparation (S), 0.38" groove weld size (E). E is larger than S here because the weld penetrates beyond the prepared groove into the root.
 - `25°` is the groove angle on each side
@@ -1029,7 +1029,7 @@ knitr::include_graphics("images/C27_F04_pg220.jpg")
 | **Application** | Critical joints | Secondary members, brackets |
 | **Symbol** | No size shown (full by default) | Size specified |
 
-**Reading PJP symbols from Figure @fig-pjp-welds-ref:**
+**Reading PJP symbols from @fig-pjp-welds-ref:**
 
 - `(.75)` on the square groove - groove weld size (effective throat) of 0.75"; a square groove has no preparation, so no S is given
 - `(.50)` with `0` and `60°` on the V-groove - 0.50" weld size, zero root opening, 60° groove angle
@@ -1777,7 +1777,7 @@ The following examples demonstrate how to interpret welding symbols on actual en
 
 ### Worked Example 1: Fillet Weld Assembly (A-66)
 
-Figure @fig-fillet-weld-assignment-ref shows a comprehensive fillet weld assignment with multiple weld configurations.
+@fig-fillet-weld-assignment-ref shows a comprehensive fillet weld assignment with multiple weld configurations.
 
 ```{r fig-fillet-weld-assignment-ref, echo=FALSE, fig.cap="Fillet weld assignment (A-66) showing five different assemblies with various fillet weld specifications. Practice interpreting weld symbols and creating drawing callouts. Adapted from Jensen (2016).", fig.align='center', out.width='75%'}
 knitr::include_graphics("images/C26_A66_pg217.jpg")
@@ -1805,7 +1805,7 @@ The left column of the sheet shows the desired weld; the student draws the weldi
 - This demonstrates dimensional location of welds
 
 ::: {.callout-activity}
-**Try This:** For Assembly D in Figure @fig-fillet-weld-assignment-ref, identify:
+**Try This:** For Assembly D in @fig-fillet-weld-assignment-ref, identify:
 
 1. What weld sizes are specified (A, B, C)?
 2. What process is indicated?
@@ -1827,7 +1827,7 @@ The left column of the sheet shows the desired weld; the student draws the weldi
 
 ### Worked Example 2: Shaft Support Weldment (A-67)
 
-Figure @fig-shaft-support-assignment-ref presents a more complex welded assembly with multiple components and weld specifications.
+@fig-shaft-support-assignment-ref presents a more complex welded assembly with multiple components and weld specifications.
 
 ```{r fig-shaft-support-assignment-ref, echo=FALSE, fig.cap="Shaft support welding assignment (A-67) showing a multi-component weldment with various fillet weld specifications for ribs, arms, shafts, and base connections. Adapted from Jensen (2016).", fig.align='center', out.width='75%'}
 knitr::include_graphics("images/C26_A67_pg218.jpg")
@@ -2066,7 +2066,7 @@ The following assignments provide comprehensive practice in reading welding draw
 
 ### Assignment 1: Base Skid Assembly (A-68)
 
-Figure @fig-base-skid-assignment-ref shows a complex welded assembly with detailed dimensions and welding specifications.
+@fig-base-skid-assignment-ref shows a complex welded assembly with detailed dimensions and welding specifications.
 
 ```{r fig-base-skid-assignment-ref, echo=FALSE, fig.cap="Base skid welding assignment (A-68). This comprehensive assembly drawing includes multiple views, dimensioning, hole specifications, and various weld callouts. Practice identifying weld types, sizes, and locations. Adapted from Jensen (2016).", fig.align='center', out.width='95%'}
 knitr::include_graphics("images/C27_A68_pg224-25.jpg")
@@ -2099,7 +2099,7 @@ knitr::include_graphics("images/C27_A68_pg224-25.jpg")
 
 ### Assignment 2: Groove Welds Interpretation (A-69)
 
-Figure @fig-groove-welds-assignment-ref presents three assemblies focusing on groove weld specifications.
+@fig-groove-welds-assignment-ref presents three assemblies focusing on groove weld specifications.
 
 ```{r fig-groove-welds-assignment-ref, echo=FALSE, fig.cap="Groove welds assignment (A-69). Three assemblies with various groove weld types including bevel, V-groove, and backing welds. The circled areas indicate locations where detailed weld sketches should be made. Adapted from Jensen (2016).", fig.align='center', out.width='75%'}
 knitr::include_graphics("images/C27_A69_pg226.jpg")
