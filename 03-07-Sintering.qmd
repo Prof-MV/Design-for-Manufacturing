@@ -148,12 +148,10 @@ The resulting "green compact" has sufficient strength to be handled but is still
 ```{r fig-compaction-pressure, echo=FALSE, fig.cap="Effect of compaction pressure on green density for iron powder.", fig.align='center', fig.width=8, fig.height=5}
 library(ggplot2)
 
-# Generate compaction curve data
-pressure <- seq(100, 800, by = 25)
-# Typical compaction behavior follows a logarithmic relationship
-set.seed(42)
-density <- 5.2 + 1.6 * log(pressure/100) + rnorm(length(pressure), 0, 0.05)
-density <- pmin(density, 7.2)  # Cap at ~92% of theoretical density (7.87)
+# Smooth compaction curve for a lubricated sponge-iron powder: density approaches the
+# theoretical value asymptotically (about 6.6 g/cm3 at 400 MPa, 7.0 at 600, 7.2 at 800)
+pressure <- seq(100, 800, by = 10)
+density <- 7.87 - 2.71 * exp(-0.00189 * pressure)
 
 compaction_data <- data.frame(
   pressure = pressure,
@@ -162,15 +160,17 @@ compaction_data <- data.frame(
 )
 
 ggplot(compaction_data, aes(x = pressure, y = density)) +
+  annotate("rect", xmin = 400, xmax = 700, ymin = -Inf, ymax = Inf, fill = "steelblue", alpha = 0.08) +
+  annotate("text", x = 550, y = 5.55, label = "Typical press\nrange", color = "steelblue", size = 3 * diagram_text_scale) +
   geom_line(color = "steelblue", linewidth = 1.2) +
   geom_hline(yintercept = 7.87, linetype = "dashed", color = "red") +
-  annotate("text", x = 700, y = 7.95, label = "Theoretical Density (7.87 g/cm³)",
+  annotate("text", x = 250, y = 7.95, label = "Theoretical Density (7.87 g/cm³)",
            color = "red", size = 3.5 * diagram_text_scale) +
-  geom_hline(yintercept = 6.3, linetype = "dotted", color = "darkgreen") +
-  annotate("text", x = 700, y = 6.4, label = "80% - Structural Parts",
+  geom_hline(yintercept = 0.80 * 7.87, linetype = "dotted", color = "darkgreen") +
+  annotate("text", x = 720, y = 0.80 * 7.87 - 0.1, label = "80% - Structural Parts",
            color = "darkgreen", size = 3 * diagram_text_scale) +
-  geom_hline(yintercept = 5.5, linetype = "dotted", color = "purple") +
-  annotate("text", x = 700, y = 5.6, label = "70% - Self-Lubricating Bearings",
+  geom_hline(yintercept = 0.70 * 7.87, linetype = "dotted", color = "purple") +
+  annotate("text", x = 720, y = 0.70 * 7.87 - 0.1, label = "70% - Self-Lubricating Bearings",
            color = "purple", size = 3 * diagram_text_scale) +
   labs(
     title = "Compaction Curve for Iron Powder",
@@ -178,6 +178,7 @@ ggplot(compaction_data, aes(x = pressure, y = density)) +
     y = "Green Density (g/cm³)"
   ) +
   scale_y_continuous(
+    limits = c(5, 8),
     sec.axis = sec_axis(~ . / 7.87 * 100, name = "Percent Theoretical Density (%)")
   ) +
   theme_minimal() +
@@ -199,49 +200,37 @@ Sintering is the heart of the powder metallurgy process. The green compact is he
 ```{r fig-sintering-stages, echo=FALSE, fig.cap="Particle bonding evolution during sintering: from point contacts to neck growth and pore rounding.", fig.align='center', fig.width=10, fig.height=4}
 library(ggplot2)
 
+circ <- function(x0, y0, r, n = 60) { a <- seq(0, 2 * pi, length.out = n); data.frame(x = x0 + r * cos(a), y = y0 + r * sin(a)) }
+r <- 0.45
+## Each stage: centre distance (particles move together) and neck half-height
+st <- data.frame(cx = c(1.5, 4.5, 7.5, 10.5), d = c(0.90, 0.84, 0.74, 0.62), neck = c(0, 0.13, 0.25, 0.36),
+                 fill = c("gray60", "gray50", "gray40", "gray30"))
+pair <- function(i) {
+  rbind(cbind(circ(st$cx[i] - st$d[i] / 2, 2, r), g = paste0(i, "a")),
+        cbind(circ(st$cx[i] + st$d[i] / 2, 2, r), g = paste0(i, "b")))
+}
+particles <- do.call(rbind, lapply(1:4, function(i) cbind(pair(i), fill = st$fill[i])))
+necks <- st[st$neck > 0, ]
+
 ggplot() +
-  # Stage 1: Initial Contact
-  annotate("text", x = 1.5, y = 3.8, label = "Initial\nContact", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  # Two particles touching at a point
-  geom_point(aes(x = 1.2, y = 2), size = 25, color = "gray60") +
-  geom_point(aes(x = 1.8, y = 2), size = 25, color = "gray60") +
-  annotate("text", x = 1.5, y = 0.8, label = "Point contact\nbetween particles", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  geom_polygon(data = particles, aes(x, y, group = g, fill = fill), color = NA) +
+  geom_rect(data = necks, aes(xmin = cx - 0.18, xmax = cx + 0.18, ymin = 2 - neck, ymax = 2 + neck, fill = fill), color = NA) +
+  scale_fill_identity() +
+  ## Small isolated pore left inside the final-stage body
+  geom_polygon(data = circ(10.5, 2.12, 0.05), aes(x, y), fill = "white", color = NA) +
+  geom_polygon(data = circ(10.42, 1.88, 0.035), aes(x, y), fill = "white", color = NA) +
 
-  # Stage 2: Early Sintering
-  annotate("text", x = 4.5, y = 3.8, label = "Early\nSintering", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_point(aes(x = 4.25, y = 2), size = 25, color = "gray50") +
-  geom_point(aes(x = 4.75, y = 2), size = 25, color = "gray50") +
-  # Small neck
-  geom_rect(aes(xmin = 4.4, xmax = 4.6, ymin = 1.8, ymax = 2.2), fill = "gray50") +
-  annotate("text", x = 4.5, y = 0.8, label = "Neck begins\nto form", size = 2.5 * diagram_text_scale, fontface = "italic") +
-
-  # Stage 3: Intermediate Sintering
-  annotate("text", x = 7.5, y = 3.8, label = "Intermediate\nSintering", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  geom_point(aes(x = 7.3, y = 2), size = 25, color = "gray40") +
-  geom_point(aes(x = 7.7, y = 2), size = 25, color = "gray40") +
-  # Larger neck
-  geom_rect(aes(xmin = 7.35, xmax = 7.65, ymin = 1.7, ymax = 2.3), fill = "gray40") +
-  annotate("text", x = 7.5, y = 0.8, label = "Neck growth,\npore rounding", size = 2.5 * diagram_text_scale, fontface = "italic") +
-
-  # Stage 4: Final Sintering
-  annotate("text", x = 10.5, y = 3.8, label = "Final\nSintering", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  # Nearly merged particles
-  geom_point(aes(x = 10.35, y = 2), size = 25, color = "gray30") +
-  geom_point(aes(x = 10.65, y = 2), size = 25, color = "gray30") +
-  geom_rect(aes(xmin = 10.25, xmax = 10.75, ymin = 1.6, ymax = 2.4), fill = "gray30") +
-  # Small remaining pore
-  geom_point(aes(x = 10.5, y = 2.5), size = 4, color = "white") +
-  annotate("text", x = 10.5, y = 0.8, label = "Strong bonds,\nisolated pores", size = 2.5 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = st$cx, y = 3.4, label = c("Initial\nContact", "Early\nSintering", "Intermediate\nSintering", "Final\nSintering"),
+           fontface = "bold", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = st$cx, y = 1.0,
+           label = c("Point contact\nbetween particles", "Neck begins\nto form", "Neck growth,\npore rounding", "Strong bonds,\nisolated pores"),
+           size = 2.5 * diagram_text_scale, fontface = "italic") +
 
   # Arrows between stages
-  geom_segment(aes(x = 2.3, xend = 3.5, y = 2, yend = 2),
-               arrow = arrow(length = unit(0.2, "cm")), linewidth = 0.8) +
-  geom_segment(aes(x = 5.3, xend = 6.5, y = 2, yend = 2),
-               arrow = arrow(length = unit(0.2, "cm")), linewidth = 0.8) +
-  geom_segment(aes(x = 8.3, xend = 9.5, y = 2, yend = 2),
+  geom_segment(aes(x = c(2.6, 5.6, 8.6), xend = c(3.4, 6.4, 9.4), y = 2, yend = 2),
                arrow = arrow(length = unit(0.2, "cm")), linewidth = 0.8) +
 
-  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0.3, 4.2)) +
+  coord_fixed(ratio = 1, xlim = c(0.5, 11.5), ylim = c(0.5, 3.9)) +
   theme_void() +
   labs(title = "Evolution of Particle Bonding During Sintering") +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
@@ -290,7 +279,7 @@ ggplot(density_data, aes(y = category)) +
   geom_segment(aes(x = min_density, xend = max_density, yend = category, color = category),
                linewidth = 15, lineend = "round") +
   geom_text(aes(x = (min_density + max_density)/2, label = porosity),
-            color = "white", fontface = "bold", size = 3.5 * diagram_text_scale) +
+            color = ifelse(density_data$category == "Filters", "black", "white"), fontface = "bold", size = 3.5 * diagram_text_scale) +
   scale_color_manual(values = c("Filters" = "lightblue",
                                  "Self-Lubricating\nBearings" = "purple",
                                  "Low-Strength\nStructural" = "darkgreen",
@@ -300,12 +289,14 @@ ggplot(density_data, aes(y = category)) +
   scale_x_continuous(breaks = seq(40, 100, 10), limits = c(35, 105)) +
   labs(
     title = "Sintered Density Ranges and Applications",
+    subtitle = "Bar position = density; label on each bar = the matching porosity",
     x = "Density (% of Theoretical)",
     y = NULL
   ) +
   theme_minimal() +
   theme(
     plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale),
+    plot.subtitle = element_text(hjust = 0.5),
     legend.position = "none",
     axis.text.y = element_text(size = 10 * chart_text_scale, face = "bold"),
     panel.grid.major.y = element_blank()
@@ -353,69 +344,49 @@ This self-regulating system means the bearing can operate for extended periods�
 ```{r fig-self-lub-mechanism, echo=FALSE, fig.cap="Cross-section of a self-lubricating bearing showing oil release during operation.", fig.align='center', fig.width=10, fig.height=5}
 library(ggplot2)
 
+## End view of a sintered bushing: porous ring, bore, and shaft
+circ <- function(x0, y0, r, n = 80) { a <- seq(0, 2 * pi, length.out = n); data.frame(x = x0 + r * cos(a), y = y0 + r * sin(a)) }
+ring_pores <- function(x0, y0, n, seed) {
+  set.seed(seed)
+  rr <- runif(n, 1.0, 1.6); aa <- runif(n, 0, 2 * pi)
+  data.frame(x = x0 + rr * cos(aa), y = y0 + rr * sin(aa))
+}
+Rb <- 0.9; Rs <- 0.8          # bore and shaft radius (clearance exaggerated)
+a_rot <- seq(200, 80, length.out = 20) * pi / 180
+
 ggplot() +
-  # Bearing body (porous)
-  geom_rect(aes(xmin = 1, xmax = 5, ymin = 1, ymax = 4), fill = "tan", color = "black", linewidth = 1) +
+  ## AT REST: pores full of oil, shaft resting on the bottom of the bore
+  geom_polygon(data = circ(3, 2.5, 1.75), aes(x, y), fill = "tan", color = "black", linewidth = 1) +
+  geom_point(data = ring_pores(3, 2.5, 26, 1), aes(x, y), size = 3, color = "gold3") +
+  geom_polygon(data = circ(3, 2.5, Rb), aes(x, y), fill = "white", color = "black", linewidth = 0.6) +
+  geom_polygon(data = circ(3, 2.5 - (Rb - Rs), Rs), aes(x, y), fill = "gray60", color = "black", linewidth = 1) +
+  annotate("text", x = 3, y = 2.4, label = "Shaft\n(stationary)", size = 2.8 * diagram_text_scale) +
 
-  # Pores with oil (small circles)
-  geom_point(aes(x = c(1.5, 2, 2.5, 3, 3.5, 4, 4.5, 1.7, 2.3, 2.8, 3.3, 3.8, 4.3,
-                       1.4, 1.9, 2.4, 2.9, 3.4, 3.9, 4.4),
-                 y = c(1.5, 1.6, 1.4, 1.7, 1.5, 1.6, 1.4, 2.2, 2.3, 2.1, 2.4, 2.2, 2.3,
-                       3, 3.1, 2.9, 3.2, 3, 3.1, 2.9)),
-             size = 4, color = "gold3", alpha = 0.8) +
-
-  # Shaft bore
-  geom_rect(aes(xmin = 2, xmax = 4, ymin = 1.8, ymax = 3.2), fill = "white", color = "black", linewidth = 0.5) +
-
-  # Shaft
-  geom_rect(aes(xmin = 2.1, xmax = 3.9, ymin = 1.9, ymax = 3.1), fill = "gray50", color = "black", linewidth = 1) +
-
-  # Oil film
-  annotate("segment", x = 2.05, xend = 2.05, y = 1.9, yend = 3.1, color = "gold", linewidth = 2) +
-  annotate("segment", x = 3.95, xend = 3.95, y = 1.9, yend = 3.1, color = "gold", linewidth = 2) +
-
-  # Rotation arrow on shaft
-  geom_curve(aes(x = 3, xend = 3.3, y = 2.5, yend = 2.8), curvature = -0.3,
-             arrow = arrow(length = unit(0.15, "cm")), linewidth = 1, color = "black") +
-  annotate("text", x = 3, y = 2.2, label = "Rotation", size = 3 * diagram_text_scale) +
-
-  # Right side - Operating condition
-  geom_rect(aes(xmin = 7, xmax = 11, ymin = 1, ymax = 4), fill = "tan", color = "black", linewidth = 1) +
-
-  # Fewer pores (oil released)
-  geom_point(aes(x = c(7.5, 8, 8.5, 9, 9.5, 10, 10.5, 7.7, 8.3, 8.8, 9.3, 9.8, 10.3),
-                 y = c(1.5, 1.6, 1.4, 1.7, 1.5, 1.6, 1.4, 3, 3.1, 2.9, 3.2, 3, 3.1)),
-             size = 3, color = "gold3", alpha = 0.5) +
-
-  # Shaft bore
-  geom_rect(aes(xmin = 8, xmax = 10, ymin = 1.8, ymax = 3.2), fill = "white", color = "black", linewidth = 0.5) +
-
-  # Shaft (slightly offset - hydrodynamic)
-  geom_rect(aes(xmin = 8.05, xmax = 9.85, ymin = 1.85, ymax = 3.05), fill = "gray50", color = "black", linewidth = 1) +
-
-  # Thick oil film (hydrodynamic)
-  annotate("segment", x = 8.02, xend = 8.02, y = 1.85, yend = 3.05, color = "gold", linewidth = 4) +
-  annotate("segment", x = 9.88, xend = 9.88, y = 1.85, yend = 3.05, color = "gold", linewidth = 1) +
-
-  # Fast rotation
-  geom_curve(aes(x = 9, xend = 9.4, y = 2.45, yend = 2.9), curvature = -0.4,
-             arrow = arrow(length = unit(0.2, "cm")), linewidth = 1.5, color = "black") +
-  annotate("text", x = 9, y = 2.15, label = "Fast rotation", size = 2.5 * diagram_text_scale, color = "white") +
+  ## OPERATING: oil drawn out of the pores fills the clearance; shaft lifts on the film
+  geom_polygon(data = circ(9, 2.5, 1.75), aes(x, y), fill = "tan", color = "black", linewidth = 1) +
+  geom_point(data = ring_pores(9, 2.5, 14, 2), aes(x, y), size = 2.5, color = "gold3", alpha = 0.6) +
+  geom_polygon(data = circ(9, 2.5, Rb), aes(x, y), fill = "gold", color = "black", linewidth = 0.6) +
+  geom_polygon(data = circ(9.04, 2.45, Rs), aes(x, y), fill = "gray60", color = "black", linewidth = 1) +
+  geom_path(aes(x = 9.04 + 0.45 * cos(a_rot), y = 2.45 + 0.45 * sin(a_rot)), linewidth = 1,
+            arrow = arrow(length = unit(0.15, "cm"))) +
+  annotate("text", x = 9.04, y = 2.4, label = "Rotating", size = 2.8 * diagram_text_scale) +
+  geom_segment(aes(x = 10.9, xend = 9.85, y = 4.2, yend = 2.95), arrow = arrow(length = unit(0.12, "cm")), color = "darkgoldenrod") +
+  annotate("text", x = 11.1, y = 4.45, label = "Oil film", color = "darkgoldenrod", size = 3 * diagram_text_scale, fontface = "bold") +
 
   # Labels
-  annotate("text", x = 3, y = 4.5, label = "AT REST", fontface = "bold", size = 4 * diagram_text_scale) +
-  annotate("text", x = 9, y = 4.5, label = "OPERATING", fontface = "bold", size = 4 * diagram_text_scale) +
-  annotate("text", x = 3, y = 0.5, label = "Oil stored in pores", size = 3 * diagram_text_scale, fontface = "italic") +
-  annotate("text", x = 9, y = 0.5, label = "Oil released to form\nhydrodynamic film", size = 3 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 3, y = 4.75, label = "AT REST", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = 9, y = 4.75, label = "OPERATING", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = 3, y = 0.3, label = "Oil stored in the pores", size = 3 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 9, y = 0.3, label = "Heat and shaft rotation draw oil out\nto form a film in the clearance", size = 3 * diagram_text_scale, fontface = "italic") +
 
   # Arrow between states
-  geom_segment(aes(x = 5.5, xend = 6.5, y = 2.5, yend = 2.5),
+  geom_segment(aes(x = 5.2, xend = 6.8, y = 2.5, yend = 2.5),
                arrow = arrow(length = unit(0.25, "cm")), linewidth = 1.2) +
-  annotate("text", x = 6, y = 3, label = "Heat &\nRotation", size = 2.5 * diagram_text_scale) +
+  annotate("text", x = 6, y = 3.0, label = "Start\nrotation", size = 2.5 * diagram_text_scale) +
 
-  coord_fixed(ratio = 1, xlim = c(0, 12), ylim = c(0, 5)) +
+  coord_fixed(ratio = 1, xlim = c(0.5, 12), ylim = c(-0.1, 5)) +
   theme_void() +
-  labs(title = "Self-Lubricating Bearing Operation") +
+  labs(title = "Self-Lubricating Bearing Operation (End View)") +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
 ```
 
@@ -557,53 +528,52 @@ This hydrodynamic action requires a minimum speed to develop—below this speed,
 ```{r fig-hydrodynamic, echo=FALSE, fig.cap="Hydrodynamic film formation in an oil-lubricated bearing at speed.", fig.align='center', fig.width=9, fig.height=5}
 library(ggplot2)
 
+## Journal bearing end view. The load W acts downward; the shaft turns counter-clockwise,
+## drags oil into the narrowing gap on its lower left, and runs eccentric toward the lower right.
+circ <- function(x0, y0, r, n = 120) { a <- seq(0, 2 * pi, length.out = n); data.frame(x = x0 + r * cos(a), y = y0 + r * sin(a)) }
+Rb <- 2.0; Rs <- 1.7
+ex <- 0.17; ey <- -0.22                      # eccentricity of the shaft centre
+a_rot <- seq(210, 100, length.out = 25) * pi / 180
+## Pressure arrows on the converging side, peaking just before the minimum film
+pa <- seq(215, 300, length.out = 7) * pi / 180
+pl <- 0.25 + 0.65 * sin((seq(0, 1, length.out = 7)) * pi * 0.85)
+
 ggplot() +
-  # Bearing (outer circle representation)
-  geom_rect(aes(xmin = 1, xmax = 9, ymin = 1, ymax = 7), fill = "tan", color = "black", linewidth = 1) +
+  # Bearing (bushing) with bore
+  geom_polygon(data = circ(5, 4, 2.9), aes(x, y), fill = "tan", color = "black", linewidth = 1) +
+  geom_polygon(data = circ(5, 4, Rb), aes(x, y), fill = "gold", color = "black", linewidth = 0.8) +
 
-  # Bore (circular cutout representation)
-  geom_point(aes(x = 5, y = 4), size = 70, color = "white") +
-  geom_point(aes(x = 5, y = 4), size = 68, color = "black", shape = 1, stroke = 1) +
-
-  # Shaft (offset to right/up for hydrodynamic illustration)
-  geom_point(aes(x = 5.15, y = 4.1), size = 55, color = "gray50") +
-  geom_point(aes(x = 5.15, y = 4.1), size = 53, color = "gray60") +
-
-  # Oil film - varying thickness
-  # Thick side (left/bottom)
-  annotate("segment", x = 3.2, xend = 3.5, y = 4, yend = 4,
-           color = "gold", linewidth = 8) +
-  annotate("segment", x = 4.5, xend = 4.5, y = 2.4, yend = 2.7,
-           color = "gold", linewidth = 6) +
-  # Thin side (right/top)
-  annotate("segment", x = 6.5, xend = 6.7, y = 4, yend = 4,
-           color = "gold", linewidth = 2) +
-  annotate("segment", x = 5.5, xend = 5.5, y = 5.4, yend = 5.5,
-           color = "gold", linewidth = 2) +
+  # Shaft, displaced toward the lower right
+  geom_polygon(data = circ(5 + ex, 4 + ey, Rs), aes(x, y), fill = "gray60", color = "black", linewidth = 1) +
 
   # Rotation direction
-  geom_curve(aes(x = 5.15, xend = 5.8, y = 4.1, yend = 4.7), curvature = -0.4,
-             arrow = arrow(length = unit(0.2, "cm")), linewidth = 1.2) +
-  annotate("text", x = 6.3, y = 5, label = "Rotation", size = 3.5 * diagram_text_scale) +
+  geom_path(aes(x = 5 + ex + 0.9 * cos(a_rot), y = 4 + ey + 0.9 * sin(a_rot)), linewidth = 1.2,
+            arrow = arrow(length = unit(0.2, "cm"))) +
+  annotate("text", x = 5 + ex, y = 4 + ey, label = "Rotation", size = 3.5 * diagram_text_scale) +
 
-  # Pressure distribution arrows
-  geom_segment(aes(x = 3.3, xend = 2.8, y = 4, yend = 4),
-               arrow = arrow(length = unit(0.15, "cm")), color = "red", linewidth = 1) +
-  geom_segment(aes(x = 3.3, xend = 2.5, y = 3.5, yend = 3.2),
-               arrow = arrow(length = unit(0.15, "cm")), color = "red", linewidth = 1) +
-  geom_segment(aes(x = 4.5, xend = 4.5, y = 2.5, yend = 1.8),
-               arrow = arrow(length = unit(0.15, "cm")), color = "red", linewidth = 1) +
+  # Load on the shaft
+  geom_segment(aes(x = 5 + ex, xend = 5 + ex, y = 4 + ey + 1.45, yend = 4 + ey + 0.5),
+               arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1.2, color = "darkblue") +
+  annotate("text", x = 5 + ex + 0.25, y = 4 + ey + 1.2, label = "W", color = "darkblue", fontface = "bold", size = 4 * diagram_text_scale) +
 
-  annotate("text", x = 2, y = 3.5, label = "High\nPressure\nZone", color = "red", size = 3 * diagram_text_scale, fontface = "bold") +
+  # Pressure acting on the shaft in the converging wedge
+  geom_segment(aes(x = 5 + ex + (Rs + pl) * cos(pa), xend = 5 + ex + Rs * cos(pa),
+                   y = 4 + ey + (Rs + pl) * sin(pa), yend = 4 + ey + Rs * sin(pa)),
+               arrow = arrow(length = unit(0.12, "cm")), color = "red", linewidth = 0.9) +
+  annotate("text", x = 2.0, y = 1.4, label = "High pressure\nin the converging\nwedge", color = "red", size = 3 * diagram_text_scale, fontface = "bold") +
+
+  # Film thickness labels
+  geom_segment(aes(x = 2.0, xend = 3.3, y = 6.6, yend = 5.25), arrow = arrow(length = unit(0.12, "cm"))) +
+  annotate("text", x = 1.6, y = 6.85, label = "Thick film\n(upper left)", size = 2.8 * diagram_text_scale) +
+  geom_segment(aes(x = 8.4, xend = 6.45, y = 1.4, yend = 2.45), arrow = arrow(length = unit(0.12, "cm"))) +
+  annotate("text", x = 8.7, y = 1.15, label = "Minimum film\nthickness", size = 2.8 * diagram_text_scale) +
 
   # Labels
-  annotate("text", x = 5, y = 0.3,
-           label = "Shaft 'floats' on oil film - no metal contact",
-           size = 3.5 * diagram_text_scale, fontface = "italic") +
-  annotate("text", x = 7.5, y = 4, label = "Thin film\n(convergent\nwedge)", size = 2.5 * diagram_text_scale, color = "black") +
-  annotate("text", x = 2.8, y = 4.5, label = "Thick\nfilm", size = 2.5 * diagram_text_scale, color = "black") +
+  annotate("text", x = 5, y = 0.35,
+           label = "Shaft 'floats' on the oil film - no metal contact (clearance exaggerated)",
+           size = 3.2 * diagram_text_scale, fontface = "italic") +
 
-  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 8)) +
+  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0.1, 7.4)) +
   theme_void() +
   labs(title = "Hydrodynamic Lubrication - Shaft Floats on Oil Film") +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 12 * chart_text_scale))
@@ -949,7 +919,9 @@ ggplot() +
   annotate("segment", x = 6.2, xend = 5.7, y = 2.15, yend = 1.8,
            arrow = arrow(length = unit(0.1, "cm")), color = "red") +
   annotate("text", x = 5.5, y = 1.5, label = "Undercut\n- NO", size = 2.5 * diagram_text_scale, color = "red") +
-  annotate("text", x = 9.5, y = 5.0, label = "Sharp\ncorners", size = 2.5 * diagram_text_scale, color = "red") +
+  annotate("segment", x = 9.35, xend = 9.03, y = 4.85, yend = 4.53,
+           arrow = arrow(length = unit(0.1, "cm")), color = "red") +
+  annotate("text", x = 9.5, y = 5.15, label = "Sharp\ncorners", size = 2.5 * diagram_text_scale, color = "red") +
 
   # Press direction arrows
   geom_segment(aes(x = 2.5, xend = 2.5, y = 0.8, yend = 1.3),
@@ -1165,7 +1137,7 @@ Volume of the compact:
 $$V = \frac{\pi d^2}{4} \times h = \frac{\pi (2.5)^2}{4} \times 1.5 = 7.36 \text{ cm}^3$$
 
 Green density:
-$$\rho_{green} = \frac{m}{V} = \frac{150}{7.36} = 6.52 \text{ g/cm}^3$$
+$$\rho_{green} = \frac{m}{V} = \frac{48}{7.36} = 6.52 \text{ g/cm}^3$$
 
 Percentage of theoretical density:
 $$\text{\% TD} = \frac{6.52}{7.87} \times 100 = 82.8\%$$
@@ -1210,7 +1182,7 @@ embed_youtube("olo_vK13WuU", "Self-Lubricating Bearing Manufacturing")
 ```
 
 ```{r video-sintering-process-animation, echo=FALSE, results='asis'}
-embed_youtube("4zXkn9iyC0c", "Sintering Process Animation")
+embed_youtube("4zXkn9iyC0c", "Compaction in Powder Metallurgy")
 ```
 
 **Reading:**

@@ -72,7 +72,7 @@ Effective DFM requires engineers to think beyond the functional requirements of 
 
 ## Manufacturing Processes Covered in This Section
 
-This section of the textbook explores design considerations for six major manufacturing process families:
+This section of the textbook explores design considerations for seven major manufacturing process families:
 
 | Chapter | Process | Key Applications |
 |:--------|:--------|:-----------------|
@@ -82,6 +82,7 @@ This section of the textbook explores design considerations for six major manufa
 | Welding | Fusing materials with heat | Bridges, pressure vessels, vehicle frames |
 | Machining | Removing material with cutting tools | Precision shafts, gears, aerospace components |
 | 3D Printing | Building parts layer by layer | Prototypes, custom medical devices, tooling |
+| Sintering (Powder Metallurgy) | Pressing metal powder and bonding it below the melting point | Self-lubricating bearings, small gears, filters |
 
 ```{r fig-process-comparison, echo=FALSE, fig.cap="Comparison of manufacturing processes by typical production volume and part complexity.", fig.align='center', fig.width=9, fig.height=6}
 library(ggplot2)
@@ -89,11 +90,11 @@ library(ggplot2)
 # Create comparison data
 processes <- data.frame(
   process = c("Sand Casting", "Die Casting", "Investment Casting",
-              "Stamping", "Machining", "3D Printing", "Welding"),
-  volume = c(3, 8, 4, 9, 5, 2, 4),
-  complexity = c(7, 6, 9, 5, 8, 10, 4),
+              "Stamping", "Machining", "3D Printing", "Welding", "Powder Metallurgy"),
+  volume = c(3, 8, 4, 9, 5, 2, 4, 7.5),
+  complexity = c(7, 6, 9, 5, 8, 10, 4, 4.8),
   category = c("Casting", "Casting", "Casting",
-               "Forming", "Subtractive", "Additive", "Joining")
+               "Forming", "Subtractive", "Additive", "Joining", "Powder")
 )
 
 ggplot(processes, aes(x = volume, y = complexity, color = category, label = process)) +
@@ -101,7 +102,7 @@ ggplot(processes, aes(x = volume, y = complexity, color = category, label = proc
   geom_text(vjust = -1, hjust = 0.5, size = 3.5 * diagram_text_scale, show.legend = FALSE) +
   scale_color_manual(values = c("Casting" = "darkorange", "Forming" = "steelblue",
                                  "Subtractive" = "forestgreen", "Additive" = "purple",
-                                 "Joining" = "brown")) +
+                                 "Joining" = "brown", "Powder" = "gray40")) +
   labs(
     title = "Manufacturing Process Selection Guide",
     x = "Typical Production Volume (Low to High)",

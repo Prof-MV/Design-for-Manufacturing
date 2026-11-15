@@ -53,7 +53,7 @@ These processes use a separate material (a filler) to create the bond between tw
 These methods rely on either a sticky substance or physical interlocking to hold parts together.
 
 * **Adhesive Joining:** This method uses chemical compounds (adhesives, glues, epoxies) that cure to form a chemical bond between the surfaces. Adhesives can join dissimilar materials (like metal to plastic), distribute stress over a wide area, and provide excellent sealing.
-* **Mechanical Fasteners:** These are non-permanent methods that use hardware to hold materials together. This category includes common items like **bolts, screws, rivets, nuts, pins, and clips**. The primary advantage of mechanical fasteners is that they allow for easy disassembly and reassembly for maintenance or repair.
+* **Mechanical Fasteners:** These methods use hardware to hold materials together. This category includes common items like **bolts, screws, nuts, pins, clips and rivets**. The primary advantage of most mechanical fasteners is that they allow for easy disassembly and reassembly for maintenance or repair; rivets are the exception, as they are permanent and must be drilled out to separate the parts.
 
 ## The Welding Process {#sec-welding-process}
 
@@ -88,7 +88,7 @@ knitr::include_graphics("images/Gemini_Generated_Image_7mwxtj7mwxtj7mwx.png")
 * **Gas Metal Arc Welding (GMAW or MIG Welding):** Uses a continuous, consumable wire electrode fed through a welding gun, while an externally supplied shielding gas (e.g., Argon, $\text{CO}_2$) protects the arc and weld pool. It is known for its speed and suitability for automated systems. 
 * **Gas Tungsten Arc Welding (GTAW or TIG Welding):** Uses a non-consumable tungsten electrode and an inert shielding gas (usually Argon). It typically requires a separate filler rod. TIG welding produces the highest quality welds, often used for critical applications and joining thin metals or reactive metals like aluminum and titanium. 
 
-```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Gas Tungsten Arc Welding (GATW)"}
+```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="Gas Tungsten Arc Welding (GTAW)"}
 knitr::include_graphics("images/Gemini_Generated_Image_ftcdd1ftcdd1ftcd.png")
 ```
 
@@ -203,7 +203,7 @@ ggplot() +
 |:------|:--------------|:------------|
 | Sn63/Pb37 | 183°C | Traditional electronics (leaded) |
 | SAC305 (Sn96.5/Ag3/Cu0.5) | 217-220°C | Lead-free electronics |
-| Sn/Pb/Ag | 179°C | Plumbing, high-reliability electronics |
+| Sn62/Pb36/Ag2 | 179°C | High-reliability electronics, silver-plated parts (leaded solders are banned for drinking-water plumbing) |
 
 ::: {.callout-check}
 **Quick Check:** A joint will operate at 300°C. Should you use brazing or soldering? Why?
@@ -248,7 +248,7 @@ Adhesive bonding uses chemical compounds that cure to form a bond between surfac
 
 ## Mechanical Fastening {#sec-mechanical-fastening}
 
-Mechanical fasteners provide non-permanent joining that allows for disassembly. For detailed coverage of bolted joints, see Chapter @sec-chap-03-bolts.
+Most mechanical fasteners provide non-permanent joining that allows for disassembly (rivets are the permanent exception). For detailed coverage of bolted joints, see Chapter @sec-chap-03-bolts.
 
 ### Categories of Mechanical Fasteners
 
@@ -312,7 +312,8 @@ scores <- matrix(c(
 
 # Create data frame
 selection_data <- expand.grid(Process = processes, Criterion = criteria)
-selection_data$Score <- as.vector(t(scores))
+## expand.grid varies Process fastest, so the matrix (rows = processes) is read column by column
+selection_data$Score <- as.vector(scores)
 
 ggplot(selection_data, aes(x = Criterion, y = Process, fill = Score)) +
   geom_tile(color = "white", linewidth = 0.5) +
@@ -480,7 +481,7 @@ tryit_sort(
 - Provides leak-proof seal for liquid containment
 - Stainless steel is readily weldable with proper technique
 - Service temperature (90°C) is well within weld capability
-- No filler metals or adhesives that could contaminate product
+- Autogenous (no filler) or matching stainless filler: no dissimilar metals, solders or adhesives that could contaminate the product
 
 Orbital TIG welding would be ideal for consistent, high-quality pipe joints.
 :::
@@ -541,7 +542,7 @@ Orbital TIG welding would be ideal for consistent, high-quality pipe joints.
 
 **Videos:**
 ```{r video-welding-basics, echo=FALSE, results='asis'}
-embed_youtube("2CIcvB72dmk", "Welding Process Overview")
+embed_youtube("GSmQm-V8w20", "Welding Processes Explained: MIG, TIG, Stick & More")
 ```
 
 **Reading:**

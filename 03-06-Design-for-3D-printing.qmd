@@ -37,10 +37,10 @@ embed_youtube("a42znmU6BLE", "3D Printing - An Introduction")
 
 All 3D printing processes start with a CAD model that is sent to software to prepare the design. Depending on the technology, the 3D printer might produce the part layer by layer by solidifying resin or sintering powder. The parts are then removed from the printer and post-processed for the specific application.
 
-For more detail on how 3D printing works, watch: [How Does 3D Printing Work?](https://youtu.be/Hr4DKHX9Hsg)
+For more detail on how 3D printing works, watch: [From Design to 3D Print: SLA Workflow Overview](https://youtu.be/Hr4DKHX9Hsg)
 
 ```{r video-how-does-3d-printing-work, echo=FALSE, results='asis'}
-embed_youtube("Hr4DKHX9Hsg", "How Does 3D Printing Work?")
+embed_youtube("Hr4DKHX9Hsg", "From Design to 3D Print: SLA Workflow Overview")
 ```
 
 ### Design
@@ -208,7 +208,7 @@ All of this is done in an effort to have very good re-melting of the lower layer
 
 [How to increase the strength of the part?](https://www.cnckitchen.com/blog/how-the-color-of-pla-filament-influences-3d-printed-part-strength)
 
-- Ensure the printed part is stressed in the XY direction (remember, XY is twice as strong as the Z direction)
+- Ensure the printed part is stressed in the XY direction (remember, parts are often only about half as strong across the layers, in Z, as along them, in XY)
 - Increase the number of external walls
 - Design holes into the part instead of relying on infill. This forces the slicer to add extra walls giving it more strength than increasing the infill percentage
 
@@ -250,7 +250,7 @@ Vase Mode is a special mode the slicer offers where the CAD model is printed as 
 knitr::include_graphics("images/image20.png")
 ```
 
-You will find [many designs for vases](https://www.printables.com/contest/124-vase-mode-vases), but this can also be used for technical parts if the part is designed for it. For example this [wing](https://www.reddit.com/r/3Dprinting/comments/ecv329/this_is_a_wing_section_i_designed_as_a_proof_of/) is printed in vase mode. The image on the bottom shows how the CAD model (red) is created so that the internal spars and stringers are resolved by the slicer to create a single beat of material (yellow)
+You will find [many designs for vases](https://www.printables.com/contest/124-vase-mode-vases), but this can also be used for technical parts if the part is designed for it. For example this [wing](https://www.reddit.com/r/3Dprinting/comments/ecv329/this_is_a_wing_section_i_designed_as_a_proof_of/) is printed in vase mode. The image on the bottom shows how the CAD model (red) is created so that the internal spars and stringers are resolved by the slicer to create a single bead of material (yellow)
 
 ```{r, echo=FALSE, out.width="50%", fig.align="center", fig.cap="RC plane wing in Vase Mode"}
 knitr::include_graphics("images/image19.png")
@@ -384,32 +384,37 @@ tryit_sort(
 ## Check Your Understanding
 
 1. What is the minimum recommended wall thickness for a printer with a 0.4mm nozzle?
-   a) 0.2mm
-   b) 0.4mm
-   c) 0.8mm
-   d) 1.2mm
+   - a) 0.2mm
+   - b) 0.4mm
+   - c) 0.8mm
+   - d) 1.2mm
+
    **Answer: c**
 
 2. What is the maximum overhang angle that can typically be printed without support material?
-   a) 30°
-   b) 45°
-   c) 60°
-   d) 90°
+   - a) 30°
+   - b) 45°
+   - c) 60°
+   - d) 90°
+
    **Answer: b**
 
 3. Which 3D printing technology uses a laser to cure liquid resin?
-   a) FDM
-   b) FFF
-   c) SLS
-   d) SLA
+   - a) FDM
+   - b) FFF
+   - c) SLS
+   - d) SLA
+
    **Answer: d**
 
 4. True or False: Parts printed with FDM have equal strength in all directions.
+
    **Answer: False** (Parts are stronger in the XY direction than the Z direction)
 
 5. How much should you add to vertical hole diameters to compensate for undersizing?
-   a) 0.1mm
-   b) 0.2mm
-   c) 0.5mm
-   d) 1.0mm
+   - a) 0.1mm
+   - b) 0.2mm
+   - c) 0.5mm
+   - d) 1.0mm
+
    **Answer: b**
