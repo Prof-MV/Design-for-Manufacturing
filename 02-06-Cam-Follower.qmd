@@ -45,7 +45,7 @@ By the end of this chapter, you will be able to:
 6. **Evaluate** which motion type is most appropriate for a given operating speed and application
 
 ::: {.callout-think}
-**Before You Read:** Every time you start a car, a cam is doing precision work. The engine's camshaft pushes small metal followers to open and close the intake and exhaust valves — sometimes more than 50 times per second at highway speed. What would happen if those followers moved too abruptly? What forces would be created? What would break first?
+**Before You Read:** Every time you start a car, a cam is doing precision work. The engine's camshaft pushes small metal followers to open and close the intake and exhaust valves: at highway cruising speed each valve opens about 20 to 25 times per second, and near the rev limit about 50 times per second. What would happen if those followers moved too abruptly? What forces would be created? What would break first?
 :::
 
 ***
@@ -65,14 +65,14 @@ Cam-follower systems are found in:
 - **Automated assembly** — pick-and-place heads follow programmed rise-dwell-return sequences
 
 ::: {.callout-industry}
-**Industry Application:** A typical automotive inline-four engine has two camshafts (one for intake, one for exhaust), each with eight lobes — one per valve. At 6,000 RPM, each lobe completes a full cycle 100 times per second. The cam profile must be designed so the follower never bounces, never slams, and opens the valve at precisely the right moment. A poorly designed cam profile at this speed causes valve float, noise, and engine damage.
+**Industry Application:** A typical automotive inline-four engine has two camshafts (one for intake, one for exhaust), each with eight lobes — one per valve. The camshaft turns at half the crankshaft speed, so at 6,000 RPM each lobe completes a full cycle 50 times per second. The cam profile must be designed so the follower never bounces, never slams, and opens the valve at precisely the right moment. A poorly designed cam profile at this speed causes valve float, noise, and engine damage.
 :::
 
 ```{r fig-cam-system-overview, echo=FALSE, out.width="80%", fig.align="center", fig.cap="Elements of a cam-follower system showing the cam, follower, and return spring (top), and a grooved cam with an oscillating follower (bottom). The spring provides force closure, keeping the follower in contact with the cam at all times."}
 knitr::include_graphics("images/cam1-image1.jpg")
 ```
 
-As seen in Figure @fig-cam-system-overview, the fundamental elements of any cam-follower system are:
+As seen in @fig-cam-system-overview, the fundamental elements of any cam-follower system are:
 
 | Component | Role |
 |:----------|:-----|
@@ -161,7 +161,7 @@ The **knife-edge follower** has a sharp pointed tip that contacts the cam at a s
 
 The **roller follower** has a small rotating wheel (the roller) at the tip, supported by a needle or ball bearing. The roller rolls along the cam surface, converting the sliding friction of other follower types into rolling friction. This dramatically reduces wear and allows for higher contact forces and higher operating speeds. The roller follower is the most widely used follower type in industrial machinery.
 
-**Important design constraint:** The roller radius must be smaller than the minimum radius of curvature of the *pitch curve* at any concave section. If the roller is too large, it will undercut the cam profile and physically cannot follow the intended curve.
+**Important design constraint:** Where the pitch curve is convex, the roller radius must be smaller than its minimum radius of curvature; otherwise the cam profile undercuts itself (it would need a negative radius) and the follower cannot reproduce the intended motion. Where the cam is concave, the roller must simply fit inside the concave curve.
 
 ### Mushroom (Spherical) Follower {-}
 
@@ -206,11 +206,11 @@ A **translating follower** moves in a straight line — either directly toward a
 - **In-line (radial) translating follower:** The follower stem passes through the cam axis. Simple to design and analyse.
 - **Offset translating follower:** The follower axis is displaced laterally from the cam centre. The offset changes the pressure angle distribution and can reduce side forces on the follower stem — useful for high-force applications.
 
-A translating follower is kinematically equivalent to a **slider-crank mechanism**, as shown in Figure @fig-follower-motion-types(b). The cam replaces the crank and coupler, and the follower replaces the slider.
+A translating follower is kinematically equivalent to a **slider-crank mechanism**, as shown in @fig-follower-motion-types(b). The cam replaces the crank and coupler, and the follower replaces the slider.
 
 ### Oscillating (Pivoting) Follower {-}
 
-An **oscillating follower** (also called a **rocker follower** or **pivoting follower**) is pinned to the frame at a fixed pivot point. Instead of moving in a straight line, it rocks back and forth through an arc as the cam rotates. This type of follower is kinematically equivalent to a **four-bar linkage**, as shown in Figure @fig-follower-motion-types(a).
+An **oscillating follower** (also called a **rocker follower** or **pivoting follower**) is pinned to the frame at a fixed pivot point. Instead of moving in a straight line, it rocks back and forth through an arc as the cam rotates. This type of follower is kinematically equivalent to a **four-bar linkage**, as shown in @fig-follower-motion-types(a).
 
 Oscillating followers are very common in internal combustion engine valve trains — the rocker arm is an oscillating follower. They can transmit large forces with low stem side-loads, and their geometry can be used to create mechanical advantage (lever ratio) between the cam and the valve.
 
@@ -236,14 +236,14 @@ In **force closure**, an external force (almost always a compressed spring) hold
 
 In **form closure**, the follower is mechanically trapped in a groove or track cut into the cam, so it cannot separate from the cam regardless of speed. The follower is constrained on both sides — it is *positively driven* in both directions.
 
-In **radial form closure**, the groove is cut into the face of a disc cam (Figure @fig-form-closed-systems(a) and (b)). The follower roller rides inside the groove and is physically unable to leave the cam surface. No return spring is needed.
+In **radial form closure**, the groove is cut into the face of a disc cam (@fig-form-closed-systems(a) and (b)). The follower roller rides inside the groove and is physically unable to leave the cam surface. No return spring is needed.
 
 **Advantage:** No follower jump possible — suitable for very high-speed applications.
 **Disadvantage:** More complex to manufacture; the groove must be machined to tight tolerances; backlash in the groove can cause impact.
 
 ### Form Closure — Axial {-}
 
-In **axial form closure**, the groove is cut into the surface of a **cylindrical (barrel) cam** (Figure @fig-barrel-cam-photo). The follower rides in the helical or patterned groove and is driven axially (parallel to the cam shaft axis) in both directions. This is common in textile machinery, automatic screw machines, and multi-spindle lathes where the cam must produce complex axial motion.
+In **axial form closure**, the groove is cut into the surface of a **cylindrical (barrel) cam** (@fig-barrel-cam-photo). The follower rides in the helical or patterned groove and is driven axially (parallel to the cam shaft axis) in both directions. This is common in textile machinery, automatic screw machines, and multi-spindle lathes where the cam must produce complex axial motion.
 
 ```{r fig-form-closed-systems, echo=FALSE, out.width="85%", fig.align="center", fig.cap="Form-closed cam systems: (a) disc cam with groove for radial form closure with translating follower; (b) disc cam with groove for radial form closure with oscillating follower; (c) conjugate cam pair — two cams on the same shaft drive the follower in both directions, eliminating the need for a groove."}
 knitr::include_graphics("images/cam2-image5.jpeg")
@@ -367,18 +367,18 @@ derivatives <- tribble(
   ~Order, ~Formal_Name,       ~Alt_Name,          ~Symbol,     ~Units_SI,       ~Physical_Meaning,                            ~Engineering_Importance,
   "0th",  "Displacement",     "—",                "$s$",        "mm",            "Position of the follower from datum",       "Defines the stroke; what the cam is designed to produce",
   "1st",  "Velocity",         "—",                "$v$",        "mm/s",          "Rate of change of position",                "Determines speed of follower; affects dynamic forces",
-  "2nd",  "Acceleration",     "Abseleration*",    "$a$",        "mm/s²",         "Rate of change of velocity",               "Directly proportional to inertial force (F = ma); dominant concern at high speed",
-  "3rd",  "Jerk",             "Abserk*",          "$j$",        "mm/s³",         "Rate of change of acceleration",           "Causes impact loads at transitions; infinite jerk = hammering; primary concern in cam design",
-  "4th",  "Snap / Jounce",    "Absounce*",        "snap",       "mm/s⁴",        "Rate of change of jerk",                   "Drives structural vibration and fatigue; important in high-speed and precision cams",
-  "5th",  "Crackle",          "—",                "—",          "mm/s⁵",        "Rate of change of snap",                   "Material stress waves; relevant in ultraprecision and micro-mechanisms",
-  "6th",  "Pop",              "—",                "—",          "mm/s⁶",        "Rate of change of crackle",                "Acoustic emission; audible snap/crack in mechanisms",
-  "7th",  "Lock",             "—",                "—",          "mm/s⁷",        "Rate of change of pop",                    "System resonance and mode coupling effects",
-  "8th",  "Drop",             "—",                "—",          "mm/s⁸",        "Rate of change of lock",                   "Beyond practical design; theoretical completeness"
+  "2nd",  "Acceleration",     "—",                "$a$",        "mm/s²",         "Rate of change of velocity",               "Directly proportional to inertial force (F = ma); dominant concern at high speed",
+  "3rd",  "Jerk",             "Jolt",             "$j$",        "mm/s³",         "Rate of change of acceleration",           "Rate of change of force; an infinite jerk is an impact; primary concern in cam design",
+  "4th",  "Snap",             "Jounce",           "$s^{(4)}$",  "mm/s⁴",        "Rate of change of jerk",                   "Checked in some high-speed cam and motion-profile design (S-curve profiles)",
+  "5th",  "Crackle",          "—",                "—",          "mm/s⁵",        "Rate of change of snap",                   "Not used in practical cam design",
+  "6th",  "Pop",              "—",                "—",          "mm/s⁶",        "Rate of change of crackle",                "Not used in practical cam design",
+  "7th",  "Lock",             "—",                "—",          "mm/s⁷",        "Rate of change of pop",                    "Not used; name proposed only for completeness",
+  "8th",  "Drop",             "—",                "—",          "mm/s⁸",        "Rate of change of lock",                   "Not used; name proposed only for completeness"
 )
 
 derivatives %>%
-  kbl(caption = "The Complete Derivative Chain for Displacement. (*) Informal/humorous names sometimes used in teaching. Formal names should always be used in professional practice.",
-      col.names = c("Order", "Formal Name", "Informal Name", "Symbol", "SI Units", "Physical Meaning", "Engineering Importance"),
+  kbl(caption = "The Complete Derivative Chain for Displacement. Only displacement to jerk (and occasionally snap) are used in engineering practice.",
+      col.names = c("Order", "Name", "Other Name", "Symbol", "SI Units", "Physical Meaning", "Engineering Importance"),
       booktabs = TRUE) %>%
   kable_styling(latex_options = c("hold_position", "scale_down"), full_width = knitr::is_html_output()) %>%
   row_spec(0, background = "#D81B60", color = "white") %>%
@@ -391,7 +391,7 @@ derivatives %>%
 ```
 
 ::: {.callout-think}
-**The Snap-Crackle-Pop Connection:** The names snap, crackle, and pop for the 4th, 5th, and 6th derivatives are a physics community joke referencing the Rice Krispies cereal mascots. Lock and drop continue the sequence. The informal teaching names "abseleration," "abserk," and "absounce" are playful extensions of this naming tradition — but in a professional report or exam, always use the formal terms: acceleration, jerk, and snap/jounce.
+**The Snap-Crackle-Pop Connection:** The names snap, crackle, and pop for the 4th, 5th, and 6th derivatives are a physics joke referencing the Rice Krispies cereal mascots; lock and drop were later proposed to continue the sequence. In a report or exam, use acceleration, jerk and snap (or jounce).
 :::
 
 ### Why Jerk Matters Most {-}
@@ -554,9 +554,9 @@ $$ {#eq-parabolic-rise2-10}
 knitr::include_graphics("images/cam1-image6.png")
 ```
 
-Parabolic motion improves over uniform motion: velocity is now zero at the start and end of each segment ($v = 0$ at $\bar{\theta} = 0$ and $\bar{\theta} = \beta$), which eliminates the velocity-jump jerk at the segment boundaries. However, there is still an **infinite jerk at the midpoint** of each segment, where the acceleration instantaneously reverses from $+4L/\beta^2$ to $-4L/\beta^2$.
+Parabolic motion improves over uniform motion: velocity is now zero at the start and end of each segment ($v = 0$ at $\bar{\theta} = 0$ and $\bar{\theta} = \beta$), which eliminates the velocity-jump jerk at the segment boundaries. However, the acceleration still **steps**: from zero to $+4L/\beta^2$ at the start, from $+4L/\beta^2$ to $-4L/\beta^2$ at the midpoint, and back to zero at the end. Each step is an **infinite jerk**.
 
-> **Conclusion:** Better than uniform, but still has infinite jerk at the midpoint. Suitable for low-to-moderate speeds.
+> **Conclusion:** Better than uniform, but still has infinite jerk at both ends and at the midpoint. Suitable for low speeds.
 
 ### Harmonic Motion (Simple Harmonic Motion) {-}
 
@@ -606,7 +606,7 @@ At the endpoints:
 - Velocity = 0 ✓
 - Acceleration = 0 ✓ (jerk is finite at the boundary — much better than harmonic!)
 
-> **Conclusion:** Cycloidal motion is the gold standard for high-speed cams. No infinite jerk anywhere in the cycle. It produces the smoothest possible follower motion, minimizing vibration, noise, and wear. The tradeoff is that the peak acceleration is higher than harmonic motion for the same lift and beta angle (by a factor of $\pi/2 \approx 1.57$).
+> **Conclusion:** Cycloidal motion is the gold standard for high-speed cams. No infinite jerk anywhere in the cycle. It produces the smoothest possible follower motion, minimizing vibration, noise, and wear. The tradeoff is that the peak acceleration is higher than with harmonic motion for the same lift and beta angle: $2\pi L/\beta^2$ against $\pi^2 L/(2\beta^2)$, a factor of $4/\pi \approx 1.27$.
 
 ### General Polynomial Motion {-}
 
@@ -632,7 +632,7 @@ General polynomial motion is used in computer-aided cam design where the motion 
 
 The real power of understanding motion types comes when we look at all four curves — displacement, velocity, acceleration, and jerk — together. In cam design, this is called the **SVAJ diagram** ($S$-displacement, $V$-velocity, $A$-acceleration, $J$-jerk).
 
-```{r svaj-harmonic, echo=FALSE, message=FALSE, fig.width=11, fig.height=10, fig.align='center', fig.cap="SVAJ diagram for harmonic motion over a rise segment (0° to 90°). Top to bottom: displacement (S), normalized velocity (V), normalized acceleration (A), normalized jerk (J). The jerk is a cosine wave within the rise segment, but it is discontinuous at the endpoints (jerk jumps from zero in the dwell to a finite value at the start of rise — shown by the dashed vertical lines). This finite discontinuity in jerk is why harmonic motion is acceptable for moderate but not high speeds."}
+```{r svaj-harmonic, echo=FALSE, message=FALSE, fig.width=11, fig.height=10, fig.align='center', fig.cap="SVAJ diagram for harmonic motion over a rise segment (0° to 90°). Top to bottom: displacement (S), normalized velocity (V), normalized acceleration (A), normalized jerk (J). Inside the rise the jerk is a smooth sine curve. But the acceleration is at its maximum at the very start and end of the rise (dashed lines), while it is zero in the adjacent dwells: it steps there, so the jerk is infinite at both boundaries. That is why harmonic motion is acceptable for moderate but not high speeds."}
 
 ## Compute SVAJ for harmonic rise only (0 to 90 degrees)
 theta_rise <- seq(0, 90, by = 0.5)
@@ -687,65 +687,49 @@ ggplot(df_svaj, aes(x = theta, y = value, colour = curve)) +
         strip.text = element_text(face = "bold", size = 10 * chart_text_scale))
 ```
 
-```{r jerk-comparison, echo=FALSE, message=FALSE, fig.width=11, fig.height=6, fig.align='center', fig.cap="Jerk comparison for the four motion types over a rise segment. Uniform motion has theoretically infinite jerk at both endpoints — shown as large red spikes. Parabolic motion has infinite jerk at the midpoint (θ̄ = β/2) where acceleration reverses. Harmonic motion has a finite jerk within the segment but a step discontinuity at both ends (shown by the dashed vertical lines). Cycloidal motion has finite, smooth jerk everywhere — making it the best choice for high-speed cams."}
+```{r jerk-comparison, echo=FALSE, message=FALSE, fig.width=11, fig.height=7, fig.align='center', fig.cap="Follower acceleration through a rise of beta = 90 deg with a dwell before and after it, in units of L/beta^2 (beta in radians). Jerk is the slope of these curves: wherever the acceleration steps (red triangles), the jerk is infinite. Uniform motion is worse still: its velocity steps, so the acceleration itself is infinite at the ends. Only cycloidal motion has no step at all."}
+## Acceleration over dwell - rise - dwell, normalised to L / beta^2 (beta in rad)
+u <- seq(-0.25, 1.25, by = 0.0025)          # cam angle as a fraction of the rise angle
+in_rise <- u >= 0 & u <= 1
+acc <- function(type) {
+  a <- numeric(length(u))
+  a[in_rise] <- switch(type,
+    Uniform   = 0,
+    Parabolic = ifelse(u[in_rise] < 0.5, 4, -4),
+    Harmonic  = pi^2 / 2 * cos(pi * u[in_rise]),
+    Cycloidal = 2 * pi * sin(2 * pi * u[in_rise]))
+  a
+}
+types <- c("Uniform", "Parabolic", "Harmonic", "Cycloidal")
+dd <- do.call(rbind, lapply(types, function(tp) data.frame(u = u * 90, a = acc(tp), type = tp)))
+dd$type <- factor(dd$type, levels = types)
+## break the line at the steps so they are drawn as true jumps
+dd$grp <- cumsum(c(TRUE, abs(diff(dd$a)) > 1 | diff(as.numeric(dd$type)) != 0))
+steps <- data.frame(type = factor(c("Parabolic", "Parabolic", "Parabolic", "Harmonic", "Harmonic"), levels = types),
+                    u = c(0, 45, 90, 0, 90), y = 0)
+spikes <- data.frame(type = factor("Uniform", levels = types), u = c(0, 90), y = c(5.2, -5.2), yend = c(7.6, -7.6))
+peak <- data.frame(type = factor(types, levels = types), lab = c("a = 0 inside,\nbut v jumps at the ends",
+                   "peak a = 4", "peak a = 4.93", "peak a = 6.28 (no steps)"))
 
-## Compute jerk for each type over the rise segment
-theta_r <- seq(0, 90, by = 0.5)
-beta_r  <- 90
-b       <- beta_r * pi/180  ## radians
-th      <- theta_r * pi/180
-L       <- 1.0
-eps     <- 0.5  ## small region for simulating ∞ jerk spike
-
-## Uniform jerk: 0 within segment, spike at endpoints
-j_uniform <- rep(0, length(theta_r))
-j_uniform[theta_r <  eps] <- 12.0   ## large finite spike representing ∞
-j_uniform[theta_r > (beta_r - eps)] <- -12.0
-
-## Parabolic jerk: 0 within each half, spike at midpoint and endpoints
-j_parabolic <- rep(0, length(theta_r))
-j_parabolic[theta_r <  eps]  <- 8.0
-j_parabolic[abs(theta_r - beta_r/2) < eps] <- -8.0
-j_parabolic[theta_r > (beta_r - eps)] <- 8.0
-
-## Harmonic jerk (analytical)
-j_harmonic  <- -L * pi^3 / (2 * b^3) * sin(pi * th / b)
-## Add boundary discontinuity markers
-j_harmonic[theta_r < eps] <- max(abs(j_harmonic)) * 1.2
-j_harmonic[theta_r > (beta_r - eps)] <- -max(abs(j_harmonic)) * 1.2
-
-## Cycloidal jerk (analytical)
-j_cycloidal <- L * 4*pi^2 / b^3 * cos(2*pi*th/b)
-
-## Normalise all to the cycloidal maximum for fair comparison
-j_max <- max(abs(j_cycloidal))
-df_jerk <- data.frame(
-  theta = rep(theta_r, 4),
-  jerk  = c(j_uniform  / j_max,
-            j_parabolic / j_max,
-            j_harmonic  / j_max,
-            j_cycloidal / j_max),
-  type  = rep(c("Uniform","Parabolic","Harmonic","Cycloidal"), each = length(theta_r))
-)
-df_jerk$type <- factor(df_jerk$type, levels = c("Uniform","Parabolic","Harmonic","Cycloidal"))
-
-ggplot(df_jerk, aes(x = theta, y = jerk, colour = type, linetype = type)) +
-  geom_line(linewidth = 1.1) +
-  geom_vline(xintercept = c(0, 45, 90), linetype = "dotted", colour = "gray60") +
-  geom_hline(yintercept = 0, linewidth = 0.5, colour = "gray40") +
-  annotate("text", x = 2, y = 11, label = "∞ jerk\n(spike)", colour = "#E53935", size = 3 * diagram_text_scale) +
-  annotate("text", x = 44, y = 8, label = "∞ jerk\n(parabolic\nmidpoint)", colour = "#8E24AA", size = 3 * diagram_text_scale) +
-  scale_colour_manual(values = c("Uniform"="#E53935","Parabolic"="#8E24AA","Harmonic"="#1E88E5","Cycloidal"="#43A047"),
-                      name = "Motion Type") +
-  scale_linetype_manual(values = c("Uniform"="dashed","Parabolic"="dotted","Harmonic"="solid","Cycloidal"="twodash"),
-                        name = "Motion Type") +
-  scale_x_continuous(breaks = seq(0, 90, 15)) +
-  scale_y_continuous(limits = c(-13, 13)) +
-  labs(title = "Jerk Comparison for Rise Segment (0° to β)",
-       subtitle = "Large spikes represent theoretically infinite jerk — the key failure mode in poor cam design",
-       x = "Cam Angle θ̄ (degrees from start of rise)",
-       y = "Normalised Jerk  (J / J_cycloidal_max)") +
-  theme_cam
+ggplot(dd, aes(u, a)) +
+  annotate("rect", xmin = -22.5, xmax = 0, ymin = -Inf, ymax = Inf, fill = "gray92") +
+  annotate("rect", xmin = 90, xmax = 112.5, ymin = -Inf, ymax = Inf, fill = "gray92") +
+  geom_hline(yintercept = 0, color = "gray50") +
+  geom_line(aes(group = grp, color = type), linewidth = 1.2) +
+  geom_point(data = steps, aes(u, y), shape = 17, size = 3.5, color = "red") +
+  geom_segment(data = spikes, aes(x = u, xend = u, y = y, yend = yend), color = "red", linewidth = 1,
+               arrow = arrow(length = unit(0.2, "cm"), type = "closed")) +
+  geom_text(data = spikes, aes(x = u + 6, y = yend * 0.85, label = "infinite a"), color = "red", size = 3 * diagram_text_scale, hjust = 0) +
+  geom_text(data = peak, aes(x = 45, y = 7.2, label = lab), size = 3 * diagram_text_scale, lineheight = 0.9) +
+  facet_wrap(~type, ncol = 2) +
+  scale_color_manual(values = c(Uniform = "#E53935", Parabolic = "#8E24AA", Harmonic = "#1E88E5", Cycloidal = "#43A047"), guide = "none") +
+  scale_x_continuous(breaks = c(0, 45, 90)) +
+  coord_cartesian(ylim = c(-8, 8.5)) +
+  labs(title = "Acceleration Through a Rise: Where Is the Jerk Infinite?",
+       subtitle = "Grey bands: dwells before and after the rise. Red triangles: steps in acceleration = infinite jerk",
+       x = "Cam angle from the start of the rise (degrees, beta = 90)", y = "Acceleration (L / beta^2)") +
+  theme_cam +
+  theme(strip.text = element_text(face = "bold", size = 10 * chart_text_scale))
 ```
 
 ### Motion Type Selection Guide {-}
@@ -756,7 +740,7 @@ motion_sel <- tribble(
   "Uniform",       "No (v ≠ 0)", "—",          "No (∞ at all boundaries)", "Very low",  "Very slow machines (< 30 RPM)", "Any application with significant inertia",
   "Parabolic",     "Yes (v = 0)","No (a ≠ 0)", "No (∞ at midpoint)",  "Low",         "Low speed (30–100 RPM)",       "Moderate or high speed",
   "Harmonic",      "Yes (v = 0)","No (a ≠ 0)", "No (∞ at boundaries)","Medium",      "Moderate speed (100–500 RPM)", "High speed or precision",
-  "Cycloidal",     "Yes (v = 0)","Yes (a = 0)","Yes (finite everywhere)","High (×1.57)","High speed (> 500 RPM)",     "Minimizing peak force is critical",
+  "Cycloidal",     "Yes (v = 0)","Yes (a = 0)","Yes (finite everywhere)","High (×1.27 vs harmonic)","High speed (> 500 RPM)",     "Minimizing peak force is critical",
   "Polynomial 3-4-5","Yes","Yes","Yes","Medium-High","High speed and smooth force",  "Simple calculations preferred"
 )
 
@@ -809,7 +793,7 @@ Calculate the follower displacement at:
 The rise segment spans 120° to 180°, so $\beta_{rise} = 60°$.
 The local angle measured from the start of rise: $\bar{\theta} = 150° - 120° = 30°$
 
-Using Equation @eq-harmonic-rise-10:
+Using @eq-harmonic-rise-10:
 
 $$y = \frac{L}{2}\left(1 - \cos\frac{\pi\bar{\theta}}{\beta}\right) = \frac{0.8}{2}\left(1 - \cos\frac{\pi \times 30°}{60°}\right)$$
 
@@ -820,7 +804,7 @@ $$y = 0.4\left(1 - \cos(90°)\right) = 0.4\left(1 - 0\right) = 0.4 \text{ units}
 The return segment spans 210° to 360°, so $\beta_{return} = 150°$.
 The local angle: $\bar{\theta} = 270° - 210° = 60°$
 
-Using Equation @eq-harmonic-return-10:
+Using @eq-harmonic-return-10:
 
 $$y = \frac{L}{2}\left(1 + \cos\frac{\pi\bar{\theta}}{\beta}\right) = \frac{0.8}{2}\left(1 + \cos\frac{\pi \times 60°}{150°}\right)$$
 
@@ -866,7 +850,7 @@ knitr::include_graphics("images/cam1-image11.png")
 knitr::include_graphics("images/cam1-image12.png")
 ```
 
-The tabulated values in Figure @fig-harmonic-tables-rise and Figure @fig-harmonic-tables-return confirm both results:
+The tabulated values in @fig-harmonic-tables-rise and @fig-harmonic-tables-return confirm both results:
 
 - At θ = 150°: $y = 0.4000$ ✓
 - At θ = 270°: $y = 0.5236$ ✓
@@ -1080,7 +1064,7 @@ tryit_sort(
       "Cycloidal motion is the gold standard for high-speed cams.",
       "Uniform motion causes violent impact loading at every transition.",
       "Harmonic is the medium-speed choice in the selection guide.",
-      "Cycloidal has about 1.57 times the peak acceleration of harmonic.",
+      "Cycloidal has about 1.27 times (4/pi) the peak acceleration of harmonic.",
       "Parabolic improves on uniform but is still limited by the midpoint jerk."
     )
   ),
@@ -1122,7 +1106,7 @@ Calculate the follower displacement at (a) $\theta = 60°$ and (b) $\theta = 210
 knitr::include_graphics("images/cam2-image25.png")
 ```
 
-For the cam described in Figure @fig-practice-problem-img, the cam shaft completes one full revolution every three minutes. From the displacement diagram (not shown — sketch one based on the description): the follower rises 1.50 inches over 90° of cam rotation, dwells at the top for 90°, returns 1.50 inches over 120°, and dwells at the bottom for 60°.
+For the cam described in @fig-practice-problem-img, the cam shaft completes one full revolution every three minutes. From the displacement diagram (not shown — sketch one based on the description): the follower rises 1.50 inches over 90° of cam rotation, dwells at the top for 90°, returns 1.50 inches over 120°, and dwells at the bottom for 60°.
 
 (a) How long does it take for the follower to rise 1.50 inches?
 (b) How long does it take for the follower to drop 1.50 inches?
@@ -1132,7 +1116,7 @@ For the cam described in Figure @fig-practice-problem-img, the cam shaft complet
 ---
 
 ::: {.callout-activity}
-**R Activity:** In the card below, drag the `beta_r` and `beta_f` angles of the displacement comparison from Section @sec-motion-types to see how the curve shapes change. Try: rise 60° / return 180°, then rise 180° / return 60°. Which combination results in lower peak velocity? Why does a longer beta angle always reduce peak velocity for a given lift?
+**R Activity:** In the card below, drag the `beta_r` and `beta_f` angles of the displacement comparison from @sec-motion-types to see how the curve shapes change. Try: rise 60° / return 120°, then rise 120° / return 60°. Which combination results in lower peak velocity? Why does a longer beta angle always reduce peak velocity for a given lift?
 
 *Hint: peak harmonic velocity = $L\pi/(2\beta)$ — what happens as $\beta$ increases?*
 :::

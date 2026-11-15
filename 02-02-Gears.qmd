@@ -30,19 +30,46 @@ theme_gear <- theme_minimal() +
     panel.background = element_rect(fill = "white", color = NA)
   )
 
-## Function to create gear tooth profile (simplified involute approximation)
-gear_profile <- function(cx, cy, r_pitch, n_teeth, rotation = 0) {
-  angles <- seq(0, 2*pi, length.out = n_teeth * 4 + 1) + rotation
-  r_outer <- r_pitch * 1.15
-  r_inner <- r_pitch * 0.85
+## Involute gear outline (20 deg pressure angle). The module follows from the pitch
+## radius and tooth count, m = 2 r / N; addendum m, dedendum 1.25 m.
+## 'rotation' is the angle of the centre of tooth 1. For the tooth spaces of an
+## internal (ring) gear, pass ra = r + 1.25 m and rf = r - m: the spaces have the
+## same involute shape as external teeth.
+gear_profile <- function(cx, cy, r_pitch, n_teeth, rotation = 0, ra = NULL, rf = NULL, pts = 8) {
+  m  <- 2 * r_pitch / n_teeth
+  if (is.null(ra)) ra <- r_pitch + m
+  if (is.null(rf)) rf <- max(r_pitch - 1.25 * m, 0.3 * r_pitch)
+  a0 <- 20 * pi / 180
+  rb <- r_pitch * cos(a0)
+  inv <- function(a) tan(a) - a
+  half <- function(rho) {                       # half angular thickness at radius rho
+    rho <- pmax(rho, rb)
+    pi / (2 * n_teeth) + inv(a0) - inv(acos(pmin(1, rb / rho)))
+  }
+  rho <- seq(rf, ra, length.out = pts)
+  out <- lapply(0:(n_teeth - 1), function(k) {
+    c0 <- rotation + 2 * pi * k / n_teeth
+    tip <- seq(c0 - half(ra), c0 + half(ra), length.out = 4)
+    root <- seq(c0 + half(rf), c0 + 2 * pi / n_teeth - half(rf), length.out = 4)
+    data.frame(ang = c(c0 - half(rho), tip, c0 + half(rev(rho)), root),
+               rad = c(rho, rep(ra, 4), rev(rho), rep(rf, 4)))
+  })
+  g <- do.call(rbind, out)
+  data.frame(x = cx + g$rad * cos(g$ang), y = cy + g$rad * sin(g$ang))
+}
 
-  radii <- rep(c(r_outer, r_pitch * 1.05, r_inner, r_pitch * 1.05), n_teeth)
-  radii <- c(radii, radii[1])
+## Rotation of gear 2 so that its teeth fall into the spaces of gear 1.
+## theta = direction from centre 1 to centre 2 (external mesh).
+mesh_rot <- function(rot1, N1, theta, N2) theta + pi - (rot1 - theta) * N1 / N2 + pi / N2
+## Rotation of a ring (internal) gear meshing with a planet whose centre lies in
+## direction theta from the ring centre.
+ring_rot <- function(rot_p, N_p, theta, N_r) theta + (rot_p - theta) * N_p / N_r
 
-  data.frame(
-    x = cx + radii * cos(angles),
-    y = cy + radii * sin(angles)
-  )
+## Circular arc with an arrow, for rotation directions (angles in degrees)
+rot_arrow <- function(cx, cy, r, from, to, color, lw = 1) {
+  a <- seq(from, to, length.out = 40) * pi / 180
+  annotate("path", x = cx + r * cos(a), y = cy + r * sin(a), color = color, linewidth = lw,
+           arrow = arrow(length = unit(0.22, "cm"), type = "closed"))
 }
 ```
 
@@ -112,7 +139,7 @@ The main milestones are summarized below.
 | 1500s–1800s | Mills use large wooden cogwheels with replaceable pegs, usually of maple, driving cage or lantern pinions (@fig-gear-history-mills b). |
 | late 1800s | The involute tooth profile replaces the cycloidal profile for power transmission (@sec-tooth-profile). |
 | 1920s | Hypoid gears go into mass production in car rear axles (@sec-bevel-gears). |
-| 1957 | C. Walton Musser patents the strain-wave (harmonic) drive (@sec-harmonic-drives). |
+| 1957 | C. Walton Musser invents the strain-wave (harmonic) drive (@sec-harmonic-drives). |
 
 ```{r}
 #| label: fig-gear-history-mills
@@ -165,46 +192,42 @@ Choose gears when the ratio must be exact, the space is tight, the shafts are no
 
 When two gears mesh, their teeth interlock. As one gear (the **driver** or **pinion**) rotates, it pushes against the teeth of the other gear (the **driven gear**), causing it to rotate.
 
-```{r gear-mesh-basic, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Basic gear mesh showing driver (pinion) and driven gear."}
-## Create two meshing gears
-pinion <- gear_profile(3, 4, 1.2, 12, rotation = pi/24)
-driven <- gear_profile(6.5, 4, 2, 20, rotation = 0)
+```{r gear-mesh-basic, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Basic gear mesh showing driver (pinion) and driven gear. The dashed pitch circles touch at the pitch point; the centre distance is the sum of the pitch radii."}
+## 12-tooth pinion and 20-tooth gear, same module (m = 0.2): centre distance = r1 + r2 = 3.2
+c1 <- c(3, 4); r1 <- 1.2; N1 <- 12
+c2 <- c(6.2, 4); r2 <- 2.0; N2 <- 20
+rot1 <- pi / N1                                   # a space of the pinion faces the gear
+pinion <- gear_profile(c1[1], c1[2], r1, N1, rotation = rot1)
+driven <- gear_profile(c2[1], c2[2], r2, N2, rotation = mesh_rot(rot1, N1, 0, N2))
+circ <- function(c, r) data.frame(x = c[1] + r * cos(seq(0, 2 * pi, length.out = 150)), y = c[2] + r * sin(seq(0, 2 * pi, length.out = 150)))
 
 ggplot() +
-  ## Driven gear (larger)
   geom_polygon(data = driven, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  annotate("point", x = 6.5, y = 4, size = 4, color = "black") +
-  annotate("point", x = 6.5, y = 4, size = 2, color = "white") +
-
-  ## Pinion (smaller, driver)
   geom_polygon(data = pinion, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
-  annotate("point", x = 3, y = 4, size = 4, color = "black") +
-  annotate("point", x = 3, y = 4, size = 2, color = "white") +
+  geom_path(data = circ(c1, r1), aes(x, y), linetype = "dashed", linewidth = 0.4) +
+  geom_path(data = circ(c2, r2), aes(x, y), linetype = "dashed", linewidth = 0.4) +
+  annotate("point", x = c(c1[1], c2[1]), y = 4, size = 4, color = "black") +
+  annotate("point", x = c(c1[1], c2[1]), y = 4, size = 2, color = "white") +
 
-  ## Rotation arrows
-  annotate("curve", x = 3, xend = 3.6, y = 5.5, yend = 5.8,
-             arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
-             curvature = -0.3, linewidth = 1, color = "darkorange") +
-  annotate("text", x = 3, y = 6.7, label = "Driver\n(Pinion)", fontface = "bold", size = 4.5 * diagram_text_scale) +
-  annotate("text", x = 3, y = 2.3, label = "12 teeth\n(input)", size = 3 * diagram_text_scale, color = "darkorange") +
+  ## Rotation arrows: the pinion turns counter-clockwise, the gear clockwise
+  rot_arrow(c1[1], c1[2], 1.65, 55, 125, "darkorange") +
+  annotate("text", x = 3, y = 6.4, label = "Driver\n(Pinion)", fontface = "bold", size = 4.5 * diagram_text_scale) +
+  annotate("text", x = 3, y = 2.25, label = "12 teeth\n(input)", size = 3 * diagram_text_scale, color = "darkorange") +
+  rot_arrow(c2[1], c2[2], 2.55, 120, 60, "steelblue") +
+  annotate("text", x = 6.2, y = 7.2, label = "Driven Gear", fontface = "bold", size = 4.5 * diagram_text_scale) +
+  annotate("text", x = 8.6, y = 1.8, label = "20 teeth\n(output)", size = 3 * diagram_text_scale, color = "steelblue") +
 
-  annotate("curve", x = 6.5, xend = 5.7, y = 6.3, yend = 6.5,
-             arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
-             curvature = 0.3, linewidth = 1, color = "steelblue") +
-  annotate("text", x = 6.5, y = 7.2, label = "Driven\nGear", fontface = "bold", size = 4.5 * diagram_text_scale) +
-  annotate("text", x = 8.2, y = 1.9, label = "20 teeth\n(output)", size = 3 * diagram_text_scale, color = "steelblue") +
-
-  ## Pitch circles (dashed)
-  annotate("point", x = 4.15, y = 4, size = 3, color = "red") +
-  annotate("segment", x = 4.0, xend = 4.12, y = 2.5, yend = 3.85, color = "red", linewidth = 0.5) +
-  annotate("text", x = 4.0, y = 2.1, label = "Pitch\nPoint", color = "red", size = 3.5 * diagram_text_scale) +
+  ## Pitch point where the dashed pitch circles touch
+  annotate("point", x = 4.2, y = 4, size = 3, color = "red") +
+  annotate("segment", x = 4.75, xend = 4.25, y = 1.7, yend = 3.88, color = "red", linewidth = 0.5) +
+  annotate("text", x = 4.9, y = 1.55, label = "Pitch point", color = "red", hjust = 0, size = 3.2 * diagram_text_scale) +
 
   ## Key principle box
   annotate("rect", xmin = 0.2, xmax = 6.4, ymin = 0.1, ymax = 1.3, fill = "lightyellow", color = "black") +
   annotate("text", x = 3.3, y = 0.95, label = "KEY PRINCIPLE:", fontface = "bold", size = 3.6 * diagram_text_scale) +
   annotate("text", x = 3.3, y = 0.5, label = "Small gear drives large gear → Speed DOWN, Torque UP", size = 3.2 * diagram_text_scale) +
 
-  coord_fixed(ratio = 1, xlim = c(0, 9), ylim = c(0, 7.5)) +
+  coord_fixed(ratio = 1, xlim = c(0, 9.4), ylim = c(0, 7.5)) +
   labs(title = "Meshing Gears: Driver and Driven") +
   theme_gear
 ```
@@ -954,27 +977,22 @@ $$\text{Gear Ratio} = \frac{N_{driven}}{N_{driver}} = \frac{\omega_{driver}}{\om
 Where: $N$ = number of teeth, $\omega$ = angular velocity, $T$ = torque
 
 ```{r gear-ratio-visual, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Gear ratio demonstration: speed reduction and torque multiplication."}
-small_gear <- gear_profile(2.5, 3.5, 1, 15, 0)
-large_gear <- gear_profile(6.5, 3.5, 2, 30, pi/30)
+## 15 and 30 teeth, same module: centre distance = 1 + 2 = 3
+rot_s <- pi / 15
+small_gear <- gear_profile(2.5, 3.5, 1, 15, rot_s)
+large_gear <- gear_profile(5.5, 3.5, 2, 30, mesh_rot(rot_s, 15, 0, 30))
 
 ggplot() +
-  ## Small gear (driver)
   geom_polygon(data = small_gear, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
   annotate("point", x = 2.5, y = 3.5, size = 4, color = "black") +
-
-  ## Large gear (driven)
   geom_polygon(data = large_gear, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  annotate("point", x = 6.5, y = 3.5, size = 5, color = "black") +
+  annotate("point", x = 5.5, y = 3.5, size = 5, color = "black") +
 
-  ## Input arrow
-  annotate("segment", x = 0.5, xend = 1.3, y = 3.5, yend = 3.5,
-               arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
-               linewidth = 1.5, color = "red") +
-
-  ## Output arrow
-  annotate("segment", x = 8.7, xend = 9.5, y = 3.5, yend = 3.5,
-               arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
-               linewidth = 1.5, color = "darkgreen") +
+  ## Input and output shafts
+  annotate("segment", x = 0.4, xend = 1.2, y = 3.5, yend = 3.5,
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), linewidth = 1.5, color = "red") +
+  annotate("segment", x = 7.8, xend = 8.8, y = 3.5, yend = 3.5,
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"), linewidth = 1.5, color = "darkgreen") +
 
   ## Input specifications
   annotate("rect", xmin = 0.3, xmax = 3.3, ymin = 6.1, ymax = 8.2, fill = "mistyrose", color = "black") +
@@ -1135,53 +1153,47 @@ A **gear train** is a combination of two or more gears used to transmit power fr
 In a **simple gear train**, each shaft carries only one gear. The intermediate gears are called **idlers** and do not affect the overall gear ratio—they only change the direction of rotation.
 
 ```{r simple-gear-train, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Simple gear train with idler gear."}
-gear1 <- gear_profile(2, 3, 1.2, 20, 0)
-gear2 <- gear_profile(5, 3, 1, 16, pi/32)
-gear3 <- gear_profile(8, 3, 1.5, 24, 0)
+## 20, 16 and 24 teeth, module 0.12: pitch radii 1.2, 0.96, 1.44
+yc <- 3.4
+x1 <- 2; x2 <- x1 + 1.2 + 0.96; x3 <- x2 + 0.96 + 1.44
+r1 <- pi / 20
+r2 <- mesh_rot(r1, 20, 0, 16)
+r3 <- mesh_rot(r2, 16, 0, 24)
+gear1 <- gear_profile(x1, yc, 1.2, 20, r1)
+gear2 <- gear_profile(x2, yc, 0.96, 16, r2)
+gear3 <- gear_profile(x3, yc, 1.44, 24, r3)
 
 ggplot() +
-  ## Gear 1 (Driver)
   geom_polygon(data = gear1, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
-  annotate("point", x = 2, y = 3, size = 4, color = "black") +
-  annotate("text", x = 2, y = 4.8, label = "Driver\n20 teeth", size = 3 * diagram_text_scale, fontface = "bold") +
+  annotate("point", x = x1, y = yc, size = 4, color = "black") +
+  annotate("text", x = x1, y = 5.45, label = "Driver, 20 teeth", size = 3 * diagram_text_scale, fontface = "bold") +
+  rot_arrow(x1, yc, 1.6, 125, 55, "darkorange") +
+  annotate("text", x = x1 - 1.45, y = yc + 1.35, label = "CW", size = 3 * diagram_text_scale, color = "darkorange") +
 
-  ## Rotation arrow 1
-  annotate("curve", x = 2.7, xend = 2.9, y = 4.2, yend = 3.6,
-             arrow = arrow(length = unit(0.15, "cm")), curvature = 0.4, color = "darkorange") +
-  annotate("text", x = 3.2, y = 4.2, label = "CW", size = 3 * diagram_text_scale) +
-
-  ## Gear 2 (Idler)
   geom_polygon(data = gear2, aes(x = x, y = y), fill = "gray70", color = "black", linewidth = 0.5) +
-  annotate("point", x = 5, y = 3, size = 4, color = "black") +
-  annotate("text", x = 5, y = 4.5, label = "Idler\n16 teeth", size = 3 * diagram_text_scale, fontface = "bold") +
+  annotate("point", x = x2, y = yc, size = 4, color = "black") +
+  annotate("text", x = x2, y = 5.45, label = "Idler, 16 teeth", size = 3 * diagram_text_scale, fontface = "bold") +
+  rot_arrow(x2, yc, 1.3, 55, 125, "gray40") +
+  annotate("text", x = x2 + 0.75, y = yc + 1.35, label = "CCW", size = 3 * diagram_text_scale, color = "gray30") +
 
-  ## Rotation arrow 2
-  annotate("curve", x = 5.6, xend = 5.4, y = 3.9, yend = 3.3,
-             arrow = arrow(length = unit(0.15, "cm")), curvature = 0.4, color = "gray50") +
-  annotate("text", x = 6.5, y = 4.4, label = "CCW", size = 3 * diagram_text_scale) +
-
-  ## Gear 3 (Driven)
   geom_polygon(data = gear3, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  annotate("point", x = 8, y = 3, size = 5, color = "black") +
-  annotate("text", x = 8, y = 5, label = "Driven\n24 teeth", size = 3 * diagram_text_scale, fontface = "bold") +
-
-  ## Rotation arrow 3
-  annotate("curve", x = 8.9, xend = 9.1, y = 4.5, yend = 3.8,
-             arrow = arrow(length = unit(0.15, "cm")), curvature = 0.4, color = "steelblue") +
-  annotate("text", x = 9.5, y = 4.3, label = "CW", size = 3 * diagram_text_scale) +
+  annotate("point", x = x3, y = yc, size = 5, color = "black") +
+  annotate("text", x = x3, y = 5.45, label = "Driven, 24 teeth", size = 3 * diagram_text_scale, fontface = "bold") +
+  rot_arrow(x3, yc, 1.85, 125, 55, "steelblue") +
+  annotate("text", x = x3 + 1.55, y = yc + 1.35, label = "CW", size = 3 * diagram_text_scale, color = "steelblue") +
 
   ## Formula box
-  annotate("rect", xmin = 0.5, xmax = 5.5, ymin = 0.3, ymax = 1.8, fill = "lightyellow", color = "black") +
-  annotate("text", x = 3, y = 1.5, label = "Simple Gear Train Ratio:", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  annotate("text", x = 3, y = 1, label = "GR = N_driven / N_driver = 24/20 = 1.2:1", size = 3 * diagram_text_scale) +
-  annotate("text", x = 3, y = 0.5, label = "(Idler teeth don't affect ratio!)", size = 2.8 * diagram_text_scale, fontface = "italic") +
+  annotate("rect", xmin = 0.3, xmax = 5.3, ymin = 0.1, ymax = 1.6, fill = "lightyellow", color = "black") +
+  annotate("text", x = 2.8, y = 1.3, label = "Simple Gear Train Ratio:", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 2.8, y = 0.85, label = "GR = N_driven / N_driver = 24/20 = 1.2:1", size = 3 * diagram_text_scale) +
+  annotate("text", x = 2.8, y = 0.4, label = "(Idler teeth don't affect ratio!)", size = 2.8 * diagram_text_scale, fontface = "italic") +
 
   ## Direction note
-  annotate("rect", xmin = 6, xmax = 10.5, ymin = 0.3, ymax = 1.5, fill = "mistyrose", color = "black") +
-  annotate("text", x = 8.25, y = 1.2, label = "Odd # of gears: Same direction", size = 2.8 * diagram_text_scale) +
-  annotate("text", x = 8.25, y = 0.7, label = "Even # of gears: Opposite direction", size = 2.8 * diagram_text_scale) +
+  annotate("rect", xmin = 8.6, xmax = 12.4, ymin = 2.4, ymax = 4.0, fill = "mistyrose", color = "black") +
+  annotate("text", x = 10.5, y = 3.55, label = "Odd number of gears:\nfirst and last turn the same way", size = 2.8 * diagram_text_scale) +
+  annotate("text", x = 10.5, y = 2.8, label = "Even number: opposite ways", size = 2.8 * diagram_text_scale) +
 
-  coord_fixed(ratio = 1, xlim = c(0, 11), ylim = c(0, 5.5)) +
+  coord_fixed(ratio = 1, xlim = c(0, 12.5), ylim = c(0, 5.8)) +
   labs(title = "Simple Gear Train") +
   theme_gear
 ```
@@ -1197,43 +1209,40 @@ The idler gears only affect **direction of rotation**, not the gear ratio.
 
 In a **compound gear train**, two or more gears are mounted on the same shaft, rotating together. This allows for much higher gear ratios in a compact space.
 
-```{r compound-gear-train, echo=FALSE, fig.width=12, fig.height=6, fig.align='center', fig.cap="Compound gear train: higher ratios in less space."}
-gear_a <- gear_profile(2, 3.5, 1, 16, 0)
-gear_b <- gear_profile(4.5, 3.5, 1.5, 24, pi/48)
-gear_c <- gear_profile(4.5, 3.5, 0.7, 12, pi/24)
-gear_d <- gear_profile(7.3, 3.5, 2, 32, 0)
+```{r compound-gear-train, echo=FALSE, fig.width=12, fig.height=6, fig.align='center', fig.cap="Compound gear train: higher ratios in less space. Gears B and C are fixed to the same shaft; B lies in the rear plane (meshing with A) and C in the front plane (meshing with D)."}
+## Both stages module 0.1: A 16 (r 0.8), B 24 (r 1.2), C 12 (r 0.6), D 32 (r 1.6)
+yc <- 3.5
+xA <- 2; xB <- xA + 0.8 + 1.2; xD <- xB + 0.6 + 1.6
+rA <- pi / 16
+rB <- mesh_rot(rA, 16, 0, 24)
+rC <- pi / 12
+rD <- mesh_rot(rC, 12, 0, 32)
+gear_a <- gear_profile(xA, yc, 0.8, 16, rA)
+gear_b <- gear_profile(xB, yc, 1.2, 24, rB)
+gear_c <- gear_profile(xB, yc, 0.6, 12, rC)
+gear_d <- gear_profile(xD, yc, 1.6, 32, rD)
 
 ggplot() +
-  ## Gear A (Driver)
+  ## Rear plane: A meshes with B
   geom_polygon(data = gear_a, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
-  annotate("point", x = 2, y = 3.5, size = 4, color = "black") +
-  annotate("text", x = 2, y = 5, label = "Gear A\n16 teeth", size = 3 * diagram_text_scale, fontface = "bold", color = "darkorange") +
-
-  ## Gear B (on compound shaft)
-  geom_polygon(data = gear_b, aes(x = x, y = y), fill = "forestgreen", color = "black", linewidth = 0.5) +
-
-  ## Gear C (on same shaft as B, smaller)
+  geom_polygon(data = gear_b, aes(x = x, y = y), fill = "forestgreen", color = "black", linewidth = 0.5, alpha = 0.55) +
+  ## Front plane: C meshes with D
+  geom_polygon(data = gear_d, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5, alpha = 0.9) +
   geom_polygon(data = gear_c, aes(x = x, y = y), fill = "lightgreen", color = "black", linewidth = 0.5) +
-  annotate("point", x = 4.5, y = 3.5, size = 4, color = "black") +
-  annotate("text", x = 4.5, y = 5.5, label = "Gear B: 24 teeth\nGear C: 12 teeth", size = 3 * diagram_text_scale, fontface = "bold", color = "darkgreen") +
-  annotate("text", x = 4.5, y = 1.5, label = "COMPOUND\nSHAFT", size = 3 * diagram_text_scale, fontface = "bold") +
+  annotate("point", x = c(xA, xB, xD), y = yc, size = 4, color = "black") +
 
-  ## Gear D (Output)
-  geom_polygon(data = gear_d, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  annotate("point", x = 7.3, y = 3.5, size = 5, color = "black") +
-  annotate("text", x = 7.3, y = 6, label = "Gear D\n32 teeth", size = 3 * diagram_text_scale, fontface = "bold", color = "steelblue") +
+  annotate("text", x = xA, y = 5.0, label = "Gear A\n16 teeth", size = 3 * diagram_text_scale, fontface = "bold", color = "darkorange") +
+  annotate("text", x = xB, y = 5.45, label = "Gear B: 24 teeth (rear)\nGear C: 12 teeth (front)", size = 3 * diagram_text_scale, fontface = "bold", color = "darkgreen") +
+  annotate("text", x = xB - 0.3, y = 1.75, label = "COMPOUND SHAFT\n(B and C turn together)", size = 2.8 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = xD, y = 5.9, label = "Gear D\n32 teeth", size = 3 * diagram_text_scale, fontface = "bold", color = "steelblue") +
 
-  ## Shaft connection indicator
-  annotate("segment", x = 4.5, xend = 4.5, y = 2, yend = 2.5, linewidth = 4, color = "gray40") +
-
-  ## Input/Output labels
-  annotate("segment", x = 0.5, xend = 1.2, y = 3.5, yend = 3.5,
-               arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1.2, color = "red") +
-  annotate("text", x = 0.5, y = 3, label = "Input", color = "red", fontface = "bold", size = 3 * diagram_text_scale) +
-
-  annotate("segment", x = 9.3, xend = 10, y = 3.5, yend = 3.5,
-               arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1.2, color = "darkgreen") +
-  annotate("text", x = 10, y = 3, label = "Output", color = "darkgreen", fontface = "bold", size = 3 * diagram_text_scale) +
+  ## Input/Output
+  annotate("segment", x = 0.3, xend = 1.0, y = yc, yend = yc,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1.2, color = "red") +
+  annotate("text", x = 0.5, y = yc - 0.4, label = "Input", color = "red", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("segment", x = xD + 1.8, xend = xD + 2.5, y = yc, yend = yc,
+           arrow = arrow(length = unit(0.2, "cm"), type = "closed"), linewidth = 1.2, color = "darkgreen") +
+  annotate("text", x = xD + 2.3, y = yc - 0.4, label = "Output", color = "darkgreen", fontface = "bold", size = 3 * diagram_text_scale) +
 
   ## Formula box
   annotate("rect", xmin = 0.3, xmax = 5.5, ymin = -0.3, ymax = 1.2, fill = "lightyellow", color = "black") +
@@ -1242,9 +1251,9 @@ ggplot() +
   annotate("text", x = 2.9, y = -0.1, label = "GR = (24/16) × (32/12) = 1.5 × 2.67 = 4:1", size = 3 * diagram_text_scale) +
 
   ## Advantage note
-  annotate("rect", xmin = 6, xmax = 10.5, ymin = -0.3, ymax = 0.8, fill = "honeydew", color = "black") +
-  annotate("text", x = 8.25, y = 0.5, label = "Advantage: 4:1 ratio in", size = 2.8 * diagram_text_scale) +
-  annotate("text", x = 8.25, y = 0, label = "compact space!", size = 2.8 * diagram_text_scale, fontface = "bold") +
+  annotate("rect", xmin = 6.6, xmax = 10.6, ymin = -0.3, ymax = 0.8, fill = "honeydew", color = "black") +
+  annotate("text", x = 8.6, y = 0.5, label = "Advantage: 4:1 ratio in", size = 2.8 * diagram_text_scale) +
+  annotate("text", x = 8.6, y = 0, label = "compact space!", size = 2.8 * diagram_text_scale, fontface = "bold") +
 
   coord_fixed(ratio = 1, xlim = c(0, 11), ylim = c(-0.5, 6.5)) +
   labs(title = "Compound Gear Train") +
@@ -1341,81 +1350,65 @@ if (knitr::is_html_output()) {
 
 @fig-planetary-animation shows the gear set in motion, and the diagram below names the parts and lists the ways the set can be operated.
 
-```{r planetary-gear, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Planetary gear system components and arrangement."}
-## Sun gear
-sun <- gear_profile(5, 4, 0.8, 18, 0)
+```{r planetary-gear, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Planetary gear system components and arrangement: an 18-tooth sun, three 12-tooth planets on a carrier, and a 42-tooth ring gear."}
+## Module 0.1: sun 18 (r 0.9), planets 12 (r 0.6), ring 42 (r 2.1); planets on orbit radius 1.5
+cx <- 5; cy <- 4
+Ns <- 18; Np <- 12; Nr <- 42; m <- 0.1
+rs <- m * Ns / 2; rp <- m * Np / 2; rr <- m * Nr / 2; a <- rs + rp
+th <- c(90, 210, 330) * pi / 180
+rot_s <- 0
+rot_p <- sapply(th, function(t) mesh_rot(rot_s, Ns, t, Np))
+rot_r <- ring_rot(rot_p[1], Np, th[1], Nr)
+pc <- data.frame(x = cx + a * cos(th), y = cy + a * sin(th))
 
-## Planet gears — equally spaced at 120° (90°, 210°, 330°) on orbit radius = 2
-planet1 <- gear_profile(5,    6,    0.6, 12, pi/24)  # 90°
-planet2 <- gear_profile(6.73, 3,    0.6, 12, pi/24)  # 330°
-planet3 <- gear_profile(3.27, 3,    0.6, 12, pi/24)  # 210°
-
-## Ring gear (internal teeth - simplified)
-theta <- seq(0, 2*pi, length.out = 100)
-ring_outer <- data.frame(x = 5 + 3   * cos(theta), y = 4 + 3   * sin(theta))
-ring_inner <- data.frame(x = 5 + 2.4 * cos(theta), y = 4 + 2.4 * sin(theta))
+ang <- seq(0, 2 * pi, length.out = 200)
+ring_outer <- data.frame(x = cx + (rr + 0.55) * cos(ang), y = cy + (rr + 0.55) * sin(ang))
+ring_hole  <- gear_profile(cx, cy, rr, Nr, rot_r, ra = rr + 1.25 * m, rf = rr - m)
+sun <- gear_profile(cx, cy, rs, Ns, rot_s)
+planets <- do.call(rbind, lapply(1:3, function(i) cbind(gear_profile(pc$x[i], pc$y[i], rp, Np, rot_p[i]), id = i)))
+## carrier: a three-armed plate joining the planet pins
+arms <- data.frame(x = c(pc$x, pc$x[1]), y = c(pc$y, pc$y[1]))
 
 ggplot() +
-  ## Ring gear (outer circle)
-  geom_polygon(data = ring_outer, aes(x = x, y = y), fill = "gray60", color = "black", linewidth = 1) +
-  ## Ring gear (inner circle - makes it hollow)
-  geom_polygon(data = ring_inner, aes(x = x, y = y), fill = "white", color = "black", linewidth = 0.5) +
-
-  ## Internal teeth suggestion
-  annotate("point", x = 5 + 2.35 * cos(seq(0, 2*pi, length.out = 37)[-37]),
-                 y = 4 + 2.35 * sin(seq(0, 2*pi, length.out = 37)[-37]),
-             size = 1.5, color = "gray40") +
-
-  ## Planet carrier (circle)
-  annotate("point", x = 5, y = 4, size = 50, color = "tan", shape = 16, alpha = 0.3) +
-
-  ## Sun gear
-  geom_polygon(data = sun, aes(x = x, y = y), fill = "orange", color = "black", linewidth = 0.5) +
-  annotate("point", x = 5, y = 4, size = 4, color = "black") +
-
-  ## Planet gear 1 — top (90°)
-  geom_polygon(data = planet1, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  annotate("point", x = 5, y = 6, size = 2, color = "black") +
-
-  ## Planet gear 2 — bottom-right (330°)
-  geom_polygon(data = planet2, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  annotate("point", x = 6.73, y = 3, size = 2, color = "black") +
-
-  ## Planet gear 3 — bottom-left (210°)
-  geom_polygon(data = planet3, aes(x = x, y = y), fill = "steelblue", color = "black", linewidth = 0.5) +
-  annotate("point", x = 3.27, y = 3, size = 2, color = "black") +
+  geom_polygon(data = ring_outer, aes(x, y), fill = "gray60", color = "black", linewidth = 1) +
+  geom_polygon(data = ring_hole, aes(x, y), fill = "white", color = "black", linewidth = 0.5) +
+  geom_polygon(data = sun, aes(x, y), fill = "orange", color = "black", linewidth = 0.5) +
+  geom_polygon(data = planets, aes(x, y, group = id), fill = "steelblue", color = "black", linewidth = 0.5) +
+  ## carrier drawn in front as three arms from the central axis to the planet pins
+  annotate("segment", x = cx, y = cy, xend = pc$x, yend = pc$y, color = "tan3", linewidth = 3.5, alpha = 0.85, lineend = "round") +
+  annotate("point", x = cx, y = cy, size = 3, color = "black") +
+  annotate("point", x = pc$x, y = pc$y, size = 2.5, color = "tan4") +
 
   ## Labels
-  annotate("label", x = 5,    y = 4,   label = "SUN",    fontface = "bold", size = 2.4 * diagram_text_scale, fill = "white", linewidth = 0, color = "darkorange4") +
-  annotate("text", x = 5,    y = 7.35, label = "Planet gears", size = 2.8 * diagram_text_scale,        color = "steelblue") +
-  annotate("text", x = 0.7,  y = 4,   label = "Ring\n(Annulus)", fontface = "bold", size = 3 * diagram_text_scale, color = "gray40") +
-
-  ## Carrier indication
-  annotate("curve", x = 8.6, xend = 6.2, y = 5.6, yend = 4.9,
-             arrow = arrow(length = unit(0.15, "cm")), curvature = 0.2, color = "tan4") +
+  annotate("label", x = cx, y = cy - 0.35, label = "SUN", fontface = "bold", size = 2.4 * diagram_text_scale, fill = "white", linewidth = 0, color = "darkorange4") +
+  annotate("text", x = 5, y = 7.0, label = "Planet gears (3)", size = 2.8 * diagram_text_scale, color = "steelblue") +
+  annotate("segment", x = 5, xend = 5, y = 6.85, yend = 6.2, color = "steelblue") +
+  annotate("text", x = 1.3, y = 4, label = "Ring\n(Annulus)", fontface = "bold", size = 3 * diagram_text_scale, color = "gray30") +
+  annotate("segment", x = 1.85, xend = 2.4, y = 4, yend = 4, color = "gray30") +
+  annotate("segment", x = 8.6, xend = (cx + pc$x[3]) / 2 + 0.05, y = 5.6, yend = (cy + pc$y[3]) / 2 + 0.12,
+           arrow = arrow(length = unit(0.15, "cm")), color = "tan4") +
   annotate("text", x = 10.2, y = 5.8, label = "Carrier\n(holds planets)", size = 2.8 * diagram_text_scale, color = "tan4") +
 
-  ## Title
-  annotate("text", x = 5, y = 8, label = "PLANETARY GEAR SYSTEM", fontface = "bold", size = 5 * diagram_text_scale) +
+  annotate("text", x = 5, y = 7.9, label = "PLANETARY GEAR SYSTEM", fontface = "bold", size = 5 * diagram_text_scale) +
 
   ## Operating modes table
-  annotate("rect", xmin = 8.5, xmax = 12.5, ymin = 0.5, ymax = 4, fill = "white", color = "black") +
-  annotate("text", x = 10.5, y = 3.7, label = "Operating Modes:", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 8.7,  y = 3.2, label = "Input   Fixed   Output  Ratio",         size = 2.5 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 8.7,  y = 2.7, label = "Sun     Ring    Carrier  Reduction",     size = 2.5 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 8.7,  y = 2.2, label = "Carrier Ring    Sun     Increase",       size = 2.5 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 8.7,  y = 1.7, label = "Sun     Carrier Ring    Rev. reduction", size = 2.5 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 8.7,  y = 1.2, label = "Ring    Carrier Sun     Rev. increase",  size = 2.5 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 8.7,  y = 0.7, label = "All connected: Direct (1:1)",            size = 2.5 * diagram_text_scale, hjust = 0) +
+  annotate("rect", xmin = 8.5, xmax = 13.3, ymin = 0.5, ymax = 4, fill = "white", color = "black") +
+  annotate("text", x = 10.7, y = 3.7, label = "Operating Modes:", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("text", x = 8.7,  y = 3.2, label = "Input   Fixed   Output  Ratio",         size = 2.5 * diagram_text_scale, hjust = 0, family = "mono") +
+  annotate("text", x = 8.7,  y = 2.7, label = "Sun     Ring    Carrier Reduction",     size = 2.5 * diagram_text_scale, hjust = 0, family = "mono") +
+  annotate("text", x = 8.7,  y = 2.2, label = "Carrier Ring    Sun     Increase",      size = 2.5 * diagram_text_scale, hjust = 0, family = "mono") +
+  annotate("text", x = 8.7,  y = 1.7, label = "Sun     Carrier Ring    Rev. reduction", size = 2.5 * diagram_text_scale, hjust = 0, family = "mono") +
+  annotate("text", x = 8.7,  y = 1.2, label = "Ring    Carrier Sun     Rev. increase",  size = 2.5 * diagram_text_scale, hjust = 0, family = "mono") +
+  annotate("text", x = 8.7,  y = 0.7, label = "Two members locked: direct (1:1)",      size = 2.5 * diagram_text_scale, hjust = 0) +
 
   ## Advantages
-  annotate("rect", xmin = -1.5, xmax = 2, ymin = 0.5, ymax = 2.5, fill = "honeydew", color = "black") +
-  annotate("text", x = 0.25, y = 2.2, label = "Advantages:", fontface = "bold", size = 3 * diagram_text_scale) +
+  annotate("rect", xmin = -1.5, xmax = 1.9, ymin = 0.5, ymax = 2.5, fill = "honeydew", color = "black") +
+  annotate("text", x = 0.2, y = 2.2, label = "Advantages:", fontface = "bold", size = 3 * diagram_text_scale) +
   annotate("text", x = -1.3, y = 1.7, label = "• Compact",             size = 2.8 * diagram_text_scale, hjust = 0) +
   annotate("text", x = -1.3, y = 1.2, label = "• High torque capacity", size = 2.8 * diagram_text_scale, hjust = 0) +
   annotate("text", x = -1.3, y = 0.7, label = "• Multiple ratios",      size = 2.8 * diagram_text_scale, hjust = 0) +
 
-  coord_fixed(ratio = 1, xlim = c(-2, 13), ylim = c(0, 8.5)) +
+  coord_fixed(ratio = 1, xlim = c(-2, 13.5), ylim = c(0.3, 8.3)) +
   theme_gear
 ```
 
@@ -1582,40 +1575,64 @@ cat(sprintf("  Overall ratio, engine/wheel  %.2f : 1\n", gear_ratio * final_driv
 
 ### Automotive Industry
 
-```{r automotive-gears, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Gear applications in automotive systems."}
+```{r automotive-gears, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Gear applications in automotive systems: constant-mesh gear pairs between two gearbox shafts (side view), a hypoid ring gear and pinion, and a rack and pinion."}
+panel <- function(x0, title) list(
+  annotate("rect", xmin = x0, xmax = x0 + 3.5, ymin = 1, ymax = 4.5, fill = "gray92", color = "black", linewidth = 1),
+  annotate("text", x = x0 + 1.75, y = 4.8, label = title, fontface = "bold", size = 3.5 * diagram_text_scale))
+
+## Manual gearbox, side view: four gear pairs, each pair's radii add up to the fixed centre distance
+ys_in <- 3.3; ys_lay <- 2.3; cd <- ys_in - ys_lay
+xg <- c(1.6, 2.2, 2.8, 3.4)
+r_in <- c(0.3, 0.42, 0.55, 0.68)                   # gears on the main shaft
+r_ly <- cd - r_in                                  # mating layshaft gears
+gb <- rbind(data.frame(x = xg, ymin = ys_in - r_in, ymax = ys_in + r_in, f = "steelblue"),
+            data.frame(x = xg, ymin = ys_lay - r_ly, ymax = ys_lay + r_ly, f = "orange"))
+
+## Differential: ring gear face-on, hypoid pinion (side view, axis offset below the ring centre)
+rc <- c(6.45, 2.85); rr <- 1.05
+ring <- gear_profile(rc[1], rc[2], rr, 37, 0)
+py <- rc[2] - 0.45                                 # pinion axis offset (hypoid)
+px <- rc[1] - sqrt(rr^2 - (py - rc[2])^2)          # pinion apex reaches the ring's pitch circle
+
+## Rack and pinion: pinion pitch circle tangent to the rack pitch line
+pc <- c(10.25, 3.35); rp <- 0.45; Np <- 12; mp <- 2 * rp / Np; pp <- pi * mp
+pin <- gear_profile(pc[1], pc[2], rp, Np, rotation = -pi / 2 + pi / Np)   # a space faces the rack
+y0 <- pc[2] - rp                                   # rack pitch line
+xr <- seq(8.75, 11.75, by = pp); xr <- xr - (xr[which.min(abs(xr - pc[1]))] - pc[1])   # a tooth under the pinion space
+xr <- xr[xr > 8.8 & xr < 11.7]
+ht <- pp / 4 - mp * tan(20 * pi / 180); hb <- pp / 4 + 1.25 * mp * tan(20 * pi / 180)
+rack_teeth <- do.call(rbind, lapply(seq_along(xr), function(i)
+  data.frame(x = xr[i] + c(-hb, -ht, ht, hb), y = y0 + c(-1.25 * mp, mp, mp, -1.25 * mp), id = i)))
+
 ggplot() +
-  ## Manual Transmission
-  annotate("rect", xmin = 0.5, xmax = 4, ymin = 1, ymax = 4.5, fill = "lightgray", color = "black", linewidth = 1) +
-  annotate("text", x = 2.25, y = 4.8, label = "Manual Transmission", fontface = "bold", size = 3.5 * diagram_text_scale) +
+  panel(0.5, "Manual Transmission") +
+  annotate("segment", x = 0.7, xend = 3.8, y = c(ys_in, ys_lay), yend = c(ys_in, ys_lay), linewidth = 2.2, color = "gray40") +
+  geom_rect(data = gb, aes(xmin = x - 0.2, xmax = x + 0.2, ymin = ymin, ymax = ymax, fill = f), color = "black") +
+  annotate("text", x = 0.6, y = ys_in + 0.17, label = "main shaft", hjust = 0, size = 2.4 * diagram_text_scale) +
+  annotate("text", x = 0.6, y = ys_lay - 0.17, label = "layshaft", hjust = 0, size = 2.4 * diagram_text_scale) +
+  annotate("text", x = 2.25, y = 1.3, label = "Helical gear pairs, constant mesh\none pair per ratio", size = 2.5 * diagram_text_scale) +
 
-  ## Simplified gear arrangement
-  annotate("rect", xmin = 0.8, xmax = 3.7, ymin = 2.8, ymax = 3.2, fill = "gray50", color = "black") +
-  annotate("rect", xmin = 0.8, xmax = 3.7, ymin = 1.8, ymax = 2.2, fill = "gray50", color = "black") +
-  annotate("point", x = c(1.3, 2, 2.7, 3.4), y = rep(3, 4), size = c(6, 8, 10, 12), color = "steelblue") +
-  annotate("point", x = c(1.3, 2, 2.7, 3.4), y = rep(2, 4), size = c(12, 10, 8, 6), color = "orange") +
-  annotate("text", x = 2.25, y = 1.3, label = "Helical gears\nMultiple ratios", size = 2.5 * diagram_text_scale) +
+  panel(4.7, "Differential") +
+  geom_polygon(data = ring, aes(x, y), fill = "steelblue", color = "black", linewidth = 0.4) +
+  annotate("point", x = rc[1], y = rc[2], size = 2) +
+  annotate("polygon", x = c(px, px - 0.55, px - 0.55), y = c(py, py + 0.28, py - 0.28), fill = "orange", color = "black") +
+  annotate("segment", x = 4.75, xend = px - 0.55, y = py, yend = py, linewidth = 2.5, color = "gray40") +
+  annotate("segment", x = rc[1] - 1.3, xend = rc[1] + 1.3, y = rc[2], yend = rc[2], linetype = "dashed", linewidth = 0.3) +
+  annotate("text", x = 4.8, y = py - 0.45, label = "propshaft", size = 2.4 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 6.45, y = 1.3, label = "Hypoid ring gear and pinion:\npinion axis offset below the ring centre", size = 2.5 * diagram_text_scale) +
 
-  ## Differential
-  annotate("rect", xmin = 4.5, xmax = 8, ymin = 1, ymax = 4.5, fill = "lightgray", color = "black", linewidth = 1) +
-  annotate("text", x = 6.25, y = 4.8, label = "Differential", fontface = "bold", size = 3.5 * diagram_text_scale) +
-
-  ## Ring and pinion representation
-  annotate("point", x = 6.25, y = 2.8, size = 25, color = "steelblue") +
-  annotate("point", x = 5.5, y = 2.8, size = 8, color = "orange") +
-  annotate("segment", x = 4.5, xend = 5.3, y = 2.8, yend = 2.8, linewidth = 3, color = "gray40") +
-  annotate("text", x = 6.25, y = 1.3, label = "Spiral bevel/Hypoid\nFinal drive ratio", size = 2.5 * diagram_text_scale) +
-
-  ## Steering
-  annotate("rect", xmin = 8.5, xmax = 12, ymin = 1, ymax = 4.5, fill = "lightgray", color = "black", linewidth = 1) +
-  annotate("text", x = 10.25, y = 4.8, label = "Steering System", fontface = "bold", size = 3.5 * diagram_text_scale) +
-
-  ## Rack and pinion
-  annotate("rect", xmin = 8.8, xmax = 11.7, ymin = 2.5, ymax = 3, fill = "steelblue", color = "black") +
-  annotate("point", x = 10.25, y = 3.5, size = 10, color = "orange") +
-  annotate("segment", x = 10.25, xend = 10.25, y = 3.8, yend = 4.3, linewidth = 3, color = "gray40") +
+  panel(8.5, "Steering System") +
+  annotate("rect", xmin = 8.75, xmax = 11.75, ymin = y0 - 0.55, ymax = y0 - 1.25 * mp, fill = "steelblue", color = "black") +
+  geom_polygon(data = rack_teeth, aes(x, y, group = id), fill = "steelblue", color = "black", linewidth = 0.3) +
+  geom_polygon(data = pin, aes(x, y), fill = "orange", color = "black", linewidth = 0.4) +
+  annotate("segment", x = pc[1], xend = pc[1], y = pc[2] + 0.5, yend = 4.3, linewidth = 2.5, color = "gray40") +
+  annotate("point", x = pc[1], y = pc[2], size = 2) +
+  annotate("segment", x = 9.1, xend = 9.9, y = y0 - 0.85, yend = y0 - 0.85, arrow = arrow(length = unit(0.18, "cm"), ends = "both")) +
+  annotate("text", x = 9.5, y = y0 - 1.05, label = "to the tie rods", size = 2.4 * diagram_text_scale) +
   annotate("text", x = 10.25, y = 1.3, label = "Rack and pinion\nPrecise control", size = 2.5 * diagram_text_scale) +
 
-  coord_cartesian(xlim = c(0, 12.5), ylim = c(0.8, 5.3)) +
+  scale_fill_identity() +
+  coord_fixed(ratio = 1, xlim = c(0.3, 12.2), ylim = c(0.8, 5.1)) +
   labs(title = "Automotive Gear Applications") +
   theme_gear
 ```
@@ -1770,6 +1787,10 @@ tag <- function(x, y, txt, ...) {
 }
 
 ring_t <- seq(0, 2 * pi, length.out = 81)
+## harmonic drive geometry (module 0.04): circular spline 40 teeth, flexspline 38 teeth
+hd_ring <- gear_profile(10.4, 2.75, 0.8, 40, 0, ra = 0.8 + 1.25 * 0.04, rf = 0.8 - 0.04)
+hd_flex <- gear_profile(0, 0, 0.76, 38, 0)
+hd_flex <- data.frame(x = 10.4 + 1.05 * hd_flex$x, y = 2.75 + 0.9 * hd_flex$y)
 
 ggplot() +
   ## ---- Vehicle drivetrain, top view ----
@@ -1804,10 +1825,14 @@ ggplot() +
 
   ## ---- Harmonic drive actuator ----
   panel_frame(8.5, "Harmonic actuator") +
-  gear_poly(10.4, 2.75, 0.9, 36, "gray60") +
-  disc(10.4, 2.75, 0.7, "white") +
-  ellipse_poly(10.4, 2.75, 0.62, 0.5, "steelblue") +
-  ellipse_poly(10.4, 2.75, 0.5, 0.3, "orange") +
+  ## circular spline: rigid ring with INTERNAL teeth (40)
+  disc(10.4, 2.75, 1.0, "gray60") +
+  annotate("polygon", x = hd_ring$x, y = hd_ring$y, fill = "white", color = "black", linewidth = 0.4) +
+  ## flexspline: 38 external teeth on a cup pushed into an ellipse; it meshes only at the ends of the long axis
+  annotate("polygon", x = hd_flex$x, y = hd_flex$y, fill = "steelblue", color = "black", linewidth = 0.4) +
+  ellipse_poly(10.4, 2.75, 0.64, 0.55, "white") +
+  ## wave generator: elliptical cam inside the flexspline
+  ellipse_poly(10.4, 2.75, 0.6, 0.5, "orange") +
   disc(10.4, 2.75, 0.1, "white") +
   annotate("segment", x = 11.6, xend = 11.1, y = 3.55, yend = 3.3, color = "gray30") +
   tag(11.85, 3.8, "Circular\nspline") +
@@ -1898,41 +1923,51 @@ knitr::include_graphics("images/gears-wiki/failure-map.png")
 
 The sketch below summarizes three of these mechanisms. The photographs that follow show what each one looks like on a real gear.
 
-```{r gear-failures, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Schematic of three common gear failure modes."}
+```{r gear-failures, echo=FALSE, fig.width=12, fig.height=5, fig.align='center', fig.cap="Schematic of three common gear failure modes on a single tooth. The load F acts on the right flank; bending puts the root fillet on that side in tension."}
+## One tooth on a strip of gear rim: straight flanks with root fillets
+tooth <- function(x0, w_root = 1.0, w_tip = 0.42, h = 1.45, yb = 1.85, f = 0.16) {
+  a <- seq(pi, 3 * pi / 2, length.out = 10)          # left fillet, concave
+  b <- seq(3 * pi / 2, 2 * pi, length.out = 10)      # right fillet
+  xl <- x0 - w_root / 2; xr <- x0 + w_root / 2
+  data.frame(x = c(x0 - 1.1, xl - f + f * (1 + cos(a)) - f, x0 - w_tip / 2, x0 + w_tip / 2,
+                   xr + f + f * (cos(b) - 1) + f, x0 + 1.1, x0 + 1.1, x0 - 1.1),
+             y = c(yb, yb + f + f * sin(a), yb + h, yb + h, yb + f + f * sin(b), yb, yb - 0.45, yb - 0.45))
+}
+tt <- function(x0) tooth(x0)
+load_arrow <- function(x0) annotate("segment", x = x0 + 0.75, xend = x0 + 0.33, y = 3.05, yend = 2.85,
+                                    arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "darkred", linewidth = 1)
+frame <- function(x0, title) list(
+  annotate("rect", xmin = x0 - 1.5, xmax = x0 + 1.5, ymin = 1, ymax = 4, fill = "white", color = "black", linewidth = 1),
+  annotate("text", x = x0, y = 4.3, label = title, fontface = "bold", size = 3.5 * diagram_text_scale))
+
+## pits: small dark craters on the right flank, near and just below the pitch line
+fl <- function(t) c(0.5 - t * (0.5 - 0.21), 1.85 + 0.16 + t * (1.45 - 0.16))   # point on the right flank (local x, y)
+pits <- t(sapply(c(0.30, 0.38, 0.45, 0.52), fl))
+
 ggplot() +
-  ## Bending Fatigue
-  annotate("rect", xmin = 0.5, xmax = 3.5, ymin = 1, ymax = 4, fill = "white", color = "black", linewidth = 1) +
-  annotate("text", x = 2, y = 4.3, label = "Bending Fatigue", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  ## Tooth with crack
-  annotate("polygon", x = c(1.5, 2, 2.5, 2.3, 2, 1.7), y = c(1.8, 3.5, 1.8, 1.8, 1.5, 1.8),
-               fill = "steelblue", color = "black") +
-  ## Crack
-  annotate("path", x = c(1.7, 1.85, 1.75, 1.9), y = c(1.8, 2.2, 2.4, 2.6), color = "red", linewidth = 1.5) +
-  annotate("text", x = 2, y = 1.3, label = "Crack at root fillet\nfrom cyclic loading", size = 2.5 * diagram_text_scale) +
+  ## Bending fatigue
+  frame(2, "Bending Fatigue") +
+  geom_polygon(data = tt(2), aes(x, y), fill = "steelblue", color = "black") +
+  load_arrow(2) + annotate("text", x = 2.85, y = 3.15, label = "F", color = "darkred", fontface = "bold") +
+  annotate("path", x = 2 + c(0.56, 0.45, 0.33, 0.18), y = c(2.0, 1.93, 1.88, 1.80), color = "red", linewidth = 1.5) +
+  annotate("text", x = 2, y = 1.2, label = "Crack starts at the tensile\nroot fillet and runs across the root", size = 2.5 * diagram_text_scale) +
 
   ## Pitting
-  annotate("rect", xmin = 4, xmax = 7, ymin = 1, ymax = 4, fill = "white", color = "black", linewidth = 1) +
-  annotate("text", x = 5.5, y = 4.3, label = "Surface Pitting", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  ## Tooth with pits
-  annotate("polygon", x = c(5, 5.5, 6, 5.8, 5.5, 5.2), y = c(1.8, 3.5, 1.8, 1.8, 1.5, 1.8),
-               fill = "steelblue", color = "black") +
-  ## Pits
-  annotate("point", x = c(5.3, 5.5, 5.7, 5.4, 5.6), y = c(2.5, 2.8, 2.4, 3, 2.2),
-             size = 2, color = "black") +
-  annotate("text", x = 5.5, y = 1.3, label = "Surface fatigue\nfrom contact stress", size = 2.5 * diagram_text_scale) +
+  frame(5.5, "Surface Pitting") +
+  geom_polygon(data = tt(5.5), aes(x, y), fill = "steelblue", color = "black") +
+  load_arrow(5.5) +
+  annotate("point", x = 5.5 + pits[, 1] - 0.03, y = pits[, 2], size = 2.2, color = "gray15") +
+  annotate("segment", x = 5.5 - 0.7, xend = 5.5 + 0.75, y = 2.65, yend = 2.65, linetype = "dotted", color = "gray40") +
+  annotate("text", x = 5.5 - 0.75, y = 2.65, label = "pitch\nline", hjust = 1, size = 2.2 * diagram_text_scale, color = "gray30") +
+  annotate("text", x = 5.5, y = 1.2, label = "Contact fatigue craters\nnear and below the pitch line", size = 2.5 * diagram_text_scale) +
 
-  ## Wear
-  annotate("rect", xmin = 7.5, xmax = 10.5, ymin = 1, ymax = 4, fill = "white", color = "black", linewidth = 1) +
-  annotate("text", x = 9, y = 4.3, label = "Adhesive Wear", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  ## Normal tooth (dashed)
-  annotate("polygon", x = c(8.5, 9, 9.5, 9.3, 9, 8.7), y = c(1.8, 3.5, 1.8, 1.8, 1.5, 1.8),
-               fill = NA, color = "gray50", linetype = "dashed") +
-  ## Worn tooth
-  annotate("polygon", x = c(8.5, 9, 9.5, 9.25, 9, 8.75), y = c(1.8, 3.2, 1.8, 1.8, 1.6, 1.8),
-               fill = "steelblue", color = "black") +
-  annotate("text", x = 9, y = 1.3, label = "Material loss from\ninsufficient lubrication", size = 2.5 * diagram_text_scale) +
+  ## Wear: thinner flanks, original profile dashed
+  frame(9, "Adhesive Wear") +
+  geom_polygon(data = tooth(9, w_root = 0.84, w_tip = 0.28, h = 1.42), aes(x, y), fill = "steelblue", color = "black") +
+  geom_polygon(data = tt(9), aes(x, y), fill = NA, color = "gray40", linetype = "dashed") +
+  annotate("text", x = 9, y = 1.2, label = "Flanks worn thin (original dashed);\nbacklash grows", size = 2.5 * diagram_text_scale) +
 
-  coord_cartesian(xlim = c(0, 11), ylim = c(0.8, 4.8)) +
+  coord_fixed(ratio = 1, xlim = c(0.3, 10.7), ylim = c(0.9, 4.5)) +
   labs(title = "Common Gear Failure Modes") +
   theme_gear
 ```
@@ -2111,18 +2146,21 @@ $$GR = \frac{1800}{45} = 40:1$$
 
 **2. Select Gear Train Configuration:**
 
-**Option A: Two-stage helical** (preferred for food industry)
+**Option A: Three-stage helical** (preferred for food industry)
 
-- Stage 1: 6.3:1 (16T pinion, 101T gear - round to 100T) → actual 6.25:1
-- Stage 2: 6.4:1 (15T pinion, 96T gear) → actual 6.4:1
-- Total: 6.25 × 6.4 = **40:1** ✓
+A two-stage train needs about $\sqrt{40} = 6.3:1$ per stage. With pinions of at least 17 teeth (to avoid undercut) that means gears of about 108 teeth, and at the module the 200 N·m output stage needs, the last gear would be well over 200 mm in diameter: it cannot fit the 200 mm side of the envelope. Three stages of about $\sqrt[3]{40} = 3.4:1$ keep every gear small:
+
+- Stage 1: 17T pinion, 58T gear → 3.41:1
+- Stage 2: 17T pinion, 58T gear → 3.41:1
+- Stage 3: 18T pinion, 62T gear → 3.44:1
+- Total: $(58/17)^2 \times (62/18) = 40.1:1$, so the output turns at $1800/40.1 = 44.9$ RPM, inside $45 \pm 2\%$ ✓
 
 **Option B: Worm + Helical**
 
 - Worm stage: 20:1
 - Helical stage: 2:1
 - Total: 40:1
-- Self-locking feature may be beneficial
+- Self-locking feature may be beneficial, but a 20:1 worm is only about 80% efficient, so the motor must be larger (about 1.2 kW instead of 1.1 kW)
 
 **3. Material Selection:**
 
@@ -2137,17 +2175,19 @@ $$GR = \frac{1800}{45} = 40:1$$
 - **Smooth exterior** for easy cleaning
 - **Stainless fasteners**
 
-**5. Verify Size:**
+**5. Verify Size:** the module grows with the torque from stage to stage.
 
-- Module 3 for both stages
-- Stage 1 center distance: 3 × (16 + 100) / 2 = 174 mm
-- Stage 2 center distance: 3 × (15 + 96) / 2 = 166.5 mm
-- Fits within 300 × 200 mm envelope ✓
+- Stage 1, module 1.5: gear diameter 1.5 × 58 = 87 mm, centre distance 1.5 × (17 + 58) / 2 = 56.3 mm
+- Stage 2, module 2: gear diameter 2 × 58 = 116 mm, centre distance 2 × (17 + 58) / 2 = 75 mm
+- Stage 3, module 2.5: gear diameter 2.5 × 62 = 155 mm, centre distance 2.5 × (18 + 62) / 2 = 100 mm
+- Output gear: tangential force $F_t = 2T/d = 2 \times 200 / 0.155 = 2.6$ kN on teeth of module 2.5 mm and 25 mm face width, a moderate load for hardened steel
+- The largest gear (155 mm) fits the 200 mm height, and the three stages folded side by side fit the 300 mm length ✓ (a straight in-line layout would be about 325 mm long and would not)
 
 **6. Efficiency Check:**
 
-- Two-stage helical: ~97% × 97% = 94%
-- Input power: (200 × 45 × 2π/60) / 0.94 = 1003 W
+- Three-stage helical: ~97% × 97% × 97% = 91%
+- Output power: 200 × 45 × 2π/60 = 942 W
+- Input power: 942 / 0.91 = 1032 W
 - Motor rating: 1.1 kW minimum ✓
 
 </details>
@@ -2462,30 +2502,30 @@ $$n_{carrier} = \frac{n_{sun}}{GR} = \frac{500}{5} = 100 \text{ RPM}$$
 
 ## Supplemental Videos {-}
 
-### How Gear Ratios Work
+### Spinning Levers: How Gear Ratios and Transmissions Work (1936)
 
 ```{r video-gear-ratios, echo=FALSE, results='asis'}
-embed_youtube("JOLtS4VUcvQ", "How Gear Ratios Work")
+embed_youtube("JOLtS4VUcvQ", "Spinning Levers - How A Transmission Works (Chevrolet, 1936)")
 ```
 
 ### Planetary Gears Explained
 
 ```{r video-planetary-gears, echo=FALSE, results='asis'}
-embed_youtube("ARd-Om2VyiE", "Planetary Gears Explained")
+embed_youtube("oSFZvBm4HFA", "How does a planetary gear work? (tec-science)")
 ```
 
 ### How Manual Transmissions Work
 
 ```{r video-manual-transmission, echo=FALSE, results='asis'}
-embed_youtube("wCu9W9xNwtI", "Manual Transmission Explained")
+embed_youtube("8VEc3zhGaro", "How Manual Transmissions Work - A Simple Explanation (Engineering Explained)")
 ```
 
 The manual gearbox, clutch and synchronizers are covered in @sec-manual-transmission-13.
 
-### How Differentials Work
+### Around the Corner: How Differentials Work (1937)
 
 ```{r video-differentials, echo=FALSE, results='asis'}
-embed_youtube("yYAw79386WI", "How Differentials Work")
+embed_youtube("yYAw79386WI", "Around The Corner - How Differential Steering Works (Chevrolet, 1937)")
 ```
 
 The bevel or hypoid final drive that carries the differential is described in @sec-bevel-gears. The differential's role in the drivetrain is covered in @sec-drivetrain-intro and @sec-awd-4wd-13.

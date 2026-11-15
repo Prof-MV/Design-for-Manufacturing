@@ -58,90 +58,64 @@ The answer lies in the unique advantages belt drives offer:
 
 A belt drive consists of at least two pulleys connected by a flexible belt. When the driving pulley (connected to the motor or power source) rotates, friction between the belt and pulley surface transmits the motion to the driven pulley.
 
-```{r belt-drive-diagram, echo=FALSE, fig.align='center', fig.cap="Basic two-pulley belt drive system showing driver and driven pulleys", fig.width=10, fig.height=6}
-## Create a basic belt drive visualization
+```{r belt-drive-diagram, echo=FALSE, fig.align='center', fig.cap="Basic two-pulley open belt drive. The driver turns counter-clockwise and pulls the belt in from the upper span, so the upper span is the tight side and the lower span the slack side.", fig.width=10, fig.height=6}
 library(ggplot2)
-library(ggforce)
+## ---- Belt path through a list of pulleys --------------------------------------------
+## Pulleys are visited in the order the belt travels (counter-clockwise loop).
+## sigma = +1: pulley inside the loop (belt wraps it CCW); -1: outside (backside idler, wrapped CW).
+belt_path <- function(P) {
+  n <- nrow(P); seg <- list(); tp <- vector("list", n)
+  for (i in seq_len(n)) {
+    j <- i %% n + 1
+    D <- c(P$x[j] - P$x[i], P$y[j] - P$y[i]); L <- sqrt(sum(D^2)); phi <- atan2(D[2], D[1])
+    g <- acos((P$s[i] * P$r[i] - P$s[j] * P$r[j]) / L)
+    nrm <- c(cos(phi - g), sin(phi - g))                       # right-hand normal of the span
+    pi_ <- c(P$x[i], P$y[i]) + P$s[i] * P$r[i] * nrm
+    pj_ <- c(P$x[j], P$y[j]) + P$s[j] * P$r[j] * nrm
+    seg[[i]] <- data.frame(x = c(pi_[1], pj_[1]), y = c(pi_[2], pj_[2]))
+    tp[[i]]$out <- pi_; tp[[j]]$inn <- pj_
+  }
+  arcs <- lapply(seq_len(n), function(k) {
+    a1 <- atan2(tp[[k]]$inn[2] - P$y[k], tp[[k]]$inn[1] - P$x[k])
+    a2 <- atan2(tp[[k]]$out[2] - P$y[k], tp[[k]]$out[1] - P$x[k])
+    if (P$s[k] > 0) { while (a2 < a1) a2 <- a2 + 2 * pi } else { while (a2 > a1) a2 <- a2 - 2 * pi }
+    t <- seq(a1, a2, length.out = 60)
+    data.frame(x = P$x[k] + P$r[k] * cos(t), y = P$y[k] + P$r[k] * sin(t), wrap = abs(a2 - a1))
+  })
+  list(spans = seg, arcs = arcs)
+}
+disc <- function(x, y, r, n = 120) { t <- seq(0, 2 * pi, length.out = n); data.frame(x = x + r * cos(t), y = y + r * sin(t)) }
+rot_arc <- function(x, y, r, from, to, col) {
+  t <- seq(from, to, length.out = 30) * pi / 180
+  annotate("path", x = x + r * cos(t), y = y + r * sin(t), color = col, linewidth = 1.1,
+           arrow = arrow(length = unit(0.25, "cm"), type = "closed"))
+}
 
-## Define pulley parameters
-driver_x <- 0
-driver_y <- 0
-driver_r <- 1.5  ## Smaller driver pulley (speed increase)
+P <- data.frame(x = c(0, 8), y = c(0, 0), r = c(1.5, 3), s = c(1, 1))
+bp <- belt_path(P)
+wrap1 <- bp$arcs[[1]]$wrap[1] * 180 / pi
 
-driven_x <- 8
-driven_y <- 0
-driven_r <- 3    ## Larger driven pulley
-
-## Calculate tangent points for belt
-## Upper tangent
-angle_driver_upper <- asin((driven_r - driver_r) / (driven_x - driver_x))
-angle_driven_upper <- angle_driver_upper
-
-## Tangent points
-tang_driver_upper_x <- driver_x + driver_r * cos(pi/2 - angle_driver_upper)
-tang_driver_upper_y <- driver_y + driver_r * sin(pi/2 - angle_driver_upper)
-tang_driven_upper_x <- driven_x + driven_r * cos(pi/2 - angle_driven_upper)
-tang_driven_upper_y <- driven_y + driven_r * sin(pi/2 - angle_driven_upper)
-
-tang_driver_lower_x <- driver_x + driver_r * cos(-pi/2 + angle_driver_upper)
-tang_driver_lower_y <- driver_y + driver_r * sin(-pi/2 + angle_driver_upper)
-tang_driven_lower_x <- driven_x + driven_r * cos(-pi/2 + angle_driven_upper)
-tang_driven_lower_y <- driven_y + driven_r * sin(-pi/2 + angle_driven_upper)
-
-## Create the plot
 ggplot() +
-  ## Driver pulley (outer ring)
-  geom_circle(aes(x0 = driver_x, y0 = driver_y, r = driver_r),
-              fill = "steelblue", color = "darkblue", linewidth = 1.2) +
-  geom_circle(aes(x0 = driver_x, y0 = driver_y, r = driver_r * 0.3),
-              fill = "gray30", color = "black", linewidth = 1) +
-  ## Driven pulley (outer ring)
-  geom_circle(aes(x0 = driven_x, y0 = driven_y, r = driven_r),
-              fill = "coral", color = "darkred", linewidth = 1.2) +
-  geom_circle(aes(x0 = driven_x, y0 = driven_y, r = driven_r * 0.15),
-              fill = "gray30", color = "black", linewidth = 1) +
-  ## Belt - upper span (tight side)
-  geom_segment(aes(x = tang_driver_upper_x, y = tang_driver_upper_y,
-                   xend = tang_driven_upper_x, yend = tang_driven_upper_y),
-               color = "black", linewidth = 3) +
-  ## Belt - lower span (slack side)
-  geom_segment(aes(x = tang_driver_lower_x, y = tang_driver_lower_y,
-                   xend = tang_driven_lower_x, yend = tang_driven_lower_y),
-               color = "gray40", linewidth = 3) +
-  ## Rotation arrows
-  geom_curve(aes(x = driver_x - 0.3, y = driver_y + driver_r + 0.8,
-                 xend = driver_x + 0.8, yend = driver_y + driver_r + 0.5),
-             arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-             curvature = -0.3, color = "darkblue", linewidth = 1.2) +
-  geom_curve(aes(x = driven_x - 0.5, y = driven_y + driven_r + 0.8,
-                 xend = driven_x + 1.2, yend = driven_y + driven_r + 0.5),
-             arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-             curvature = -0.3, color = "darkred", linewidth = 1.2) +
-  ## Labels
-  annotate("text", x = driver_x, y = driver_y - driver_r - 1,
-           label = "Driver Pulley\n(Small, Fast)",
-           size = 4 * diagram_text_scale, fontface = "bold", color = "darkblue") +
-  annotate("text", x = driven_x, y = driven_y - driven_r - 1,
-           label = "Driven Pulley\n(Large, Slow)",
-           size = 4 * diagram_text_scale, fontface = "bold", color = "darkred") +
-  annotate("text", x = 4, y = 3.7,
-           label = "Tight Side\n(High Tension)",
-           size = 3.5 * diagram_text_scale, color = "black") +
-  annotate("text", x = 4, y = -3.7,
-           label = "Slack Side\n(Low Tension)",
-           size = 3.5 * diagram_text_scale, color = "gray40") +
-  ## Center distance annotation
-  annotate("segment", x = driver_x, y = -5, xend = driven_x, yend = -5,
-           arrow = arrow(ends = "both", length = unit(0.2, "cm")),
-           color = "darkgreen", linewidth = 1) +
-  annotate("text", x = 4, y = -5.7, label = "Center Distance (C)",
-           size = 4 * diagram_text_scale, color = "darkgreen", fontface = "italic") +
-  coord_fixed() +
-  xlim(-3, 12) +
-  ylim(-7, 5) +
+  geom_polygon(data = disc(0, 0, 1.5), aes(x, y), fill = "steelblue", color = "darkblue", linewidth = 1) +
+  geom_polygon(data = disc(0, 0, 0.45), aes(x, y), fill = "gray30", color = "black") +
+  geom_polygon(data = disc(8, 0, 3), aes(x, y), fill = "coral", color = "darkred", linewidth = 1) +
+  geom_polygon(data = disc(8, 0, 0.45), aes(x, y), fill = "gray30", color = "black") +
+  geom_path(data = bp$arcs[[1]], aes(x, y), linewidth = 2.5, color = "gray15") +
+  geom_path(data = bp$arcs[[2]], aes(x, y), linewidth = 2.5, color = "gray15") +
+  geom_path(data = bp$spans[[1]], aes(x, y), linewidth = 2.5, color = "gray50") +      # lower span (slack)
+  geom_path(data = bp$spans[[2]], aes(x, y), linewidth = 2.5, color = "black") +       # upper span (tight)
+  rot_arc(0, 0, 2.1, 20, 110, "darkblue") + rot_arc(8, 0, 3.6, 30, 80, "darkred") +
+  annotate("text", x = 0, y = -2.6, label = "Driver Pulley\n(Small, Fast)", size = 4 * diagram_text_scale, fontface = "bold", color = "darkblue") +
+  annotate("text", x = 8, y = -4.1, label = "Driven Pulley\n(Large, Slow)", size = 4 * diagram_text_scale, fontface = "bold", color = "darkred") +
+  annotate("text", x = 4, y = 3.5, label = "Tight Side (High Tension T1)", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 4, y = -3.4, label = "Slack Side (Low Tension T2)", size = 3.5 * diagram_text_scale, color = "gray40") +
+  annotate("text", x = -1.9, y = 1.4, label = sprintf("wrap %.0f°", wrap1), size = 3.2 * diagram_text_scale, color = "darkblue", hjust = 1) +
+  annotate("segment", x = 0, y = -5.2, xend = 8, yend = -5.2, arrow = arrow(ends = "both", length = unit(0.2, "cm")), color = "darkgreen") +
+  annotate("text", x = 4, y = -5.7, label = "Center Distance (C)", size = 4 * diagram_text_scale, color = "darkgreen", fontface = "italic") +
+  coord_fixed(xlim = c(-3.5, 11.5), ylim = c(-6, 4.2)) +
   theme_pulley +
   labs(title = "Open Belt Drive System",
-       subtitle = "Speed reduction configuration: large driven pulley reduces output speed while increasing torque")
+       subtitle = "Speed reduction: the large driven pulley turns slower and with more torque")
 ```
 
 ### The Speed Ratio
@@ -172,94 +146,42 @@ Where:
 
 Understanding belt drive terminology is essential for proper selection and design.
 
-```{r pulley-terminology, echo=FALSE, fig.align='center', fig.cap="V-belt pulley (sheave) cross-section with key dimensional terms", fig.width=8, fig.height=7}
-## Create a V-belt pulley cross-section diagram
+```{r pulley-terminology, echo=FALSE, fig.align='center', fig.cap="Half-section of a V-belt pulley (sheave) through its axis, with the belt seated in the groove. The belt wedges against the groove walls and does not touch the bottom of the groove.", fig.width=8, fig.height=7}
 library(ggplot2)
-
-## Define V-groove profile
-groove_depth <- 1.5
-groove_width_top <- 2
-groove_width_bottom <- 0.8
-pulley_width <- 3.5
-pulley_outer_r <- 4
-pulley_inner_r <- 1.5
-flange_height <- 0.4
-
-## Create pulley cross-section (right half, will mirror)
-## V-groove profile points
-v_belt_df <- data.frame(
-  x = c(-groove_width_top/2, -groove_width_bottom/2, groove_width_bottom/2, groove_width_top/2),
-  y = c(pulley_outer_r, pulley_outer_r - groove_depth, pulley_outer_r - groove_depth, pulley_outer_r)
-)
-
-## Belt in the groove (trapezoidal shape)
-belt_df <- data.frame(
-  x = c(-groove_width_top/2 + 0.15, -groove_width_bottom/2 + 0.1,
-        groove_width_bottom/2 - 0.1, groove_width_top/2 - 0.15),
-  y = c(pulley_outer_r + 0.3, pulley_outer_r - groove_depth + 0.2,
-        pulley_outer_r - groove_depth + 0.2, pulley_outer_r + 0.3)
-)
-
+tb <- tan(19 * pi / 180)                    # groove half-angle 19 deg (38 deg groove)
+hw <- function(y) 0.24 + (y - 3.1) * tb      # groove half-width at height y
+rim <- data.frame(x = c(-1.4, 1.4, 1.4, hw(4), hw(3.1), -hw(3.1), -hw(4), -1.4),
+                  y = c(3.0, 3.0, 4.0, 4.0, 3.1, 3.1, 4.0, 4.0))
+belt <- data.frame(x = c(-hw(4.15), hw(4.15), hw(3.55), -hw(3.55)), y = c(4.15, 4.15, 3.55, 3.55))
+apex_y <- 3.1 - 0.24 / tb
 ggplot() +
-  ## Pulley body (simplified cross-section view)
-  geom_rect(aes(xmin = -pulley_width/2, xmax = pulley_width/2,
-                ymin = pulley_inner_r, ymax = pulley_outer_r - groove_depth - 0.1),
-            fill = "gray70", color = "black", linewidth = 1) +
-  ## Left flange
-  geom_rect(aes(xmin = -pulley_width/2, xmax = -groove_width_top/2 - 0.1,
-                ymin = pulley_outer_r - groove_depth - 0.1, ymax = pulley_outer_r + flange_height),
-            fill = "gray70", color = "black", linewidth = 1) +
-  ## Right flange
-  geom_rect(aes(xmin = groove_width_top/2 + 0.1, xmax = pulley_width/2,
-                ymin = pulley_outer_r - groove_depth - 0.1, ymax = pulley_outer_r + flange_height),
-            fill = "gray70", color = "black", linewidth = 1) +
-  ## V-groove
-  geom_polygon(data = v_belt_df, aes(x = x, y = y),
-               fill = "gray50", color = "black", linewidth = 1) +
-  ## Belt in groove
-  geom_polygon(data = belt_df, aes(x = x, y = y),
-               fill = "black", color = "gray20", linewidth = 0.5) +
-  ## Shaft hole indication
-  geom_rect(aes(xmin = -0.4, xmax = 0.4, ymin = 0, ymax = pulley_inner_r),
-            fill = "white", color = "black", linewidth = 1) +
-  ## Center line
-  geom_segment(aes(x = 0, y = -0.5, xend = 0, yend = 6),
-               linetype = "dashed", color = "red", linewidth = 0.8) +
-  ## Dimension lines and labels
-  ## Groove angle
-  geom_segment(aes(x = -groove_width_bottom/2, y = pulley_outer_r - groove_depth,
-                   xend = -groove_width_top/2, yend = pulley_outer_r),
-               color = "blue", linewidth = 0.8, linetype = "dashed") +
-  geom_curve(aes(x = -0.2, y = pulley_outer_r - groove_depth + 0.3,
-                 xend = -0.6, yend = pulley_outer_r - 0.5),
-             curvature = 0.3, color = "blue", linewidth = 0.8) +
-  annotate("text", x = -3.1, y = pulley_outer_r - 0.4,
-           label = "Groove\nAngle (β)", size = 3.5 * diagram_text_scale, color = "blue") +
-  ## Pitch diameter
-  annotate("segment", x = 3.9, y = 0, xend = 3.9, yend = pulley_outer_r - groove_depth/2,
-           arrow = arrow(ends = "both", length = unit(0.15, "cm")),
-           color = "darkgreen", linewidth = 0.8) +
-  annotate("text", x = 4.9, y = (pulley_outer_r - groove_depth/2)/2,
-           label = "Pitch\nRadius", size = 3.5 * diagram_text_scale, color = "darkgreen") +
-  ## Groove depth
-  annotate("segment", x = 1.5, y = pulley_outer_r - groove_depth, xend = 1.5, yend = pulley_outer_r,
-           arrow = arrow(ends = "both", length = unit(0.15, "cm")),
-           color = "purple", linewidth = 0.8) +
-  annotate("text", x = 2.8, y = pulley_outer_r - groove_depth/2,
-           label = "Groove\nDepth", size = 3.5 * diagram_text_scale, color = "purple") +
-  ## Belt labels
-  annotate("text", x = 0, y = pulley_outer_r + 0.8,
-           label = "V-Belt", size = 4 * diagram_text_scale, fontface = "bold") +
-  annotate("text", x = 1.3, y = pulley_inner_r/2,
-           label = "Bore\n(Shaft)", size = 3.5 * diagram_text_scale) +
-  ## Pulley label
- annotate("text", x = -3.2, y = pulley_inner_r + 0.5,
-           label = "Pulley\n(Sheave)", size = 3.5 * diagram_text_scale, color = "gray30") +
-  coord_fixed() +
-  xlim(-4.5, 6.2) +
-  ylim(-0.5, 6) +
+  annotate("segment", x = -2.6, xend = 2.6, y = 0, yend = 0, linetype = "F282", color = "red") +
+  annotate("text", x = 2.7, y = 0, label = "axis of rotation", hjust = 0, color = "red", size = 3 * diagram_text_scale) +
+  annotate("rect", xmin = -1.6, xmax = 1.6, ymin = 0.6, ymax = 1.4, fill = "gray70", color = "black") +    # hub
+  annotate("rect", xmin = -0.35, xmax = 0.35, ymin = 1.4, ymax = 3.0, fill = "gray70", color = "black") +  # web
+  geom_polygon(data = rim, aes(x, y), fill = "gray70", color = "black") +                                  # rim with groove
+  geom_polygon(data = belt, aes(x, y), fill = "gray15", color = "black") +
+  ## groove angle: walls extended to their apex
+  annotate("segment", x = c(-hw(3.1), hw(3.1)), xend = 0, y = 3.1, yend = apex_y, linetype = "dashed", color = "blue") +
+  annotate("path", x = 0.45 * sin(seq(-19, 19, length.out = 20) * pi / 180), y = apex_y + 0.45 * cos(seq(-19, 19, length.out = 20) * pi / 180), color = "blue") +
+  annotate("text", x = -1.0, y = 2.55, label = "Groove angle β\n(34–38°)", color = "blue", size = 3.2 * diagram_text_scale, hjust = 1) +
+  annotate("segment", x = -0.98, xend = -0.1, y = 2.6, yend = apex_y + 0.4, color = "blue", linewidth = 0.3) +
+  ## groove depth
+  annotate("segment", x = 1.75, xend = 1.75, y = 3.1, yend = 4.0, arrow = arrow(ends = "both", length = unit(0.12, "cm")), color = "purple") +
+  annotate("segment", x = hw(3.1), xend = 1.85, y = 3.1, yend = 3.1, color = "purple", linewidth = 0.3, linetype = "dotted") +
+  annotate("text", x = 1.9, y = 3.55, label = "Groove depth", hjust = 0, color = "purple", size = 3.2 * diagram_text_scale) +
+  ## pitch radius: axis to the belt's pitch line
+  annotate("segment", x = -hw(3.95) - 0.8, xend = hw(3.95) + 0.1, y = 3.95, yend = 3.95, linetype = "dashed", color = "darkgreen", linewidth = 0.4) +
+  annotate("segment", x = -2.2, xend = -2.2, y = 0, yend = 3.95, arrow = arrow(ends = "both", length = unit(0.15, "cm")), color = "darkgreen") +
+  annotate("text", x = -2.3, y = 2.0, label = "Pitch\nradius", hjust = 1, color = "darkgreen", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = 0, y = 4.45, label = "V-belt", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = 0.6, y = 3.32, label = "gap", size = 2.6 * diagram_text_scale, color = "gray30", hjust = 0) +
+  annotate("text", x = 1.9, y = 1.0, label = "Hub (bore for\nshaft below)", hjust = 0, size = 3 * diagram_text_scale) +
+  annotate("text", x = 0.5, y = 2.2, label = "Web", hjust = 0, size = 3 * diagram_text_scale) +
+  annotate("text", x = 1.55, y = 4.25, label = "Rim", hjust = 0, size = 3 * diagram_text_scale) +
+  coord_fixed(xlim = c(-3.6, 4.2), ylim = c(-0.3, 4.7)) +
   theme_pulley +
-  labs(title = "V-Belt Pulley Cross-Section",
+  labs(title = "V-Belt Pulley Half-Section",
        subtitle = "The belt rides on the groove walls, not the bottom")
 ```
 
@@ -370,92 +292,30 @@ ggplot() +
 
 Timing belts have teeth that mesh with grooves in the pulley, providing positive engagement without slip. They are essential when precise speed ratios and synchronized motion are required.
 
-```{r timing-belt-diagram, echo=FALSE, fig.align='center', fig.cap="Timing belt tooth profile engaging with pulley grooves", fig.width=10, fig.height=5}
-## Create timing belt visualization
+```{r timing-belt-diagram, echo=FALSE, fig.align='center', fig.cap="Timing belt teeth meshing with the grooves of a timing pulley (shown developed into a straight rack for clarity). The pitch is measured along the pitch line, which lies in the tension cords of the belt.", fig.width=10, fig.height=5}
 library(ggplot2)
-
-## Generate teeth for belt section
-tooth_pitch <- 0.8
-num_teeth <- 8
-belt_thickness <- 0.5
-tooth_height <- 0.4
-
-## Create belt backbone
-belt_base <- data.frame(
-  x = c(0, num_teeth * tooth_pitch, num_teeth * tooth_pitch, 0),
-  y = c(0, 0, belt_thickness, belt_thickness)
-)
-
-## Create individual teeth
-teeth_df <- data.frame()
-for (i in 0:(num_teeth-1)) {
-  tooth <- data.frame(
-    x = c(i * tooth_pitch + 0.15, i * tooth_pitch + 0.15,
-          i * tooth_pitch + 0.25, i * tooth_pitch + 0.55,
-          i * tooth_pitch + 0.65, i * tooth_pitch + 0.65),
-    y = c(0, -0.05, -tooth_height, -tooth_height, -0.05, 0),
-    tooth_id = i
-  )
-  teeth_df <- rbind(teeth_df, tooth)
-}
-
-## Create pulley section with grooves
-pulley_y_offset <- -0.5
-pulley_thickness <- 1
-
-grooves_df <- data.frame()
-for (i in 0:(num_teeth-1)) {
-  groove <- data.frame(
-    x = c(i * tooth_pitch + 0.1, i * tooth_pitch + 0.2,
-          i * tooth_pitch + 0.6, i * tooth_pitch + 0.7,
-          i * tooth_pitch + 0.7, i * tooth_pitch + 0.1),
-    y = c(pulley_y_offset, pulley_y_offset - tooth_height - 0.1,
-          pulley_y_offset - tooth_height - 0.1, pulley_y_offset,
-          pulley_y_offset - pulley_thickness, pulley_y_offset - pulley_thickness),
-    groove_id = i
-  )
-  grooves_df <- rbind(grooves_df, groove)
-}
-
+p <- 1; n <- 8; tw_root <- 0.62; tw_tip <- 0.42; th <- 0.38; back <- 0.45
+## belt teeth hang down from the backing; pulley grooves have the same shape plus a small clearance
+tooth <- function(i, w1, w2, h, y0, id) data.frame(x = i * p + c(-w1, w1, w2, -w2) / 2, y = y0 - c(0, 0, h, h), id = id)
+teeth <- do.call(rbind, lapply(0:(n - 1), function(i) tooth(i, tw_root, tw_tip, th, 0, i)))
+grooves <- do.call(rbind, lapply(0:(n - 1), function(i) tooth(i, tw_root + 0.06, tw_tip + 0.06, th + 0.05, 0, i)))
 ggplot() +
-  ## Pulley body
-  geom_rect(aes(xmin = -0.2, xmax = num_teeth * tooth_pitch + 0.2,
-                ymin = pulley_y_offset - pulley_thickness, ymax = pulley_y_offset),
-            fill = "gray70", color = "black", linewidth = 1) +
-  ## Pulley grooves
-  geom_polygon(data = grooves_df, aes(x = x, y = y, group = groove_id),
-               fill = "gray50", color = "gray40", linewidth = 0.5) +
-  ## Belt backbone
-  geom_polygon(data = belt_base, aes(x = x, y = y),
-               fill = "gray30", color = "black", linewidth = 1) +
-  ## Belt teeth
-  geom_polygon(data = teeth_df, aes(x = x, y = y, group = tooth_id),
-               fill = "gray20", color = "black", linewidth = 0.5) +
-  ## Annotations
-  annotate("segment", x = -0.8, y = belt_thickness, xend = -0.8, yend = 0,
-           arrow = arrow(ends = "both", length = unit(0.1, "cm")),
-           color = "blue", linewidth = 0.8) +
-  annotate("text", x = -1.5, y = belt_thickness/2,
-           label = "Belt\nThickness", size = 3 * diagram_text_scale, color = "blue") +
-  annotate("segment", x = 0.4, y = 0.8, xend = 1.2, yend = 0.8,
-           arrow = arrow(ends = "both", length = unit(0.1, "cm")),
-           color = "darkgreen", linewidth = 0.8) +
-  annotate("text", x = 0.8, y = 1.1,
-           label = "Pitch", size = 3.5 * diagram_text_scale, color = "darkgreen") +
-  annotate("segment", x = num_teeth * tooth_pitch + 0.5, y = 0,
-           xend = num_teeth * tooth_pitch + 0.5, yend = -tooth_height,
-           arrow = arrow(ends = "both", length = unit(0.1, "cm")),
-           color = "purple", linewidth = 0.8) +
-  annotate("text", x = num_teeth * tooth_pitch + 1.3, y = -tooth_height/2,
-           label = "Tooth\nHeight", size = 3 * diagram_text_scale, color = "purple") +
-  ## Labels
-  annotate("text", x = num_teeth * tooth_pitch / 2, y = belt_thickness + 0.4,
-           label = "Timing Belt (Toothed Belt)", size = 5 * diagram_text_scale, fontface = "bold") +
-  annotate("text", x = num_teeth * tooth_pitch / 2, y = pulley_y_offset - pulley_thickness - 0.3,
-           label = "Timing Pulley (Sprocket)", size = 4 * diagram_text_scale, fontface = "bold", color = "gray40") +
-  coord_fixed() +
-  xlim(-2.5, 8) +
-  ylim(-2.5, 1.8) +
+  annotate("rect", xmin = -0.7, xmax = n - 0.3, ymin = -1.2, ymax = 0, fill = "gray75", color = "black") +   # pulley rim
+  geom_polygon(data = grooves, aes(x, y, group = id), fill = "white", color = "black", linewidth = 0.4) +
+  annotate("rect", xmin = -0.7, xmax = n - 0.3, ymin = 0, ymax = back, fill = "gray30", color = "black") +   # belt backing
+  geom_polygon(data = teeth, aes(x, y, group = id), fill = "gray30", color = "black", linewidth = 0.4) +
+  annotate("segment", x = -0.7, xend = n - 0.3, y = 0.12, yend = 0.12, color = "gold", linewidth = 1.2) +    # tension cords / pitch line
+  annotate("segment", x = 1, xend = 2, y = 0.75, yend = 0.75, arrow = arrow(ends = "both", length = unit(0.15, "cm")), color = "darkgreen") +
+  annotate("segment", x = c(1, 2), xend = c(1, 2), y = 0.12, yend = 0.85, color = "darkgreen", linetype = "dotted") +
+  annotate("text", x = 1.5, y = 0.98, label = "Pitch p", color = "darkgreen", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = n - 0.1, y = 0.12, label = "Pitch line\n(tension cords)", hjust = 0, color = "goldenrod4", size = 3 * diagram_text_scale) +
+  annotate("segment", x = -1.0, xend = -1.0, y = 0, yend = -th, arrow = arrow(ends = "both", length = unit(0.1, "cm")), color = "purple") +
+  annotate("text", x = -1.1, y = -th / 2, label = "Tooth\nheight", hjust = 1, color = "purple", size = 3 * diagram_text_scale) +
+  annotate("segment", x = -1.0, xend = -1.0, y = 0, yend = back, arrow = arrow(ends = "both", length = unit(0.1, "cm")), color = "blue") +
+  annotate("text", x = -1.1, y = back / 2 + 0.05, label = "Backing", hjust = 1, color = "blue", size = 3 * diagram_text_scale) +
+  annotate("text", x = (n - 1) / 2, y = 1.35, label = "Timing Belt (Toothed Belt)", size = 5 * diagram_text_scale, fontface = "bold") +
+  annotate("text", x = (n - 1) / 2, y = -1.5, label = "Timing Pulley (developed)", size = 4 * diagram_text_scale, fontface = "bold", color = "gray40") +
+  coord_fixed(xlim = c(-2.4, n + 1.3), ylim = c(-1.8, 1.6)) +
   theme_pulley
 ```
 
@@ -465,7 +325,7 @@ ggplot() +
 - Can transmit high torque
 - Suitable for precision positioning
 - Long service life with proper maintenance
-- Can operate in contaminated environments
+- No lubrication required
 
 **Timing Belt Applications:**
 
@@ -641,7 +501,7 @@ $$L = 2(500) + \frac{\pi}{2}(100 + 280) + \frac{(280 - 100)^2}{4(500)}$$
 
 $$L = 1000 + 596.9 + 16.2 = 1613.1 \text{ mm}$$
 
-Select nearest standard belt length: **A63** (1600 mm) or **A64** (1626 mm)
+Classical V-belts are designated by their *inside* length in inches; for B-section belts the pitch length is about 1.8 in longer. The required pitch length, 1613 mm = 63.5 in, corresponds to an inside length of 61.7 in, so select **B62** (pitch length about 63.8 in = 1621 mm). With $L = 1621$ mm the center-distance formula gives $C = 504$ mm, close to the 500 mm target.
 
 **Step 4: Verify arc of contact**
 
@@ -655,7 +515,7 @@ This exceeds 120°, so grip is adequate. ✓
 
 $$v = \frac{\pi \times 100 \times 1450}{60,000} = 7.6 \text{ m/s}$$
 
-This is within acceptable range (15-25 m/s optimal, up to 30 m/s maximum). ✓
+This is well below the 15-25 m/s optimum. It is acceptable (V-belts work down to about 5 m/s), but at this low speed each belt transmits less power, so more belts or a larger driver pulley may be needed. A 140 mm driver with a 400 mm driven pulley (ratio 2.86) would run the belt at 10.6 m/s.
 
 **Step 6: Select belt cross-section**
 
@@ -665,8 +525,8 @@ For 5 kW at 1450 rpm with a 100 mm pulley, referencing V-belt power rating table
 
 - Driver pulley: 100 mm pitch diameter, B-section groove
 - Driven pulley: 280 mm pitch diameter, B-section groove
-- Belt: B64 (1626 mm pitch length), B-section
-- Center distance: ~500 mm (adjust with tensioner)
+- Belt: B62 (about 1621 mm pitch length), B-section
+- Center distance: about 504 mm (adjustable motor base for tensioning)
 - Output speed: 518 rpm
 
 </details>
@@ -681,7 +541,7 @@ Proper belt tension is critical for reliable operation. Too little tension cause
 
 | Belt Type | Tension Check Method | Acceptable Deflection |
 | :--- | :--- | :--- |
-| V-Belt | Force per unit deflection | 1.5-2% of span length per N force |
+| V-Belt | Force-deflection method | Deflection of 1/64 of the span length (about 1.6 %) under the specified test force |
 | Timing Belt | Frequency measurement | Specified Hz range |
 | Flat Belt | Visual/manual check | Minimal visible sag |
 
@@ -692,73 +552,32 @@ Proper belt tension is critical for reliable operation. Too little tension cause
 3. **Automatic tensioner** – Spring-loaded pulley maintains constant tension
 4. **Screw adjustment** – Threaded adjustment for precise tension setting
 
-```{r idler-pulley-diagram, echo=FALSE, fig.align='center', fig.cap="Belt drive with backside idler tensioner", fig.width=10, fig.height=6}
-## Create belt drive with idler pulley
+```{r idler-pulley-diagram, echo=FALSE, fig.align='center', fig.cap="Belt drive with a backside idler tensioner. The spring-loaded idler presses on the back of the slack span from outside the loop, which also increases the wrap on both pulleys.", fig.width=10, fig.height=6}
 library(ggplot2)
-library(ggforce)
-
-## Define pulley parameters
-driver_x <- 0
-driver_y <- 0
-driver_r <- 1.2
-
-driven_x <- 8
-driven_y <- 0
-driven_r <- 2.5
-
-idler_x <- 3
-idler_y <- -2.5
-idler_r <- 0.6
-
+P <- data.frame(x = c(0, 3.4, 8), y = c(0, -1.25, 0), r = c(1.2, 0.6, 2.5), s = c(1, -1, 1))
+bp <- belt_path(P)
 ggplot() +
-  ## Driver pulley
-  geom_circle(aes(x0 = driver_x, y0 = driver_y, r = driver_r),
-              fill = "steelblue", color = "darkblue", linewidth = 1.2) +
-  geom_circle(aes(x0 = driver_x, y0 = driver_y, r = driver_r * 0.25),
-              fill = "gray30", color = "black", linewidth = 1) +
-  ## Driven pulley
-  geom_circle(aes(x0 = driven_x, y0 = driven_y, r = driven_r),
-              fill = "coral", color = "darkred", linewidth = 1.2) +
-  geom_circle(aes(x0 = driven_x, y0 = driven_y, r = driven_r * 0.12),
-              fill = "gray30", color = "black", linewidth = 1) +
-  ## Idler pulley
-  geom_circle(aes(x0 = idler_x, y0 = idler_y, r = idler_r),
-              fill = "gold", color = "darkorange", linewidth = 1.2) +
-  geom_circle(aes(x0 = idler_x, y0 = idler_y, r = idler_r * 0.3),
-              fill = "gray30", color = "black", linewidth = 0.8) +
-  ## Belt path (simplified as segments)
-  ## Upper belt span
-  geom_segment(aes(x = driver_x + driver_r * cos(0.25), y = driver_y + driver_r * sin(0.25),
-                   xend = driven_x - driven_r * 0.95, yend = driven_y + driven_r * 0.35),
-               color = "black", linewidth = 3) +
-  ## Belt to idler (from driver)
-  geom_segment(aes(x = driver_x + driver_r * 0.7, y = driver_y - driver_r * 0.75,
-                   xend = idler_x - idler_r * 0.8, yend = idler_y + idler_r * 0.6),
-               color = "gray40", linewidth = 3) +
-  ## Belt from idler (to driven)
-  geom_segment(aes(x = idler_x + idler_r * 0.8, y = idler_y + idler_r * 0.6,
-                   xend = driven_x - driven_r * 0.6, yend = driven_y - driven_r * 0.8),
-               color = "gray40", linewidth = 3) +
-  ## Tensioner spring indication
-  annotate("segment", x = idler_x, y = idler_y - idler_r - 0.2,
-           xend = idler_x, yend = idler_y - idler_r - 1.2,
-           color = "darkgreen", linewidth = 1.5,
+  geom_polygon(data = disc(0, 0, 1.2), aes(x, y), fill = "steelblue", color = "darkblue", linewidth = 1) +
+  geom_polygon(data = disc(8, 0, 2.5), aes(x, y), fill = "coral", color = "darkred", linewidth = 1) +
+  geom_polygon(data = disc(3.4, -1.25, 0.6), aes(x, y), fill = "gold", color = "darkorange", linewidth = 1) +
+  geom_polygon(data = rbind(disc(0, 0, 0.3), disc(8, 0, 0.3), disc(3.4, -1.25, 0.18)) |> transform(g = rep(1:3, each = 120)),
+               aes(x, y, group = g), fill = "gray30", color = "black") +
+  lapply(bp$arcs, function(a) geom_path(data = a, aes(x, y), linewidth = 2.5, color = "gray15")) +
+  geom_path(data = bp$spans[[3]], aes(x, y), linewidth = 2.5, color = "black") +
+  geom_path(data = bp$spans[[1]], aes(x, y), linewidth = 2.5, color = "gray50") +
+  geom_path(data = bp$spans[[2]], aes(x, y), linewidth = 2.5, color = "gray50") +
+  rot_arc(0, 0, 1.8, 30, 120, "darkblue") +
+  annotate("segment", x = 3.4, y = -3.0, xend = 3.4, yend = -2.0, color = "darkgreen", linewidth = 1.5,
            arrow = arrow(length = unit(0.25, "cm"), type = "closed")) +
-  annotate("text", x = idler_x, y = idler_y - idler_r - 1.6,
-           label = "Spring\nForce", size = 3.5 * diagram_text_scale, color = "darkgreen") +
-  ## Labels
-  annotate("text", x = driver_x, y = driver_y + driver_r + 0.6,
-           label = "Driver", size = 4 * diagram_text_scale, fontface = "bold", color = "darkblue") +
-  annotate("text", x = driven_x, y = driven_y + driven_r + 0.6,
-           label = "Driven", size = 4 * diagram_text_scale, fontface = "bold", color = "darkred") +
-  annotate("text", x = idler_x + 2.3, y = idler_y - 1.4,
-           label = "Idler\n(Tensioner)", size = 3.5 * diagram_text_scale, fontface = "bold", color = "darkorange") +
-  coord_fixed() +
-  xlim(-3, 12) +
-  ylim(-5, 4) +
+  annotate("text", x = 3.4, y = -3.4, label = "Spring force", size = 3.5 * diagram_text_scale, color = "darkgreen") +
+  annotate("text", x = -1.9, y = 1.6, label = "Driver", size = 4 * diagram_text_scale, fontface = "bold", color = "darkblue") +
+  annotate("text", x = 8, y = 3.1, label = "Driven", size = 4 * diagram_text_scale, fontface = "bold", color = "darkred") +
+  annotate("text", x = 4.4, y = -2.5, label = "Backside idler\n(on the slack side)", hjust = 0, size = 3.5 * diagram_text_scale, fontface = "bold", color = "darkorange") +
+  annotate("text", x = 4, y = 2.3, label = "Tight side", size = 3.5 * diagram_text_scale) +
+  coord_fixed(xlim = c(-2.5, 11.5), ylim = c(-4.8, 3.6)) +
   theme_pulley +
   labs(title = "Belt Drive with Automatic Tensioner",
-       subtitle = "Idler pulley on slack side maintains constant belt tension")
+       subtitle = "A spring-loaded idler on the slack side keeps the belt tension constant")
 ```
 
 ---
@@ -773,7 +592,7 @@ ggplot() +
 | Speed ratio | Keep below 6:1 for single-stage drives |
 | Number of belts | Use multiple belts for high power or redundancy |
 | Material | Cast iron or steel for most applications; aluminum for light duty |
-| Groove angle | 34° for light/medium loads; 38° for heavy loads |
+| Groove angle | Set by pulley size: about 34° on small-diameter pulleys, up to 38° on large ones (the belt section narrows as it bends) |
 
 ### Installation Best Practices
 
@@ -799,9 +618,9 @@ ggplot() +
 
 Belt and pulley systems are one component of the broader field of power transmission. For related content, see:
 
-- **Chapter 4: Gears** – For applications requiring exact speed ratios or high torque
-- **Chapter 8: Bearings** – Essential for supporting pulley shafts
-- **Chain Drives** – When positive engagement is needed with higher load capacity than timing belts
+- **Gears** (@sec-chap-02-gears) – For applications requiring exact speed ratios or high torque
+- **Bearings** ([Ball Bearings and Bushings](02-03-Bearings.qmd)) – Essential for supporting pulley shafts
+- **Chain Drives** (@sec-chains-intro) – When positive engagement is needed with higher load capacity than timing belts
 
 ---
 

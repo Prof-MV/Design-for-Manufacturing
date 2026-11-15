@@ -23,11 +23,11 @@ theme_ml <- theme_minimal() +
 
 ## Chapter Overview {#ml-overview}
 
-This chapter runs over six weeks — twelve hours of classroom theory paired with twelve hours of hands-on laboratory work (see Chapter @sec-chap-ml-lab). By the end of the six weeks you will have built, trained, and publicly deployed a predictive-maintenance web application using real industrial sensor data. That app will be on your résumé.
+This chapter runs over six weeks — twelve hours of classroom theory paired with twelve hours of hands-on laboratory work (see @sec-chap-ml-lab). By the end of the six weeks you will have built, trained, and publicly deployed a predictive-maintenance web application using real industrial sensor data. That app will be on your résumé.
 
 The technical path moves from wide to narrow: Week 1 surveys the entire AI landscape and teaches you to use the tools you already have access to (large language models) wisely. Week 2 grounds you in the messy reality of plant data and refreshes your statistical process control. Weeks 3 through 5 build and deploy a machine-learning model for predicting when a turbofan engine will fail — the same class of problem that GE Aviation, Pratt & Whitney, and every major Tier-1 automotive supplier runs on their production lines. Week 6 steps back to examine ethics, the broader landscape, and where this field is heading.
 
-The companion lab handout (Chapter @sec-chap-ml-lab) provides the step-by-step exercises, Python code, and deliverable instructions for each week.
+The companion lab handout (@sec-chap-ml-lab) provides the step-by-step exercises, Python code, and deliverable instructions for each week.
 
 ::: {.callout-think}
 **Before You Start:** Think about the last time a machine at your co-op, at home, or on a plant tour broke down unexpectedly. How much warning was there? What would have been different if you had known two weeks in advance that it was going to fail?
@@ -55,33 +55,38 @@ The terms "AI," "machine learning," "deep learning," and "large language model" 
 
 ```{r fig-ml-ai-hierarchy-01, echo=FALSE, message=FALSE, fig.cap="The AI landscape is a nested hierarchy. Each inner layer is a specialization of the outer one. Not all AI is machine learning, and not all machine learning is deep learning.", fig.align='center'}
 library(ggplot2)
-library(dplyr)
 
-#Nested circles concept shown as a horizontal bar of relative scope
-ai_scope <- data.frame(
-  level   = factor(c("AI", "ML", "Deep Learning", "LLMs"),
-                   levels = c("AI", "ML", "Deep Learning", "LLMs")),
-  scope   = c(100, 70, 50, 32),
-  label   = c("Artificial Intelligence\n(any system that acts intelligently)",
-              "Machine Learning\n(learns patterns from data)",
-              "Deep Learning\n(multi-layer neural\nnetworks)",
-              "LLMs\n(deep learning\ntrained on text)")
+# Nested sets drawn as nested rectangles: each inner box lies inside the outer one
+nest <- data.frame(
+  set   = c("AI", "ML", "DL", "LLM"),
+  xmin  = c(0.0, 0.5, 1.0, 1.5), xmax = c(10.0, 9.5, 9.0, 8.5),
+  ymin  = c(0.0, 0.4, 0.8, 1.2), ymax = c(8.0, 6.2, 4.4, 2.6),
+  fill  = c("#1565c0", "#1976d2", "#42a5f5", "#90caf9"),
+  txt   = c("white", "white", "white", "#0d2c54"),
+  name  = c("Artificial Intelligence", "Machine Learning", "Deep Learning", "Large Language Models"),
+  what  = c("any system that acts intelligently", "learns patterns from data",
+            "multi-layer neural networks", "deep learning trained on text"),
+  eg    = c("e.g. rule-based expert system", "e.g. random forest predicting RUL",
+            "e.g. CNN for visual inspection", "e.g. ChatGPT, Claude, Gemini")
 )
 
-ggplot(ai_scope, aes(x = scope, y = reorder(level, scope), fill = level)) +
-  geom_col(width = 0.65, colour = "white", linewidth = 0.5) +
-  geom_text(aes(label = label), x = 2, hjust = 0, size = 3 * diagram_text_scale, colour = "white",
-            fontface = "bold") +
-  scale_fill_manual(values = c("#1565c0", "#1976d2", "#42a5f5", "#90caf9")) +
-  scale_x_continuous(breaks = NULL) +
-  labs(title = "The AI Landscape: A Nested Hierarchy",
-       x = NULL, y = NULL) +
-  theme_ml +
-  theme(legend.position = "none",
-        axis.text.y     = element_text(size = 10 * chart_text_scale, face = "bold"))
+ggplot(nest) +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = fill),
+            colour = "white", linewidth = 0.8) +
+  geom_text(aes(x = xmin + 0.25, y = ymax - 0.3, label = paste0(name, "\n(", what, ")"), colour = txt),
+            hjust = 0, vjust = 1, size = 3.1 * diagram_text_scale, fontface = "bold", lineheight = 0.9) +
+  geom_text(aes(x = xmax - 0.25, y = ymax - 0.3, label = eg, colour = txt),
+            hjust = 1, vjust = 1, size = 2.8 * diagram_text_scale, fontface = "italic") +
+  scale_fill_identity() +
+  scale_colour_identity() +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 8), expand = FALSE) +
+  labs(title = "The AI Landscape: A Nested Hierarchy", x = NULL, y = NULL) +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, size = 11 * chart_text_scale, face = "bold"),
+        plot.background = element_rect(fill = "white", colour = NA))
 ```
 
-Figure @fig-ml-ai-hierarchy-01 illustrates the key insight: every LLM is deep learning, every deep learning system is machine learning, and all machine learning is AI — but the reverse is not true. There are AI systems (like the rule-based expert systems used in 1980s industrial diagnostics) that are not machine learning at all.
+@fig-ml-ai-hierarchy-01 illustrates the key insight: every LLM is deep learning, every deep learning system is machine learning, and all machine learning is AI — but the reverse is not true. There are AI systems (like the rule-based expert systems used in 1980s industrial diagnostics) that are not machine learning at all.
 
 #### Machine Learning {#ml-w1-ml}
 
@@ -104,7 +109,7 @@ Give it a new tool age, it predicts the diameter. The algorithm *learned* the sl
 | **K-means clustering** | Grouping similar items | Identifying defect families from inspection data |
 | **Support Vector Machines** | Classification with clear boundaries | Pass/fail from multiple measurement features |
 
-ML is the **right tool** when you have structured tabular data, a clearly defined output to predict, and you want the result to be explainable. It is the **wrong tool** when your inputs are unstructured (images, audio, free text) or when you have very little data.
+Classical ML (the techniques in this table) is the **right tool** when you have structured tabular data, a clearly defined output to predict, and you want the result to be explainable. It is the **wrong tool** when your inputs are unstructured (images, audio, free text) — that is where deep learning comes in — or when you have very little data.
 
 #### Deep Learning {#ml-w1-dl}
 
@@ -162,7 +167,7 @@ The model has no plan, no goal, no understanding — just "what token probably c
 | Manufacturing examples | Predictive maintenance, yield prediction | Defect detection from images | Drafting SOPs, summarizing reports, generating Python code |
 
 ::: {.callout-industry}
-**Industry Application:** At Ford's Dearborn Truck Plant, AI systems monitor thousands of sensor channels from body-welding robots. Anomaly detection (a form of ML) runs continuously on each weld. A separate LLM-based assistant helps maintenance planners draft work orders from natural-language descriptions of symptoms. Both tools are in production — they solve different problems, and neither replaces the engineer who interprets the output.
+**Industry Application:** In a typical automotive body shop, ML-based anomaly detection monitors the current, voltage and electrode-force signals of the spot-welding robots and flags welds whose signature looks abnormal. A separate LLM-based assistant may help maintenance planners draft work orders from natural-language descriptions of symptoms. Both tools are in production — they solve different problems, and neither replaces the engineer who interprets the output.
 :::
 
 The big takeaway: **use the simplest tool that solves your problem.** A linear regression you fully understand is often better than a neural network you don't. An LLM is excellent for drafting documents but a terrible choice for predicting tool wear from sensor data — that is a job for ML.
@@ -278,7 +283,7 @@ Even when the provider's policy says they do not use your data for training, you
 | Draft a generic SOP template | Abstract your situation; do not paste proprietary procedures |
 | Summarize a long technical document | Redact identifying details, or use an enterprise tool with contractual data-protection guarantees |
 | Debug code that touches sensitive systems | Strip credentials, names, and paths; reproduce the bug in a minimal isolated example |
-| Engineering work with real customer or defense data | Use only your employer's approved enterprise LLM (Claude Team/Enterprise, ChatGPT Enterprise, Microsoft Copilot for Business), or a locally-hosted model (Ollama, LM Studio) |
+| Engineering work with real customer or defense data | Use only your employer's approved enterprise LLM (for example Claude Team/Enterprise, ChatGPT Enterprise or Microsoft 365 Copilot), or a locally hosted model (Ollama, LM Studio) |
 
 ***
 
@@ -330,7 +335,7 @@ Produces a focused, audience-appropriate, length-controlled explanation that the
 - Asking for specific numerical recommendations on safety-critical decisions — verify everything independently
 
 ::: {.callout-activity}
-**Lab Preview:** In Week 1 Lab (Chapter @sec-chap-ml-lab), you will rewrite five real bad prompts from manufacturing engineers using R-C-T-C-F, deliberately trigger and document a hallucination, and use an LLM to generate your Week 2 Python starter code. The code you generate this week becomes your starting point next week — so write the prompt carefully.
+**Lab Preview:** In Week 1 Lab (@sec-chap-ml-lab), you will rewrite five real bad prompts from manufacturing engineers using R-C-T-C-F, deliberately trigger and document a hallucination, and use an LLM to generate your Week 2 Python starter code. The code you generate this week becomes your starting point next week — so write the prompt carefully.
 :::
 
 ***
@@ -387,34 +392,37 @@ Every modern manufacturing facility generates data from at least five separate I
 library(ggplot2)
 
 isa_levels <- data.frame(
-  level = factor(paste0("Level ", 4:0),
-                 levels = paste0("Level ", 4:0)),
+  lvl   = 0:4,
   label = c(
-    "Level 4 — ERP\n(SAP, Oracle: orders, finance, scheduling)",
-    "Level 3 — Operations\n(MES, Historian, QMS, CMMS)",
-    "Level 2 — Supervisory\n(SCADA: control room view)",
+    "Level 0 — Field Devices\n(sensors, actuators, motors)",
     "Level 1 — Control\n(PLCs: machine logic)",
-    "Level 0 — Field Devices\n(sensors, actuators, motors)"
+    "Level 2 — Supervisory\n(SCADA / HMI: control room view)",
+    "Level 3 — Operations\n(MES, Historian, QMS, CMMS)",
+    "Level 4 — ERP\n(SAP, Oracle: orders, finance, scheduling)"
   ),
-  domain = c("IT", "IT", "OT", "OT", "OT"),
-  width  = c(1.0, 0.85, 0.70, 0.55, 0.40)
+  domain = c("OT", "OT", "OT", "IT", "IT"),
+  half   = c(5.0, 4.5, 4.0, 3.5, 3.0)        # pyramid: many devices at the bottom, one ERP at the top
 )
 
-ggplot(isa_levels, aes(x = width, y = level, fill = domain)) +
-  geom_col(colour = "white", linewidth = 0.6) +
-  geom_text(aes(label = label), x = 0.02, hjust = 0,
-            size = 2.9 * diagram_text_scale, colour = "white", fontface = "bold") +
-  scale_fill_manual(values = c("IT" = "#2e7d32", "OT" = "#e65100"),
-                    name = "Domain") +
-  scale_x_continuous(breaks = NULL) +
+ggplot(isa_levels) +
+  geom_rect(aes(xmin = -half, xmax = half, ymin = lvl - 0.42, ymax = lvl + 0.42, fill = domain),
+            colour = "white", linewidth = 0.6) +
+  geom_text(aes(x = 0, y = lvl, label = label), size = 2.9 * diagram_text_scale,
+            colour = "white", fontface = "bold", lineheight = 0.9) +
+  annotate("segment", x = -5.6, xend = 5.6, y = 2.5, yend = 2.5,
+           linetype = "dashed", colour = "grey30", linewidth = 0.7) +
+  annotate("label", x = 5.6, y = 2.5, label = "OT / IT boundary", hjust = 1,
+           size = 2.8 * diagram_text_scale, fill = "white", linewidth = 0, colour = "grey20") +
+  scale_fill_manual(values = c("IT" = "#2e7d32", "OT" = "#e65100"), name = "Domain") +
+  coord_cartesian(xlim = c(-5.7, 5.7)) +
   labs(title = "ISA-95 Plant Data Hierarchy",
        subtitle = "Green = IT (Information Technology), orange = OT (Operational Technology)",
        x = NULL, y = NULL) +
   theme_ml +
-  theme(legend.position = "right")
+  theme(legend.position = "right", axis.text = element_blank(), panel.grid = element_blank())
 ```
 
-This is the **ISA-95 hierarchy** (Figure @fig-ml-isa95-02). Different rules apply at different levels: you absolutely do not deploy Python scripts on a PLC (Level 1), but you absolutely do deploy them at Level 3 or 4. The boundary between OT and IT is one of the most important distinctions in manufacturing engineering — you will encounter it again in Week 5.
+This is the **ISA-95 hierarchy** (@fig-ml-isa95-02). Different rules apply at different levels: you absolutely do not deploy Python scripts on a PLC (Level 1), but you absolutely do deploy them at Level 3 or 4. The boundary between OT and IT is one of the most important distinctions in manufacturing engineering — you will encounter it again in Week 5.
 
 | System | Full Name | What It Stores | Typical Sample Rate |
 |:---|:---|:---|:---|
@@ -549,8 +557,8 @@ xbar <- parts %>%
   group_by(day) %>%
   summarise(mean_diam = mean(diameter), .groups = "drop")
 
-# Control limits using overall σ and X̄̄
-grand_mean <- mean(xbar$mean_diam)
+# Control limits from the in-control baseline: sigma of individual parts and X-double-bar
+grand_mean <- mean(xbar$mean_diam[!xbar$day %in% bad_days])
 sigma_ind  <- sd(parts$diameter[!parts$day %in% bad_days])
 ucl <- grand_mean + 3 * sigma_ind / sqrt(n_per_day)
 lcl <- grand_mean - 3 * sigma_ind / sqrt(n_per_day)
@@ -558,6 +566,9 @@ usl <- process_mean + 0.050
 lsl <- process_mean - 0.050
 
 xbar$out_of_control <- xbar$mean_diam > ucl | xbar$mean_diam < lcl
+
+lim_lab <- data.frame(y = c(usl, ucl, lcl, lsl), lab = c("USL", "UCL", "LCL", "LSL"),
+                      col = c("#b71c1c", "#e65100", "#e65100", "#b71c1c"))
 
 ggplot(xbar, aes(x = day, y = mean_diam)) +
   geom_hline(yintercept = usl, colour = "#b71c1c", linetype = "dashed", linewidth = 0.8) +
@@ -570,10 +581,8 @@ ggplot(xbar, aes(x = day, y = mean_diam)) +
   scale_colour_manual(values = c("FALSE" = "#1976d2", "TRUE" = "#c62828"),
                       labels = c("In control", "Out of control"),
                       name   = NULL) +
-  annotate("text", x = 99.5, y = ucl + 0.0015, label = "UCL", hjust = 1, vjust = 0, size = 3 * diagram_text_scale) +
-  annotate("text", x = 99.5, y = lcl - 0.0015, label = "LCL", hjust = 1, vjust = 1, size = 3 * diagram_text_scale) +
-  annotate("text", x = 99.5, y = usl - 0.0015, label = "USL", hjust = 1, vjust = 1, size = 3 * diagram_text_scale, colour = "#b71c1c") +
-  annotate("text", x = 99.5, y = lsl + 0.0015, label = "LSL", hjust = 1, vjust = 0, size = 3 * diagram_text_scale, colour = "#b71c1c") +
+  annotate("label", x = 97, y = lim_lab$y, label = lim_lab$lab, colour = lim_lab$col,
+           fill = "white", linewidth = 0, size = 3 * diagram_text_scale) +
   coord_cartesian(xlim = c(1, 100)) +
   labs(title   = "X-bar Control Chart: CNC Cell 3 (Simulated)",
        subtitle = "Red = specification limits | Orange = control limits",
@@ -609,7 +618,7 @@ $$ {#eq-ml-lcl}
 
 where $\sigma$ is the standard deviation of *individual* parts, $n$ is the subgroup size, and $\bar{\bar{X}}$ is the overall process mean.
 
-A common student mistake: computing control limits using the standard deviation of the *daily means* instead of the standard deviation of individual parts. If the daily means have standard deviation $s_{\bar{x}}$, then $s_{\bar{x}} \approx \sigma / \sqrt{n}$ — so using $s_{\bar{x}}$ instead of $\sigma/\sqrt{n}$ effectively applies the $\sqrt{n}$ correction twice. The control limits become too narrow, generating false alarms constantly.
+A common student mistake: putting the standard deviation of the *daily means*, $s_{\bar{x}}$, into these formulas in place of $\sigma$. Because $s_{\bar{x}} \approx \sigma / \sqrt{n}$ already, dividing it by $\sqrt{n}$ again applies the correction twice: the limits come out $\sqrt{n}$ times too narrow and generate false alarms constantly. (Using $\pm 3 s_{\bar{x}}$ directly, with no further division, is closer to right, but the daily means also contain any special-cause shifts, which inflates $s_{\bar{x}}$ and hides the very events you are looking for. That is why standard practice estimates $\sigma$ from the variation *within* each subgroup, for example $\bar{R}/d_2$ or $\bar{s}/c_4$.)
 
 #### Process Capability: $C_p$ and $C_{pk}$ {#ml-w2-capability}
 
@@ -629,15 +638,16 @@ where $\sigma$ is the standard deviation of *individual* measurements (not the X
 - **$C_{pk}$** is the *actual* capability — accounts for off-centre processes
 - $C_{pk} \leq C_p$ always; they are equal only when the process is perfectly centred
 
-```{r fig-ml-cpk-visual-02, echo=FALSE, message=FALSE, fig.cap="Process capability visualization. A Cpk of 1.16 means the nearest specification limit is 3.48σ from the process mean — better than minimum (1.00) but below the automotive standard (1.33). The shaded tail area under each specification limit represents the expected fraction of non-conforming parts.", fig.align='center', fig.height=4}
+```{r fig-ml-cpk-visual-02, echo=FALSE, message=FALSE, fig.cap="Process capability visualization. A Cpk of 1.16 means the nearest specification limit is 3.48σ from the process mean — better than minimum (1.00) but below the automotive standard (1.33). The shaded tail area beyond each specification limit represents the expected fraction of non-conforming parts; at this Cpk it is only about 0.03%, too small to see at this scale.", fig.align='center', fig.height=4}
 library(ggplot2)
 
 # Process parameters from Week 2 lab scenario
-mu    <- 25.004     #slight offset from nominal
-sigma <- 0.013
+mu    <- 25.004     # slight offset from nominal
+sigma <- 0.0132
 usl   <- 25.050
 lsl   <- 24.950
 cpk   <- round(min((usl - mu) / (3 * sigma), (mu - lsl) / (3 * sigma)), 2)
+p_out <- pnorm(lsl, mu, sigma) + pnorm(usl, mu, sigma, lower.tail = FALSE)
 
 x_range <- seq(lsl - 0.03, usl + 0.03, length.out = 500)
 density  <- dnorm(x_range, mu, sigma)
@@ -650,10 +660,9 @@ ggplot(df_curve, aes(x, y)) +
   geom_area(data = df_reject_hi, aes(x, y), fill = "#ef9a9a", alpha = 0.7) +
   geom_area(data = df_reject_lo, aes(x, y), fill = "#ef9a9a", alpha = 0.7) +
   geom_line(colour = "#1565c0", linewidth = 1) +
-  geom_vline(xintercept = c(usl, lsl), colour = "#c62828",
-             linetype = "dashed", linewidth = 0.9) +
-  geom_vline(xintercept = mu, colour = "#1565c0",
-             linetype = "solid", linewidth = 0.8) +
+  geom_vline(xintercept = usl, colour = "#c62828", linetype = "dashed", linewidth = 0.9) +
+  geom_vline(xintercept = lsl, colour = "#c62828", linetype = "dashed", linewidth = 0.9) +
+  geom_vline(xintercept = mu, colour = "#1565c0", linetype = "solid", linewidth = 0.8) +
   annotate("text", x = usl + 0.005, y = max(density) * 0.9,
            label = paste0("USL\n", usl), colour = "#c62828", size = 3 * diagram_text_scale, hjust = 0) +
   annotate("text", x = lsl - 0.005, y = max(density) * 0.9,
@@ -661,10 +670,10 @@ ggplot(df_curve, aes(x, y)) +
   annotate("text", x = mu + 0.002, y = max(density) * 1.1,
            label = paste0("μ = ", mu), colour = "#1565c0", size = 3 * diagram_text_scale, hjust = 0) +
   annotate("text", x = mu + 0.03, y = max(density) * 0.55,
-           label = paste0("Cpk = ", cpk), size = 4 * diagram_text_scale, fontface = "bold") +
+           label = paste0("Cpk = ", sprintf("%.2f", cpk)), size = 4 * diagram_text_scale, fontface = "bold") +
   expand_limits(y = max(density) * 1.2) +
   labs(title   = "Process Capability: CNC Cell 3 (Simulated)",
-       subtitle = "Red shaded area = predicted fraction of out-of-spec parts",
+       subtitle = sprintf("Shaded tails = predicted out-of-spec fraction (%.2f%%, too small to see)", p_out * 100),
        x = "Diameter (mm)", y = "Probability density") +
   theme_ml
 ```
@@ -714,7 +723,7 @@ Both have a role. SPC is your safety net. ML is your early-warning system. The b
 2. Your CMM reports surface flatness in mm. The drawing specifies inches. The CSV column header says "mm." Three days of data have suspiciously small values. What likely happened, and how would you detect it without anyone telling you?
 3. A process has $C_{pk} = 0.85$. The control chart shows no out-of-control points. The plant manager declares the process "in control" and refuses your improvement project. What is the technically correct response?
 4. Why does tool-wear autocorrelation violate the assumptions of a standard X-bar chart?
-5. Name the four levels of the ISA-95 hierarchy and give one example of data that lives at each level.
+5. Name the five levels (0–4) of the ISA-95 hierarchy and give one example of data that lives at each level.
 
 ### Further Reading — Week 2 {#ml-w2-reading}
 
@@ -804,83 +813,77 @@ ggplot(cost_long, aes(x = regime, y = cost_cad, fill = cost_type)) +
   theme(legend.position = "right")
 ```
 
-Figure @fig-ml-maintenance-cost-03 shows why every plant manager wants predictive maintenance. For a 10-machine cell with one unplanned bearing failure per machine per year, the plant loses roughly CAD $178,000 annually on this single component type. A predictive model catching 70% of these failures before they become functional failures would save approximately CAD $125,000 per year — from one component, on one cell.
+@fig-ml-maintenance-cost-03 shows why every plant manager wants predictive maintenance. For a 10-machine cell with one unplanned bearing failure per machine per year, the plant loses roughly CAD $178,000 annually on this single component type (10 × $17,800). A predictive model catching 70% of these failures before they become functional failures turns each of those 7 events into a planned repair costing about $780, saving approximately 7 × ($17,800 − $780) ≈ CAD $119,000 per year — from one component, on one cell. Preventive replacement looks even cheaper per event, but it replaces bearings that still have most of their life left, so it needs many more events per year.
 
 #### The P-F Curve {#ml-w3-pf-curve}
 
 The most important concept in maintenance theory:
 
-```{r fig-ml-pf-curve-03, echo=FALSE, message=FALSE, fig.cap="The P-F curve: a stylized view of how a machine component's condition degrades from normal operation to functional failure. The P-F interval — the time between when failure becomes detectable (P) and when function is lost (F) — is the maintenance engineer's decision window. Different sensor types detect failure at different positions along the curve.", fig.align='center', fig.height=4.5}
+```{r fig-ml-pf-curve-03, echo=FALSE, message=FALSE, fig.cap="The P-F curve: a stylized view of how a machine component's condition degrades from normal operation to functional failure. P is the point where the failure first becomes detectable with the best available technique; F is the point where the component can no longer do its job. The P-F interval between them is the maintenance engineer's decision window. Each detection technique has its own P point further down the curve, so a later technique leaves a shorter window.", fig.align='center', fig.height=4.5}
 library(ggplot2)
 
-# Simulate a degradation trajectory
-t     <- seq(0, 100, length.out = 500)
-# Condition degrades slowly at first, then accelerates (exponential-ish)
-condition <- 100 - 3 * exp(0.04 * t)
-condition <- pmax(condition, 0)
+# Condition degrades slowly at first, then accelerates
+cond_fun <- function(t) 100 - 3 * exp(0.04 * t)
+t_of     <- function(c) log((100 - c) / 3) / 0.04      # time at which condition = c
 
-df_pf <- data.frame(time = t, condition = condition)
+c_F <- 15                     # functional failure: component can no longer do its job
+t_F <- t_of(c_F)
+t   <- seq(0, t_F, length.out = 400)
+t_b <- seq(t_F, t_of(0), length.out = 50)               # after F: run to breakdown
 
-# Key event times
-t_P <- 60    #first detectable sign
-t_F <- 92    #functional failure
-
-cond_P <- 100 - 3 * exp(0.04 * t_P)
-cond_F <- 100 - 3 * exp(0.04 * t_F)
-
-# Sensor detection zones
-sensor_labels <- data.frame(
-  t_detect = c(52,  66,  76,  85,  91),
-  label    = c("Vibration", "Temperature", "Motor current", "Audible noise", "Visual signs"),
-  y        = c(35,  25,  15,  7,  1)
+# Detection points ON the curve, earliest first
+det <- data.frame(
+  label = c("Vibration analysis", "Oil / wear-debris analysis", "Temperature rise",
+            "Audible noise", "Smoke, heat, visible damage"),
+  cond  = c(88, 78, 62, 40, 24)
 )
+det$t <- t_of(det$cond)
+t_P   <- det$t[1]
 
-ggplot(df_pf, aes(x = time, y = condition)) +
-  geom_line(colour = "#1565c0", linewidth = 1.2) +
-  geom_vline(xintercept = t_P, colour = "#f57f17", linetype = "dashed", linewidth = 0.9) +
-  geom_vline(xintercept = t_F, colour = "#c62828", linetype = "dashed", linewidth = 0.9) +
-  annotate("segment", x = t_P, xend = t_F, y = -2, yend = -2,
-               arrow = arrow(ends = "both", length = unit(0.2, "cm")),
-               colour = "#4caf50", linewidth = 0.8) +
-  annotate("text", x = (t_P + t_F) / 2 - 14, y = -13,
-           label = "P-F Interval\n(decision window)",
-           colour = "#2e7d32", size = 3.2 * diagram_text_scale, fontface = "bold", hjust = 0.5) +
-  annotate("label", x = t_P - 1, y = cond_P + 14,
-           label = "P: First\ndetectable sign", fill = "white", linewidth = 0,
-           colour = "#f57f17", size = 3 * diagram_text_scale, hjust = 1) +
-  annotate("text", x = t_F + 1, y = cond_F + 40,
-           label = "F: Functional\nfailure",
-           colour = "#c62828", size = 3 * diagram_text_scale, hjust = 0) +
-  coord_cartesian(xlim = c(0, 108)) +
-  geom_point(data = sensor_labels,
-             aes(x = t_detect, y = y), colour = "#7b1fa2",
-             size = 3, shape = 18) +
-  geom_label(data = sensor_labels,
-            aes(x = t_detect, y = y + 7, label = label),
-            colour = "#7b1fa2", fill = "white", linewidth = 0,
-            size = 2.5 * diagram_text_scale, hjust = 0.5) +
-  scale_y_continuous(limits = c(-22, 100),
-                     breaks  = seq(0, 100, 20)) +
+ggplot() +
+  geom_path(data = data.frame(t = t, c = cond_fun(t)), aes(t, c), colour = "#1565c0", linewidth = 1.2) +
+  geom_path(data = data.frame(t = t_b, c = cond_fun(t_b)), aes(t, c), colour = "#1565c0",
+            linewidth = 1.0, linetype = "dotted") +
+  geom_point(data = det, aes(t, cond), colour = "#7b1fa2", size = 3, shape = 18) +
+  geom_label(data = det, aes(t - 1, cond - 7, label = label), hjust = 1, colour = "#7b1fa2",
+             fill = "white", linewidth = 0, size = 2.6 * diagram_text_scale) +
+  annotate("point", x = t_P, y = det$cond[1], colour = "#f57f17", size = 4) +
+  annotate("label", x = t_P + 1.5, y = det$cond[1] + 8, label = "P: failure first\ndetectable",
+           hjust = 0, colour = "#e65100", fill = "white", linewidth = 0, size = 2.9 * diagram_text_scale) +
+  annotate("point", x = t_F, y = c_F, colour = "#c62828", size = 4) +
+  annotate("label", x = t_F + 1.5, y = c_F + 9, label = "F: functional\nfailure",
+           hjust = 0, colour = "#c62828", fill = "white", linewidth = 0, size = 2.9 * diagram_text_scale) +
+  annotate("segment", x = t_P, xend = t_P, y = det$cond[1], yend = -8,
+           linetype = "dashed", colour = "#f57f17", linewidth = 0.7) +
+  annotate("segment", x = t_F, xend = t_F, y = c_F, yend = -8,
+           linetype = "dashed", colour = "#c62828", linewidth = 0.7) +
+  annotate("segment", x = t_P, xend = t_F, y = -8, yend = -8,
+           arrow = arrow(ends = "both", length = unit(0.2, "cm")),
+           colour = "#2e7d32", linewidth = 0.8) +
+  annotate("label", x = (t_P + t_F) / 2, y = -8, label = "P-F interval (decision window)",
+           colour = "#2e7d32", fill = "white", linewidth = 0, size = 3 * diagram_text_scale, fontface = "bold") +
+  scale_y_continuous(limits = c(-14, 104), breaks = seq(0, 100, 20)) +
+  coord_cartesian(xlim = c(0, 100)) +
   labs(title    = "The P-F Curve",
-       subtitle = "Different sensor types detect failure at different positions on the curve",
+       subtitle = "Different detection techniques find the same failure at different points on the curve",
        x = "Time (operating cycles or hours)", y = "Component condition (%)") +
   theme_ml
 ```
 
-Different sensor types detect failure at different positions on the P-F curve (Figure @fig-ml-pf-curve-03):
+Different sensor types detect failure at different positions on the P-F curve (@fig-ml-pf-curve-03):
 
-| Sensor type | Typical position on P-F curve | Approximate P-F interval |
+| Detection technique | Typical position on P-F curve | Approximate P-F interval |
 |:---|:---|:---|
 | Vibration analysis | Earliest — often months before functional failure | Months to weeks |
+| Oil / wear-debris analysis | Early to middle — metal particles appear as surfaces wear | Weeks |
 | Temperature monitoring | Later — bearing temperature rises as wear progresses | Weeks to days |
-| Motor current signature | Even later — current draw increases as friction rises | Days to hours |
-| Audible noise (human ear) | Late | Hours to minutes |
-| Visual smoke or sparks | Functional failure imminent | Minutes |
+| Audible noise (human ear) | Late | Days to hours |
+| Smoke, heat, visible damage | Functional failure imminent | Minutes |
 
 Predictive maintenance models exploit the **earliest** indicators (vibration, subtle sensor drift) to maximize the decision window. This is why the C-MAPSS dataset you will work with uses 21 sensors per cycle — many of them recording subtle thermodynamic shifts that no human operator would notice.
 
 ::: {.callout-industry}
-**Industry Application:** GE Aviation's OnPoint predictive maintenance program for CFM56 engines (the most common commercial airliner engine in service) uses sensor data from every flight to continuously update engine health models. Airlines receive maintenance recommendations before any symptom is observable on the shop floor. This has reduced unscheduled removals by over 30% on participating fleets.
+**Industry Application:** Engine manufacturers such as GE Aerospace and CFM International (maker of the CFM56, one of the most widely used airliner engines) run engine health-monitoring services that collect sensor snapshots from every flight and trend them against fleet models. Airlines receive maintenance recommendations — for example, to inspect or wash an engine — before any symptom is noticeable to the crew or the mechanics, which reduces unscheduled engine removals.
 :::
 
 ***
@@ -1006,7 +1009,7 @@ ggplot(df_engines, aes(x = col, y = -row, fill = split)) +
         panel.grid = element_blank())
 ```
 
-Figure @fig-ml-engine-split-03 illustrates the correct split. The validation set contains entire engine histories that the model has never seen during training. This simulates the real deployment situation: a new engine arrives at your plant; your model must predict its RUL without having seen this specific engine before.
+@fig-ml-engine-split-03 illustrates the correct split. The validation set contains entire engine histories that the model has never seen during training. This simulates the real deployment situation: a new engine arrives at your plant; your model must predict its RUL without having seen this specific engine before.
 
 **How to detect the bug if you accidentally use row-wise splitting:** your validation RMSE will be suspiciously low — 5 to 8 cycles instead of the expected 15 to 25. When you see that, immediately check whether any engine ID appears in both training and validation sets. If it does, you have data leakage.
 
@@ -1332,9 +1335,9 @@ Random Forest addresses overfitting with two sources of randomness:
 
 1. **Bootstrap aggregating (bagging):** each tree is trained on a bootstrap sample — a random sample of the training data *with replacement*, same size as the original. Roughly 37% of rows are left out of each tree's training set (the "out-of-bag" samples), which can be used for internal validation.
 
-2. **Feature subsampling:** at each split, the algorithm considers only a random subset of features (typically $\sqrt{p}$ features for classification, $p/3$ for regression, where $p$ is the total number of features). This forces trees to differ from each other even when one feature is dominant.
+2. **Feature subsampling:** at each split, the algorithm considers only a random subset of features (the classic recommendations are $\sqrt{p}$ features for classification and $p/3$ for regression, where $p$ is the total number of features). This forces trees to differ from each other even when one feature is dominant. Note that scikit-learn's `RandomForestRegressor` defaults to `max_features=1.0`, i.e. *all* features at every split (pure bagging); set `max_features="sqrt"` or `1/3` to get the classic behaviour.
 
-Because each tree sees a different random view of the data, the trees make different mistakes. When you average 100 different-but-correlated predictions, the random errors cancel out while the shared signal remains. The bias is roughly the same as any single tree; the variance drops roughly by a factor of $n_{trees}$. This is the core statistical argument for ensemble methods.
+Because each tree sees a different random view of the data, the trees make different mistakes. When you average 100 different-but-correlated predictions, the random errors partly cancel while the shared signal remains. The bias is roughly the same as any single tree. The variance drops, but not by a factor of $n_{trees}$: for trees whose errors have correlation $\rho$, the variance of the average is $\rho\sigma^2 + (1-\rho)\sigma^2/n_{trees}$, so it levels off at $\rho\sigma^2$. That is why feature subsampling, which lowers $\rho$, matters. This is the core statistical argument for ensemble methods.
 
 ::: {.callout-discussion}
 **Group Discussion:** Feature importance in a Random Forest is computed as the average reduction in node impurity contributed by each feature across all trees. If two features are highly correlated (say, sensor_11 and sensor_4 both drift together as the engine degrades), how might this affect the feature importance values for each? Would removing one of them hurt or help model performance?
@@ -1347,7 +1350,7 @@ Because each tree sees a different random view of the data, the trees make diffe
 | `n_estimators` | Number of trees | 100 | More trees = lower variance, slower training |
 | `max_depth` | Maximum depth per tree | 10 | Deeper = more expressive but higher overfitting risk |
 | `min_samples_leaf` | Minimum samples per leaf node | 1–5 | Higher = simpler trees, less overfitting |
-| `max_features` | Features considered per split | "sqrt" or 1/3 of total | Fewer = more diverse trees |
+| `max_features` | Features considered per split | "sqrt" or 1/3 of total (scikit-learn default for regression: all) | Fewer = more diverse trees |
 | `n_jobs` | Parallel threads | -1 (use all CPU cores) | More = faster training (no accuracy effect) |
 
 For C-MAPSS FD001, `n_estimators=100, max_depth=10, n_jobs=-1` with default feature selection gives you approximately 90% of the achievable performance with zero tuning effort. This is the value of Random Forest for industrial first-pass analysis.
@@ -1361,7 +1364,7 @@ For C-MAPSS FD001, `n_estimators=100, max_depth=10, n_jobs=-1` with default feat
 A single RMSE number does not tell you where your model is failing. Always produce a **predictions vs. actuals scatter plot** (often called a residual plot):
 
 - Points along the diagonal ($\hat{y} = y$) = perfect predictions
-- Points above the diagonal = overestimates (predicted too much life remaining — dangerous in maintenance)
+- With actual RUL on the horizontal axis and predicted RUL on the vertical axis, points above the diagonal = overestimates (predicted too much life remaining — dangerous in maintenance)
 - Points below the diagonal = underestimates (predicted too little life — results in premature replacement, wastes money but is safe)
 - Systematic patterns (e.g., all high-RUL points overestimated) = model bias at specific RUL ranges
 
@@ -1389,7 +1392,7 @@ Target: **at least 2× better than the naive baseline.** If you are not hitting 
 
 1. Your validation RMSE is 6.8 cycles. The naive baseline RMSE on the same validation set is 48 cycles. Is this a good result or should you be suspicious? Why?
 2. You are choosing between rolling windows of k = 3, k = 5, and k = 20 for your C-MAPSS features. What would you try first, and what would you monitor to decide whether a different value is better?
-3. You have 42 features after feature engineering (raw sensors + rolling mean + rolling std, with constants removed). At each split in a Random Forest tree, how many features does the algorithm consider? Why not all 42?
+3. You have 42 features after feature engineering (raw sensors + rolling mean + rolling std, with constants removed). At each split in a Random Forest tree, how many features does the algorithm consider with `max_features="sqrt"`, and with $p/3$? What does scikit-learn's regressor do by default, and why might considering fewer than all 42 help?
 4. A classmate's feature importance chart shows sensor_14_rolling_mean at 0.12 and sensor_14 at 0.03. Why might the rolling feature dominate the raw feature despite measuring the same physical quantity?
 5. You save `rul_model.pkl` but forget to save `feature_cols.pkl`. What happens when you try to use the model in the Streamlit app next week?
 
@@ -1428,8 +1431,8 @@ Recall the ISA-95 hierarchy from Week 2. The boundary between Operational Techno
 **Why AI models do not go on PLCs (Level 1):**
 
 - PLCs run deterministic, real-time control loops with cycle times in the millisecond range. A Python inference call that takes 50 ms would break the control loop and create safety hazards.
-- PLCs are certified for functional safety under IEC 61508/61511. Adding a Python runtime would invalidate certification and create liability.
-- PLCs run on embedded operating systems with no Python interpreter. Deploying there requires rewriting in IEC 61131 structured text or C.
+- Safety PLCs are certified for functional safety (IEC 61508, IEC 62061, ISO 13849), and even standard PLCs run validated control code under strict change management. Adding an ML model would invalidate that certification or validation and create liability.
+- Most PLCs run real-time embedded operating systems with no Python interpreter. Deploying there would require rewriting the model in IEC 61131-3 structured text or C.
 - PLCs are maintained by OT teams with different update cadences and change management processes than IT systems.
 
 **Where AI models actually live in production:**
@@ -1492,35 +1495,29 @@ set.seed(21)
 months    <- 1:24
 # Model starts well, gradually degrades with a step change at month 12 (overhaul)
 base_rmse <- 20 + cumsum(rnorm(24, 0.3, 0.8))
-# Step change at month 12 when plant had a major overhaul (new sensors, recalibrated)
+# Step change from month 12 after a major overhaul (new sensors, recalibrated)
 base_rmse[12:24] <- base_rmse[12:24] + 8
 
-df_drift <- data.frame(
-  month = months,
-  rmse  = pmax(base_rmse, 18),
-  event = ifelse(months == 12, "Major overhaul\n(new sensors)", NA_character_)
-)
+df_drift <- data.frame(month = months, rmse = pmax(base_rmse, 18))
 
 ggplot(df_drift, aes(x = month, y = rmse)) +
-  geom_hline(yintercept = 20, colour = "#2e7d32", linetype = "dashed",
-             linewidth = 0.8) +
-  geom_hline(yintercept = 35, colour = "#c62828", linetype = "dashed",
-             linewidth = 0.8) +
+  geom_hline(yintercept = 20, colour = "#2e7d32", linetype = "dashed", linewidth = 0.8) +
+  geom_hline(yintercept = 35, colour = "#c62828", linetype = "dashed", linewidth = 0.8) +
   geom_line(colour = "#1565c0", linewidth = 1) +
   geom_point(colour = "#1565c0", size = 2) +
-  geom_vline(xintercept = 12, colour = "#e65100", linetype = "dotted", linewidth = 1) +
-  annotate("text", x = 12.3, y = 39, label = "Major overhaul\n(new sensors installed)",
+  geom_vline(xintercept = 11.5, colour = "#e65100", linetype = "dotted", linewidth = 1) +
+  annotate("text", x = 11.8, y = 39, label = "Major overhaul\n(new sensors installed)",
            colour = "#e65100", size = 3 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 24.5, y = 19.2, label = "Launch RMSE", colour = "#2e7d32",
-           size = 3 * diagram_text_scale, hjust = 1) +
-  annotate("text", x = 24.5, y = 33.8, label = "Retraining threshold", colour = "#c62828",
-           size = 3 * diagram_text_scale, hjust = 1) +
+  annotate("label", x = 24.5, y = 20, label = "Launch RMSE", colour = "#2e7d32",
+           fill = "white", linewidth = 0, size = 3 * diagram_text_scale, hjust = 1) +
+  annotate("label", x = 9, y = 35, label = "Retraining threshold", colour = "#c62828",
+           fill = "white", linewidth = 0, size = 3 * diagram_text_scale, hjust = 0.5) +
   scale_x_continuous(breaks = seq(1, 24, by = 3),
                      labels = paste0("M", seq(1, 24, by = 3))) +
   scale_y_continuous(limits = c(17, 42)) +
   labs(title    = "Model Performance Drift in Production",
-       subtitle = "Validation RMSE over 24 months. No retraining performed.",
-       x = "Month in production", y = "Validation RMSE (cycles)") +
+       subtitle = "RMSE against ground truth over 24 months. No retraining performed.",
+       x = "Month in production", y = "RMSE (cycles)") +
   theme_ml
 ```
 
@@ -1528,7 +1525,7 @@ ggplot(df_drift, aes(x = month, y = rmse)) +
 
 1. **Input drift (covariate shift):** The distribution of input features changes over time. Sensors are recalibrated, replaced with different-accuracy units, or repositioned. The model was trained on the old distribution and now receives systematically different values. The model is not wrong — the world changed. Detect this by monitoring the mean and variance of key features over time and comparing to training-set statistics.
 
-2. **Concept drift:** The relationship between inputs and the target variable changes. A major spindle rebuild changes the wear pattern of the engine; the degradation trajectory looks different from the training data. The model learned the old relationship. Detect this by monitoring ground-truth RUL when you eventually get it (after planned or unplanned maintenance) and comparing to predictions.
+2. **Concept drift:** The relationship between inputs and the target variable changes. A major rebuild changes how the equipment wears; the degradation trajectory looks different from the training data. The model learned the old relationship. Detect this by monitoring ground-truth RUL when you eventually get it (after planned or unplanned maintenance) and comparing to predictions.
 
 3. **Data quality drift:** The fraction of missing or corrupted sensor readings increases over time as sensors age. The model was trained on clean data; it now receives increasingly dirty inputs. Detect this by monitoring the rate of missing values and out-of-range sensor readings in the incoming data stream.
 
@@ -1548,7 +1545,7 @@ ggplot(df_drift, aes(x = month, y = rmse)) +
 - How expensive is labelled data? For C-MAPSS this is free (simulation). For a real plant, you only get the "true RUL" label after the equipment actually fails or is removed.
 - How expensive is a wrong prediction? Higher stakes require more frequent validation and lower drift tolerance.
 
-A practical starting point for most manufacturing predictive-maintenance applications: monthly validation against recent ground-truth events, with a scheduled quarterly retraining trigger and an event-triggered retraining trigger if RMSE exceeds 2× the launch baseline.
+A practical starting point for most manufacturing predictive-maintenance applications: monthly validation against recent ground-truth events, with a scheduled quarterly retraining and an event-triggered retraining whenever the monitored RMSE rises well above the launch value (the figure uses 35 cycles against a launch RMSE of 20).
 
 ***
 
@@ -1606,9 +1603,9 @@ Machine learning models learn patterns from historical data. If the historical d
 
 #### Liability: Who Is Responsible When AI Is Wrong? {#ml-w6-liability}
 
-The Air Canada case (2024) established that companies are liable for what their AI-powered customer-service bots say. The principle extends to manufacturing: if your predictive maintenance model causes a consequential decision — stopping production, removing a part prematurely, or failing to flag an imminent failure — and that decision results in financial loss or injury, the question of liability is not trivial.
+The Air Canada case (2024) showed that companies are held liable for what their AI-powered customer-service bots say. The principle extends to manufacturing: if your predictive maintenance model causes a consequential decision — stopping production, removing a part prematurely, or failing to flag an imminent failure — and that decision results in financial loss or injury, the question of liability is not trivial.
 
-Current state of Canadian and US law: liability typically falls on the company deploying the system, not the model vendor. The engineer who deployed the system may be asked to demonstrate that the model was:
+In general, under Canadian and US law, liability falls first on the company deploying the system rather than on the model vendor. The engineer who deployed the system may be asked to demonstrate that the model was:
 
 - Validated appropriately before deployment
 - Used within its intended scope (not applied to equipment or conditions outside the training distribution)
@@ -1659,9 +1656,9 @@ Good AI deployment design includes:
 
 What is actually in production at scale (not pilot or demo) in North American manufacturing:
 
-- **Statistical process control software with ML-augmented anomaly detection:** AVEVA, OSIsoft (now AVEVA PI), AspenTech, GE Digital — all ship SPC with ML alarm filtering
+- **Process historians and SPC software with ML-based anomaly detection:** AVEVA PI (formerly OSIsoft), AspenTech, GE Vernova (formerly GE Digital) and others offer ML anomaly detection alongside classical SPC
 - **Computer vision quality inspection:** Cognex, Keyence, and custom solutions using YOLO/Detectron2 — in high-volume electronics, automotive body panels, food sorting
-- **Predictive maintenance on rotating equipment:** vibration FFT analysis + ML on PLCs or edge servers — most common in paper, cement, oil refining, and heavy automotive
+- **Predictive maintenance on rotating equipment:** vibration FFT analysis + ML on edge devices or plant servers — most common in paper, cement, oil refining, and heavy automotive
 - **LLM-assisted documentation:** work order generation, SOP drafting, supplier emails — on the rise since 2023; most common at the engineering and supervision level, not on the shop floor
 
 What is in rapid development / early deployment:
@@ -1695,7 +1692,7 @@ The field moves fast. Three habits that will keep you current without burning ou
 ### Self-Check Questions — Week 6 {#ml-w6-check}
 
 1. Your C-MAPSS model was trained exclusively on FD001 (one operating condition, one fault mode). A plant manager asks you to deploy it on the hydraulic press line to predict cylinder seal failure. List three specific reasons why this deployment would be inappropriate, and what you would need to do before it could be considered.
-2. The Air Canada chatbot case established that companies are liable for what their AI tools say. What does this imply for the "About this model" section of your Streamlit app — specifically what information should it contain to protect both you and your future employer?
+2. The Air Canada chatbot case showed that companies are held liable for what their AI tools say. What does this imply for the "About this model" section of your Streamlit app — specifically what information should it contain to protect both you and your future employer?
 3. A junior technician has been using your predictive maintenance dashboard for six months. You notice they never override the recommendations, even when they personally notice an unusual sound from a machine the model shows as "healthy." What phenomenon does this illustrate, and how would you redesign the dashboard to mitigate it?
 4. Your plant uses a Random Forest for bearing failure prediction on the stamping press. A failure occurs that the model did not predict (a false negative). The quality team asks you to explain why the model missed it. What tools would you use to investigate, and what information would you present?
 5. Name two AI technologies not yet widely deployed in manufacturing (as of this course) that you think are most likely to change your specific engineering role within 10 years. Justify your answer.
@@ -1703,7 +1700,7 @@ The field moves fast. Three habits that will keep you current without burning ou
 ### Further Reading — Week 6 {#ml-w6-reading}
 
 - NIST. *AI Risk Management Framework (AI RMF 1.0).* <https://www.nist.gov/system/files/documents/2023/01/26/NIST.AI.100-1.pdf>
-- European Commission. *EU AI Act — Summary for practitioners.* <https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689>
+- European Union. *Regulation (EU) 2024/1689 (the AI Act), full text.* <https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689>
 - ISO/IEC 42001:2023. *Artificial intelligence — Management system.* (Standard, not free, but your employer may have access.)
 - Lundberg, S. and Lee, S.-I. "A Unified Approach to Interpreting Model Predictions," *NeurIPS 2017.* <https://arxiv.org/abs/1705.07874> (the SHAP paper — foundational for model explainability)
 - Crawford, K. *Atlas of AI* (2021). A readable, critical examination of AI's social and political dimensions — highly recommended for its grounding perspective.

@@ -56,7 +56,7 @@ Understanding drivetrains is fundamental for any engineer working in the automot
 knitr::include_graphics("images/drTrain-image6.jpeg")
 ```
 
-As shown in Figure @fig-drivetrain-components-overview-13, a typical AWD or 4WD drivetrain contains many precision-engineered components. The major drivetrain components are:
+As shown in @fig-drivetrain-components-overview-13, a typical AWD or 4WD drivetrain contains many precision-engineered components. The major drivetrain components are:
 
 | Component | Function |
 |:----------|:---------|
@@ -82,7 +82,7 @@ knitr::include_graphics("images/drTrain-image7.jpeg")
 
 ### Front-Wheel Drive (FWD) {#sec-fwd-13}
 
-In a **front-wheel drive** (FWD) vehicle, the engine and transaxle (combined gearbox and differential) are packaged at the front, and only the front wheels are driven. As shown in Figure @fig-fwd-rwd-diagram-13, this creates a compact layout with no rear driveshaft.
+In a **front-wheel drive** (FWD) vehicle, the engine and transaxle (combined gearbox and differential) are packaged at the front, and only the front wheels are driven. As shown in @fig-fwd-rwd-diagram-13, this creates a compact layout with no rear driveshaft.
 
 **Advantages of FWD:**
 
@@ -104,7 +104,7 @@ In a **front-wheel drive** (FWD) vehicle, the engine and transaxle (combined gea
 
 ### Rear-Wheel Drive (RWD) {#sec-rwd-13}
 
-In a **rear-wheel drive** (RWD) vehicle, the engine is typically at the front, but power is delivered to the rear wheels through a propeller shaft and rear differential. Figure @fig-fwd-rwd-diagram-13 shows how the transmission output (item 3) connects to the rear axle (4) via the propshaft (5).
+In a **rear-wheel drive** (RWD) vehicle, the engine is typically at the front, but power is delivered to the rear wheels through a propeller shaft and rear differential. @fig-fwd-rwd-diagram-13 shows how the transmission output (item 3) connects to the rear axle (4) via the propshaft (5).
 
 **Advantages of RWD:**
 
@@ -121,7 +121,7 @@ In a **rear-wheel drive** (RWD) vehicle, the engine is typically at the front, b
 - **Oversteer** tendency — rear wheel traction loss is less intuitive to correct than front-wheel slip
 
 ::: {.callout-industry}
-**Industry Application:** BMW maintains RWD as a core design principle for its performance lineup. On the production line, the propshaft is dynamically balanced to tolerances below 1 g·cm to prevent vibration at highway speeds — a 100% inspection check performed after final assembly.
+**Industry Application:** BMW maintains RWD as a core design principle for its performance lineup. On the production line, every propshaft is dynamically balanced to a tight residual-imbalance limit to prevent vibration at highway speeds.
 :::
 
 ### All-Wheel Drive (AWD) and Four-Wheel Drive (4WD) {#sec-awd-4wd-13}
@@ -134,7 +134,7 @@ Both AWD and 4WD send power to all four wheels, but they work differently and su
 
 **All-Wheel Drive (AWD):**
 
-- Power is *continuously* distributed to all four wheels through a centre differential (item 9 in Figure @fig-awd-4wd-diagram-13)
+- Power is *continuously* distributed to all four wheels through a centre differential (item 9 in @fig-awd-4wd-diagram-13)
 - The centre differential allows the front and rear axles to rotate at different speeds — essential for cornering on dry pavement without binding
 - The front/rear torque split is managed automatically by electronics — the driver has no manual control
 - Modern AWD systems use electronically controlled clutch packs to vary the torque split dynamically (e.g., 40:60 front-rear in normal driving, 0:100 when the front wheels lose grip)
@@ -142,7 +142,7 @@ Both AWD and 4WD send power to all four wheels, but they work differently and su
 
 **Four-Wheel Drive (4WD):**
 
-- The transfer case (item 6 in Figure @fig-awd-4wd-diagram-13) mechanically locks the front and rear propshafts together — both axles are forced to rotate at the same speed
+- The transfer case (item 6 in @fig-awd-4wd-diagram-13) mechanically locks the front and rear propshafts together — both axles are forced to rotate at the same speed
 - Ideal for **off-road** conditions (deep mud, sand, rock) where maximum traction matters more than cornering behaviour
 - On hard dry pavement, locked 4WD causes **drivetrain binding** — the front and rear axles fight each other in corners because they are forced to turn at the same speed
 - Modern 4WD systems offer: **2H** (two-wheel drive, highway), **4H** (four-wheel high, for slippery roads), and **4L** (four-wheel low, maximum torque multiplication for serious off-roading)
@@ -209,7 +209,7 @@ if (knitr::is_html_output()) {
 }
 ```
 
-As Figure @fig-engine-torque-curve-13 shows, an ICE engine produces almost **no torque at very low RPM**. Yet a car must be able to start from rest — which demands *maximum* torque at *zero* wheel speed. This is the fundamental mismatch: the wheel needs maximum torque at zero speed, but the engine produces zero torque at zero RPM.
+As @fig-engine-torque-curve-13 shows, an ICE engine produces almost **no torque at very low RPM**. Yet a car must be able to start from rest — which demands *maximum* torque at *zero* wheel speed. This is the fundamental mismatch: the wheel needs maximum torque at zero speed, but the engine produces zero torque at zero RPM.
 
 The transmission solves this through:
 
@@ -217,39 +217,33 @@ The transmission solves this through:
 2. **Multiple gears** — allow the engine to remain in its efficient RPM band across the full range of vehicle speeds
 3. **Torque converter or clutch** — provide a controlled slip coupling that lets the engine spin while the vehicle is stationary
 
-```{r gear-ratio-visualization-13, fig.cap="Wheel torque available at different vehicle speeds for each gear of a 6-speed transmission. Each gear maps a range of vehicle speeds onto the engine's useful torque band. Without the transmission, the engine would be far outside its power band for most driving conditions.", fig.align='center', echo=FALSE}
+```{r gear-ratio-visualization-13, fig.cap="Wheel torque available at each road speed in each gear of a 6-speed transmission (final drive 3.7, tyre radius 0.32 m, driveline efficiency 92 %). Each gear covers a band of road speeds while the engine stays in its rpm range: low gears give high wheel torque at low speed, high gears reach high speed with less torque. The dashed curve is the ideal constant-power line that a continuously variable ratio would follow.", fig.align='center', echo=FALSE}
 library(ggplot2)
-library(dplyr)
-
-rpm_range <- seq(1000, 7000, by = 50)
+rpm_range <- seq(1000, 6500, by = 50)
 engine_torque_Nm <- 180 * exp(-((rpm_range - 3500)^2) / (2 * 1600^2)) + 120
-
-gear_ratios <- c("1st (3.9:1)" = 3.9, "2nd (2.3:1)" = 2.3,
-                 "3rd (1.5:1)" = 1.5, "4th (1.1:1)" = 1.1,
-                 "5th (0.85:1)" = 0.85, "6th (0.65:1)" = 0.65)
-final_drive <- 3.7
-
+gear_ratios <- c("1st (3.9:1)" = 3.9, "2nd (2.3:1)" = 2.3, "3rd (1.5:1)" = 1.5,
+                 "4th (1.1:1)" = 1.1, "5th (0.85:1)" = 0.85, "6th (0.65:1)" = 0.65)
+final_drive <- 3.7; r_tyre <- 0.32; eta <- 0.92
 gear_df <- do.call(rbind, lapply(names(gear_ratios), function(g) {
-  ratio        <- gear_ratios[g]
-  wheel_torque <- engine_torque_Nm * ratio * final_drive * 0.92
-  data.frame(RPM = rpm_range, Wheel_Torque = wheel_torque, Gear = g)
+  i <- gear_ratios[[g]] * final_drive
+  data.frame(Speed = rpm_range / i * 2 * pi * r_tyre / 60 * 3.6,
+             Wheel_Torque = engine_torque_Nm * i * eta, Gear = g)
 }))
 gear_df$Gear <- factor(gear_df$Gear, levels = names(gear_ratios))
+P_max <- max(engine_torque_Nm * rpm_range * 2 * pi / 60) * eta            # W at the wheels
+v <- seq(10, 230, by = 1)
+ideal <- data.frame(Speed = v, Wheel_Torque = P_max / (v / 3.6) * r_tyre)
 
-ggplot(gear_df, aes(x = RPM, y = Wheel_Torque, colour = Gear)) +
+ggplot(gear_df, aes(x = Speed, y = Wheel_Torque, colour = Gear)) +
+  geom_line(data = ideal, aes(Speed, Wheel_Torque), inherit.aes = FALSE, linetype = "dashed", colour = "gray40") +
   geom_line(linewidth = 1.1) +
   scale_colour_brewer(palette = "Dark2") +
-  labs(
-    title  = "Available Wheel Torque vs Engine RPM by Gear",
-    x      = "Engine Speed (RPM)",
-    y      = "Wheel Torque (N·m)",
-    colour = "Gear"
-  ) +
+  coord_cartesian(xlim = c(0, 250), ylim = c(0, 4100)) +
+  labs(title = "Available Wheel Torque vs Road Speed by Gear",
+       x = "Road speed (km/h)", y = "Wheel torque (N·m)", colour = "Gear") +
   theme_minimal() +
-  theme(
-    plot.title      = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold"),
-    legend.position = "right"
-  )
+  theme(plot.title = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold"),
+        legend.position = "right")
 ```
 
 ### The EV Advantage: Maximum Torque from Zero RPM {#sec-ev-torque-13}
@@ -260,13 +254,13 @@ An electric motor has a fundamentally different torque-speed characteristic.
 knitr::include_graphics("images/drTrain-image15.png")
 ```
 
-As Figure @fig-ev-torque-comparison-13 shows, an electric motor delivers **maximum torque from 0 RPM**. This is because motor torque is directly proportional to current:
+As @fig-ev-torque-comparison-13 shows, an electric motor delivers **maximum torque from 0 RPM**. This is because motor torque is directly proportional to current:
 
 $$
 T = k_t \cdot I
 $$ {#eq-motor-torque-13}
 
-where $k_t$ is the motor torque constant (N·m/A) and $I$ is the stator current (A). Maximum current can be supplied instantaneously at any motor speed, so maximum torque is available the moment the motor is energized — including at standstill.
+where $k_t$ is the motor torque constant (N·m/A) and $I$ is the stator current (A). Up to the motor's base speed the inverter can supply full current, so maximum torque is available the moment the motor is energized, including at standstill. Above base speed the back-EMF limits the current, torque falls, and the motor runs at roughly constant power (the right-hand part of @fig-ev-torque-comparison-13).
 
 This means an EV does **not need a multi-speed transmission**. A single fixed-ratio reduction gear (typically 7:1 to 10:1) matches the motor's high rotational speed to a usable wheel speed. The motor varies its torque electronically across the full speed range.
 
@@ -289,7 +283,7 @@ This means an EV does **not need a multi-speed transmission**. A single fixed-ra
 ## Automatic Transmission {#sec-automatic-transmission-13}
 
 ```{r auto-trans-video-13, echo=FALSE, results='asis'}
-embed_youtube("u_y1S8C0Hmc", "How an Automatic Transmission Works")
+embed_youtube("Y1zbE21Pzl0", "How Automatic Transmissions Work (Animation)")
 ```
 
 The **automatic transmission** (AT) is the dominant transmission type in North America. It selects gear ratios automatically based on vehicle speed and throttle position — the driver has no clutch pedal and no manual gear selection (unless using paddle shifters in sport mode).
@@ -326,13 +320,13 @@ $$i = -\frac{N_{ring}}{N_{sun}} = -\frac{72}{24} = -3:1 \quad \text{(negative = 
 Modern automatic transmissions stack **two or three planetary sets** in series, combined with hydraulically actuated clutch packs and brake bands that selectively hold or release elements. This yields 6, 8, or 10 forward gear ratios from a compact package.
 
 ::: {.callout-industry}
-**Industry Application:** The ZF 8HP eight-speed automatic, used in BMW, Chrysler, Land Rover, and Jeep vehicles, achieves eight forward gears from two planetary sets and four clutch packs. Its gear spread runs from 4.71:1 in first gear to 0.50:1 in eighth — a 9.4:1 span — allowing the engine to operate near its efficiency peak from city traffic to highway cruise.
+**Industry Application:** The ZF 8HP eight-speed automatic, used in BMW, Chrysler, Land Rover, and Jeep vehicles, achieves eight forward gears from four simple planetary sets and five shift elements (three clutches and two brakes), only two of which are open in any gear. In its original version the ratios run from 4.71:1 in first gear to 0.67:1 in eighth, a spread of about 7:1, allowing the engine to operate near its efficiency peak from city traffic to highway cruise.
 :::
 
 ### The Torque Converter {#sec-torque-converter-13}
 
 ```{r torque-converter-video-13, echo=FALSE, results='asis'}
-embed_youtube("z5G2zQ_3xTc", "How a Torque Converter Works")
+embed_youtube("z5G2zQ_3xTc", "How Torque Converters Work (Animation)")
 ```
 
 The **torque converter** replaces the manual clutch in an automatic transmission. It sits between the engine crankshaft and the transmission input shaft and performs three critical functions:
@@ -367,42 +361,32 @@ As the turbine catches up to pump speed, the torque multiplication drops toward 
 At high speed, the fluid exits the turbine in the same rotational direction as the pump. A stator fixed to the case would block this returning fluid and act as a brake on the turbine, absorbing power and generating heat. The one-way clutch allows the stator to free-wheel when the fluid pushes against its "wrong" face — it simply spins freely and stops redirecting. The converter then acts as a plain fluid coupling without the torque multiplication penalty.
 :::
 
-```{r torque-converter-efficiency-13, fig.cap="Torque converter torque ratio and efficiency as a function of the speed ratio (turbine speed divided by pump speed). At launch (speed ratio near zero), torque ratio peaks at 2–3×. As the turbine approaches pump speed, multiplication drops to 1:1 and the lock-up clutch engages near a speed ratio of 0.90 to recover full efficiency.", fig.align='center', echo=FALSE}
+```{r torque-converter-efficiency-13, fig.cap="Torque converter torque ratio and efficiency as a function of the speed ratio (turbine speed divided by pump speed). At stall the torque ratio is about 2.2; it falls to 1 at the coupling point (speed ratio about 0.85), where the stator starts to freewheel. Efficiency = speed ratio x torque ratio. Above the coupling point the converter is a fluid coupling, and the lock-up clutch closes near a speed ratio of 0.9 to remove the remaining slip.", fig.align='center', echo=FALSE, fig.width=8, fig.height=6}
 library(ggplot2)
-library(tidyr)
+sr <- seq(0, 1, by = 0.005)
+sr_c <- 0.85; tr0 <- 2.2
+tr <- ifelse(sr < sr_c, 1 + (tr0 - 1) * (1 - sr / sr_c), 1)
+eff <- 100 * sr * tr
+eff_lock <- ifelse(sr >= 0.9, 97, NA)
+tc <- rbind(data.frame(SR = sr, Value = tr, Panel = "Torque ratio (output / input torque)"),
+            data.frame(SR = sr, Value = eff, Panel = "Efficiency (%)"))
+tc$Panel <- factor(tc$Panel, levels = c("Torque ratio (output / input torque)", "Efficiency (%)"))
+lock <- data.frame(SR = sr[sr >= 0.9], Value = 97, Panel = factor("Efficiency (%)", levels = levels(tc$Panel)))
 
-speed_ratio   <- seq(0, 1, by = 0.01)
-torque_ratio  <- 2.5 * (1 - speed_ratio)^1.1 + 1
-efficiency    <- speed_ratio * (1 / torque_ratio) * 100
-efficiency[speed_ratio >= 0.9] <- 97
-
-tc_data <- data.frame(
-  Speed_Ratio   = speed_ratio,
-  "Torque Ratio" = torque_ratio,
-  "Efficiency (%)" = efficiency,
-  check.names = FALSE
-)
-
-tc_long <- pivot_longer(tc_data, -Speed_Ratio,
-                        names_to = "Metric", values_to = "Value")
-
-ggplot(tc_long, aes(x = Speed_Ratio, y = Value, colour = Metric)) +
-  geom_line(linewidth = 1.3) +
-  geom_vline(xintercept = 0.9, linetype = "dashed", colour = "grey50") +
-  annotate("text", x = 0.92, y = 55, label = "Lock-up\nengages",
-           hjust = 0, size = 3.2 * diagram_text_scale, colour = "grey40") +
-  scale_colour_manual(values = c("#E63946", "#2A9D8F")) +
-  labs(
-    title  = "Torque Converter Characteristics",
-    x      = "Speed Ratio  (Turbine Speed / Pump Speed)",
-    y      = "Value",
-    colour = "Metric"
-  ) +
+ggplot(tc, aes(SR, Value)) +
+  geom_line(linewidth = 1.3, colour = "#2A9D8F") +
+  geom_line(data = lock, colour = "#E63946", linewidth = 1.3) +
+  geom_vline(xintercept = sr_c, linetype = "dotted", colour = "grey40") +
+  geom_vline(xintercept = 0.9, linetype = "dashed", colour = "grey40") +
+  geom_text(data = data.frame(SR = 0.905, Value = 60, Panel = factor("Efficiency (%)", levels = levels(tc$Panel))),
+            aes(label = "lock-up\n(97 %)"), hjust = 0, size = 3 * diagram_text_scale, colour = "#E63946") +
+  geom_text(data = data.frame(SR = 0.83, Value = 1.9, Panel = factor("Torque ratio (output / input torque)", levels = levels(tc$Panel))),
+            aes(label = "coupling\npoint"), hjust = 1, size = 3 * diagram_text_scale, colour = "grey30") +
+  facet_wrap(~Panel, ncol = 1, scales = "free_y") +
+  labs(title = "Torque Converter Characteristics", x = "Speed ratio (turbine speed / pump speed)", y = NULL) +
   theme_minimal() +
-  theme(
-    plot.title      = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold"),
-    legend.position = "bottom"
-  )
+  theme(plot.title = element_text(hjust = 0.5, size = 12 * chart_text_scale, face = "bold"),
+        strip.text = element_text(face = "bold"))
 ```
 
 ***
@@ -410,11 +394,11 @@ ggplot(tc_long, aes(x = Speed_Ratio, y = Value, colour = Metric)) +
 ## Manual Transmission and Clutch {#sec-manual-transmission-13}
 
 ```{r manual-trans-video-13, echo=FALSE, results='asis'}
-embed_youtube("wCu9W9xNwtI", "How a Manual Transmission Works")
+embed_youtube("8VEc3zhGaro", "How Manual Transmissions Work - A Simple Explanation (Engineering Explained)")
 ```
 
 ```{r clutch-video-13, echo=FALSE, results='asis'}
-embed_youtube("devo3kdSPQY", "How a Clutch Works")
+embed_youtube("pJj8NvDUSFs", "Clutches - Explained (Engineering Explained)")
 ```
 
 ### The Clutch {#sec-clutch-13}
@@ -445,8 +429,8 @@ A standard **single-disc dry clutch** consists of:
 
 A manual gearbox contains two parallel shafts:
 
-- **Input shaft (countershaft/layshaft):** Driven by the clutch; carries constant-mesh input gear pairs
-- **Output shaft (mainshaft):** Connected to the propshaft; carries freely rotating output gears
+- **Input shaft:** Driven by the clutch; carries the fixed drive gears (in a rear-wheel-drive gearbox these sit on a separate **countershaft** or layshaft, driven from the input shaft through one constant-mesh pair)
+- **Output shaft (mainshaft):** Connected to the final drive or propshaft; carries the freely rotating driven gears, which are always in mesh with their partners
 
 To select a gear, the driver moves a **synchronizer** — a toothed collar with conical friction surfaces — to slide between neutral and the desired gear. The synchronizer first matches the rotational speeds of the shaft and gear through friction, then locks them together mechanically. This speed-matching is what eliminates gear clash without requiring the driver to "double-clutch."
 
@@ -559,12 +543,8 @@ abline(h = redline, lty = 3, col = "firebrick")
 
 ## Dual Clutch Transmission (DCT) {#sec-dct-13}
 
-```{r dct-video1-13, echo=FALSE, results='asis'}
-embed_youtube("lFAtc-zOKZs", "How a Dual Clutch Transmission Works — Part 1")
-```
-
 ```{r dct-video2-13, echo=FALSE, results='asis'}
-embed_youtube("t8aGgSbtoJE", "How a Dual Clutch Transmission Works — Part 2")
+embed_youtube("t8aGgSbtoJE", "Dual Clutch Transmission - How It Works (TREMEC)")
 ```
 
 The **Dual Clutch Transmission (DCT)** — marketed as DSG (Volkswagen), PDK (Porsche), M-DCT (BMW), or Powershift (Ford) — combines the mechanical efficiency of a manual gearbox with the convenience of an automatic. The key innovation is **two separate clutches acting on two concentric input shafts**.
@@ -592,7 +572,7 @@ There is virtually no torque interruption and no perceptible power loss during t
 | **Dry DCT** | Operate in air | Moderate (<350 N·m) | Small/medium economy engines | Low drag; can shudder at very low creeping speeds |
 
 ::: {.callout-industry}
-**Industry Application:** The Porsche 7-speed PDK (Porsche Doppelkupplung) wet DCT can complete gear changes in 100 ms — faster than any human with a manual gearbox. Independent track testing shows the PDK-equipped 911 GT3 is consistently faster around the Nürburgring than the same car with a manual, because the uninterrupted torque delivery out of corners results in higher corner exit speeds.
+**Industry Application:** The Porsche 7-speed PDK (Porsche Doppelkupplung) wet DCT can complete gear changes in about 100 ms, faster than any driver with a manual gearbox. Porsche quotes faster lap times for PDK-equipped cars than for the same models with a manual, because the uninterrupted torque delivery out of corners gives higher corner-exit speeds.
 :::
 
 ::: {.callout-check}
@@ -608,7 +588,7 @@ No. Both 5th and 3rd gears are on the odd-shaft (Clutch 1). You cannot simultane
 ## Continuously Variable Transmission (CVT) {#sec-cvt-13}
 
 ```{r cvt-video-13, echo=FALSE, results='asis'}
-embed_youtube("xHWqlfDZnmQ", "How a CVT (Continuously Variable Transmission) Works")
+embed_youtube("xHWqlfDZnmQ", "How a CVT Works (Animation)")
 ```
 
 The **Continuously Variable Transmission (CVT)** takes a completely different approach from all the above. Instead of discrete gear ratios, it provides an **infinite number of ratios** within a continuous range, allowing the engine to operate at whatever RPM is most efficient for a given power demand.
@@ -637,7 +617,7 @@ A modern CVT covers a ratio range from approximately 2.5:1 to 0.5:1 — a 5:1 sp
 
 1. **Fuel economy** — The engine can always operate at the RPM where its thermal efficiency is highest. In city stop-go driving, this can improve fuel economy by 10–15% compared to a conventional step-gear automatic.
 2. **Smooth acceleration** — No gear shifts to feel; power delivery is perfectly continuous.
-3. **Mechanical simplicity** — Far fewer moving parts than a planetary automatic; no clutch packs, bands, or solenoid valves for individual gears.
+3. **Fewer gear sets** — No multi-speed planetary gear train; the ratio change is done by the two pulleys (a simple planetary set and two clutches are still needed for forward/reverse and launch, and the pulleys are clamped by a hydraulic control system).
 4. **Hill holding** — Ratio adjusts continuously to maintain engine RPM at the ideal point regardless of gradient.
 
 ### CVT Disadvantages {#sec-cvt-disadvantages-13}
@@ -648,7 +628,7 @@ A modern CVT covers a ratio range from approximately 2.5:1 to 0.5:1 — a 5:1 sp
 4. **Driver perception** — Many drivers associate the droning sound of a CVT at wide-open throttle with poor performance, leading to negative brand perception even when the vehicle accelerates quickly.
 5. **Fluid sensitivity** — CVTs require a specific manufacturer-approved CVT fluid (CVTF). Using the wrong fluid or exceeding service intervals causes belt slippage, surging, and eventual failure.
 
-```{r cvt-at-efficiency-13, fig.cap="Indicative drivetrain efficiency comparison between a 6-speed step-gear automatic (AT) and a CVT across different driving conditions. The CVT maintains the engine near its efficiency optimum more consistently, yielding better fuel economy in city and mixed driving, but the step-gear AT has a slight edge under high-load conditions.", fig.align='center', echo=FALSE}
+```{r cvt-at-efficiency-13, fig.cap="Indicative overall powertrain efficiency (engine operating point and transmission losses together) for a 6-speed step-gear automatic (AT) and a CVT. The CVT itself loses more power than a modern AT (belt friction and the high-pressure pump), but it keeps the engine closer to its best-efficiency speed, which can pay off overall in city and mixed driving. Under full throttle the AT has the edge. The numbers are illustrative only.", fig.align='center', echo=FALSE}
 library(ggplot2)
 
 conditions <- c("City Stop-Go", "City Arterial", "Mixed", "Highway Cruise", "Full Throttle")
@@ -665,9 +645,9 @@ ggplot(eff_data, aes(x = Condition, y = Efficiency, fill = Type)) +
   scale_fill_manual(values = c("#E63946", "#2A9D8F")) +
   scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20)) +
   labs(
-    title  = "Drivetrain Efficiency by Driving Condition",
+    title  = "Indicative Overall Powertrain Efficiency",
     x      = NULL,
-    y      = "Drivetrain Efficiency (%)",
+    y      = "Relative efficiency (%)",
     fill   = "Transmission Type"
   ) +
   theme_minimal() +
@@ -687,7 +667,7 @@ ggplot(eff_data, aes(x = Condition, y = Efficiency, fill = Type)) +
 ## Electric Vehicle Drivetrains {#sec-ev-drivetrains-13}
 
 ```{r ev-drivetrain-video-13, echo=FALSE, results='asis'}
-embed_youtube("6H5vtu5_SF4", "Electric Vehicle Drivetrain Configurations Explained")
+embed_youtube("6H5vtu5_SF4", "Single, Dual, Three and Four Motor Configurations in EVs")
 ```
 
 Electric vehicles eliminate the multi-speed transmission but introduce new drivetrain architectures based on how many motors are used and where they are positioned. Each configuration offers different trade-offs between performance, traction, cost, and mechanical complexity.
@@ -698,7 +678,7 @@ Electric vehicles eliminate the multi-speed transmission but introduce new drive
 knitr::include_graphics("images/drTrain-image10.png")
 ```
 
-As shown in Figure @fig-ev-single-motor-13, the simplest EV drivetrain uses one motor to drive a single axle. The motor output passes through a fixed single-ratio reduction gear and then a conventional differential to the two driven wheels.
+As shown in @fig-ev-single-motor-13, the simplest EV drivetrain uses one motor to drive a single axle. The motor output passes through a fixed single-ratio reduction gear and then a conventional differential to the two driven wheels.
 
 - **Examples:** Nissan Leaf (front motor, FWD), Chevrolet Bolt EV, base Tesla Model 3
 - **Advantages:** Simple, low cost, lightweight, highly reliable, straightforward packaging
@@ -710,7 +690,7 @@ As shown in Figure @fig-ev-single-motor-13, the simplest EV drivetrain uses one 
 knitr::include_graphics("images/drTrain-image11.png")
 ```
 
-The most common performance EV layout uses **two motors**, one per axle (Figure @fig-ev-dual-motor-13). Each motor has its own reduction gear and differential, with no mechanical coupling between front and rear axles.
+The most common performance EV layout uses **two motors**, one per axle (@fig-ev-dual-motor-13). Each motor has its own reduction gear and differential, with no mechanical coupling between front and rear axles.
 
 - **Examples:** Tesla Model 3 Long Range AWD, Audi e-tron, Ford Mustang Mach-E AWD
 - **Advantages:** Full AWD traction; independent torque control for front-rear balance; front motor can be deactivated at highway cruise to save energy; significantly higher performance than single-motor
@@ -723,7 +703,7 @@ The most common performance EV layout uses **two motors**, one per axle (Figure 
 knitr::include_graphics("images/drTrain-image12.png")
 ```
 
-A **three-motor** configuration (Figure @fig-ev-triple-motor-13) typically places two motors at the rear — one per rear wheel — for **true rear-axle torque vectoring**, plus one motor at the front for AWD.
+A **three-motor** configuration (@fig-ev-triple-motor-13) typically places two motors at the rear — one per rear wheel — for **true rear-axle torque vectoring**, plus one motor at the front for AWD.
 
 - **Examples:** Tesla Model S Plaid, Tesla Model X Plaid
 - **Advantages:** Exceptional performance (Model S Plaid: 0–100 km/h in 2.1 s); precise rear torque vectoring; allows the outer rear wheel to receive more torque during cornering, actively yawing the car for sharper turn-in
@@ -735,7 +715,7 @@ A **three-motor** configuration (Figure @fig-ev-triple-motor-13) typically place
 knitr::include_graphics("images/drTrain-image13.png")
 ```
 
-The **four-motor** configuration (Figure @fig-ev-quad-motor-13) dedicates one motor to each wheel. This is the ultimate traction and handling architecture.
+The **four-motor** configuration (@fig-ev-quad-motor-13) dedicates one motor to each wheel. This is the ultimate traction and handling architecture.
 
 - **Examples:** Rivian R1T pickup, Rivian R1S SUV
 - **Advantages:** Maximum traction on any surface; full four-wheel torque vectoring; enables **tank-turn** capability (driving front wheels forward while rear wheels drive in reverse to spin the vehicle on its own axis); exceptional off-road capability
@@ -755,7 +735,7 @@ knitr::include_graphics("images/drTrain-image14.jpg")
 knitr::include_graphics("images/drTrain-image16.png")
 ```
 
-The most radical EV drivetrain concept places the motor **directly inside each wheel hub**. As Figures @fig-inhub-motor-photo-13 and @fig-inhub-motor-exploded-13 show, the entire motor is contained within the wheel assembly — the vehicle underbody is completely free of axles, differentials, and driveshafts.
+The most radical EV drivetrain concept places the motor **directly inside each wheel hub**. As @fig-inhub-motor-photo-13 and @fig-inhub-motor-exploded-13 show, the entire motor is contained within the wheel assembly — the vehicle underbody is completely free of axles, differentials, and driveshafts.
 
 **Advantages:**
 
@@ -948,30 +928,4 @@ Evaluate single-motor, dual-motor, and quad-motor drivetrain configurations agai
 
 ## Further Resources {#sec-drivetrain-resources-13}
 
-```{r further-auto-trans-13, echo=FALSE, results='asis'}
-embed_youtube("u_y1S8C0Hmc", "Automatic Transmission Deep Dive — Engineering Explained")
-```
-
-```{r further-torque-conv-13, echo=FALSE, results='asis'}
-embed_youtube("z5G2zQ_3xTc", "Torque Converter Operation — Engineering Explained")
-```
-
-```{r further-manual-13, echo=FALSE, results='asis'}
-embed_youtube("wCu9W9xNwtI", "Manual Transmission and Synchronizers — Engineering Explained")
-```
-
-```{r further-clutch-13, echo=FALSE, results='asis'}
-embed_youtube("devo3kdSPQY", "Clutch Operation and Construction — Engineering Explained")
-```
-
-```{r further-dct-13, echo=FALSE, results='asis'}
-embed_youtube("lFAtc-zOKZs", "Dual Clutch Transmission — How It Works")
-```
-
-```{r further-cvt-13, echo=FALSE, results='asis'}
-embed_youtube("xHWqlfDZnmQ", "CVT Explained — Advantages, Disadvantages and How It Works")
-```
-
-```{r further-ev-13, echo=FALSE, results='asis'}
-embed_youtube("6H5vtu5_SF4", "Electric Vehicle Drivetrain Configurations Compared")
-```
+Each transmission section above includes an animated video: the automatic transmission and torque converter (@sec-automatic-transmission-13), the manual gearbox and clutch (@sec-manual-transmission-13), the dual clutch transmission (@sec-dct-13), the CVT (@sec-cvt-13) and EV drivetrains (@sec-ev-drivetrains-13). The [Engineering Explained YouTube channel](https://www.youtube.com/@EngineeringExplained) has many further short videos on drivetrain topics.

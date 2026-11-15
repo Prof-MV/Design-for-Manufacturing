@@ -56,7 +56,7 @@ By the end of this chapter, you will be able to:
 2. **Set up** a complete static stress study in SolidWorks Simulation: assign material, apply fixtures and loads, generate a mesh, and run the solver.
 3. **Interpret** von Mises stress, displacement, and factor-of-safety plots, and decide whether a result is trustworthy.
 4. **Perform** a mesh convergence study and recognise stress singularities that will never converge.
-5. **Validate** a SolidWorks result against an analytical hand calculation and quantify the percentage difference.
+5. **Check** a SolidWorks result against an analytical hand calculation, quantify the percentage difference, and explain the difference between verification and validation.
 6. **Iterate** a design to meet a target factor of safety while reducing mass, and document the work to an industry-acceptable standard.
 
 ::: {.callout-think}
@@ -125,7 +125,7 @@ ggplot() +
   theme(legend.position = "none")
 ```
 
-As shown in Figure @fig-discretization-12, the trick is to replace one hard problem with many easy ones. Each element behaves a bit like a spring: push on it and it deflects in proportion to the force. For a single linear spring you already know the relationship — force equals stiffness times displacement, $F = ku$. FEA simply writes this for *every* element and solves them all together.
+As shown in @fig-discretization-12, the trick is to replace one hard problem with many easy ones. Each element behaves a bit like a spring: push on it and it deflects in proportion to the force. For a single linear spring you already know the relationship — force equals stiffness times displacement, $F = ku$. FEA simply writes this for *every* element and solves them all together.
 
 When all the element "springs" are assembled into one system, the governing equation of a static FEA problem is:
 
@@ -133,7 +133,7 @@ $$
 [K]\{u\} = \{F\}
 $$ {#eq-governing-12}
 
-where $[K]$ is the **global stiffness matrix** (how stiff the whole structure is, assembled from every element), $\{u\}$ is the vector of unknown displacements at every node, and $\{F\}$ is the vector of applied loads. The solver's entire job in a static study is to rearrange Equation @eq-governing-12 and find $\{u\}$. Once it knows how far every node moved, it works backward to strain, and from strain to stress.
+where $[K]$ is the **global stiffness matrix** (how stiff the whole structure is, assembled from every element), $\{u\}$ is the vector of unknown displacements at every node, and $\{F\}$ is the vector of applied loads. The solver's entire job in a static study is to rearrange @eq-governing-12 and find $\{u\}$. Once it knows how far every node moved, it works backward to strain, and from strain to stress.
 
 ::: {.callout-concept}
 **Key Concept: The FEA Chain**  
@@ -166,7 +166,7 @@ $$
 FOS = \frac{\sigma_y}{\sigma_{vM}}
 $$ {#eq-fos-12}
 
-A factor of safety of 1.0 means the part is right at the edge of yielding — no margin at all. A FOS of 2.0 means the part can take twice the analysed load before yielding begins. Figure @fig-stress-strain-12 shows where these quantities live on a real stress–strain curve.
+A factor of safety of 1.0 means the part is right at the edge of yielding — no margin at all. A FOS of 2.0 means the part can take twice the analysed load before yielding begins. @fig-stress-strain-12 shows where these quantities live on a real stress–strain curve.
 
 ```{r fig-stress-strain-12, fig.cap="A typical ductile-steel stress-strain curve. Yield strength sets the line we must not cross; von Mises stress is where our design currently sits; the gap between them is the factor of safety.", fig.width=8, fig.height=5}
 library(ggplot2)
@@ -197,7 +197,7 @@ ggplot(curve, aes(strain, stress)) +
   geom_line(linewidth = 1.2, color = "grey20") +
   geom_hline(yintercept = yield, linetype = "dashed", color = "firebrick", linewidth = 0.9) +
   geom_hline(yintercept = design_stress, linetype = "dotted", color = "darkblue", linewidth = 0.9) +
-  annotate("text", x = 0.13, y = yield + 14, label = "Yield strength (sigma_y = 350 MPa)",
+  annotate("text", x = 0.13, y = yield + 14, label = "Yield strength (σy = 350 MPa)",
            color = "firebrick", fontface = "bold", size = 3.6 * diagram_text_scale) +
   annotate("text", x = 0.13, y = design_stress - 16,
            label = "Design point (von Mises = 175 MPa)",
@@ -208,7 +208,7 @@ ggplot(curve, aes(strain, stress)) +
            label = "FOS = 350/175 = 2.0", hjust = 0, color = "darkgreen",
            fontface = "bold", size = 3.8 * diagram_text_scale) +
   labs(x = "Strain (mm/mm)", y = "Stress (MPa)") +
-  theme_minimal()
+  theme_minimal(base_size = 10 * chart_text_scale)
 ```
 
 ::: {.callout-warning}
@@ -220,7 +220,7 @@ A bracket made of 6061-T6 aluminium ($\sigma_y = 275$ MPa) shows a peak von Mise
 :::
 
 ::: {.answer}
-Using Equation @eq-fos-12, $FOS = 275 / 110 = 2.5$. Whether that is "acceptable" depends on the application: a general structural bracket often targets 1.5–2.5, so 2.5 is comfortable. A safety-critical lifting component may be required by code to have a much higher factor (4 or more). The number alone is not enough — you must know the *required* factor for that industry before you judge it.
+Using @eq-fos-12, $FOS = 275 / 110 = 2.5$. Whether that is "acceptable" depends on the application: a general structural bracket often targets 1.5–2.5, so 2.5 is comfortable. A safety-critical lifting component may be required by code to have a much higher factor (4 or more). The number alone is not enough — you must know the *required* factor for that industry before you judge it.
 :::
 
 ### The Five-Step Workflow You Will Repeat Forever {#sec-workflow-12}
@@ -258,7 +258,7 @@ Work through these steps at your lab station. The goal is not a perfect answer �
 **Record in your lab notebook:** peak von Mises stress (MPa), maximum displacement (mm), minimum factor of safety, and *where on the part* the peak stress occurs.
 
 ::: {.callout-recall}
-**Theory Recall:** The reason you read von Mises stress and not some other stress is Equation @eq-vonmises-12 — it is the single number that predicts yielding in ductile metals. The reason the back face had to be fixed is that the solver cannot solve Equation @eq-governing-12 at all unless *something* holds the part in place; with no fixture, the part would simply fly off into space and $[K]$ becomes unsolvable.
+**Theory Recall:** The reason you read von Mises stress and not some other stress is @eq-vonmises-12 — it is the single number that predicts yielding in ductile metals. The reason the back face had to be fixed is that the solver cannot solve @eq-governing-12 at all unless *something* holds the part in place; with no fixture, the part would simply fly off into space and $[K]$ becomes unsolvable.
 :::
 
 ::: {.callout-discussion}
@@ -297,10 +297,10 @@ ggplot(conv, aes(dof, peak)) +
   annotate("segment", x = 11500, xend = 4000, y = peak[2] - 6, yend = peak[2] - 1,
            arrow = arrow(length = unit(0.2, "cm")), color = "grey40") +
   labs(x = "Degrees of freedom (mesh refinement)", y = "Peak von Mises stress (MPa)") +
-  theme_minimal()
+  theme_minimal(base_size = 10 * chart_text_scale)
 ```
 
-Figure @fig-convergence-12 is the single most important picture in this chapter. A **convergence study** means running the same study several times with progressively finer meshes and watching the peak stress. When refining the mesh further stops changing the answer meaningfully — say, less than a 5% change between two refinements — the result has **converged** and you can trust it. We measure that change with a simple percentage difference:
+@fig-convergence-12 is the single most important picture in this chapter. A **convergence study** means running the same study several times with progressively finer meshes and watching the peak stress. When refining the mesh further stops changing the answer meaningfully — say, less than a 5% change between two refinements — the result has **converged** and you can trust it. We measure that change with a simple percentage difference:
 
 $$
 \%\,\text{change} = \left| \frac{\sigma_{fine} - \sigma_{coarse}}{\sigma_{fine}} \right| \times 100\%
@@ -308,7 +308,7 @@ $$ {#eq-convergence-12}
 
 ::: {.callout-concept}
 **Key Concept: Convergence**  
-A result is trustworthy not because it looks pretty but because **refining the mesh no longer changes it.** A single run on a default mesh is a guess. A converged study is an answer. Use Equation @eq-convergence-12 to put a number on it.
+A result is trustworthy not because it looks pretty but because **refining the mesh no longer changes it.** A single run on a default mesh is a guess. A converged study is an answer. Use @eq-convergence-12 to put a number on it.
 :::
 
 ### Stress Concentrations and the Singularity Trap {#sec-singularity-12}
@@ -319,31 +319,35 @@ $$
 \sigma_{max} = K_t \, \sigma_{nom}
 $$ {#eq-kt-12}
 
-where $\sigma_{nom}$ is the nominal (average) stress you would calculate ignoring the feature, and $K_t$ depends only on the geometry. A generous fillet radius gives a small $K_t$; a tight radius gives a large one. Figure @fig-kt-12 shows the classic relationship for a stepped shaft in bending.
+where $\sigma_{nom}$ is the nominal (average) stress you would calculate ignoring the feature, and $K_t$ depends only on the geometry. A generous fillet radius gives a small $K_t$; a tight radius gives a large one. @fig-kt-12 shows the classic relationship for a stepped shaft in bending.
 
-```{r fig-kt-12, fig.cap="Stress concentration factor versus fillet radius. Larger radii dramatically reduce the peak stress, which is why adding a fillet is the cheapest design fix in engineering.", fig.width=8, fig.height=5}
+```{r fig-kt-12, fig.cap="Stress concentration factor versus fillet radius for a stepped round shaft in bending with D/d = 2 (power-law fit to Peterson's chart, K_t ≈ 0.909 (r/d)^-0.286). Larger radii sharply reduce the peak stress, which is why adding a fillet is the cheapest design fix in engineering.", fig.width=8, fig.height=5}
 library(ggplot2)
 
-# Representative Kt curve for a filleted shoulder vs r/d ratio
+# Stepped round bar in bending, D/d = 2: Kt = A (r/d)^b (curve fit to Peterson's chart)
+A_kt <- 0.90879; b_kt <- -0.28598
+kt_fun <- function(rd) A_kt * rd^b_kt
+
 r_over_d <- seq(0.02, 0.30, length.out = 100)
-Kt <- 1 + 0.9 / (r_over_d^0.5 * 6)   # illustrative decaying curve
-kt_df <- data.frame(r_over_d, Kt)
+kt_df <- data.frame(r_over_d, Kt = kt_fun(r_over_d))
+pts   <- data.frame(r_over_d = c(0.03, 0.20), Kt = kt_fun(c(0.03, 0.20)))
 
 ggplot(kt_df, aes(r_over_d, Kt)) +
   geom_line(color = "darkred", linewidth = 1.2) +
-  geom_point(data = data.frame(r_over_d = c(0.04, 0.20),
-                               Kt = 1 + 0.9 / (c(0.04, 0.20)^0.5 * 6)),
-             aes(r_over_d, Kt), size = 3.5, color = "black") +
-  annotate("text", x = 0.04, y = 1 + 0.9/(0.04^0.5*6) + 0.12,
-           label = "Sharp corner:\nhigh Kt", size = 3.4 * diagram_text_scale, hjust = 0.1) +
-  annotate("text", x = 0.20, y = 1 + 0.9/(0.20^0.5*6) + 0.12,
-           label = "Generous fillet:\nlow Kt", size = 3.4 * diagram_text_scale) +
-  labs(x = "Fillet radius / part dimension (r/d)",
+  geom_point(data = pts, aes(r_over_d, Kt), size = 3.5, color = "black") +
+  annotate("label", x = 0.045, y = kt_fun(0.03) + 0.05,
+           label = sprintf("Small radius (r/d = 0.03):\nKt = %.2f", kt_fun(0.03)),
+           size = 3.4 * diagram_text_scale, hjust = 0, fill = "white", linewidth = 0) +
+  annotate("label", x = 0.20, y = kt_fun(0.20) + 0.25,
+           label = sprintf("Generous fillet (r/d = 0.20):\nKt = %.2f", kt_fun(0.20)),
+           size = 3.4 * diagram_text_scale, fill = "white", linewidth = 0) +
+  scale_y_continuous(limits = c(1, 3.2), breaks = seq(1, 3, 0.5)) +
+  labs(x = "Fillet radius / smaller diameter (r/d)",
        y = expression("Stress concentration factor "*K[t])) +
-  theme_minimal()
+  theme_minimal(base_size = 10 * chart_text_scale)
 ```
 
-Now the dangerous part. A real fillet has a finite radius, so its peak stress is finite and **will converge** as you refine the mesh. But a *perfectly sharp* re-entrant corner in CAD has zero radius — mathematically, the stress there is infinite. This is a **stress singularity.** No matter how fine you make the mesh, the stress at a sharp corner keeps climbing and never settles. Figure @fig-singularity-12 shows the two behaviours side by side.
+Now the dangerous part. A real fillet has a finite radius, so its peak stress is finite and **will converge** as you refine the mesh. But a *perfectly sharp* re-entrant corner in CAD has zero radius — mathematically, the stress there is infinite. This is a **stress singularity.** No matter how fine you make the mesh, the stress at a sharp corner keeps climbing and never settles. @fig-singularity-12 shows the two behaviours side by side.
 
 ```{r fig-singularity-12, fig.cap="The convergence test that separates real results from numerical garbage. A filleted feature converges to a finite stress; a sharp re-entrant corner is a singularity whose stress climbs forever and must never be reported.", fig.width=8, fig.height=5}
 library(ggplot2)
@@ -369,7 +373,7 @@ ggplot(df, aes(dof, stress, color = geometry)) +
            color = "darkgreen", size = 3.7 * diagram_text_scale) +
   annotate("text", x = 70000, y = 365, label = "Never converges -> singularity, ignore",
            color = "firebrick", size = 3.7 * diagram_text_scale) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "bottom")
 ```
 
@@ -386,7 +390,7 @@ The mesh is only half the story. The other half is whether your fixtures and loa
 :::
 
 ::: {.callout-activity}
-**Lab Connection — Week 2 Lab:** This week you will take a flat steel plate with a central hole (`plate_with_hole.SLDPRT`) loaded in tension. First you will calculate the expected peak stress *by hand* using the nominal stress and a published $K_t$ for a hole in a plate (Equation @eq-kt-12). Then you will run the FEA **four times** with progressively finer meshes, record the peak von Mises stress each time, and apply Equation @eq-convergence-12 to find where it converges. Finally you will compare your converged FEA peak to your hand calculation. They should agree within roughly 10% — and if they do, you have just *validated* your own simulation skills.
+**Lab Connection — Week 2 Lab:** This week you will take a flat steel plate with a central hole (`plate_with_hole.SLDPRT`) loaded in tension. First you will calculate the expected peak stress *by hand* using the nominal stress and a published $K_t$ for a hole in a plate (@eq-kt-12). Then you will run the FEA **four times** with progressively finer meshes, record the peak von Mises stress each time, and apply @eq-convergence-12 to find where it converges. Finally you will compare your converged FEA peak to your hand calculation. They should agree within roughly 10% — and if they do, you have just *validated* your own simulation skills.
 :::
 
 ### Week 2 Lab Guide: Convergence Study and Hand-Calc Check {#sec-lab2-12}
@@ -394,8 +398,8 @@ The mesh is only half the story. The other half is whether your fixtures and loa
 **Hand calculation first (do this before touching the computer).** For a wide plate of width $w$, thickness $t$, with a central hole of diameter $d$, under tension force $P$:
 
 - Nominal stress on the reduced section: $\sigma_{nom} = \dfrac{P}{(w - d)\,t}$
-- A hole in a plate has a well-known concentration factor of about $K_t \approx 3$ for a small hole.
-- Predicted peak: $\sigma_{max} = K_t\,\sigma_{nom}$ from Equation @eq-kt-12.
+- For a central hole, referred to this net-section nominal stress, a good approximation is $K_t \approx 2 + (1 - d/w)^3$ (Heywood). It approaches the familiar value of 3 only for a very small hole in a wide plate; for $d/w = 0.2$ it is about 2.5. (Charts that quote $K_t \approx 3$ use the gross-section stress $P/(wt)$ instead — never mix the two definitions.)
+- Predicted peak: $\sigma_{max} = K_t\,\sigma_{nom}$ from @eq-kt-12.
 
 Record your predicted peak stress.
 
@@ -421,13 +425,13 @@ ggplot(lab2, aes(x = elements, y = peak)) +
            color = "firebrick", size = 3.6 * diagram_text_scale) +
   labs(x = "Number of elements", y = "Peak von Mises stress (MPa)") +
   ylim(135, 178) +
-  theme_minimal()
+  theme_minimal(base_size = 10 * chart_text_scale)
 ```
 
-In the worked example of Figure @fig-lab2-results-12, the jump from Fine to Very-fine is $|169-166|/169 \times 100 = 1.8\%$ — below our 5% threshold, so the result has converged at about 169 MPa, agreeing nicely with the 170 MPa hand calculation. **Your numbers will differ; what matters is that you can demonstrate convergence and a sensible match.**
+In the worked example of @fig-lab2-results-12, the jump from Fine to Very-fine is $|169-166|/169 \times 100 = 1.8\%$ — below our 5% threshold, so the result has converged at about 169 MPa, agreeing nicely with the 170 MPa hand calculation. **Your numbers will differ; what matters is that you can demonstrate convergence and a sensible match.**
 
 ::: {.callout-recall}
-**Theory Recall:** The reason your coarse mesh read low (142 MPa) is exactly the under-prediction shown in Figure @fig-convergence-12 — a coarse mesh cannot resolve the steep stress gradient around the hole. The reason your hand calc and converged FEA agree is that both are describing the same physical stress concentration captured by $K_t$ in Equation @eq-kt-12.
+**Theory Recall:** The reason your coarse mesh read low (142 MPa) is exactly the under-prediction shown in @fig-convergence-12 — a coarse mesh cannot resolve the steep stress gradient around the hole. The reason your hand calc and converged FEA agree is that both are describing the same physical stress concentration captured by $K_t$ in @eq-kt-12.
 :::
 
 ::: {.callout-check}
@@ -461,21 +465,23 @@ tryit_order(
 
 #### Has the mesh converged? {#sec-tryit-convergence}
 
-A plate of width $w = 60$ mm and thickness $t = 5$ mm has a central hole of diameter $d = 12$ mm and carries $P = 12$ kN in tension. The stress concentration factor for the hole is taken as $K_t \approx 3$.
+A plate of width $w = 60$ mm and thickness $t = 5$ mm has a central hole of diameter $d = 12$ mm and carries $P = 12$ kN in tension. Use the net-section stress concentration factor $K_t = 2 + (1 - d/w)^3$.
 
 ```{r tryit-converge-grid, echo=FALSE, results='asis'}
 cv <- data.frame(
   `Run` = c("Medium", "Fine", "Very fine"),
   `Elements` = c(5200, 17500, 46000),
-  `Previous peak (MPa)` = c(116, 137, 146),
-  `Peak (MPa)` = c(137, 146, 149),
+  `Previous peak (MPa)` = c(98, 116, 123),
+  `Peak (MPa)` = c(116, 123, 126),
   check.names = FALSE
 )
 cv[["Change (%)"]] <- abs(cv[["Peak (MPa)"]] - cv[["Previous peak (MPa)"]]) / cv[["Peak (MPa)"]] * 100
-cv_hand <- list(P = 12000, w = 60, d = 12, t = 5, Kt = 3)
+cv_hand <- list(P = 12000, w = 60, d = 12, t = 5)
+cv_hand$Kt   <- 2 + (1 - cv_hand$d / cv_hand$w)^3
 cv_hand$nom  <- cv_hand$P / ((cv_hand$w - cv_hand$d) * cv_hand$t)
 cv_hand$peak <- cv_hand$Kt * cv_hand$nom
-cv_diff <- abs(149 - cv_hand$peak) / cv_hand$peak * 100
+cv_fea  <- cv[["Peak (MPa)"]][3]
+cv_diff <- abs(cv_fea - cv_hand$peak) / cv_hand$peak * 100
 
 tryit_grid(
   id = "mesh-convergence",
@@ -486,19 +492,21 @@ tryit_grid(
   hints = c(`Change (%)` = "|new peak - previous peak| / new peak x 100, as in the chapter's worked example."),
   digits = 0,
   answers = list(
+    tryit_answer("Stress concentration factor K_t", cv_hand$Kt, tol = 0.01,
+                 hint = "K_t = 2 + (1 - d/w)^3 with d/w = 12/60."),
     tryit_answer("Nominal stress on the reduced section", cv_hand$nom, tol = 0.2, suffix = "MPa",
                  hint = "sigma_nom = P / ((w - d) t), in N and mm2 for MPa."),
-    tryit_answer("Hand-calculated peak stress (K_t = 3)", cv_hand$peak, tol = 0.5, suffix = "MPa", hint = "K_t x sigma_nom."),
-    tryit_answer("Difference between the converged FEA peak (149 MPa) and the hand calculation", cv_diff, tol = 0.1, suffix = "%",
+    tryit_answer("Hand-calculated peak stress", cv_hand$peak, tol = 0.5, suffix = "MPa", hint = "K_t x sigma_nom."),
+    tryit_answer("Difference between the converged FEA peak (126 MPa) and the hand calculation", cv_diff, tol = 0.1, suffix = "%",
                  hint = "|FEA - hand| / hand x 100.")
   ),
   intro = "Then decide which run is the first to change by less than 5%.",
   question = paste0(
-    "<p>A convergence study gave peak von Mises stresses of 116 MPa (coarse), 137 MPa (medium, 5200 elements), 146 MPa (fine, 17 500 elements) ",
-    "and 149 MPa (very fine, 46 000 elements). The percentage change of a refinement is |new - previous| / new x 100. ",
+    "<p>A convergence study gave peak von Mises stresses of 98 MPa (coarse), 116 MPa (medium, 5200 elements), 123 MPa (fine, 17 500 elements) ",
+    "and 126 MPa (very fine, 46 000 elements). The percentage change of a refinement is |new - previous| / new x 100. ",
     "Find the change for the medium, fine and very fine runs. A plate (w = 60 mm, t = 5 mm, central hole d = 12 mm, P = 12 kN) has ",
-    "sigma_nom = P / ((w - d) t) and a hand-calculated peak of K_t x sigma_nom with K_t = 3. Find both, and the percentage difference between the ",
-    "very fine FEA peak of 149 MPa and the hand calculation.</p>")
+    "sigma_nom = P / ((w - d) t), a net-section stress concentration factor K_t = 2 + (1 - d/w)^3 and a hand-calculated peak of K_t x sigma_nom. ",
+    "Find K_t, sigma_nom and the peak, and the percentage difference between the very fine FEA peak of 126 MPa and the hand calculation.</p>")
 )
 ```
 
@@ -509,7 +517,7 @@ tryit_grid(
 knitr::kable(cv, digits = c(0, 0, 0, 0, 1), align = "c")
 ```
 
-The change falls to `r sprintf("%.1f", cv[["Change (%)"]][3])`% on the last refinement, under the 5% threshold, so the study has converged at about 149 MPa. The hand calculation gives $3 \times `r sprintf("%.0f", cv_hand$nom)` = `r sprintf("%.0f", cv_hand$peak)`$ MPa, within `r sprintf("%.1f", cv_diff)`% of the FEA result: the model is validated against a hand calculation as well as against itself.
+The change falls to `r sprintf("%.1f", cv[["Change (%)"]][3])`% on the last refinement, under the 5% threshold, so the study has converged at about `r cv_fea` MPa. The hand calculation gives $K_t = 2 + (1 - 0.2)^3 = `r sprintf("%.3f", cv_hand$Kt)`$ and $`r sprintf("%.3f", cv_hand$Kt)` \times `r sprintf("%.0f", cv_hand$nom)` = `r sprintf("%.1f", cv_hand$peak)`$ MPa, within `r sprintf("%.1f", cv_diff)`% of the FEA result: the model agrees with an independent hand calculation as well as with itself.
 
 </details>
 
@@ -533,7 +541,7 @@ tryit_sort(
     why = c(
       "A change under 5% between refinements indicates convergence.",
       "A doubling peak at a corner is a singularity: use a fillet or evaluate away from it.",
-      "Agreement with an independent hand calculation is validation.",
+      "Agreement with an independent hand calculation is a strong check that the model was set up and solved correctly.",
       "A coarse mesh cannot resolve a steep stress gradient; refine and compare.",
       "Garbage in, garbage out: boundary conditions decide everything.",
       "A point load on a node is a singularity, not a real stress."
@@ -550,9 +558,9 @@ tryit_sort(
 
 Engineers draw a careful line between two words that sound identical to everyone else.
 
-**Verification** asks: *did I solve the equations correctly?* That is what a convergence study checks — it confirms the math is clean. **Validation** asks the harder question: *did I solve the correct equations — does my model match reality?* You validate by comparing your FEA to something independent: a hand calculation, a published result, or a physical test.
+**Verification** asks: *did I solve the equations correctly?* A convergence study is one verification check — it confirms the mesh is fine enough. Comparing with a hand calculation or a published solution for the same idealised problem is another: it catches setup mistakes such as a wrong unit, fixture or load. **Validation** asks the harder question: *did I solve the correct equations — does my model match reality?* Strictly, only a comparison with physical evidence — a strain-gauge test, a test to failure, field data — validates a model, because a hand calculation makes the same idealisations as the FEA.
 
-Last week's plate study did both. The convergence study verified the math; the hand-calc comparison validated the model. This week we validate against the analytical beam formulas you already know.
+Last week's plate study checked the mesh (convergence) and the setup (hand calculation). This week you do the same against the analytical beam formulas you already know. In industry the hand-calc comparison is often loosely called "validation against analytical results"; when a test is available, it is the real validation.
 
 For a cantilever beam of length $L$, carrying an end load $P$, with rectangular cross-section, the maximum bending stress at the wall is:
 
@@ -568,7 +576,7 @@ $$ {#eq-deflection-12}
 
 where $M = PL$ is the bending moment at the wall, $c$ is the distance from the neutral axis to the outer fibre, $I$ is the second moment of area of the cross-section, and $E$ is Young's modulus. These are the "true" answers we will hold the FEA up against.
 
-```{r fig-validation-12, fig.cap="Validation of FEA against the analytical cantilever solution. Across five load cases the converged FEA tracks the hand-calculated bending stress closely, building confidence in the model.", fig.width=8, fig.height=5}
+```{r fig-validation-12, fig.cap="Comparison of FEA with the analytical cantilever solution (L = 200 mm, 20 mm × 10 mm section). Across five load cases the converged FEA tracks the hand-calculated bending stress closely, building confidence in the model.", fig.width=8, fig.height=5}
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -578,7 +586,7 @@ L <- 200; b <- 20; h <- 10; E <- 200000
 I <- b * h^3 / 12
 c_dist <- h / 2
 
-loads <- c(500, 1000, 1500, 2000, 2500)   # N
+loads <- c(50, 100, 150, 200, 250)          # N  (30-150 MPa, well below yield)
 analytical <- loads * L * c_dist / I        # MPa
 
 set.seed(7)
@@ -593,21 +601,21 @@ ggplot(val, aes(load, stress, color = source, shape = source)) +
   geom_point(size = 3.5) +
   scale_color_manual(values = c("Analytical" = "firebrick", "FEA" = "steelblue")) +
   labs(x = "Applied end load P (N)", y = "Max bending stress (MPa)", color = NULL, shape = NULL) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "bottom")
 ```
 
-Figure @fig-validation-12 is what a healthy validation looks like: the FEA points hug the analytical line. If your FEA were wildly off, you would *not* simply trust the computer — you would hunt for the bad fixture, missing load, or unconverged mesh causing the disagreement.
+@fig-validation-12 is what a healthy validation looks like: the FEA points hug the analytical line. If your FEA were wildly off, you would *not* simply trust the computer — you would hunt for the bad fixture, missing load, or unconverged mesh causing the disagreement.
 
 ::: {.callout-industry}
-**Industry Application:** In defense and aerospace work, an FEA result is not accepted into a design package unless it is accompanied by exactly this kind of validation — either a hand calculation or correlation to a physical test. The phrase auditors use is "an analysis is only as good as its validation." The habit you build in this lab is the same habit that keeps you employable in regulated industries.
+**Industry Application:** In defense and aerospace work, an FEA result is not accepted into a design package unless it is accompanied by exactly this kind of independent check — a hand calculation for the setup, and correlation to a physical test where one exists. The phrase auditors use is "an analysis is only as good as its validation." The habit you build in this lab is the same habit that keeps you employable in regulated industries.
 :::
 
 ### Design Iteration: Strong Enough, and Not a Gram More {#sec-iteration-12}
 
 In the real world, a part is rarely "done" after the first analysis. The first design is usually either too weak (FOS below the target) or too heavy (FOS far above the target, meaning wasted material and cost). Good engineering walks the design toward the sweet spot: **meet the required factor of safety while minimising mass.**
 
-This is an iterative loop: analyse → check FOS and mass → modify geometry (add a rib, remove material, change a fillet, thin a wall) → re-analyse. Figure @fig-iteration-12 shows how a series of design iterations can cut mass while staying above a required FOS of 2.0.
+This is an iterative loop: analyse → check FOS and mass → modify geometry (add a rib, remove material, change a fillet, thin a wall) → re-analyse. @fig-iteration-12 shows how a series of design iterations can cut mass while staying above a required FOS of 2.0.
 
 ```{r fig-iteration-12, fig.cap="Design iteration history. Each version trades mass against factor of safety; the goal is the lightest design that still clears the required FOS line.", fig.width=8, fig.height=5}
 library(ggplot2)
@@ -617,7 +625,7 @@ iter <- data.frame(
                      "v4 thin flange", "v5 too aggressive"),
                    levels = c("v1 baseline", "v2 add fillet", "v3 lighten web",
                               "v4 thin flange", "v5 too aggressive")),
-  mass = c(1.85, 1.78, 1.42, 1.20, 0.98),   # kg
+  mass = c(1.85, 1.86, 1.42, 1.20, 0.98),   # kg (the fillet adds a few grams)
   fos  = c(1.6, 2.6, 2.3, 2.05, 1.7)
 )
 
@@ -634,14 +642,14 @@ ggplot(iter, aes(mass, fos)) +
   labs(x = "Part mass (kg)", y = "Minimum factor of safety") +
   ylim(1.4, 2.8) +
   scale_x_continuous(expand = expansion(mult = 0.15)) +
-  theme_minimal() +
+  theme_minimal(base_size = 10 * chart_text_scale) +
   theme(legend.position = "bottom")
 ```
 
-The winning design in Figure @fig-iteration-12 is **v4**: it sits just above the required FOS of 2.0 at the lowest mass that still clears the line (v5 went too far and dropped below the requirement). Notice that v1 *failed* the requirement — adding a fillet in v2 (lowering $K_t$, Equation @eq-kt-12) was what made the rest of the lightening possible.
+The winning design in @fig-iteration-12 is **v4**: it sits just above the required FOS of 2.0 at the lowest mass that still clears the line (v5 went too far and dropped below the requirement). Notice that v1 *failed* the requirement — adding a fillet in v2 (lowering $K_t$, @eq-kt-12) was what made the rest of the lightening possible.
 
 ::: {.callout-activity}
-**Lab Connection — Week 3 Lab:** You will be given a lifting bracket (`lifting_bracket.SLDPRT`) that currently fails its required factor of safety of 2.0 under a 5 kN load. Your task over the two-hour lab: (1) confirm the failing baseline with a *converged* mesh, (2) validate one stress value against a hand calculation using Equation @eq-bending-12, (3) iterate the geometry through at least three versions to reach FOS ≥ 2.0 while reducing mass, and (4) produce a one-page analysis report. This single lab uses every skill from all three weeks at once.
+**Lab Connection — Week 3 Lab:** You will be given a lifting bracket (`lifting_bracket.SLDPRT`) that currently fails its required factor of safety of 2.0 under a 5 kN load. Your task over the two-hour lab: (1) confirm the failing baseline with a *converged* mesh, (2) validate one stress value against a hand calculation using @eq-bending-12, (3) iterate the geometry through at least three versions to reach FOS ≥ 2.0 while reducing mass, and (4) produce a one-page analysis report. This single lab uses every skill from all three weeks at once.
 :::
 
 ### Week 3 Lab Guide and the Engineering Report {#sec-lab3-12}
@@ -651,7 +659,7 @@ Run the redesign loop, then write it up. A professional FEA report — the deliv
 - **Objective and requirement:** what you analysed and the target FOS.
 - **Model setup:** material, fixtures, and loads, stated explicitly with units.
 - **Mesh and convergence evidence:** a small table showing peak stress versus mesh refinement (your Week 2 skill).
-- **Validation:** the hand calculation you compared against, and the percentage difference (Equation @eq-convergence-12).
+- **Validation:** the hand calculation you compared against, and the percentage difference (computed the same way as @eq-convergence-12).
 - **Results:** final von Mises, displacement, and FOS plots.
 - **Iteration history and conclusion:** what you changed, why, and the mass saved.
 
@@ -678,7 +686,7 @@ kable(report, caption = "What every section of your Week 3 FEA report must demon
 ```
 
 ::: {.callout-recall}
-**Theory Recall:** Every line of the report in Table @tbl-report-12 maps to a concept you learned: the convergence row is Figure @fig-convergence-12 and Equation @eq-convergence-12; the validation row is the verification-versus-validation idea from Section @sec-vandv-12; the FOS in the results row is Equation @eq-fos-12. The report is not busywork — it is the theory, made auditable.
+**Theory Recall:** Every line of the report in @tbl-report-12 maps to a concept you learned: the convergence row is @fig-convergence-12 and @eq-convergence-12; the validation row is the verification-versus-validation idea from @sec-vandv-12; the FOS in the results row is @eq-fos-12. The report is not busywork — it is the theory, made auditable.
 :::
 
 ::: {.callout-challenge}
@@ -687,11 +695,11 @@ kable(report, caption = "What every section of your Week 3 FEA report must demon
 
 ## Key Takeaways {#sec-takeaways-12}
 
-- **FEA divides one unsolvable part into many simple elements** and solves $[K]\{u\}=\{F\}$ (Equation @eq-governing-12) for displacement, then works back to stress.
-- **Von Mises stress** (Equation @eq-vonmises-12) predicts yielding in ductile metals; the **factor of safety** (Equation @eq-fos-12) compares it to the material's yield strength.
+- **FEA divides one unsolvable part into many simple elements** and solves $[K]\{u\}=\{F\}$ (@eq-governing-12) for displacement, then works back to stress.
+- **Von Mises stress** (@eq-vonmises-12) predicts yielding in ductile metals; the **factor of safety** (@eq-fos-12) compares it to the material's yield strength.
 - The **five-step workflow** — material, fixtures, loads, mesh, run — is identical in every static study you will ever build.
-- **A single run on a default mesh is a guess.** Only a converged result (Equation @eq-convergence-12, Figure @fig-convergence-12) is trustworthy.
-- **Stress concentrations** (Equation @eq-kt-12) are real and converge; **singularities** at sharp corners are numerical artifacts that never converge and must be fixed in the geometry.
+- **A single run on a default mesh is a guess.** Only a converged result (@eq-convergence-12, @fig-convergence-12) is trustworthy.
+- **Stress concentrations** (@eq-kt-12) are real and converge; **singularities** at sharp corners are numerical artifacts that never converge and must be fixed in the geometry.
 - **Verify** that you solved the math right; **validate** that you solved the right problem by comparing to a hand calculation or test.
 - Good design **meets the required FOS at minimum mass** through iteration — not on the first try.
 
@@ -699,9 +707,9 @@ kable(report, caption = "What every section of your Week 3 FEA report must demon
 
 1. **(Automotive)** A steel suspension bracket shows a converged peak von Mises stress of 240 MPa under a 4 kN load. The material yield strength is 420 MPa. Calculate the factor of safety. If your company requires FOS ≥ 2.0 for suspension parts, does this design pass? If not, by what percentage must you reduce the peak stress?
 
-2. **(General)** You run a convergence study and obtain peak stresses of 120, 145, 158, 163, and 165 MPa for increasingly fine meshes. Using Equation @eq-convergence-12, at which refinement step would you declare convergence (5% threshold)? What is your best estimate of the true peak stress?
+2. **(General)** You run a convergence study and obtain peak stresses of 120, 145, 158, 163, and 165 MPa for increasingly fine meshes. Using @eq-convergence-12, at which refinement step would you declare convergence (5% threshold)? What is your best estimate of the true peak stress?
 
-3. **(Food processing)** A 316 stainless steel mounting arm for a wash-down nozzle is modelled as a cantilever, $L = 150$ mm, rectangular section $b = 25$ mm by $h = 8$ mm, $E = 193{,}000$ MPa, carrying a 300 N end load. Using Equations @eq-bending-12 and @eq-deflection-12, hand-calculate the maximum bending stress and the end deflection. These are the values you would compare your FEA against to *validate* the model.
+3. **(Food processing)** A 316 stainless steel mounting arm for a wash-down nozzle is modelled as a cantilever, $L = 150$ mm, rectangular section $b = 25$ mm by $h = 8$ mm, $E = 193{,}000$ MPa, carrying a 300 N end load. Using @eq-bending-12 and @eq-deflection-12, hand-calculate the maximum bending stress and the end deflection. These are the values you would compare your FEA against to *validate* the model.
 
 4. **(Defense)** Your FEA of a sharp-cornered housing shows peak stress rising from 280 to 410 to 590 MPa as you refine the mesh three times. Explain, using the concept of a stress singularity, why these numbers should not appear in your final report, and describe the single geometry change that would make the result converge.
 
@@ -710,13 +718,21 @@ kable(report, caption = "What every section of your Week 3 FEA report must demon
 ## Further Resources {#sec-resources-12}
 
 - **SOLIDWORKS Simulation help:** the official "Static Analysis" and "Meshing" documentation within the Simulation add-in (Help → SOLIDWORKS Simulation).
-- **Reference text:** *Roark's Formulas for Stress and Strain* — the standard source for stress concentration factors ($K_t$) you will need for hand-calc validation.
+- **Reference texts:** *Peterson's Stress Concentration Factors* (Pilkey and Pilkey) — the standard source for $K_t$ charts; *Roark's Formulas for Stress and Strain* — stresses and deflections for standard shapes and loadings. You will need both kinds of formula for hand-calc checks.
 - **Strength-of-materials review:** revisit your earlier course notes on bending stress ($Mc/I$) and beam deflection; they are the backbone of every validation in this chapter.
 
 ::: {.callout-video}
-**Watch:** Before the Week 2 lab, search for the official "SOLIDWORKS Simulation — Mesh Convergence" tutorial on the SOLIDWORKS YouTube channel. (Drop the clip's video ID into the `include_youtube()` helper here once you have chosen one for your course.)
+**Watch:** Before the Week 2 lab, watch these two short videos on mesh convergence and stress singularities in SOLIDWORKS Simulation.
 
-**After watching:** How does the presenter decide that the mesh is fine enough? Compare their criterion to our 5% rule from Equation @eq-convergence-12.
+```{r fea-video-convergence-12, echo=FALSE, results='asis'}
+embed_youtube("1t2DT465bZ8", "Video Tech Tip: Automatic Mesh Convergence Simulation in SOLIDWORKS Simulation (TriMech)")
+```
+
+```{r fea-video-singularity-12, echo=FALSE, results='asis'}
+embed_youtube("3WubMvqul-U", "SolidWorks Simulation: Stress Singularities, H-Adaptive vs. P-Adaptive Meshing")
+```
+
+**After watching:** How does the presenter decide that the mesh is fine enough? Compare their criterion to our 5% rule from @eq-convergence-12.
 :::
 
 ::: {.callout-summary}

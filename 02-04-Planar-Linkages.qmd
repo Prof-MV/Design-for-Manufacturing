@@ -49,7 +49,7 @@ Understanding planar linkages begins with two fundamental questions:
 2. **How many ways can the whole mechanism move?** This is the concept of **mobility** or **degrees of freedom**, and it determines whether a mechanism needs one input, two inputs, or none at all.
 
 ::: {.callout-industry}
-**Industry Application:** In an automotive assembly plant, robot arms are planar (or near-planar) linkages. The number of controllable joints — each requiring a separate motor and controller — directly determines cost. Engineers minimise mobility to the minimum needed for the task.
+**Industry Application:** In an automotive assembly plant, a SCARA pick-and-place robot is essentially a planar linkage. Every degree of freedom needs its own motor, drive and controller, so the mobility directly drives cost. Engineers give a machine exactly the mobility its task needs and no more.
 :::
 
 ***
@@ -72,22 +72,22 @@ Lower pairs have **surface-to-surface** contact. Because load is distributed ove
 knitr::include_graphics("images/linkage-lower-pair-joints.jpg")
 ```
 
-Table @tbl-lower-pair-summary-10 summarises the key characteristics of each lower-pair joint.
+@tbl-lower-pair-summary-10 summarises the key characteristics of each lower-pair joint.
 
 ```{r tbl-lower-pair-summary-10, echo=FALSE, message=FALSE}
 lower_pairs <- tribble(
   ~Symbol, ~Names,                        ~DOF_Allowed, ~DOF_Removed, ~Description,
-  "R",  "Revolute / Pin / Hinge",          1, 2, "Pure rotation about one axis",
-  "P",  "Prismatic / Slider",              1, 2, "Pure translation along one axis",
-  "H",  "Helical / Screw",                 1, 2, "Coupled rotation and translation (s = h·θ)",
-  "C",  "Cylindric",                        2, 1, "Rotation and translation about/along same axis",
-  "S",  "Spherical / Ball-and-Socket",     3, 0, "Rotation about any axis through the centre",
-  "PL", "Planar",                           3, 0, "Translation in a plane plus rotation about normal"
+  "R",  "Revolute / Pin / Hinge",          1, 5, "Pure rotation about one axis",
+  "P",  "Prismatic / Slider",              1, 5, "Pure translation along one axis",
+  "H",  "Helical / Screw",                 1, 5, "Coupled rotation and translation (s = h·θ)",
+  "C",  "Cylindric",                        2, 4, "Rotation and translation about/along same axis",
+  "S",  "Spherical / Ball-and-Socket",     3, 3, "Rotation about any axis through the centre",
+  "PL", "Planar",                           3, 3, "Translation in a plane plus rotation about normal"
 )
 
 lower_pairs %>%
   kbl(caption = "Summary of the six lower-pair joint types",
-      col.names = c("Symbol", "Names", "DOF Permitted", "DOF Removed (planar)", "Description"),
+      col.names = c("Symbol", "Names", "DOF Permitted", "DOF Removed (in space, of 6)", "Description"),
       booktabs = TRUE) %>%
   kable_styling(latex_options = c("hold_position", "scale_down"), full_width = knitr::is_html_output()) %>%
   row_spec(0, background = "#1565C0", color = "white") %>%
@@ -95,6 +95,8 @@ lower_pairs %>%
   row_spec(c(3, 4), background = "#FFF8E1") %>%
   row_spec(c(5, 6), background = "#F3E5F5")
 ```
+
+Only the revolute (R) and prismatic (P) joints can appear in a planar linkage, where the joint axis is perpendicular to the plane of motion (R) or the sliding direction lies in it (P). In the plane each of them removes **2** of the 3 planar DOF. The other four pairs need three-dimensional motion and belong to spatial mechanisms.
 
 ::: {.callout-check}
 **Quick Check:** A pin joint in a four-bar linkage is which lower-pair type? How many degrees of freedom does it remove in a planar mechanism?
@@ -133,7 +135,9 @@ The two higher-pair types most common in planar mechanisms are:
 
 ### Compound Joints {#sec-compound-joints-10}
 
-A **compound joint** (also called a **multiple joint**) occurs when **three or more links** share the same joint location. This is common in complex linkages where multiple links pivot about the same point.
+The term **compound joint** is used in two ways. @fig-compound-joint-table-10 shows the first: a joint built from several elements that acts as one connection, such as a ball bearing (rolling elements between two rings), a universal joint (two pins at right angles) or a roller slide. For mobility counting, what matters is its connectivity, the DOF it permits.
+
+The second meaning, used in the mobility rule below, is a **multiple (coincident) joint**: **three or more links** share the same pin. This is common in complex linkages where several links pivot about the same point.
 
 ```{r fig-compound-joint-table-10, echo=FALSE, fig.cap="Compound joints: ball bearing / anti-friction bearing (connectivity 1), universal / Hooke / Cardan joint (connectivity 2), and roller slide / roller guide (connectivity 1). These combine features of lower and higher pairs.", fig.align='center', out.width='80%'}
 knitr::include_graphics("images/linkage-compound-joints.jpg")
@@ -146,7 +150,7 @@ The critical rule for counting compound joints in mobility calculations is:
 For example, if links 2, 3, and 4 all share a common revolute axis, that location counts as **2** full (1-DOF) joints, not 1.
 
 ::: {.callout-discussion}
-**Group Discussion:** Look at the universal (Hooke/Cardan) joint shown in Figure @fig-compound-joint-table-10. It has connectivity 2. Where do you see this joint used in an automobile drivetrain, and why is the 2-DOF flexibility important there?
+**Group Discussion:** Look at the universal (Hooke/Cardan) joint shown in @fig-compound-joint-table-10. It has connectivity 2. Where do you see this joint used in an automobile drivetrain, and why is the 2-DOF flexibility important there?
 :::
 
 ***
@@ -173,7 +177,7 @@ Links are classified by the number of joints they carry:
 | **Quaternary** | 4 | Quadrilateral | Complex coupler, body with 4 joints |
 
 ::: {.callout-activity}
-**Try This:** Look at the recliner chair or excavator in Figure @fig-practice-links-10 below. Sketch the kinematic schematic and classify each link as binary, ternary, or quaternary before checking the chapter practice section.
+**Try This:** Look at the recliner chair or excavator in @fig-practice-links-10 below. Sketch the kinematic schematic and classify each link as binary, ternary, or quaternary before checking the chapter practice section.
 :::
 
 ```{r fig-practice-links-10, echo=FALSE, fig.cap="Practice: identify binary, ternary, and quaternary links in a recliner chair (adjustable mechanism) and a backhoe excavator arm.", fig.align='center', out.width='90%'}
@@ -204,7 +208,7 @@ knitr::include_graphics("images/linkage-rrrr-rrrp-numbering.jpg")
 ```
 
 ::: {.callout-industry}
-**Industry Application:** The water pump shown in Figure @fig-water-pump-10 is a real-world RRRP (slider-crank) mechanism. Link 1 is the pump body (ground). The handle (link 2) and the connecting links (links 3 and 4) transmit motion from the operator's hand down to the piston. Joints A, B, and C are revolute pin joints. Note how the schematic numbering makes the mechanism instantly readable by any engineer, regardless of the physical shape of the pump body.
+**Industry Application:** The water pump shown in @fig-water-pump-10 is a real-world RRRP (slider-crank) mechanism. Link 1 is the pump body (ground). The long curved handle is link 3. At B it is pinned to the short swinging link 2, which pivots on the body at C, and at A it is pinned to the piston rod, link 4, which slides up and down in the body (the prismatic joint). Joints A, B and C are revolute pin joints. Note how the schematic numbering makes the mechanism instantly readable by any engineer, regardless of the physical shape of the pump body.
 :::
 
 ```{r fig-water-pump-10, echo=FALSE, fig.cap="Water pump mechanism with kinematic numbering: link 1 = pump body (ground), links 2, 3, 4 = moving links, joints A, B, C = revolute (pin) joints. This is a RRRP slider-crank mechanism.", fig.align='center', out.width='60%'}
@@ -213,8 +217,8 @@ knitr::include_graphics("images/linkage-water-pump-schematic.png")
 
 The naming convention **RRRR** or **RRRP** describes the joint sequence around the closed loop:
 
-- **RRRR** — four-bar linkage (four revolute joints) → Figure @fig-linkage-numbering-10, left
-- **RRRP** — slider-crank (three revolute + one prismatic) → Figure @fig-linkage-numbering-10, right
+- **RRRR** — four-bar linkage (four revolute joints) → @fig-linkage-numbering-10, left
+- **RRRP** — slider-crank (three revolute + one prismatic) → @fig-linkage-numbering-10, right
 
 ***
 
@@ -228,7 +232,7 @@ The **degree of freedom (DOF)** of a body is the number of **independent coordin
 knitr::include_graphics("images/linkage-dof-free-body.jpg")
 ```
 
-As Figure @fig-dof-body-10 shows, a single rigid body moving freely in a plane has **3 DOF**:
+As @fig-dof-body-10 shows, a single rigid body moving freely in a plane has **3 DOF**:
 
 $$DOF_{free\ body} = 3 \quad (x_0,\ y_0,\ \theta)$$
 
@@ -242,7 +246,7 @@ When bodies are connected by joints, DOF are *removed*. Each full joint (1 DOF p
 - $M < 0$: **Overconstrained** — redundant constraints (statically indeterminate)
 
 ::: {.callout-think}
-**Before You Calculate:** A bicycle frame is rigid ($M = 0$). A four-bar windshield wiper mechanism has $M = 1$. A car steering system with two independent inputs has $M = 2$. Can you think of a mechanism in your industry area that has $M = 1$?
+**Before You Calculate:** A bicycle frame is rigid ($M = 0$). A four-bar windshield wiper mechanism has $M = 1$. A five-bar linkage driven by two motors, as in some plotters and parallel robots, has $M = 2$. Can you think of a mechanism in your industry area that has $M = 1$?
 :::
 
 ***
@@ -261,7 +265,7 @@ $$ {#eq-gruebler-10}
 |:-------|:--------|
 | $M$ | Mobility (total degrees of freedom of the mechanism) |
 | $n$ | Total number of links, **including the ground link** |
-| $j_1$ | Number of **full joints** (1 DOF each: revolute, prismatic, helical) |
+| $j_1$ | Number of **full joints** (1 DOF each: revolute, prismatic) |
 | $j_2$ | Number of **half joints** (2 DOF each: cam pair, gear pair) |
 
 The term $3(n-1)$ gives the DOF if all links were free (3 DOF each, minus 3 for the ground which is fixed). The terms $2j_1$ and $j_2$ subtract the constraints imposed by each joint.
@@ -290,7 +294,7 @@ ggplot() +
   annotate("text", x = 5.9, y = 3.9, label = "Each removes 2 DOF", size = 3.2 * diagram_text_scale, color = "#E65100") +
   geom_rect(aes(xmin = 7.8, xmax = 11, ymin = 3.5, ymax = 5.2), fill = "#F3E5F5", color = "#7B1FA2", linewidth = 1.2) +
   annotate("text", x = 9.4, y = 4.9, label = "j2  =  half joints", fontface = "bold", size = 4 * diagram_text_scale, color = "#7B1FA2") +
-  annotate("text", x = 9.4, y = 4.4, label = "Cam pair, Gear pair", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = 9.4, y = 4.4, label = "Cam, gear, pin-in-slot", size = 3.2 * diagram_text_scale) +
   annotate("text", x = 9.4, y = 3.9, label = "Each removes 1 DOF", size = 3.2 * diagram_text_scale, color = "#4A148C") +
   geom_rect(aes(xmin = 1, xmax = 11, ymin = 1.8, ymax = 3.2), fill = "#E8F5E9", color = "#2E7D32", linewidth = 1) +
   annotate("text", x = 6, y = 2.9, label = "Compound Joint Rule", fontface = "bold", size = 4 * diagram_text_scale, color = "#2E7D32") +
@@ -316,7 +320,7 @@ knitr::include_graphics("images/linkage-ex1-fourbar-dof.jpg")
 ::: {.question}
 ##### Problem Statement {-}
 
-Determine the mobility of the planar four-bar linkage shown in Figure @fig-ex1-fourbar-10. All joints are revolute (pin) joints.
+Determine the mobility of the planar four-bar linkage shown in @fig-ex1-fourbar-10. All joints are revolute (pin) joints.
 :::
 
 ::: {.answer}
@@ -345,7 +349,7 @@ No cam or gear pairs are present.
 
 $$j_2 = 0$$
 
-**Step 4: Apply Equation** @eq-gruebler-10
+**Step 4: Apply** @eq-gruebler-10
 
 $$M = 3(4 - 1) - 2(4) - 0 = 9 - 8 = \boxed{1}$$
 
@@ -382,7 +386,7 @@ knitr::include_graphics("images/linkage-ex2-complex-dof.jpg")
 ::: {.question}
 ##### Problem Statement {-}
 
-Determine the mobility of the planar linkage shown in Figure @fig-ex2-complex-10. The mechanism is planar and **all joints have connectivity 1**.
+Determine the mobility of the planar linkage shown in @fig-ex2-complex-10. The mechanism is planar and **all joints have connectivity 1**.
 :::
 
 ::: {.answer}
@@ -431,7 +435,7 @@ knitr::include_graphics("images/linkage-ex3-compound-joints.jpg")
 ::: {.question}
 ##### Problem Statement {-}
 
-Determine the mobility of the planar linkage in Figure @fig-ex3-compound-10. All joints have connectivity 1. **Links 3, 4, and 5 are all connected at the same revolute joint axis** (compound joint).
+Determine the mobility of the planar linkage in @fig-ex3-compound-10. All joints have connectivity 1. **Links 3, 4, and 5 are all connected at the same revolute joint axis** (compound joint).
 :::
 
 ::: {.answer}
@@ -472,7 +476,7 @@ knitr::include_graphics("images/linkage-ex4-higher-pair.png")
 ::: {.question}
 ##### Problem Statement {-}
 
-Determine the mobility of the planar linkage shown in Figure @fig-ex4-higher-pair-10. The mechanism has 11 links and is planar. **One joint is a pin-in-slot** (labelled $f_i = 2$, meaning it permits 2 DOF, i.e. it is a half joint). All other joints are full revolute joints.
+Determine the mobility of the planar linkage shown in @fig-ex4-higher-pair-10. The mechanism has 11 links and is planar. **One joint is a pin-in-slot** (labelled $f_i = 2$, meaning it permits 2 DOF, i.e. it is a half joint). All other joints are full joints: revolute pins, plus the prismatic joint of slider 7 on its fixed guide.
 :::
 
 ::: {.answer}
@@ -480,13 +484,24 @@ Determine the mobility of the planar linkage shown in Figure @fig-ex4-higher-pai
 
 **Step 1: Count links ($n$)**
 
-Counting from Figure @fig-ex4-higher-pair-10: links 1 through 11.
+Counting from @fig-ex4-higher-pair-10: links 1 through 11.
 
 $$n = 11$$
 
 **Step 2: Count full joints ($j_1$)**
 
-All joints except the pin-in-slot are full revolute joints. Counting carefully from the figure: 13 full joints.
+Count joint by joint, applying the $(m-1)$ rule where several links share a pin:
+
+| Location | Links joined | Full joints |
+|:---------|:-------------|:-----------:|
+| Ground pivots of links 2, 5 and 11 | 2–1, 5–1, 11–1 | 3 |
+| Slider 7 on its guide (prismatic) | 7–1 | 1 |
+| Left pin | 2, 3, 4, 8 ($m = 4$) | 3 |
+| Pin joining 3, 5 and 6 | $m = 3$ | 2 |
+| Pin on slider 7 | 6, 7, 9 ($m = 3$) | 2 |
+| Pin joining 4 and 9 | | 1 |
+| Pin joining 8 and 10 | | 1 |
+| **Total** | | **13** |
 
 $$j_1 = 13$$
 
@@ -496,7 +511,7 @@ The pin-in-slot has $f_i = 2$ — it permits 2 DOF (rotation *and* sliding), so 
 
 $$j_2 = 1$$
 
-**Step 4: Apply Equation** @eq-gruebler-10
+**Step 4: Apply** @eq-gruebler-10
 
 $$M = 3(11 - 1) - 2(13) - 1 = 30 - 26 - 1 = \boxed{3}$$
 
@@ -529,7 +544,7 @@ ex4 %>%
 ```{r fig-mobility-chart-10, echo=FALSE, fig.width=10, fig.height=5.5, fig.align='center', fig.cap="Mobility values and their physical meaning. M = 1 is the target for most single-actuator mechanisms."}
 mob_data <- data.frame(
   M     = c(-1, 0, 1, 2, 3),
-  label = c("M = -1\nOver-constrained\n(Redundant constraints)",
+  label = c("M = -1\nOver-constrained\n(redundant\nconstraints)",
             "M = 0\nStructure\n(Rigid, no motion)",
             "M = 1\nMechanism\n(1 input needed) \u2713",
             "M = 2\nUnder-constrained\n(2 inputs needed)",
@@ -563,7 +578,7 @@ Once you know how to calculate mobility, a natural next question is: *which comb
 
 ### Structural Numbers for M = 1 {#sec-structural-numbers-10}
 
-Setting $M = 1$ and $j_2 = 0$ in Equation @eq-gruebler-10 and solving gives the relationship $j_1 = \frac{3n - 4}{2}$, which requires $n$ to be even. Table @tbl-m1-solutions-10 lists valid combinations.
+Setting $M = 1$ and $j_2 = 0$ in @eq-gruebler-10 and solving gives the relationship $j_1 = \frac{3n - 4}{2}$, which requires $n$ to be even. @tbl-m1-solutions-10 lists valid combinations.
 
 ```{r fig-m1-solutions-table-10, echo=FALSE, fig.cap="Valid combinations of link count (n) and joint count (j) for planar linkages with M = 1 and all full joints. As n increases, the number of distinct topological configurations grows rapidly — from 1 configuration with 4 links up to 6856 configurations with 12 links.", fig.align='center', out.width='60%'}
 knitr::include_graphics("images/linkage-m1-solutions-table.png")
@@ -572,7 +587,7 @@ knitr::include_graphics("images/linkage-m1-solutions-table.png")
 ```{r tbl-m1-solutions-10, echo=FALSE, message=FALSE}
 m1_sols <- tribble(
   ~n, ~j1, ~Configurations, ~Common_Name,
-  2,  1,   1,     "Simple dyad (not a closed loop)",
+  2,  1,   1,     "A single link pinned to ground (a lever)",
   4,  4,   1,     "Four-bar linkage / slider-crank",
   6,  7,   2,     "Six-bar: Watt chain or Stephenson chain",
   8,  10,  16,    "Eight-bar linkages",
@@ -589,7 +604,7 @@ m1_sols %>%
   row_spec(3, background = "#E3F2FD", bold = TRUE)
 ```
 
-```{r fig-m1-solutions-diagrams-10, echo=FALSE, fig.cap="The two topologically distinct solutions of M = 1 for n = 4 links: (a) dyad (open chain, 2 links), (b) four-bar RRRR linkage, (c) slider-crank RRRP linkage. With n = 4 there is only 1 closed-loop configuration.", fig.align='center', out.width='80%'}
+```{r fig-m1-solutions-diagrams-10, echo=FALSE, fig.cap="Solutions of the mobility equation for M = 1 with n = 2 and n = 4: (a) n = 2, a single link pinned to ground; (b) n = 4, the four-bar RRRR linkage; (c) n = 4, the slider-crank RRRP linkage. With n = 4 and only revolute joints there is just one closed-loop configuration, the four-bar.", fig.align='center', out.width='80%'}
 knitr::include_graphics("images/linkage-m1-solutions-diagrams.png")
 ```
 
@@ -655,16 +670,16 @@ A **kinematic inversion** is produced by **fixing a different link** of the same
 
 The RRRP slider-crank chain has **four possible inversions**, depending on which of the four links is fixed as ground:
 
-```{r fig-slider-crank-inversions-10, echo=FALSE, fig.cap="Four inversions of the slider-crank (RRRP) kinematic chain. (a) Standard: link 1 (cylinder block) is ground — classic engine/pump; (b) link 2 is ground — oscillating cylinder mechanism; (c) link 3 is ground — Whitworth quick-return mechanism; (d) link 4 is ground — rotating cylinder mechanism. The relative motion between any two links is the same in all inversions.", fig.align='center', out.width='90%'}
+```{r fig-slider-crank-inversions-10, echo=FALSE, fig.cap="Four inversions of the slider-crank (RRRP) kinematic chain. (a) Link 1 (frame) fixed: the ordinary slider-crank of engines and compressors; (b) link 4 (slider) fixed: hand pump; (c) link 2 (crank) fixed: Whitworth quick-return and rotary-cylinder engines; (d) link 3 (coupler) fixed: oscillating-cylinder mechanism. The relative motion between any two links is the same in all inversions.", fig.align='center', out.width='90%'}
 knitr::include_graphics("images/linkage-slider-crank-inversions.png")
 ```
 
 | Inversion | Fixed Link | Mechanism Type | Application |
 |:----------|:----------:|:---------------|:------------|
-| (a) Standard | Link 1 (cylinder) | Slider-crank | Piston engine, air compressor |
-| (b) | Link 2 (crank) | Oscillating cylinder | Pneumatic actuator swing |
-| (c) | Link 3 (coupler) | Whitworth quick-return | Shaper machine, fast-return tool |
-| (d) | Link 4 (slider) | Rotating cylinder | Radial aircraft engine |
+| (a) Standard | Link 1 (frame / cylinder) | Slider-crank | Piston engine, air compressor |
+| (b) | Link 4 (slider) | Fixed slider ("pendulum pump") | Hand water pump |
+| (c) | Link 2 (crank) | Whitworth quick-return / rotating cylinder | Shaper machine; Gnome rotary aircraft engine |
+| (d) | Link 3 (coupler) | Oscillating cylinder | Oscillating steam engine, slotted-lever shaper |
 
 ::: {.callout-industry}
 **Industry Application (Defense):** The Whitworth quick-return mechanism (inversion c) was used in metal shaper machines to machine flat surfaces. The return stroke is faster than the cutting stroke, saving cycle time. In modern CNC machines, the same kinematic principle underlies asymmetric motion profiles programmed into servo controllers.
@@ -692,20 +707,20 @@ The front-end loader is an excellent example of planar linkage analysis in a rea
 2. Keep the bucket approximately level (parallel to ground) throughout the lift stroke
 3. Allow the bucket to tilt for dumping
 
-```{r fig-frontend-loader-photo-10, echo=FALSE, fig.cap="A front-end loader. If analysed using the planar mobility equation, the bucket support linkage will be found to have less than one degree of freedom by itself — parallel actuators are used on both sides of the machine to balance the load and increase stiffness, effectively creating a redundant (overconstrained) structure under symmetry assumptions.", fig.align='center', out.width='80%'}
+```{r fig-frontend-loader-photo-10, echo=FALSE, fig.cap="A front-end loader. Hydraulic lift cylinders raise the boom (the bucket-support linkage analysed below); separate tilt cylinders and links rotate the bucket.", fig.align='center', out.width='80%'}
 knitr::include_graphics("images/linkage-frontend-loader-photo.png")
 ```
 
-```{r fig-frontend-loader-schematic-10, echo=FALSE, fig.cap="Kinematic schematic of the bucket-support linkage for a front-end loader. Links are numbered 1 (frame/ground) through 4. The linkage is a four-bar chain (RRRR) that controls the bucket path during lift. A separate hydraulic cylinder (not shown) provides the tilt function.", fig.align='center', out.width='75%'}
+```{r fig-frontend-loader-schematic-10, echo=FALSE, fig.cap="Kinematic schematic of the bucket-support (boom-lift) linkage of a front-end loader: frame 1, lift-cylinder body 2, cylinder rod 3 and boom 4. Joints: frame–cylinder, rod–boom and boom–frame are revolute; the rod slides in the cylinder body (prismatic). It is an RPRR inversion of the slider-crank chain.", fig.align='center', out.width='75%'}
 knitr::include_graphics("images/linkage-frontend-loader-schematic.png")
 ```
 
 ::: {.question}
 ##### Case Study Problem {-}
 
-From the schematic in Figure @fig-frontend-loader-schematic-10:
+From the schematic in @fig-frontend-loader-schematic-10:
 
-a) Identify $n$, $j_1$, $j_2$ for the bucket-support linkage (links 1–4, all revolute joints)
+a) Identify $n$, $j_1$, $j_2$ for the bucket-support linkage (links 1–4)
 b) Calculate mobility $M$
 c) Explain why the real machine uses **parallel actuators** on both sides and what this implies about $M$
 :::
@@ -715,17 +730,17 @@ c) Explain why the real machine uses **parallel actuators** on both sides and wh
 
 **a) Count links and joints:**
 
-$n = 4$ (links 1, 2, 3, 4 as shown) $\quad j_1 = 4$ (four revolute joints) $\quad j_2 = 0$
+$n = 4$ (frame, cylinder body, rod, boom) $\quad j_1 = 4$ (three revolute joints plus the prismatic joint between rod and cylinder) $\quad j_2 = 0$
 
 **b) Mobility:**
 
 $$M = 3(4-1) - 2(4) - 0 = 9 - 8 = 1$$
 
-The bucket linkage itself is an M = 1 four-bar mechanism.
+The boom linkage is an M = 1 mechanism: extending the single lift cylinder (the one input) sets the boom position.
 
 **c) Parallel actuators and real-world overconstrained design:**
 
-In practice, the front-end loader has *identical* linkage assemblies on the left *and* right sides of the machine, both driven by the same hydraulic cylinder. If both sides are perfectly rigid and perfectly identical, the system is **overconstrained** (M < 1 when you count the full 3D structure). However, slight flexibility in the frame and hydraulic lines accommodates the redundancy while providing:
+In practice, the front-end loader has *identical* lift linkages on the left *and* right sides, each with its own lift cylinder, and the two cylinders are fed in parallel from one valve. Counted as a full 3D structure, two boom arms joined by the bucket and the cross tube are **overconstrained** (M < 1): with perfectly rigid parts they could only move if both sides were exactly identical. The parallel hydraulic supply equalises the cylinder pressures, and slight flexibility in the frame accommodates the remaining mismatch, while providing:
 
 - Doubled load capacity (force shared across both linkages)
 - Increased lateral stability (bucket does not tip sideways)
@@ -743,7 +758,7 @@ This deliberate overconstrained design is common in heavy equipment and is a key
 | **DOF of free planar body** | $DOF = 3$ | Before any joints are added |
 | **Gruebler–Kutzbach** | $M = 3(n-1) - 2j_1 - j_2$ | Any planar mechanism |
 | **Compound joint rule** | $j_1\text{ contribution} = m - 1$ | When $m \geq 3$ links share one joint |
-| **Full joint DOF removed** | 2 per joint | Revolute (R), Prismatic (P), Helical (H) |
+| **Full joint DOF removed** | 2 per joint | Revolute (R), Prismatic (P) |
 | **Half joint DOF removed** | 1 per joint | Cam pair, Gear pair, Pin-in-slot |
 | **M = 1 condition (all full joints)** | $j_1 = \frac{3n-4}{2}$ | Finding valid (n, j) combinations |
 
@@ -755,7 +770,7 @@ This deliberate overconstrained design is common in heavy equipment and is a key
 
 - [ ] Draw or obtain the kinematic schematic (not the physical drawing)
 - [ ] Number all links starting from 1 (ground) in sequence
-- [ ] Label all joints with type symbol (R, P, H, etc.) and number/letter
+- [ ] Label all joints with type symbol (R, P) and number/letter
 - [ ] Count $n$ — include the ground link (do not forget it)
 - [ ] Count $j_1$: apply the $(m-1)$ compound joint rule at every multi-link joint
 - [ ] Count $j_2$: identify all cam, gear, and pin-in-slot (higher) pairs
@@ -858,7 +873,7 @@ tryit_sort(
 A slider-crank mechanism (RRRP) consists of: a crank (link 2), a connecting rod (link 3), a slider/piston (link 4), and the engine block as ground (link 1). There are three revolute joints and one prismatic joint.
 
 a) Identify $n$, $j_1$, $j_2$
-b) Calculate the mobility using Equation @eq-gruebler-10
+b) Calculate the mobility using @eq-gruebler-10
 c) What does this mobility value tell you about the number of actuators needed?
 :::
 
@@ -875,7 +890,7 @@ c) $M = 1$ — exactly one motor drives the crankshaft, and the entire piston me
 ::: {.question}
 ##### Problem 2 {-}
 
-A folding chair mechanism has 5 links (including ground) and uses a pin-in-slot joint where the seat pin (a revolute joint on one link) rides in a slot (a prismatic guide) on another link. There are also 4 regular revolute joints.
+A folding chair mechanism has 5 links (including ground) and uses a pin-in-slot joint where the seat pin (a revolute joint on one link) rides in a slot (a prismatic guide) on another link. There are also 5 regular revolute joints.
 
 a) Identify $n$, $j_1$, $j_2$
 b) Calculate the mobility
@@ -885,11 +900,11 @@ c) Is this a valid single-actuator mechanism?
 ::: {.answer}
 ##### Solution 2 {-}
 
-a) $n = 5$, $j_1 = 4$ (four standard revolute joints), $j_2 = 1$ (the pin-in-slot = half joint)
+a) $n = 5$, $j_1 = 5$ (five standard revolute joints), $j_2 = 1$ (the pin-in-slot = half joint)
 
-b) $M = 3(5-1) - 2(4) - 1 = 12 - 8 - 1 = 3$
+b) $M = 3(5-1) - 2(5) - 1 = 12 - 10 - 1 = 1$
 
-c) No — $M = 3$ means the chair has three unconstrained DOF in this configuration. In practice, the user's weight and contact with the floor impose additional constraints that make it behave as a structure ($M = 0$) when loaded, and collapsible ($M > 0$) when unloaded.
+c) Yes. $M = 1$ means a single motion, folding, describes the whole chair. When the seat pin reaches the end of its slot, the end stop adds a constraint and the unfolded chair behaves as a structure ($M = 0$) under the user's weight.
 :::
 
 ::: {.question}
@@ -907,7 +922,7 @@ c) Name one industrial application of a Watt six-bar mechanism
 
 a) $M = 3(6-1) - 2(7) - 0 = 15 - 14 = 1$ ✓
 
-b) Adding one full joint reduces $M$ by 2 (from 1 to -1), which overshoots. Instead, adding a binary link with one joint adds $+3 - 2(1) = +1$ to $M$, and adding a binary link with 2 joints adds $+3 - 2(2) = -1$ to $M$. To go from $M = 1$ to $M = 0$ requires adding $+\frac{1}{2}$ of a full joint worth of constraint — i.e., adding one **half joint** ($j_2 = 1$) reduces $M$ by exactly 1.
+b) None: full joints alone cannot do it. One extra full joint between two existing links removes 2 DOF and gives $M = -1$ (overconstrained). Adding a binary link with a full joint at each end also gives $M = 1 + 3 - 2(2) = 0$, so the usual way to make the six-bar rigid is to add **one binary link** (a brace). Alternatively, one **half joint** ($j_2 = 1$, e.g. a pin-in-slot or a stop) between two existing links removes exactly 1 DOF.
 
 c) Stamping press feeder, walking machine leg, variable-dwell mechanism.
 :::
@@ -915,12 +930,21 @@ c) Stamping press feeder, walking machine leg, variable-dwell mechanism.
 ::: {.question}
 ##### Problem 4 (Challenge) {-}
 
-An excavator arm (see Figure @fig-practice-links-10) has the following schematic: ground link + 4 moving links, 5 revolute joints, and 1 compound joint where 3 links share the same pin axis.
+An excavator arm (see @fig-practice-links-10) is modelled with 10 links including the ground (frame, boom, stick, bucket, a bucket link, and the body and rod of each of three hydraulic cylinders). It has 10 simple joints (revolute pins plus the three cylinder sliders) and one pin where 3 links meet.
 
 a) Determine $j_1$ correctly using the compound joint rule
 b) Calculate the mobility
 c) How many hydraulic actuators are needed to fully control this arm?
-d) Name each inversion of a four-bar linkage and give one real-world application of each
+:::
+
+::: {.answer}
+##### Solution 4 {-}
+
+a) $j_1 = 10 + (3 - 1) = 12$
+
+b) $M = 3(10 - 1) - 2(12) - 0 = 27 - 24 = 3$
+
+c) Three: one cylinder each for the boom, the stick and the bucket. Each cylinder length is one independent input.
 :::
 
 ***

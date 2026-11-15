@@ -34,10 +34,33 @@ By the end of this chapter, you will be able to:
 
 ## Mechanics of Bolted Joint Integrity {#sec-bolted-joints}
 
-Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads. Fundamentals of Bolt Preload
-When a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_p$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself. 
-The relationship between the applied torque ($T$) and the resulting preload is typically approximated by the "short-form" torque equation:$$T = K \cdot D \cdot F_p$$
-Where: $T$ is the tightening torque.$K$ is the torque coefficient (often ~0.2 for unlubricated steel).$D$ is the nominal diameter of the bolt. $F_p$ is the desired preload. Note: Relying solely on torque to determine preload is notoriously imprecise due to friction variables. Advanced applications may use the "turn-of-nut" method or ultrasonic tension sensors [@shigley2020]. Load Distribution and Joint Stiffness. When an external tensile load ($P$) is applied to a joint, only a fraction of that load is actually felt by the bolt. The rest is absorbed by the decompression of the clamped members. This is defined by the joint stiffness constant, $C$:$$C = \frac{k_b}{k_b + k_m}$$ In this equation, $k_b$ represents the stiffness of the bolt and $k_m$ represents the stiffness of the members. The total force acting on the bolt ($F_b$) after the external load is applied is:$$F_b = F_p + C \cdot P$$ Visualizing Factor of Safety to ensure the joint does not fail via yielding or separation, we must calculate the factor of safety. The following R code demonstrates how the bolt force increases relative to the external load until the point of joint separation.
+Bolted joints are among the most common elements in mechanical design, yet they are often the most frequent points of failure. Ensuring the strength of a bolted joint requires a delicate balance between the physical properties of the bolt, the stiffness of the clamped members, and the applied external loads.
+
+### Fundamentals of Bolt Preload {-}
+
+When a bolt is tightened, it undergoes axial extension, creating a clamping force known as preload ($F_i$). This preload is essential because it keeps the joint members in compression, preventing separation and reducing the amplitude of cyclic loading on the bolt itself.
+
+The relationship between the applied torque ($T$) and the resulting preload is typically approximated by the "short-form" torque equation:
+
+$$T = K \cdot d \cdot F_i$$
+
+where $T$ is the tightening torque, $K$ is the torque (nut) coefficient (often about 0.2 for unlubricated steel), $d$ is the nominal diameter of the bolt and $F_i$ is the desired preload.
+
+> **Note:** Relying solely on torque to set preload is imprecise because most of the torque is lost to friction. Critical applications use the torque-angle ("turn-of-nut") method or ultrasonic tension measurement [@shigley2020].
+
+### Load Distribution and Joint Stiffness {-}
+
+When an external tensile load ($P$) is applied to a joint, only a fraction of that load is actually felt by the bolt. The rest goes into relieving the compression of the clamped members. The fraction is set by the joint stiffness constant $C$:
+
+$$C = \frac{k_b}{k_b + k_m}$$
+
+where $k_b$ is the stiffness of the bolt and $k_m$ the stiffness of the members. The total force in the bolt after the external load is applied is
+
+$$F_b = F_i + C \cdot P$$
+
+### Visualizing the Load Response {-}
+
+The following plot shows how the bolt force increases with the external load until the joint separates.
 
 ```{r fig-bolt-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Relationship between Bolt Force and External Load."}
 library(ggplot2)
@@ -68,7 +91,7 @@ ggplot(df, aes(x = ExternalLoad, y = BoltForce)) +
   theme_minimal()
 ```
 
-As illustrated in Figure ~@fig-bolt-plot, the bolt force increases much more slowly while the joint is clamped ($C < 1$). Once the external load exceeds the separation point, the bolt must carry the entire load, significantly increasing the risk of fatigue or tensile failure.
+As illustrated in @fig-bolt-plot, the bolt force increases slowly while the joint is clamped (slope $C < 1$). Once the external load exceeds the separation point $P = F_i/(1-C)$, the members no longer help and the bolt carries the entire load (slope 1), which greatly increases the risk of fatigue or tensile failure.
 
 ::: {.content-visible when-format="html"}
 *This one is live — change the preload or the joint stiffness constant, or drag the external-load slider, and the chart and results update immediately.*
@@ -158,7 +181,7 @@ knitr::include_graphics("images/ThreadStandards.png")
 knitr::include_graphics("images/BasicProfile.png")
 ```
 
-> **Note:** The dimensions and geometry in the Figure ~@fig-basic-profile are only used for 3d modeling and drawing the threads, they are not dimensions to manufacture to!
+> **Note:** The dimensions and geometry in @fig-basic-profile are only used for 3d modeling and drawing the threads, they are not dimensions to manufacture to!
 
 The tensile stress area, $A_t$, is the area of an unthreaded rod  with the same tensile strength as a threaded rod.
 
@@ -293,10 +316,10 @@ metric_lookup %>%
 For the purpose of this course we limit to Hexagon-Head bolts.
 
 * **Hexagon-head bolts** are one of the most common for engineering applications.
-* $W$ is usually about $1.5$ times nominal diameter:
-  $$\text{round}(W \cdot 1.5)$$
-  * **Example:** $\text{Dia} = 7/16 \Rightarrow \text{round}(7 \cdot 1.5) \Rightarrow \text{round}(10.5) = 11$
-    $\therefore W = 11/16$
+* The width across flats $W$ of the head is about $1.5$ times the nominal diameter, rounded to a standard size:
+  $$W \approx 1.5\, d$$
+  * **Example:** $d = 1/2$ in $\Rightarrow W \approx 1.5 \cdot 8/16 = 12/16$, so $W = 3/4$ in.
+  * The rule is approximate: a $7/16$ in hex bolt has $W = 5/8$ in, not $1.5 \cdot 7/16 \approx 0.66$ in. Always check the standard (ASME B18.2.1) for the exact head size.
 
 
 ```{r, echo=FALSE, out.width="70%", fig.align="center", fig.cap="Bolt Dimensions"}
@@ -305,7 +328,7 @@ knitr::include_graphics("images/BoltDimensions.png")
 * Bolt length $L$ is measured from **below the head**.
 * Thread length $L_T$.
 
-Although many other thread lengths exist, to standardize the bolts used in this course, we only use a tread length determined by the equations below.
+Although many other thread lengths exist, to standardize the bolts used in this course, we only use a thread length determined by the equations below.
 
 ##### English Units: {-#thread-lengths-english}
 $$
@@ -850,7 +873,7 @@ Achieving the correct preload in a bolted joint is critical for joint integrity.
 
 In most bolted joint assemblies, it is preferable to **rotate the nut while holding the bolt stationary** rather than turning the bolt head. This practice offers several important advantages:
 
-1. **Reduced Torsional Stress in the Bolt:** When the bolt is rotated during tightening, the threads experience friction that induces torsional stress in addition to the desired tensile stress. This combined loading reduces the effective preload and can lead to premature fatigue failure. Rotating the nut instead transfers the frictional torque to the nut-to-washer interface, keeping the bolt in pure tension.
+1. **No Shank Rubbing in the Hole:** Thread friction twists the bolt shank whichever end is turned, so turning the nut does not remove the torsion (it largely relaxes once the wrench is removed). But a bolt that is turned rotates its shank inside the clearance hole; if the hole is tight, misaligned or coated, the extra friction there consumes torque, and the torque-preload relationship becomes even less reliable.
 
 2. **Consistent Friction Conditions:** The friction coefficient under the bolt head is typically more consistent when the bolt remains stationary. The bearing surface under a rotating bolt head can gall or score, leading to unpredictable torque-tension relationships.
 
@@ -898,63 +921,50 @@ The **torque-angle method** (also called "turn-of-nut" method) improves upon pur
 1. **Snug Tightening:** The bolt is first tightened to a low "snug" torque that brings all joint surfaces into firm contact. This establishes a consistent starting point.
 2. **Angle Turn:** From the snug position, the nut is rotated through a specified additional angle (e.g., 60°, 90°, or 120°). This rotation directly corresponds to bolt elongation.
 
-The relationship between rotation angle and elongation is:
+Each turn of the nut advances it by one pitch. That advance is shared between stretching the bolt and compressing the members:
 
-$$\delta = \frac{\theta}{360°} \cdot p$$
+$$\delta_b + \delta_m = \frac{\theta}{360°} \cdot p \qquad\Rightarrow\qquad \delta_b = \frac{\theta}{360°} \cdot p \cdot \frac{k_m}{k_b + k_m}$$
 
-Where $\delta$ is the bolt elongation, $\theta$ is the rotation angle in degrees, and $p$ is the thread pitch.
+where $\theta$ is the rotation angle after snug in degrees, $p$ is the thread pitch, and $\delta_b$, $\delta_m$ are the bolt elongation and member compression. The preload added by the turn is $\Delta F_i = k_b \delta_b$.
 
-```{r fig-torque-angle-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Torque-Angle Tightening Curve"}
+```{r fig-torque-angle-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, fig.cap="Torque-angle tightening curve (schematic): seating up to the snug torque, a linear elastic rise during the additional angle, and the flattening that marks bolt yield."}
 library(ggplot2)
 
-# 1. Generate synthetic data for the curve
-# We want an initial rise, a plateau, and then a sharp upward turn.
-x_vals <- seq(0, 10, length.out = 200)
-y_vals <- 0.1 * x_vals^3 - 1.2 * x_vals^2 + 4.5 * x_vals # Polynomial to mimic the shape
-y_vals <- y_vals / max(y_vals) * 5 # Scale for aesthetics
+## Schematic torque-angle curve: seating, linear elastic stretch, yield
+th_s <- 30; T_s <- 20            # snug point (deg, % of yield torque)
+th_y <- 125; T_y <- 100          # onset of yield
+th_f <- 105                      # end of the specified additional angle (snug + 75 deg)
+k_el <- (T_y - T_s) / (th_y - th_s)
+th <- seq(0, 160, by = 0.5)
+Tq <- ifelse(th <= th_s, T_s * (th / th_s)^2.2,
+      ifelse(th <= th_y, T_s + k_el * (th - th_s),
+             T_y + k_el * 12 * (1 - exp(-(th - th_y) / 12))))   # slope dies away after yield
+df <- data.frame(th, Tq)
+T_f <- T_s + k_el * (th_f - th_s)
 
-df <- data.frame(Angle = x_vals, Torque = y_vals)
-
-# Define specific points for the red annotations
-limit_x <- 7.8
-limit_y <- df$Torque[which.min(abs(df$Angle - limit_x))]
-extra_x <- 9.2
-extra_y <- df$Torque[which.min(abs(df$Angle - extra_x))]
-
-# 2. Build the plot
-ggplot(df, aes(x = Angle, y = Torque)) +
-  # The main curve
-  geom_line(color = "#3b5998", size = 1.5) +
-  
-  # Red limit lines (Horizontal and Vertical)
-  annotate("segment", x = 0, xend = limit_x, y = limit_y, yend = limit_y, color = "red") +
-  annotate("segment", x = limit_x, xend = limit_x, y = 0, yend = limit_y, color = "red") +
-  
-  # Additional angle vertical line
-  annotate("segment", x = extra_x, xend = extra_x, y = 0, yend = extra_y, color = "red") +
-  
-  # Red arrow following the curve
-  annotate("segment", x = 8.2, xend = 9, y = 3.2, yend = 4.2, 
-           color = "red", size = 1.2, arrow = arrow(length = unit(0.3, "cm"))) +
-  
-  # Labels
-  annotate("text", x = -0.2, y = limit_y, label = "Limit", hjust = 1, size = 5 * diagram_text_scale) +
-  annotate("text", x = limit_x, y = -0.3, label = "Additional\nAngle", vjust = 1, size = 4.5 * diagram_text_scale) +
-  
-  # Axis Arrows and styling
-  theme_classic() +
-  scale_x_continuous(expand = c(0, 0), limits = c(0, 11)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 6)) +
-  theme(
-    axis.line = element_line(arrow = arrow(type = "closed", length = unit(0.15, "inches"))),
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    axis.title = element_text(size = 14 * chart_text_scale, face = "plain", hjust = 1)
-  ) +
-  labs(x = "Angle", y = "Torque")
+ggplot(df, aes(th, Tq)) +
+  annotate("rect", xmin = th_s, xmax = th_f, ymin = 0, ymax = 125, fill = "lightblue", alpha = 0.35) +
+  geom_line(color = "#3b5998", linewidth = 1.5) +
+  annotate("segment", x = 0, xend = th_s, y = T_s, yend = T_s, color = "red", linetype = "dashed") +
+  annotate("segment", x = th_s, xend = th_s, y = 0, yend = T_s, color = "red", linetype = "dashed") +
+  annotate("segment", x = th_f, xend = th_f, y = 0, yend = T_f, color = "red", linetype = "dashed") +
+  annotate("point", x = c(th_s, th_f), y = c(T_s, T_f), color = "red", size = 3) +
+  annotate("segment", x = th_s, xend = th_f, y = 6, yend = 6, color = "red",
+           arrow = arrow(length = unit(0.2, "cm"), ends = "both")) +
+  annotate("label", x = (th_s + th_f) / 2, y = 6, label = "Additional angle", color = "red",
+           fill = "white", linewidth = 0, size = 3.6 * diagram_text_scale) +
+  annotate("text", x = 1, y = T_s + 5, label = "Snug torque", color = "red", hjust = 0, size = 3.6 * diagram_text_scale) +
+  annotate("text", x = 14, y = 45, label = "Seating:\nsurfaces pulled\ninto contact", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = 62, y = 80, label = "Elastic stretch:\ntorque rises linearly\nwith angle", size = 3.2 * diagram_text_scale, hjust = 1) +
+  annotate("text", x = 150, y = 98, label = "Yield:\ncurve\nflattens", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = th_f + 2, y = T_f - 4, label = "Final\ntorque", hjust = 0, color = "red", size = 3.2 * diagram_text_scale) +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 165)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 125)) +
+  labs(x = "Rotation angle of the nut (deg)", y = "Tightening torque (% of yield torque)") +
+  theme_classic(base_size = 11 * chart_text_scale)
 ```
 
-As shown in Figure @fig-torque-angle-plot, the tightening process begins with a rapid torque rise as surfaces come into contact. Once the "snug" limit is reached, the additional angle rotation stretches the bolt into the elastic (or slightly plastic) region, achieving consistent preload regardless of friction variations.
+As shown in @fig-torque-angle-plot, the torque first rises slowly and unevenly while the joint surfaces are pulled into contact (seating). Once the snug torque is reached, the additional angle stretches the bolt along the straight elastic part of the curve; because the angle, not the torque, sets the stretch, the preload no longer depends much on friction. If the angle is taken too far, the curve flattens as the bolt yields; some automotive bolts are deliberately tightened just into this region (torque-to-yield) and must then not be reused.
 
 #### Advantages {-}
 
@@ -1075,12 +1085,12 @@ tryit_sort(
 
 ## Understanding Bolt Joints and Force Triangles {#bolt-joints}
 In bolted joints, the force triangle is a conceptual tool used to visualize and analyze the distribution of forces between the bolt and the clamped members under preload and external working loads. This representation helps engineers understand how forces are balanced to maintain joint integrity and prevent failure modes such as separation or fatigue [@shigley2020].
-When a bolt is tightened to apply a preload $F_p$, it elongates the bolt shaft by a small amount $\delta_b$, governed by the bolt's stiffness $k_b$ according to Hooke's law: $\delta_b = F_p / k_b$. Simultaneously, this preload compresses the clamped members (e.g., plates or flanges) by an equivalent amount $\delta_m = F_p / k_m$, where $k_m$ is the stiffness of the members. The preload creates an initial tensile force in the bolt and a compressive force in the members, establishing equilibrium in the joint before any external load is applied.
+When a bolt is tightened to apply a preload $F_p$, it elongates the bolt shaft by a small amount $\delta_b$, governed by the bolt's stiffness $k_b$ according to Hooke's law: $\delta_b = F_p / k_b$. Simultaneously, the same force compresses the clamped members (e.g., plates or flanges) by $\delta_m = F_p / k_m$, where $k_m$ is the stiffness of the members. The preload creates an initial tensile force in the bolt and a compressive force in the members, establishing equilibrium in the joint before any external load is applied.
 The introduction of an external working force $F_w$ alters this balance. In a typical force triangle diagram, the preload forms the base, and the working force is distributed between the bolt and members based on their relative stiffnesses. The change in bolt force becomes $\Delta F_b = (k_b / (k_b + k_m)) F_w$, while the change in member force is $\Delta F_m = -(k_m / (k_b + k_m)) F_w$. Thus, the bolt experiences an increase in tension, and the members see a reduction in compression. If the working force exceeds a critical threshold, it may lead to joint separation when the member compression approaches zero.
-For a visual representation, consider the force triangle plot shown in Figure @fig-force-triangle-plot, which illustrates the vector addition of forces in a simplified bolted joint scenario.
+For a visual representation, consider the force triangle plot shown in @fig-force-triangle-plot, which illustrates the vector addition of forces in a simplified bolted joint scenario.
 
 
->Note: The stiffness ratio $k_b / k_m$ significantly influences how the working force is shared; stiffer bolts absorb more of the load variation, enhancing joint reliability.
+>Note: The stiffness ratio $k_b / k_m$ decides how the working force is shared. The stiffer the bolt relative to the members, the more of the load variation the bolt has to carry. For fatigue resistance you want stiff members and a relatively slender (compliant) bolt, so that $C$ is small.
 
 **Key Considerations in Design**
 
@@ -1113,72 +1123,68 @@ This image illustrates the Joint Diagram (often called a "Force Triangle" or "Fr
 
 ##### The Physical Model (Left) {-}
 
-On the left of Figure ~@fig-force-triangle-plot, the bolt is modeled as a tension spring (green coil) and the clamped members are modeled as a compression spring (yellow coils). Preload ($F_v$): When the nut is tightened, the bolt is pulled into tension (elongation), and the members are squeezed into compression. Equilibrium: The red arrows represent the internal forces. The force pulling the bolt ($F_v$) is exactly equal to the force pushing against the members.
+On the left of @fig-force-triangle-plot, the bolt is modeled as a tension spring (green coil) and the clamped members are modeled as a compression spring (yellow coils). Preload ($F_v$): When the nut is tightened, the bolt is pulled into tension (elongation), and the members are squeezed into compression. Equilibrium: The red arrows represent the internal forces. The force pulling the bolt ($F_v$) is exactly equal to the force pushing against the members.
 
 ##### The Force-Deformation Graph (Right) {-}
 
 The graph translates these physical movements into a geometric diagram where the slopes represent stiffness ($k = \frac{Force}{Deformation}$).
 
-* **Elongation (Green Line):** This is the bolt's behavior. As the load increases, the bolt stretches. Because a bolt is typically long and thin, it is relatively "stretchy," resulting in a shallower slope.
-* **Compression (Yellow Line):** This is the members' behavior. It is plotted starting from the right and moving toward the center. Clamped members (like steel plates) are usually much stiffer than the bolt, so this line has a steeper slope.
+* **Rising line (bolt):** This is the bolt's behavior; its elongation is marked by the green bar on the deformation axis. As the load increases, the bolt stretches. Because a bolt is typically long and thin, it is relatively "stretchy," resulting in a shallower slope.
+* **Falling line (members):** This is the members' behavior; their compression is marked by the yellow bar. It is plotted starting from the right and moving toward the center. Clamped members (like steel plates) are usually much stiffer than the bolt, so this line has a steeper slope.
 * **The Intersection Point ($F_v$):** The peak of the triangle represents the state after tightening but before any external "working load" is applied. At this point, the bolt tension and member compression are balanced at the preload value $F_v$.
 
 ##### Key Engineering Takeaway {-} 
 
 The "triangle" shows that for any given preload, the members will deform less (linear distance) than the bolt because they are stiffer. This is crucial for fatigue resistance: when an external load is applied to the joint, the "stiff" members absorb most of the force change, protecting the "stretchy" bolt from large fluctuations in tension that could lead to failure.
 
-```{r joint-working-load, echo=FALSE, warning=FALSE, fig.cap="Joint Diagram with External Working Load"}
+```{r joint-working-load, echo=FALSE, warning=FALSE, fig.width=8, fig.height=5.5, fig.cap="Joint Diagram with External Working Load: the operating point moves up the bolt line by CP and down the member line by (1 - C)P; the vertical gap between the two lines at the new deflection is the external load P."}
 library(ggplot2)
 
-## Parameters
-preload <- 30000 
-kb <- 431027    ## Bolt stiffness from previous calc
-km <- kb * 4    ## Member stiffness
-external_p <- 15000 ## New external force (N)
+## Parameters (N, mm)
+preload <- 30000
+kb <- 431027              ## bolt stiffness (N/mm)
+km <- kb * 4              ## member stiffness (N/mm)
+external_p <- 15000       ## external working load (N)
 
-## Calculate Load Sharing
-Phi <- kb / (kb + km)
-bolt_increase <- Phi * external_p
-member_decrease <- (1 - Phi) * external_p
+C_j <- kb / (kb + km)
+d_b <- preload / kb       ## bolt stretch at preload
+d_m <- preload / km       ## member compression at preload
+dlt <- C_j * external_p / kb          ## extra bolt stretch = member recovery
+x1  <- d_b + dlt
+Fb  <- preload + C_j * external_p
+Fm  <- preload - (1 - C_j) * external_p
 
-## Data for the "Force Triangle"
-## Base triangle (Preload only)
-base_tri <- data.frame(
-  x = c(0, preload/kb, (preload/kb + preload/km)),
-  y = c(0, preload, 0),
-  group = "Preload Only"
-)
+lines_df <- rbind(
+  data.frame(x = c(0, x1 * 1.04), y = c(0, kb * x1 * 1.04), line = "Bolt (slope k_b)"),
+  data.frame(x = c(d_b - 0.004, d_b + d_m), y = c(preload + km * 0.004, 0), line = "Members (slope -k_m)"))
 
-## New state (with Working Load P)
-## The bolt elongates by (Phi * P / kb)
-## The member compression reduces
-new_delta_b <- (preload + bolt_increase) / kb
-new_y <- preload + bolt_increase
-
-working_load_tri <- data.frame(
-  x = c(0, new_delta_b, (preload/kb + preload/km)),
-  y = c(0, new_y, preload - member_decrease),
-  group = "With Working Load"
-)
-
-plot_data <- rbind(base_tri, working_load_tri)
-
-ggplot(plot_data, aes(x = x, y = y, color = group, linetype = group)) +
-  geom_line(size = 1) +
-  geom_hline(yintercept = preload, linetype = "dotted", alpha = 0.5) +
-  annotate("segment", x = new_delta_b, y = preload, xend = new_delta_b, yend = new_y, 
-           arrow = arrow(length = unit(0.2, "cm")), color = "red") +
+ggplot() +
+  geom_line(data = lines_df, aes(x, y, color = line), linewidth = 1.2) +
+  geom_hline(yintercept = preload, linetype = "dotted", color = "gray40") +
+  geom_segment(aes(x = x1, xend = x1, y = Fm, yend = Fb), color = "black", linewidth = 0.8,
+               arrow = arrow(length = unit(0.2, "cm"), ends = "both")) +
+  annotate("point", x = c(d_b, x1, x1), y = c(preload, Fb, Fm), size = 2.8) +
+  annotate("text", x = x1 + 0.002, y = (Fb + Fm) / 2, hjust = 0, size = 3.3 * diagram_text_scale,
+           label = sprintf("P = %s N", format(external_p, big.mark = " "))) +
+  annotate("text", x = x1 - 0.012, y = Fb + 2600, hjust = 1, size = 3.2 * diagram_text_scale, color = "#2c7bb6",
+           label = sprintf("F_b = F_i + CP = %s N", format(round(Fb), big.mark = " "))) +
+  annotate("text", x = x1 - 0.004, y = Fm - 1200, hjust = 1, size = 3.2 * diagram_text_scale, color = "darkorange3",
+           label = sprintf("F_m = F_i - (1-C)P = %s N", format(round(Fm), big.mark = " "))) +
+  annotate("text", x = 0.003, y = preload + 1500, hjust = 0, size = 3.2 * diagram_text_scale,
+           label = sprintf("Preload F_i = %s N", format(preload, big.mark = " "))) +
+  scale_color_manual(values = c("Bolt (slope k_b)" = "#2c7bb6", "Members (slope -k_m)" = "darkorange3"), name = NULL) +
   labs(title = "Effect of Working Load on Joint Diagram",
-       subtitle = paste("Bolt Force Increase:", round(bolt_increase), "N"),
-       x = "Deformation (mm)",
-       y = "Force (N)",
-       color = "Scenario", linetype = "Scenario") +
-  theme_minimal()
+       subtitle = sprintf("C = %.2f: bolt force +%s N, member clamp force −%s N",
+                          C_j, format(round(C_j * external_p), big.mark = " "), format(round((1 - C_j) * external_p), big.mark = " ")),
+       x = "Deformation (mm)", y = "Force (N)") +
+  coord_cartesian(ylim = c(0, 36000)) +
+  theme_minimal() +
+  theme(legend.position = "top")
 ```
 ### How to Interpret the Result
-* **The "Triangle" stretches upward:** The peak moves from $F_i$ (preload) to $F_b$ (total bolt load).
-* **The Red Arrow:** This represents the additional tension the bolt carries. Notice that it is much smaller than the total external force ($P = 15,000$). This is because the members "gave up" some of their compression to support the load.
-* **Member Safety:** As long as the yellow line (member compression) does not reach $y = 0$, the joint remains "clamped." If the line hits zero, the members separate, and the bolt must carry 100% of the load, usually leading to rapid fatigue failure.
+* **The operating point splits:** The external load stretches the bolt a little further, so the bolt force climbs up the bolt line from $F_i$ to $F_b = F_i + CP$, while the members spring back by the same amount and their clamp force drops down the member line to $F_i - (1-C)P$.
+* **The vertical arrow** between the two lines is the external load $P = 15\,000$ N. Only $CP = 3\,000$ N of it is added to the bolt; the other 12 000 N is taken by the members "giving up" compression.
+* **Member Safety:** As long as the member force stays above zero, the joint remains clamped. When $P$ reaches $F_i/(1-C)$ the member force reaches zero, the members separate, and the bolt must carry 100% of any further load, usually leading to rapid fatigue failure.
 
 ::: {.content-visible when-format="html"}
 *This one is live — change the preload or the bolt/member stiffnesses, or drag the external working load, and the load sharing updates immediately.*
@@ -1316,11 +1322,13 @@ $$k_m = \frac{EA_s}{l_j}$$
 The calculation of $A_s$ depends on the relationship between the joint diameter ($D_J$) and the head diameter ($D_H$):
 
 1. **Small Joint ($D_J < D_H$):**
-   $$A_s = \frac{\pi}{4}(D_c^2 - D_h^2)$$
+   $$A_s = \frac{\pi}{4}(D_J^2 - D_h^2)$$
 2. **Medium Joint ($D_H < D_J < 3D_H$):**
    $$A_s = \frac{\pi}{4}(D_H^2 - D_h^2) + \frac{\pi}{8}\left(\frac{D_J}{D_H} - 1\right)\left(\frac{D_H l_j}{5} + \frac{l_j^2}{100}\right)$$
 3. **Large Joint ($3D_H < D_J$):**
-   $$A_s = \frac{\pi}{4}\left[(D_H + 0.1l)^2 - D_h^2\right]$$
+   $$A_s = \frac{\pi}{4}\left[(D_H + 0.1\,l_j)^2 - D_h^2\right]$$
+
+Here $D_J$ is the outer diameter of the clamped part around the bolt (the joint diameter), $D_H$ the bearing diameter of the head or washer, $D_h$ the hole diameter and $l_j$ the clamped (grip) length. Members of different materials act as springs in series: compute $k$ for each layer with its own $E$ and thickness and combine them as $1/k_m = \sum 1/k_i$.
 
 ---
 
@@ -1369,7 +1377,7 @@ To ensure a safe design, we evaluate three safety factors:
 
 ## Applied Example: Bolted Joint Safety Calculation {#bolt-example}
 
-To ensure the reliability of a bolted joint, we must move from theoretical equations to practical application. In this example, we will calculate the safety factors for a specific joint configuration by retrieving standard dimensions from the tables provided in Chapter @sec-bolt-definitions and applying the stiffness formulas derived in Chapter @sec-bolted-analysis-formulas.
+To ensure the reliability of a bolted joint, we must move from theoretical equations to practical application. In this example, we will calculate the safety factors for a specific joint configuration by retrieving standard dimensions from the tables in @sec-bolt-definitions and applying the stiffness formulas from @sec-bolted-analysis-formulas.
 
 #### Problem Statement {-}
 
@@ -1393,8 +1401,8 @@ We are designing a bolted connection to clamp two plates together: one made of *
 
 First, we need to gather the geometric properties of the hardware. Instead of guessing, we look up the exact values from the reference tables.
 
-1.  **Tensile Stress Area ($A_t$):** From Table @tbl-english-cross-section-area-table for a "1/2" size UNC bolt.
-2.  **Washer Thickness ($t_w$):** From Table @tbl-english-washer-dimensions-table for a "1/2 N" washer.
+1.  **Tensile Stress Area ($A_t$):** From @tbl-english-cross-section-area-table for a "1/2" size UNC bolt.
+2.  **Washer Thickness ($t_w$):** From @tbl-english-washer-dimensions-table for a "1/2 N" washer.
 
 #### Step 2: Calculation {-}
 
@@ -1434,8 +1442,8 @@ t1   <- 1.25     ## thickness of steel plate (in)
 t2   <- 0.75     ## thickness of cast iron plate (in)
 
 ## ---- 2. Values looked up from the standards tables (edit these) -------------
-At   <- 0.1419   ## tensile stress area, 1/2 in-13 UNC  (Table @tbl-english-cross-section-area-table)
-tw   <- 0.095    ## washer thickness, 1/2 N            (Table @tbl-english-washer-dimensions-table)
+At   <- 0.1419   ## tensile stress area, 1/2 in-13 UNC  (UNC/UNF stress-area table)
+tw   <- 0.095    ## washer thickness, 1/2 N            (plain washer table)
 d_nom <- 0.5     ## nominal bolt diameter (in)
 L_total <- 3.0   ## selected bolt length (in)
 Hex_W <- 0.75    ## hex-head width across flats for a 1/2 in bolt (in)
@@ -1453,11 +1461,13 @@ Ad   <- (pi / 4) * d_nom^2           ## unthreaded (shank) cross-section area
 ## Bolt stiffness k_b (shank + threaded portion acting as springs in series)
 kb <- (Ad * At * Eb) / (Ad * l_t + At * l_d)
 
-## Member stiffness k_m via a substitute cylinder (large-joint form)
+## Member stiffness k_m via a substitute cylinder (large-joint form: wide plates, D_J > 3 D_H)
 Dh <- d_nom + clr                                   ## effective hole diameter
 As <- (pi / 4) * ((Hex_W + 0.1 * Grip)^2 - Dh^2)    ## substitute-cylinder area
-E_avg <- (E1 * t1 + E2 * t2) / (t1 + t2)            ## thickness-weighted average modulus
-km <- (E_avg * As) / Grip
+## Layers are springs in series: steel washer + steel plate, then cast iron plate
+k1 <- (E1 * As) / (t1 + tw)
+k2 <- (E2 * As) / t2
+km <- 1 / (1 / k1 + 1 / k2)
 
 ## ---- 5. Joint constant and forces ------------------------------------------
 C_joint <- kb / (kb + km)            ## joint stiffness constant C
@@ -1558,23 +1568,18 @@ Ad <- (pi / 4) * d_nom^2
 kb <- (Ad * At * Eb) / (Ad * l_t + At * l_d)
 
 ## Member Stiffness (km)
-## We use the 'Medium Joint' substitute area approximation 
-## Assumption: Joint Diameter Dj is roughly equal to the Hex Width (W)
-## From Nut Table: W for 1/2 is 3/4 inch. 
-Hex_W <- 0.75 
-Dh    <- 0.5 + 0.0625 ## Hole diameter clearance (standard rule of thumb)
-Dj    <- Hex_W       ## Approximation for joint stress distribution
+## Plates are assumed wide (D_J > 3 D_H): large-joint substitute cylinder
+## D_H = width across flats of a 1/2 in hex head = 3/4 in
+Hex_W <- 0.75
+Dh    <- 0.5 + 0.0625 ## Hole diameter = bolt + clearance
 
-## Substitute Area (As) formula for Large Joint
-## As = (pi/4)*(Dj^2 - Dh^2)
+## Substitute Area (As), large joint: (pi/4)*((D_H + 0.1*l)^2 - Dh^2)
 As <- (pi / 4) * ((Hex_W + 0.1 * Grip)^2 - Dh^2)
 
-## Equivalent Modulus (Em) - Weighted Harmonic Mean for Series Springs
-## 1/km_total = 1/k_steel + 1/k_iron + 1/k_washer
-## To keep this example concise, we use a weighted average E based on thickness
-E_avg <- (design_params$Value[3]*t1 + design_params$Value[4]*t2) / (t1 + t2)
-
-km <- (E_avg * As) / Grip
+## Layers act as springs in series: 1/km = 1/k_steel(+washer) + 1/k_iron
+k1 <- design_params$Value[3] * As / (t1 + tw)
+k2 <- design_params$Value[4] * As / t2
+km <- 1 / (1 / k1 + 1 / k2)
 
 ## Joint Constant (C)
 C_joint <- kb / (kb + km)
@@ -1648,6 +1653,8 @@ In this example we are verifying if the bolts can hold the applied load and how 
 knitr::include_graphics("images/BoltJointExample.png")
 ```
 
+> **Note:** Check the bolt length before calculating. The grip is $0.5 + 0.75 + 0.095 = 1.345$ in, and a 1/2 in regular nut is $7/16 = 0.4375$ in high, so a fully engaged nut with about two threads showing needs $L \approx 1.345 + 0.44 + 0.1 \approx 1.9$ in: a **2 in** bolt. The problem keeps the given 1.5 in length so that the numbers below match the original exercise; a longer bolt puts more of its unthreaded shank in the grip and slightly raises $k_b$.
+
 ::: {.content-visible when-format="html"}
 **Live calculator for Example 2**
 
@@ -1687,7 +1694,7 @@ Su     <- 120000   ## min tensile strength, Grade 5 (psi)
 
 t_top  <- 0.5      ## steel top plate thickness (in)
 t_bot  <- 0.75     ## cast iron bottom plate thickness (in)
-tw     <- 0.095    ## washer thickness under the head (in)
+tw     <- 0.095    ## washer thickness under the nut (in)
 E_top  <- 29e6     ## steel plate modulus (psi)
 E_bot  <- 13e6     ## cast iron plate modulus (psi)
 
@@ -1816,7 +1823,7 @@ $$ A_s = \frac{\pi}{4} \cdot \left[ (D_H + 0.1 l_j)^2 - D_h^2 \right] $$
 
 Given values:
 $$ D_h = 0.510 \, \text{in} $$
-$$ D_H = W \text{ on Page 8} = 1.5 \cdot 0.5 = 0.75 \, \text{in} $$
+$$ D_H = W \approx 1.5 \cdot 0.5 = 0.75 \, \text{in} \quad \text{(width across flats of the 1/2 in hex head)} $$
 $$ l_j = 0.5 + 0.75 + 0.095 = 1.345 \, \text{in} $$
 where $l_{j}$ is the entire joint length.
 
@@ -1848,7 +1855,7 @@ The equivalent spring constant $k_m$ is found using:
 $$ \frac{1}{k_m} = \frac{1}{k_1} + \frac{1}{k_2} + \dots + \frac{1}{k_n} $$
 
 Substituting the calculated stiffness values:
-$$ \frac{1}{k_m} = \frac{1}{20 \cdot 10^6} + \frac{1}{7.1 \cdot 10^6} = \frac{1}{1.908 \cdot 10^7} $$
+$$ \frac{1}{k_m} = \frac{1}{20 \cdot 10^6} + \frac{1}{7.1 \cdot 10^6} = 1.908 \cdot 10^{-7} \, \frac{\text{in}}{\text{lbf}} $$
 
 Solving for $k_m$:
 $$ k_m = 5.24 \cdot 10^6 \, \frac{\text{lbf}}{\text{in}} $$

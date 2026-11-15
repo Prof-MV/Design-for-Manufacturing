@@ -67,125 +67,68 @@ The most common type of industrial chain is the **roller chain**, standardized u
 
 ### Roller Chain Anatomy
 
-```{r chain-anatomy, echo=FALSE, fig.align='center', fig.cap="Roller chain link construction showing key components", fig.width=11, fig.height=6}
+```{r chain-anatomy, echo=FALSE, fig.align='center', fig.cap="Roller chain construction. Top: side view of three pitches, with inner links (light) and outer links (dark) alternating. Bottom: section through one joint, showing the pin pressed into the outer plates, the bushing pressed into the inner plates, and the roller turning freely on the bushing.", fig.width=11, fig.height=7.5}
 library(ggplot2)
-library(ggforce)
-
-## Chain link parameters
-pitch <- 2.5
-roller_r <- 0.4
-pin_r <- 0.15
-plate_height <- 1.2
-plate_width <- 0.3
-link_spacing <- pitch
-
-## Create outer plates (darker)
-outer_plate_1 <- data.frame(
- xmin = -plate_width/2,
- xmax = plate_width/2,
- ymin = -plate_height/2,
- ymax = plate_height/2
-)
-
-outer_plate_2 <- data.frame(
- xmin = pitch - plate_width/2,
- xmax = pitch + plate_width/2,
- ymin = -plate_height/2,
- ymax = plate_height/2
-)
-
-## Create inner plates (lighter, offset)
-inner_plate_1 <- data.frame(
- xmin = pitch - plate_width/2 + 0.35,
- xmax = pitch + plate_width/2 + 0.35,
- ymin = -plate_height/2 + 0.1,
- ymax = plate_height/2 - 0.1
-)
-
-inner_plate_2 <- data.frame(
- xmin = 2*pitch - plate_width/2 + 0.35,
- xmax = 2*pitch + plate_width/2 + 0.35,
- ymin = -plate_height/2 + 0.1,
- ymax = plate_height/2 - 0.1
-)
-
+P <- 2.5; rr <- 0.55; rp <- 0.22
+## link plate outline: two end circles joined by a waisted body
+plate <- function(x1, x2, R, waist, id) {
+  t1 <- seq(pi / 2, 3 * pi / 2, length.out = 30); t2 <- seq(-pi / 2, pi / 2, length.out = 30)
+  data.frame(x = c(x1 + R * cos(t1), (x1 + x2) / 2, x2 + R * cos(t2), (x1 + x2) / 2),
+             y = c(R * sin(t1), -waist, R * sin(t2), waist)[c(1:30, 31, 32:61, 62)], id = id)
+}
+mk <- function(x1, x2, R, waist, id) {
+  t1 <- seq(pi / 2, 3 * pi / 2, length.out = 30); t2 <- seq(-pi / 2, pi / 2, length.out = 30)
+  data.frame(x = c(x1 + R * cos(t1), x2 + R * cos(t2)), y = c(R * sin(t1), R * sin(t2)) * c(rep(1, 30), rep(1, 30)), id = id) -> d
+  d$y <- ifelse(abs(d$x - (x1 + x2) / 2) < (x2 - x1) / 2, sign(d$y) * pmin(abs(d$y), waist + (R - waist) * (abs(d$x - (x1 + x2) / 2) / ((x2 - x1) / 2))^2), d$y)
+  d
+}
+circ <- function(x, y, r, id = 1, n = 60) { t <- seq(0, 2 * pi, length.out = n); data.frame(x = x + r * cos(t), y = y + r * sin(t), id = id) }
+inner <- rbind(mk(P, 2 * P, 0.85, 0.62, "i1"))
+outer <- rbind(mk(0, P, 0.95, 0.7, "o1"), mk(2 * P, 3 * P, 0.95, 0.7, "o2"))
+rollers <- do.call(rbind, lapply(0:3, function(k) circ(k * P, 0, rr, k)))
+pins <- do.call(rbind, lapply(0:3, function(k) circ(k * P, 0, rp, k)))
+## section through the joint at x = P (drawn below), widths along x, axis vertical
+yb <- -4.6                                        # centre line of the section
+sec <- data.frame(
+  part = c("Outer plate", "Inner plate", "Roller", "Inner plate", "Outer plate"),
+  x0 = c(-1.55, -1.15, -0.75, 0.75, 1.15), x1 = c(-1.15, -0.75, 0.75, 1.15, 1.55),
+  h  = c(0.95, 0.85, rr, 0.85, 0.95),
+  fill = c("gray35", "gray75", "steelblue", "gray75", "gray35"))
+ox <- 3 * P + 2.5                                 # x position of the section drawing
 ggplot() +
- ## Outer link plates (left pair)
- geom_rect(data = outer_plate_1,
-           aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-           fill = "gray50", color = "black", linewidth = 1) +
- geom_rect(data = outer_plate_2,
-           aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-           fill = "gray50", color = "black", linewidth = 1) +
- ## Connecting bar for outer plates
- geom_rect(aes(xmin = 0, xmax = pitch, ymin = -0.15, ymax = 0.15),
-           fill = "gray50", color = "black", linewidth = 0.5) +
- ## Inner link plates
- geom_rect(data = inner_plate_1,
-           aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-           fill = "gray70", color = "black", linewidth = 1) +
- geom_rect(data = inner_plate_2,
-           aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-           fill = "gray70", color = "black", linewidth = 1) +
- ## Connecting bar for inner plates
- geom_rect(aes(xmin = pitch + 0.35, xmax = 2*pitch + 0.35,
-               ymin = -0.12, ymax = 0.12),
-           fill = "gray70", color = "black", linewidth = 0.5) +
- ## Rollers
- geom_circle(aes(x0 = 0, y0 = 0, r = roller_r),
-             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
- geom_circle(aes(x0 = pitch, y0 = 0, r = roller_r),
-             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
- geom_circle(aes(x0 = 2*pitch, y0 = 0, r = roller_r),
-             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
- ## Pins (center of rollers)
- geom_circle(aes(x0 = 0, y0 = 0, r = pin_r),
-             fill = "gray30", color = "black", linewidth = 0.8) +
- geom_circle(aes(x0 = pitch, y0 = 0, r = pin_r),
-             fill = "gray30", color = "black", linewidth = 0.8) +
- geom_circle(aes(x0 = 2*pitch, y0 = 0, r = pin_r),
-             fill = "gray30", color = "black", linewidth = 0.8) +
- ## Bushings (between pin and roller)
- geom_circle(aes(x0 = 0, y0 = 0, r = roller_r - 0.1),
-             fill = NA, color = "orange", linewidth = 1, linetype = "dashed") +
- ## Pitch dimension
- annotate("segment", x = 0, y = -1.2, xend = pitch, yend = -1.2,
-          arrow = arrow(ends = "both", length = unit(0.15, "cm")),
-          color = "darkgreen", linewidth = 1) +
- annotate("text", x = pitch/2, y = -1.5,
-          label = "Pitch (P)", size = 4 * diagram_text_scale, color = "darkgreen", fontface = "bold") +
- ## Component labels
- annotate("segment", x = 0, y = roller_r + 0.1, xend = 0, yend = 1.5,
-          color = "steelblue", linewidth = 0.8) +
- annotate("text", x = 0, y = 1.75,
-          label = "Roller", size = 3.5 * diagram_text_scale, color = "steelblue", fontface = "bold") +
- annotate("segment", x = -0.5, y = 0.4, xend = -1.2, yend = 0.8,
-          color = "gray40", linewidth = 0.8) +
- annotate("text", x = -1.8, y = 0.8,
-          label = "Outer\nPlate", size = 3.5 * diagram_text_scale, color = "gray40") +
- annotate("segment", x = pitch + 0.6, y = -0.35, xend = pitch + 1.5, yend = -0.9,
-          color = "gray60", linewidth = 0.8) +
- annotate("text", x = pitch + 2.2, y = -0.9,
-          label = "Inner\nPlate", size = 3.5 * diagram_text_scale, color = "gray60") +
- annotate("segment", x = 0, y = -0.2, xend = -0.8, yend = -0.7,
-          color = "gray30", linewidth = 0.8) +
- annotate("text", x = -1.3, y = -0.7,
-          label = "Pin", size = 3.5 * diagram_text_scale, color = "gray30") +
- annotate("text", x = 0.6, y = 0.5,
-          label = "Bushing", size = 3 * diagram_text_scale, color = "orange", fontface = "italic") +
- ## Roller diameter dimension
- annotate("segment", x = 2*pitch - roller_r, y = 0.8,
-          xend = 2*pitch + roller_r, yend = 0.8,
-          arrow = arrow(ends = "both", length = unit(0.1, "cm")),
-          color = "purple", linewidth = 0.8) +
- annotate("text", x = 2*pitch, y = 1.1,
-          label = "Roller Ø", size = 3.5 * diagram_text_scale, color = "purple") +
- coord_fixed() +
- xlim(-2.5, 7) +
- ylim(-2, 2.2) +
- theme_chain +
- labs(title = "Roller Chain Construction",
-      subtitle = "Standard ANSI/ISO roller chain showing alternating inner and outer link plates")
+  geom_polygon(data = inner, aes(x, y, group = id), fill = "gray80", color = "black") +
+  geom_polygon(data = rollers, aes(x, y, group = id), fill = "steelblue", color = "darkblue") +
+  geom_polygon(data = outer, aes(x, y, group = id), fill = "gray45", color = "black", alpha = 0.95) +
+  geom_polygon(data = pins, aes(x, y, group = id), fill = "gray20", color = "black") +
+  annotate("segment", x = 0, xend = P, y = -1.35, yend = -1.35, arrow = arrow(ends = "both", length = unit(0.15, "cm")), color = "darkgreen") +
+  annotate("text", x = P / 2, y = -1.7, label = "Pitch P (pin centre to pin centre)", color = "darkgreen", size = 3.4 * diagram_text_scale) +
+  annotate("segment", x = P * 1.5, xend = 4.2, y = 0.62, yend = 1.6, color = "gray30") +
+  annotate("text", x = 4.25, y = 1.75, label = "Inner link plate", hjust = 0, size = 3.2 * diagram_text_scale) +
+  annotate("segment", x = 0.4, xend = -0.5, y = 0.8, yend = 1.6, color = "gray30") +
+  annotate("text", x = -0.55, y = 1.75, label = "Outer link plate", hjust = 1, size = 3.2 * diagram_text_scale) +
+  annotate("segment", x = P + 0.2, xend = P + 0.4, y = -0.4, yend = -0.95, color = "darkblue") +
+  annotate("text", x = P + 0.45, y = -1.05, label = "Roller", hjust = 0, color = "darkblue", size = 3.2 * diagram_text_scale) +
+  annotate("segment", x = 3 * P, xend = 3 * P + 0.9, y = -0.1, yend = -1.0, color = "gray20") +
+  annotate("text", x = 3 * P + 0.95, y = -1.1, label = "Pin", hjust = 0, size = 3.2 * diagram_text_scale) +
+  ## section through one joint
+  geom_rect(data = sec, aes(xmin = ox + x0, xmax = ox + x1, ymin = yb - h, ymax = yb + h, fill = fill), color = "black") +
+  annotate("rect", xmin = ox - 0.75, xmax = ox + 0.75, ymin = yb - 0.36, ymax = yb + 0.36, fill = "orange", color = "black") +    # bushing
+  annotate("rect", xmin = ox - 1.8, xmax = ox + 1.8, ymin = yb - rp, ymax = yb + rp, fill = "gray20", color = "black") +         # pin
+  scale_fill_identity() +
+  annotate("text", x = ox, y = yb + 1.5, label = "Section through one joint", fontface = "bold", size = 3.4 * diagram_text_scale) +
+  annotate("text", x = ox - 2.0, y = yb + rp + 0.05, label = "Pin", hjust = 1, size = 3 * diagram_text_scale) +
+  annotate("text", x = ox + 2.0, y = yb + 0.36, label = "Bushing (pressed into\ninner plates)", hjust = 0, size = 3 * diagram_text_scale, color = "darkorange3") +
+  annotate("segment", x = ox + 1.95, xend = ox + 0.5, y = yb + 0.36, yend = yb + 0.3, color = "darkorange3") +
+  annotate("text", x = ox + 2.0, y = yb - 0.75, label = "Roller (turns freely\non the bushing)", hjust = 0, size = 3 * diagram_text_scale, color = "darkblue") +
+  annotate("segment", x = ox + 1.95, xend = ox + 0.4, y = yb - 0.75, yend = yb - 0.48, color = "darkblue") +
+  annotate("text", x = ox - 1.35, y = yb - 1.3, label = "outer", size = 2.7 * diagram_text_scale) +
+  annotate("text", x = ox - 0.95, y = yb - 1.6, label = "inner", size = 2.7 * diagram_text_scale) +
+  annotate("text", x = ox + 0.95, y = yb - 1.6, label = "inner", size = 2.7 * diagram_text_scale) +
+  annotate("text", x = ox + 1.35, y = yb - 1.3, label = "outer", size = 2.7 * diagram_text_scale) +
+  coord_fixed(xlim = c(-3, ox + 4.6), ylim = c(-6.2, 2.2)) +
+  theme_chain +
+  labs(title = "Roller Chain Construction",
+       subtitle = "Inner links (bushings and rollers) alternate with outer links (pins)")
 ```
 
 ### Chain Component Functions
@@ -210,8 +153,8 @@ chain_sizes <- data.frame(
  `ANSI No.` = c("25", "35", "40", "41", "50", "60", "80", "100", "120", "140"),
  `Pitch (in)` = c("1/4", "3/8", "1/2", "1/2", "5/8", "3/4", "1", "1-1/4", "1-1/2", "1-3/4"),
  `Pitch (mm)` = c("6.35", "9.525", "12.70", "12.70", "15.875", "19.05", "25.40", "31.75", "38.10", "44.45"),
- `Roller Ø (in)` = c("0.130", "0.200", "0.312", "0.306", "0.400", "0.469", "0.625", "0.750", "0.875", "1.000"),
- `Avg. Tensile (lbs)` = c("780", "1,760", "3,125", "2,000", "4,880", "7,030", "12,500", "19,531", "28,125", "38,280"),
+ `Roller Ø (in)` = c("0.130*", "0.200*", "0.312", "0.306", "0.400", "0.469", "0.625", "0.750", "0.875", "1.000"),
+ `Min. Tensile Strength (lbf)` = c("780", "1,760", "3,125", "2,000", "4,880", "7,030", "12,500", "19,531", "28,125", "38,280"),
  check.names = FALSE
 )
 
@@ -221,7 +164,7 @@ kable(chain_sizes,
  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
                full_width = knitr::is_html_output()) %>%
  row_spec(0, bold = TRUE, background = "#4a86c7", color = "white") %>%
- footnote(general = "Chain numbers: First digit(s) = pitch in 1/8\", last digit: 0 = standard, 1 = lightweight, 5 = rollerless")
+ footnote(general = "Chain numbers: first digit(s) = pitch in 1/8\", last digit: 0 = standard, 1 = lightweight, 5 = rollerless. *Sizes 25 and 35 are rollerless: the value is the bushing diameter.")
 ```
 
 > **Understanding Chain Numbers:** The ANSI chain number system is logical. For example, chain #40 has a pitch of 4/8" = 1/2". Chain #60 has a pitch of 6/8" = 3/4". The final digit indicates the series: 0 for standard roller, 1 for lightweight, and 5 for rollerless (bushing) chains.
@@ -232,114 +175,47 @@ kable(chain_sizes,
 
 Sprockets are toothed wheels designed to engage with chain links. Proper sprocket selection is critical for chain drive performance and longevity.
 
-```{r sprocket-diagram, echo=FALSE, fig.align='center', fig.cap="Sprocket tooth geometry and engagement with roller chain", fig.width=10, fig.height=8}
+```{r sprocket-diagram, echo=FALSE, fig.align='center', fig.cap="A 17-tooth sprocket with the chain wrapped around its lower part: each roller sits in a tooth gap with its centre on the pitch circle, and the straight links between rollers form the chords of a polygon.", fig.width=10, fig.height=8}
 library(ggplot2)
-library(ggforce)
-
-## Sprocket parameters
-num_teeth <- 17
-pitch <- 1.0
-pitch_diameter <- pitch / sin(pi / num_teeth)
-roller_r <- 0.15
-
-## Calculate tooth positions
-tooth_angles <- seq(0, 2*pi, length.out = num_teeth + 1)[1:num_teeth]
-tooth_x <- (pitch_diameter/2) * cos(tooth_angles - pi/2)
-tooth_y <- (pitch_diameter/2) * sin(tooth_angles - pi/2)
-
-## Create sprocket outline (simplified as circle with teeth indicated)
-theta <- seq(0, 2*pi, length.out = 200)
-sprocket_outer_r <- pitch_diameter/2 + 0.2
-sprocket_inner_r <- pitch_diameter/2 - 0.3
-
-## Create tooth profile points
-teeth_df <- data.frame()
-for (i in 1:num_teeth) {
- angle <- tooth_angles[i] - pi/2
- ## Tooth tip
- tip_r <- pitch_diameter/2 + 0.15
- ## Tooth root
- root_r <- pitch_diameter/2 - 0.25
- ## Tooth width angle
- half_tooth <- pi / num_teeth * 0.4
-
- tooth <- data.frame(
-   x = c(root_r * cos(angle - half_tooth * 1.2),
-         tip_r * cos(angle - half_tooth * 0.5),
-         tip_r * cos(angle + half_tooth * 0.5),
-         root_r * cos(angle + half_tooth * 1.2)),
-   y = c(root_r * sin(angle - half_tooth * 1.2),
-         tip_r * sin(angle - half_tooth * 0.5),
-         tip_r * sin(angle + half_tooth * 0.5),
-         root_r * sin(angle + half_tooth * 1.2)),
-   tooth_id = i
- )
- teeth_df <- rbind(teeth_df, tooth)
-}
-
-## Chain rollers engaging with sprocket
-chain_roller_angles <- c(-pi/2, -pi/2 + 2*pi/num_teeth, -pi/2 + 4*pi/num_teeth)
-chain_roller_x <- (pitch_diameter/2) * cos(chain_roller_angles)
-chain_roller_y <- (pitch_diameter/2) * sin(chain_roller_angles)
-
+N <- 17; P <- 1; Rp <- P / (2 * sin(pi / N)); rr <- 0.31 * P; rs <- 1.03 * rr
+Ro <- P * (0.6 + 1 / tan(pi / N)) / 2              # outside radius (ANSI approximation)
+th <- seq(0, 2 * pi, length.out = 3000)
+## tooth outline: seat circle at each gap, flank ramp up to the outside radius
+gap_c <- -pi / 2 + (0:(N - 1)) * 2 * pi / N        # gap centres (one gap at the bottom)
+d <- sapply(th, function(t) { a <- (t - gap_c + pi) %% (2 * pi) - pi; a[which.min(abs(a))] })
+s <- Rp * abs(sin(d))
+r <- ifelse(s < rs, Rp * cos(d) - sqrt(pmax(rs^2 - s^2, 0)),
+            pmin(Ro, Rp + (Ro - Rp) * (abs(d) - asin(rs / Rp)) / (0.45 * pi / N)))
+spr <- data.frame(x = r * cos(th), y = r * sin(th))
+## rollers on the lower arc and the chain leaving tangentially on both sides
+k <- -3:3; ang <- -pi / 2 + k * 2 * pi / N
+rol <- data.frame(x = Rp * cos(ang), y = Rp * sin(ang))
+left_free <- data.frame(x = rol$x[1] - (1:3) * P * cos(ang[1] + pi / 2 - pi / N) * 0, y = 0)  # placeholder (unused)
+tang <- function(a, dir) { t <- a + dir * pi / 2; data.frame(x = Rp * cos(a) + (1:3) * P * cos(t), y = Rp * sin(a) + (1:3) * P * sin(t)) }
+ext_l <- tang(ang[1], -1); ext_r <- tang(ang[7], 1)
+chain <- rbind(ext_l[3:1, ], rol, ext_r)
+circ <- function(x, y, r, id, n = 50) { t <- seq(0, 2 * pi, length.out = n); data.frame(x = x + r * cos(t), y = y + r * sin(t), id = id) }
+rolls <- do.call(rbind, lapply(seq_len(nrow(chain)), function(i) circ(chain$x[i], chain$y[i], rr, i)))
 ggplot() +
- ## Sprocket body
- geom_circle(aes(x0 = 0, y0 = 0, r = pitch_diameter/2 - 0.35),
-             fill = "gray70", color = "gray50", linewidth = 1) +
- ## Sprocket hub
- geom_circle(aes(x0 = 0, y0 = 0, r = 0.8),
-             fill = "gray60", color = "gray40", linewidth = 1.2) +
- ## Bore
- geom_circle(aes(x0 = 0, y0 = 0, r = 0.4),
-             fill = "white", color = "black", linewidth = 1) +
- ## Teeth
- geom_polygon(data = teeth_df, aes(x = x, y = y, group = tooth_id),
-              fill = "gray70", color = "gray40", linewidth = 0.5) +
- ## Pitch circle (dashed)
- geom_circle(aes(x0 = 0, y0 = 0, r = pitch_diameter/2),
-             fill = NA, color = "darkgreen", linewidth = 1, linetype = "dashed") +
- ## Chain rollers
- geom_circle(aes(x0 = chain_roller_x[1], y0 = chain_roller_y[1], r = roller_r),
-             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
- geom_circle(aes(x0 = chain_roller_x[2], y0 = chain_roller_y[2], r = roller_r),
-             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
- geom_circle(aes(x0 = chain_roller_x[3], y0 = chain_roller_y[3], r = roller_r),
-             fill = "steelblue", color = "darkblue", linewidth = 1.2) +
- ## Chain links connecting rollers
- geom_segment(aes(x = chain_roller_x[1], y = chain_roller_y[1] - roller_r - 0.05,
-                  xend = chain_roller_x[1] - 0.8, yend = chain_roller_y[1] - 0.6),
-              color = "gray30", linewidth = 3) +
- geom_segment(aes(x = chain_roller_x[3], y = chain_roller_y[3],
-                  xend = chain_roller_x[3] + 0.8, yend = chain_roller_y[3] - 0.4),
-              color = "gray30", linewidth = 3) +
- ## Dimension annotations
- ## Pitch diameter
- annotate("segment", x = 0, y = 0, xend = pitch_diameter/2 * cos(pi/4),
-          yend = pitch_diameter/2 * sin(pi/4),
-          color = "darkgreen", linewidth = 0.8,
-          arrow = arrow(length = unit(0.15, "cm"), type = "closed")) +
- annotate("text", x = pitch_diameter/2 * cos(pi/4) + 0.4,
-          y = pitch_diameter/2 * sin(pi/4) + 0.3,
-          label = "Pitch\nRadius", size = 3.5 * diagram_text_scale, color = "darkgreen") +
- ## Tooth labels
- annotate("segment", x = (pitch_diameter/2 + 0.15) * cos(-pi/6),
-          y = (pitch_diameter/2 + 0.15) * sin(-pi/6),
-          xend = pitch_diameter/2 + 1.2, yend = -0.5,
-          color = "gray40", linewidth = 0.6) +
- annotate("text", x = pitch_diameter/2 + 1.6, y = -0.5,
-          label = "Tooth", size = 3.5 * diagram_text_scale, color = "gray40") +
- ## Chain roller label
- annotate("text", x = chain_roller_x[1] - 1.6, y = chain_roller_y[1] - 0.6,
-          label = "Chain\nRoller", size = 3.5 * diagram_text_scale, color = "steelblue", fontface = "bold") +
- ## Number of teeth annotation
- annotate("text", x = 0, y = 0,
-          label = paste0("N = ", num_teeth), size = 4 * diagram_text_scale, fontface = "bold") +
- coord_fixed() +
- xlim(-pitch_diameter/2 - 2, pitch_diameter/2 + 2.5) +
- ylim(-pitch_diameter/2 - 1.5, pitch_diameter/2 + 1) +
- theme_chain +
- labs(title = "Sprocket Tooth Engagement",
-      subtitle = "17-tooth sprocket showing chain rollers seated in tooth gaps")
+  geom_polygon(data = spr, aes(x, y), fill = "gray75", color = "gray30") +
+  geom_polygon(data = circ(0, 0, 0.9, 1), aes(x, y), fill = "gray60", color = "gray30") +
+  geom_polygon(data = circ(0, 0, 0.45, 1), aes(x, y), fill = "white", color = "black") +
+  geom_path(data = circ(0, 0, Rp, 1, 200), aes(x, y), color = "darkgreen", linetype = "dashed") +
+  geom_path(data = chain, aes(x, y), linewidth = 5, color = "gray35", lineend = "round", alpha = 0.85) +
+  geom_polygon(data = rolls, aes(x, y, group = id), fill = "steelblue", color = "darkblue") +
+  annotate("segment", x = 0, y = 0, xend = Rp * cos(pi / 4), yend = Rp * sin(pi / 4), color = "darkgreen",
+           arrow = arrow(length = unit(0.15, "cm"), type = "closed")) +
+  annotate("text", x = Rp * cos(pi / 4) * 0.55 - 0.2, y = Rp * sin(pi / 4) * 0.55 + 0.35, label = "Pitch radius", color = "darkgreen", size = 3.4 * diagram_text_scale, hjust = 1) +
+  annotate("segment", x = Ro * cos(pi / 5), y = Ro * sin(pi / 5), xend = Ro + 0.9, yend = 2.5, color = "gray30") +
+  annotate("text", x = Ro + 0.95, y = 2.5, label = "Tooth", hjust = 0, size = 3.4 * diagram_text_scale) +
+  annotate("segment", x = chain$x[4] - 0.3, y = chain$y[4] - 0.25, xend = chain$x[4] - 1.6, yend = chain$y[4] - 1.0, color = "darkblue") +
+  annotate("text", x = chain$x[4] - 1.7, y = chain$y[4] - 1.05, label = "Roller seated\nin a tooth gap", hjust = 1, color = "darkblue", size = 3.4 * diagram_text_scale) +
+  annotate("text", x = ext_r$x[3] + 0.2, y = ext_r$y[3] + 0.3, label = "chain leaves\ntangentially", hjust = 0, size = 3 * diagram_text_scale) +
+  annotate("text", x = 0, y = 0, label = paste0("N = ", N), size = 4 * diagram_text_scale, fontface = "bold") +
+  coord_fixed(xlim = c(-Ro - 3, Ro + 3.2), ylim = c(-Ro - 2, Ro + 0.6)) +
+  theme_chain +
+  labs(title = "Sprocket Tooth Engagement",
+       subtitle = "17-tooth sprocket: rollers seat in the tooth gaps on the pitch circle")
 ```
 
 ### Sprocket Terminology
@@ -349,7 +225,7 @@ ggplot() +
 | **Number of Teeth (N)** | Count of teeth on sprocket | — |
 | **Pitch (P)** | Distance between roller centers | — |
 | **Pitch Diameter (D)** | Diameter of circle through roller centers | $D = \frac{P}{\sin(180°/N)}$ |
-| **Outside Diameter** | Diameter to tooth tips | $D_o \approx P \times \left(\cot\frac{180°}{N} + 1\right)$ |
+| **Outside Diameter** | Diameter to tooth tips | $D_o \approx P \times \left(0.6 + \cot\frac{180°}{N}\right)$ |
 | **Root Diameter** | Diameter at tooth base | $D_r = D - \text{Roller Ø}$ |
 | **Chordal Action** | Velocity variation due to polygon effect | Minimized with more teeth |
 
@@ -416,7 +292,7 @@ $$C_p = \frac{1}{4}\left[L_p - \frac{N_1 + N_2}{2} + \sqrt{\left(L_p - \frac{N_1
 
 Or approximately:
 
-$$C \approx \frac{P}{4}\left[2L_p - N_1 - N_2 + \sqrt{(2L_p - N_1 - N_2)^2 - 0.81(N_2 - N_1)^2}\right]$$
+$$C \approx \frac{P}{8}\left[2L_p - N_1 - N_2 + \sqrt{(2L_p - N_1 - N_2)^2 - 0.81(N_2 - N_1)^2}\right]$$
 
 ### Chain Speed
 
@@ -437,99 +313,53 @@ Where:
 
 ## Chain Drive System Layout {#sec-chain-layout}
 
-```{r chain-drive-layout, echo=FALSE, fig.align='center', fig.cap="Chain drive system showing driver and driven sprockets with chain path", fig.width=11, fig.height=7}
+```{r chain-drive-layout, echo=FALSE, fig.align='center', fig.cap="Chain drive layout (17-tooth driver, 34-tooth driven). The driver turns counter-clockwise, so it pulls on the upper span: the tight side is on top and the slack side, where any sag does no harm, is underneath.", fig.width=11, fig.height=7}
 library(ggplot2)
-library(ggforce)
-
-## System parameters
-driver_teeth <- 17
-driven_teeth <- 34
-pitch <- 0.5
-driver_pd <- pitch / sin(pi / driver_teeth)
-driven_pd <- pitch / sin(pi / driven_teeth)
-
-driver_x <- 0
-driver_y <- 0
-driven_x <- 6
-driven_y <- 0
-
-## Calculate tangent points for chain
-## Upper tangent
-delta_r <- (driven_pd - driver_pd) / 2
-center_dist <- driven_x - driver_x
-tangent_angle <- asin(delta_r / center_dist)
-
-upper_tang_driver_x <- driver_x + (driver_pd/2) * cos(pi/2 - tangent_angle)
-upper_tang_driver_y <- driver_y + (driver_pd/2) * sin(pi/2 - tangent_angle)
-upper_tang_driven_x <- driven_x + (driven_pd/2) * cos(pi/2 - tangent_angle)
-upper_tang_driven_y <- driven_y + (driven_pd/2) * sin(pi/2 - tangent_angle)
-
-lower_tang_driver_x <- driver_x + (driver_pd/2) * cos(-pi/2 + tangent_angle)
-lower_tang_driver_y <- driver_y + (driver_pd/2) * sin(-pi/2 + tangent_angle)
-lower_tang_driven_x <- driven_x + (driven_pd/2) * cos(-pi/2 + tangent_angle)
-lower_tang_driven_y <- driven_y + (driven_pd/2) * sin(-pi/2 + tangent_angle)
-
+belt_path <- function(P) {
+  n <- nrow(P); seg <- list(); tp <- vector("list", n)
+  for (i in seq_len(n)) {
+    j <- i %% n + 1
+    D <- c(P$x[j] - P$x[i], P$y[j] - P$y[i]); L <- sqrt(sum(D^2)); phi <- atan2(D[2], D[1])
+    g <- acos((P$s[i] * P$r[i] - P$s[j] * P$r[j]) / L)
+    nrm <- c(cos(phi - g), sin(phi - g))
+    a <- c(P$x[i], P$y[i]) + P$s[i] * P$r[i] * nrm; b <- c(P$x[j], P$y[j]) + P$s[j] * P$r[j] * nrm
+    seg[[i]] <- data.frame(x = c(a[1], b[1]), y = c(a[2], b[2])); tp[[i]]$out <- a; tp[[j]]$inn <- b
+  }
+  arcs <- lapply(seq_len(n), function(k) {
+    a1 <- atan2(tp[[k]]$inn[2] - P$y[k], tp[[k]]$inn[1] - P$x[k]); a2 <- atan2(tp[[k]]$out[2] - P$y[k], tp[[k]]$out[1] - P$x[k])
+    while (a2 < a1) a2 <- a2 + 2 * pi
+    t <- seq(a1, a2, length.out = 80); data.frame(x = P$x[k] + P$r[k] * cos(t), y = P$y[k] + P$r[k] * sin(t))
+  })
+  list(spans = seg, arcs = arcs)
+}
+disc <- function(x, y, r, n = 150) { t <- seq(0, 2 * pi, length.out = n); data.frame(x = x + r * cos(t), y = y + r * sin(t)) }
+p <- 0.5; N1 <- 17; N2 <- 34
+r1 <- p / (2 * sin(pi / N1)); r2 <- p / (2 * sin(pi / N2))
+S <- data.frame(x = c(0, 6), y = c(0, 0), r = c(r1, r2), s = c(1, 1))
+bp <- belt_path(S)
+rot_arc <- function(x, y, r, from, to, col) { t <- seq(from, to, length.out = 30) * pi / 180
+  annotate("path", x = x + r * cos(t), y = y + r * sin(t), color = col, linewidth = 1.1, arrow = arrow(length = unit(0.25, "cm"), type = "closed")) }
 ggplot() +
- ## Driver sprocket
- geom_circle(aes(x0 = driver_x, y0 = driver_y, r = driver_pd/2),
-             fill = "steelblue", color = "darkblue", linewidth = 1.5) +
- geom_circle(aes(x0 = driver_x, y0 = driver_y, r = driver_pd/2 - 0.3),
-             fill = "gray70", color = "gray50", linewidth = 1) +
- geom_circle(aes(x0 = driver_x, y0 = driver_y, r = 0.25),
-             fill = "white", color = "black", linewidth = 1) +
- ## Driven sprocket
- geom_circle(aes(x0 = driven_x, y0 = driven_y, r = driven_pd/2),
-             fill = "coral", color = "darkred", linewidth = 1.5) +
- geom_circle(aes(x0 = driven_x, y0 = driven_y, r = driven_pd/2 - 0.5),
-             fill = "gray70", color = "gray50", linewidth = 1) +
- geom_circle(aes(x0 = driven_x, y0 = driven_y, r = 0.35),
-             fill = "white", color = "black", linewidth = 1) +
- ## Chain - tight side (top)
- geom_segment(aes(x = upper_tang_driver_x, y = upper_tang_driver_y,
-                  xend = upper_tang_driven_x, yend = upper_tang_driven_y),
-              color = "gray20", linewidth = 4) +
- ## Chain - slack side (bottom)
- geom_segment(aes(x = lower_tang_driver_x, y = lower_tang_driver_y,
-                  xend = lower_tang_driven_x, yend = lower_tang_driven_y),
-              color = "gray40", linewidth = 4) +
- ## Rotation arrows
- geom_curve(aes(x = driver_x - 0.3, y = driver_y + driver_pd/2 + 0.5,
-                xend = driver_x + 0.5, yend = driver_y + driver_pd/2 + 0.3),
-            arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-            curvature = -0.3, color = "darkblue", linewidth = 1.2) +
- geom_curve(aes(x = driven_x - 0.4, y = driven_y + driven_pd/2 + 0.5,
-                xend = driven_x + 0.7, yend = driven_y + driven_pd/2 + 0.3),
-            arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-            curvature = -0.3, color = "darkred", linewidth = 1.2) +
- ## Labels
- annotate("text", x = driver_x, y = driver_y - driver_pd/2 - 0.7,
-          label = paste0("Driver: ", driver_teeth, " teeth"),
-          size = 4 * diagram_text_scale, fontface = "bold", color = "darkblue") +
- annotate("text", x = driven_x, y = driven_y - driven_pd/2 - 0.7,
-          label = paste0("Driven: ", driven_teeth, " teeth"),
-          size = 4 * diagram_text_scale, fontface = "bold", color = "darkred") +
- ## Speed ratio annotation
- annotate("label", x = 3, y = 3.6,
-          label = paste0("Speed Ratio = ", driven_teeth, "/", driver_teeth,
-                        " = ", round(driven_teeth/driver_teeth, 2), ":1"),
-          size = 3.6 * diagram_text_scale, fill = "lightyellow", color = "black", fontface = "bold") +
- ## Chain spans
- annotate("text", x = 1.8, y = upper_tang_driver_y + 1.0,
-          label = "Tight Side", size = 3.5 * diagram_text_scale, color = "gray20", fontface = "italic") +
- annotate("text", x = 3, y = lower_tang_driver_y - 1.0,
-          label = "Slack Side", size = 3.5 * diagram_text_scale, color = "gray40", fontface = "italic") +
- ## Center distance
- annotate("segment", x = driver_x, y = -4.5, xend = driven_x, yend = -4.5,
-          arrow = arrow(ends = "both", length = unit(0.2, "cm")),
-          color = "darkgreen", linewidth = 1) +
- annotate("text", x = 3, y = -5,
-          label = "Center Distance (C)", size = 4 * diagram_text_scale, color = "darkgreen") +
- coord_fixed() +
- xlim(-2.5, 10) +
- ylim(-5.6, 4.2) +
- theme_chain +
- labs(title = "Chain Drive System Layout",
-      subtitle = "2:1 speed reduction with 17-tooth driver and 34-tooth driven sprocket")
+  geom_polygon(data = disc(0, 0, r1 + 0.12), aes(x, y), fill = "steelblue", color = "darkblue") +
+  geom_polygon(data = disc(6, 0, r2 + 0.12), aes(x, y), fill = "coral", color = "darkred") +
+  geom_polygon(data = disc(0, 0, 0.25), aes(x, y), fill = "white", color = "black") +
+  geom_polygon(data = disc(6, 0, 0.35), aes(x, y), fill = "white", color = "black") +
+  lapply(bp$arcs, function(a) geom_path(data = a, aes(x, y), linewidth = 3.5, color = "gray25")) +
+  geom_path(data = bp$spans[[2]], aes(x, y), linewidth = 3.5, color = "gray15") +
+  geom_path(data = bp$spans[[1]], aes(x, y), linewidth = 3.5, color = "gray50") +
+  rot_arc(0, 0, r1 + 0.6, 20, 120, "darkblue") + rot_arc(6, 0, r2 + 0.6, 40, 100, "darkred") +
+  annotate("text", x = 0, y = -r1 - 0.8, label = paste0("Driver: ", N1, " teeth"), size = 4 * diagram_text_scale, fontface = "bold", color = "darkblue") +
+  annotate("text", x = 6, y = -r2 - 0.8, label = paste0("Driven: ", N2, " teeth"), size = 4 * diagram_text_scale, fontface = "bold", color = "darkred") +
+  annotate("label", x = 3, y = 3.9, label = paste0("Speed Ratio = ", N2, "/", N1, " = ", round(N2 / N1, 2), ":1"),
+           size = 3.6 * diagram_text_scale, fill = "lightyellow", fontface = "bold") +
+  annotate("text", x = 3, y = 2.75, label = "Tight Side", size = 3.5 * diagram_text_scale, fontface = "italic") +
+  annotate("text", x = 3, y = -2.75, label = "Slack Side", size = 3.5 * diagram_text_scale, color = "gray40", fontface = "italic") +
+  annotate("segment", x = 0, y = -4.6, xend = 6, yend = -4.6, arrow = arrow(ends = "both", length = unit(0.2, "cm")), color = "darkgreen") +
+  annotate("text", x = 3, y = -5.05, label = "Center Distance (C)", size = 4 * diagram_text_scale, color = "darkgreen") +
+  coord_fixed(xlim = c(-2.5, 9.5), ylim = c(-5.4, 4.3)) +
+  theme_chain +
+  labs(title = "Chain Drive System Layout",
+       subtitle = "2:1 speed reduction with a 17-tooth driver and a 34-tooth driven sprocket")
 ```
 
 ---
@@ -579,12 +409,14 @@ Actual chain length: $L = 114 \times 12.7 = 1447.8$ mm
 
 **Step 6: Recalculate actual center distance**
 
-Using the rounded chain length:
-$$C_p = \frac{1}{4}\left[114 - 34 + \sqrt{(114-34)^2 - 0.81(34)^2}\right]$$
+Using the rounded chain length in the exact formula (with $N_1 + N_2 = 68$ and $N_2 - N_1 = 34$):
+$$C_p = \frac{1}{4}\left[114 - 34 + \sqrt{(114-34)^2 - \frac{8 \cdot 34^2}{4\pi^2}}\right]$$
 
-$$C_p = \frac{1}{4}\left[80 + \sqrt{6400 - 936.4}\right] = \frac{1}{4}[80 + 73.9] = 38.5 \text{ pitches}$$
+$$C_p = \frac{1}{4}\left[80 + \sqrt{6400 - 234.3}\right] = \frac{1}{4}[80 + 78.52] = 39.63 \text{ pitches}$$
 
-$$C = 38.5 \times 12.7 = 489 \text{ mm}$$
+$$C = 39.63 \times 12.7 = 503 \text{ mm}$$
+
+(The approximate formula gives the same: $\frac{1}{8}\left[160 + \sqrt{160^2 - 0.81 \cdot 34^2}\right] = 39.63$ pitches.) Rounding the chain up to 114 pitches moved the centers slightly further apart than the 500 mm target.
 
 **Step 7: Check chain speed**
 
@@ -598,7 +430,7 @@ This is acceptable for #40 chain (max recommended ~7-10 m/s for this size).
 - Driver sprocket: 17 teeth, 69.1 mm pitch diameter
 - Driven sprocket: 51 teeth, 206.2 mm pitch diameter
 - Chain length: 114 pitches (1448 mm)
-- Center distance: 489 mm
+- Center distance: 503 mm
 - Output speed: 400 rpm (exact)
 
 </details>
@@ -813,9 +645,9 @@ kable(compare_df,
 
 Chain drives are part of the power transmission family. For related content, see:
 
-- **Chapter 4: Gears** – When more compact, quieter transmission is needed
-- **Chapter 10: Belt & Pulley Systems** – For shock absorption and quiet operation
-- **Chapter 8: Bearings** – Essential for supporting sprocket shafts
+- **Gears** (@sec-chap-02-gears) – When more compact, quieter transmission is needed
+- **Belt and Pulley Systems** (@sec-belts-intro) – For shock absorption and quiet operation
+- **Bearings** ([Ball Bearings and Bushings](02-03-Bearings.qmd)) – Essential for supporting sprocket shafts
 
 ---
 

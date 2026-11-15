@@ -338,7 +338,7 @@ $$
 \boxed{F = F_N \cdot \frac{l_1 + \mu \, l_2}{l}} \qquad \text{(trailing shoe)}
 $$ {#eq-trailing-shoe-14}
 
-The general form combining both cases using the $\pm$ notation is shown in Figure @fig-shoe-formula-general-14:
+The general form combining both cases using the $\pm$ notation is shown in @fig-shoe-formula-general-14:
 
 ```{r fig-shoe-formula-general-14, echo=FALSE, out.width="38%", fig.align="center", fig.cap="General shoe brake force equation. The minus sign applies to the leading shoe (self-energizing); the plus sign applies to the trailing shoe (de-energizing)."}
 knitr::include_graphics("images/drTrain-image17.png")
@@ -377,7 +377,7 @@ knitr::include_graphics("images/drTrain-image19.png")
 
 ### Self-Locking Condition {#sec-self-locking-14}
 
-For the **leading shoe**, examine Equation @eq-leading-shoe-14. As $\mu \cdot l_2$ approaches $l_1$, the denominator approaches zero — $F_N$ approaches infinity for any actuating force. If:
+For the **leading shoe**, examine @eq-leading-shoe-14. As $\mu \cdot l_2$ approaches $l_1$, the denominator approaches zero — $F_N$ approaches infinity for any actuating force. If:
 
 $$
 \boxed{l_1 \leq \mu \cdot l_2}
@@ -408,13 +408,13 @@ knitr::include_graphics("images/drTrain-image20.png")
 
 **Solution:**
 
-Rearrange Equation @eq-leading-shoe-14 for $F_N$:
+Rearrange @eq-leading-shoe-14 for $F_N$:
 
 $$F_N = \frac{F \cdot l}{l_1 - \mu \cdot l_2} = \frac{200 \times 0.200}{0.120 - 0.35 \times 0.030} = \frac{40.0}{0.120 - 0.0105} = \frac{40.0}{0.1095}$$
 
 $$\boxed{F_N = 365.3 \text{ N}}$$
 
-Braking torque from Equation @eq-shoe-torque-14:
+Braking torque from @eq-shoe-torque-14:
 
 $$T = \mu \cdot F_N \cdot r = 0.35 \times 365.3 \times 0.150 = \boxed{19.2 \text{ N·m}}$$
 
@@ -575,32 +575,47 @@ When a wheel locks (stops rotating while the vehicle is still moving), the tyre 
 
 A locked front wheel means the vehicle will not respond to steering inputs — it understeers straight regardless of steering wheel angle. A locked rear wheel can cause the vehicle to spin.
 
-Additionally, peak braking force occurs at a **slip ratio** of approximately 10–20%, not at 100% slip (locked). A rolling tyre with controlled slip generates *more* longitudinal braking force than a fully locked tyre, especially on wet, icy, or loose surfaces.
+Additionally, peak braking force occurs at a **slip ratio** of approximately 10–20%, not at 100% slip (locked). A rolling tyre with controlled slip generates *more* longitudinal braking force than a fully locked tyre on paved surfaces, wet or dry. The exception is loose surfaces such as gravel or fresh snow: a locked tyre ploughs up a wedge of material in front of it and can stop *shorter* than ABS. Even there, ABS keeps the car steerable, which is usually the more important benefit.
 
-```{r abs-slip-curve-14, fig.cap="Tyre friction coefficient versus wheel slip ratio. Both longitudinal (braking) and lateral (steering) friction coefficients are shown. Peak braking force occurs at 10–20% slip. At 100% slip (locked wheel), longitudinal force is reduced and lateral force drops to near zero — the vehicle cannot be steered.", fig.align='center', echo=FALSE}
+```{r abs-slip-curve-14, fig.cap="Tyre friction coefficient versus wheel slip ratio on dry asphalt, for a tyre running at a small steering slip angle. Longitudinal (braking) friction peaks at about μ = 1.0 near 10–15% slip and falls to about 0.75 when the wheel locks (100% slip). Lateral (steering) friction falls steadily as slip rises and is almost zero for a locked wheel, so the vehicle cannot be steered. ABS holds each wheel in the shaded band of roughly 8–20% slip.", fig.align='center', echo=FALSE}
 library(ggplot2)
 
-slip_ratio <- seq(0, 1, by = 0.01)
-mu_long    <- 0.85 * (1 - exp(-8 * slip_ratio)) * exp(-1.2 * slip_ratio) + 0.15 * slip_ratio
-mu_long    <- pmin(mu_long, 0.9)
-mu_lat     <- 0.9 * exp(-2.5 * slip_ratio)
+slip_ratio <- seq(0, 1, by = 0.005)
+# Pacejka "magic formula" shape: B = stiffness, C = shape, D = peak
+B_mf <- 12; C_mf <- 1.55; D_mf <- 1.0
+mu_long <- D_mf * sin(C_mf * atan(B_mf * slip_ratio))
+mu_lat  <- 0.90 * (1 - slip_ratio)^1.4 + 0.04 * slip_ratio
+
+i_pk    <- which.max(mu_long)
+s_pk    <- slip_ratio[i_pk] * 100
+mu_pk   <- mu_long[i_pk]
+mu_lock <- mu_long[length(mu_long)]
 
 friction_df <- data.frame(
-  Slip          = rep(slip_ratio, 2),
+  Slip          = rep(slip_ratio * 100, 2),
   Friction_Coef = c(mu_long, mu_lat),
   Type = rep(c("Longitudinal (Braking)", "Lateral (Steering)"), each = length(slip_ratio))
 )
 
-ggplot(friction_df, aes(x = Slip * 100, y = Friction_Coef, colour = Type)) +
+ggplot(friction_df, aes(x = Slip, y = Friction_Coef, colour = Type)) +
+  annotate("rect", xmin = 8, xmax = 20, ymin = -Inf, ymax = Inf,
+           fill = "#E9C46A", alpha = 0.30) +
   geom_line(linewidth = 1.2) +
-  geom_vline(xintercept = 15, linetype = "dashed", colour = "#E9C46A") +
-  annotate("text", x = 40, y = 0.78, label = "ABS operating zone
-(10-20% slip, dashed line)",
-           hjust = 0, size = 3 * diagram_text_scale, colour = "#9A7B0A") +
-  annotate("point", x = 15, y = max(mu_long[round(slip_ratio, 2) == 0.15]),
-           colour = "#E63946", size = 4) +
-  scale_colour_manual(values = c("#2A9D8F", "#457B9D")) +
-  scale_x_continuous(labels = function(x) paste0(x, "%")) +
+  annotate("label", x = 14, y = 1.12, label = "ABS operating zone\n(about 8-20% slip)",
+           size = 3 * diagram_text_scale, colour = "#9A7B0A", fill = "white", linewidth = 0) +
+  annotate("point", x = s_pk, y = mu_pk, colour = "#E63946", size = 3) +
+  annotate("label", x = 34, y = 1.02,
+           label = sprintf("Peak: μ = %.2f at %.0f%% slip", mu_pk, s_pk),
+           hjust = 0, size = 3 * diagram_text_scale, colour = "#E63946", fill = "white", linewidth = 0) +
+  annotate("point", x = 100, y = mu_lock, colour = "#E63946", size = 3) +
+  annotate("label", x = 97, y = mu_lock + 0.09,
+           label = sprintf("Locked wheel: μ = %.2f", mu_lock),
+           hjust = 1, size = 3 * diagram_text_scale, colour = "#E63946", fill = "white", linewidth = 0) +
+  annotate("label", x = 62, y = 0.40, label = "Lateral grip almost gone",
+           hjust = 0,size = 3 * diagram_text_scale, colour = "#457B9D", fill = "white", linewidth = 0) +
+  scale_colour_manual(values = c("#457B9D", "#2A9D8F")) +
+  scale_x_continuous(labels = function(x) paste0(x, "%"), breaks = seq(0, 100, 20)) +
+  scale_y_continuous(limits = c(0, 1.2), breaks = seq(0, 1.2, 0.2)) +
   labs(
     title  = "Tyre Friction vs Wheel Slip Ratio",
     x      = "Wheel Slip Ratio",
@@ -630,7 +645,7 @@ The driver hears and feels a characteristic pulsing in the brake pedal — this 
 | **Hydraulic Modulator** | Solenoid valves and a return pump; can independently hold, reduce, or restore pressure at each wheel circuit |
 
 ::: {.callout-industry}
-**Industry Application:** ABS has been mandatory on all new passenger vehicles sold in the European Union since 2004, and in Canada/USA since 2013. Assembly plant end-of-line (EOL) testing includes an ABS functional test where each solenoid valve is pulsed and confirmed via pressure sensors. If the modulator block fails the functional test, the vehicle is quarantined for investigation — the ABS module cannot be shipped with a fault.
+**Industry Application:** European manufacturers fitted ABS as standard on all new cars from 2004 under a voluntary ACEA commitment. EU General Safety Regulation 661/2009 then made it a legal requirement for new types from November 2011 and for all new cars from November 2014. The USA and Canada have no ABS rule for cars as such, but the ESC mandates (CMVSS 126 for vehicles built from September 2011, FMVSS 126 for 100% of light vehicles from model year 2012) cannot be met without ABS hardware, so ABS is effectively universal. Assembly plant end-of-line (EOL) testing includes an ABS functional test where each solenoid valve is pulsed and confirmed via pressure sensors. If the modulator block fails the functional test, the vehicle is quarantined for investigation — the ABS module cannot be shipped with a fault.
 :::
 
 ***
@@ -718,7 +733,7 @@ The ESC ECU continuously compares the **intended path** (from steering angle and
 ESC can apply brake force to individual wheels independently and can also reduce engine torque to help stabilize the vehicle.
 
 ::: {.callout-industry}
-**Industry Application:** ESC is mandatory on all new passenger vehicles sold in the EU, USA, Canada, and Australia. Studies show ESC reduces single-vehicle fatal crashes (the type ESC is designed to prevent) by approximately 35–40%. It is arguably the most effective active safety system ever introduced in passenger vehicles. Assembly plant testing includes a steering angle sensor calibration step (a stationary 360° lock-to-lock steering sweep) that must be performed whenever the steering column or ESC ECU is replaced.
+**Industry Application:** ESC is mandatory on all new passenger vehicles sold in the EU, USA, Canada, and Australia. NHTSA studies estimate that ESC reduces fatal single-vehicle crashes (the type ESC is designed to prevent) by roughly 30–35% for passenger cars and by about 60% or more for SUVs, whose high centre of gravity makes loss of control more likely to end in a rollover. It is arguably the most effective active safety system ever introduced in passenger vehicles. At the end of the assembly line, and again in service whenever the steering column, the steering angle sensor or the ESC ECU is replaced or the wheels are aligned, the steering angle sensor must be zeroed. With the wheels pointing straight ahead, a scan tool tells the ECU that this position is zero steering angle.
 :::
 
 ***
@@ -741,6 +756,7 @@ When the driver lifts off the throttle or applies the brake pedal lightly:
 - Motor speed (low speeds produce less back-EMF → less generating capacity)
 - Battery state of charge (a full battery cannot accept more charge — regeneration is reduced or disabled)
 - Thermal limits of the motor and power electronics
+- The torque and power ratings of the motor and inverter (at high speed the power limit caps the regenerative torque, because torque = power / angular speed)
 
 Because regenerative braking alone cannot provide full emergency braking force, EVs and hybrids use **brake blending** — a combination of regenerative and friction braking.
 
@@ -752,34 +768,39 @@ Under light braking: regenerative braking provides most or all of the braking to
 
 Under moderate braking: a blend of regenerative and friction braking is used — the friction contribution increases as the required deceleration exceeds the regenerative capacity.
 
-Under hard braking / ABS activation: friction braking takes over entirely — regenerative torque is cut out because the ABS cannot modulate the motor torque fast enough to prevent wheel lockup. Full hydraulic control restores precise ABS performance.
+Under hard braking / ABS activation: friction braking takes over. Most systems ramp the regenerative torque out as soon as ABS activates. The ABS control loop is built around fast, individual hydraulic modulation at each wheel, while regeneration acts on a whole axle through the drivetrain. Removing the motor torque leaves ABS in full control of every wheel.
 
-```{r regen-blending-14, fig.cap="Brake blending strategy for an EV: how braking torque is shared between regenerative (electrical) and friction (hydraulic) sources across the deceleration range. At light deceleration, energy recovery is maximized. At higher deceleration, friction braking supplements and eventually takes over completely. ABS operation disables regeneration entirely.", fig.align='center', echo=FALSE}
+```{r regen-blending-14, fig.cap="Brake blending strategy for an EV: how braking torque is shared between regenerative (electrical) and friction (hydraulic) sources across the deceleration range. Up to the regenerative capacity (here about 3 m/s²) the motor does all the braking and recovers the most energy. Above it, the regenerative torque stays at its maximum and friction braking supplies the rest, so the regenerative share falls. In hard braking, when ABS activates, regeneration is ramped out and the friction brakes take over.", fig.align='center', echo=FALSE}
 library(ggplot2)
-library(tidyr)
 
-decel_range <- seq(0, 10, by = 0.1)
+regen_max <- 3.0   # m/s^2: deceleration the motor alone can provide
+abs_thr   <- 7.5   # m/s^2: hard braking / ABS activation, regen ramped out
 
-regen_max  <- 3.0  # m/s^2 max regen
-regen_fade <- 7.5  # m/s^2 regen fade-out
+decel_range <- sort(unique(c(seq(0.05, 10, by = 0.05), abs_thr - 1e-6)))
 
-regen_torque   <- ifelse(decel_range <= regen_max,
-                         decel_range / regen_max * 100,
-                         pmax(0, 100 * (1 - (decel_range - regen_max) / (regen_fade - regen_max))))
-friction_torque <- pmax(0, 100 - regen_torque)
+# regen share: 100 % up to regen_max, then regen_max/decel, then 0 above the ABS threshold
+regen_share    <- pmin(100, 100 * regen_max / decel_range) * (decel_range < abs_thr)
+friction_share <- 100 - regen_share
 
 blend_df <- data.frame(
-  Decel          = rep(decel_range, 2),
-  Torque_pct     = c(regen_torque, friction_torque),
-  Source         = rep(c("Regenerative (Electric)", "Friction (Hydraulic)"), each = length(decel_range))
+  Decel      = rep(decel_range, 2),
+  Torque_pct = c(regen_share, friction_share),
+  Source     = factor(rep(c("Regenerative (Electric)", "Friction (Hydraulic)"),
+                          each = length(decel_range)),
+                      levels = c("Friction (Hydraulic)", "Regenerative (Electric)"))
 )
 
 ggplot(blend_df, aes(x = Decel, y = Torque_pct, fill = Source)) +
   geom_area(alpha = 0.85, position = "stack") +
-  geom_vline(xintercept = 7.5, linetype = "dashed", colour = "white") +
-  annotate("text", x = 7.6, y = 60, label = "ABS threshold\n(regen cut)", colour = "white",
-           size = 3 * diagram_text_scale, hjust = 0) +
-  scale_fill_manual(values = c("#2A9D8F", "#E63946")) +
+  geom_vline(xintercept = regen_max, linetype = "dotted", colour = "grey20", linewidth = 0.7) +
+  geom_vline(xintercept = abs_thr, linetype = "dashed", colour = "grey20", linewidth = 0.7) +
+  annotate("label", x = regen_max, y = 88, label = "Regen capacity\n(~3 m/s²)",
+           size = 3 * diagram_text_scale, fill = "white", linewidth = 0) +
+  annotate("label", x = abs_thr, y = 60, label = "ABS / hard braking\n(regen ramped out)",
+           size = 3 * diagram_text_scale, fill = "white", linewidth = 0) +
+  scale_fill_manual(values = c("Regenerative (Electric)" = "#2A9D8F",
+                               "Friction (Hydraulic)"    = "#E63946")) +
+  scale_x_continuous(limits = c(0, 10), breaks = 0:10) +
   scale_y_continuous(labels = function(x) paste0(x, "%")) +
   labs(
     title  = "Brake Blending — Regenerative vs Friction Braking",
@@ -791,7 +812,7 @@ ggplot(blend_df, aes(x = Decel, y = Torque_pct, fill = Source)) +
 ```
 
 ::: {.callout-industry}
-**Industry Application:** Tesla's one-pedal driving mode maximizes regenerative braking to the point where most city driving requires no friction brake application at all. The rear friction brakes on some Tesla Model 3 variants have been found to rust significantly because they are used so rarely — an unintended consequence of very aggressive regeneration. Tesla addressed this with a periodic friction brake application routine that automatically scrubs the rotors clean during low-speed driving.
+**Industry Application:** Tesla's one-pedal driving mode maximizes regenerative braking to the point where most city driving requires no friction brake application at all. Owners have reported heavily rusted rotors and seized caliper slide pins, especially on the rear axle and in regions that salt the roads, because the friction brakes are used so rarely — an unintended consequence of very aggressive regeneration. Tesla's owner's manual tells drivers to press the brake pedal firmly from time to time to keep the rotors clean. Its maintenance schedule calls for cleaning and lubricating the calipers every year (or every 12,500 miles) in cold-weather regions.
 :::
 
 ***
@@ -858,7 +879,7 @@ $$
 F_{front} = F_{brake,total} \cdot \phi_f, \qquad F_{rear} = F_{brake,total} \cdot (1 - \phi_f)
 $$ {#eq-brake-distribution-14}
 
-(In practice, $\phi_f$ increases with deceleration due to weight transfer — see Section @sec-ebd-14.)
+(In practice, $\phi_f$ increases with deceleration due to weight transfer — see @sec-ebd-14.)
 
 The required **brake torque per front wheel** (with $r_w$ = rolling radius):
 
@@ -879,7 +900,7 @@ $$F_{front} = 12{,}560 \times 0.60 = 7{,}536 \text{ N}$$
 Required brake torque per front wheel:
 $$T_{wheel} = \frac{7{,}536}{2} \times 0.32 = 3{,}768 \times 0.32 = \boxed{1{,}206 \text{ N·m}}$$
 
-```{r stopping-distance-plot-14, fig.cap="Total stopping distance (braking distance plus 1.2 s reaction distance) versus initial vehicle speed, for three road surface conditions. The difference between dry and icy conditions is dramatic — at 100 km/h, stopping distance on ice is more than four times that on dry asphalt.", fig.align='center', echo=FALSE}
+```{r stopping-distance-plot-14, fig.cap="Total stopping distance (braking distance plus 1.2 s reaction distance) versus initial vehicle speed, for three road surface conditions. The difference between dry and icy conditions is dramatic — at 100 km/h, the total stopping distance on ice (about 296 m) is about 3.7 times that on dry asphalt (about 80 m), and the braking distance alone is 5.7 times longer.", fig.align='center', echo=FALSE}
 library(ggplot2)
 library(dplyr)
 
@@ -1067,7 +1088,7 @@ tryit_sort(
 
 **Problem 1 — Hydraulic Force Amplification**
 
-A brake system has a master cylinder bore diameter of 20 mm and a front caliper with two pistons each 52 mm in diameter. The vacuum booster amplifies pedal force by 4.0×. A driver applies 120 N to the brake pedal.
+A brake system has a master cylinder bore diameter of 20 mm and a front caliper with two pistons each 52 mm in diameter. The vacuum booster amplifies pedal force by 4.0×, and the booster output pushes directly on the master cylinder piston (ignore the pedal lever ratio). A driver applies 120 N to the brake pedal.
 
 (a) Calculate the hydraulic pressure in the brake circuit.
 (b) Calculate the total clamping force on the front rotor from both pistons.
@@ -1122,7 +1143,7 @@ A vehicle engineer is evaluating whether to use a leading-trailing or dual-leadi
 
 (a) With a leading-trailing arrangement and $F = 300$ N per shoe, $l = 180$ mm, $l_1 = 105$ mm, $l_2 = 22$ mm, $\mu = 0.38$, $r = 140$ mm — calculate the total rear axle braking torque (both drums, two shoes each).
 (b) If the dual-leading arrangement is used with the same geometry (both shoes behave as leading), what is the total rear axle torque?
-(c) Why might the dual-leading arrangement cause handling problems during reverse braking?
+(c) When the car brakes while reversing, the drum turns the other way. What do the two shoes of the dual-leading arrangement become, and what happens to the braking torque?
 (d) The ABS control module for this vehicle limits rear wheel slip to 15% before modulating pressure. Explain how this interacts with the dual-leading arrangement.
 
 ---
@@ -1141,21 +1162,21 @@ An EV with mass 2,100 kg (including passengers) is travelling at 90 km/h and app
 ## Further Resources {#sec-brakes-resources-14}
 
 ```{r brakes-res-abs-14, echo=FALSE, results='asis'}
-embed_youtube("wGUqr7YcG4k", "How ABS Works — Engineering Explained")
+embed_youtube("G-GEUkiMuLk", "Why Threshold Braking Is Impossible - ABS Wins! (Engineering Explained)")
 ```
 
 ```{r brakes-res-disc-14, echo=FALSE, results='asis'}
-embed_youtube("5S1kGKSn5Qw", "How Disc Brakes Work — Engineering Explained")
+embed_youtube("hD2z1P5qMUY", "How Disc Brakes Work in Cars and Light Vehicles (3D Animation)")
 ```
 
 ```{r brakes-res-drum-14, echo=FALSE, results='asis'}
-embed_youtube("VIPhEUGMRhY", "How Drum Brakes Work — Engineering Explained")
+embed_youtube("LX4mqzoe3BY", "Drum Brakes - Explained (Engineering Explained)")
 ```
 
 ```{r brakes-res-regen-14, echo=FALSE, results='asis'}
-embed_youtube("6JnAHQqFr0E", "How Regenerative Braking Works in Electric Vehicles")
+embed_youtube("RV8OcvE7XCQ", "How Regenerative Braking Works in Electric Vehicles")
 ```
 
 ```{r brakes-res-esc-14, echo=FALSE, results='asis'}
-embed_youtube("Lq5oI1ej5aM", "Electronic Stability Control Explained")
+embed_youtube("MCRLKRluk1w", "How Electronic Stability Control (ESC) Works (IIHS)")
 ```

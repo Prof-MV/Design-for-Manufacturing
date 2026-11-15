@@ -157,93 +157,37 @@ grid.arrange(p1, p2, p3, ncol = 3)
 
 Rigid couplings provide a solid connection between two shafts with **no allowance for misalignment**. They are used only when shafts are precisely aligned and remain so during operation.
 
-```{r rigid-coupling-types, echo=FALSE, fig.align='center', fig.cap="Common rigid coupling designs", fig.width=11, fig.height=5}
+```{r rigid-coupling-types, echo=FALSE, fig.align='center', fig.cap="Common rigid coupling designs, side views: a keyed sleeve, two bolted flanges, and a split clamp whose two halves are bolted together across the shafts.", fig.width=11, fig.height=5}
 library(ggplot2)
-library(ggforce)
-library(gridExtra)
-
-## Sleeve coupling
-p1 <- ggplot() +
-  ## Left shaft
-  geom_rect(aes(xmin = -2, xmax = 0.8, ymin = -0.3, ymax = 0.3),
-            fill = "gray60", color = "gray40", linewidth = 1) +
-  ## Right shaft
-  geom_rect(aes(xmin = 0.8, xmax = 3, ymin = -0.3, ymax = 0.3),
-            fill = "gray60", color = "gray40", linewidth = 1) +
-  ## Sleeve
-  geom_rect(aes(xmin = -0.5, xmax = 2, ymin = -0.6, ymax = 0.6),
-            fill = "steelblue", color = "darkblue", linewidth = 1.2, alpha = 0.7) +
-  ## Keys
-  geom_rect(aes(xmin = -0.3, xmax = 0.6, ymin = 0.3, ymax = 0.45),
-            fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_rect(aes(xmin = 1.0, xmax = 1.8, ymin = 0.3, ymax = 0.45),
-            fill = "gold", color = "darkorange", linewidth = 0.8) +
-  ## Set screws
-  geom_point(aes(x = c(-0.2, 1.7), y = c(0.6, 0.6)), size = 3, color = "black") +
-  coord_fixed() +
-  xlim(-2.5, 3.5) +
-  ylim(-1.2, 1.2) +
-  theme_coupling +
-  labs(title = "Sleeve (Muff) Coupling",
-       subtitle = "Simple, low cost")
-
-## Flanged coupling
-p2 <- ggplot() +
-  ## Left shaft
-  geom_rect(aes(xmin = -2, xmax = 0, ymin = -0.3, ymax = 0.3),
-            fill = "gray60", color = "gray40", linewidth = 1) +
-  ## Right shaft
-  geom_rect(aes(xmin = 0.4, xmax = 3, ymin = -0.3, ymax = 0.3),
-            fill = "gray60", color = "gray40", linewidth = 1) +
-  ## Left flange hub
-  geom_rect(aes(xmin = -0.8, xmax = 0, ymin = -0.5, ymax = 0.5),
-            fill = "coral", color = "darkred", linewidth = 1) +
-  ## Left flange face
-  geom_rect(aes(xmin = 0, xmax = 0.15, ymin = -0.9, ymax = 0.9),
-            fill = "coral", color = "darkred", linewidth = 1.2) +
-  ## Right flange hub
-  geom_rect(aes(xmin = 0.4, xmax = 1.2, ymin = -0.5, ymax = 0.5),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  ## Right flange face
-  geom_rect(aes(xmin = 0.25, xmax = 0.4, ymin = -0.9, ymax = 0.9),
-            fill = "steelblue", color = "darkblue", linewidth = 1.2) +
-  ## Bolts
-  geom_point(aes(x = c(0.2, 0.2), y = c(0.7, -0.7)), size = 4, color = "gray30") +
-  geom_point(aes(x = c(0.2, 0.2), y = c(0.7, -0.7)), size = 2, color = "white") +
-  coord_fixed() +
-  xlim(-2.5, 3.5) +
-  ylim(-1.2, 1.2) +
-  theme_coupling +
-  labs(title = "Flanged Coupling",
-       subtitle = "High torque capacity")
-
-## Clamp coupling
-p3 <- ggplot() +
-  ## Left shaft
-  geom_rect(aes(xmin = -2, xmax = 0.8, ymin = -0.3, ymax = 0.3),
-            fill = "gray60", color = "gray40", linewidth = 1) +
-  ## Right shaft
-  geom_rect(aes(xmin = 0.8, xmax = 3, ymin = -0.3, ymax = 0.3),
-            fill = "gray60", color = "gray40", linewidth = 1) +
-  ## Clamp halves (top)
-  geom_arc_bar(aes(x0 = 0.8, y0 = 0, r0 = 0.3, r = 0.7,
-                   start = 0.1, end = pi - 0.1),
-               fill = "forestgreen", color = "darkgreen", linewidth = 1) +
-  ## Clamp halves (bottom)
-  geom_arc_bar(aes(x0 = 0.8, y0 = 0, r0 = 0.3, r = 0.7,
-                   start = pi + 0.1, end = 2*pi - 0.1),
-               fill = "forestgreen", color = "darkgreen", linewidth = 1) +
-  ## Bolts
-  geom_point(aes(x = c(0.2, 1.4), y = c(0.75, 0.75)), size = 3, color = "gray30") +
-  geom_point(aes(x = c(0.2, 1.4), y = c(-0.75, -0.75)), size = 3, color = "gray30") +
-  coord_fixed() +
-  xlim(-2.5, 3.5) +
-  ylim(-1.2, 1.2) +
-  theme_coupling +
-  labs(title = "Clamp (Split) Coupling",
-       subtitle = "Easy installation")
-
-grid.arrange(p1, p2, p3, ncol = 3)
+shaft <- function(x0, x1, gap = 0.15) list(
+  annotate("rect", xmin = x0, xmax = x0 + (x1 - x0) / 2 - gap / 2, ymin = -0.3, ymax = 0.3, fill = "gray60", color = "gray30"),
+  annotate("rect", xmin = x0 + (x1 - x0) / 2 + gap / 2, xmax = x1, ymin = -0.3, ymax = 0.3, fill = "gray60", color = "gray30"))
+ttl <- function(x, a, b) list(annotate("text", x = x, y = 1.9, label = a, fontface = "bold", size = 4 * diagram_text_scale),
+                              annotate("text", x = x, y = 1.5, label = b, size = 3.3 * diagram_text_scale))
+ggplot() +
+  ## sleeve (muff) coupling: one sleeve keyed to both shafts
+  shaft(-1.8, 1.8) +
+  annotate("rect", xmin = -1.0, xmax = 1.0, ymin = -0.65, ymax = 0.65, fill = "steelblue", alpha = 0.8, color = "darkblue") +
+  annotate("rect", xmin = c(-0.85, 0.1), xmax = c(-0.1, 0.85), ymin = 0.3, ymax = 0.45, fill = "goldenrod", color = "black") +
+  annotate("text", x = 0, y = -0.95, label = "keys", size = 3 * diagram_text_scale, color = "goldenrod4") +
+  ttl(0, "Sleeve (Muff) Coupling", "Simple, low cost") +
+  ## flanged coupling: two hubs with flanges, bolted
+  shaft(3.2, 6.8, 0) +
+  annotate("rect", xmin = c(4.1, 5.05), xmax = c(4.95, 5.9), ymin = -0.55, ymax = 0.55, fill = c("coral", "steelblue"), color = "black") +
+  annotate("rect", xmin = c(4.75, 5.0), xmax = c(5.0, 5.25), ymin = -1.1, ymax = 1.1, fill = c("coral", "steelblue"), color = "black") +
+  annotate("segment", x = 4.6, xend = 5.45, y = c(0.85, -0.85), yend = c(0.85, -0.85), linewidth = 1.6) +
+  annotate("text", x = 5.0, y = -1.35, label = "bolts", size = 3 * diagram_text_scale) +
+  ttl(5, "Flanged Coupling", "High torque capacity") +
+  ## clamp (split) coupling: two half shells clamped by bolts
+  shaft(8.2, 11.8) +
+  annotate("rect", xmin = 9.0, xmax = 11.0, ymin = 0, ymax = 0.6, fill = "forestgreen", color = "black") +
+  annotate("rect", xmin = 9.0, xmax = 11.0, ymin = -0.6, ymax = 0, fill = "forestgreen", alpha = 0.7, color = "black") +
+  annotate("segment", x = c(9.3, 9.75, 10.25, 10.7), xend = c(9.3, 9.75, 10.25, 10.7), y = -0.85, yend = 0.85, linewidth = 1.4) +
+  annotate("text", x = 11.2, y = 0, label = "split\nline", hjust = 0, size = 2.8 * diagram_text_scale) +
+  annotate("text", x = 10, y = -1.1, label = "clamping bolts", size = 3 * diagram_text_scale) +
+  ttl(10, "Clamp (Split) Coupling", "Fits without moving the shafts") +
+  coord_fixed(xlim = c(-2, 12), ylim = c(-1.6, 2.2)) +
+  theme_coupling
 ```
 
 ### Rigid Coupling Characteristics
@@ -266,69 +210,29 @@ Flexible couplings accommodate misalignment while transmitting torque. They use 
 
 These couplings use rubber or polymer elements to provide flexibility and damping.
 
-```{r jaw-coupling, echo=FALSE, fig.align='center', fig.cap="Jaw coupling with elastomeric spider element", fig.width=10, fig.height=6}
+```{r jaw-coupling, echo=FALSE, fig.align='center', fig.cap="Jaw coupling, exploded side view: the jaws of the two hubs fit between the legs of the elastomeric spider, so torque passes through the spider in compression.", fig.width=10, fig.height=5.5}
 library(ggplot2)
-library(ggforce)
-
-## Jaw coupling visualization
+jaws <- function(x_face, dir, ys, fill) lapply(ys, function(y)
+  annotate("rect", xmin = min(x_face, x_face + dir * 0.7), xmax = max(x_face, x_face + dir * 0.7), ymin = y - 0.32, ymax = y + 0.32, fill = fill, color = "black"))
 ggplot() +
-  ## Left hub (with jaws)
-  geom_circle(aes(x0 = -0.8, y0 = 0, r = 1.5),
-              fill = "steelblue", color = "darkblue", linewidth = 1.2) +
-  geom_circle(aes(x0 = -0.8, y0 = 0, r = 0.5),
-              fill = "white", color = "gray40", linewidth = 1) +
-  ## Left hub jaws (3 equally spaced)
-  geom_rect(aes(xmin = -0.5, xmax = 0.1, ymin = 0.9, ymax = 1.3),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  geom_rect(aes(xmin = -0.5, xmax = 0.1,
-                ymin = 0.9 * cos(2*pi/3) - 0.2, ymax = 0.9 * cos(2*pi/3) + 0.2),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  geom_rect(aes(xmin = -0.5, xmax = 0.1,
-                ymin = -1.3, ymax = -0.9),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  ## Spider element (center)
-  geom_circle(aes(x0 = 0, y0 = 0, r = 1.2),
-              fill = "gold", color = "darkorange", linewidth = 1.5, alpha = 0.8) +
-  geom_circle(aes(x0 = 0, y0 = 0, r = 0.4),
-              fill = "white", color = "darkorange", linewidth = 1) +
-  ## Spider legs
-  geom_rect(aes(xmin = -0.25, xmax = 0.25, ymin = 0.7, ymax = 1.15),
-            fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_rect(aes(xmin = -0.25, xmax = 0.25, ymin = -1.15, ymax = -0.7),
-            fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(0.7, 1.15, 0.9, 0.45),
-                   y = c(0.25, 0.5, 0.7, 0.45)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(0.7, 1.15, 0.9, 0.45),
-                   y = c(-0.25, -0.5, -0.7, -0.45)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(-0.7, -1.15, -0.9, -0.45),
-                   y = c(0.25, 0.5, 0.7, 0.45)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(-0.7, -1.15, -0.9, -0.45),
-                   y = c(-0.25, -0.5, -0.7, -0.45)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  ## Right hub outline
-  geom_circle(aes(x0 = 0.8, y0 = 0, r = 1.5),
-              fill = NA, color = "darkred", linewidth = 1.2, linetype = "dashed") +
-  ## Labels
-  annotate("segment", x = 0, y = 1.4, xend = 0, yend = 2,
-           color = "darkorange", linewidth = 0.8) +
-  annotate("text", x = 0, y = 2.3,
-           label = "Elastomeric\nSpider", size = 4 * diagram_text_scale, color = "darkorange",
-           fontface = "bold") +
-  annotate("segment", x = -1.5, y = 1.2, xend = -2.2, yend = 1.5,
-           color = "darkblue", linewidth = 0.8) +
-  annotate("text", x = -2.8, y = 1.5,
-           label = "Drive\nHub", size = 4 * diagram_text_scale, color = "darkblue") +
-  annotate("text", x = 3.0, y = 0,
-           label = "Driven\nHub", size = 4 * diagram_text_scale, color = "darkred") +
-  coord_fixed() +
-  xlim(-3.5, 3.9) +
-  ylim(-2.5, 2.8) +
+  annotate("rect", xmin = -5, xmax = -2.6, ymin = -0.35, ymax = 0.35, fill = "gray60", color = "gray30") +
+  annotate("rect", xmin = -3.4, xmax = -1.6, ymin = -1.4, ymax = 1.4, fill = "steelblue", color = "darkblue") +
+  jaws(-1.6, 1, c(1.0, -0.2), "steelblue") +
+  ## spider: hub ring with legs between the jaws
+  annotate("rect", xmin = -0.35, xmax = 0.35, ymin = -1.4, ymax = 1.4, fill = "gold", color = "darkorange") +
+  annotate("rect", xmin = -0.5, xmax = 0.5, ymin = c(0.4, -0.8), ymax = c(0.75, -0.45), fill = "gold", color = "darkorange") +
+  annotate("rect", xmin = 1.6, xmax = 3.4, ymin = -1.4, ymax = 1.4, fill = "coral", color = "darkred") +
+  jaws(1.6, -1, c(0.4 + 0.2, -1.0 + 0.2) , "coral") +
+  annotate("rect", xmin = 2.6, xmax = 5, ymin = -0.35, ymax = 0.35, fill = "gray60", color = "gray30") +
+  annotate("segment", x = c(-0.9, 0.9), xend = c(-0.45, 0.45), y = -1.9, yend = -1.9, arrow = arrow(length = unit(0.2, "cm"), type = "closed")) +
+  annotate("text", x = 0, y = -2.25, label = "assembled: the jaws interleave with the spider legs", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = -2.5, y = 1.8, label = "Drive hub\nwith jaws", color = "darkblue", size = 3.4 * diagram_text_scale) +
+  annotate("text", x = 0, y = 1.8, label = "Elastomeric\nspider", color = "darkorange", size = 3.4 * diagram_text_scale) +
+  annotate("text", x = 2.5, y = 1.8, label = "Driven hub\nwith jaws", color = "darkred", size = 3.4 * diagram_text_scale) +
+  coord_fixed(xlim = c(-5.2, 5.2), ylim = c(-2.5, 2.4)) +
   theme_coupling +
   labs(title = "Jaw Coupling (Exploded View)",
-       subtitle = "Elastomeric spider absorbs shock and accommodates misalignment")
+       subtitle = "Elastomeric spider absorbs shock and accommodates small misalignment")
 ```
 
 **Common Elastomeric Coupling Types:**
@@ -344,101 +248,43 @@ ggplot() +
 
 These use metal elements to provide flexibility through mechanical deflection rather than material deformation.
 
-```{r metallic-couplings, echo=FALSE, fig.align='center', fig.cap="Common metallic flexible coupling designs", fig.width=12, fig.height=5}
+```{r metallic-couplings, echo=FALSE, fig.align='center', fig.cap="Metallic flexible couplings in side view. Oldham: the centre disc carries a tongue on each face, at 90 degrees to each other, that slides in a slot of each hub, so the shafts may be offset (parallel misalignment). Gear: crowned external teeth on both hubs mesh with the internal teeth of one sleeve. Universal joint: two forked yokes joined by a cross, for large angles.", fig.width=12, fig.height=5}
 library(ggplot2)
-library(ggforce)
-library(gridExtra)
-
-## Oldham coupling
-p1 <- ggplot() +
-  ## Left hub
-  geom_circle(aes(x0 = -0.6, y0 = 0, r = 1.2),
-              fill = "steelblue", color = "darkblue", linewidth = 1.2) +
-  geom_circle(aes(x0 = -0.6, y0 = 0, r = 0.4),
-              fill = "white", color = "gray40", linewidth = 1) +
-  ## Left hub slot (vertical)
-  geom_rect(aes(xmin = -0.5, xmax = -0.1, ymin = -0.9, ymax = 0.9),
-            fill = "gray80", color = "gray50", linewidth = 0.8) +
-  ## Center disc
-  geom_circle(aes(x0 = 0, y0 = 0, r = 1.0),
-              fill = "gold", color = "darkorange", linewidth = 1.2) +
-  ## Center disc tongues
-  geom_rect(aes(xmin = -0.15, xmax = 0.15, ymin = -1.0, ymax = 1.0),
-            fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_rect(aes(xmin = -0.9, xmax = 0.9, ymin = -0.15, ymax = 0.15),
-            fill = "gold", color = "darkorange", linewidth = 0.8) +
-  ## Right hub (outline)
-  geom_circle(aes(x0 = 0.6, y0 = 0, r = 1.2),
-              fill = NA, color = "darkred", linewidth = 1.2, linetype = "dashed") +
-  coord_fixed() +
-  xlim(-2.5, 2.5) +
-  ylim(-2, 2) +
-  theme_coupling +
-  labs(title = "Oldham Coupling",
-       subtitle = "Accommodates parallel misalignment")
-
-## Gear coupling
-p2 <- ggplot() +
-  ## Left hub with external gear teeth
-  geom_circle(aes(x0 = -0.5, y0 = 0, r = 0.8),
-              fill = "steelblue", color = "darkblue", linewidth = 1) +
-  geom_circle(aes(x0 = -0.5, y0 = 0, r = 1.0),
-              fill = NA, color = "darkblue", linewidth = 2) +
-  geom_circle(aes(x0 = -0.5, y0 = 0, r = 0.35),
-              fill = "white", color = "gray40", linewidth = 1) +
-  ## Sleeve with internal teeth
-  geom_rect(aes(xmin = -1.3, xmax = 0.8, ymin = -1.3, ymax = 1.3),
-            fill = NA, color = "gray40", linewidth = 1.5) +
-  geom_rect(aes(xmin = -1.2, xmax = 0.7, ymin = 1.05, ymax = 1.2),
-            fill = "gray60", color = "gray40", linewidth = 0.8) +
-  geom_rect(aes(xmin = -1.2, xmax = 0.7, ymin = -1.2, ymax = -1.05),
-            fill = "gray60", color = "gray40", linewidth = 0.8) +
-  ## Right hub (outline)
-  geom_circle(aes(x0 = 0.5, y0 = 0, r = 0.8),
-              fill = NA, color = "darkred", linewidth = 1, linetype = "dashed") +
-  geom_circle(aes(x0 = 0.5, y0 = 0, r = 1.0),
-              fill = NA, color = "darkred", linewidth = 2, linetype = "dashed") +
-  coord_fixed() +
-  xlim(-2, 2) +
-  ylim(-2, 2) +
-  theme_coupling +
-  labs(title = "Gear Coupling",
-       subtitle = "High torque, some angular misalignment")
-
-## Universal joint
-p3 <- ggplot() +
-  ## Left yoke
-  geom_rect(aes(xmin = -2, xmax = -0.8, ymin = -0.25, ymax = 0.25),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  geom_rect(aes(xmin = -0.9, xmax = -0.5, ymin = -0.8, ymax = 0.8),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  ## Cross/spider
-  geom_rect(aes(xmin = -0.55, xmax = 0.55, ymin = -0.15, ymax = 0.15),
-            fill = "gold", color = "darkorange", linewidth = 1.2) +
-  geom_rect(aes(xmin = -0.15, xmax = 0.15, ymin = -0.7, ymax = 0.7),
-            fill = "gold", color = "darkorange", linewidth = 1.2) +
-  ## Cross bearing caps
-  geom_circle(aes(x0 = -0.5, y0 = 0, r = 0.18),
-              fill = "gray50", color = "gray30", linewidth = 0.8) +
-  geom_circle(aes(x0 = 0.5, y0 = 0, r = 0.18),
-              fill = "gray50", color = "gray30", linewidth = 0.8) +
-  geom_circle(aes(x0 = 0, y0 = 0.65, r = 0.18),
-              fill = "gray50", color = "gray30", linewidth = 0.8) +
-  geom_circle(aes(x0 = 0, y0 = -0.65, r = 0.18),
-              fill = "gray50", color = "gray30", linewidth = 0.8) +
-  ## Right yoke
-  geom_rect(aes(xmin = 0.5, xmax = 0.9, ymin = -0.8, ymax = 0.8),
-            fill = "coral", color = "darkred", linewidth = 1) +
-  geom_rect(aes(xmin = 0.8, xmax = 2, ymin = -0.25, ymax = 0.25),
-            fill = "coral", color = "darkred", linewidth = 1) +
-  coord_fixed() +
-  xlim(-2.5, 2.5) +
-  ylim(-1.5, 1.5) +
-  theme_coupling +
-  labs(title = "Universal Joint (U-Joint)",
-       subtitle = "High angular misalignment capacity")
-
-grid.arrange(p1, p2, p3, ncol = 3)
+ggplot() +
+  ## ---- Oldham: offset shafts, hub - disc - hub
+  annotate("rect", xmin = -3.6, xmax = -2.4, ymin = -0.3, ymax = 0.3, fill = "gray60", color = "gray30") +
+  annotate("rect", xmin = -2.4, xmax = -1.6, ymin = -1.1, ymax = 1.1, fill = "steelblue", color = "darkblue") +
+  annotate("rect", xmin = -1.55, xmax = -0.95, ymin = -1.0, ymax = 1.3, fill = "gold", color = "darkorange") +
+  annotate("rect", xmin = -1.75, xmax = -1.55, ymin = -0.25, ymax = 0.25, fill = "gold", color = "darkorange") +   # tongue seen edge-on (horizontal slot)
+  annotate("rect", xmin = -0.95, xmax = -0.75, ymin = -0.85, ymax = 1.15, fill = "gold", color = "darkorange") +   # tongue seen face-on (vertical slot)
+  annotate("rect", xmin = -0.9, xmax = -0.1, ymin = -0.8, ymax = 1.4, fill = "coral", color = "darkred") +
+  annotate("rect", xmin = -0.1, xmax = 1.1, ymin = 0, ymax = 0.6, fill = "gray60", color = "gray30") +
+  annotate("segment", x = 1.25, xend = 1.25, y = 0, yend = 0.3, arrow = arrow(ends = "both", length = unit(0.1, "cm")), color = "darkgreen") +
+  annotate("text", x = 1.35, y = 0.15, label = "offset", hjust = 0, color = "darkgreen", size = 2.8 * diagram_text_scale) +
+  annotate("text", x = -1.25, y = 2.3, label = "Oldham Coupling", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = -1.25, y = 1.85, label = "Parallel misalignment", size = 3.2 * diagram_text_scale) +
+  ## ---- Gear coupling (half section)
+  annotate("rect", xmin = 3.4, xmax = 6.6, ymin = -0.3, ymax = 0.3, fill = "gray60", color = "gray30") +
+  annotate("rect", xmin = c(3.9, 5.15), xmax = c(4.85, 6.1), ymin = -0.75, ymax = 0.75, fill = c("steelblue", "coral"), color = "black") +
+  annotate("rect", xmin = c(4.25, 5.15), xmax = c(4.85, 5.75), ymin = 0.75, ymax = 0.95, fill = "gray25", color = "black") +   # external teeth
+  annotate("rect", xmin = c(4.25, 5.15), xmax = c(4.85, 5.75), ymin = -0.95, ymax = -0.75, fill = "gray25", color = "black") +
+  annotate("rect", xmin = 4.1, xmax = 5.9, ymin = 0.95, ymax = 1.3, fill = "gray75", color = "black") +    # sleeve (internal teeth)
+  annotate("rect", xmin = 4.1, xmax = 5.9, ymin = -1.3, ymax = -0.95, fill = "gray75", color = "black") +
+  annotate("text", x = 5, y = 1.55, label = "sleeve with internal teeth", size = 2.8 * diagram_text_scale) +
+  annotate("text", x = 5, y = 2.3, label = "Gear Coupling", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = 5, y = 1.85, label = "High torque, small misalignment", size = 3.2 * diagram_text_scale) +
+  ## ---- Universal joint: forks and cross
+  annotate("rect", xmin = 8.2, xmax = 9.3, ymin = -0.3, ymax = 0.3, fill = "steelblue", color = "darkblue") +
+  annotate("polygon", x = c(9.3, 10.1, 10.1, 9.6, 9.6, 10.1, 10.1, 9.3), y = c(-1.0, -1.0, -0.75, -0.75, 0.75, 0.75, 1.0, 1.0), fill = "steelblue", color = "darkblue") +
+  annotate("rect", xmin = 10.0, xmax = 10.2, ymin = -1.05, ymax = 1.05, fill = "gold", color = "darkorange") +      # cross arm (vertical pins)
+  annotate("rect", xmin = 9.95, xmax = 10.25, ymin = -0.12, ymax = 0.12, fill = "gold", color = "darkorange") +
+  annotate("rect", xmin = 10.2, xmax = 10.8, ymin = -0.45, ymax = 0.45, fill = "coral", color = "darkred", alpha = 0.9) +  # second fork, arms in and out of the page
+  annotate("rect", xmin = 10.8, xmax = 11.9, ymin = -0.3, ymax = 0.3, fill = "coral", color = "darkred") +
+  annotate("text", x = 10, y = 2.3, label = "Universal Joint (U-Joint)", fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("text", x = 10, y = 1.85, label = "Large angular misalignment", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = 10.1, y = -1.45, label = "cross (spider)", size = 2.8 * diagram_text_scale, color = "darkorange3") +
+  coord_fixed(xlim = c(-3.8, 12.1), ylim = c(-1.7, 2.5)) +
+  theme_coupling
 ```
 
 ### Metallic Coupling Comparison
@@ -651,7 +497,7 @@ ggplot() +
   geom_rect(aes(xmin = -0.3, xmax = 0.1, ymin = -0.5, ymax = 0.5),
             fill = "purple", color = "purple4", linewidth = 1) +
   ## Release fork indication
-  geom_segment(aes(x = 0.1, y = 0, xend = 0.8, yend = 0.5),
+  geom_segment(aes(x = 0.9, y = 0.45, xend = 0.15, yend = 0.15),
                color = "gray40", linewidth = 2,
                arrow = arrow(length = unit(0.2, "cm"))) +
   ## Labels
@@ -671,7 +517,7 @@ ggplot() +
            size = 3.5 * diagram_text_scale, color = "darkorange") +
   annotate("text", x = 0.5, y = -0.8, label = "Release\nBearing",
            size = 3.5 * diagram_text_scale, color = "purple4") +
-  annotate("text", x = 1.2, y = 0.5, label = "Fork\nForce",
+  annotate("text", x = 1.3, y = 0.75, label = "Fork pushes\nto disengage",
            size = 3.5 * diagram_text_scale, color = "gray40") +
   annotate("segment", x = -0.8, y = -0.4, xend = -0.8, yend = -1.2,
            color = "darkred", linewidth = 0.6) +
@@ -689,7 +535,7 @@ ggplot() +
 
 The torque transmitted by a friction clutch depends on the clamping force and friction coefficient:
 
-**Single-surface clutch:**
+**Clutch with $n$ friction surfaces** (a single-plate car clutch has $n = 2$: one on each side of the disc):
 $$T = \mu \times F \times r_m \times n$$
 
 Where:
@@ -756,54 +602,25 @@ Positive engagement clutches use mechanical interlocking rather than friction. T
 
 ### Jaw Clutch
 
-```{r jaw-clutch, echo=FALSE, fig.align='center', fig.cap="Jaw clutch showing interlocking teeth", fig.width=10, fig.height=5}
+```{r jaw-clutch, echo=FALSE, fig.align='center', fig.cap="Jaw (dog) clutch, disengaged: the sliding half moves along splines on its shaft until its jaws drop between the jaws of the fixed half.", fig.width=10, fig.height=4.5}
 library(ggplot2)
-
-## Jaw clutch simplified view
+ys <- c(0.75, -0.45)
 ggplot() +
-  ## Left half (fixed)
-  geom_rect(aes(xmin = -3, xmax = -0.8, ymin = -0.4, ymax = 0.4),
-            fill = "gray60", color = "gray40", linewidth = 1) +
-  ## Left jaw teeth
-  geom_rect(aes(xmin = -0.8, xmax = -0.3, ymin = 0.8, ymax = 1.3),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  geom_rect(aes(xmin = -0.8, xmax = -0.3, ymin = -0.1, ymax = 0.4),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  geom_rect(aes(xmin = -0.8, xmax = -0.3, ymin = -1.3, ymax = -0.8),
-            fill = "steelblue", color = "darkblue", linewidth = 1) +
-  ## Left hub
-  geom_rect(aes(xmin = -0.8, xmax = -0.3, ymin = -1.5, ymax = 1.5),
-            fill = NA, color = "darkblue", linewidth = 1.2) +
-  ## Right half (sliding)
-  geom_rect(aes(xmin = 1, xmax = 3, ymin = -0.4, ymax = 0.4),
-            fill = "gray60", color = "gray40", linewidth = 1) +
-  ## Right jaw teeth
-  geom_rect(aes(xmin = 0.5, xmax = 1, ymin = 0.35, ymax = 0.85),
-            fill = "coral", color = "darkred", linewidth = 1) +
-  geom_rect(aes(xmin = 0.5, xmax = 1, ymin = -0.55, ymax = -0.05),
-            fill = "coral", color = "darkred", linewidth = 1) +
-  geom_rect(aes(xmin = 0.5, xmax = 1, ymin = -1.45, ymax = -0.95),
-            fill = "coral", color = "darkred", linewidth = 1) +
-  ## Right hub
-  geom_rect(aes(xmin = 0.5, xmax = 1, ymin = -1.5, ymax = 1.5),
-            fill = NA, color = "darkred", linewidth = 1.2) +
-  ## Shift direction arrow
-  annotate("segment", x = 2, y = 1.2, xend = 0.3, yend = 1.2,
-           arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-           color = "darkgreen", linewidth = 1.5) +
-  annotate("text", x = 1.2, y = 1.95, label = "Engagement",
-           size = 4 * diagram_text_scale, color = "darkgreen", fontface = "bold") +
-  ## Labels
-  annotate("text", x = -2, y = -1.8, label = "Fixed Half",
-           size = 4 * diagram_text_scale, color = "darkblue") +
-  annotate("text", x = 2, y = -1.8, label = "Sliding Half",
-           size = 4 * diagram_text_scale, color = "darkred") +
-  coord_fixed() +
-  xlim(-3.5, 3.5) +
-  ylim(-2.2, 2.3) +
+  annotate("rect", xmin = -4.5, xmax = -0.6, ymin = -0.3, ymax = 0.3, fill = "gray60", color = "gray30") +
+  annotate("rect", xmin = 0.6, xmax = 4.5, ymin = -0.3, ymax = 0.3, fill = "gray60", color = "gray30") +
+  annotate("rect", xmin = 1.3, xmax = 3.8, ymin = 0.3, ymax = 0.42, fill = "gray40") +                          # splines
+  annotate("rect", xmin = -2.6, xmax = -1.2, ymin = -1.2, ymax = 1.2, fill = "steelblue", color = "darkblue") +
+  annotate("rect", xmin = -1.2, xmax = -0.6, ymin = ys - 0.3, ymax = ys + 0.3, fill = "steelblue", color = "darkblue") +
+  annotate("rect", xmin = 1.4, xmax = 2.8, ymin = -1.2, ymax = 1.2, fill = "coral", color = "darkred") +
+  annotate("rect", xmin = 0.8, xmax = 1.4, ymin = ys - 0.3 - 0.6, ymax = ys + 0.3 - 0.6, fill = "coral", color = "darkred") +
+  annotate("segment", x = 3.4, xend = 2.95, y = 1.55, yend = 1.55, arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = "darkgreen", linewidth = 1.2) +
+  annotate("text", x = 3.5, y = 1.55, label = "slide to engage", hjust = 0, color = "darkgreen", size = 3.3 * diagram_text_scale) +
+  annotate("text", x = -1.9, y = -1.55, label = "Fixed half", color = "darkblue", size = 3.5 * diagram_text_scale) +
+  annotate("text", x = 2.1, y = -1.55, label = "Sliding half (on splines)", color = "darkred", size = 3.5 * diagram_text_scale) +
+  coord_fixed(xlim = c(-4.6, 5.6), ylim = c(-1.9, 1.9)) +
   theme_coupling +
   labs(title = "Jaw (Dog) Clutch",
-       subtitle = "Positive engagement — must synchronize before engaging")
+       subtitle = "Positive engagement: the shafts must be (nearly) at the same speed before engaging")
 ```
 
 **Characteristics:**
@@ -819,84 +636,37 @@ ggplot() +
 
 Overrunning (one-way) clutches automatically engage in one direction and freewheel in the other. They require no external control.
 
-```{r overrunning-clutch, echo=FALSE, fig.align='center', fig.cap="Sprag-type overrunning clutch operation", fig.width=11, fig.height=5}
+```{r overrunning-clutch, echo=FALSE, fig.align='center', fig.cap="Roller-ramp overrunning clutch. Left: the inner cam drives clockwise; the rollers are pushed toward the narrow end of their ramps, wedge between cam and outer race, and drive the race. Right: the outer race overruns (turns clockwise faster than the cam); the rollers are dragged to the wide end and the clutch freewheels.", fig.width=11, fig.height=5.5}
 library(ggplot2)
-library(ggforce)
-library(gridExtra)
-
-## Engaged state
-p1 <- ggplot() +
-  ## Outer race
-  geom_circle(aes(x0 = 0, y0 = 0, r = 2),
-              fill = "gray70", color = "gray40", linewidth = 1.5) +
-  geom_circle(aes(x0 = 0, y0 = 0, r = 1.7),
-              fill = "white", color = "gray50", linewidth = 1) +
-  ## Inner race
-  geom_circle(aes(x0 = 0, y0 = 0, r = 1.1),
-              fill = "steelblue", color = "darkblue", linewidth = 1.2) +
-  geom_circle(aes(x0 = 0, y0 = 0, r = 0.5),
-              fill = "white", color = "gray40", linewidth = 1) +
-  ## Sprags (wedge-shaped elements) - tilted for engagement
-  geom_polygon(aes(x = c(0.9, 1.2, 1.5, 1.3),
-                   y = c(0.6, 0.9, 0.6, 0.3)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(-0.9, -1.2, -1.5, -1.3),
-                   y = c(-0.6, -0.9, -0.6, -0.3)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(0.3, 0.6, 0.9, 0.6),
-                   y = c(-1.1, -1.4, -1.2, -0.9)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(-0.3, -0.6, -0.9, -0.6),
-                   y = c(1.1, 1.4, 1.2, 0.9)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  ## Rotation arrow
-  geom_curve(aes(x = -0.3, y = 1.5, xend = 0.5, yend = 1.4),
-             arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
-             curvature = -0.3, color = "darkgreen", linewidth = 1.2) +
-  annotate("text", x = 0, y = 2.5, label = "ENGAGED\n(Driving)",
-           size = 4 * diagram_text_scale, fontface = "bold", color = "darkgreen") +
-  coord_fixed() +
-  xlim(-2.8, 2.8) +
-  ylim(-2.8, 3) +
+Ro <- 3; rr <- 0.3
+sect <- (0:3) * pi / 2
+cam_r <- function(t) { u <- (t %% (pi / 2)) / (pi / 2); 2.2 + 0.4 * u }      # radius rises through each 90 deg sector
+cam <- function(cx) { t <- seq(0, 2 * pi, length.out = 1200); data.frame(x = cx + cam_r(t) * cos(t), y = cam_r(t) * sin(t)) }
+circ <- function(x, y, r, id, n = 80) { t <- seq(0, 2 * pi, length.out = n); data.frame(x = x + r * cos(t), y = y + r * sin(t), id = id) }
+roller_set <- function(cx, frac) {
+  do.call(rbind, lapply(1:4, function(k) { t <- sect[k] + frac * pi / 2; rc <- cam_r(t) + rr
+    circ(cx + rc * cos(t), rc * sin(t), rr, k) }))
+}
+ring <- function(cx) rbind(transform(circ(cx, 0, 3.5, 1, 200)), transform(circ(cx, 0, Ro, 2, 200)))
+arcd <- function(cx, r, from, to, col) { t <- seq(from, to, length.out = 30) * pi / 180
+  annotate("path", x = cx + r * cos(t), y = r * sin(t), color = col, linewidth = 1.2, arrow = arrow(length = unit(0.25, "cm"), type = "closed")) }
+one <- function(cx, frac) list(
+  geom_polygon(data = circ(cx, 0, 3.5, 1, 200), aes(x, y), fill = "gray70", color = "gray30"),
+  geom_polygon(data = circ(cx, 0, Ro, 1, 200), aes(x, y), fill = "white", color = "gray30"),
+  geom_polygon(data = cam(cx), aes(x, y), fill = "steelblue", color = "darkblue"),
+  geom_polygon(data = circ(cx, 0, 0.8, 1), aes(x, y), fill = "white", color = "darkblue"),
+  geom_polygon(data = roller_set(cx, frac), aes(x, y, group = id), fill = "gold", color = "darkorange"))
+ggplot() +
+  one(0, 0.5) + one(9, 0.22) +
+  arcd(0, 1.5, 110, 50, "darkgreen") + annotate("text", x = 0, y = 0, label = "cam\ndrives", size = 3 * diagram_text_scale, color = "darkgreen") +
+  arcd(0, 3.9, 110, 60, "darkgreen") +
+  arcd(9, 3.9, 120, 50, "red") + annotate("text", x = 9, y = 0, label = "cam", size = 3 * diagram_text_scale) +
+  annotate("text", x = 0, y = 4.6, label = "ENGAGED (driving)\nrollers wedged at the narrow end", color = "darkgreen", fontface = "bold", size = 3.4 * diagram_text_scale) +
+  annotate("text", x = 9, y = 4.6, label = "FREEWHEELING (overrunning)\nrollers at the wide end, race turns freely", color = "red", fontface = "bold", size = 3.4 * diagram_text_scale) +
+  annotate("text", x = 4.5, y = -3.9, label = "Outer race (grey), inner cam with four ramps (blue), rollers (yellow); springs omitted",
+           size = 3 * diagram_text_scale, color = "gray30") +
+  coord_fixed(xlim = c(-4, 13), ylim = c(-4.2, 5.4)) +
   theme_coupling
-
-## Freewheeling state
-p2 <- ggplot() +
-  ## Outer race
-  geom_circle(aes(x0 = 0, y0 = 0, r = 2),
-              fill = "gray70", color = "gray40", linewidth = 1.5) +
-  geom_circle(aes(x0 = 0, y0 = 0, r = 1.7),
-              fill = "white", color = "gray50", linewidth = 1) +
-  ## Inner race
-  geom_circle(aes(x0 = 0, y0 = 0, r = 1.1),
-              fill = "steelblue", color = "darkblue", linewidth = 1.2) +
-  geom_circle(aes(x0 = 0, y0 = 0, r = 0.5),
-              fill = "white", color = "gray40", linewidth = 1) +
-  ## Sprags (flat for freewheeling)
-  geom_polygon(aes(x = c(1.0, 1.15, 1.45, 1.3),
-                   y = c(0.5, 0.75, 0.55, 0.3)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(-1.0, -1.15, -1.45, -1.3),
-                   y = c(-0.5, -0.75, -0.55, -0.3)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(0.4, 0.55, 0.85, 0.7),
-                   y = c(-1.05, -1.3, -1.15, -0.9)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  geom_polygon(aes(x = c(-0.4, -0.55, -0.85, -0.7),
-                   y = c(1.05, 1.3, 1.15, 0.9)),
-               fill = "gold", color = "darkorange", linewidth = 0.8) +
-  ## Rotation arrow (opposite)
-  geom_curve(aes(x = 0.5, y = 1.4, xend = -0.3, yend = 1.5),
-             arrow = arrow(length = unit(0.25, "cm"), type = "closed"),
-             curvature = -0.3, color = "red", linewidth = 1.2) +
-  annotate("text", x = 0, y = 2.5, label = "FREEWHEELING\n(Overrunning)",
-           size = 4 * diagram_text_scale, fontface = "bold", color = "red") +
-  coord_fixed() +
-  xlim(-2.8, 2.8) +
-  ylim(-2.8, 3) +
-  theme_coupling
-
-grid.arrange(p1, p2, ncol = 2)
 ```
 
 ### Overrunning Clutch Applications
@@ -991,10 +761,10 @@ $$T = 0.35 \times 4500 \times 0.1041 \times 2 = 328.0 \text{ N·m}$$
 
 Couplings and clutches work with other power transmission components:
 
-- **Chapter 4: Gears** – Often connected via couplings
-- **Chapter 8: Bearings** – Support coupled shafts
-- **Chapter 10: Belt & Pulley Systems** – Alternative to direct shaft coupling
-- **Chapter 11: Chain Drives** – Another power transmission option
+- **Gears** (@sec-chap-02-gears) – Often connected via couplings
+- **Bearings** ([Ball Bearings and Bushings](02-03-Bearings.qmd)) – Support coupled shafts
+- **Belt and Pulley Systems** (@sec-belts-intro) – Alternative to direct shaft coupling
+- **Chain Drives** (@sec-chains-intro) – Another power transmission option
 
 ---
 

@@ -7,7 +7,7 @@ source("R/required_packages.R")
 
 ## Lab Overview {#sec-ml-lab-overview}
 
-Each week of this module has two hours of classroom theory (Chapter @sec-chap-ml) followed by two hours of hands-on laboratory work. The six lab sessions build on each other progressively:
+Each week of this module has two hours of classroom theory (@sec-chap-ml) followed by two hours of hands-on laboratory work. The six lab sessions build on each other progressively:
 
 | Week | Lab Focus | What You Submit |
 |:---|:---|:---|
@@ -248,9 +248,9 @@ quality_log.append({
 |:---|:---|:---|
 | **Missing data — 2 days** | Gaps in timestamp sequence | Document as network outage; do NOT interpolate production data |
 | **Sensor error — impossible diameter** | One row with `diameter_mm` far above 30 mm | Fix with decimal correction; log it |
-| **Unit confusion — roughness in inches** | A block of rows where `surface_roughness_um` values are around 0.00X rather than X–X0 µm | Convert inches to µm (multiply by 25,400); log each row |
+| **Unit confusion — roughness in inches** | A block of rows where `surface_roughness_um` values are below 0.001 (Ra in inches, e.g. 0.00006) instead of the usual 0.4–3.2 µm | Convert inches to µm (multiply by 25,400); log each row |
 | **Impossible cycle time** | One row with negative `cycle_time_sec` | Flag and remove; log it |
-| **Justified outlier (do NOT remove)** | A cluster of 3–5 parts with elevated diameter around days 43–47 | Keep it — this is a real special cause. Document that it is a real event. |
+| **Justified outlier (do NOT remove)** | A run of elevated diameters on days 43–47 | Keep it — this is a real special cause. Document that it is a real event. |
 
 After cleaning, verify that:
 
@@ -276,13 +276,14 @@ import matplotlib.pyplot as plt
 df_clean["date"] = pd.to_datetime(df_clean["timestamp"]).dt.date
 
 # Step 1: Compute daily means (X-bar)
-n_per_day  = 5           # subgroup size: 5 parts per day
+n_per_day  = 5           # subgroup size: 5 sampled parts per day
 daily_mean = df_clean.groupby("date")["diameter_mm"].mean()
 
-# Step 2: Compute overall statistics from the CLEAN baseline
-#    Use only the in-control days (before the special cause event)
-#    to estimate the process standard deviation
-sigma_individual = df_clean["diameter_mm"].std()
+# Step 2: Estimate sigma of individual parts from the variation WITHIN each day.
+#    The average within-day standard deviation reflects only common-cause noise,
+#    so a shift between days (the special cause you are hunting) does not inflate it.
+#    (A textbook chart would also divide by the bias constant c4 = 0.940 for n = 5.)
+sigma_individual = df_clean.groupby("date")["diameter_mm"].std().mean()
 grand_mean       = daily_mean.mean()
 
 # Step 3: Control limits — remember: UCL/LCL use sigma/sqrt(n),
@@ -321,7 +322,7 @@ plt.show()
 
 1. Identify which days show out-of-control points. Write the date range in a markdown cell.
 2. Cross-reference those days with the `operator` and `tool_age_cycles` columns. What do you notice?
-3. Compute Cpk using Equation @eq-ml-cpk from Chapter @sec-chap-ml:
+3. Compute Cpk using @eq-ml-cpk from @sec-chap-ml:
 
 ```python
 # Cpk calculation
@@ -341,7 +342,7 @@ print(f"Cpk = {cpk:.3f}")
 
 In a markdown cell, answer these three questions. Your answers do not need to be long — one to three sentences each. These questions set up Week 3.
 
-1. **Advance warning:** The SPC chart identified the bad-batch event around days 43–47. How many parts had already been produced during that event by the time the first out-of-control point appeared? (Count the rows from the first day of the shift to the first red point on your chart.)
+1. **Advance warning:** The SPC chart identified the bad-batch event around days 43–47. How many parts had already been produced during that event by the time the first out-of-control point appeared? (Count the rows from the first day of the event to the first red point on your chart.)
 
 2. **Predictive question:** If you had a model that predicted tomorrow's mean diameter from today's tool age, operator, and the last 5 days of measurements — would you have received earlier warning than SPC provided? Explain your reasoning.
 
@@ -580,8 +581,11 @@ print(f"New columns added: {train_fe.shape[1] - train.shape[1]}")
 **Verify the groupby is working:** check that the rolling features for engine #1's last cycle and engine #2's first cycle are computed independently:
 
 ```python
-# Check engine boundary: last row of engine 1 and first row of engine 2
-boundary_check = train_fe[train_fe["unit_number"].isin([1, 2])].head(10).tail(6)
+# Check engine boundary: last 3 rows of engine 1 and first 3 rows of engine 2
+boundary_check = pd.concat([
+    train_fe[train_fe["unit_number"] == 1].tail(3),
+    train_fe[train_fe["unit_number"] == 2].head(3),
+])
 print(boundary_check[["unit_number", "time_in_cycles", "sensor_11", "sensor_11_rolling_mean"]])
 ```
 
@@ -844,7 +848,8 @@ This opens the app in your browser at `http://localhost:8501`. Test it with a CS
 ```python
 !pip install streamlit pyngrok -q
 from pyngrok import ngrok
-!streamlit run streamlit_app.py &
+ngrok.set_auth_token("YOUR_NGROK_TOKEN")   # free account at ngrok.com; required since 2023
+!streamlit run streamlit_app.py &>/dev/null &
 public_url = ngrok.connect(8501)
 print("Public URL:", public_url)
 ```
@@ -865,18 +870,25 @@ Your repository needs these files:
 | `requirements.txt` | Python dependencies for deployment |
 | `sample_engine.csv` | Sample data for the "Use sample data" button |
 
-**`requirements.txt` content** (copy this exactly — versions tested for compatibility):
+**`requirements.txt` content.** A pickled model can only be loaded reliably by the **same scikit-learn version** that trained it, and the NumPy major version must match too (a model saved with NumPy 2.x will not load under NumPy 1.x). So pin the versions *from your Colab session*: run
+
+```python
+import sklearn, numpy, pandas, joblib
+print(sklearn.__version__, numpy.__version__, pandas.__version__, joblib.__version__)
+```
+
+in the notebook where you trained the model, and put those numbers in the file, for example:
 
 ```
-streamlit==1.39.0
-scikit-learn==1.5.2
-pandas==2.2.3
-numpy==1.26.4
-matplotlib==3.9.2
+streamlit
+scikit-learn==1.6.1
+numpy==2.0.2
+pandas==2.2.2
 joblib==1.4.2
+matplotlib
 ```
 
-If newer stable versions are available when you take this course, they will likely also work. If deployment fails, pin to these specific versions.
+(The example numbers will be out of date by the time you read this — use the ones your notebook prints.)
 
 **Push to GitHub** using the GitHub web interface (drag and drop files into your repo) or via the command line:
 
@@ -904,8 +916,8 @@ Deployment typically takes 2–3 minutes. You will get a public URL in the forma
 If deployment fails:
 
 - Check the log for the specific error (usually a missing package or wrong file path)
-- Most common issue: `rul_model.pkl` is too large (> 50 MB). If so, retrain with fewer trees (`n_estimators=50`) to reduce file size.
-- Second most common: `requirements.txt` has a version conflict. Remove version pins and let Streamlit resolve them, then re-add specific pins if needed.
+- Most common issue: the model fails to load because `requirements.txt` installs a different scikit-learn or NumPy version from the one you trained with. Pin the exact versions your Colab notebook prints.
+- Second most common: `rul_model.pkl` is too large. GitHub's web upload accepts files up to 25 MB (100 MB from the command line). If your file is larger, retrain with fewer or shallower trees (`n_estimators=50`, `max_depth=8`), or save with `joblib.dump(model, "rul_model.pkl", compress=3)`.
 
 ***
 
@@ -1046,7 +1058,7 @@ If you complete the core capstone and have time remaining, these optional extens
 
 | Goal | What it involves | Why it matters |
 |:---|:---|:---|
-| **XGBoost comparison** | Install `xgboost`, train an `XGBRegressor` with the same features, compare RMSE | XGBoost often outperforms RF by 10–20% on tabular data; understanding when and why is valuable |
+| **XGBoost comparison** | Install `xgboost`, train an `XGBRegressor` with the same features, compare RMSE | Gradient boosting often beats a Random Forest on tabular data, though usually by a modest margin and only after tuning; understanding when and why is valuable |
 | **Different window sizes** | Repeat the rolling feature generation with k = 3, 10, and 20; compare RMSE | Practical understanding of the window size hyperparameter |
 | **SHAP values** | Install `shap`, produce a SHAP waterfall plot for a specific engine near failure | The industry standard for model explainability; shows why a specific prediction was made |
 | **FD002 generalization** | Train on FD001, test on FD002 (multiple operating conditions) | Tests model robustness; nearly everyone discovers their model transfers poorly — understanding why is the lesson |

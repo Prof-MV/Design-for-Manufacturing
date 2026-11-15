@@ -14,8 +14,9 @@ In this section, you will learn to:
 - **Design and analyze bolted joints** including preload calculations and safety factors
 - **Select and specify gears** for power transmission with proper ratios and tooth geometry
 - **Choose bearings** based on load, speed, and life requirements
-- **Analyze linkage mechanisms** using Grashof's law and position analysis
+- **Analyze linkage and cam mechanisms** using mobility, Grashof's law, position analysis and follower motion laws
 - **Design belt, chain, and coupling systems** for reliable power transmission
+- **Apply these elements to vehicles**: drivetrains, brakes, and the thermodynamics behind them
 
 ::: {.callout-think}
 **Before You Begin:** Think about a machine you use every day—perhaps a car, a bicycle, or even a power drill. How many different machine elements can you identify? How do they work together to accomplish the machine's function?
@@ -32,15 +33,20 @@ Machine elements are the vocabulary of mechanical design. Just as a writer must 
 
 ## Chapters in This Section
 
-| Chapter | Topic | Key Skills |
-|:--------|:------|:-----------|
-| 2.1 | Bolt Joint Calculations | Preload, stiffness, safety factors |
-| 2.2 | Gears and Gear Trains | Speed ratios, tooth geometry, gear types |
-| 2.3 | Bearings and Bushings | L10 life calculations, PV limits |
-| 2.4 | Four-Bar Linkages | Grashof classification, transmission angle |
-| 2.5 | Belt and Pulley Systems | Speed ratios, belt length, tensioning |
-| 2.6 | Chain Drives | Sprocket selection, chain length |
-| 2.7 | Couplings and Clutches | Misalignment, friction clutch torque |
+| Chapter | Key Skills |
+|:--------|:-----------|
+| Bolt Joint Calculations | Preload, joint stiffness, tightening torque, safety factors |
+| Gears, Gear Trains, and Transmissions | Speed ratios, tooth geometry, gear types, gear failure |
+| Ball Bearings and Bushings | L10 life calculations, PV limits |
+| Planar Linkages | Links, joints, kinematic diagrams, degrees of freedom (Gruebler) |
+| Four-Bar Linkages | Grashof classification, position analysis, transmission angle |
+| Cam-Follower Mechanisms | Follower types, motion laws, displacement (SVAJ) diagrams, cam layout |
+| Belt and Pulley Systems | Speed ratios, belt length, wrap angle, tensioning |
+| Chain Drives | Sprocket selection, chain length, tensioning, lubrication |
+| Couplings and Clutches | Misalignment, friction clutch torque |
+| Automotive Drivetrains | Drive layouts, automatic/manual/DCT/CVT transmissions, gear ratios and road speed, EV drivetrains |
+| Vehicle Braking Systems | Hydraulic advantage, disc and drum brakes, ABS/EBD/ESC, regenerative braking, stopping distance |
+| Thermodynamics | First and second laws, ideal gases, efficiency, power and refrigeration cycles |
 
 ## Industry Applications
 

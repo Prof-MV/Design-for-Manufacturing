@@ -29,6 +29,36 @@ theme_linkage <- theme_minimal() +
     plot.background = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   )
+
+## Four-bar position solver: ground pivots O2 = (0, 0) and O4 = (g, 0), input angle t2 (rad).
+## Returns A and B (open branch: B on the left of the line from A to O4), or NULL if the loop cannot close.
+fourbar <- function(a, b, c, g, t2, branch = 1) {
+  A <- c(a * cos(t2), a * sin(t2)); O4 <- c(g, 0)
+  d <- sqrt(sum((O4 - A)^2))
+  if (d > b + c || d < abs(b - c)) return(NULL)
+  ex <- (O4 - A) / d; ey <- c(-ex[2], ex[1])
+  x <- (b^2 - c^2 + d^2) / (2 * d); h <- sqrt(max(b^2 - x^2, 0))
+  B <- A + x * ex + branch * h * ey
+  list(A = A, B = B)
+}
+## Circle / arc as a data frame (angles in rad)
+arc_df <- function(cx, cy, r, from = 0, to = 2 * pi, n = 100) {
+  t <- seq(from, to, length.out = n); data.frame(x = cx + r * cos(t), y = cy + r * sin(t))
+}
+## Ground hatching under a pivot
+hatch <- function(x, y, w = 0.5) {
+  xs <- seq(x - w, x + w, length.out = 6)
+  list(annotate("segment", x = x - w, xend = x + w, y = y - 0.12, yend = y - 0.12, linewidth = 0.8),
+       annotate("segment", x = xs, xend = xs - 0.15, y = y - 0.12, yend = y - 0.32, linewidth = 0.5))
+}
+## Draw one linkage position (ground pivots at (0,0) and (g,0))
+draw_fb <- function(p, g, lt = "solid", alpha = 1, lw = 3) list(
+  annotate("segment", x = 0, y = 0, xend = p$A[1], yend = p$A[2], linewidth = lw, color = "steelblue", linetype = lt, alpha = alpha, lineend = "round"),
+  annotate("segment", x = p$A[1], y = p$A[2], xend = p$B[1], yend = p$B[2], linewidth = lw, color = "orange", linetype = lt, alpha = alpha, lineend = "round"),
+  annotate("segment", x = g, y = 0, xend = p$B[1], yend = p$B[2], linewidth = lw, color = "forestgreen", linetype = lt, alpha = alpha, lineend = "round"),
+  annotate("point", x = c(p$A[1], p$B[1]), y = c(p$A[2], p$B[2]), size = 3.5, shape = 21, fill = "white", stroke = 1.2, alpha = alpha))
+pivots <- function(g) list(hatch(0, 0), hatch(g, 0),
+  annotate("point", x = c(0, g), y = c(0, 0), size = 4.5, shape = 21, fill = "white", stroke = 1.5))
 ```
 
 ## Learning Objectives {#sec-objectives-09}
@@ -37,7 +67,7 @@ By the end of this chapter, you will be able to:
 
 1. **Identify** the components and terminology of four-bar linkage mechanisms
 2. **Apply** Grashof's Law to classify four-bar linkages
-3. **Distinguish** between crank-rocker, double-crank, rocker-crank, and triple-rocker mechanisms
+3. **Distinguish** between crank-rocker, double-crank, rocker-crank, double-rocker and triple-rocker mechanisms
 4. **Analyze** linkage motion using position analysis techniques
 5. **Select** appropriate linkage configurations for specific motion requirements
 
@@ -195,70 +225,30 @@ $$S + L \leq P + Q$$
 
 ### Classification by Grashof Condition {-}
 
-```{r grashof-classification, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Classification of four-bar linkages based on Grashof's Law."}
+```{r grashof-classification, echo=FALSE, fig.width=10, fig.height=8, fig.align='center', fig.cap="Classification of four-bar linkages based on Grashof's Law. For a Grashof linkage, the position of the shortest link decides the type."}
+box <- function(x0, x1, y0, y1, title, lines, fill, tsize = 3) list(
+  annotate("rect", xmin = x0, xmax = x1, ymin = y0, ymax = y1, fill = fill, color = "black"),
+  annotate("text", x = (x0 + x1) / 2, y = y1 - 0.4, label = title, fontface = "bold", size = tsize * diagram_text_scale),
+  annotate("text", x = (x0 + x1) / 2, y = (y0 + y1) / 2 - 0.25, label = lines, size = 2.4 * diagram_text_scale, lineheight = 1.1))
+
 ggplot() +
-  ## Main decision box
-  geom_rect(aes(xmin = 3, xmax = 9, ymin = 9, ymax = 10.5), fill = "steelblue", color = "black") +
+  annotate("rect", xmin = 3.5, xmax = 8.5, ymin = 9, ymax = 10.5, fill = "steelblue", color = "black") +
   annotate("text", x = 6, y = 10, label = "GRASHOF'S LAW", fontface = "bold", size = 5 * diagram_text_scale, color = "white") +
   annotate("text", x = 6, y = 9.4, label = "S + L  vs  P + Q", size = 4 * diagram_text_scale, color = "white") +
-
-  ## Connecting lines
-  geom_segment(aes(x = 6, xend = 6, y = 9, yend = 8), linewidth = 1) +
-  geom_segment(aes(x = 3, xend = 9, y = 8, yend = 8), linewidth = 1) +
-  geom_segment(aes(x = 3, xend = 3, y = 8, yend = 7), linewidth = 1) +
-  geom_segment(aes(x = 9, xend = 9, y = 8, yend = 7), linewidth = 1) +
-
-  ## Grashof condition box
-  geom_rect(aes(xmin = 1, xmax = 5, ymin = 5.5, ymax = 7), fill = "lightgreen", color = "black") +
-  annotate("text", x = 3, y = 6.6, label = "GRASHOF", fontface = "bold", size = 4 * diagram_text_scale, color = "darkgreen") +
-  annotate("text", x = 3, y = 6, label = "S + L < P + Q", size = 3.5 * diagram_text_scale) +
-
-  ## Non-Grashof condition box
-  geom_rect(aes(xmin = 7, xmax = 11, ymin = 5.5, ymax = 7), fill = "lightyellow", color = "black") +
-  annotate("text", x = 9, y = 6.6, label = "NON-GRASHOF", fontface = "bold", size = 4 * diagram_text_scale, color = "darkorange") +
-  annotate("text", x = 9, y = 6, label = "S + L > P + Q", size = 3.5 * diagram_text_scale) +
-
-  ## Grashof sub-types
-  geom_segment(aes(x = 3, xend = 3, y = 5.5, yend = 4.5), linewidth = 0.5) +
-  geom_segment(aes(x = 1, xend = 5, y = 4.5, yend = 4.5), linewidth = 0.5) +
-  geom_segment(aes(x = c(1, 3, 5), xend = c(1, 3, 5), y = rep(4.5, 3), yend = rep(4, 3)), linewidth = 0.5) +
-
-  ## Crank-Rocker
-  geom_rect(aes(xmin = 0.05, xmax = 1.95, ymin = 2, ymax = 4), fill = "palegreen", color = "black") +
-  annotate("text", x = 1, y = 3.6, label = "Crank-Rocker", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 1, y = 3.1, label = "Shortest = input", size = 2.5 * diagram_text_scale) +
-  annotate("text", x = 1, y = 2.6, label = "Input: full rotation", size = 2.5 * diagram_text_scale) +
-  annotate("text", x = 1, y = 2.2, label = "Output: oscillates", size = 2.5 * diagram_text_scale) +
-
-  ## Double-Crank
-  geom_rect(aes(xmin = 2.05, xmax = 3.95, ymin = 2, ymax = 4), fill = "palegreen", color = "black") +
-  annotate("text", x = 3, y = 3.6, label = "Double-Crank", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 3, y = 3.1, label = "Shortest = ground", size = 2.5 * diagram_text_scale) +
-  annotate("text", x = 3, y = 2.6, label = "Input: full rotation", size = 2.5 * diagram_text_scale) +
-  annotate("text", x = 3, y = 2.2, label = "Output: full rotation", size = 2.5 * diagram_text_scale) +
-
-  ## Rocker-Crank
-  geom_rect(aes(xmin = 4.05, xmax = 5.95, ymin = 2, ymax = 4), fill = "palegreen", color = "black") +
-  annotate("text", x = 5, y = 3.6, label = "Rocker-Crank", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 5, y = 3.1, label = "Shortest = output", size = 2.5 * diagram_text_scale) +
-  annotate("text", x = 5, y = 2.6, label = "Input: oscillates", size = 2.5 * diagram_text_scale) +
-  annotate("text", x = 5, y = 2.2, label = "Output: full rotation", size = 2.5 * diagram_text_scale) +
-
-  ## Triple-Rocker (Non-Grashof)
-  geom_rect(aes(xmin = 7, xmax = 11, ymin = 2, ymax = 4.5), fill = "moccasin", color = "black") +
-  annotate("text", x = 9, y = 4.1, label = "Triple-Rocker", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  annotate("text", x = 9, y = 3.5, label = "No link can fully rotate", size = 2.8 * diagram_text_scale) +
-  annotate("text", x = 9, y = 3, label = "All links oscillate", size = 2.8 * diagram_text_scale) +
-  annotate("text", x = 9, y = 2.5, label = "(Limited motion range)", size = 2.8 * diagram_text_scale) +
-
-  ## Special case
-  geom_rect(aes(xmin = 3.5, xmax = 8.5, ymin = 0.3, ymax = 1.5), fill = "lavender", color = "black") +
-  annotate("text", x = 6, y = 1.2, label = "SPECIAL CASE: S + L = P + Q", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 6, y = 0.7, label = "Change-point mechanism (passes through dead points)", size = 2.8 * diagram_text_scale) +
-
-  coord_fixed(ratio = 1, xlim = c(-1, 12), ylim = c(0, 11)) +
+  annotate("segment", x = c(6, 3, 3, 9.5), xend = c(6, 9.5, 3, 9.5), y = c(9, 8, 8, 8), yend = c(8, 8, 7, 7), linewidth = 1) +
+  box(0.6, 5.4, 5.6, 7, "GRASHOF", "S + L < P + Q\nat least one link turns fully", "lightgreen", 4) +
+  box(7.4, 11.6, 5.6, 7, "NON-GRASHOF", "S + L > P + Q", "lightyellow", 4) +
+  annotate("segment", x = c(3, -0.3, -0.3, 1.9, 4.1, 6.3), xend = c(3, 6.3, -0.3, 1.9, 4.1, 6.3),
+           y = c(5.6, 4.9, 4.9, 4.9, 4.9, 4.9), yend = c(4.9, 4.9, 4.4, 4.4, 4.4, 4.4), linewidth = 0.5) +
+  box(-1.3, 0.7, 1.9, 4.4, "Crank-Rocker", "Shortest = input\nInput: full turn\nOutput: rocks", "palegreen") +
+  box(0.9, 2.9, 1.9, 4.4, "Double-Crank", "Shortest = ground\nInput: full turn\nOutput: full turn", "palegreen") +
+  box(3.1, 5.1, 1.9, 4.4, "Rocker-Crank", "Shortest = output\nInput: rocks\nOutput: full turn", "palegreen") +
+  box(5.3, 7.3, 1.9, 4.4, "Double-Rocker", "Shortest = coupler\nInput and output\nrock; the coupler\nturns fully", "palegreen") +
+  annotate("segment", x = 9.5, xend = 9.5, y = 5.6, yend = 4.4, linewidth = 0.5) +
+  box(8, 11, 1.9, 4.4, "Triple-Rocker", "No link turns fully\nAll links rock", "moccasin") +
+  box(2.5, 9.5, 0.2, 1.5, "SPECIAL CASE: S + L = P + Q", "Change-point mechanism: the links line up (dead points)", "lavender") +
+  coord_fixed(ratio = 1, xlim = c(-1.5, 12), ylim = c(0, 10.8)) +
   theme_void()
-
 ```
 
 ***
@@ -269,8 +259,9 @@ ggplot() +
 grashof_types <- tribble(
   ~Type, ~Condition, ~Shortest_Link, ~Input_Motion, ~Output_Motion, ~Application,
   "Crank-Rocker", "S + L < P + Q", "Input link (a)", "Continuous rotation", "Oscillation", "Windshield wipers, pumps",
-  "Double-Crank", "S + L < P + Q", "Ground (g)", "Continuous rotation", "Continuous rotation", "Locomotive wheels",
-  "Rocker-Crank", "S + L < P + Q", "Output link (c)", "Oscillation", "Continuous rotation", "Treadle pumps",
+  "Double-Crank", "S + L < P + Q", "Ground (g)", "Continuous rotation", "Continuous rotation", "Drag-link quick-return, rotary feeders",
+  "Rocker-Crank", "S + L < P + Q", "Output link (c)", "Oscillation", "Continuous rotation", "Treadle drives (sewing machine, lathe)",
+  "Double-Rocker", "S + L < P + Q", "Coupler (b)", "Oscillation", "Oscillation", "Aircraft landing gear, Ackermann steering",
   "Triple-Rocker", "S + L > P + Q", "Any", "Oscillation only", "Oscillation only", "Rocking mechanisms"
 )
 
@@ -280,8 +271,8 @@ grashof_types %>%
       booktabs = TRUE) %>%
   kable_styling(latex_options = c("hold_position", "scale_down"), full_width = knitr::is_html_output()) %>%
   row_spec(0, background = "#D81B60", color = "white") %>%
-  row_spec(1:3, background = "#E8F5E9") %>%
-  row_spec(4, background = "#FFF3E0")
+  row_spec(1:4, background = "#E8F5E9") %>%
+  row_spec(5, background = "#FFF3E0")
 ```
 
 ***
@@ -292,56 +283,26 @@ grashof_types %>%
 
 The **crank-rocker** is the most common four-bar linkage configuration. The input link (crank) rotates continuously while the output link (rocker) oscillates back and forth.
 
-```{r crank-rocker, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Crank-rocker mechanism: input rotates, output oscillates."}
-## Show crank-rocker in multiple positions
+```{r crank-rocker, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Crank-rocker mechanism (a = 1.2, b = 4, c = 3, g = 4.5) drawn in three positions computed from the loop closure: the crank turns fully (dashed circle) while the rocker swings between its two limit positions."}
+a <- 1.2; b <- 4; c <- 3; g <- 4.5
+t2 <- seq(0, 2 * pi, length.out = 721)
+th4 <- sapply(t2, function(t) { p <- fourbar(a, b, c, g, t); atan2(p$B[2], p$B[1] - g) })
+rng <- range(th4)
+p1 <- fourbar(a, b, c, g, 60 * pi / 180); p2 <- fourbar(a, b, c, g, 170 * pi / 180); p3 <- fourbar(a, b, c, g, 290 * pi / 180)
+swing <- diff(rng) * 180 / pi
+
 ggplot() +
-  ## Ground
-  geom_segment(aes(x = 2, xend = 8, y = 2, yend = 2), linewidth = 3, color = "gray40") +
-  geom_segment(aes(x = seq(1.5, 8.5, 0.4), xend = seq(1.2, 8.2, 0.4),
-                   y = rep(2, 18), yend = rep(1.7, 18)), linewidth = 0.5, color = "gray40") +
-
-  ## Position 1 (solid)
-  geom_segment(aes(x = 2, xend = 3.2, y = 2, yend = 3.5), linewidth = 3, color = "steelblue") +
-  geom_segment(aes(x = 3.2, xend = 7, y = 3.5, yend = 4.8), linewidth = 3, color = "orange") +
-  geom_segment(aes(x = 8, xend = 7, y = 2, yend = 4.8), linewidth = 3, color = "forestgreen") +
-
-  ## Position 2 (dashed)
-  geom_segment(aes(x = 2, xend = 0.8, y = 2, yend = 2.8), linewidth = 2, color = "steelblue", linetype = "dashed", alpha = 0.6) +
-  geom_segment(aes(x = 0.8, xend = 5.5, y = 2.8, yend = 4.2), linewidth = 2, color = "orange", linetype = "dashed", alpha = 0.6) +
-  geom_segment(aes(x = 8, xend = 5.5, y = 2, yend = 4.2), linewidth = 2, color = "forestgreen", linetype = "dashed", alpha = 0.6) +
-
-  ## Position 3 (dotted)
-  geom_segment(aes(x = 2, xend = 2.5, y = 2, yend = 0.5), linewidth = 2, color = "steelblue", linetype = "dotted", alpha = 0.6) +
-  geom_segment(aes(x = 2.5, xend = 6.8, y = 0.5, yend = 2.8), linewidth = 2, color = "orange", linetype = "dotted", alpha = 0.6) +
-  geom_segment(aes(x = 8, xend = 6.8, y = 2, yend = 2.8), linewidth = 2, color = "forestgreen", linetype = "dotted", alpha = 0.6) +
-
-  ## Fixed pivots
-  geom_point(aes(x = c(2, 8), y = c(2, 2)), size = 8, color = "black") +
-  geom_point(aes(x = c(2, 8), y = c(2, 2)), size = 5, color = "white") +
-  geom_point(aes(x = c(2, 8), y = c(2, 2)), size = 2, color = "black") +
-
-  ## Rotation arrows
-  geom_curve(aes(x = 2, xend = 3.2, y = 0, yend = 0.3),
-             arrow = arrow(length = unit(0.2, "cm"), type = "closed", ends = "both"),
-             curvature = -0.5, linewidth = 1.2, color = "steelblue") +
-  annotate("text", x = 2.6, y = -0.5, label = "360 deg rotation", color = "steelblue", fontface = "bold", size = 3 * diagram_text_scale) +
-
-  geom_curve(aes(x = 8.8, xend = 8.5, y = 3, yend = 4.5),
-             arrow = arrow(length = unit(0.2, "cm"), type = "closed", ends = "both"),
-             curvature = 0.3, linewidth = 1.2, color = "forestgreen") +
-  annotate("text", x = 9.5, y = 3.75, label = "Oscillation\n(~60-120 deg)", color = "forestgreen", fontface = "bold", size = 3 * diagram_text_scale) +
-
-  ## Labels
-  annotate("text", x = 2, y = 5.8, label = "CRANK-ROCKER", fontface = "bold", size = 5 * diagram_text_scale) +
-  annotate("text", x = 0.9, y = 1.3, label = "Crank", color = "steelblue", size = 3.5 * diagram_text_scale) +
-  annotate("text", x = 9.6, y = 2.5, label = "Rocker", color = "forestgreen", size = 3.5 * diagram_text_scale) +
-
-  ## Application box
-  geom_rect(aes(xmin = 5.5, xmax = 10, ymin = 5, ymax = 6.3), fill = "lightyellow", color = "black") +
-  annotate("text", x = 7.75, y = 6, label = "Applications:", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 5.7, y = 5.5, label = "Windshield wipers, sewing machines,\nreciprocating pumps", size = 2.8 * diagram_text_scale, hjust = 0) +
-
-  coord_fixed(ratio = 1, xlim = c(-0.5, 10.5), ylim = c(-1, 6.5)) +
+  geom_path(data = arc_df(0, 0, a), aes(x, y), linetype = "dashed", color = "steelblue") +
+  geom_path(data = arc_df(g, 0, c, rng[1], rng[2]), aes(x, y), color = "forestgreen", linewidth = 1,
+            arrow = arrow(ends = "both", length = unit(0.2, "cm"), type = "closed")) +
+  draw_fb(p2, g, "dashed", 0.55, 2) + draw_fb(p3, g, "dotted", 0.7, 2) + draw_fb(p1, g) +
+  pivots(g) +
+  annotate("text", x = -1.5, y = 0.9, label = "Crank:\nfull 360°", color = "steelblue", fontface = "bold", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = g + 1.9, y = 2.2, label = sprintf("Rocker:\nswings %.0f°", swing), color = "forestgreen", fontface = "bold", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = g / 2, y = -0.6, label = "Ground (link 1)", color = "gray40", size = 3 * diagram_text_scale) +
+  annotate("label", x = 1, y = 4.6, label = "Applications: windshield wipers,\nfans that oscillate, agitators", size = 2.9 * diagram_text_scale, fill = "lightyellow", hjust = 0) +
+  coord_fixed(xlim = c(-2.3, 7.6), ylim = c(-1.6, 5.2)) +
+  labs(title = "Crank-Rocker") +
   theme_linkage
 ```
 
@@ -351,55 +312,21 @@ ggplot() +
 
 In a **double-crank** or **drag-link** mechanism, both the input and output links can rotate continuously. This occurs when the **ground link is the shortest**.
 
-```{r double-crank, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Double-crank mechanism: both input and output rotate continuously."}
+```{r double-crank, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Double-crank (drag-link) mechanism (g = 1.2 shortest, a = 3, b = 3.5, c = 3.2): both the input and the output make full turns (dashed circles), the output at a non-uniform speed."}
+a <- 3; b <- 3.5; c <- 3.2; g <- 1.2
+p1 <- fourbar(a, b, c, g, 70 * pi / 180); p2 <- fourbar(a, b, c, g, 230 * pi / 180)
 ggplot() +
-  ## Ground (shortest)
-  geom_segment(aes(x = 4, xend = 6, y = 2, yend = 2), linewidth = 3, color = "gray40") +
-  geom_segment(aes(x = seq(3.5, 6.5, 0.3), xend = seq(3.2, 6.2, 0.3),
-                   y = rep(2, 11), yend = rep(1.7, 11)), linewidth = 0.5, color = "gray40") +
-
-  ## Position 1
-  geom_segment(aes(x = 4, xend = 2.5, y = 2, yend = 4), linewidth = 3, color = "steelblue") +
-  geom_segment(aes(x = 2.5, xend = 5.5, y = 4, yend = 5.5), linewidth = 3, color = "orange") +
-  geom_segment(aes(x = 6, xend = 5.5, y = 2, yend = 5.5), linewidth = 3, color = "forestgreen") +
-
-  ## Position 2 (dashed)
-  geom_segment(aes(x = 4, xend = 5.5, y = 2, yend = 0.5), linewidth = 2, color = "steelblue", linetype = "dashed", alpha = 0.6) +
-  geom_segment(aes(x = 5.5, xend = 8.5, y = 0.5, yend = 2), linewidth = 2, color = "orange", linetype = "dashed", alpha = 0.6) +
-  geom_segment(aes(x = 6, xend = 8.5, y = 2, yend = 2), linewidth = 2, color = "forestgreen", linetype = "dashed", alpha = 0.6) +
-
-  ## Fixed pivots
-  geom_point(aes(x = c(4, 6), y = c(2, 2)), size = 8, color = "black") +
-  geom_point(aes(x = c(4, 6), y = c(2, 2)), size = 5, color = "white") +
-  geom_point(aes(x = c(4, 6), y = c(2, 2)), size = 2, color = "black") +
-
-  ## Rotation arrows - both 360
-  geom_curve(aes(x = 3.2, xend = 4.5, y = 0.8, yend = 0.5),
-             arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
-             curvature = 0.4, linewidth = 1.2, color = "steelblue") +
-  annotate("text", x = 3.8, y = 0.2, label = "360 deg", color = "steelblue", fontface = "bold", size = 3 * diagram_text_scale) +
-
-  geom_curve(aes(x = 6.8, xend = 5.5, y = 0.8, yend = 0.5),
-             arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
-             curvature = -0.4, linewidth = 1.2, color = "forestgreen") +
-  annotate("text", x = 6.2, y = 0.2, label = "360 deg", color = "forestgreen", fontface = "bold", size = 3 * diagram_text_scale) +
-
-  ## Labels
-  annotate("text", x = 5, y = 6.5, label = "DOUBLE-CRANK (DRAG-LINK)", fontface = "bold", size = 5 * diagram_text_scale) +
-
-  annotate("text", x = 5, y = 1.5, label = "Ground = shortest link", color = "gray40", fontface = "italic", size = 3.5 * diagram_text_scale) +
-
-  ## Key characteristic
-  geom_rect(aes(xmin = 0.5, xmax = 3.5, ymin = 5, ymax = 6.3), fill = "lightgreen", color = "black") +
-  annotate("text", x = 2, y = 6, label = "Key Feature:", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 2, y = 5.4, label = "Non-uniform output velocity\nfrom uniform input", size = 2.8 * diagram_text_scale) +
-
-  ## Application box
-  geom_rect(aes(xmin = 7, xmax = 10.5, ymin = 4, ymax = 5.5), fill = "lightyellow", color = "black") +
-  annotate("text", x = 8.75, y = 5.2, label = "Applications:", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 7.2, y = 4.6, label = "Locomotive coupling rods,\nparallel motion linkages", size = 2.8 * diagram_text_scale, hjust = 0) +
-
-  coord_fixed(ratio = 1, xlim = c(0, 11), ylim = c(-0.5, 7)) +
+  geom_path(data = arc_df(0, 0, a), aes(x, y), linetype = "dashed", color = "steelblue") +
+  geom_path(data = arc_df(g, 0, c), aes(x, y), linetype = "dashed", color = "forestgreen") +
+  draw_fb(p2, g, "dashed", 0.55, 2) + draw_fb(p1, g) +
+  pivots(g) +
+  annotate("text", x = -3.9, y = 2.4, label = "Input crank:\nfull 360°", color = "steelblue", fontface = "bold", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = 5.3, y = 2.4, label = "Output crank:\nfull 360°", color = "forestgreen", fontface = "bold", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = g / 2, y = -0.7, label = "Ground = shortest link", color = "gray40", fontface = "italic", size = 3 * diagram_text_scale) +
+  annotate("label", x = -5.5, y = -3.3, label = "Key feature: non-uniform output\nspeed from a uniform input", size = 2.9 * diagram_text_scale, fill = "lightgreen", hjust = 0) +
+  annotate("label", x = 3.0, y = -3.3, label = "Applications: drag-link quick-return\n(shapers), rotary feeders", size = 2.9 * diagram_text_scale, fill = "lightyellow", hjust = 0) +
+  coord_fixed(xlim = c(-5.6, 7.4), ylim = c(-4, 4.4)) +
+  labs(title = "Double-Crank (Drag-Link)") +
   theme_linkage
 ```
 
@@ -409,48 +336,27 @@ ggplot() +
 
 When the Grashof condition is **not satisfied** ($S + L > P + Q$), no link can complete a full revolution. All links are restricted to oscillating (rocking) motion.
 
-```{r triple-rocker, echo=FALSE, fig.width=10, fig.height=5, fig.align='center', fig.cap="Triple-rocker mechanism: all links oscillate, none can fully rotate."}
+```{r triple-rocker, echo=FALSE, fig.width=10, fig.height=5.5, fig.align='center', fig.cap="Triple-rocker mechanism (a = 2.6, b = 3, c = 2.8, g = 4; non-Grashof): the input can only swing through a limited range (arc), and so can the output."}
+a <- 2.6; b <- 3; c <- 2.8; g <- 4
+t2 <- seq(-pi, pi, length.out = 2001)
+ok <- sapply(t2, function(t) !is.null(fourbar(a, b, c, g, t)))
+t_ok <- t2[ok]; lim <- range(t_ok)                     # input range on the open branch (one continuous interval)
+th4 <- sapply(t_ok, function(t) { p <- fourbar(a, b, c, g, t); atan2(p$B[2], p$B[1] - g) %% (2 * pi) })   # 0..2pi: no wrap for this linkage
+pm <- fourbar(a, b, c, g, 60 * pi / 180)
+pl <- fourbar(a, b, c, g, lim[2] - 0.01)
 ggplot() +
-  ## Ground
-  geom_segment(aes(x = 2, xend = 8, y = 2, yend = 2), linewidth = 3, color = "gray40") +
-  geom_segment(aes(x = seq(1.5, 8.5, 0.4), xend = seq(1.2, 8.2, 0.4),
-                   y = rep(2, 18), yend = rep(1.7, 18)), linewidth = 0.5, color = "gray40") +
-
-  ## Position 1
-  geom_segment(aes(x = 2, xend = 3.5, y = 2, yend = 4), linewidth = 3, color = "steelblue") +
-  geom_segment(aes(x = 3.5, xend = 6.5, y = 4, yend = 4.2), linewidth = 3, color = "orange") +
-  geom_segment(aes(x = 8, xend = 6.5, y = 2, yend = 4.2), linewidth = 3, color = "forestgreen") +
-
-  ## Position 2 (showing limited range)
-  geom_segment(aes(x = 2, xend = 2.8, y = 2, yend = 3.8), linewidth = 2, color = "steelblue", linetype = "dashed", alpha = 0.6) +
-  geom_segment(aes(x = 2.8, xend = 6.2, y = 3.8, yend = 4.5), linewidth = 2, color = "orange", linetype = "dashed", alpha = 0.6) +
-  geom_segment(aes(x = 8, xend = 6.2, y = 2, yend = 4.5), linewidth = 2, color = "forestgreen", linetype = "dashed", alpha = 0.6) +
-
-  ## Fixed pivots
-  geom_point(aes(x = c(2, 8), y = c(2, 2)), size = 8, color = "black") +
-  geom_point(aes(x = c(2, 8), y = c(2, 2)), size = 5, color = "white") +
-  geom_point(aes(x = c(2, 8), y = c(2, 2)), size = 2, color = "black") +
-
-  ## Limited motion indicators
-  geom_curve(aes(x = 2.3, xend = 3.3, y = 3.5, yend = 4.2),
-             arrow = arrow(length = unit(0.15, "cm"), type = "closed", ends = "both"),
-             curvature = 0.3, linewidth = 1, color = "red") +
-  annotate("text", x = 1.2, y = 4, label = "Limited\nswing", color = "red", size = 3 * diagram_text_scale) +
-
-  geom_curve(aes(x = 7.5, xend = 6.7, y = 3.8, yend = 4.5),
-             arrow = arrow(length = unit(0.15, "cm"), type = "closed", ends = "both"),
-             curvature = -0.3, linewidth = 1, color = "red") +
-  annotate("text", x = 9, y = 4.2, label = "Limited\nswing", color = "red", size = 3 * diagram_text_scale) +
-
-  ## Labels
-  annotate("text", x = 5, y = 5.5, label = "TRIPLE-ROCKER (Non-Grashof)", fontface = "bold", size = 5 * diagram_text_scale) +
-
-  ## Warning box
-  geom_rect(aes(xmin = 3, xmax = 7, ymin = 0.5, ymax = 1.5), fill = "mistyrose", color = "darkred") +
-  annotate("text", x = 5, y = 1.2, label = "S + L > P + Q", fontface = "bold", size = 3.5 * diagram_text_scale, color = "darkred") +
-  annotate("text", x = 5, y = 0.8, label = "No continuous rotation possible", size = 3 * diagram_text_scale, color = "darkred") +
-
-  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(0, 6)) +
+  geom_path(data = arc_df(0, 0, a, lim[1], lim[2]), aes(x, y), color = "steelblue", linewidth = 1,
+            arrow = arrow(ends = "both", length = unit(0.2, "cm"), type = "closed")) +
+  geom_path(data = arc_df(g, 0, c, min(th4), max(th4)), aes(x, y), color = "forestgreen", linewidth = 1,
+            arrow = arrow(ends = "both", length = unit(0.2, "cm"), type = "closed")) +
+  draw_fb(pl, g, "dashed", 0.55, 2) + draw_fb(pm, g) +
+  pivots(g) +
+  annotate("text", x = -2.6, y = 1.2, label = sprintf("Input swings\n%.0f° only", diff(lim) * 180 / pi), color = "steelblue", fontface = "bold", size = 3.2 * diagram_text_scale) +
+  annotate("text", x = g + 2.6, y = 1.6, label = sprintf("Output swings\n%.0f°", diff(range(th4)) * 180 / pi), color = "forestgreen", fontface = "bold", size = 3.2 * diagram_text_scale) +
+  annotate("label", x = g / 2, y = -1.6, label = "S + L = 2.6 + 4 = 6.6 > P + Q = 2.8 + 3 = 5.8:\nno continuous rotation possible",
+           size = 3 * diagram_text_scale, fill = "mistyrose", color = "darkred") +
+  coord_fixed(xlim = c(-3.6, 7.6), ylim = c(-2.3, 3.8)) +
+  labs(title = "Triple-Rocker (Non-Grashof)") +
   theme_linkage
 ```
 
@@ -471,73 +377,33 @@ In component form (x and y):
 $$a \cos\theta_2 + b \cos\theta_3 = g + c \cos\theta_4$$
 $$a \sin\theta_2 + b \sin\theta_3 = c \sin\theta_4$$
 
-```{r vector-loop, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Vector loop closure for position analysis."}
-## Define positions
-O2 <- c(2, 2)
-O4 <- c(8, 2)
-A <- c(3.5, 4.2)
-B <- c(7, 4.8)
-
+```{r vector-loop, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Vector loop closure for position analysis: a + b = g + c, with all angles measured counter-clockwise from the ground line."}
+a <- 1.6; b <- 4; c <- 3; g <- 4.5
+p <- fourbar(a, b, c, g, 65 * pi / 180)
+t3 <- atan2(p$B[2] - p$A[2], p$B[1] - p$A[1]); t4 <- atan2(p$B[2], p$B[1] - g)
+va <- arrow(length = unit(0.3, "cm"), type = "closed")
 ggplot() +
-  ## Ground reference
-  geom_segment(aes(x = O2[1], xend = O4[1], y = O2[2], yend = O4[2]),
-               linewidth = 1, color = "gray60", linetype = "dashed") +
-
-  ## Vector a (input)
-  geom_segment(aes(x = O2[1], xend = A[1], y = O2[2], yend = A[2]),
-               arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-               linewidth = 2, color = "steelblue") +
-  annotate("text", x = 2.3, y = 3.3, label = expression(vec(a)), size = 5 * diagram_text_scale, color = "steelblue", parse = FALSE) +
-  annotate("text", x = 2.3, y = 3, label = "a", size = 5 * diagram_text_scale, color = "steelblue", fontface = "bold") +
-
-  ## Vector b (coupler)
-  geom_segment(aes(x = A[1], xend = B[1], y = A[2], yend = B[2]),
-               arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-               linewidth = 2, color = "orange") +
-  annotate("text", x = 5.2, y = 4.8, label = "b", size = 5 * diagram_text_scale, color = "darkorange", fontface = "bold") +
-
-  ## Vector c (output)
-  geom_segment(aes(x = O4[1], xend = B[1], y = O4[2], yend = B[2]),
-               arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-               linewidth = 2, color = "forestgreen") +
-  annotate("text", x = 7.8, y = 3.5, label = "c", size = 5 * diagram_text_scale, color = "forestgreen", fontface = "bold") +
-
-  ## Vector g (ground)
-  geom_segment(aes(x = O2[1], xend = O4[1], y = O2[2] - 0.3, yend = O4[2] - 0.3),
-               arrow = arrow(length = unit(0.3, "cm"), type = "closed"),
-               linewidth = 2, color = "purple") +
-  annotate("text", x = 5, y = 1.4, label = "g", size = 5 * diagram_text_scale, color = "purple", fontface = "bold") +
-
-  ## Angle theta2
-  geom_curve(aes(x = 3, xend = 2.8, y = 2, yend = 2.5), curvature = -0.3, color = "steelblue", linewidth = 1) +
-  annotate("text", x = 3.3, y = 2.5, label = expression(theta[2]), size = 4 * diagram_text_scale, color = "steelblue") +
-
-  ## Angle theta3
-  geom_curve(aes(x = 4.2, xend = 4.5, y = 4.2, yend = 4.4), curvature = 0.3, color = "darkorange", linewidth = 1) +
-  annotate("text", x = 4.7, y = 4, label = expression(theta[3]), size = 4 * diagram_text_scale, color = "darkorange") +
-
-  ## Angle theta4
-  geom_curve(aes(x = 8.5, xend = 8, y = 2, yend = 2.8), curvature = 0.3, color = "forestgreen", linewidth = 1) +
-  annotate("text", x = 8.7, y = 2.6, label = expression(theta[4]), size = 4 * diagram_text_scale, color = "forestgreen") +
-
-  ## Pivot points
-  geom_point(aes(x = c(O2[1], O4[1]), y = c(O2[2], O4[2])), size = 6, color = "black") +
-  geom_point(aes(x = c(O2[1], O4[1]), y = c(O2[2], O4[2])), size = 3, color = "white") +
-  geom_point(aes(x = c(A[1], B[1]), y = c(A[2], B[2])), size = 5, color = "black") +
-  geom_point(aes(x = c(A[1], B[1]), y = c(A[2], B[2])), size = 2, color = "white") +
-
-  ## Labels for pivots
-  annotate("text", x = O2[1] - 0.3, y = O2[2] + 0.3, label = "O2", fontface = "bold", size = 4 * diagram_text_scale) +
-  annotate("text", x = O4[1] + 0.3, y = O4[2] + 0.3, label = "O4", fontface = "bold", size = 4 * diagram_text_scale) +
-  annotate("text", x = A[1], y = A[2] + 0.4, label = "A", fontface = "bold", size = 4 * diagram_text_scale) +
-  annotate("text", x = B[1], y = B[2] + 0.4, label = "B", fontface = "bold", size = 4 * diagram_text_scale) +
-
-  ## Equation box
-  geom_rect(aes(xmin = 0.5, xmax = 5, ymin = 5.5, ymax = 7), fill = "white", color = "black") +
-  annotate("text", x = 2.75, y = 6.7, label = "Loop Closure:", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  annotate("text", x = 2.75, y = 6.2, label = "a + b = g + c", size = 4 * diagram_text_scale, fontface = "italic") +
-
-  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(1, 7.5)) +
+  annotate("segment", x = 0, y = 0, xend = p$A[1], yend = p$A[2], arrow = va, linewidth = 1.6, color = "steelblue") +
+  annotate("segment", x = p$A[1], y = p$A[2], xend = p$B[1], yend = p$B[2], arrow = va, linewidth = 1.6, color = "darkorange") +
+  annotate("segment", x = g, y = 0, xend = p$B[1], yend = p$B[2], arrow = va, linewidth = 1.6, color = "forestgreen") +
+  annotate("segment", x = 0, y = 0, xend = g, yend = 0, arrow = va, linewidth = 1.6, color = "purple") +
+  ## reference lines and angle arcs
+  annotate("segment", x = p$A[1], xend = p$A[1] + 1.4, y = p$A[2], yend = p$A[2], linetype = "dotted") +
+  annotate("segment", x = g, xend = g + 1.3, y = 0, yend = 0, linetype = "dotted") +
+  geom_path(data = arc_df(0, 0, 0.7, 0, 65 * pi / 180), aes(x, y), color = "steelblue") +
+  geom_path(data = arc_df(p$A[1], p$A[2], 0.9, 0, t3), aes(x, y), color = "darkorange") +
+  geom_path(data = arc_df(g, 0, 0.6, 0, t4), aes(x, y), color = "forestgreen") +
+  annotate("text", x = 0.95, y = 0.35, label = "theta[2]", parse = TRUE, color = "steelblue", size = 4 * diagram_text_scale) +
+  annotate("text", x = p$A[1] + 1.2, y = p$A[2] + 0.22, label = "theta[3]", parse = TRUE, color = "darkorange", size = 4 * diagram_text_scale) +
+  annotate("text", x = g + 0.85, y = 0.45, label = "theta[4]", parse = TRUE, color = "forestgreen", size = 4 * diagram_text_scale) +
+  annotate("text", x = p$A[1] / 2 - 0.35, y = p$A[2] / 2 + 0.1, label = "a", fontface = "bold", size = 5 * diagram_text_scale, color = "steelblue") +
+  annotate("text", x = (p$A[1] + p$B[1]) / 2, y = (p$A[2] + p$B[2]) / 2 + 0.35, label = "b", fontface = "bold", size = 5 * diagram_text_scale, color = "darkorange") +
+  annotate("text", x = (g + p$B[1]) / 2 + 0.35, y = p$B[2] / 2, label = "c", fontface = "bold", size = 5 * diagram_text_scale, color = "forestgreen") +
+  annotate("text", x = g / 2, y = -0.35, label = "g", fontface = "bold", size = 5 * diagram_text_scale, color = "purple") +
+  annotate("text", x = c(-0.3, g + 0.1, p$A[1] - 0.3, p$B[1]), y = c(-0.3, -0.35, p$A[2] + 0.25, p$B[2] + 0.35),
+           label = c("O2", "O4", "A", "B"), fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("label", x = 0.3, y = 3.8, label = "Loop closure:  a + b = g + c", fontface = "bold.italic", size = 3.8 * diagram_text_scale, hjust = 0) +
+  coord_fixed(xlim = c(-1, 6.3), ylim = c(-0.8, 4.3)) +
   labs(title = "Vector Loop for Four-Bar Position Analysis") +
   theme_linkage
 ```
@@ -550,7 +416,7 @@ $$K_1 \cos\theta_4 - K_2 \cos\theta_2 + K_3 = \cos(\theta_2 - \theta_4)$$
 
 **Where:**
 
-$$K_1 = \frac{g}{c}, \quad K_2 = \frac{g}{a}, \quad K_3 = \frac{a^2 - b^2 + c^2 + g^2}{2ac}$$
+$$K_1 = \frac{g}{a}, \quad K_2 = \frac{g}{c}, \quad K_3 = \frac{a^2 - b^2 + c^2 + g^2}{2ac}$$
 
 This equation is particularly useful for **function generation** problems, where a specific input-output relationship is desired.
 
@@ -560,54 +426,24 @@ This equation is particularly useful for **function generation** problems, where
 
 The **transmission angle** ($\mu$) is the angle between the coupler and the output link. It is a critical measure of linkage quality—how effectively force is transmitted through the mechanism.
 
-```{r transmission-angle, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Transmission angle and its significance for linkage performance."}
-## Positions
-O2 <- c(2, 2)
-O4 <- c(8, 2)
-A <- c(3.5, 4)
-B <- c(7, 4.5)
-
+```{r transmission-angle, echo=FALSE, fig.width=10, fig.height=6, fig.align='center', fig.cap="Transmission angle: the angle mu at B between the coupler and the output link (linkage a = 40, b = 90, c = 70, g = 100 mm at theta2 = 60 deg)."}
+a <- 40; b <- 90; c <- 70; g <- 100
+p <- fourbar(a, b, c, g, 60 * pi / 180)
+uBA <- atan2(p$A[2] - p$B[2], p$A[1] - p$B[1]); uBO <- atan2(-p$B[2], g - p$B[1])
+mu <- acos(cos(uBA - uBO)) * 180 / pi
+## arc between the two link directions at B (take the short way round)
+d <- (uBO - uBA + pi) %% (2 * pi) - pi
 ggplot() +
-  ## Links
-  geom_segment(aes(x = O2[1], xend = O4[1], y = O2[2], yend = O4[2]), linewidth = 2, color = "gray40") +
-  geom_segment(aes(x = O2[1], xend = A[1], y = O2[2], yend = A[2]), linewidth = 3, color = "steelblue") +
-  geom_segment(aes(x = A[1], xend = B[1], y = A[2], yend = B[2]), linewidth = 3, color = "orange") +
-  geom_segment(aes(x = O4[1], xend = B[1], y = O4[2], yend = B[2]), linewidth = 3, color = "forestgreen") +
-
-  ## Extend output link to show angle clearly
-  geom_segment(aes(x = B[1], xend = B[1] + 1.5, y = B[2], yend = B[2] + (B[2] - O4[2])/(B[1] - O4[1]) * 1.5),
-               linewidth = 1, color = "forestgreen", linetype = "dashed") +
-
-  ## Transmission angle arc
-  geom_curve(aes(x = B[1] - 0.8, xend = B[1] + 0.6, y = B[2] - 0.3, yend = B[2] + 0.5),
-             curvature = -0.4, linewidth = 1.5, color = "red") +
-  annotate("text", x = B[1] + 1, y = B[2] - 0.2, label = expression(mu), size = 6 * diagram_text_scale, color = "red") +
-  annotate("text", x = B[1] + 1.5, y = B[2] - 0.6, label = "(Transmission\nAngle)", size = 3 * diagram_text_scale, color = "red") +
-
-  ## Pivots
-  geom_point(aes(x = c(O2[1], O4[1]), y = c(O2[2], O4[2])), size = 7, color = "black") +
-  geom_point(aes(x = c(O2[1], O4[1]), y = c(O2[2], O4[2])), size = 4, color = "white") +
-  geom_point(aes(x = c(A[1], B[1]), y = c(A[2], B[2])), size = 6, color = "black") +
-  geom_point(aes(x = c(A[1], B[1]), y = c(A[2], B[2])), size = 3, color = "white") +
-
-  ## Label at B
-  annotate("text", x = B[1] - 0.5, y = B[2] + 0.5, label = "B", fontface = "bold", size = 4 * diagram_text_scale) +
-
-  ## Quality guidelines box
-  geom_rect(aes(xmin = 0.5, xmax = 4.5, ymin = 5, ymax = 7.5), fill = "white", color = "black") +
-  annotate("text", x = 2.5, y = 7.2, label = "DESIGN GUIDELINES", fontface = "bold", size = 3.5 * diagram_text_scale) +
-  annotate("text", x = 0.7, y = 6.7, label = expression(paste("Ideal: ", mu, " = 90 deg")), size = 3 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 0.7, y = 6.2, label = expression(paste("Good: 40 deg < ", mu, " < 140 deg")), size = 3 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 0.7, y = 5.7, label = expression(paste("Minimum: ", mu, " > 30 deg")), size = 3 * diagram_text_scale, hjust = 0) +
-  annotate("text", x = 0.7, y = 5.2, label = expression(paste("Avoid: ", mu, " near 0 deg or 180 deg")), size = 3 * diagram_text_scale, hjust = 0, color = "red") +
-
-  ## Note
-  geom_rect(aes(xmin = 5.5, xmax = 10, ymin = 0.3, ymax = 1.5), fill = "lightyellow", color = "black") +
-  annotate("text", x = 7.75, y = 1.2, label = "Why it matters:", fontface = "bold", size = 3 * diagram_text_scale) +
-  annotate("text", x = 7.75, y = 0.7, label = "Poor transmission angle causes\nhigh joint forces and jerky motion", size = 2.8 * diagram_text_scale) +
-
-  coord_fixed(ratio = 1, xlim = c(0, 10.5), ylim = c(0, 8)) +
-  labs(title = "Transmission Angle in Four-Bar Linkage") +
+  draw_fb(p, g, lw = 3) + pivots(g) +
+  geom_path(data = arc_df(p$B[1], p$B[2], 14, uBA, uBA + d), aes(x, y), color = "red", linewidth = 1.3) +
+  annotate("text", x = p$B[1] + 20 * cos(uBA + d / 2), y = p$B[2] + 20 * sin(uBA + d / 2),
+           label = sprintf("mu == %.0f*degree", mu), parse = TRUE, color = "red", size = 4.5 * diagram_text_scale) +
+  annotate("text", x = c(-5, g + 5, p$A[1] - 5, p$B[1] + 5), y = c(-6, -6, p$A[2] + 5, p$B[2] + 6),
+           label = c("O2", "O4", "A", "B"), fontface = "bold", size = 4 * diagram_text_scale) +
+  annotate("label", x = 115, y = 40, hjust = 0, size = 3 * diagram_text_scale, fill = "white",
+           label = "DESIGN GUIDELINES\nIdeal: mu = 90 deg\nGood: 40 deg < mu < 140 deg\nAvoid: mu near 0 or 180 deg\n(dead point: no torque on the output)") +
+  coord_fixed(xlim = c(-15, 190), ylim = c(-12, 85)) +
+  labs(title = "Transmission Angle in a Four-Bar Linkage") +
   theme_linkage
 ```
 
@@ -632,91 +468,23 @@ $$\cos\mu = \frac{b^2 + c^2 - (a^2 + g^2 - 2ag\cos\theta_2)}{2bc}$$
 
 One of the most powerful features of four-bar linkages is the ability to generate complex curves using a point attached to the coupler link. These **coupler curves** can approximate straight lines, circles, or other complex shapes.
 
-```{r coupler-curve-concept, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="Coupler point P traces a coupler curve as the linkage moves."}
-## Generate coupler curve data
-## Link lengths (crank-rocker example)
-a <- 1.5   ## crank
-b <- 4     ## coupler
-c <- 3     ## rocker
-g <- 5     ## ground
-
-## Coupler point location (relative to coupler)
-p_dist <- 2.5  ## distance from A along coupler direction
-p_angle <- 0.4 ## angle offset
-
-## Calculate positions for range of input angles
-theta2_range <- seq(0, 2*pi, length.out = 100)
-
-## Simple approximation for visualization
-coupler_x <- numeric(length(theta2_range))
-coupler_y <- numeric(length(theta2_range))
-
-for (i in seq_along(theta2_range)) {
-  t2 <- theta2_range[i]
-  ## Approximate coupler point path (simplified)
-  Ax <- a * cos(t2)
-  Ay <- 2.5 + a * sin(t2)
-
-  ## Approximate B position using geometric constraints
-  r <- sqrt((g - Ax)^2 + Ay^2)
-  if (r < b + c && r > abs(b - c)) {
-    phi <- atan2(Ay, g - Ax)
-    alpha <- acos((r^2 + c^2 - b^2) / (2 * r * c))
-
-    Bx <- g - c * cos(phi + alpha)
-    By <- c * sin(phi + alpha)
-
-    ## Coupler point
-    coupler_angle <- atan2(By - Ay, Bx - Ax) + p_angle
-    coupler_x[i] <- Ax + p_dist * cos(coupler_angle)
-    coupler_y[i] <- Ay + p_dist * sin(coupler_angle)
-  }
-}
-
-## Remove invalid points
-valid <- coupler_x != 0
-coupler_data <- data.frame(x = coupler_x[valid], y = coupler_y[valid])
-
+```{r coupler-curve-concept, echo=FALSE, fig.width=10, fig.height=7, fig.align='center', fig.cap="Coupler point P, fixed to the coupler, traces a coupler curve as the crank turns (crank-rocker a = 1.5, b = 4, c = 3, g = 5)."}
+a <- 1.5; b <- 4; c <- 3; g <- 5
+p_dist <- 2.5; p_angle <- 0.6           # P relative to A: distance and angle from the line A -> B
+cpt <- function(p) { u <- atan2(p$B[2] - p$A[2], p$B[1] - p$A[1]) + p_angle; p$A + p_dist * c(cos(u), sin(u)) }
+curve <- t(sapply(seq(0, 2 * pi, length.out = 361), function(t) cpt(fourbar(a, b, c, g, t))))
+curve <- data.frame(x = curve[, 1], y = curve[, 2])
+p <- fourbar(a, b, c, g, 60 * pi / 180); P <- cpt(p)
 ggplot() +
-  ## Coupler curve
-  geom_path(data = coupler_data, aes(x = x + 2, y = y),
-            linewidth = 2, color = "red", alpha = 0.8) +
-
-  ## One position of linkage
-  ## Ground
-  geom_segment(aes(x = 2, xend = 7, y = 2.5, yend = 2.5), linewidth = 2, color = "gray40") +
-  geom_segment(aes(x = seq(1.5, 7.5, 0.4), xend = seq(1.2, 7.2, 0.4),
-                   y = rep(2.5, 16), yend = rep(2.2, 16)), linewidth = 0.5, color = "gray40") +
-
-  ## Links at one position
-  geom_segment(aes(x = 2, xend = 3.3, y = 2.5, yend = 3.8), linewidth = 3, color = "steelblue") +
-  geom_segment(aes(x = 3.3, xend = 6.2, y = 3.8, yend = 4.5), linewidth = 3, color = "orange") +
-  geom_segment(aes(x = 7, xend = 6.2, y = 2.5, yend = 4.5), linewidth = 3, color = "forestgreen") +
-
-  ## Coupler point P
-  geom_point(aes(x = 4.5, y = 5.2), size = 8, color = "red") +
-  geom_point(aes(x = 4.5, y = 5.2), size = 4, color = "white") +
-  annotate("text", x = 4.5, y = 5.7, label = "P", fontface = "bold", size = 5 * diagram_text_scale, color = "red") +
-
-  ## Coupler extension to P
-  geom_segment(aes(x = 3.3, xend = 4.5, y = 3.8, yend = 5.2),
-               linewidth = 2, color = "orange", linetype = "dashed") +
-
-  ## Fixed pivots
-  geom_point(aes(x = c(2, 7), y = c(2.5, 2.5)), size = 7, color = "black") +
-  geom_point(aes(x = c(2, 7), y = c(2.5, 2.5)), size = 4, color = "white") +
-
-  ## Labels
-  annotate("text", x = 5, y = 7.5, label = "COUPLER CURVE", fontface = "bold", size = 5 * diagram_text_scale) +
-  annotate("text", x = 5, y = 7, label = "Path traced by coupler point P", size = 3.5 * diagram_text_scale) +
-
-  ## Arrow pointing to curve
-  geom_curve(aes(x = 6.5, xend = 5.5, y = 6, yend = 5.5),
-             arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
-             curvature = 0.3, linewidth = 1, color = "red") +
-  annotate("text", x = 7, y = 6.2, label = "Coupler\ncurve", size = 3 * diagram_text_scale, color = "red") +
-
-  coord_fixed(ratio = 1, xlim = c(0, 10), ylim = c(1.5, 8)) +
+  geom_path(data = curve, aes(x, y), linewidth = 1.6, color = "red", alpha = 0.85) +
+  geom_polygon(aes(x = c(p$A[1], p$B[1], P[1]), y = c(p$A[2], p$B[2], P[2])), fill = "orange", alpha = 0.35, color = "orange") +
+  draw_fb(p, g) + pivots(g) +
+  annotate("point", x = P[1], y = P[2], size = 4, shape = 21, fill = "red", stroke = 1.2) +
+  annotate("text", x = P[1] - 0.3, y = P[2] + 0.3, label = "P", fontface = "bold", size = 5 * diagram_text_scale, color = "red") +
+  annotate("text", x = -2.4, y = 4.2, label = "Coupler curve:\npath traced by P", color = "red", size = 3.3 * diagram_text_scale, hjust = 0) +
+  annotate("text", x = 5.3, y = 2.4, label = "Coupler (link 3) carries\nthe coupler point P", color = "darkorange", size = 3 * diagram_text_scale, hjust = 0) +
+  coord_fixed(xlim = c(-2.5, 8.8), ylim = c(-1.6, 5.4)) +
+  labs(title = "Coupler Curve") +
   theme_linkage
 ```
 
@@ -728,8 +496,8 @@ coupler_types <- tribble(
   "Watt's Curve", "Figure-8 with straight segment", "Steam engine guides", "Approximate straight line over portion of path",
   "Roberts' Curve", "Symmetrical with straight portion", "Mechanism design", "Three-point straight line approximation",
   "Chebyshev Linkage", "Nearly straight line", "Drafting machines, presses", "Very accurate straight line approximation",
-  "Hoeken's Linkage", "Extended straight portion", "Film projectors", "Long straight portion with low deviation",
-  "Lambda Mechanism", "Complex curve with dwell", "Indexing mechanisms", "Output dwells while input continues"
+  "Hoeken's Linkage", "Extended straight portion", "Walking robots, transfer mechanisms", "Straight portion traced at nearly constant speed",
+  "Chebyshev Lambda Mechanism", "Straight line plus return loop", "Chebyshev's walking machine, dwell drives", "Combined with a dyad, the straight portion gives an output dwell"
 )
 
 coupler_types %>%
@@ -752,8 +520,8 @@ A four-bar linkage has the following link lengths:
 
 - Link 1 (ground): $g = 100$ mm
 - Link 2 (input): $a = 40$ mm
-- Link 3 (coupler): $b = 80$ mm
-- Link 4 (output): $c = 60$ mm
+- Link 3 (coupler): $b = 90$ mm
+- Link 4 (output): $c = 70$ mm
 
 Determine:
 
@@ -778,11 +546,11 @@ qwebr_calc_card(
   inputs = list(
     qwebr_calc_input("g", "Ground link g", value = 100, min = 10, max = 300, step = 1, suffix = "mm"),
     qwebr_calc_input("a", "Input link a", value = 40, min = 10, max = 300, step = 1, suffix = "mm"),
-    qwebr_calc_input("b", "Coupler link b", value = 80, min = 10, max = 300, step = 1, suffix = "mm"),
-    qwebr_calc_input("c", "Output link c", value = 60, min = 10, max = 300, step = 1, suffix = "mm")
+    qwebr_calc_input("b", "Coupler link b", value = 90, min = 10, max = 300, step = 1, suffix = "mm"),
+    qwebr_calc_input("c", "Output link c", value = 70, min = 10, max = 300, step = 1, suffix = "mm")
   ),
-  goal = "Turn the crank-rocker into a Grashof double-crank by changing only the ground link g (leave a = 40, b = 80 and c = 60 mm).",
-  goal_test = "mech_type == \"Double-Crank\" && SL < PQ && a == 40 && b == 80 && c == 60",
+  goal = "Turn the crank-rocker into a Grashof double-crank by changing only the ground link g (leave a = 40, b = 90 and c = 70 mm).",
+  goal_test = "mech_type == \"Double-Crank\" && SL < PQ && a == 40 && b == 90 && c == 70",
   mode = "task")
 ```
 
@@ -795,8 +563,8 @@ qwebr_calc_card(
 ## Given link lengths (mm) - edit these and re-run!
 g <- 100  ## ground
 a <- 40   ## input
-b <- 80   ## coupler
-c <- 60   ## output
+b <- 90   ## coupler
+c <- 70   ## output
 
 ## Sort to find S (shortest) and L (longest)
 links <- c(a, b, c, g)
@@ -870,8 +638,8 @@ if (is_grashof) {
 ## Given link lengths
 g <- 100  ## ground
 a <- 40   ## input
-b <- 80   ## coupler
-c <- 60   ## output
+b <- 90   ## coupler
+c <- 70   ## output
 
 ## Sort to find S and L
 links <- c(a, b, c, g)
@@ -930,7 +698,7 @@ results %>%
 
 ##### Interpretation {-}
 
-- Since $S + L$ (`r SL` mm) is less than $P + Q$ (`r PQ` mm), this is a **Grashof linkage**.
+- Since $S + L$ (`r SL` mm) is less than $P + Q$ (`r PQ` mm), this is a **Grashof linkage**. (With $b = 80$ and $c = 60$ mm the two sums would be equal, 140 = 140: a change-point linkage that locks up in a straight line once per turn.)
 - The shortest link is the **input link (a = `r a` mm)**.
 - When the shortest link is the input (crank), the mechanism is a **Crank-Rocker**.
 - The input (link 2) will rotate continuously while the output (link 4) oscillates.
@@ -945,7 +713,7 @@ results %>%
 ##### Problem Statement {-}
 
 
-For the linkage in the previous example (a = 40, b = 80, c = 60, g = 100 mm), calculate the transmission angle when the input is at:
+For the linkage in the previous example (a = 40, b = 90, c = 70, g = 100 mm), calculate the transmission angle when the input is at:
 
 1. $\theta_2 = 60°$
 2. Determine the minimum transmission angle through the full rotation
@@ -966,8 +734,8 @@ qwebr_calc_card(
   icon = "gears",
   inputs = list(
     qwebr_calc_input("a", "Input link a", value = 40, min = 10, max = 300, step = 1, suffix = "mm", type = "slider"),
-    qwebr_calc_input("b", "Coupler link b", value = 80, min = 10, max = 300, step = 1, suffix = "mm", type = "slider"),
-    qwebr_calc_input("c", "Output link c", value = 60, min = 10, max = 300, step = 1, suffix = "mm", type = "slider"),
+    qwebr_calc_input("b", "Coupler link b", value = 90, min = 10, max = 300, step = 1, suffix = "mm", type = "slider"),
+    qwebr_calc_input("c", "Output link c", value = 70, min = 10, max = 300, step = 1, suffix = "mm", type = "slider"),
     qwebr_calc_input("g", "Ground link g", value = 100, min = 10, max = 300, step = 1, suffix = "mm", type = "slider")
   ),
   mode = "demo")
@@ -981,8 +749,8 @@ qwebr_calc_card(
 #| label: trans-angle-interactive
 ## Given link lengths (mm) - edit these and re-run!
 a <- 40   ## input link
-b <- 80   ## coupler
-c <- 60   ## output link
+b <- 90   ## coupler
+c <- 70   ## output link
 g <- 100  ## ground link
 
 ## Function to calculate transmission angle
@@ -1024,10 +792,10 @@ abline(h = 40, lty = 2, col = "#bdc3c7")
 points(theta_at_min, mu_min, pch = 19, cex = 2.2, col = "#e74c3c")
 
 ## Design quality verdict
-if (mu_min > 40) {
+if (mu_min > 40 && mu_max < 140) {
   cat("Design Quality: GOOD\n")
-  advice <- "Minimum transmission angle exceeds 40 deg - acceptable design"
-} else if (mu_min > 30) {
+  advice <- "Transmission angle stays between 40 and 140 deg - acceptable design"
+} else if (mu_min > 30 && mu_max < 150) {
   cat("Design Quality: MARGINAL\n")
   advice <- "Consider redesigning for better force transmission"
 } else {
@@ -1049,8 +817,8 @@ cat(advice, "\n")
 ```{r trans-angle-example, echo=FALSE, message=FALSE}
 ## Given
 a <- 40
-b <- 80
-c <- 60
+b <- 90
+c <- 70
 g <- 100
 
 ## Function to calculate transmission angle
@@ -1103,11 +871,11 @@ trans_results %>%
 ##### Quality Assessment {-}
 
 ```{r quality-assessment, echo=FALSE, message=FALSE}
-if (mu_min > 40) {
+if (mu_min > 40 && mu_max < 140) {
   quality <- "GOOD"
-  recommendation <- "Minimum transmission angle exceeds 40 deg - acceptable design"
+  recommendation <- "Transmission angle stays between 40 and 140 deg - acceptable design"
   color <- "darkgreen"
-} else if (mu_min > 30) {
+} else if (mu_min > 30 && mu_max < 150) {
   quality <- "MARGINAL"
   recommendation <- "Consider redesigning for better force transmission"
   color <- "orange"
@@ -1285,8 +1053,8 @@ applications <- tribble(
   "Windshield wipers", "Crank-rocker", "Convert motor rotation to blade oscillation", "Consistent sweep angle",
   "Automobile suspension", "Four-bar variant", "Control wheel motion during travel", "Maintains wheel orientation",
   "Aircraft landing gear", "Four-bar linkage", "Retract/extend gear in specific path", "Compact stowage",
-  "Reciprocating pumps", "Crank-rocker", "Convert rotation to linear pumping", "Smooth motion transfer",
-  "Sewing machines", "Crank-rocker", "Drive needle up/down motion", "Precise positioning",
+  "Reciprocating pumps", "Slider-crank (four-bar variant)", "Convert rotation to linear pumping", "Smooth motion transfer",
+  "Sewing machines", "Slider-crank (needle bar)", "Drive needle up/down motion", "Precise positioning",
   "Excavator bucket", "Four-bar linkage", "Control bucket angle during digging", "Force amplification",
   "Door closers", "Four-bar linkage", "Control closing speed and force", "Damped motion"
 )
