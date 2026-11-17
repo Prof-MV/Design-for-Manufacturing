@@ -417,7 +417,7 @@ ggplot() +
 
 ---
 
-## 🏭 Stamping Press Types and Progressive Dies {-}
+## Stamping Press Types and Progressive Dies {-}
 
 ### Types of Stamping Presses
 
@@ -1280,7 +1280,7 @@ ggplot() +
 
 ---
 
-## 📋 Design Checklist for Stamping {-}
+## Design Checklist for Stamping {-}
 
 Before finalizing a stamped part design, verify the following:
 
@@ -1311,7 +1311,7 @@ Before finalizing a stamped part design, verify the following:
 
 ---
 
-## 🎯 Case Study: Automotive Bracket Design {-}
+## Case Study: Automotive Bracket Design {-}
 
 Let's apply our knowledge to a real-world example.
 
@@ -1414,7 +1414,7 @@ ggplot() +
 
 ---
 
-## 📚 "Summary: Key Design Rules for Stamping" {-}
+## "Summary: Key Design Rules for Stamping" {-}
 
 | Design Feature | Minimum Requirement |
 |:---------------|:--------------------|
@@ -1599,7 +1599,7 @@ The die should over-bend the part through 96° (an included angle of 84°) so th
 
 ---
 
-## 🎬 Supplemental Videos {-}
+## Supplemental Videos {-}
 
 ### How Stamping Dies Work
 
@@ -1621,7 +1621,7 @@ embed_youtube("GDzBE6vz5r0", "Stamping by Smarter Every Day")
 
 ---
 
-## 📖 References {-}
+## References {-}
 
 1. Groover, M. P. (2020). *Fundamentals of Modern Manufacturing: Materials, Processes, and Systems* (7th ed.). Wiley.
 

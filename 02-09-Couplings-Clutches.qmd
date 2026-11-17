@@ -202,7 +202,7 @@ ggplot() +
 
 ---
 
-## 🔄 Flexible Couplings {-}
+## Flexible Couplings {-}
 
 Flexible couplings accommodate misalignment while transmitting torque. They use various mechanisms to provide flexibility.
 
@@ -365,7 +365,7 @@ Consider operating conditions:
 
 ---
 
-## ⚡ Clutches {-}
+## Clutches {-}
 
 Clutches are devices that connect and disconnect rotating shafts on demand. They allow controlled engagement of power transmission.
 
@@ -449,7 +449,7 @@ ggplot() +
 
 ---
 
-## 🔴 Friction Clutches {-}
+## Friction Clutches {-}
 
 Friction clutches transmit torque through friction between mating surfaces. They are the most common type, allowing smooth engagement and slip during startup.
 
@@ -596,7 +596,7 @@ Where $n$ = number of friction interfaces = (number of discs × 2) for alternati
 
 ---
 
-## 🔵 Positive Engagement Clutches {-}
+## Positive Engagement Clutches {-}
 
 Positive engagement clutches use mechanical interlocking rather than friction. They cannot slip and require the shafts to be at rest or synchronized speed for engagement.
 
@@ -632,7 +632,7 @@ ggplot() +
 
 ---
 
-## 🟢 Overrunning Clutches {-}
+## Overrunning Clutches {-}
 
 Overrunning (one-way) clutches automatically engage in one direction and freewheel in the other. They require no external control.
 
@@ -681,7 +681,7 @@ ggplot() +
 
 ---
 
-## 🧮 Worked Example: Clutch Torque Calculation {-}
+## Worked Example: Clutch Torque Calculation {-}
 
 **Problem:** A single-plate automotive clutch has the following specifications:
 
@@ -722,7 +722,7 @@ $$T = 0.35 \times 4500 \times 0.1041 \times 2 = 328.0 \text{ N·m}$$
 
 ---
 
-## 🎯 Design Guidelines and Best Practices {-}
+## Design Guidelines and Best Practices {-}
 
 ### Coupling Selection Guidelines
 
@@ -768,7 +768,7 @@ Couplings and clutches work with other power transmission components:
 
 ---
 
-## 📚 Chapter Summary {-}
+## Chapter Summary {-}
 
 Couplings and clutches are essential power transmission components:
 

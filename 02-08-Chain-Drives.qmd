@@ -364,7 +364,7 @@ ggplot() +
 
 ---
 
-## 🧮 Worked Example: Chain Drive Design {-}
+## Worked Example: Chain Drive Design {-}
 
 **Problem:** Design a chain drive to transmit power from a 1200 rpm motor to a conveyor shaft that must rotate at 400 rpm. The center distance should be approximately 500 mm. Select an appropriate chain size for moderate industrial service.
 
@@ -437,7 +437,7 @@ This is acceptable for #40 chain (max recommended ~7-10 m/s for this size).
 
 ---
 
-## ⚡ Chain Tensioning and Adjustment {-}
+## Chain Tensioning and Adjustment {-}
 
 Unlike belts, chains do not stretch significantly, but they do **wear**. As chain links wear, the effective pitch increases (chain "elongation"), requiring adjustment.
 
@@ -560,7 +560,7 @@ kable(lube_df,
 
 ---
 
-## 🔄 Chain vs. Belt Comparison {-}
+## Chain vs. Belt Comparison {-}
 
 When should you choose a chain drive over a belt drive?
 
@@ -610,7 +610,7 @@ kable(compare_df,
 
 ---
 
-## 🎯 Design Guidelines and Best Practices {-}
+## Design Guidelines and Best Practices {-}
 
 ### Sprocket Selection
 
@@ -651,7 +651,7 @@ Chain drives are part of the power transmission family. For related content, see
 
 ---
 
-## 📚 Chapter Summary {-}
+## Chapter Summary {-}
 
 Chain drives provide reliable, positive power transmission for many applications:
 

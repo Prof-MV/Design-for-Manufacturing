@@ -470,7 +470,7 @@ Where $\mu$ is the coefficient of friction between belt and pulley, and $\theta$
 
 ---
 
-## 🧮 Worked Example: Belt Drive Design {-}
+## Worked Example: Belt Drive Design {-}
 
 **Problem:** Design a V-belt drive system to transmit 5 kW from a 1450 rpm electric motor to a machine shaft that must rotate at approximately 500 rpm. The center distance should be approximately 500 mm.
 
@@ -533,7 +533,7 @@ For 5 kW at 1450 rpm with a 100 mm pulley, referencing V-belt power rating table
 
 ---
 
-## ⚡ Belt Tensioning {-}
+## Belt Tensioning {-}
 
 Proper belt tension is critical for reliable operation. Too little tension causes slip and rapid wear; too much tension damages bearings and shortens belt life.
 
@@ -582,7 +582,7 @@ ggplot() +
 
 ---
 
-## 🎯 Design Guidelines and Best Practices {-}
+## Design Guidelines and Best Practices {-}
 
 ### Pulley Selection Guidelines
 
@@ -624,7 +624,7 @@ Belt and pulley systems are one component of the broader field of power transmis
 
 ---
 
-## 📚 Chapter Summary {-}
+## Chapter Summary {-}
 
 Belt and pulley systems provide a versatile, economical method for transmitting rotational power. Key takeaways:
 
