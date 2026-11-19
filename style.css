@@ -908,3 +908,31 @@ details.tryit-solution.tryit-locked > summary::after {
 }
 .qwebr-calc-task .qwebr-calc-badge { background-color: #e67e22; }
 .qwebr-calc-task .qwebr-calc-header { border-bottom-color: #e67e22; }
+
+/*--- "Spot the error" welding exercises -----------------------------------------
+   The exercise figure has a red header band; the corrected figure and the list of
+   errors sit on a fold-out card below it (<details class="spot-error-card">). */
+details.spot-error-card {
+  margin: 0.5em 0 2em;
+  border: 1px solid #d5dde5;
+  border-left: 5px solid #2e8b57;
+  border-radius: 6px;
+  background-color: #f7faf8;
+  padding: 0.4em 1em;
+}
+
+details.spot-error-card > summary {
+  cursor: pointer;
+  color: #2e7d4f;
+  font-weight: 600;
+  padding: 0.3em 0;
+}
+
+details.spot-error-card > summary:hover {
+  text-decoration: underline;
+}
+
+details.spot-error-card[open] > summary {
+  border-bottom: 1px solid #d5dde5;
+  margin-bottom: 0.8em;
+}

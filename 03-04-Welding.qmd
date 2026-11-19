@@ -3742,6 +3742,205 @@ On a grid sheet, make detailed sketches of the six welds shown in the circled ar
 
 ---
 
+## Spot the Error: Class Exercises {#sec-weld-spot-error}
+
+The three figures below look like the callout-and-interpretation figures earlier in this chapter, but each one has a **red header**: something in it is wrong. Each row contains **exactly one error**. It can be in the drawing callout (the welding symbol itself) or in the interpretation (the weld drawn for that symbol).
+
+::: {.callout-activity}
+**How to work through these:** For each row, first read the welding symbol on its own and decide what weld it asks for. Then compare your reading with the interpretation. Write down the error, which rule it breaks, and how to correct it. Only then open the card below the figure to check your answer.
+:::
+
+```{r spot-error-setup, include=FALSE}
+## "Spot the error" exercises: each function draws the figure with one error per row
+## (fixed = FALSE, red header) or the corrected version (fixed = TRUE, normal header).
+spot_head <- function(fixed) if (fixed) wd_col$header else wd_col$header_err
+
+## ---- Exercise 1: fillet welds -------------------------------------------------------
+## errors: (1) arrow-side weld drawn on the other side, (2) fillet symbol with its
+## perpendicular leg on the right, (3) pitch measured as the gap between welds
+spot1 <- function(fixed) {
+  hs <- c(1.9, 1.9, 2.3); yb <- wd_ci_rows(hs); W <- 10
+  ts <- 2.8; dc <- wd_col$dim
+  y0 <- yb + 0.45; yt <- y0 + 0.28; yr <- yt + 0.55
+  cx <- 1.4; ix <- 7.3; sx <- 3.05
+  tee <- function(i, x) c(wd_plate(x - 1.0, x + 1.0, y0[i], yt[i]), wd_plate(x - 0.14, x + 0.14, yt[i], yt[i] + 0.75))
+  ref <- function(i) wsym_ref(2.15, yr[i], 2.3, cx + 0.15, yt[i])
+  lab <- function(i, s) wd_text(ix + 1.12, yt[i] + 0.35, s, size = 2.5, hjust = 0, col = dc)
+  fil_mirror <- function(x, y, s, h = 0.3) wd_path(c(x + h, x + h, x), c(y, y + s * h, y), lw = 0.6)
+  ## plan view for row 3 (1 unit = 4 in.): 3.00 long welds, second weld at 8.00 pitch
+  yc <- y0[3] + 0.55
+  seg <- function(a) wd_poly(c(a, a + 0.75, a + 0.75, a), yc + c(0.09, 0.09, 0.22, 0.22), fill = wd_col$weld, lw = 0.5)
+  x2 <- if (fixed) 7.6 else 8.35
+  ggplot() +
+    wd_ci_frame(W, hs, labels = c("1  FILLET WELD", "2  FILLET WELD", "3  INTERMITTENT FILLET WELD"),
+                header_fill = spot_head(fixed)) +
+    ## 1 arrow side .25 fillet
+    tee(1, cx) + ref(1) + wsym_fillet(sx, yr[1], s = -1, h = 0.3) +
+    wd_text(sx - 0.1, yr[1] - 0.15, ".25", size = ts, hjust = 1) +
+    tee(1, ix) + wd_fillet_bead(ix + (if (fixed) 0.14 else -0.14), yt[1], 0.25, 0.25, dx = if (fixed) 1 else -1) +
+    lab(1, ".25 fillet") +
+    ## 2 other side .31 fillet
+    tee(2, cx) + ref(2) +
+    (if (fixed) wsym_fillet(sx, yr[2], s = 1, h = 0.3) else fil_mirror(sx, yr[2], s = 1)) +
+    wd_text(sx - 0.1, yr[2] + 0.15, ".31", size = ts, hjust = 1) +
+    tee(2, ix) + wd_fillet_bead(ix - 0.14, yt[2], 0.31, 0.31, dx = -1) + lab(2, ".31 fillet") +
+    ## 3 intermittent .25 fillet, 3.00 long at 8.00 pitch
+    tee(3, cx) + ref(3) + wsym_fillet(sx, yr[3], s = -1, h = 0.3) +
+    wd_text(sx - 0.1, yr[3] - 0.15, ".25", size = ts, hjust = 1) +
+    wd_text(sx + 0.4, yr[3] - 0.15, "3.00-8.00", size = ts, hjust = 0) +
+    wd_plate(5.2, 9.6, yc - 0.45, yc + 0.45, brk = c("left", "right")) +
+    wd_seg(5.2, yc + 0.09, 9.6, yc + 0.09, lw = 0.6) + wd_seg(5.2, yc - 0.09, 9.6, yc - 0.09, lw = 0.6) +
+    seg(5.6) + seg(x2) +
+    ## extension lines up from the weld ends, then the length and pitch dimensions
+    do.call(c, lapply(unique(c(5.6, 6.35, if (fixed) 7.6 else 8.35)), function(a)
+      wd_seg(a, yc + 0.25, a, yc + 1.05, lw = 0.3, col = dc))) +
+    wd_dim(5.6, yc + 0.6, 6.35, yc + 0.6, "3.00", ly = yc + 0.72, size = 2.6) +
+    (if (fixed) wd_dim(5.6, yc + 0.95, 7.6, yc + 0.95, "8.00 pitch", ly = yc + 1.08, size = 2.6)
+     else wd_dim(6.35, yc + 0.95, 8.35, yc + 0.95, "8.00", ly = yc + 1.08, size = 2.6)) +
+    wd_canvas(c(-0.05, W + 0.05), c(-0.05, sum(hs) + 0.55))
+}
+
+## ---- Exercise 2: groove welds -------------------------------------------------------
+## errors: (1) straight arrow on a bevel groove where the right member is bevelled,
+## (2) groove weld size written to the right of the symbol, (3) melt-through symbol
+## on the same side of the reference line as the groove symbol
+spot2 <- function(fixed) {
+  hs <- rep(2.2, 3); yb <- wd_ci_rows(hs); W <- 10
+  t <- 0.6; ccx <- 1.5; icx <- 7.3; sx <- 3.8
+  y0 <- yb + 0.45; yr <- y0 + t + 0.4
+  ts <- 2.9; rad <- pi / 180; dc <- wd_col$dim
+  ref <- function(i) wsym_ref(2.5, yr[i], 2.2, ccx, y0[i] + t)
+  ext <- function(x1, y1, x2, y2) wd_seg(x1, y1, x2, y2, lw = 0.3, col = dc)
+  ggplot() +
+    wd_ci_frame(W, hs, labels = c("1  BEVEL GROOVE (CJP)", "2  V-GROOVE (PJP)", "3  SQUARE GROOVE, MELT-THROUGH"),
+                header_fill = spot_head(fixed)) +
+    ## 1 bevel groove, right member bevelled 45 deg, root opening .06
+    wd_butt(ccx, y0[1], t = t, L = 1.1) +
+    (if (fixed) c(wd_seg(2.5, yr[1], 4.7, yr[1], lw = 0.6),
+                  wd_arrow(c(2.5, 1.05, ccx), c(yr[1], yr[1] - 0.25, y0[1] + t), lw = 0.55))
+     else ref(1)) +
+    wsym_bevel(sx - 0.15, yr[1], s = -1, h = 0.45) +
+    wd_text(sx - 0.05, yr[1] - 0.62, ".06", size = ts - 0.5) + wd_text(sx - 0.05, yr[1] - 0.92, "45°", size = ts) +
+    wd_groove(icx, y0[1], t = t, L = 1.4, gap = 0.08, pr = prep_bevel(t, 45), root_cap = 0.05) +
+    wd_text(icx, y0[1] - 0.25, "right member bevelled 45°, root opening .06", size = ts - 0.3, col = dc) +
+    ## 2 V-groove, arrow side, (.50), root opening 0, 60 deg
+    wd_butt(ccx, y0[2], t = t, L = 1.1) + ref(2) + wsym_v(sx, yr[2], s = -1, h = 0.45) +
+    (if (fixed) wd_text(sx - 0.42, yr[2] - 0.2, "(.50)", size = ts, hjust = 1)
+     else wd_text(sx + 0.42, yr[2] - 0.2, "(.50)", size = ts, hjust = 0)) +
+    wd_text(sx, yr[2] - 0.28, "0", size = ts - 0.4) + wd_text(sx, yr[2] - 0.66, "60°", size = ts) +
+    wd_groove(icx, y0[2], t = t, L = 1.4, gap = 0.02, pl = prep_bevel_top(t, 30, 0.42),
+              pr = prep_bevel_top(t, 30, 0.42), fill = c(0.25, 1), joint_line = TRUE) +
+    ext(icx - 1.55, y0[2] + t, icx - 2.0, y0[2] + t) + ext(icx - 0.1, y0[2] + t - 0.45, icx - 2.0, y0[2] + t - 0.45) +
+    wd_dim_in(y0[2] + t - 0.45, y0[2] + t, icx - 1.85, "(.50)", vertical = TRUE, label_at = "left", size = ts) +
+    wd_text(icx, y0[2] - 0.25, "60° groove angle, root opening 0", size = ts - 0.3, col = dc) +
+    ## 3 square groove, arrow side, melt-through .06 on the other side
+    wd_butt(ccx, y0[3], t = t, L = 1.1) + ref(3) + wsym_square(sx, yr[3], s = -1, gap = 0.14) +
+    (if (fixed) c(wsym_back(sx, yr[3], s = 1, filled = TRUE, r = 0.17),
+                  wd_text(sx - 0.25, yr[3] + 0.17, ".06", size = ts, hjust = 1))
+     else c(wsym_back(sx + 0.5, yr[3], s = -1, filled = TRUE, r = 0.17),
+            wd_text(sx + 0.75, yr[3] - 0.17, ".06", size = ts, hjust = 0))) +
+    wd_groove(icx, y0[3], t = t, L = 1.4, gap = 0.06, root_cap = 0.1) +
+    ext(icx - 0.15, y0[3] - 0.1, icx - 1.86, y0[3] - 0.1) + ext(icx - 1.45, y0[3], icx - 1.86, y0[3]) +
+    wd_dim_in(y0[3] - 0.1, y0[3], icx - 1.8, ".06", vertical = TRUE, label_at = "left", size = ts, out = 0.3) +
+    wd_canvas(c(-0.05, W + 0.05), c(-0.05, sum(hs) + 0.55))
+}
+
+## ---- Exercise 3: supplementary symbols and dimensions ----------------------------------
+## errors: (1) weld-all-around circle at the tail end, (2) flush-ground contour but the
+## weld drawn with a reinforcement cap, (3) fillet size on the wrong side of the line
+spot3 <- function(fixed) {
+  hs <- rep(2.0, 3); yb <- wd_ci_rows(hs); W <- 10
+  ts <- 2.8; dc <- wd_col$dim
+  y0 <- yb + 0.45; yt <- y0 + 0.28; tg <- 0.45
+  yr <- c(yt[1] + 0.75, y0[2] + tg + 0.55, yt[3] + 0.55)
+  cx <- 1.4; ix <- 7.3; sx <- 3.05
+  tee <- function(i, x) c(wd_plate(x - 1.0, x + 1.0, y0[i], yt[i]), wd_plate(x - 0.14, x + 0.14, yt[i], yt[i] + 0.75))
+  lab <- function(i, s, y = yt[i] + 0.35) wd_text(ix + 1.12, y, s, size = 2.5, hjust = 0, col = dc)
+  boss <- function(x) c(wd_plate(x - 1.0, x + 1.0, y0[1], yt[1]), wd_plate(x - 0.55, x + 0.55, yt[1], yt[1] + 0.65))
+  ggplot() +
+    wd_ci_frame(W, hs, labels = c("1  WELD ALL AROUND", "2  CONTOUR AND FINISH", "3  FILLET WELD SIZE"),
+                header_fill = spot_head(fixed)) +
+    ## 1 .25 fillet all around a square boss
+    boss(cx) + wd_cl(cx, y0[1] - 0.1, cx, yt[1] + 0.75) +
+    wsym_ref(2.15, yr[1], 2.3, cx + 0.55, yt[1] + 0.08, all_around = fixed) +
+    (if (!fixed) wd_circle(2.15 + 2.3 + 0.16, yr[1], 0.16, lw = 0.6)) +
+    wsym_fillet(sx, yr[1], s = -1, h = 0.3) + wd_text(sx - 0.1, yr[1] - 0.15, ".25", size = ts, hjust = 1) +
+    boss(ix) + wd_fillet_bead(ix + 0.55, yt[1], 0.25, 0.25, dx = 1) + wd_fillet_bead(ix - 0.55, yt[1], 0.25, 0.25, dx = -1) +
+    lab(1, "continuous .25 fillet\naround the boss", y = yt[1] + 0.85) +
+    ## 2 V-groove (CJP), arrow side, flush contour finished by grinding
+    wd_butt(cx, y0[2], t = tg, L = 1.1) + wsym_ref(2.15, yr[2], 2.3, cx, y0[2] + tg) +
+    wsym_v(sx + 0.3, yr[2], s = -1, h = 0.35) +
+    wsym_contour(sx + 0.3, yr[2], s = -1, type = "flush", w = 0.6, d = 0.52, finish = "G", size = ts) +
+    wd_groove(ix, y0[2], t = tg, L = 1.4, gap = 0.04, pl = prep_bevel(tg, 30, rf = 0.05),
+              pr = prep_bevel(tg, 30, rf = 0.05), cap = if (fixed) 0 else 0.1, root_cap = 0.04) +
+    wd_text(ix, y0[2] - 0.25, "complete penetration V-groove weld", size = ts - 0.3, col = dc) +
+    ## 3 arrow side .38 fillet
+    tee(3, cx) + wsym_ref(2.15, yr[3], 2.3, cx + 0.15, yt[3]) + wsym_fillet(sx, yr[3], s = -1, h = 0.3) +
+    wd_text(sx - 0.1, yr[3] + (if (fixed) -0.15 else 0.15), ".38", size = ts, hjust = 1) +
+    tee(3, ix) + wd_fillet_bead(ix + 0.14, yt[3], 0.38, 0.38, dx = 1) + lab(3, ".38 fillet") +
+    wd_canvas(c(-0.05, W + 0.05), c(-0.05, sum(hs) + 0.55))
+}
+```
+
+### Exercise 1: Fillet Welds
+
+```{r fig-weld-spot-error-1, echo=FALSE, fig.cap="Spot the error: fillet welds. Each row contains one error, in the callout or in the interpretation.", fig.align='center', out.width='70%', fig.width=7.5, fig.height=5.0}
+spot1(fixed = FALSE)
+```
+
+<details class="spot-error-card">
+<summary>Show the corrected version and the errors</summary>
+
+```{r weld-spot-error-1-fixed, echo=FALSE, fig.cap="Corrected version of the fillet weld exercise.", fig.align='center', out.width='70%', fig.width=7.5, fig.height=5.0}
+spot1(fixed = TRUE)
+```
+
+1. **Weld on the wrong side (interpretation).** The fillet symbol is below the reference line, so the weld belongs on the **arrow side**: the side of the joint the arrow touches (right of the stem). The interpretation showed it on the other side.
+2. **Fillet symbol drawn backwards (callout).** The perpendicular leg of a fillet symbol is **always drawn on the left**, whatever the orientation of the real weld. The symbol does not picture the weld, it only names its type. The weld itself (other side, .31) was interpreted correctly.
+3. **Pitch measured wrongly (interpretation).** In `3.00-8.00`, the 8.00 is the **pitch**, the centre-to-centre distance between welds (the same as start to start). The interpretation measured 8.00 as the gap between the end of one weld and the start of the next, which puts the second weld 3.00 too far along the joint.
+
+</details>
+
+### Exercise 2: Groove Welds
+
+```{r fig-weld-spot-error-2, echo=FALSE, fig.cap="Spot the error: groove welds. Each row contains one error, in the callout or in the interpretation.", fig.align='center', out.width='70%', fig.width=7.5, fig.height=5.4}
+spot2(fixed = FALSE)
+```
+
+<details class="spot-error-card">
+<summary>Show the corrected version and the errors</summary>
+
+```{r weld-spot-error-2-fixed, echo=FALSE, fig.cap="Corrected version of the groove weld exercise.", fig.align='center', out.width='70%', fig.width=7.5, fig.height=5.4}
+spot2(fixed = TRUE)
+```
+
+1. **Arrow not broken (callout).** Only one member of a bevel-groove joint is prepared, so the arrow needs a **definite break pointing toward the member to be bevelled** (here the right one). With a straight arrow, the welder may bevel either member. See @sec-groove-weld-symbols.
+2. **Weld size on the wrong side of the symbol (callout).** The groove weld size `(.50)` goes to the **left** of the groove symbol. Dimensions to the right of a symbol are lengths and pitches, so `(.50)` on the right would be misread.
+3. **Melt-through symbol on the wrong side (callout).** Melt-through describes root reinforcement on the side **opposite** the groove weld, so its symbol goes on the **opposite side of the reference line** from the groove symbol: above the line when the square groove is below it.
+
+</details>
+
+### Exercise 3: Supplementary Symbols and Dimensions
+
+```{r fig-weld-spot-error-3, echo=FALSE, fig.cap="Spot the error: supplementary symbols and dimensions. Each row contains one error, in the callout or in the interpretation.", fig.align='center', out.width='70%', fig.width=7.5, fig.height=4.9}
+spot3(fixed = FALSE)
+```
+
+<details class="spot-error-card">
+<summary>Show the corrected version and the errors</summary>
+
+```{r weld-spot-error-3-fixed, echo=FALSE, fig.cap="Corrected version of the supplementary symbols exercise.", fig.align='center', out.width='70%', fig.width=7.5, fig.height=4.9}
+spot3(fixed = TRUE)
+```
+
+1. **Weld-all-around circle in the wrong place (callout).** The weld-all-around circle goes at the **junction of the arrow and the reference line**, not at the tail end. Placed at the tail, it means nothing.
+2. **Contour ignored (interpretation).** The flat line under the V-groove symbol is a **flush contour** and the `G` means it must be finished by **grinding**. The interpretation still showed a convex reinforcement cap, so the face must be ground flat with the plate surface.
+3. **Size on the wrong side of the reference line (callout).** A weld size belongs on the **same side of the reference line as the symbol it applies to**. With the fillet symbol below the line (arrow side), `.38` written above the line would refer to an other-side weld that has no symbol.
+
+</details>
+
+---
+
 ## Further Reading {#sec-weld-resources}
 
 [Lincoln Electric Welding Design Guide](https://www.lincolnelectric.com/en/support/welding-resources)

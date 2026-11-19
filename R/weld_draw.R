@@ -14,6 +14,7 @@ wd_col <- list(
   part   = "white",
   part2  = "#E8EEF5",   # second part where two parts need telling apart
   header = "#C9DCF0",   # table header band
+  header_err = "#F2BDB8", # red header band: "find the errors" exercise figures
   note   = "#1F5FA8",   # blue leader / callout text
   dim    = "gray25"
 )
@@ -418,10 +419,11 @@ wd_fillet_bead <- function(x, y, lh = 0.4, lv = lh, dx = 1, dy = 1, bulge = 0.04
 ## Returns the layers; row bottoms are wd_ci_rows(heights).
 wd_ci_rows <- function(heights) rev(cumsum(rev(heights))) - heights
 wd_ci_frame <- function(W, heights, labels = NULL, split = W / 2, hh = 0.5,
-                        heads = c("DRAWING CALLOUT", "INTERPRETATION"), size = 3, y0 = 0) {
+                        heads = c("DRAWING CALLOUT", "INTERPRETATION"), size = 3, y0 = 0,
+                        header_fill = wd_col$header) {
   H <- sum(heights); yb <- wd_ci_rows(heights) + y0
   out <- c(list(annotate("rect", xmin = 0, xmax = W, ymin = y0 + H, ymax = y0 + H + hh,
-                         fill = wd_col$header, colour = "black", linewidth = 0.6)),
+                         fill = header_fill, colour = "black", linewidth = 0.6)),
            wd_text(c(split / 2, (split + W) / 2), y0 + H + hh / 2, heads, size = size),
            wd_box(0, W, y0, y0 + H + hh),
            if (length(heights) > 1) wd_seg(0, yb[-length(yb)], W, yb[-length(yb)], lw = 0.4))
