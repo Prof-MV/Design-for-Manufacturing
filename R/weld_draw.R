@@ -453,13 +453,13 @@ wd_bent <- function(xo, yb, ytop, xf, th = 0.2, ro = 0.4, dir = 1, flip = FALSE,
 ## flat surface at y = ys, on the side dir (+1 right of the centre). depth = how far
 ## down the flare the weld reaches (fraction of the arc), face bulge b.
 wd_flare_bead <- function(cx0, cy0, ro, ys, dir = 1, reach = 0.35, up = 0.45, b = 0.04,
-                          fill = wd_col$weld, lw = 0.8, down = FALSE) {
+                          fill = wd_col$weld, lw = 0.8, down = FALSE, toe_dx = 0.18) {
   s <- if (down) -1 else 1
   ## arc from the tangent point on the surface (angle -90) towards the side
   a <- seq(-pi / 2 + reach, 0 - (pi / 2) * (1 - up), length.out = 20)
   ax <- cx0 + dir * ro * cos(a); ay <- cy0 + s * ro * sin(a)
-  ## face from the top of the arc out to the toe on the surface
-  toe <- c(ax[length(ax)] + dir * 0.18, ys)
+  ## face from the top of the arc out to the toe on the surface (toe_dx beyond the arc end)
+  toe <- c(ax[length(ax)] + dir * toe_dx, ys)
   tt <- seq(0, 1, length.out = 15)
   fx <- ax[length(ax)] + (toe[1] - ax[length(ax)]) * tt + dir * b * sin(pi * tt)
   fy <- ay[length(ay)] + (toe[2] - ay[length(ay)]) * tt + s * b * sin(pi * tt)

@@ -1799,7 +1799,7 @@ ggplot() +
   ## 3 U-groove, other side, (.75), root opening 0, 25 deg
   wd_butt(ccx, y0[3], t = t, L = 1.1) + ref(3) + wsym_u(sx, yr[3], s = 1, h = 0.5) +
   wd_text(sx - 0.3, yr[3] + 0.2, "(.75)", size = ts, hjust = 1) +
-  wd_text(sx, yr[3] + 0.3, "0", size = ts - 0.5) + wd_text(sx + 0.55, yr[3] + 0.42, "25°", size = ts, hjust = 0) +
+  wd_text(sx, yr[3] + 0.42, "0", size = ts - 0.7) + wd_text(sx + 0.55, yr[3] + 0.42, "25°", size = ts, hjust = 0) +
   wd_groove(icx, y0[3], t = t, L = 1.4, gap = 0.02, pl = prep_j_bot(t, 0.42, r = 0.13, angle = 12.5),
             pr = prep_j_bot(t, 0.42, r = 0.13, angle = 12.5), fill = c(0, 0.75), root_cap = 0.07,
             joint_line = TRUE) +
@@ -1819,10 +1819,12 @@ ggplot() +
   ext(icx + 0.04, y0[4] + t - 0.42, icx + 0.04, y0[4] + t + 0.45) +
   ext(icx + 0.04 + 0.42, y0[4] + t, icx + 0.04 + 0.85, y0[4] + t + 0.43) +
   wd_arcdim(icx + 0.04, y0[4] + t - 0.42, 0.8, 45 * rad, 90 * rad, "45°", lx = icx + 0.55, ly = y0[4] + t + 0.55, size = ts) +
-  ## 5 J-groove, other side: (.62), root opening 0, 20 deg; right member prepared
-  wd_butt(ccx, y0[5], t = t, L = 1.1) + ref(5) + wsym_j(sx - 0.1, yr[5], s = 1, h = 0.5) +
+  ## 5 J-groove, other side, broken arrow to the prepared (right) member: (.62), root opening 0, 20 deg
+  wd_butt(ccx, y0[5], t = t, L = 1.1) +
+  wd_seg(2.5, yr[5], 4.7, yr[5], lw = 0.6) + wd_arrow(c(2.5, 1.05, ccx), c(yr[5], yr[5] - 0.25, y0[5] + t), lw = 0.55) +
+  wsym_j(sx - 0.1, yr[5], s = 1, h = 0.5) +
   wd_text(sx - 0.25, yr[5] + 0.2, "(.62)", size = ts, hjust = 1) +
-  wd_text(sx + 0.03, yr[5] + 0.3, "0", size = ts - 0.5) + wd_text(sx + 0.3, yr[5] + 0.62, "20°", size = ts, hjust = 0) +
+  wd_text(sx - 0.03, yr[5] + 0.42, "0", size = ts - 0.7) + wd_text(sx + 0.3, yr[5] + 0.62, "20°", size = ts, hjust = 0) +
   wd_groove(icx, y0[5], t = t, L = 1.4, gap = 0.02, pr = prep_j_bot(t, 0.42, r = 0.15, angle = 20),
             fill = c(0, 0.75), root_cap = 0.07, joint_line = TRUE) +
   edim(5, 0.7 * t, "(.62)", from_top = FALSE) +
@@ -1881,7 +1883,7 @@ ggplot() +
   wd_butt(ccx, y0[1], t = t, L = 1.1) + ref(1) +
   wsym_v(sx, yr[1], s = 1, h = 0.4) + wsym_v(sx, yr[1], s = -1, h = 0.4) +
   wd_text(sx - 0.38, yr[1] + 0.18, "(.50)", size = ts, hjust = 1) + wd_text(sx - 0.38, yr[1] - 0.18, "(.50)", size = ts, hjust = 1) +
-  wd_text(sx, yr[1] + 0.12, ".10", size = ts - 0.6) + wd_text(sx + 0.55, yr[1] + 0.5, "90°", size = ts, hjust = 0) +
+  wd_text(sx, yr[1] + 0.34, ".10", size = ts - 0.7) + wd_text(sx + 0.55, yr[1] + 0.5, "90°", size = ts, hjust = 0) +
   wd_text(sx + 0.55, yr[1] - 0.5, "90°", size = ts, hjust = 0) +
   wd_groove(icx, y0[1], t = t, L = 1.4, gap = 0.1,
             pl = both(prep_bevel_top(t, 45, 0.4), prep_bevel_bot(t, 45, 0.4)),
@@ -1893,11 +1895,11 @@ ggplot() +
   wd_text(icx, y0[1] - 0.3, "root opening .10, 90° each side", size = ts - 0.2, col = dc) +
   ## 2 double-bevel: (.38) other side, (.50) arrow side, root opening 0, 45 deg; right member bevelled
   wd_butt(ccx, y0[2], t = t, L = 1.1) +
-  wd_seg(2.4, yr[2], 4.7, yr[2], lw = 0.6) + wd_arrow(c(2.4, 1.0, ccx + 0.01), c(yr[2], yr[2] - 0.3, y0[2] + t), lw = 0.55) +
+  wd_seg(2.4, yr[2], 4.7, yr[2], lw = 0.6) + wd_arrow(c(2.4, 0.95, ccx + 0.01), c(yr[2], yr[2] - 0.08, y0[2] + t), lw = 0.55) +
   wsym_bevel(sx - 0.15, yr[2], s = 1, h = 0.4) + wsym_bevel(sx - 0.15, yr[2], s = -1, h = 0.4) +
   wd_text(sx - 0.3, yr[2] + 0.18, "(.38)", size = ts, hjust = 1) + wd_text(sx - 0.3, yr[2] - 0.18, "(.50)", size = ts, hjust = 1) +
   wd_text(sx + 0.35, yr[2] + 0.55, "45°", size = ts, hjust = 0) + wd_text(sx + 0.35, yr[2] - 0.55, "45°", size = ts, hjust = 0) +
-  wd_text(sx + 0.0, yr[2] - 0.3, "0", size = ts - 0.6) +
+  wd_text(sx - 0.03, yr[2] - 0.34, "0", size = ts - 0.8) +
   wd_groove(icx, y0[2], t = t, L = 1.4, gap = 0.02,
             pr = both(prep_bevel_top(t, 45, 0.45), prep_bevel_bot(t, 45, 0.35)),
             fill = list(c(0, 0.42), c(0.44, 1)), root_cap = 0.07, joint_line = TRUE) +
@@ -1907,7 +1909,7 @@ ggplot() +
   vd(icx + 1.8, y0[2], y0[2] + 0.38, "(.38)") +
   ## 3 combined: square groove (.38) with .10 root opening on the other side, bevel .50 at 35 deg on the arrow side
   wd_butt(ccx, y0[3], t = t, L = 1.1) +
-  wd_seg(2.4, yr[3], 4.7, yr[3], lw = 0.6) + wd_arrow(c(2.4, 1.0, ccx + 0.01), c(yr[3], yr[3] - 0.3, y0[3] + t), lw = 0.55) +
+  wd_seg(2.4, yr[3], 4.7, yr[3], lw = 0.6) + wd_arrow(c(2.4, 0.95, ccx + 0.01), c(yr[3], yr[3] - 0.08, y0[3] + t), lw = 0.55) +
   wsym_square(sx, yr[3], s = 1, gap = 0.45, h = 0.38) + wd_text(sx, yr[3] + 0.18, ".10", size = ts - 0.3) +
   wd_text(sx - 0.32, yr[3] + 0.18, "(.38)", size = ts, hjust = 1) +
   wsym_bevel(sx - 0.15, yr[3], s = -1, h = 0.4) + wd_text(sx - 0.3, yr[3] - 0.18, ".50", size = ts, hjust = 1) +
@@ -2000,10 +2002,19 @@ ggplot() +
   wd_text(sx - 0.25, yr[3] - 0.47, ".31", size = ts, hjust = 1) + wd_text(sx - 0.25, yr[3] + 0.17, ".25", size = ts, hjust = 1) +
   base(3, icx, 1.5) +
   wd_bent(icx + 0.3, yt[3], yt[3] + 1.15, icx - 0.9, th = 0.22, ro = 0.45) +
-  wd_flare_bead(icx + 0.3 - 0.45, yt[3] + 0.45, 0.45, yt[3], dir = 1, reach = 0.25, up = 0.5, b = 0.05) +
+  ## flare weld runs .38 up the bend (groove depth); fillet toe .31 out from the outer face
+  wd_flare_bead(icx + 0.3 - 0.45, yt[3] + 0.45, 0.45, yt[3], dir = 1, reach = 0.25,
+                up = 1 - 2 / pi * asin(0.07 / 0.45), b = 0.05, toe_dx = 0.31 + 0.45 - sqrt(0.45^2 - 0.07^2)) +
   wd_fillet_bead(icx - 0.9, yt[3], 0.25, 0.22, dx = -1) +
-  wd_text(icx + 0.75, yt[3] + 0.75, "flare-bevel .38 (.25)\nwith .31 fillet", size = 2.5, hjust = 0, col = dc) +
-  wd_text(icx - 1.55, yt[3] + 0.6, ".25 fillet", size = 2.5, hjust = 0.5, col = dc) +
+  ## .38 (.25) flare-bevel: depth from the base surface up the bend
+  ext(icx + 0.35, yt[3] + 0.38, icx + 1.75, yt[3] + 0.38) + ext(icx + 1.55, yt[3], icx + 1.75, yt[3]) +
+  wd_dim_in(yt[3], yt[3] + 0.38, icx + 1.6, ".38 (.25)", vertical = TRUE, size = ts, out = 0.22) +
+  ## .31 fillet leg along the base, from the outer face of the bend to the toe
+  ext(icx + 0.61, yt[3] + 0.03, icx + 0.61, yt[3] + 1.45) + ext(icx + 0.3, yt[3] + 1.2, icx + 0.3, yt[3] + 1.45) +
+  wd_dim_in(icx + 0.3, icx + 0.61, yt[3] + 1.35, ".31 fillet", size = ts, out = 0.25) +
+  ## .25 fillet at the flange toe
+  ext(icx - 1.15, yt[3] + 0.03, icx - 1.15, yt[3] + 0.6) + ext(icx - 0.9, yt[3] + 0.27, icx - 0.9, yt[3] + 0.6) +
+  wd_dim_in(icx - 1.15, icx - 0.9, yt[3] + 0.5, ".25 fillet", label_at = "left", size = ts, out = 0.25) +
   wd_canvas(c(-0.05, W + 0.05), c(-0.05, sum(hs) + 0.55))
 ```
 
@@ -2066,18 +2077,22 @@ ggplot() +
   wd_text(icx + 0.75, yt[2] + 0.8, "flare-bevel .38 (.50)\nwith .38 fillet", size = 2.5, hjust = 0, col = dc) +
   wd_text(icx - 1.45, yt[2] + 0.6, ".25 fillet", size = 2.5, col = dc) +
   ## ---- 3 round bar on a plate: double flare-bevel .62 (.38)
+  ## bar radius R = .62: a flush flare-bevel fills the groove up to the bar's widest point, so S = R,
+  ## and E = 5/8 R ~ .38 (AWS D1.1, gas-shielded processes). The weld stays inside the bar outline.
   wd_plate(ccx - 1.3, ccx + 1.3, yt[3] - 0.35, yt[3], brk = c("left", "right")) +
-  wd_circle(ccx, yt[3] + 0.5, 0.5, fill = wd_col$part, lw = 0.8) +
-  wd_cl(ccx - 0.65, yt[3] + 0.5, ccx + 0.65, yt[3] + 0.5) + wd_cl(ccx, yt[3] - 0.1, ccx, yt[3] + 1.1) +
-  wsym_ref(2.7, yr[3], 2.1, ccx + 0.3, yt[3] + 0.11) +
+  wd_circle(ccx, yt[3] + 0.62, 0.62, fill = wd_col$part, lw = 0.8) +
+  wd_cl(ccx - 0.77, yt[3] + 0.62, ccx + 0.77, yt[3] + 0.62) + wd_cl(ccx, yt[3] - 0.1, ccx, yt[3] + 1.37) +
+  wsym_ref(2.9, yr[3], 1.9, ccx + 0.42, yt[3] + 0.06) +
   wsym_flare_bevel(sx - 0.15, yr[3], s = -1, h = 0.3) + wsym_flare_bevel(sx - 0.15, yr[3], s = 1, h = 0.3) +
   wd_text(sx - 0.25, yr[3] - 0.15, ".62 (.38)", size = ts, hjust = 1) + wd_text(sx - 0.25, yr[3] + 0.15, ".62 (.38)", size = ts, hjust = 1) +
   wd_plate(icx - 1.5, icx + 1.5, yt[3] - 0.35, yt[3], brk = c("left", "right")) +
-  wd_circle(icx, yt[3] + 0.5, 0.5, fill = wd_col$part, lw = 0.8) +
-  wd_flare_bead(icx, yt[3] + 0.5, 0.5, yt[3], dir = 1, reach = 0.25, up = 0.55, b = 0.05) +
-  wd_flare_bead(icx, yt[3] + 0.5, 0.5, yt[3], dir = -1, reach = 0.25, up = 0.55, b = 0.05) +
-  wd_cl(icx - 0.65, yt[3] + 0.5, icx + 0.65, yt[3] + 0.5) + wd_cl(icx, yt[3] - 0.1, icx, yt[3] + 1.1) +
-  wd_text(icx + 0.85, yt[3] + 0.95, "flare-bevel both sides:\nS = .62, E = .38", size = 2.5, hjust = 0, col = dc) +
+  wd_circle(icx, yt[3] + 0.62, 0.62, fill = wd_col$part, lw = 0.8) +
+  wd_flare_bead(icx, yt[3] + 0.62, 0.62, yt[3], dir = 1, reach = 0.2, up = 1, b = 0, toe_dx = 0) +
+  wd_flare_bead(icx, yt[3] + 0.62, 0.62, yt[3], dir = -1, reach = 0.2, up = 1, b = 0, toe_dx = 0) +
+  wd_cl(icx - 0.77, yt[3] + 0.62, icx + 0.77, yt[3] + 0.62) + wd_cl(icx, yt[3] - 0.1, icx, yt[3] + 1.37) +
+  ext(icx + 0.8, yt[3] + 0.62, icx + 1.75, yt[3] + 0.62) + ext(icx + 1.55, yt[3], icx + 1.75, yt[3]) +
+  wd_dim_in(yt[3], yt[3] + 0.62, icx + 1.6, "S = .62", vertical = TRUE, size = ts, out = 0.22) +
+  wd_text(icx + 0.8, yt[3] + 1.25, "bar radius R = .62\nE = .38 each side", size = 2.5, hjust = 0, col = dc) +
   wd_canvas(c(-0.05, W + 0.05), c(-0.05, sum(hs) + 0.55))
 ```
 
@@ -2116,24 +2131,41 @@ one_line <- function(i, note, syms) {
 vsym <- function(x, y) wsym_v(x, y, s = -1, h = 0.32)
 bk <- function(x, y) wsym_back(x, y, s = 1, r = 0.15)
 or <- function(i) wd_text(ccx, y0[i] + t + 1.2, "OR", size = 3, col = blue)
-interp <- function(i) c(wd_groove(icx, y0[i], t = t, L = 1.6, gap = 0.04, pl = prep_bevel(t, 30, rf = 0.06),
-                                  pr = prep_bevel(t, 30, rf = 0.06), root_cap = 0),
-                        wd_bead(icx + 0.32 * c(-1, -0.6, 0, 0.6, 1, 0.6, 0, -0.6),
-                                y0[i] + c(0, -0.07, -0.1, -0.07, 0, 0.04, 0.05, 0.04)))
+## V-groove weld bead (30 deg bevels, root face rf, root opening g); its root dips `dip` below the
+## bottom surface. Drawn on its own so the order of the two welds can be shown.
+gbead <- function(i, tt, rf, g, dip, melt = 0.05, cap = 0.08) {
+  k <- tan(30 * pi / 180); yy <- y0[i] + c(0, rf, tt)
+  xl <- icx - g / 2 - melt - c(0, 0, (tt - rf) * k); xr <- 2 * icx - xl
+  a <- seq(0, 1, length.out = 21)
+  c(wd_poly(c(xl, xl[3] + (xr[3] - xl[3]) * a, rev(xr), xr[1] + (xl[1] - xr[1]) * a),
+            c(yy, y0[i] + tt + cap * sin(pi * a), rev(yy), y0[i] - dip * sin(pi * a)), fill = wd_col$weld, lw = 0.8),
+    wd_path(xl[2:3] + melt, yy[2:3], lw = 0.3, lt = "dashed"), wd_path(xr[2:3] - melt, yy[2:3], lw = 0.3, lt = "dashed"))
+}
+## bead on the other (bottom) side: `pen` = how far it fuses up into the root, `h` = height below the surface
+rbead <- function(i, pen, h = 0.1) wd_bead(icx + 0.32 * c(-1, -0.6, 0, 0.6, 1, 0.6, 0, -0.6),
+                                           y0[i] + c(0, -0.7 * h, -h, -0.7 * h, 0, 0.6 * pen, pen, 0.6 * pen))
+## back weld (A): groove weld first, the back weld fuses up into the groove root.
+## backing weld (B, C): backing weld first, the groove weld root re-melts down into it.
+interp <- function(i, backing, tt = t, rf = 0.06, g = 0.04) {
+  plates <- wd_groove(icx, y0[i], t = tt, L = 1.6, gap = g, pl = prep_bevel(tt, 30, rf = rf),
+                      pr = prep_bevel(tt, 30, rf = rf), fill = list())
+  if (backing) c(plates, rbead(i, pen = 0.04), gbead(i, tt, rf, g, dip = 0.07))
+  else c(plates, gbead(i, tt, rf, g, dip = 0), rbead(i, pen = 0.13))
+}
 
 ggplot() +
   wd_ci_frame(W, hs, split = sp, labels = c("(A) BACK WELD", "(B) BACKING WELD", "(C) BACKING WELD WITH ROOT OPENING")) +
   ## ---- A back weld: groove weld first, back weld second
   wd_butt(ccx, y0[1], t = t, L = 1.9) + or(1) +
   two_lines(1, vsym, bk) + one_line(1, "BACK\nWELD", function(x, y) c(vsym(x, y), bk(x, y))) +
-  interp(1) +
-  wd_text(icx, y0[1] + t + 0.9, "Groove weld made BEFORE\nthe weld on the other side", size = ts, col = dc) +
+  interp(1, backing = FALSE) +
+  wd_text(icx, y0[1] + t + 0.9, "Groove weld made FIRST; the back weld\nis made after it and fuses into its root", size = ts, col = dc) +
   wd_text(icx + 0.7, y0[1] - 0.3, "back weld", size = ts, col = dc, hjust = 0) +
   ## ---- B backing weld: backing weld first, groove weld second
   wd_butt(ccx, y0[2], t = t, L = 1.9) + or(2) +
   two_lines(2, bk, vsym) + one_line(2, "BACKING\nWELD", function(x, y) c(vsym(x, y), bk(x, y))) +
-  interp(2) +
-  wd_text(icx, y0[2] + t + 0.9, "Groove weld made AFTER\nthe weld on the other side", size = ts, col = dc) +
+  interp(2, backing = TRUE) +
+  wd_text(icx, y0[2] + t + 0.9, "Backing weld made FIRST; the groove weld\nroot re-melts into the backing weld", size = ts, col = dc) +
   wd_text(icx + 0.7, y0[2] - 0.3, "backing weld", size = ts, col = dc, hjust = 0) +
   ## ---- C backing weld .10 high, groove .25 deep with .06 root opening
   wd_butt(ccx, y0[3], t = t, L = 1.9) + or(3) +
@@ -2144,11 +2176,13 @@ ggplot() +
                                                  wd_text(x - 0.3, y - 0.12, ".25", size = ts, hjust = 1),
                                                  wd_text(x - 0.22, y + 0.12, ".10", size = ts, hjust = 1),
                                                  wd_text(x, y - 0.2, ".06", size = ts - 0.6))) +
-  interp(3) +
-  wd_seg(icx - 1.65, y0[3] + t, icx - 2.1, y0[3] + t, lw = 0.3, col = dc) + wd_seg(icx - 1.65, y0[3], icx - 2.1, y0[3], lw = 0.3, col = dc) +
-  wd_dim(icx - 1.95, y0[3], icx - 1.95, y0[3] + t, ".25", lx = icx - 2.1, hjust = 1, size = ts) +
-  wd_seg(icx + 0.33, y0[3] - 0.1, icx + 2.05, y0[3] - 0.1, lw = 0.3, col = dc) + wd_seg(icx + 1.65, y0[3], icx + 2.05, y0[3], lw = 0.3, col = dc) +
-  wd_dim_in(y0[3] - 0.1, y0[3], icx + 1.9, ".10", vertical = TRUE, size = ts, out = 0.22) +
+  ## plate .31 thick: .25 groove depth (S) above a .06 root face, .06 root opening
+  interp(3, backing = TRUE, tt = 0.31, rf = 0.06, g = 0.06) +
+  wd_seg(icx - 1.65, y0[3] + 0.31, icx - 2.1, y0[3] + 0.31, lw = 0.3, col = dc) +
+  wd_seg(icx - 0.12, y0[3] + 0.06, icx - 2.1, y0[3] + 0.06, lw = 0.3, col = dc) +
+  wd_dim_in(y0[3] + 0.06, y0[3] + 0.31, icx - 1.95, ".25", vertical = TRUE, label_at = "left", size = ts, out = 0.22) +
+  wd_seg(icx + 0.33, y0[3] - 0.1, icx + 1.86, y0[3] - 0.1, lw = 0.3, col = dc) + wd_seg(icx + 1.65, y0[3], icx + 1.86, y0[3], lw = 0.3, col = dc) +
+  wd_dim_in(y0[3] - 0.1, y0[3], icx + 1.8, ".10", vertical = TRUE, size = ts, out = 0.22) +
   wd_text(icx, y0[3] + t + 0.6, "root opening .06", size = ts, col = dc) +
   wd_canvas(c(-0.05, W + 0.05), c(-0.05, sum(hs) + 0.55))
 ```
@@ -2178,8 +2212,8 @@ ref <- function(i, x0 = 2.5, tipx = ccx, tipy = y0[i] + t) wsym_ref(x0, yr[i], 2
 ext <- function(x1, y1, x2, y2) wd_seg(x1, y1, x2, y2, lw = 0.3, col = dc)
 ## root reinforcement height dimension, left of the joint
 rdim <- function(x, ybot, label) {
-  c(ext(x - 0.15, ybot, x - 2.0, ybot), ext(x - 1.45, ybot + 0.1, x - 2.0, ybot + 0.1),
-    wd_dim_in(ybot, ybot + 0.1, x - 1.85, label, vertical = TRUE, label_at = "left", size = ts, out = 0.3))
+  c(ext(x - 0.15, ybot, x - 1.86, ybot), ext(x - 1.45, ybot + 0.1, x - 1.86, ybot + 0.1),
+    wd_dim_in(ybot, ybot + 0.1, x - 1.8, label, vertical = TRUE, label_at = "left", size = ts, out = 0.3))
 }
 
 ggplot() +
@@ -2197,20 +2231,21 @@ ggplot() +
   wd_groove(icx, y0[2], t = t, L = 1.4, gap = 0.04, pl = prep_bevel(t, 30), pr = prep_bevel(t, 30), root_cap = 0.1) +
   rdim(icx, y0[2] - 0.1, ".12") +
   ## 3 single bevel groove in a T-joint (vertical member on the left), melt-through .12
-  wd_plate(1.2, 1.55, y0[3] - 0.3, y0[3] + 1.0, brk = c("top", "bottom")) +
+  ## vertical member stops just below the joint so it clears the row label
+  wd_plate(1.2, 1.55, y0[3] - 0.12, y0[3] + 1.0, brk = c("top", "bottom")) +
   wd_plate(1.55, 3.3, y0[3], y0[3] + t, brk = "right") +
   wsym_ref(2.5, yr[3] + 0.25, 2.2, 1.58, y0[3] + t + 0.05) +
   wsym_bevel(sx - 0.15, yr[3] + 0.25, s = -1, h = 0.4) +
   wsym_back(sx, yr[3] + 0.25, s = 1, filled = TRUE, r = 0.17) +
   wd_text(sx - 0.25, yr[3] + 0.42, ".12", size = ts, hjust = 1) +
   ## interpretation: the horizontal member is bevelled from the top; the weld shows through underneath
-  wd_plate(icx - 1.2, icx - 0.85, y0[3] - 0.3, y0[3] + 1.0, brk = c("top", "bottom")) +
+  wd_plate(icx - 1.2, icx - 0.85, y0[3] - 0.12, y0[3] + 1.0, brk = c("top", "bottom")) +
   wd_poly(c(icx - 0.83, icx + 1.3, icx + 1.3, icx - 0.83 + t), c(y0[3], y0[3], y0[3] + t, y0[3] + t), lw = 0.8) +
   wd_poly(c(icx - 0.9, icx - 0.78, icx - 0.83 + t + 0.06, icx - 0.83 + t + 0.06, icx - 0.6, icx - 0.88),
           c(y0[3] - 0.08, y0[3] - 0.1, y0[3] + t + 0.02, y0[3] + t + 0.09, y0[3] + t + 0.12, y0[3] + t + 0.08),
           fill = wd_col$weld, lw = 0.8) +
   wd_seg(icx - 0.83, y0[3], icx - 0.83 + t, y0[3] + t, lw = 0.3, lt = "dashed") +
-  ext(icx - 0.7, y0[3] - 0.1, icx + 1.75, y0[3] - 0.1) + ext(icx + 1.35, y0[3], icx + 1.75, y0[3]) +
+  ext(icx - 0.7, y0[3] - 0.1, icx + 1.66, y0[3] - 0.1) + ext(icx + 1.35, y0[3], icx + 1.66, y0[3]) +
   wd_dim_in(y0[3] - 0.1, y0[3], icx + 1.6, ".12", vertical = TRUE, size = ts, out = 0.3) +
   wd_canvas(c(-0.05, W + 0.05), c(-0.05, sum(hs) + 0.55))
 ```
@@ -2599,6 +2634,39 @@ ggplot(ce_data, aes(x = CE)) +
     panel.grid.minor = element_blank()
   )
 ```
+
+### Why High-CE Steels Are Harder to Weld
+
+The carbon equivalent is a measure of **hardenability**: how easily the steel turns into **martensite**, a very hard but brittle microstructure, when it cools quickly. Carbon has the strongest effect, so it counts in full. Manganese, chromium, molybdenum, vanadium, nickel and copper also raise hardenability, but less per percent, which is why the formula divides them by 5, 6 or 15 to express them as "equivalent carbon."
+
+**What the weld does to the heat-affected zone.** During welding, the base metal next to the weld (the HAZ) is heated above about 900 °C, where steel becomes austenite. As soon as the arc moves on, the large mass of cold plate around the weld pulls the heat out very quickly. For the HAZ this is effectively a **quench**, much like dropping a hot part into water during hardening.
+
+- In a **low-CE steel** (mild steel), the austenite still transforms into soft, ductile ferrite and pearlite, even at this fast cooling rate. The HAZ stays tough.
+- In a **high-CE steel**, the same cooling rate is fast enough to form **martensite**. The HAZ becomes hard (often above 350 HV) and brittle.
+
+**Why a hard HAZ cracks.** A hard HAZ alone does not crack. Cracking happens when three conditions are present at the same time:
+
+1. **A susceptible microstructure**: hard martensite in the HAZ (high CE, fast cooling).
+2. **Hydrogen** in the weld: it comes from moisture in electrode coatings or flux, rust, oil, paint and humid air, and the arc splits it into atomic hydrogen that dissolves in the hot metal and diffuses into the HAZ.
+3. **Tensile stress**: the weld shrinks as it cools and the surrounding structure restrains it, leaving residual stresses near the yield strength.
+
+The result is **hydrogen-induced cracking**, also called **cold cracking** or **delayed cracking**. It forms after the weld has cooled, often hours or even days later, so a weld that looks perfect when it is finished can crack later. This is why critical welds in high-strength steels are often inspected 24 to 48 hours after welding, not immediately.
+
+**How preheating prevents it.** Preheating the joint area (typically to 100 to 300 °C, depending on CE and thickness) works on all three conditions:
+
+- **Slower cooling**: the plate around the weld is already warm, so the temperature difference is smaller and the HAZ cools more slowly through the critical range of about 800 to 500 °C. Cooling slowly gives the austenite time to form softer bainite or ferrite instead of martensite, so the HAZ is softer and tougher.
+- **Hydrogen escapes**: hydrogen diffuses much faster at elevated temperature, so more of it leaves the weld before the joint reaches room temperature.
+- **Lower residual stress**: smaller temperature gradients across the joint mean less uneven shrinkage.
+
+The other precautions for high-CE steels attack the same three conditions:
+
+- **Interpass temperature control** keeps the joint warm between passes.
+- **Low-hydrogen electrodes** (such as E7018, kept dry in a rod oven) and clean, dry joints remove the hydrogen.
+- **Post-weld heat treatment (PWHT)** tempers any martensite that did form and relieves residual stress.
+
+::: {.callout-note}
+**Thickness matters too:** a thick plate is a bigger heat sink than a thin one, so it quenches the HAZ faster. Two parts made from the same steel can therefore need different preheats. Welding codes such as AWS D1.1 and EN 1011-2 determine the required preheat from the CE together with plate thickness, joint restraint and the hydrogen level of the welding consumable, not from CE alone.
+:::
 
 ### Weldability of Common Materials
 
